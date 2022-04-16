@@ -5,7 +5,6 @@ ruby "3.1.2"
 
 gem 'devise'
 gem 'haml-rails'
-gem 'erb2haml'
 gem 'tailwindcss-rails'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

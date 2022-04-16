@@ -8,6 +8,16 @@
       = f.label :email, class: label_class
       = f.email_field :email, autofocus: true, autocomplete: "email", class: field_class
     .pb-5
+      = f.label :nickname, class: label_class
+      = f.text_field :nickname, autofocus: true, autocomplete: "nickname", class: field_class
+    .pb-5.grid.grid-cols-2.gap-6
+      .group
+        = f.label :familyname, class: label_class
+        = f.text_field :familyname, autofocus: true, autocomplete: "family-name", class: field_class
+      .group
+        = f.label :givenname, class: label_class
+        = f.text_field :givenname, autofocus: true, autocomplete: "given-name", class: field_class
+    .pb-5
       = f.label :password, class: label_class 
       - if @minimum_password_length
         %em

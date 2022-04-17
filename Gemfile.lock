@@ -104,6 +104,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faker (2.20.0)
+      i18n (>= 1.8.11, < 2)
     globalid (1.0.0)
       activesupport (>= 5.0)
     haml (5.2.2)
@@ -199,6 +201,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    redis (4.6.0)
     regexp_parser (2.3.0)
     reline (0.3.1)
       io-console (~> 0.5)
@@ -299,12 +302,14 @@ DEPENDENCIES
   debug
   devise
   factory_bot_rails
+  faker
   haml-rails
   importmap-rails
   jbuilder
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.2, >= 7.0.2.3)
+  redis (~> 4.0)
   rspec-rails (~> 6.0.0rc1)
   rubocop-rails
   seed-fu

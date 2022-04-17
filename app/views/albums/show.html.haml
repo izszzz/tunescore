@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @album.title
+%p
+  %b Bookmarks count:
+  = @album.bookmarks_count
+
+= link_to 'Edit', edit_album_path(@album)
+\|
+= link_to 'Back', albums_path

@@ -1,7 +1,7 @@
 %main.h-full.flex.flex-auto.justify-center.items-center
   .w-full.max-w-md.p-10.bg-white.rounded-lg
     .text-center.pb-8
-      = link_to root_path, class: "m-10" do
-        = image_tag "svg/stave.svg", class: "inline w-20 mx-auto"
+      = link_to root_path, class: "mx-auto" do
+        = svg_use_tag "stave", class: "inline w-20 h-20"
     = yield
     = render "devise/shared/links"

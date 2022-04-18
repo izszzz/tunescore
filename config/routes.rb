@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root 'static_pages#home'
+  get '/settings', to: 'static_pages#settings'
   resources :users, only: [:index, :show]
   resources :albums
   resources :artists

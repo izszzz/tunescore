@@ -1,16 +1,15 @@
-= form_for @album do |f|
-  - if @album.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@album.errors.count, "error")} prohibited this album from being saved:"
+= form_with(model: album, class: "contents") do |form|
+  - if album.errors.any?
+    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
+      %h2
+        = pluralize(album.errors.count, "error")
+        prohibited this artist from being saved:
       %ul
-        - @album.errors.full_messages.each do |message|
-          %li= message
+        - album.errors.each do |error|
+          %li= error.full_message
+  .my-5
+    = form.label :title
+    = form.text_field :title, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full"
+  .inline
+    = form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer"
 
-  .field
-    = f.label :title
-    = f.text_field :title
-  .field
-    = f.label :bookmarks_count
-    = f.number_field :bookmarks_count
-  .actions
-    = f.submit 'Save'

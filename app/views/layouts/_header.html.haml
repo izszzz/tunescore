@@ -1,9 +1,11 @@
 :ruby
-	svg_length = "w-6 h-6"
-	gray = "text-gray-500 hover:text-gray-900"
-	indigo = "bg-indigo-600 hover:bg-indigo-700"
-	text = "whitespace-nowrap text-base font-medium"
-	plus_dropdown= [
+	def base_svg_use_tag name, **attributes
+		svg_use_tag name, **attributes, class: ["w-6 h-6", attributes[:class]]
+	end
+	def header_svg_use_tag name, **attributes
+		base_svg_use_tag name, **attributes, class: ["text-gray-500 hover:text-gray-900 ml-8", attributes[:class]]
+	end
+	plus_dropdown = [
 		["#", "music-note", "Music"], 
 		[new_album_path, "folder", "Album"], 
 		[new_artist_path, "user", "Artist"], 
@@ -11,18 +13,28 @@
 	]
 
 - plus_icon = capture do
-	= svg_use_tag "plus", class: [svg_length, indigo, "text-white rounded-md"]
+	= base_svg_use_tag "plus", class: "bg-indigo-600 hover:bg-indigo-700 text-white rounded-md"
 - user_icon = capture do
-	= svg_use_tag "user-circle", class: [svg_length, gray, "ml-8"]
+	= header_svg_use_tag "user-circle"
 - bell_icon = capture do
-	= svg_use_tag "bell", class: [svg_length, gray, "ml-8"]
+	= header_svg_use_tag "bell"
+
 - plus_lists = capture do
 	- plus_dropdown.each do |path, icon, text|
-		= link_to path, class: ["py-4 flex justify-between", gray] do
-			= svg_use_tag icon, class: svg_length 
-			= text
+		= link_to path do
+			= render "layouts/shared/dropdown_list" do
+				= base_svg_use_tag icon
+				= text
 - user_lists = capture do
-	= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: [gray, text]
+	= link_to settings_path do
+		= render "layouts/shared/dropdown_list" do
+			= base_svg_use_tag "cog"
+			Setting
+	= link_to destroy_user_session_path, data: { turbo_method: :delete } do
+		= render "layouts/shared/dropdown_list" do
+			= base_svg_use_tag "logout"
+			Logout
+
 :ruby
 	dropdowns = [
 		[plus_icon, plus_lists],
@@ -38,8 +50,6 @@
 				- if user_signed_in?
 					- dropdowns.each do |icon, lists|
 						= render "layouts/shared/dropdown", icon: icon, lists: lists
-					= link_to settings_path, class: "ml-8" do
-						= svg_use_tag "cog", class: [svg_length, gray]
 				- else
-					= link_to "Sign in", user_session_path, class: [gray, text]
-					= link_to "Sign up", new_user_registration_path, class: [indigo, text, "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"]
+					= link_to "Sign in", user_session_path, class: "text-gray-500 hover:text-gray-900"
+					= link_to "Sign up", new_user_registration_path, class: "bg-indigo-600 hover:bg-indigo-700 ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"

@@ -1,0 +1,5 @@
+.inline.relative{"data-controller": "dropdown"}
+	%button.block{type: "button", "data-action": "dropdown#toggle click@window->dropdown#hide"}
+		= icon
+	.px-4.w-40.drop-shadow-lg.hidden.transition.transform.origin-top-right.absolute.right-0.bg-white.rounded-md{"data-dropdown-target" => "menu", "data-transition-enter-from" => "opacity-0 scale-95", "data-transition-enter-to" => "opacity-100 scale-100", "data-transition-leave-from" => "opacity-100 scale-100", "data-transition-leave-to" => "opacity-0 scale-95"}
+		= lists

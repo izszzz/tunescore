@@ -1,5 +1,5 @@
 :ruby
-	svg_length = "w-7 h-7"
+	svg_length = "w-6 h-6"
 	gray = "text-gray-500 hover:text-gray-900"
 	indigo = "bg-indigo-600 hover:bg-indigo-700"
 	text = "whitespace-nowrap text-base font-medium"
@@ -9,25 +9,37 @@
 		[new_artist_path, "user", "Artist"], 
 		["#", "user-group", "Band"]
 	]
+
+- plus_icon = capture do
+	= svg_use_tag "plus", class: [svg_length, indigo, "text-white rounded-md"]
+- user_icon = capture do
+	= svg_use_tag "user-circle", class: [svg_length, gray, "ml-8"]
+- bell_icon = capture do
+	= svg_use_tag "bell", class: [svg_length, gray, "ml-8"]
+- plus_lists = capture do
+	- plus_dropdown.each do |path, icon, text|
+		= link_to path, class: ["py-4 flex justify-between", gray] do
+			= svg_use_tag icon, class: svg_length 
+			= text
+- user_lists = capture do
+	= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: [gray, text]
+:ruby
+	dropdowns = [
+		[plus_icon, plus_lists],
+		[user_icon, user_lists],
+		[bell_icon, user_lists]
+	]
+
 %header.relative.bg-white.border-b-2.border-gray-100
 	.max-w-7xl.mx-auto.px-4.sm:px-6
 		.flex.justify-between.items-center.py-4.md:justify-start.md:space-x-10
-			=link_to "tunescore", root_path, class: "text-3xl"
+			= link_to "tunescore", root_path, class: "text-3xl"
 			.hidden.md:flex.items-center.justify-end.md:flex-1.lg:w-0
 				- if user_signed_in?
-					.inline.relative.align-middle{"data-controller": "dropdown"}
-						%button.block{type: "button", "data-action": "dropdown#toggle click@window->dropdown#hide"}
-							= svg_use_tag "plus", class: [svg_length, indigo, "text-white rounded-md"]
-						.px-4.w-40.drop-shadow-lg.hidden.transition.transform.origin-top-right.absolute.right-0.bg-white.rounded-md{"data-dropdown-target" => "menu", "data-transition-enter-from" => "opacity-0 scale-95", "data-transition-enter-to" => "opacity-100 scale-100", "data-transition-leave-from" => "opacity-100 scale-100", "data-transition-leave-to" => "opacity-0 scale-95"}
-							- plus_dropdown.each do |path, icon, text|
-								= link_to path, class: ["py-4 flex justify-between", gray] do
-									= svg_use_tag icon, class: ["w-6 h-6"]
-									= text
-					= svg_use_tag "bell", class: [svg_length, gray, "ml-8"]
-					= svg_use_tag "user-circle", class: [svg_length, gray, "ml-8"]
+					- dropdowns.each do |icon, lists|
+						= render "layouts/shared/dropdown", icon: icon, lists: lists
 					= link_to settings_path, class: "ml-8" do
 						= svg_use_tag "cog", class: [svg_length, gray]
-					= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: [gray, text]
 				- else
 					= link_to "Sign in", user_session_path, class: [gray, text]
 					= link_to "Sign up", new_user_registration_path, class: [indigo, text, "ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"]

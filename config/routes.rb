@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :bands
   devise_for :users
   root 'static_pages#home'
   get '/settings', to: 'static_pages#settings'

@@ -1,1 +1,3 @@
-= render 'layouts/single_column_layout'
+%h2 Musics
+- @musics.each do |music|
+	= music.title

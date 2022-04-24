@@ -10,4 +10,8 @@
     = stylesheet_link_tag "tailwind", "data-turbo-track": "reload" 
     = javascript_importmap_tags
   %body.min-h-full.flex.flex-col
-    = yield
+    .mb-10
+      = render 'layouts/header'
+    %main
+      .max-w-7xl.mx-auto
+        = yield

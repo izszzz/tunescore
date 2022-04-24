@@ -36,8 +36,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_092910) do
   end
 
   create_table "musics", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "band_id", null: false
+    t.bigint "user_id"
+    t.bigint "band_id"
     t.string "title"
     t.integer "bookmarks_count"
     t.string "score"

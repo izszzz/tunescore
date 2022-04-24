@@ -15,8 +15,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_092910) do
   enable_extension "plpgsql"
 
   create_table "albums", force: :cascade do |t|
-    t.string "title"
-    t.integer "bookmarks_count"
+    t.string "title", default: "", null: false
+    t.integer "bookmarks_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,8 +29,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_092910) do
   end
 
   create_table "bands", force: :cascade do |t|
-    t.string "name"
-    t.integer "bookmarks_count"
+    t.string "name", default: "", null: false
+    t.integer "bookmarks_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -38,9 +38,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_24_092910) do
   create_table "musics", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "band_id"
-    t.string "title"
-    t.integer "bookmarks_count"
-    t.string "score"
+    t.string "title", default: "", null: false
+    t.string "score", default: "", null: false
+    t.integer "price", default: 0, null: false
+    t.boolean "status", default: true, null: false
+    t.integer "bookmarks_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["band_id"], name: "index_musics_on_band_id"

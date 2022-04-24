@@ -1,3 +1,6 @@
 %h2 Musics
 - @musics.each do |music|
-	= music.title
+	.mb-5
+		= music.id
+		= music.title
+		= music.user&.nickname

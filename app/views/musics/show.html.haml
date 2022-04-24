@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @music.user
+%p
+  %b Band:
+  = @music.band
+%p
+  %b Title:
+  = @music.title
+%p
+  %b Bookmarks count:
+  = @music.bookmarks_count
+%p
+  %b Score:
+  = @music.score
+
+= link_to 'Edit', edit_music_path(@music)
+\|
+= link_to 'Back', musics_path

@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-  get 'score/show'
-  get 'score/edit'
-  get 'score/update'
-  resources :musics
-  resources :bands
   devise_for :users
   root 'static_pages#home'
   get '/settings', to: 'static_pages#settings'
+  resources :score, only: [:show, :edit, :update]
+  resources :musics
+  resources :bands
   resources :users, only: [:index, :show]
   resources :albums
   resources :artists

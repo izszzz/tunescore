@@ -16,6 +16,10 @@
   %b Score:
   = @music.score
 
+= link_to "Score", score_path(@music)
+|
+= link_to "Score Edit", score_path(@music)
+|
 = link_to 'Edit', edit_music_path(@music)
-\|
+|
 = link_to 'Back', musics_path

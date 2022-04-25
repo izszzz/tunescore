@@ -1,22 +1,10 @@
-= form_with(model: music, class: "contents") do |form|
-  - if music.errors.any?
-    #error_explanation.bg-red-50.text-red-500.px-3.py-2.font-medium.rounded-lg.mt-3
-      %h2
-        = pluralize(music.errors.count, "error")
-        prohibited this resource from being saved:
-      %ul
-        - music.errors.each do |error|
-          %li= error.full_message
-  .mb-5
-    = form.label :title
-    = form.text_field :title, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full"
-
+= render "layouts/shared/form_layout", resource: music, label: :title do |form|
   .mb-5
     %h2 Ownership
-    = form.radio_button :user_id, current_user.id
+    = form.check_box :user_id, {}, current_user.id, nil
     = form.label :user, "mine"
 
-  .mb-5 
+  .mb-5
     %h2 Publishing Settings
     = form.radio_button :status, true
     = form.label :user, "public"
@@ -26,6 +14,3 @@
   .mb-5 
     %h2 Price
     = form.number_field :price, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2"
-
-  .inline
-    = form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer"

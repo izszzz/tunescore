@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'score/show'
+  get 'score/edit'
+  get 'score/update'
   resources :musics
   resources :bands
   devise_for :users

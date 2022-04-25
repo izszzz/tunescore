@@ -1,6 +1,29 @@
 %h2 Musics
-- @musics.each do |music|
-	.mb-5
-		= music.id
-		= music.title
-		= music.user&.nickname
+%ul.mb-5
+  - @musics.each do |music|
+    = link_to music_path(music) do
+      %li
+        = music.id
+        = music.title
+        = music.user&.nickname
+
+%h2 Album
+%ul.mb-5
+  - @albums.each do |album|
+    %li
+      = album.id
+      = album.title
+
+%h2 Artists
+%ul.mb-5
+  - @artists.each do |artist|
+    %li
+      = artist.id
+      = artist.name
+
+%h2 Band
+%ul.mb-5
+  - @bands.each do |band|
+    %li
+      = band.id
+      = band.name

@@ -1,0 +1,5 @@
+= link_to music_path(music) do
+	%li
+		= music.id
+		= music.title
+		= music.user&.nickname

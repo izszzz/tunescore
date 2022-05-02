@@ -1,1 +1,11 @@
 = @music.title
+.at-wrap
+	.at-content
+		.at-sidebar
+		.at-viewport
+			.at-main.h-screen
+	.at-controls
+:javascript
+	new alphaTab.AlphaTabApi(document.querySelector(".at-main"), {
+		file: "https://www.alphatab.net/files/canon.gp",
+	})

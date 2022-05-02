@@ -1,0 +1,14 @@
+!!!
+%html.h-full.bg-gray-100
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Myapp
+    %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
+    %script{src:"https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"}
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = stylesheet_link_tag "tailwind", "data-turbo-track": "reload" 
+    = javascript_importmap_tags
+  %body.min-h-full.flex.flex-col{'data-controller': "alphatab"}
+    = yield

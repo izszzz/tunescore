@@ -1,5 +1,6 @@
 class ScoreController < ApplicationController
-  before_action :set_music, only: %i[ show edit update]
+  before_action :set_music, only: %i[show edit update]
+  layout 'score'
 
   def show
   end

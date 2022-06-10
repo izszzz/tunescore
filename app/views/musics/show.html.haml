@@ -1,19 +1,46 @@
-
-.flex.items-center
-  %i.fas.fa-music.text-xl.text-slate-400.mr-4
-  %h1.text-3xl
-    = @music.title
-
 %p#notice= notice
 
+- user = @music.user
+- band = @music.band
 
-%p
-  %b User:
-  = @music.user
-%p
-  %b Band:
-  = @music.band
-%p
-  %b Title:
+.flex.items-center.text-3xl
+  %i.fas.fa-music.text-xl.text-slate-400.mr-4
+  %h2
+    - if user
+      = link_to user&.nickname, user_path(user)
+      %span /
+    - else 
+      - if band
+        = link_to band.title, band_path(band)
+        %span /
+  -#
+      - else
+        = link_to @music.composer, artist_path(@music.composer.id) do
+          = @music.composer
+        %span /
+  %h1 
+    = @music.title
+
+
+%table.table-auto.w-full.bg-white
+  %tbody
+    = render "layouts/shared/tr" do
+      %th.text-center.text-slate-300.w-20
+        %i.fas.fa-users.fa-lg
+      %td Band
+      %td
+        = @music.band
+    = render "layouts/shared/tr" do
+      %th.text-center.text-slate-300.w-20
+        %i.fas.fa-user-md.fa-lg
+      %td Composer
+      %td
+        -# = @music.composer
+    = render "layouts/shared/tr" do
+      %th.text-center.text-slate-300.w-20
+        %i.fas.fa-user-md.fa-lg
+      %td Lyrist
+      %td
+        -# = @music.lyrist
 
 = render "footer", music: @music

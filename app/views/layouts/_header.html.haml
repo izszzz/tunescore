@@ -3,7 +3,7 @@
 		svg_use_tag name, **attributes, class: ["w-6 h-6", attributes[:class]]
 	end
 	def header_svg_use_tag name, **attributes
-		base_svg_use_tag name, **attributes, class: ["text-gray-500 hover:text-gray-900 ml-8", attributes[:class]]
+		base_svg_use_tag name, **attributes, class: ["text-slate-300 hover:text-slate-500 ml-8", attributes[:class]]
 	end
 	plus_dropdown = [
 		[new_music_path, "music-note", "Music"], 
@@ -13,7 +13,7 @@
 	]
 
 - plus_icon = capture do
-	= base_svg_use_tag "plus", class: "bg-indigo-600 hover:bg-indigo-700 text-white rounded-md"
+	= base_svg_use_tag "plus", class: "bg-cyan-300 hover:bg-cyan-500 text-white rounded-md"
 - user_icon = capture do
 	= header_svg_use_tag "user-circle"
 - bell_icon = capture do
@@ -52,5 +52,5 @@
 					- dropdowns.each do |icon, lists|
 						= render "layouts/shared/dropdown", icon: icon, lists: lists
 				- else
-					= link_to "Sign in", user_session_path, class: "text-gray-500 hover:text-gray-900"
-					= link_to "Sign up", new_user_registration_path, class: "bg-indigo-600 hover:bg-indigo-700 ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"
+					= link_to "Sign in", user_session_path, class: "text-slate-300 hover:text-slate-500"
+					= link_to "Sign up", new_user_registration_path, class: "bg-cyan-300 hover:bg-cyan-500 ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"

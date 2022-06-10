@@ -1,4 +1,11 @@
+
+.flex.items-center
+  %i.fas.fa-music.text-xl.text-slate-400.mr-4
+  %h1.text-3xl
+    = @music.title
+
 %p#notice= notice
+
 
 %p
   %b User:
@@ -8,16 +15,5 @@
   = @music.band
 %p
   %b Title:
-  = @music.title
-%p
-  %b Bookmarks count:
-  = @music.bookmarks_count
 
-
-= link_to "Score", score_path(@music)
-|
-= link_to "Score Edit", score_path(@music)
-|
-= link_to 'Edit', edit_music_path(@music)
-|
-= link_to 'Back', musics_path
+= render "footer", music: @music

@@ -1,25 +1,15 @@
-%h2 Musics
-%ul.mb-5
+= render "layouts/shared/table", table_heads: ["Title", "Artist", "User"] do
   - @musics.each do |music|
-    = render 'musics/shared/music', music: music
+    = render 'musics/music', music: music
 
-%h2 Album
-%ul.mb-5
+= render "layouts/shared/table", table_heads: ["Title", "Artist"] do
   - @albums.each do |album|
-    %li
-      = album.id
-      = album.title
+    = render 'albums/album', album: album
 
-%h2 Artists
-%ul.mb-5
+= render "layouts/shared/table", table_heads: ["Name"] do
   - @artists.each do |artist|
-    %li
-      = artist.id
-      = artist.name
+    = render 'artists/artist', artist: artist
 
-%h2 Band
-%ul.mb-5
+= render "layouts/shared/table", table_heads: ["Name"] do
   - @bands.each do |band|
-    %li
-      = band.id
-      = band.name
+    = render 'bands/band', band: band

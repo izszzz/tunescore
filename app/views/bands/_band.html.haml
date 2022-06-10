@@ -1,0 +1,6 @@
+= render "layouts/shared/tr" do
+	%td.text-center.text-slate-300.w-20
+		%i.fas.fa-users.fa-lg
+	%td.font-bold
+		= link_to band_path(band) do
+			= band.name

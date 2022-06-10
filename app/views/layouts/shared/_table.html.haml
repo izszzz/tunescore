@@ -1,0 +1,9 @@
+%table.table-auto.w-full.border.border-slate-300.bg-white
+  %thead.text-slate-300
+    %tr.h-10
+      %th.border
+      - table_heads.each do |th|
+        %th.border
+          = th
+  %tbody
+    = yield

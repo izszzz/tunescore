@@ -1,0 +1,9 @@
+= render "layouts/shared/tr" do
+	%td.text-center.text-slate-300.w-20
+		%i.fas.fa-music.fa-lg
+	%td.font-bold
+		= link_to music_path(music) do
+			= music.title
+	%td
+	%td.text-slate-300
+		= music.user&.nickname

@@ -1,0 +1,3 @@
+= render "layouts/shared/table", table_heads: ["Title", "Artist"] do
+  - albums.each do |album|
+    = render 'albums/album', album: album

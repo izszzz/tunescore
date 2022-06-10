@@ -1,15 +1,4 @@
-= render "layouts/shared/table", table_heads: ["Title", "Artist", "User"] do
-  - @musics.each do |music|
-    = render 'musics/music', music: music
-
-= render "layouts/shared/table", table_heads: ["Title", "Artist"] do
-  - @albums.each do |album|
-    = render 'albums/album', album: album
-
-= render "layouts/shared/table", table_heads: ["Name"] do
-  - @artists.each do |artist|
-    = render 'artists/artist', artist: artist
-
-= render "layouts/shared/table", table_heads: ["Name"] do
-  - @bands.each do |band|
-    = render 'bands/band', band: band
+= render "musics/shared/table", musics: @musics
+= render "albums/shared/table", albums: @albums
+= render "artists/shared/table", artists: @artists
+= render "bands/shared/table", bands: @bands

@@ -9,15 +9,13 @@
     - if user
       = link_to user&.nickname, user_path(user)
       %span /
-    - else 
-      - if band
-        = link_to band.title, band_path(band)
-        %span /
+    - elsif band
+      = link_to band.title, band_path(band)
+      %span /
   -#
-      - else
-        = link_to @music.composer, artist_path(@music.composer.id) do
-          = @music.composer
-        %span /
+    - else
+      = link_to @music.composer, artist_path(@music.composer.id) do
+      %span /
   %h1 
     = @music.title
 
@@ -30,17 +28,29 @@
       %td Band
       %td
         = @music.band
+      %td
+        Edit
     = render "layouts/shared/tr" do
       %th.text-center.text-slate-300.w-20
         %i.fas.fa-user-md.fa-lg
       %td Composer
       %td
         -# = @music.composer
+      %td
+        Edit
     = render "layouts/shared/tr" do
       %th.text-center.text-slate-300.w-20
         %i.fas.fa-user-md.fa-lg
       %td Lyrist
       %td
         -# = @music.lyrist
+      %td
+        Edit
+    = render "layouts/shared/tr" do
+      %th.text-center.text-slate-300.w-20
+        %i.fas.fa-user-md.fa-lg
+      %td Arranger
+      %td
+        -# = @music.arranger
 
 = render "footer", music: @music

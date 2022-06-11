@@ -9,6 +9,7 @@ gem 'tailwindcss-rails'
 gem 'seed-fu'
 gem 'factory_bot_rails'
 gem 'faker'
+gem "view_component"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.2", ">= 7.0.2.3"

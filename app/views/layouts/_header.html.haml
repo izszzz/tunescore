@@ -5,52 +5,43 @@
 	def header_svg_use_tag name, **attributes
 		base_svg_use_tag name, **attributes, class: ["text-slate-300 hover:text-slate-500 ml-8", attributes[:class]]
 	end
-	plus_dropdown = [
-		[new_music_path, "music-note", "Music"], 
-		[new_album_path, "folder", "Album"], 
-		[new_artist_path, "user", "Artist"], 
-		[new_band_path, "user-group", "Band"]
+	add_lists = [
+		{ text: "Music", icon: "fa-music", path: new_music_path },
+		{ text: "Album", icon: "fa-record-vinyl", path: new_album_path },
+		{ text: "Artist", icon: "fa-user-md", path: new_artist_path }, 
+		{ text: "Band", icon: "fa-users", path: new_band_path }
+	]
+	user_lists = [
+		{ text: "Settings", icon: "fa-cog", path: settings_path },
+		{ text: "Sign Out", icon: "fa-sign-out-alt", path: destroy_user_session_path, link_options: { data: { turbo_method: :delete } }, dropdown_list_css_class: "border-t-2 border-gray-100"}
 	]
 
-- plus_icon = capture do
-	= base_svg_use_tag "plus", class: "bg-cyan-300 hover:bg-cyan-500 text-white rounded-md"
-- user_icon = capture do
-	= header_svg_use_tag "user-circle"
-- bell_icon = capture do
-	= header_svg_use_tag "bell"
-
-- plus_lists = capture do
-	- plus_dropdown.each do |path, icon, text|
-		= link_to path do
-			= render "layouts/shared/dropdown_list" do
-				= base_svg_use_tag icon
-				= text
-- user_lists = capture do
-	= link_to settings_path do
-		= render "layouts/shared/dropdown_list" do
-			= base_svg_use_tag "cog"
-			Setting
-	.border-t-2.border-gray-100
-	= link_to destroy_user_session_path, data: { turbo_method: :delete } do
-		= render "layouts/shared/dropdown_list" do
-			= base_svg_use_tag "logout"
-			Logout
-
-:ruby
-	dropdowns = [
-		[plus_icon, plus_lists],
-		[bell_icon, user_lists],
-		[user_icon, user_lists],
-	]
 
 %header.relative.bg-white.border-b-2.border-gray-100
 	.max-w-7xl.mx-auto.px-4.sm:px-6
 		.flex.justify-between.items-center.py-4.md:justify-start.md:space-x-10
 			= link_to "tunescore", root_path, class: "text-3xl"
+
 			.hidden.md:flex.items-center.justify-end.md:flex-1.lg:w-0
 				- if user_signed_in?
-					- dropdowns.each do |icon, lists|
-						= render "layouts/shared/dropdown", icon: icon, lists: lists
+					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+						- c.with_icon do
+							= base_svg_use_tag "plus", class: "bg-cyan-300 hover:bg-cyan-500 text-white rounded-md"
+						:ruby
+							c.with_dropdown_lists(add_lists)
+
+					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+						- c.with_icon do
+							= base_svg_use_tag "bell", class: "text-slate-300 hover:text-slate-500 ml-8"
+						:ruby
+							c.with_dropdown_lists([])
+
+					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+						- c.with_icon do
+							= base_svg_use_tag "user-circle", class: "text-slate-300 hover:text-slate-500 ml-8"
+						:ruby
+							c.with_dropdown_lists(user_lists)
+
 				- else
 					= link_to "Sign in", user_session_path, class: "text-slate-300 hover:text-slate-500"
 					= link_to "Sign up", new_user_registration_path, class: "bg-cyan-300 hover:bg-cyan-500 ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white"

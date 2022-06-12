@@ -1,8 +1,8 @@
-.at-wrap.flex.flex-col.overflow-hidden{class: "h-[80vh] w-[80vw]"}
-	= render 'score/shared/overlay'
-	.at-content.relative.flex-auto.overflow-hidden
+.at-wrap
+	= render AlphatabOverlayComponent.new
+	.at-content
 		.at-sidebar
-			= render 'score/shared/tracks'
-		.at-viewport.absolute.inset-0.left-12.overflow-y-auto
+			= render AlphatabTracksComponent.new
+		.at-viewport
 			.at-main{'data-alphatab-target': 'main'}
 	.at-controls

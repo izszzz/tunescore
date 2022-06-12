@@ -28,29 +28,31 @@
       %td Band
       %td
         = @music.band
-      %td
-        Edit
+      %td.text-slate-300
+        %i.fas.fa-edit
     = render "layouts/shared/tr" do
       %th.text-center.text-slate-300.w-20
         %i.fas.fa-user-md.fa-lg
       %td Composer
       %td
         -# = @music.composer
-      %td
-        Edit
+      %td.text-slate-300
+        %i.fas.fa-edit
     = render "layouts/shared/tr" do
       %th.text-center.text-slate-300.w-20
         %i.fas.fa-user-md.fa-lg
       %td Lyrist
       %td
         -# = @music.lyrist
-      %td
-        Edit
+      %td.text-slate-300
+        %i.fas.fa-edit
     = render "layouts/shared/tr" do
       %th.text-center.text-slate-300.w-20
         %i.fas.fa-user-md.fa-lg
       %td Arranger
       %td
         -# = @music.arranger
+      %td.text-slate-300
+        %i.fas.fa-edit
 
 = render "footer", music: @music

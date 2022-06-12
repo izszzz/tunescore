@@ -1,0 +1,8 @@
+.at-wrap{'data-alphatab-target': 'wrapper'}
+	= render AlphatabOverlayComponent.new
+	.at-content
+		.at-sidebar
+			= render AlphatabTracksComponent.new
+		.at-viewport{'data-alphatab-target': 'viewport'}
+			.at-main{'data-alphatab-target': 'main'}
+	= render AlphatabControlsComponent.new

@@ -1,4 +1,5 @@
-.py-4.flex.justify-between.text-gray-500.hover:text-gray-900{class: @dropdown_list_css_class}
-	= link_to @path, class: "block", **@link_options do
-		%i.fas.fa-lg.text-slate-400.mr-4{class: @icon}
-		= @text
+.py-4.flex.justify-between.text-slate-400.hover:text-slate-600{class: @dropdown_list_css_class}
+	= link_to @path, class: "flex justify-between items-center w-full", **@link_options do
+		%i.fas.fa-lg.mr-4{class: @icon}
+		%span
+			= @text

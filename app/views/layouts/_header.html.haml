@@ -24,17 +24,17 @@
 
 			.hidden.md:flex.items-center.justify-end.md:flex-1.lg:w-0
 				- if user_signed_in?
-					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+					= render HeaderDropdownComponent.new do |c|
 						- c.with_icon do
 							= base_svg_use_tag "plus", class: "bg-cyan-300 hover:bg-cyan-500 text-white rounded-md"
 						- c.with_dropdown_lists(add_lists)
 
-					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+					= render HeaderDropdownComponent.new do |c|
 						- c.with_icon do
 							= base_svg_use_tag "bell", class: "text-slate-300 hover:text-slate-500 ml-8"
 						- c.with_dropdown_lists([])
 
-					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
+					= render HeaderDropdownComponent.new do |c|
 						- c.with_icon do
 							= base_svg_use_tag "user-circle", class: "text-slate-300 hover:text-slate-500 ml-8"
 						- c.with_dropdown_lists(user_lists)

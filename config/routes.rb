@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root 'static_pages#home'
   get '/settings', to: 'static_pages#settings'
+  get '/search', to: 'static_pages#search'
   resources :score, only: [:show, :edit, :update]
   resources :musics
   resources :bands

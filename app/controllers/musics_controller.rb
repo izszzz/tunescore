@@ -3,7 +3,8 @@ class MusicsController < ApplicationController
 
   # GET /musics or /musics.json
   def index
-    @musics = Music.all
+    @q = Music.ransack(params[:q])
+    @musics = @q.result
   end
 
   # GET /musics/1 or /musics/1.json

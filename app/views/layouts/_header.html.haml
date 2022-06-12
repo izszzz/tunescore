@@ -2,9 +2,6 @@
 	def base_svg_use_tag name, **attributes
 		svg_use_tag name, **attributes, class: ["w-6 h-6", attributes[:class]]
 	end
-	def header_svg_use_tag name, **attributes
-		base_svg_use_tag name, **attributes, class: ["text-slate-300 hover:text-slate-500 ml-8", attributes[:class]]
-	end
 	add_lists = [
 		{ text: "Music", icon: "fa-music", path: new_music_path },
 		{ text: "Album", icon: "fa-record-vinyl", path: new_album_path },

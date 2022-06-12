@@ -27,20 +27,17 @@
 					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
 						- c.with_icon do
 							= base_svg_use_tag "plus", class: "bg-cyan-300 hover:bg-cyan-500 text-white rounded-md"
-						:ruby
-							c.with_dropdown_lists(add_lists)
+						- c.with_dropdown_lists(add_lists)
 
 					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
 						- c.with_icon do
 							= base_svg_use_tag "bell", class: "text-slate-300 hover:text-slate-500 ml-8"
-						:ruby
-							c.with_dropdown_lists([])
+						- c.with_dropdown_lists([])
 
 					= render HeaderDropdownComponent.new(dropdown_lists: add_lists) do |c|
 						- c.with_icon do
 							= base_svg_use_tag "user-circle", class: "text-slate-300 hover:text-slate-500 ml-8"
-						:ruby
-							c.with_dropdown_lists(user_lists)
+						- c.with_dropdown_lists(user_lists)
 
 				- else
 					= link_to "Sign in", user_session_path, class: "text-slate-300 hover:text-slate-500"

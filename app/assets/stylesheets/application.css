@@ -14,9 +14,10 @@
  *= require_self
  */
 
+/* Alphatab */
 .at-wrap {
-width: 100vw;
-height: 100vh;
+width: 100%;
+height: 100%;
 margin: 0 auto;
 border: 1px solid rgba(0, 0, 0, 0.12);
 display: flex;
@@ -241,4 +242,22 @@ width: 3px;
 /* Defines the color of the music symbols when they are being played (svg) */
 fill: #0078ff;
 stroke: #0078ff;
+}
+
+/* Split.js */
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+
+/* Monaco Editor */
+.monaco-editor {
+    width: 100%;
+    height: 100%;
 }

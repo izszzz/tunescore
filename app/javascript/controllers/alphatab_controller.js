@@ -152,7 +152,7 @@ export default class extends Controller {
   }
 
   setPlayerProgress(api){
-    const playerIndicator = this.playerProgress
+    const playerIndicator = this.playerProgressTarget
     api.soundFontLoad.on((e) => {
       const percentage = Math.floor((e.loaded / e.total) * 100);
       playerIndicator.innerText = percentage + "%";

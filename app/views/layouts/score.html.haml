@@ -6,6 +6,9 @@
     %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
     %script{src:"https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"}
     %script{:src => "https://kit.fontawesome.com/2ea26090f3.js", :crossorigin => "anonymous"}
+    %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"}
+    %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.min.js"}
+    %link{"data-name" => "vs/editor/editor.main", :href => "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/editor/editor.main.min.css", :rel => "stylesheet"}/
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"

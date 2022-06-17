@@ -9,3 +9,4 @@ pin "stimulus-dropdown", to: "https://ga.jspm.io/npm:stimulus-dropdown@2.0.0/dis
 pin "hotkeys-js", to: "https://ga.jspm.io/npm:hotkeys-js@3.8.9/dist/hotkeys.esm.js"
 pin "stimulus-use", to: "https://ga.jspm.io/npm:stimulus-use@0.50.0-2/dist/index.js"
 pin "stimulus-autocomplete", to: "https://ga.jspm.io/npm:stimulus-autocomplete@3.0.2/src/autocomplete.js"
+pin "split.js", to: "https://ga.jspm.io/npm:split.js@1.6.5/dist/split.es.js"

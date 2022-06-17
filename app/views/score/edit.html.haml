@@ -1,18 +1,4 @@
-.flex.flex-row{class: "h-[100vh] w-[100vw]"}
-	#split-0.h-full.w-full
-		= render AlphatabComponent.new
-	#split-1
-
-:javascript
-	window.Split(["#split-0", "#split-1"])
-	require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' }});
-	require(["vs/editor/editor.main"], () => {
-		monaco.editor.create(document.getElementById('split-1'), {
-			value: `function x() {
-				console.log("Hello world!");
-			}`,
-			language: 'javascript',
-			theme: 'vs-dark',
-			automaticLayout: true,
-		});
-	});
+.flex.flex-row{class: "h-[100vh] w-[100vw]", 'data-controller': 'editor alphatab', 'data-score-value': @music.score}
+	#split-0{'data-editor-target': 'split0'}
+	#split-1.h-full.w-full{'data-editor-target': 'split1'}
+		= render AlphatabComponent.new music: @music

@@ -2,20 +2,26 @@ import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["main", "overlay", "tracks", "track", "viewport", "songTitle", "songArtist", "countIn", "metronome", "loop", "print", "zoom", "layout", "playerProgress", "playerPause", "playerStop"]
+  api
 
   mainTargetConnected(target) {
     if (!window.alphaTab) return setTimeout(() => this.setApi(target), 500)
     this.setApi(target)
   }
+
+  changeMethod(value){
+    this.api.tex(value)
+  }
   setApi(main) {
-    const api = new window.alphaTab.AlphaTabApi(main, {
-      file: "https://www.alphatab.net/files/canon.gp",
+    this.api = new window.alphaTab.AlphaTabApi(main, {
+      tex: true,
       player: {
         enablePlayer: true,
         soundFont: 'https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2',
         scrollElement: this.viewportTarget // this is the element to scroll during playback
       }
     })
+    const api = this.api
     this.setOverlay(api)
     this.setTracks(api)
     this.setSongInfo(api)

@@ -4,6 +4,6 @@ import SingleColumn from '../templates/SingleColumn';
 
 export default function Home() {
   return (
-    <SingleColumn header={<Header />} />
+    <SingleColumn header={<Header />} content={<a href="/musics">Musics</a>} />
   );
 }

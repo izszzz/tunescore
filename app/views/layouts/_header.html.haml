@@ -19,7 +19,7 @@
 		.flex.justify-between.items-center.py-4.md:justify-start.md:space-x-10
 			= link_to "tunescore", root_path, class: "text-3xl"
 
-			.hidden.md:flex.items-center.justify-end.md:flex-1.lg:w-0
+			.md:flex.items-center.justify-end.md:flex-1.lg:w-0
 				- if user_signed_in?
 					= render HeaderDropdownComponent.new do |c|
 						- c.with_icon do

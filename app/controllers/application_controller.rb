@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+	before_action :set_gon
 	protect_from_forgery :except => [:destroy]	
 	around_action :switch_locale
 
@@ -8,4 +9,9 @@ class ApplicationController < ActionController::Base
 	end
 
 	def after_sign_out_path_for(resource_or_scope) = root_path
+
+	def set_gon
+		gon.push({currentUser: current_user})
+	end
+
 end

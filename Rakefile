@@ -4,3 +4,8 @@
 require_relative "config/application"
 
 Rails.application.load_tasks
+
+JSRailsRoutes.configure do |c|
+  c.output_dir = Rails.root.join('app/javascript')
+end
+

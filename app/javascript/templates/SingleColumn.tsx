@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '@mui/material/Container';
 
 interface Props {
   header: React.ReactNode;
@@ -9,7 +10,9 @@ export default function SingleColumn({ header, content }: Props) {
   return (
     <>
       {header}
-      {content}
+      <Container>
+        {content}
+      </Container>
     </>
   );
 }

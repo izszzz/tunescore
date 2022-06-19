@@ -1,17 +1,18 @@
 - label_class = "block text-sm font-medium text-gray-700"
 - field_class = "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
 
-= render "devise/shared/sign_form_layout" do
-  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    .pb-5
-      = f.label :email, class: label_class
-      = f.email_field :email, autofocus: true, autocomplete: "email", class: field_class
-    .pb-5
-      = f.label :password, class: label_class 
-      = f.password_field :password, autocomplete: "current-password", class: field_class
-    - if devise_mapping.rememberable?
-      .pb-10.form-check
-        = f.check_box :remember_me, class: "form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointe"
-        = f.label :remember_me, class: label_class
-    .pb-5
-      = f.submit "Sign in", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+#signin
+-# = render "devise/shared/sign_form_layout" do
+-#   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+-#     .pb-5
+-#       = f.label :email, class: label_class
+-#       = f.email_field :email, autofocus: true, autocomplete: "email", class: field_class
+-#     .pb-5
+-#       = f.label :password, class: label_class 
+-#       = f.password_field :password, autocomplete: "current-password", class: field_class
+-#     - if devise_mapping.rememberable?
+-#       .pb-10.form-check
+-#         = f.check_box :remember_me, class: "form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointe"
+-#         = f.label :remember_me, class: label_class
+-#     .pb-5
+-#       = f.submit "Sign in", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

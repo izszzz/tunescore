@@ -11,7 +11,12 @@ class ApplicationController < ActionController::Base
 	def after_sign_out_path_for(resource_or_scope) = root_path
 
 	def set_gon
-		gon.push({currentUser: current_user})
+		gon.push({
+			validators: {
+				user: User.validators.to_a
+			},
+			currentUser: current_user,
+		})
 	end
 
 end

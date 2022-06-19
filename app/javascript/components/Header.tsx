@@ -6,12 +6,15 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+// @ts-ignore
+import * as Routes from "../rails-routes.js"
 
 export default function Header() {
   const [currentUser, setCurrentUser] = useState(null)
   useEffect(()=>{
     setCurrentUser(window.gon.currentUser)
   },[])
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -29,11 +32,11 @@ export default function Header() {
             TuneScore
           </Typography>
           {currentUser ?
-              <Button color="inherit" href="/users/sign_out" data-turbo-method="delete">SignOut</Button>
+              <Button color="inherit" href={Routes.destroy_user_session_path()} data-turbo-method="delete">SignOut</Button>
             :
             <>
-              <Button color="inherit" href="/users/sign_up">SignUp</Button>
-              <Button color="inherit" href="/users/sign_in">SignIn</Button>
+              <Button color="inherit" href={Routes.new_user_registration_path()} >SignUp</Button>
+              <Button color="inherit" href={Routes.new_user_session_path()}>SignIn</Button>
             </>
           }
         </Toolbar>

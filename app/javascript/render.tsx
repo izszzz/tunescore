@@ -1,35 +1,27 @@
 import "@hotwired/turbo-rails"
-import React from 'react';
 import { createRoot } from 'react-dom/client';
-// @ts-ignore
-import * as Routes from  "./rails-routes"
-import Home from './pages/Home';
-import SignUp from './pages/SignUp';
-import SignIn from './pages/SignIn';
-import Musics from "./pages/Musics";
 import { Gon } from "./interfaces";
+import pages, { Page } from "./pages";
 
-const pages = [
-	[Routes.new_user_session_path(), "signin", <SignIn/>],
-	[Routes.new_user_registration_path(), "signup", <SignUp/>],
-	[Routes.root_path(), "home", <Home/>],
-	[Routes.musics_path(), "musics", <Musics/>]
-]
-
-document.addEventListener("turbo:load", function() {
-	pages.map(([path, id, page])=>render(path, id, page))
+document.addEventListener("turbo:load", function () {
+	render(pages)
 })
 
-function render(path: string, id: string, page: React.ReactNode){
-	if(location.pathname === path){
+function render(pages: Page[]) {
+	for (const { id, component } of pages) {
 		const e = document.getElementById(id);
-		if (!e) throw new Error('Failed to find the root element');
-		createRoot(e).render(page);
+		if (e) {
+			createRoot(e).render(component);
+			return
+		} else {
+			continue
+		}
 	}
+	throw new Error('Failed to find the root element');
 }
 
 declare global {
-  interface Window {
-    gon: Gon
-  }
+	interface Window {
+		gon: Gon
+	}
 }

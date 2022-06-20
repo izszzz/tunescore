@@ -6,12 +6,15 @@ class MusicsController < ApplicationController
     @q = Music.ransack(params[:q])
     @musics = @q.result
     gon.push({
-      musics: @musics.includes(:user)
+      musics: @musics
     })
   end
 
   # GET /musics/1 or /musics/1.json
   def show
+    gon.push({
+      musics: @music
+    })
   end
 
   # GET /musics/new

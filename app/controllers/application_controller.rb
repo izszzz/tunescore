@@ -15,6 +15,9 @@ class ApplicationController < ActionController::Base
 			validators: {
 				user: User.validators.to_a
 			},
+			models: {
+				user: User.columns
+			},
 			currentUser: current_user,
 		})
 	end

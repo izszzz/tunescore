@@ -1,9 +1,15 @@
 import React from 'react';
-import Header from '../components/Header';
 import SingleColumn from '../templates/SingleColumn';
+import Header from '../components/Headers/Header';
+import GonContextProvider from '../contexts/GonContext';
 
 export default function Home() {
   return (
-    <SingleColumn header={<Header />} content={<a href="/musics">Musics</a>} />
+    <GonContextProvider>
+      <SingleColumn
+        header={<Header />}
+        content={<a href="/musics">Musics</a>}
+      />
+    </GonContextProvider>
   );
 }

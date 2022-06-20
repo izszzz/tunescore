@@ -5,6 +5,9 @@ class MusicsController < ApplicationController
   def index
     @q = Music.ransack(params[:q])
     @musics = @q.result
+    gon.push({
+      musics: @musics.includes(:user)
+    })
   end
 
   # GET /musics/1 or /musics/1.json

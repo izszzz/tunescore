@@ -11,7 +11,6 @@ import { ErrorMessage } from "@hookform/error-message";
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 export type ControlTextFieldProps = TextFieldProps & {
-
   name: string;
   control: Control;
   errors?: DeepMap<FieldValues, FieldError>;

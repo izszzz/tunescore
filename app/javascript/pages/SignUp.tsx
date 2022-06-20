@@ -1,11 +1,12 @@
 import React from 'react';
 import SingleColumn from '../templates/SingleColumn';
-import SignUpForm from "../components/Form/SignUpForm";
+import BackHeader from "../components/Headers/BackHeader"
+import SignUpForm from "../components/Forms/SignUpForm";
 
 export default function SignUp() {
   return (
     <SingleColumn 
-      header={null} 
+      header={<BackHeader />} 
       content={<SignUpForm />} 
     />
   )

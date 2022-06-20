@@ -1,12 +1,8 @@
 import * as yup from "yup";
 
-interface SignInSchemaParams {
-  minimum: number;
-  maximum: number
-}
-export const signInSchema = ({minimum, maximum}: SignInSchemaParams) =>yup.object().shape({
+export const signInSchema = yup.object().shape({
   email: yup.string().email().required(),
-  password: yup.string().required().min(minimum).max(maximum),
+  password: yup.string().required(),
 });
 export const signUpSchema = yup.object().shape({
   email: yup.string().email().required(),

@@ -1,20 +1,16 @@
 import React from "react"
-import ControlTextField from "../ControlTextField"
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { signInSchema } from "../../schema";
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import ControlTextField from "../ControlTextField"
+import Layout from "./Layout"
+import { signInSchema } from "../../schema";
 
-export default function SignInForm (){
-	const { control, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(signInSchema),
-  });
-	const onSubmit= ()=>{}
-	return(
-    <Paper>
-      <Box p={3}>
+export default function SignInForm() {
+  const onSubmit = () => {
+    console.log("submit")
+  }
+  return (
+    <Layout schema={signInSchema}>
+      {({ control, handleSubmit, formState: { errors } }) =>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ControlTextField
             type="email"
@@ -40,9 +36,9 @@ export default function SignInForm (){
             errors={errors}
             fullWidth
           />
-          <LoadingButton variant="contained" color="primary" fullWidth  disableElevation>Sign In</LoadingButton>
+          <LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>Sign In</LoadingButton>
         </form>
-      </Box>
-    </Paper>
-	)
+      }
+    </Layout>
+  )
 }

@@ -258,6 +258,8 @@ GEM
     ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
     rubyzip (2.3.2)
+    schema2type (0.4.0)
+      activesupport
     seed-fu (2.3.9)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
@@ -331,6 +333,7 @@ DEPENDENCIES
   redis (~> 4.0)
   rspec-rails (~> 6.0.0rc1)
   rubocop-rails
+  schema2type
   seed-fu
   selenium-webdriver
   sprockets-rails

@@ -3,7 +3,7 @@ import SingleColumn from '../templates/SingleColumn';
 import Header from '../components/Headers/Header';
 import { GonContext } from '../contexts/GonContext';
 
-export default function Musics() {
+export default function Artist() {
 	const gon = useContext(GonContext)
 	return (
 		<SingleColumn

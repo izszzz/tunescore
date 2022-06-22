@@ -11,6 +11,7 @@ export default function Home() {
           <a href="/musics">Musics</a>
           <a href="/artists">Artists</a>
           <a href="/bands">Bands</a>
+          <a href="/albums">Albums</a>
         </>
       }
     />

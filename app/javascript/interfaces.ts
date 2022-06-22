@@ -6,6 +6,8 @@ export interface Gon{
 	artist: any
 	bands: any[]
 	band: any
+	albums: any[]
+	album: any
 }
 
 export interface Page {

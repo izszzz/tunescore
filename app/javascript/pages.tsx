@@ -8,7 +8,8 @@ import Artists from "./pages/Artists";
 import Artist from "./pages/Artist";
 import Bands from "./pages/Bands";
 import Band from "./pages/Band";
-
+import Albums from "./pages/Albums";
+import Album from "./pages/Album";
 
 function createData(
 	id: string,
@@ -27,6 +28,8 @@ const pages = [
 	createData("artist", <Artist />),
 	createData("bands", <Bands />),
 	createData("band", <Band />),
+	createData("albums", <Albums />),
+	createData("album", <Album />),
 ]
 
 export default pages 

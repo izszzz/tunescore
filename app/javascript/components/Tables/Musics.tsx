@@ -28,12 +28,12 @@ export default function Musics({ musics }: Props) {
 				</TableHead>
 				<TableBody>
 					{musics.map((music: any) =>
-						<TableRow key={music.id} component={Link} href={Routes.music_path(music)}>
+						<TableRow key={music.id} component={Link} href={Routes.music_path({ id: music.id })}>
 							<TableCell></TableCell>
 							<TableCell>{music.title}</TableCell>
 							<TableCell>{ }</TableCell>
 							<TableCell>{ }</TableCell>
-							<TableCell>{ }</TableCell>
+							<TableCell>{music.user?.nickname}</TableCell>
 						</TableRow >
 					)}
 				</TableBody>

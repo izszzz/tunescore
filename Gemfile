@@ -14,6 +14,9 @@ gem 'ransack'
 gem 'gon'
 gem 'jsbundling-rails'
 gem 'schema2type'
+gem 'rabl'
+gem 'activeadmin'
+
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.2", ">= 7.0.2.3"
@@ -37,7 +40,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.0"

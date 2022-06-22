@@ -3,18 +3,13 @@ class MusicsController < ApplicationController
 
   # GET /musics or /musics.json
   def index
-    @q = Music.ransack(params[:q])
-    @musics = @q.result
-    gon.push({
-      musics: @musics
-    })
+    @musics = Music.all
+    gon.rabl as: :musics
   end
 
   # GET /musics/1 or /musics/1.json
   def show
-    gon.push({
-      musics: @music
-    })
+    gon.rabl as: :music
   end
 
   # GET /musics/new
@@ -67,7 +62,7 @@ class MusicsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_music
-      @music = Music.find(params[:id])
+      @music = Music.includes([:user]).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

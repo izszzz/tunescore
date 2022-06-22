@@ -3,3 +3,8 @@ export interface Gon{
 	musics: any[]
 	music: any
 }
+
+export interface Page {
+	id: string
+	component: React.ReactNode
+}

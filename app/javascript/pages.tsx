@@ -5,10 +5,6 @@ import SignIn from './pages/SignIn';
 import Musics from "./pages/Musics";
 import Music from "./pages/Music";
 
-export interface Page {
-	id: string
-	component: React.ReactNode
-}
 
 function createData(
 	id: string,
@@ -16,6 +12,7 @@ function createData(
 ) {
 	return { id, component };
 }
+
 const pages = [
 	createData("signin", <SignIn />),
 	createData("signup", <SignUp />),

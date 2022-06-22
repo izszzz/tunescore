@@ -1,7 +1,7 @@
 import "@hotwired/turbo-rails"
 import { createRoot } from 'react-dom/client';
-import { Gon } from "./interfaces";
-import pages, { Page } from "./pages";
+import { Gon, Page } from "./interfaces";
+import pages from "./pages";
 
 document.addEventListener("turbo:load", function () {
 	render(pages)

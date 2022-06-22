@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 // @ts-ignore
 import * as Routes from "../../rails-routes.js"
 import Layout from './Layout.js';
+import Link from '@mui/material/Link';
 
 export default function Header() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -24,7 +25,7 @@ export default function Header() {
       >
         <MenuIcon />
       </IconButton>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Typography variant="h6" component={Link} href={Routes.root_path()} sx={{ flexGrow: 1 }}>
         TuneScore
       </Typography>
       {currentUser ?

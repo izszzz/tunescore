@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SingleColumn from '../templates/SingleColumn';
 import Header from '../components/Headers/Header';
 import MusicsTable from "../components/Tables/Musics"
-import GonContextProvider, { GonContext } from '../contexts/GonContext';
+import { GonContext } from '../contexts/GonContext';
 
 export default function Musics() {
+  const gon = useContext(GonContext)
   return (
-    <GonContextProvider>
-      <GonContext.Consumer>
-        {gon =>
-          <SingleColumn
-            header={<Header />}
-            content={<MusicsTable musics={gon?.musics || []} />}
-          />
-        }
-      </GonContext.Consumer>
-    </GonContextProvider>
+    <SingleColumn
+      header={<Header />}
+      content={<MusicsTable musics={gon?.musics || []} />}
+    />
   );
 }

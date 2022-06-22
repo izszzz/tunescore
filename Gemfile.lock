@@ -118,6 +118,7 @@ GEM
       railties (>= 5.0.0)
     faker (2.20.0)
       i18n (>= 1.8.11, < 2)
+    ffi (1.15.5)
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
     formtastic_i18n (0.7.0)
@@ -297,6 +298,14 @@ GEM
     ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
     rubyzip (2.3.2)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     schema2type (0.4.0)
       activesupport
     seed-fu (2.3.9)
@@ -373,6 +382,7 @@ DEPENDENCIES
   redis (~> 4.0)
   rspec-rails (~> 6.0.0rc1)
   rubocop-rails
+  sassc-rails
   schema2type
   seed-fu
   selenium-webdriver

@@ -8,7 +8,6 @@ gem 'haml-rails'
 gem 'seed-fu'
 gem 'factory_bot_rails'
 gem 'faker'
-gem "view_component"
 gem 'ransack'
 gem 'gon'
 gem 'jsbundling-rails'

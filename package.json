@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.32.2",
     "react-script-hook": "^1.6.0",
+    "react-split": "^2.0.14",
     "react-use": "^17.4.0",
     "yup": "^0.32.11"
   },

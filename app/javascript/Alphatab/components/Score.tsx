@@ -8,7 +8,7 @@ interface Props {
 export default function Score({ mainRef, viewportRef }: Props) {
 	return (
 		<Box ref={viewportRef}>
-			<Box ref={mainRef} height="100vh" width="100vw" />
+			<Box ref={mainRef} height="100%" width="100%" />
 		</Box>
 	)
 }

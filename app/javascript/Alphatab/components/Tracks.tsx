@@ -12,7 +12,6 @@ export default function Tracks({ onTracks }: Props) {
 	console.log(tracks)
 	return (
 		<>
-			tracks
 		</>
 	)
 }

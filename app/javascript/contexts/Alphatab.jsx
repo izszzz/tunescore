@@ -1,15 +1,11 @@
 import React, {useEffect, useState, useRef, createContext} from "react"
-import useScript from "react-script-hook"
 
 export default function AlphatabContextProvider({children}) {
   const [api, setApi] = useState()
   const mainRef = useRef(null)
   const viewportRef = useRef(null)
-  const [loading, error] = useScript({
-    src: "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.min.js",
-  })
   useEffect(() => {
-    if(mainRef && viewportRef && loading){
+    if(mainRef && viewportRef){
       const api = new window.alphaTab.AlphaTabApi(mainRef.current, {
         file: "https://www.alphatab.net/files/canon.gp",
         // tex: true,
@@ -22,7 +18,7 @@ export default function AlphatabContextProvider({children}) {
       })
       setApi(api)
     }
-  }, [mainRef, viewportRef, loading])
+  }, [mainRef, viewportRef])
   return (
     <AlphatabContext.Provider value={api}>
       {children({mainRef, viewportRef})}

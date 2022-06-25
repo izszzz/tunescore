@@ -33,6 +33,6 @@
 
 /* Monaco Editor */
 .monaco-editor {
-    width: 100%;
-    height: 100%;
+    width: 100vh !important;
+    height: 100vh !important;
 }

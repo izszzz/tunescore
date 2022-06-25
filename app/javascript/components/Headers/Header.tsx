@@ -29,7 +29,7 @@ export default function Header() {
         TuneScore
       </Typography>
       {currentUser ?
-        <Button color="inherit" href={Routes.destroy_user_session_path()} data-turbo-method="delete">SignOut</Button>
+        <Button color="inherit" href={Routes.destroy_user_session_path()} data-turbo-method="delete" data-turbo="true">SignOut</Button>
         :
         <>
           <Button color="inherit" href={Routes.new_user_registration_path()} >SignUp</Button>

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { GonContext } from "../../contexts/GonContext";
+import { GonContext } from "../../contexts/Gon";
 import { Gon } from "../../interfaces";
 
 interface Props {

@@ -3,12 +3,13 @@ class AlbumsController < ApplicationController
 
   # GET /albums or /albums.json
   def index
-    @q = Album.ransack(params[:q])
-    @albums = @q.result
+    @albums = Album.all
+    gon.rabl as: :albums
   end
 
   # GET /albums/1 or /albums/1.json
   def show
+    gon.rabl as: :album
   end
 
   # GET /albums/new

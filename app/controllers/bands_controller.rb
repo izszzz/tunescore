@@ -3,12 +3,13 @@ class BandsController < ApplicationController
 
   # GET /bands or /bands.json
   def index
-    @q = Band.ransack(params[:q])
-    @bands = @q.result
+    @bands = Band.all
+    gon.rabl as: :bands
   end
 
   # GET /bands/1 or /bands/1.json
   def show
+    gon.rabl as: :band
   end
 
   # GET /bands/new

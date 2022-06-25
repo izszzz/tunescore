@@ -3,12 +3,13 @@ class ArtistsController < ApplicationController
 
   # GET /artists or /artists.json
   def index
-    @q = Artist.ransack(params[:q])
-    @artists = @q.result
+    @artists = Artist.all
+    gon.rabl as: :artists
   end
 
   # GET /artists/1 or /artists/1.json
   def show
+    gon.rabl as: :artist
   end
 
   # GET /artists/new

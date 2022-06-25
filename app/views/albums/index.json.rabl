@@ -1,2 +1,2 @@
-collection @albums, object_root: false
+collection @albums
 extends 'albums/album'

@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createRoot } from 'react-dom/client';
 import { Gon, Page } from "./interfaces";
 import pages from "./pages";
-import GonContextProvider from './contexts/GonContext';
+import GonContextProvider from './contexts/Gon';
 // @ts-ignore
 import { Turbo } from "@hotwired/turbo-rails"
 Turbo.session.drive = false

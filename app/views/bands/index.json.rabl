@@ -1,2 +1,2 @@
-collection @bands, object_root: false
+collection @bands
 extends 'bands/band'

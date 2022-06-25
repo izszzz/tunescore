@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import SingleColumn from '../templates/SingleColumn';
 import Header from '../components/Headers/Header';
-import { GonContext } from '../contexts/GonContext';
+import { GonContext } from '../contexts/Gon';
 
 export default function Album() {
 	const gon = useContext(GonContext)

@@ -10,6 +10,8 @@ import Bands from "./pages/Bands";
 import Band from "./pages/Band";
 import Albums from "./pages/Albums";
 import Album from "./pages/Album";
+import Score from "./pages/Score/Show";
+import ScoreEdit from "./pages/Score/Edit";
 
 function createData(
 	id: string,
@@ -30,6 +32,8 @@ const pages = [
 	createData("band", <Band />),
 	createData("albums", <Albums />),
 	createData("album", <Album />),
+	createData("score", <Score />),
+	createData("score_edit", <ScoreEdit />)
 ]
 
 export default pages 

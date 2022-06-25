@@ -1,2 +1,2 @@
-collection @musics, object_root: false
+collection @musics
 extends 'musics/music'

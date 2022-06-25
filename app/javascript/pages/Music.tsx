@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import SingleColumn from '../templates/SingleColumn';
 import Header from '../components/Headers/Header';
-import { GonContext } from '../contexts/GonContext';
+import { GonContext } from '../contexts/Gon';
 import Title from '../components/Title';
 import MusicTable from '../components/Tables/Music';
 import Button from '@mui/material/Button';

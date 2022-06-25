@@ -1,2 +1,2 @@
-collection @artists, object_root: false
+collection @artists
 extends 'artists/artist'

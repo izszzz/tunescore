@@ -1,6 +1,6 @@
 import React from "react"
 import ControlTextField from "../ControlTextField"
-import { signUpSchema } from "../../schema";
+import { signUpSchema } from "../../yup";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from "@mui/material/Grid";
 import Layout from "./Layout";

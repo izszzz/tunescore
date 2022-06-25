@@ -2,7 +2,7 @@ import React from "react"
 import LoadingButton from '@mui/lab/LoadingButton';
 import ControlTextField from "../ControlTextField"
 import Layout from "./Layout"
-import { signInSchema } from "../../schema";
+import { signInSchema } from "../../yup";
 
 export default function SignInForm() {
   const onSubmit = () => {

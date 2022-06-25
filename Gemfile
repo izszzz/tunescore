@@ -14,6 +14,7 @@ gem 'jsbundling-rails'
 gem 'schema2type'
 gem 'rabl'
 gem 'activeadmin'
+gem "ts_schema"
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

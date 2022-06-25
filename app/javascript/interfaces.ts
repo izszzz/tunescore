@@ -1,13 +1,13 @@
 export interface Gon{
-	currentUser: null
-	musics: any[]
-	music: any
-	artists: any[]
-	artist: any
-	bands: any[]
-	band: any
-	albums: any[]
-	album: any
+	currentUser: schema.User
+	musics: schema.Music[]
+	music: schema.Music
+	artists: schema.Artist[]
+	artist: schema.Artist
+	bands: schema.Band[]
+	band: schema.Band
+	albums: schema.Album[]
+	album: schema.Album
 }
 
 export interface Page {

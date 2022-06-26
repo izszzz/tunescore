@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from '@mui/material/Container';
+import SpeedDial from "../components/SpeedDial";
 
 interface Props {
   header: React.ReactNode;
@@ -13,6 +14,7 @@ export default function SingleColumn({ header, content }: Props) {
       <Container>
         {content}
       </Container>
+      <SpeedDial />
     </>
   );
 }

@@ -9,9 +9,9 @@ export default function SignInForm() {
     console.log("submit")
   }
   return (
-    <Layout schema={signInSchema}>
-      {({ control, handleSubmit, formState: { errors } }) =>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <Layout schema={signInSchema} onSubmit={onSubmit}>
+      {({ control, formState: { errors } }) =>
+        <>
           <ControlTextField
             type="email"
             name="email"
@@ -37,7 +37,7 @@ export default function SignInForm() {
             fullWidth
           />
           <LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>Sign In</LoadingButton>
-        </form>
+        </>
       }
     </Layout>
   )

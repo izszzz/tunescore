@@ -8,11 +8,12 @@ import { Gon } from "../../interfaces";
 
 interface Props {
 	schema: any
-	children: (form: UseFormReturn<FieldValues, Gon | null>) => React.ReactNode
+	children: (form: Omit<UseFormReturn<FieldValues, Gon | null>, "handleSubmit">) => React.ReactNode
+	onSubmit: () => void
 }
-export default function Layout({ schema, children }: Props) {
+export default function Layout({ schema, children, onSubmit }: Props) {
 	const gon = useContext(GonContext)
-	const form = useForm({
+	const { handleSubmit, ...form } = useForm({
 		resolver: yupResolver(schema),
 		context: gon
 	});
@@ -20,7 +21,9 @@ export default function Layout({ schema, children }: Props) {
 		<Box height="100%">
 			<Paper>
 				<Box p={3}>
-					{children(form)}
+					<form onSubmit={handleSubmit(onSubmit)}>
+						{children(form)}
+					</form>
 				</Box>
 			</Paper>
 		</Box>

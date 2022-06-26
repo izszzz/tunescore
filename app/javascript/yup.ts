@@ -12,3 +12,15 @@ export const signUpSchema = yup.object().shape({
   password: yup.string().required(),
   passwordConfirmation: yup.string().oneOf([yup.ref("password"), null]),
 });
+export const musicSchema= yup.object().shape({
+  title: yup.string().required() 
+})
+export const albumSchema = yup.object().shape({
+  title: yup.string().required() 
+})
+export const artistSchema = yup.object().shape({
+  name: yup.string().required() 
+})
+export const bandSchema = yup.object().shape({
+  name: yup.string().required() 
+})

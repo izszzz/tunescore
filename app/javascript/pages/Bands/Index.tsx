@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import SingleColumn from '../templates/SingleColumn';
-import Header from '../components/Headers/Header';
-import { GonContext } from '../contexts/Gon';
-import BandsTable from '../components/Tables/Bands';
+import SingleColumn from '../../templates/SingleColumn';
+import Header from '../../components/Headers/Header';
+import { GonContext } from '../../contexts/Gon';
+import BandsTable from '../../components/Tables/Bands';
 
 export default function Bands() {
 	const gon = useContext(GonContext)

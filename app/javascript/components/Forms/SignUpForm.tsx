@@ -1,6 +1,6 @@
 import React from "react"
 import ControlTextField from "../ControlTextField"
-import { signUpSchema } from "../../schema";
+import { signUpSchema } from "../../yup";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Grid from "@mui/material/Grid";
 import Layout from "./Layout";
@@ -10,9 +10,9 @@ export default function SignInForm() {
     console.log("submit")
   }
   return (
-    <Layout schema={signUpSchema}>
-      {({ control, handleSubmit, formState: { errors } }) =>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <Layout schema={signUpSchema} onSubmit={onSubmit}>
+      {({ control, formState: { errors } }) =>
+        <>
           <ControlTextField
             type="email"
             name="email"
@@ -86,7 +86,7 @@ export default function SignInForm() {
             fullWidth
           />
           <LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>Sign Up</LoadingButton>
-        </form>
+        </>
       }
     </Layout>
   )

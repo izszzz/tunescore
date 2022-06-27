@@ -1,4 +1,5 @@
 export interface Gon{
+	authenticity_token: string
 	currentUser: schema.User
 	musics: schema.Music[]
 	music: schema.Music

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-	before_action :set_gon
 	protect_from_forgery :except => [:destroy]	
+	before_action :set_gon
 	around_action :switch_locale
 
 	def switch_locale(&action)
@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
 
 	def set_gon
 		gon.push({
+			# TODO: fix
 			validators: {
 				user: User.validators.to_a
 			},
@@ -19,6 +20,7 @@ class ApplicationController < ActionController::Base
 				user: User.columns
 			},
 			currentUser: current_user,
+			authenticity_token: form_authenticity_token
 		})
 	end
 

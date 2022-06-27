@@ -6,6 +6,7 @@ import {
   FieldValues,
   RegisterOptions,
   useController,
+  UseControllerProps,
 } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -17,7 +18,7 @@ export type ControlTextFieldProps = TextFieldProps & {
   rules?: RegisterOptions;
 };
 
-const ControlTextField: React.FC<ControlTextFieldProps> = ({
+function ControlTextField({
   name,
   defaultValue,
   onChange,
@@ -27,7 +28,7 @@ const ControlTextField: React.FC<ControlTextFieldProps> = ({
   control,
   rules,
   ...props
-}: ControlTextFieldProps) => {
+}: UseControllerProps<ControlTextFieldProps>) {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     field: { ref, value, onChange: onChangeController },

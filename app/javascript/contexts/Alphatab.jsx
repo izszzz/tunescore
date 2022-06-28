@@ -7,8 +7,8 @@ export default function AlphatabContextProvider({children}) {
   useEffect(() => {
     if(mainRef && viewportRef){
       const api = new window.alphaTab.AlphaTabApi(mainRef.current, {
-        file: "https://www.alphatab.net/files/canon.gp",
-        // tex: true,
+        // file: "https://www.alphatab.net/files/canon.gp",
+        tex: true,
         player: {
           enablePlayer: true,
           soundFont:

@@ -13,12 +13,11 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 export type ControlTextFieldProps = TextFieldProps & {
   name: string;
-  control: Control;
   errors?: DeepMap<FieldValues, FieldError>;
   rules?: RegisterOptions;
 };
 
-function ControlTextField({
+function ControlTextField<T>({
   name,
   defaultValue,
   onChange,
@@ -28,12 +27,11 @@ function ControlTextField({
   control,
   rules,
   ...props
-}: UseControllerProps<ControlTextFieldProps>) {
+}: UseControllerProps<T> & ControlTextFieldProps) {
   const {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     field: { ref, value, onChange: onChangeController },
     fieldState: { invalid },
-  } = useController({ name, control, rules, defaultValue });
+  } = useController<T>({ name, control, rules, defaultValue });
   const handleChange = (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {

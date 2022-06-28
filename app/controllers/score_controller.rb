@@ -3,9 +3,11 @@ class ScoreController < ApplicationController
   layout 'score'
 
   def show
+    gon.rabl as: :music
   end
 
   def edit
+    gon.rabl as: :music
   end
 
   def update

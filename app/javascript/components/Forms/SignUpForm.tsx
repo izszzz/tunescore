@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import axios from "axios"
 import { SubmitHandler } from "react-hook-form";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -24,7 +24,7 @@ export default function SignUpForm() {
   const [loading, setLoading] = useState(false)
   const onSubmit: SubmitHandler<SignUp> = (data) => {
     setLoading(true)
-    axios.post(Routes.user_registration_path(), { ...data, authenticity_token: gon.authenticity_token }).then(res => {
+    axios.post(Routes.user_registration_path(), { ...data, authenticity_token: gon?.authenticity_token }).then(res => {
       location.href = Routes.root_path()
     }).catch(err => {
       setLoading(false)
@@ -35,7 +35,7 @@ export default function SignUpForm() {
     <Layout schema={signUpSchema} onSubmit={onSubmit}>
       {({ control, formState: { errors } }) =>
         <>
-          <ControlTextField
+          <ControlTextField<SignUp>
             type="email"
             name="email"
             defaultValue=""
@@ -47,7 +47,7 @@ export default function SignUpForm() {
             errors={errors}
             fullWidth
           />
-          <ControlTextField
+          <ControlTextField<SignUp>
             type="nickname"
             name="nickname"
             defaultValue=""
@@ -107,7 +107,7 @@ export default function SignUpForm() {
             errors={errors}
             fullWidth
           />
-          <LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>Sign Up</LoadingButton>
+          <LoadingButton loading={loading} type="submit" variant="contained" color="primary" fullWidth disableElevation>Sign Up</LoadingButton>
         </>
       }
     </Layout>

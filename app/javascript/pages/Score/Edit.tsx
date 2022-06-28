@@ -1,50 +1,43 @@
-import React, { useEffect, useRef } from 'react'
+import React, { RefObject, useContext, useEffect } from 'react'
+import axios from 'axios';
 import Split from 'split.js'
+import Box from '@mui/material/Box';
 import Control from '../../Alphatab/components/Control';
 // @ts-ignore
 import AlphatabContextProvider from "../../contexts/Alphatab"
+// @ts-ignore
+import * as Routes from "../../rails-routes"
 import Score from '../../Alphatab/components/Score';
-import Box from '@mui/material/Box';
+import MonacoEditor from '../../components/MonacoEditor';
+import Save from '../../components/Buttons/Save';
+import { GonContext } from '../../contexts/Gon';
 
 export default function Show() {
-	const editorRef = useRef<HTMLDivElement>(null)
+	const gon = useContext(GonContext)
 	useEffect(() => {
 		Split(['#split-0', '#split-1'])
 	}, [])
-	useEffect(() => {
-		if (editorRef) {
-			//@ts-ignore
-			window.require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' } });
-			//@ts-ignore
-			window.require(["vs/editor/editor.main"], () => {
-				//@ts-ignore
-				const model = monaco.editor.createModel("aaaa", "javascript")
-				//@ts-ignore
-				const editor = window.monaco.editor.create(editorRef.current, {
-					automaticLayout: true
-				})
-				editor.setModel(model)
-			})
-		}
-	}, [editorRef])
+	const onSave = () => {
+		//@ts-ignore
+		axios.patch(Routes.music_path({ id: gon?.music.id }) + ".json", { music: { score: monaco.editor.getModels()[0].getValue() }, authenticity_token: gon?.authenticity_token })
+	}
 	return (
-		<>
-			<AlphatabContextProvider>
-				{({ mainRef, viewportRef }) =>
-					<>
-						<Control>
-						</Control>
-						<div className="split">
-							<div id="split-0">
-								<Score mainRef={mainRef} viewportRef={viewportRef} />
-							</div>
-							<Box id="split-1">
-								<div ref={editorRef} />
-							</Box>
-						</div>
-					</>
-				}
-			</AlphatabContextProvider>
-		</>
+		<AlphatabContextProvider>
+			{({ mainRef, viewportRef }: { mainRef: RefObject<HTMLDivElement>, viewportRef: RefObject<HTMLDivElement> }) =>
+				<>
+					<Control>
+						<Save onSave={onSave} />
+					</Control>
+					<Box className="split">
+						<Box id="split-0">
+							<Score mainRef={mainRef} viewportRef={viewportRef} />
+						</Box>
+						<Box id="split-1">
+							<MonacoEditor />
+						</Box>
+					</Box>
+				</>
+			}
+		</AlphatabContextProvider>
 	)
 }

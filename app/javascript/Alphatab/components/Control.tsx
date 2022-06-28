@@ -29,7 +29,7 @@ export default function Control({ children }: Props) {
 	}
 	const handleCountIn = (countIn: boolean) => onCountIn(api, countIn)
 	return (
-		<>
+		<Box position="relative">
 			<Overlay onOverlay={onOverlay(api)} />
 			<Box sx={{ flexGrow: 1 }}>
 				<AppBar position="fixed" color="inherit">
@@ -48,6 +48,6 @@ export default function Control({ children }: Props) {
 				<Toolbar />
 			</Box>
 			<Tracks onTracks={onTracks(api)} />
-		</>
+		</Box>
 	)
 }

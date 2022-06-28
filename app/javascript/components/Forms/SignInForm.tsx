@@ -7,6 +7,7 @@ import { signInSchema } from "../../yup";
 import { GonContext } from "../../contexts/Gon"
 // @ts-ignore
 import * as Routes from '../../rails-routes';
+import { SubmitHandler } from "react-hook-form";
 
 interface SignIn {
   email: string;
@@ -17,7 +18,7 @@ export default function SignInForm() {
   const [loading, setLoading] = useState(false)
   const onSubmit: SubmitHandler<SignIn> = (data) => {
     setLoading(true)
-    axios.post(Routes.user_session_path(), { user: data, authenticity_token: gon.authenticity_token }).then(res => {
+    axios.post(Routes.user_session_path(), { user: data, authenticity_token: gon?.authenticity_token }).then(res => {
       location.href = Routes.root_path()
     }).catch(err => {
       setLoading(false)

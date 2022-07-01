@@ -1,9 +1,8 @@
-import React, { RefObject, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import axios from 'axios';
 import Split from 'split.js'
 import Box from '@mui/material/Box';
 import Control from '../../Alphatab/components/Control';
-// @ts-ignore
 import AlphatabContextProvider from "../../contexts/Alphatab"
 // @ts-ignore
 import * as Routes from "../../rails-routes"
@@ -23,7 +22,7 @@ export default function Show() {
 	}
 	return (
 		<AlphatabContextProvider>
-			{({ mainRef, viewportRef }: { mainRef: RefObject<HTMLDivElement>, viewportRef: RefObject<HTMLDivElement> }) =>
+			{({ mainRef, viewportRef }) =>
 				<>
 					<Control>
 						<Save onSave={onSave} />

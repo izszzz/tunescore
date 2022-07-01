@@ -9,14 +9,15 @@ import { musicSchema } from "../../yup"
 // @ts-ignore
 import * as Routes from '../../rails-routes';
 
+type New = Pick<schema.Music, "title">
 export default function New() {
 	return (
-		<NewLayout url={Routes.musics_path} >
+		<NewLayout<New> url={Routes.musics_path} >
 			{({ loading, onSubmit }) =>
 				<SingleColumn
 					header={<Header />}
 					content={
-						<FormLayout<schema.Music> schema={musicSchema} onSubmit={onSubmit}>
+						<FormLayout<New> schema={musicSchema} onSubmit={onSubmit}>
 							{({ control, formState: { errors } }) =>
 								<>
 									<ControlTextField

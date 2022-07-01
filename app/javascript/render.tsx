@@ -6,6 +6,7 @@ import pages from "./pages";
 import GonContextProvider from './contexts/Gon';
 // @ts-ignore
 import { Turbo } from "@hotwired/turbo-rails"
+import { AlphaTabApi } from "../../node_modules/@coderline/alphatab/dist/alphaTab";
 Turbo.session.drive = false
 
 document.addEventListener("turbo:load", function () {
@@ -34,5 +35,12 @@ function render(pages: Page[]) {
 declare global {
 	interface Window {
 		gon: Gon
+		alphaTab: {
+			AlphaTabApi: typeof AlphaTabApi;
+			LayoutMode: {
+				Page: 0;
+				Horizontal: 1;
+			}
+		}
 	}
 }

@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-// @ts-ignore
 import { AlphatabContext, onPlayPause, onStop, onVolume, onCountIn, onPlayerProgress, onLoop, onMetronome, onOverlay, onTracks, onLayout } from '../../contexts/Alphatab';
 import PlayButton from '../../components/Buttons/Play';
 import StopButton from '../../components/Buttons/Stop';

@@ -9,14 +9,15 @@ import { bandSchema } from "../../yup"
 // @ts-ignore
 import * as Routes from '../../rails-routes';
 
+type New = Pick<schema.Band, "name">
 export default function New() {
 	return (
-		<NewLayout url={Routes.bands_path} >
+		<NewLayout<New> url={Routes.bands_path} >
 			{({ loading, onSubmit }) =>
 				<SingleColumn
 					header={<Header />}
 					content={
-						<FormLayout schema={bandSchema} onSubmit={onSubmit}>
+						<FormLayout<New> schema={bandSchema} onSubmit={onSubmit}>
 							{({ control, formState: { errors } }) =>
 								<>
 									<ControlTextField
@@ -31,7 +32,7 @@ export default function New() {
 										errors={errors}
 										fullWidth
 									/>
-									<LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>add Band</LoadingButton>
+									<LoadingButton loading={loading} type="submit" variant="contained" color="primary" fullWidth disableElevation>add Band</LoadingButton>
 								</>
 							}
 						</FormLayout>

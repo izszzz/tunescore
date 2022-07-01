@@ -9,14 +9,15 @@ import { albumSchema } from "../../yup"
 // @ts-ignore
 import * as Routes from '../../rails-routes';
 
+type New = Pick<schema.Album, "title">
 export default function New() {
 	return (
-		<NewLayout url={Routes.albums_path} >
+		<NewLayout<New> url={Routes.albums_path} >
 			{({ loading, onSubmit }) =>
 				<SingleColumn
 					header={<Header />}
 					content={
-						<FormLayout schema={albumSchema} onSubmit={onSubmit}>
+						<FormLayout<New> schema={albumSchema} onSubmit={onSubmit}>
 							{({ control, formState: { errors } }) =>
 								<>
 									<ControlTextField
@@ -31,7 +32,7 @@ export default function New() {
 										errors={errors}
 										fullWidth
 									/>
-									<LoadingButton type="submit" variant="contained" color="primary" fullWidth disableElevation>Add Album</LoadingButton>
+									<LoadingButton loading={loading} type="submit" variant="contained" color="primary" fullWidth disableElevation>Add Album</LoadingButton>
 								</>
 							}
 						</FormLayout>

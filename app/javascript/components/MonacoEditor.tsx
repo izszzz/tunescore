@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react'
-// @ts-ignore
 import { AlphatabContext } from "../contexts/Alphatab"
 import { GonContext } from '../contexts/Gon'
 

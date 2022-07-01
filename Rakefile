@@ -7,5 +7,6 @@ Rails.application.load_tasks
 
 JSRailsRoutes.configure do |c|
   c.output_dir = Rails.root.join('app/javascript')
+  c.target = "ts"
 end
 

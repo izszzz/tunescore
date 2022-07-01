@@ -7,8 +7,6 @@ import ControlTextField from "../ControlTextField"
 import { signUpSchema } from "../../yup";
 import Layout from "./Layout";
 import { GonContext } from "../../contexts/Gon"
-
-// @ts-ignore
 import * as Routes from '../../rails-routes';
 
 interface SignUp {

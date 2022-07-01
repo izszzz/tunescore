@@ -5,7 +5,6 @@ import ControlTextField from "../ControlTextField"
 import Layout from "./Layout"
 import { signInSchema } from "../../yup";
 import { GonContext } from "../../contexts/Gon"
-// @ts-ignore
 import * as Routes from '../../rails-routes';
 import { SubmitHandler } from "react-hook-form";
 

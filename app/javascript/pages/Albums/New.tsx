@@ -6,7 +6,6 @@ import ControlTextField from '../../components/ControlTextField';
 import FormLayout from '../../components/Forms/Layout';
 import NewLayout from '../Basic/New';
 import { albumSchema } from "../../yup"
-// @ts-ignore
 import * as Routes from '../../rails-routes';
 
 type New = Pick<schema.Album, "title">

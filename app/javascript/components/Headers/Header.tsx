@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-// @ts-ignore
 import * as Routes from "../../rails-routes.js"
 import Layout from './Layout.js';
 import Link from '@mui/material/Link';

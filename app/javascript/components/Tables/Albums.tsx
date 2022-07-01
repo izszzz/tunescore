@@ -1,5 +1,4 @@
 import * as React from 'react';
-// @ts-ignore
 import * as Routes from "../../rails-routes"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

@@ -4,7 +4,6 @@ import Split from 'split.js'
 import Box from '@mui/material/Box';
 import Control from '../../Alphatab/components/Control';
 import AlphatabContextProvider from "../../contexts/Alphatab"
-// @ts-ignore
 import * as Routes from "../../rails-routes"
 import Score from '../../Alphatab/components/Score';
 import MonacoEditor from '../../components/MonacoEditor';

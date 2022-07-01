@@ -1,5 +1,4 @@
 import * as React from 'react';
-// @ts-ignore
 import * as Routes from '../rails-routes';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';

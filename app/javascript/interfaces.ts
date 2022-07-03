@@ -1,3 +1,5 @@
+import { AlphaTabApi } from "../../node_modules/@coderline/alphatab/dist/alphaTab";
+
 export interface Gon{
 	authenticity_token: string
 	currentUser: schema.User
@@ -14,4 +16,17 @@ export interface Gon{
 export interface Page {
 	id: string
 	component: React.ReactNode
+}
+
+declare global {
+	interface Window {
+		gon: Gon
+		alphaTab: {
+			AlphaTabApi: typeof AlphaTabApi;
+			LayoutMode: {
+				Page: 0;
+				Horizontal: 1;
+			}
+		}
+	}
 }

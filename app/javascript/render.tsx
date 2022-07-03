@@ -1,12 +1,11 @@
 import React from "react"
 import CssBaseline from '@mui/material/CssBaseline';
 import { createRoot } from 'react-dom/client';
-import { Gon, Page } from "./interfaces";
+import { Page } from "./interfaces";
 import pages from "./pages";
 import GonContextProvider from './contexts/Gon';
 // @ts-ignore
 import { Turbo } from "@hotwired/turbo-rails"
-import { AlphaTabApi } from "../../node_modules/@coderline/alphatab/dist/alphaTab";
 Turbo.session.drive = false
 
 document.addEventListener("turbo:load", function () {
@@ -32,15 +31,3 @@ function render(pages: Page[]) {
 	throw new Error('Failed to find the root element');
 }
 
-declare global {
-	interface Window {
-		gon: Gon
-		alphaTab: {
-			AlphaTabApi: typeof AlphaTabApi;
-			LayoutMode: {
-				Page: 0;
-				Horizontal: 1;
-			}
-		}
-	}
-}

@@ -6,13 +6,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
+import EditDialog from "../Dialog/Edit";
 
 interface Props {
 	music: any
 }
 export default function Music({ music }: Props) {
 	return (
-
 		<TableContainer component={Paper}>
 			<Table>
 				<TableHead>
@@ -24,7 +24,9 @@ export default function Music({ music }: Props) {
 				<TableBody>
 					<TableRow>
 						<TableCell>Band</TableCell>
-						<TableCell></TableCell>
+						<TableCell>
+							<EditDialog dialogTitle="Band" />
+						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell>User</TableCell>

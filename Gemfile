@@ -11,7 +11,6 @@ gem 'faker'
 gem 'ransack'
 gem 'gon'
 gem 'jsbundling-rails'
-gem 'schema2type'
 gem 'rabl'
 gem 'activeadmin'
 gem "ts_schema"

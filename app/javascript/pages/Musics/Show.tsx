@@ -16,8 +16,8 @@ export default function Music() {
 			header={<Header />}
 			content={
 				<>
-					<Title music={gon?.music} />
-					<MusicTable music={gon?.music} />
+					<Title music={gon.music} />
+					<MusicTable music={gon.music} />
 					<Button component={Link} href={Routes.score_path({ id: gon.music.id })} fullWidth>Watch Score</Button>
 					<Button component={Link} href={Routes.edit_score_path({ id: gon.music.id })} fullWidth>Edit Score</Button>
 				</>

@@ -1,9 +1,11 @@
 import React from "react"
 import CssBaseline from '@mui/material/CssBaseline';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux'
 import { Page } from "./interfaces";
 import pages from "./pages";
 import GonContextProvider from './contexts/Gon';
+import { store } from "./store/store"
 // @ts-ignore
 import { Turbo } from "@hotwired/turbo-rails"
 Turbo.session.drive = false
@@ -18,9 +20,11 @@ function render(pages: Page[]) {
 		if (e) {
 			createRoot(e).render(
 				<GonContextProvider>
-					<CssBaseline>
-						{component}
-					</CssBaseline>
+					<Provider store={store}>
+						<CssBaseline>
+							{component}
+						</CssBaseline>
+					</Provider>
 				</GonContextProvider>
 			);
 			return

@@ -17,13 +17,9 @@ RSpec.describe "/musics", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Music. As you add validations to Music, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) { attributes_for :music }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) { attributes_for :music_title_empty }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -88,16 +84,14 @@ RSpec.describe "/musics", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { attributes_for :music }
 
-      it "updates the requested music" do
-        music = Music.create! valid_attributes
-        patch music_url(music), params: { music: new_attributes }
-        music.reload
-        skip("Add assertions for updated state")
-      end
+      # it "updates the requested music" do
+      #   music = Music.create! valid_attributes
+      #   patch music_url(music), params: { music: new_attributes }
+      #   music.reload
+      #   expect(response).to be_successful
+      # end
 
       it "redirects to the music" do
         music = Music.create! valid_attributes

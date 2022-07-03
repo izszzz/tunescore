@@ -1,5 +1,5 @@
 declare namespace schema {
-	interface Music {
+	type Music = {
 		id: number;
 		userId?: number | null;
 		bandId?: number | null;
@@ -14,7 +14,7 @@ declare namespace schema {
 		band?: Band;
 	}
 
-	interface Band {
+	type Band = {
 		id: number;
 		name: string;
 		bookmarksCount: number;
@@ -22,7 +22,7 @@ declare namespace schema {
 		updatedAt: string;
 	}
 
-	interface Artist {
+	type Artist = {
 		id: number;
 		name: string;
 		bookmarksCount: number;
@@ -30,7 +30,7 @@ declare namespace schema {
 		updatedAt: string;
 	}
 
-	interface Album {
+	type Album = {
 		id: number;
 		title: string;
 		bookmarksCount: number;
@@ -38,7 +38,7 @@ declare namespace schema {
 		updatedAt: string;
 	}
 
-	interface User {
+	type User = {
 		id: number;
 		email: string;
 		password?: string | null;
@@ -59,7 +59,7 @@ declare namespace schema {
 		musics?: Music[];
 	}
 
-	interface AdminUser {
+	type AdminUser = {
 		id: number;
 		email: string;
 		password?: string | null;

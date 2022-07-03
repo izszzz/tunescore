@@ -1,0 +1,320 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "myapp",
+    "version": "1.0.0"
+  },
+  "servers": [
+
+  ],
+  "paths": {
+    "/albums": {
+      "get": {
+        "summary": "index",
+        "tags": [
+          "Album"
+        ],
+        "responses": {
+          "200": {
+            "description": "renders a successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"kD2VRjTO8d9wIBolNsPe5r1dfKi519_pzaymbVkKSypGOsqMHcQo3AjAmCnd0yy6LU9EZAPbT_P7RWnrnwB83w\";gon.albums=[];\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<div id='albums'></div>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics": {
+      "get": {
+        "summary": "index",
+        "tags": [
+          "Music"
+        ],
+        "responses": {
+          "200": {
+            "description": "renders a successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"qhX_zjE5IWV_9Kn7oWj5Sq5bE31zoB9ncF4qJsMH6CIlMGruNKKrdiwNobvgPLpXw7GXSqI4CXdJ8YWeljiKsQ\";gon.musics=[{\"id\":64,\"title\":\"Stairway to Heaven\",\"user\":null}];\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<div id='musics'></div>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "create",
+        "tags": [
+          "Music"
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "music": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "nullable": true
+                      },
+                      "band": {
+                        "nullable": true
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "string"
+                      },
+                      "score": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "music": {
+                  "user": null,
+                  "band": null,
+                  "title": "",
+                  "bookmarks_count": "1",
+                  "score": "MyString"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "redirects to the created music",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<html><body>You are being <a href=\"http://www.example.com/musics/68\">redirected</a>.</body></html>"
+              }
+            }
+          },
+          "422": {
+            "description": "renders a response with 422 status (i.e. to display the 'new' template)",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"bW31uuAHgSihHQ3d8FV49098Fn7Qq-NF_wWKvXY9uTItB2Db1oAwlPVgpnM4HqLQwMG6d-jbLiAu9hsjGqb4WA\";\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<div id='music_new'></div>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics/{id}": {
+      "get": {
+        "summary": "show",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 65
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "renders a successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"XaFzL4NARHstZGCNTLIb6IwtP3pzwQT0rhIeJErosbbmkHBBz7TqxQuPDqwzIVY8_g44JVPLVyKLC-lRSBfSTw\";gon.music={\"id\":65,\"title\":\"American Pie\",\"user\":null};\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<div id='music'></div>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "update",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 69
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "music": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "nullable": true
+                      },
+                      "band": {
+                        "nullable": true
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "string"
+                      },
+                      "score": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "music": {
+                  "user": null,
+                  "band": null,
+                  "title": "",
+                  "bookmarks_count": "1",
+                  "score": "MyString"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "302": {
+            "description": "redirects to the music",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<html><body>You are being <a href=\"http://www.example.com/musics/69\">redirected</a>.</body></html>"
+              }
+            }
+          },
+          "422": {
+            "description": "renders a response with 422 status (i.e. to display the 'edit' template)",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"N0ClOel3xA3Ql5A-p80w6DRTWUxsb6ePjK5ZzgdZ0iBIAjlMvxKWzlooA50xqpgGCdbUDtixkHMZLanhZEql3w\";\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<h1>Editing music</h1>\n\n<a href=\"/musics/70\">Show</a>\n|\n<a href=\"/musics\">Back</a>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "destroy",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 71
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "redirects to the musics list",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<html><body>You are being <a href=\"http://www.example.com/musics\">redirected</a>.</body></html>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics/new": {
+      "get": {
+        "summary": "new",
+        "tags": [
+          "Music"
+        ],
+        "responses": {
+          "200": {
+            "description": "renders a successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"kLCvKFmuGLYA_YdS-WNbOhH1PO-9RxjkofvB8FcirQ-nIz7jD44O4plmTbwljeSEa2fcbuliTlp5xlRkwREXJA\";\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<div id='music_new'></div>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics/{id}/edit": {
+      "get": {
+        "summary": "edit",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 66
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "renders a successful response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html>\n<html class='h-full bg-gray-100'>\n<head>\n<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>\n<title>Myapp</title>\n<meta content='width=device-width,initial-scale=1' name='viewport'>\n<script crossorigin='anonymous' src='https://kit.fontawesome.com/2ea26090f3.js'></script>\n\n\n<link rel=\"stylesheet\" href=\"/assets/application-b2ef1098fbfff952e711c57e73d70e02d8f6ce842f08bad51f58afbbe6dfa2eb.css\" data-turbo-track=\"reload\" />\n<script>\n//<![CDATA[\nwindow.gon={};gon.validators={\"user\":[{\"attributes\":[\"email\"],\"options\":{\"if\":\"email_required?\"}},{\"attributes\":[\"email\"],\"options\":{\"allow_blank\":true,\"case_sensitive\":true,\"if\":\"will_save_change_to_email?\"},\"klass\":\"User\"},{\"attributes\":[\"email\"],\"options\":{\"with\":\"(?-mix:\\\\A[^@\\\\s]+@[^@\\\\s]+\\\\z)\",\"allow_blank\":true,\"if\":\"will_save_change_to_email?\"}},{\"attributes\":[\"password\"],\"options\":{\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"case_sensitive\":true,\"if\":\"password_required?\"}},{\"attributes\":[\"password\"],\"options\":{\"allow_blank\":true,\"minimum\":6,\"maximum\":128}}]};gon.models={\"user\":[{\"name\":\"id\",\"sql_type_metadata\":{\"sql_type\":\"bigint\",\"type\":\"integer\",\"limit\":8,\"precision\":null,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":\"nextval('users_id_seq'::regclass)\",\"collation\":null,\"comment\":null,\"serial\":true,\"generated\":\"\"},{\"name\":\"email\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"encrypted_password\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_token\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"reset_password_sent_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"remember_created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"nickname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"image\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"familyname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"givenname\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"introduction\",\"sql_type_metadata\":{\"sql_type\":\"character varying\",\"type\":\"string\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"birthday\",\"sql_type_metadata\":{\"sql_type\":\"date\",\"type\":\"date\",\"limit\":null,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"gender\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":true,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"following_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"followers_count\",\"sql_type_metadata\":{\"sql_type\":\"integer\",\"type\":\"integer\",\"limit\":4,\"precision\":null,\"scale\":null},\"null\":false,\"default\":\"0\",\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"created_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"},{\"name\":\"updated_at\",\"sql_type_metadata\":{\"sql_type\":\"timestamp(6) without time zone\",\"type\":\"datetime\",\"limit\":null,\"precision\":6,\"scale\":null},\"null\":false,\"default\":null,\"default_function\":null,\"collation\":null,\"comment\":null,\"serial\":null,\"generated\":\"\"}]};gon.currentUser=null;gon.authenticity_token=\"6rn5YPy0jtz3MmH4eYGNl094Kh-QpfuN02MT6YEOdihBhOxixPdEaawb-M7DwQD9JrYObEwC-4Q-CbaSx3VMug\";\n//]]>\n</script>\n<script src=\"/assets/application-08044097df2270d49d362bdd722469a04424abdc5bb443d36ea58669a2065dbf.js\" data-turbo-track=\"reload\" defer=\"defer\"></script>\n</head>\n<body>\n<h1>Editing music</h1>\n\n<a href=\"/musics/66\">Show</a>\n|\n<a href=\"/musics\">Back</a>\n\n</body>\n</html>\n"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

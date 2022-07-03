@@ -1,16 +1,16 @@
-= render "layouts/shared/form_layout", resource: music, label: :title do |form|
-  .mb-5
-    %h2 Ownership
-    = form.check_box :user_id, {}, current_user.id, nil
-    = form.label :user, "mine"
+-# = render "layouts/shared/form_layout", resource: music, label: :title do |form|
+-#   .mb-5
+-#     %h2 Ownership
+-#     = form.check_box :user_id, {}, current_user.id, nil
+-#     = form.label :user, "mine"
 
-  .mb-5
-    %h2 Publishing Settings
-    = form.radio_button :status, true
-    = form.label :user, "public"
-    = form.radio_button :status, false
-    = form.label :public, "private"
+-#   .mb-5
+-#     %h2 Publishing Settings
+-#     = form.radio_button :status, true
+-#     = form.label :user, "public"
+-#     = form.radio_button :status, false
+-#     = form.label :public, "private"
 
-  .mb-5 
-    %h2 Price
-    = form.number_field :price, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2"
+-#   .mb-5 
+-#     %h2 Price
+-#     = form.number_field :price, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2"

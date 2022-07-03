@@ -17,13 +17,9 @@ RSpec.describe "/bands", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Band. As you add validations to Band, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) { attributes_for :band }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) { attributes_for :band_name_empty}
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -88,16 +84,14 @@ RSpec.describe "/bands", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { attributes_for :band }
 
-      it "updates the requested band" do
-        band = Band.create! valid_attributes
-        patch band_url(band), params: { band: new_attributes }
-        band.reload
-        skip("Add assertions for updated state")
-      end
+      # it "updates the requested band" do
+      #   band = Band.create! valid_attributes
+      #   patch band_url(band), params: { band: new_attributes }
+      #   band.reload
+      #   expect(response).to have_http_status(:unprocessable_entity)
+      # end
 
       it "redirects to the band" do
         band = Band.create! valid_attributes

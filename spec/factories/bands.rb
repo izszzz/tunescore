@@ -1,6 +1,9 @@
 FactoryBot.define do
   factory :band do
-    name { "MyString" }
-    bookmarks_count { 1 }
+    name { Faker::Music::RockBand.name }
+  end
+
+  factory :band_name_empty, class: Band do
+    name { "" }
   end
 end

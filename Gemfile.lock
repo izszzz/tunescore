@@ -261,6 +261,10 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    rspec (3.11.0)
+      rspec-core (~> 3.11.0)
+      rspec-expectations (~> 3.11.0)
+      rspec-mocks (~> 3.11.0)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
     rspec-expectations (3.11.0)
@@ -269,6 +273,9 @@ GEM
     rspec-mocks (3.11.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
+    rspec-openapi (0.6.0)
+      actionpack (>= 5.2.0)
+      rspec
     rspec-rails (6.0.0.rc1)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
@@ -306,8 +313,6 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    schema2type (0.4.0)
-      activesupport
     seed-fu (2.3.9)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
@@ -378,10 +383,10 @@ DEPENDENCIES
   rails (~> 7.0.2, >= 7.0.2.3)
   ransack
   redis (~> 4.0)
+  rspec-openapi
   rspec-rails (~> 6.0.0rc1)
   rubocop-rails
   sassc-rails
-  schema2type
   seed-fu
   selenium-webdriver
   sprockets-rails

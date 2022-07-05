@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StaticPagesController < ApplicationController
   def home
     @musics = Music.all
@@ -6,6 +8,5 @@ class StaticPagesController < ApplicationController
     @bands = Band.all
   end
 
-  def settings
-  end
+  def settings; end
 end

@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "musics/show", type: :view do
+RSpec.describe 'musics/show', type: :view do
   before(:each) do
     @music = assign(:music, Music.create!(
-      user: nil,
-      band: nil,
-      title: "Title",
-      bookmarks_count: 2,
-      score: "Score"
-    ))
+                              user: nil,
+                              band: nil,
+                              title: 'Title',
+                              bookmarks_count: 2,
+                              score: 'Score'
+                            ))
   end
 
-  it "renders attributes in <p>" do
+  it 'renders attributes in <p>' do
     render
     expect(rendered).to match(//)
     expect(rendered).to match(//)

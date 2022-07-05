@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class BandsController < ApplicationController
-  before_action :set_band, only: %i[ show edit update destroy ]
+  before_action :set_band, only: %i[show edit update destroy]
 
   # GET /bands or /bands.json
   def index
-    @bands = Band.ransack(params[:q] ? JSON.parse(params[:q]) : "").result
+    @bands = Band.ransack(params[:q] ? JSON.parse(params[:q]) : '').result
     gon.rabl as: :bands
   end
 
@@ -18,8 +20,7 @@ class BandsController < ApplicationController
   end
 
   # GET /bands/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /bands or /bands.json
   def create
@@ -27,7 +28,7 @@ class BandsController < ApplicationController
 
     respond_to do |format|
       if @band.save
-        format.html { redirect_to band_url(@band), notice: "Band was successfully created." }
+        format.html { redirect_to band_url(@band), notice: 'Band was successfully created.' }
         format.json { render :show, status: :created, location: @band }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +41,7 @@ class BandsController < ApplicationController
   def update
     respond_to do |format|
       if @band.update(band_params)
-        format.html { redirect_to band_url(@band), notice: "Band was successfully updated." }
+        format.html { redirect_to band_url(@band), notice: 'Band was successfully updated.' }
         format.json { render :show, status: :ok, location: @band }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,19 +55,20 @@ class BandsController < ApplicationController
     @band.destroy
 
     respond_to do |format|
-      format.html { redirect_to bands_url, notice: "Band was successfully destroyed." }
+      format.html { redirect_to bands_url, notice: 'Band was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_band
-      @band = Band.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def band_params
-      params.require(:band).permit(:name, :bookmarks_count)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_band
+    @band = Band.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def band_params
+    params.require(:band).permit(:name, :bookmarks_count)
+  end
 end

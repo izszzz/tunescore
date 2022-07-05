@@ -29,6 +29,16 @@ const injectedRtkApi = api.injectEndpoints({
         params: { music: queryArg.music },
       }),
     }),
+    patchMusicsById: build.mutation<
+      PatchMusicsByIdApiResponse,
+      PatchMusicsByIdApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/musics/${queryArg.id}`,
+        method: "PATCH",
+        body: queryArg.body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -77,9 +87,27 @@ export type PostMusicsApiArg = {
     user?: string;
   };
 };
+export type PatchMusicsByIdApiResponse = /** status 200 creates a new Music */ {
+  id?: number;
+  title?: string;
+  user?: any | null;
+};
+export type PatchMusicsByIdApiArg = {
+  id: number;
+  body: {
+    music?: {
+      user?: any | null;
+      band?: any | null;
+      title?: string;
+      bookmarks_count?: string;
+      score?: string;
+    };
+  };
+};
 export const {
   usePostBandsMutation,
   usePostAlbumsMutation,
   usePostArtistsMutation,
   usePostMusicsMutation,
+  usePatchMusicsByIdMutation,
 } = injectedRtkApi;

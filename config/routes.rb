@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -5,10 +7,10 @@ Rails.application.routes.draw do
   root 'static_pages#home'
   get '/settings', to: 'static_pages#settings'
   get '/search', to: 'static_pages#search'
-  resources :score, only: [:show, :edit, :update]
+  resources :score, only: %i[show edit update]
   resources :musics
   resources :bands
-  resources :users, only: [:index, :show]
+  resources :users, only: %i[index show]
   resources :albums
   resources :artists
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

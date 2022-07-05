@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MusicsController < ApplicationController
-  before_action :set_music, only: %i[ show edit update destroy ]
+  before_action :set_music, only: %i[show edit update destroy]
 
   # GET /musics or /musics.json
   def index
@@ -18,8 +20,7 @@ class MusicsController < ApplicationController
   end
 
   # GET /musics/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /musics or /musics.json
   def create
@@ -27,7 +28,7 @@ class MusicsController < ApplicationController
 
     respond_to do |format|
       if @music.save
-        format.html { redirect_to music_url(@music), notice: "Music was successfully created." }
+        format.html { redirect_to music_url(@music), notice: 'Music was successfully created.' }
         format.json { render :show, status: :created, location: @music }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +41,7 @@ class MusicsController < ApplicationController
   def update
     respond_to do |format|
       if @music.update(music_params)
-        format.html { redirect_to music_url(@music), notice: "Music was successfully updated." }
+        format.html { redirect_to music_url(@music), notice: 'Music was successfully updated.' }
         format.json { render :show, status: :ok, location: @music }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -54,19 +55,20 @@ class MusicsController < ApplicationController
     @music.destroy
 
     respond_to do |format|
-      format.html { redirect_to musics_url, notice: "Music was successfully destroyed." }
+      format.html { redirect_to musics_url, notice: 'Music was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_music
-      @music = Music.includes([:user]).find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def music_params
-      params.require(:music).permit(:user_id, :band_id, :title, :bookmarks_count, :score, :price, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_music
+    @music = Music.includes([:user]).find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def music_params
+    params.require(:music).permit(:user_id, :band_id, :title, :bookmarks_count, :score, :price, :status)
+  end
 end

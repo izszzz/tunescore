@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 User.seed(:id,
           (1..10).map do |i|
-            { id: i, email: Faker::Internet.email, familyname: Faker::Name.first_name, givenname: Faker::Name.last_name, nickname: Faker::Name.name, password: "password", password_confirmation: "password"}
+            { id: i, email: Faker::Internet.email, familyname: Faker::Name.first_name,
+              givenname: Faker::Name.last_name, nickname: Faker::Name.name, password: 'password', password_confirmation: 'password' }
           end)
 
 User.seed(:id,

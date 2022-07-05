@@ -60,6 +60,181 @@
           }
         }
       }
+    },
+    "/albums": {
+      "post": {
+        "summary": "create",
+        "tags": [
+          "Album"
+        ],
+        "parameters": [
+          {
+            "name": "album",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "bookmarks_count": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "bookmarks_count": "1",
+              "title": "Midnight Memories"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "creates a new Album",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": 17,
+                  "title": "Midnight Memories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artists": {
+      "post": {
+        "summary": "create",
+        "tags": [
+          "Artist"
+        ],
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "bookmarks_count": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "bookmarks_count": "1",
+              "name": "MyString"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "creates a new Artist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": 17,
+                  "name": "MyString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics": {
+      "post": {
+        "summary": "create",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "music",
+            "in": "query",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "band": {
+                  "type": "string"
+                },
+                "bookmarks_count": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                }
+              }
+            },
+            "example": {
+              "band": "",
+              "bookmarks_count": "1",
+              "score": "MyString",
+              "title": "For What It's Worth",
+              "user": ""
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "creates a new Music",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "nullable": true
+                    }
+                  }
+                },
+                "example": {
+                  "id": 149,
+                  "title": "For What It's Worth",
+                  "user": null
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

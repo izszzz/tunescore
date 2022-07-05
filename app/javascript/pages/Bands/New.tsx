@@ -9,13 +9,8 @@ import { usePostBandsMutation } from '../../store/api';
 
 type New = Pick<schema.Band, "name">
 export default function New() {
-	const [updatePost,
-		{ isLoading }
-	] = usePostBandsMutation()
-	const onSubmit = (data: New) => {
-		const formatData = { band: data }
-		updatePost(formatData)
-	}
+	const [updatePost, { isLoading }] = usePostBandsMutation()
+	const onSubmit = (data: New) => updatePost({ band: data })
 	return (
 		<SingleColumn
 			header={<Header />}

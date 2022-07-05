@@ -132,3 +132,13 @@ RSpec.describe "/albums", type: :request, openapi: false do
     end
   end
 end
+
+RSpec.describe "/albums.json", type: :request do
+  let(:valid_attributes) { attributes_for :album }
+  describe "POST /create" do
+    it "creates a new Album" do
+      post albums_url format: :json, params: { album: valid_attributes }
+      expect(response).to have_http_status(:created)
+    end
+  end
+end

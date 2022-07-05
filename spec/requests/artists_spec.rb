@@ -133,3 +133,13 @@ RSpec.describe "/artists", type: :request, openapi: false do
     end
   end
 end
+
+RSpec.describe "/artists.json", type: :request do
+  let(:valid_attributes) { attributes_for :artist }
+  describe "POST /create" do
+    it "creates a new Artist" do
+      post artists_url format: :json, params: { artist: valid_attributes }
+      expect(response).to have_http_status(:created)
+    end
+  end
+end

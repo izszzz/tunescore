@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :album do
-    title { "MyString" }
+    title { Faker::Music.album }
     bookmarks_count { 1 }
   end
 end

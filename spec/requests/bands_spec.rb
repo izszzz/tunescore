@@ -12,7 +12,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/bands", type: :request do
+RSpec.describe "/bands", type: :request, openapi: false do
   
   # This should return the minimal set of attributes required to create a valid
   # Band. As you add validations to Band, be sure to
@@ -86,6 +86,7 @@ RSpec.describe "/bands", type: :request do
     context "with valid parameters" do
       let(:new_attributes) { attributes_for :band }
 
+      # TODO: 
       # it "updates the requested band" do
       #   band = Band.create! valid_attributes
       #   patch band_url(band), params: { band: new_attributes }
@@ -124,6 +125,16 @@ RSpec.describe "/bands", type: :request do
       band = Band.create! valid_attributes
       delete band_url(band)
       expect(response).to redirect_to(bands_url)
+    end
+  end
+end
+
+RSpec.describe "/bands.json", type: :request do
+  let(:valid_attributes) { attributes_for :band }
+  describe "POST /create" do
+    it "creates a new Band" do
+      post bands_url format: :json, params: { band: valid_attributes }
+      expect(response).to have_http_status(:created)
     end
   end
 end

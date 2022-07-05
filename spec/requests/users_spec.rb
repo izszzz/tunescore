@@ -12,7 +12,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/users", type: :request do
+RSpec.describe "/users", type: :request, openapi: false do
   
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
@@ -37,13 +37,6 @@ RSpec.describe "/users", type: :request do
     it "renders a successful response" do
       user = User.create! valid_attributes
       get user_url(user)
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_user_url
       expect(response).to be_successful
     end
   end

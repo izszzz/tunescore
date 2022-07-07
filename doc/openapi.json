@@ -35,7 +35,7 @@
               },
               "example": {
                 "album": {
-                  "title": "Born in the U.S.A.",
+                  "title": "All We Know Is Falling",
                   "bookmarks_count": 1
                 }
               }
@@ -59,8 +59,8 @@
                   }
                 },
                 "example": {
-                  "id": 2298,
-                  "title": "Born in the U.S.A."
+                  "id": 2308,
+                  "title": "All We Know Is Falling"
                 }
               }
             }
@@ -203,7 +203,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 890
+            "example": 989
           }
         ],
         "requestBody": {
@@ -287,7 +287,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 893
+            "example": 992
           }
         ],
         "requestBody": {

@@ -39,7 +39,7 @@ RSpec.shared_examples 'respond_with' do |http_status, openapi: false|
   end
 
   def controller
-    p self.class.top_level_description.downcase
+    self.class.top_level_description.downcase
   end
 
   def url(id: nil, params: nil)

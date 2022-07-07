@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'bands/index', type: :view do
-  before(:each) do
+  before do
     assign(:bands, [
              Band.create!(
                name: 'Name',

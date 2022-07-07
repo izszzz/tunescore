@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'albums/index', type: :view do
-  before(:each) do
+  before do
     assign(:albums, [
              Album.create!(
                title: 'Title',

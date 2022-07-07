@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'users/index', type: :view do
-  before(:each) do
+  before do
     assign(:users, [
              User.create!,
              User.create!
@@ -12,6 +12,6 @@ RSpec.describe 'users/index', type: :view do
 
   it 'renders a list of users' do
     render
-    cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
+    # cell_selector = Rails::VERSION::STRING >= '7' ? 'div>p' : 'tr>td'
   end
 end

@@ -14,42 +14,43 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/bands', type: :request, openapi: false do
+RSpec.describe "Bands", type: :request, openapi: false do
   # This should return the minimal set of attributes required to create a valid
   # Band. As you add validations to Band, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { attributes_for :band }
+  let(:band) do
+    attributes_for :band
+  end
 
-  let(:invalid_attributes) { attributes_for :band_name_empty }
+  let(:band_name_empty) do
+    attributes_for :band, :name_empty
+  end
 
   describe 'GET /index' do
-    it 'renders a successful response' do
-      Band.create! valid_attributes
-      get bands_url
-      expect(response).to be_successful
+    context 'should success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /show' do
-    it 'renders a successful response' do
-      band = Band.create! valid_attributes
-      get band_url(band)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:band).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /new' do
-    it 'renders a successful response' do
-      get new_band_url
-      expect(response).to be_successful
+    context 'should be success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /edit' do
-    it 'renders a successful response' do
-      band = Band.create! valid_attributes
-      get edit_band_url(band)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:band).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
@@ -57,12 +58,12 @@ RSpec.describe '/bands', type: :request, openapi: false do
     context 'with valid parameters' do
       it 'creates a new Band' do
         expect do
-          post bands_url, params: { band: valid_attributes }
+          post bands_url, params: { band: }
         end.to change(Band, :count).by(1)
       end
 
       it 'redirects to the created band' do
-        post bands_url, params: { band: valid_attributes }
+        post bands_url, params: { band: }
         expect(response).to redirect_to(band_url(Band.last))
       end
     end
@@ -70,14 +71,24 @@ RSpec.describe '/bands', type: :request, openapi: false do
     context 'with invalid parameters' do
       it 'does not create a new Band' do
         expect do
-          post bands_url, params: { band: invalid_attributes }
+          post bands_url, params: { band: band_name_empty }
         end.to change(Band, :count).by(0)
       end
+    end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post bands_url, params: { band: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
+    context 'should be success' do
+      let(:id) { create(:bands).id }
+      let(:params) { { band: band_name_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity
+    end
+  end
+
+  describe 'POST /create json', openapi: true do
+    context 'should be success' do
+      let(:params) { { band: band_name_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity, openapi: true
     end
   end
 
@@ -94,7 +105,7 @@ RSpec.describe '/bands', type: :request, openapi: false do
       # end
 
       it 'redirects to the band' do
-        band = Band.create! valid_attributes
+        band = create(:band)
         patch band_url(band), params: { band: new_attributes }
         band.reload
         expect(response).to redirect_to(band_url(band))
@@ -103,8 +114,8 @@ RSpec.describe '/bands', type: :request, openapi: false do
 
     context 'with invalid parameters' do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        band = Band.create! valid_attributes
-        patch band_url(band), params: { band: invalid_attributes }
+        band = create(:band)
+        patch band_url(band), params: { band: band_name_empty }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
@@ -112,26 +123,16 @@ RSpec.describe '/bands', type: :request, openapi: false do
 
   describe 'DELETE /destroy' do
     it 'destroys the requested band' do
-      band = Band.create! valid_attributes
+      band = create(:band)
       expect do
         delete band_url(band)
       end.to change(Band, :count).by(-1)
     end
 
     it 'redirects to the bands list' do
-      band = Band.create! valid_attributes
+      band = create(:band)
       delete band_url(band)
       expect(response).to redirect_to(bands_url)
-    end
-  end
-end
-
-RSpec.describe '/bands.json', type: :request do
-  let(:valid_attributes) { attributes_for :band }
-  describe 'POST /create' do
-    it 'creates a new Band' do
-      post bands_url format: :json, params: { band: valid_attributes }
-      expect(response).to have_http_status(:created)
     end
   end
 end

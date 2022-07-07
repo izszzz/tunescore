@@ -7,13 +7,8 @@ FactoryBot.define do
     title { Faker::Music::RockBand.song }
     bookmarks_count { 1 }
     score { 'MyString' }
-  end
-
-  factory :music_title_empty, class: Music do
-    user { nil }
-    band { nil }
-    title { '' }
-    bookmarks_count { 1 }
-    score { 'MyString' }
+    trait :title_empty do
+      title { '' }
+    end
   end
 end

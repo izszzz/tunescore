@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'bands/show', type: :view do
-  before(:each) do
+  before do
     @band = assign(:band, Band.create!(
                             name: 'Name',
                             bookmarks_count: 2

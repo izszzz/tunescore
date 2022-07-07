@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'artists/show', type: :view do
-  before(:each) do
+  before do
     @artist = assign(:artist, Artist.create!)
   end
 

@@ -28,7 +28,7 @@ TsSchema.setup do |config|
 
   # Customize output path and file name
   #
-  config.output = Rails.root.join('app', 'javascript', 'schema.d.ts')
+  config.output = Rails.root.join('app/javascript/schema.d.ts')
 
   # Whether to generate the schema file after running migrations
   #

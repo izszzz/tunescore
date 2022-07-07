@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'bands/new', type: :view do
-  before(:each) do
+  before do
     assign(:band, Band.new(
                     name: 'MyString',
                     bookmarks_count: 1

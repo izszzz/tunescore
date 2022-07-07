@@ -14,42 +14,39 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/musics', type: :request, openapi: false do
+RSpec.describe "Musics", type: :request, openapi: false do
   # This should return the minimal set of attributes required to create a valid
   # Music. As you add validations to Music, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { attributes_for :music }
+  let(:music) { attributes_for :music }
 
-  let(:invalid_attributes) { attributes_for :music_title_empty }
+  let(:music_title_empty) { attributes_for :music, :title_empty }
 
   describe 'GET /index' do
-    it 'renders a successful response' do
-      Music.create! valid_attributes
-      get musics_url
-      expect(response).to be_successful
+    context 'should success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /show' do
-    it 'renders a successful response' do
-      music = Music.create! valid_attributes
-      get music_url(music)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:music).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /new' do
-    it 'renders a successful response' do
-      get new_music_url
-      expect(response).to be_successful
+    context 'should be success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /edit' do
-    it 'renders a successful response' do
-      music = Music.create! valid_attributes
-      get edit_music_url(music)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:music).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
@@ -57,12 +54,12 @@ RSpec.describe '/musics', type: :request, openapi: false do
     context 'with valid parameters' do
       it 'creates a new Music' do
         expect do
-          post musics_url, params: { music: valid_attributes }
+          post musics_url, params: { music: }
         end.to change(Music, :count).by(1)
       end
 
       it 'redirects to the created music' do
-        post musics_url, params: { music: valid_attributes }
+        post musics_url, params: { music: }
         expect(response).to redirect_to(music_url(Music.last))
       end
     end
@@ -70,14 +67,29 @@ RSpec.describe '/musics', type: :request, openapi: false do
     context 'with invalid parameters' do
       it 'does not create a new Music' do
         expect do
-          post musics_url, params: { music: invalid_attributes }
+          post musics_url, params: { music: music_title_empty }
         end.to change(Music, :count).by(0)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post musics_url, params: { music: invalid_attributes }
+        post musics_url, params: { music: music_title_empty }
         expect(response).to have_http_status(:unprocessable_entity)
       end
+    end
+
+    context 'should be success' do
+      let(:params) { { music: music_title_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity
+    end
+  end
+
+  describe 'POST /create json', openapi: true do
+    context 'should be success' do
+      let(:id) { create(:music).id }
+      let(:params) { { music: music_title_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity, openapi: true
     end
   end
 
@@ -93,53 +105,42 @@ RSpec.describe '/musics', type: :request, openapi: false do
       # end
 
       it 'redirects to the music' do
-        music = Music.create! valid_attributes
+        music = create :music
         patch music_url(music), params: { music: new_attributes }
         music.reload
         expect(response).to redirect_to(music_url(music))
       end
     end
 
-    context 'with invalid parameters' do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        music = Music.create! valid_attributes
-        patch music_url(music), params: { music: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
+    context 'should be success' do
+      let(:id) { create(:music).id }
+      let(:params) { { music: music_title_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity
+    end
+  end
+
+  describe 'PATCH /update json' do
+    context 'should be success' do
+      let(:id) { create(:music).id }
+      let(:params) { { music: music_title_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity, openapi: true
     end
   end
 
   describe 'DELETE /destroy' do
     it 'destroys the requested music' do
-      music = Music.create! valid_attributes
+      music = create :music
       expect do
         delete music_url(music)
       end.to change(Music, :count).by(-1)
     end
 
     it 'redirects to the musics list' do
-      music = Music.create! valid_attributes
+      music = create :music
       delete music_url(music)
       expect(response).to redirect_to(musics_url)
-    end
-  end
-end
-
-RSpec.describe '/musics.json', type: :request do
-  let(:valid_attributes) { attributes_for :music }
-  describe 'POST /create' do
-    it 'creates a new Music' do
-      post musics_url format: :json, params: { music: valid_attributes }
-      expect(response).to have_http_status(:created)
-    end
-  end
-
-  describe 'PATCH /create' do
-    let(:new_attributes) { attributes_for :music }
-    it 'creates a new Music' do
-      music = Music.create! valid_attributes
-      patch music_url(music, format: :json), params: { music: new_attributes }
-      expect(response).to have_http_status(:ok)
     end
   end
 end

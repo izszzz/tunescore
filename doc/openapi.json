@@ -8,89 +8,43 @@
 
   ],
   "paths": {
-    "/bands": {
-      "post": {
-        "summary": "create",
-        "tags": [
-          "Band"
-        ],
-        "parameters": [
-          {
-            "name": "band",
-            "in": "query",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "bookmarks_count": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                }
-              }
-            },
-            "example": {
-              "bookmarks_count": "1",
-              "name": "Bon Jovi"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "creates a new Band",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  }
-                },
-                "example": {
-                  "id": 475,
-                  "name": "Janis Joplin and Big Brother and the Holding Company"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/albums": {
       "post": {
-        "summary": "create",
+        "summary": "POST /create json",
         "tags": [
           "Album"
         ],
-        "parameters": [
-          {
-            "name": "album",
-            "in": "query",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "bookmarks_count": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "album": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "album": {
+                  "title": "Born in the U.S.A.",
+                  "bookmarks_count": 1
                 }
               }
-            },
-            "example": {
-              "bookmarks_count": "1",
-              "title": "Midnight Memories"
             }
           }
-        ],
+        },
         "responses": {
           "201": {
-            "description": "creates a new Album",
+            "description": "is expected to respond with status code :created (201)",
             "content": {
               "application/json": {
                 "schema": {
@@ -105,8 +59,8 @@
                   }
                 },
                 "example": {
-                  "id": 20,
-                  "title": "Gold: Greatest Hits"
+                  "id": 2298,
+                  "title": "Born in the U.S.A."
                 }
               }
             }
@@ -116,50 +70,119 @@
     },
     "/artists": {
       "post": {
-        "summary": "create",
+        "summary": "POST /create json",
         "tags": [
           "Artist"
         ],
-        "parameters": [
-          {
-            "name": "artist",
-            "in": "query",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "bookmarks_count": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "artist": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "artist": {
+                  "name": "",
+                  "bookmarks_count": 1
                 }
               }
-            },
-            "example": {
-              "bookmarks_count": "1",
-              "name": "MyString"
             }
           }
-        ],
+        },
         "responses": {
-          "201": {
-            "description": "creates a new Artist",
+          "422": {
+            "description": "is expected to respond with status code :unprocessable_entity (422)",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
                     "name": {
-                      "type": "string"
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 },
                 "example": {
-                  "id": 20,
-                  "name": "MyString"
+                  "name": [
+                    "can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bands": {
+      "post": {
+        "summary": "POST /create json",
+        "tags": [
+          "Band"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "band": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "band": {
+                  "name": "",
+                  "bookmarks_count": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "422": {
+            "description": "is expected to respond with status code :unprocessable_entity (422)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "name": [
+                    "can't be blank"
+                  ]
                 }
               }
             }
@@ -169,93 +192,23 @@
     },
     "/musics": {
       "post": {
-        "summary": "create",
-        "tags": [
-          "Music"
-        ],
-        "parameters": [
-          {
-            "name": "music",
-            "in": "query",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "band": {
-                  "type": "string"
-                },
-                "bookmarks_count": {
-                  "type": "string"
-                },
-                "score": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "user": {
-                  "type": "string"
-                }
-              }
-            },
-            "example": {
-              "band": "",
-              "bookmarks_count": "1",
-              "score": "MyString",
-              "title": "For What It's Worth",
-              "user": ""
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "creates a new Music",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "nullable": true
-                    }
-                  }
-                },
-                "example": {
-                  "id": 181,
-                  "title": "Bad Company",
-                  "user": null
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/musics/{id}": {
-      "patch": {
-        "summary": "update",
+        "summary": "POST /create json",
         "tags": [
           "Music"
         ],
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer"
             },
-            "example": 171
+            "example": 890
           }
         ],
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -272,7 +225,7 @@
                         "type": "string"
                       },
                       "bookmarks_count": {
-                        "type": "string"
+                        "type": "integer"
                       },
                       "score": {
                         "type": "string"
@@ -285,8 +238,8 @@
                 "music": {
                   "user": null,
                   "band": null,
-                  "title": "Satisfaction",
-                  "bookmarks_count": "1",
+                  "title": "",
+                  "bookmarks_count": 1,
                   "score": "MyString"
                 }
               }
@@ -294,28 +247,109 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "creates a new Music",
+          "422": {
+            "description": "is expected to respond with status code :unprocessable_entity (422)",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
                     "title": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "nullable": true
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 },
                 "example": {
-                  "id": 182,
-                  "title": "Satisfaction",
-                  "user": null
+                  "title": [
+                    "can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/musics/{id}": {
+      "patch": {
+        "summary": "PATCH /update json",
+        "tags": [
+          "Music"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 893
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "music": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "nullable": true
+                      },
+                      "band": {
+                        "nullable": true
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "bookmarks_count": {
+                        "type": "integer"
+                      },
+                      "score": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "music": {
+                  "user": null,
+                  "band": null,
+                  "title": "",
+                  "bookmarks_count": 1,
+                  "score": "MyString"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "422": {
+            "description": "is expected to respond with status code :unprocessable_entity (422)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "title": [
+                    "can't be blank"
+                  ]
                 }
               }
             }

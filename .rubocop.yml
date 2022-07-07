@@ -1,1 +1,10 @@
-require: rubocop-rails
+require: 
+  - rubocop-rails
+  - rubocop-rspec
+Style/Documentation:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'config/initializers/devise.rb'
+    - "db/migrate/20220415122505_devise_create_users.rb"

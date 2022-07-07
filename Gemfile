@@ -67,6 +67,8 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'js_rails_routes'
   gem 'rspec-rails', '~> 6.0.0rc1'
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :development do
@@ -78,7 +80,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'rubocop-rails', require: false
 end
 
 group :test do
@@ -86,5 +87,6 @@ group :test do
   gem 'capybara'
   gem 'rspec-openapi'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 5.0'
   gem 'webdrivers'
 end

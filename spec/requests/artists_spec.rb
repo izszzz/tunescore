@@ -14,59 +14,62 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/artists', type: :request, openapi: false do
+RSpec.describe "Artists", type: :request, openapi: false do
   # This should return the minimal set of attributes required to create a valid
   # Artist. As you add validations to Artist, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+  let(:artist) do
+    attributes_for :artist
   end
 
-  let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
+  let(:artist_name_empty) do
+    attributes_for :artist, :name_empty
   end
 
   describe 'GET /index' do
-    it 'renders a successful response' do
-      Artist.create! valid_attributes
-      get artists_url
-      expect(response).to be_successful
+    context 'should success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /show' do
-    it 'renders a successful response' do
-      artist = Artist.create! valid_attributes
-      get artist_url(artist)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:artist).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /new' do
-    it 'renders a successful response' do
-      get new_artist_url
-      expect(response).to be_successful
+    context 'should be success' do
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'GET /edit' do
-    it 'renders a successful response' do
-      artist = Artist.create! valid_attributes
-      get edit_artist_url(artist)
-      expect(response).to be_successful
+    context 'should be success' do
+      let(:id) { create(:artist).id }
+
+      it_behaves_like 'respond_with', :success
     end
   end
 
   describe 'POST /create' do
+    context 'should be success' do
+      let(:params) { { artist: artist_name_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity
+    end
+
     context 'with valid parameters' do
       it 'creates a new Artist' do
         expect do
-          post artists_url, params: { artist: valid_attributes }
+          post artists_url, params: { artist: }
         end.to change(Artist, :count).by(1)
       end
 
       it 'redirects to the created artist' do
-        post artists_url, params: { artist: valid_attributes }
+        post artists_url, params: { artist: }
         expect(response).to redirect_to(artist_url(Artist.last))
       end
     end
@@ -74,69 +77,52 @@ RSpec.describe '/artists', type: :request, openapi: false do
     context 'with invalid parameters' do
       it 'does not create a new Artist' do
         expect do
-          post artists_url, params: { artist: invalid_attributes }
+          post artists_url, params: { artist: artist_name_empty }
         end.to change(Artist, :count).by(0)
       end
+    end
+  end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post artists_url, params: { artist: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
+  describe 'POST /create json', openapi: true do
+    context 'should be success' do
+      let(:params) { { artist: artist_name_empty } }
+
+      it_behaves_like 'respond_with', :unprocessable_entity, openapi: true
     end
   end
 
   describe 'PATCH /update' do
     context 'with valid parameters' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
+      let(:new_artist) { attributes_for :artist }
 
       it 'updates the requested artist' do
-        artist = Artist.create! valid_attributes
-        patch artist_url(artist), params: { artist: new_attributes }
+        artist = create(:artist)
+        patch artist_url(artist), params: { artist: new_artist }
         artist.reload
         skip('Add assertions for updated state')
       end
 
       it 'redirects to the artist' do
-        artist = Artist.create! valid_attributes
-        patch artist_url(artist), params: { artist: new_attributes }
+        artist = create(:artist)
+        patch artist_url(artist), params: { artist: new_artist }
         artist.reload
         expect(response).to redirect_to(artist_url(artist))
-      end
-    end
-
-    context 'with invalid parameters' do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        artist = Artist.create! valid_attributes
-        patch artist_url(artist), params: { artist: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe 'DELETE /destroy' do
     it 'destroys the requested artist' do
-      artist = Artist.create! valid_attributes
+      artist = create :artist
       expect do
         delete artist_url(artist)
       end.to change(Artist, :count).by(-1)
     end
 
     it 'redirects to the artists list' do
-      artist = Artist.create! valid_attributes
+      artist = create :artist
       delete artist_url(artist)
       expect(response).to redirect_to(artists_url)
-    end
-  end
-end
-
-RSpec.describe '/artists.json', type: :request do
-  let(:valid_attributes) { attributes_for :artist }
-  describe 'POST /create' do
-    it 'creates a new Artist' do
-      post artists_url format: :json, params: { artist: valid_attributes }
-      expect(response).to have_http_status(:created)
     end
   end
 end

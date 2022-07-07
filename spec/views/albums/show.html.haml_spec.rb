@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'albums/show', type: :view do
-  before(:each) do
+  before do
     @album = assign(:album, Album.create!(
                               title: 'Title',
                               bookmarks_count: 2

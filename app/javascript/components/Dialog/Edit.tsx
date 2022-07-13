@@ -4,7 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Button, DialogTitle } from "@mui/material";
 import TextField from '@mui/material/TextField';
-import { bands } from '../../axios';
 
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
 export default function Edit({ dialogTitle }: Props) {
 	const [on, toggle] = useToggle(false);
 	const [band, setBand] = useState<schema.Band[]>([])
-	const handleChange = (_event: SyntheticEvent<Element, Event>, value: string) => bands({ q: { name_cont: value } }).then(res => setBand(res.data))
+	const handleChange = (_event: SyntheticEvent<Element, Event>, value: string) => console.log(value)
 	return (
 		<>
 			<Button onClick={toggle}>Edit</Button>

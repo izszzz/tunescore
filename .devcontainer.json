@@ -1,0 +1,21 @@
+{
+  "name": "NextJS",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/app",
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"esbenp.prettier-vscode",
+	"ms-azuretools.vscode-docker"
+],
+  "shutdownAction": "stopCompose",
+   "settings": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true
+  }
+}

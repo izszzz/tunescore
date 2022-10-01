@@ -1,4 +1,6 @@
 version: '3'
+volumes:
+   nextjs-node-modules:
 services:
   db:
     image: postgres
@@ -12,6 +14,7 @@ services:
     command: bash -c "npm run dev & npm run storybook"
     volumes:
       - .:/app
+      - nextjs-node-modules:/app/node_modules
     ports:
       - 3000:3000
       - 6006:6006

@@ -1,18 +1,18 @@
 import type { NextPage } from "next";
-import Header from "../../components/elements/Header";
+import Link from 'next/link'
+import SingleColumnLayout from "../../components/layouts/single_column";
 import { trpc } from "../../utils/trpc";
 
-const Index: NextPage = () => {
-	const users = trpc.useQuery(["user.index"]);
+const Users: NextPage = () => {
+	const { data: users } = trpc.useQuery(["user.index"]);
 	return (
-		<>
-			<Header />
+		<SingleColumnLayout>
 			<p>hello</p>
 			<>
-				{users.data?.map((user) => <p key={user.id}>{user.name}</p>)}
+				{users?.map((user) => <Link key={user.id} href="/users/[id]" as={`/users/${user.id}`}><a>{user.name}</a></Link>)}
 			</>
-		</>
+		</SingleColumnLayout>
 	)
 }
 
-export default Index;
+export default Users;

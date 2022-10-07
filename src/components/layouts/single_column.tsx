@@ -1,3 +1,4 @@
+import Container from "@mui/material/Container";
 import Header from "../elements/Header";
 
 interface SingleColumnProps {
@@ -7,7 +8,9 @@ const SingleColumn: React.FC<SingleColumnProps> = ({ children }) => {
 	return (
 		<>
 			<Header />
-			{children}
+			<Container>
+				{children}
+			</Container>
 		</>
 	)
 }

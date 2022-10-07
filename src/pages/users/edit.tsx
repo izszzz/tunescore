@@ -8,7 +8,7 @@ import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
 import SingleColumnLayout from "../../components/layouts/single_column";
 import { trpc } from "../../utils/trpc";
 
-const Edit: NextPage = () => {
+const EditUser: NextPage = () => {
 	const router = useRouter()
 	const { data: session } = useSession()
 	const formContext = useForm<User>()
@@ -36,4 +36,4 @@ const Edit: NextPage = () => {
 		</SingleColumnLayout>
 	)
 }
-export default Edit;
+export default EditUser;

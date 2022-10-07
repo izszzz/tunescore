@@ -7,10 +7,12 @@ const Users: NextPage = () => {
 	const { data: users } = trpc.useQuery(["user.index"]);
 	return (
 		<SingleColumnLayout>
-			<p>hello</p>
-			<>
-				{users?.map((user) => <Link key={user.id} href="/users/[id]" as={`/users/${user.id}`}><a>{user.name}</a></Link>)}
-			</>
+			<p>users</p>
+			<div>
+				{users?.map((user) =>
+					<Link key={user.id} href={`/users/${user.id}`} ><a>{user.name}</a></Link>)
+				}
+			</div>
 		</SingleColumnLayout>
 	)
 }

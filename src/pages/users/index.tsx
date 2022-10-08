@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Link from 'next/link'
+import Link from 'next/link';
 import SingleColumnLayout from "../../components/layouts/single_column";
 import { trpc } from "../../utils/trpc";
 

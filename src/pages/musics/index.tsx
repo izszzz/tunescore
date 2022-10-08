@@ -13,7 +13,7 @@ const Musics: NextPage = () => {
 				<a>create music</a>
 			</Link>
 			<div>
-				{musics?.map(music => <MusicCard {...music} />)}
+				{musics?.map(music => <MusicCard key={music.id} {...music} />)}
 			</div>
 		</SingleColumnLayout>
 	)

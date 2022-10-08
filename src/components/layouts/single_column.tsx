@@ -1,5 +1,5 @@
 import Container from "@mui/material/Container";
-import Header from "../elements/Header";
+import Header from "../elements/header";
 
 interface SingleColumnProps {
 	children: React.ReactNode;

@@ -6,12 +6,14 @@ import {exampleRouter} from "./example"
 import {protectedExampleRouter} from "./protected-example-router"
 import {userRouter} from "./user"
 import {musicRouter} from "./music"
+import {artistRouter} from "./artist"
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("example.", exampleRouter)
   .merge("user.", userRouter)
   .merge("music.", musicRouter)
+  .merge("artist.", artistRouter)
   .merge("auth.", protectedExampleRouter)
 
 // export type definition of API

@@ -15,6 +15,9 @@ const Home: NextPage = () => {
       <br /><Link href="/artists">
         <a>artist</a>
       </Link>
+      <br /><Link href="/bands">
+        <a>band</a>
+      </Link>
     </SingleColumnLayout>
   );
 };

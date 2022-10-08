@@ -33,7 +33,7 @@ const EditArtist: NextPage = () => {
 				formContext={formContext}
 				onSuccess={handleSubmit}
 			>
-				<TextFieldElement name="title" label="Title" required /><br />
+				<TextFieldElement name="name" label="Name" required /><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
 			<br /><Button type="button" onClick={handleDestroy}>Delete Artist</Button>

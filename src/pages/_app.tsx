@@ -8,16 +8,20 @@ import type { AppType } from "next/app";
 import type { AppRouter } from "../server/router";
 import type { Session } from "next-auth";
 import CssBaseline from '@mui/material/CssBaseline'
+import { SnackbarProvider } from 'notistack';
+
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <CssBaseline />
-      <Component {...pageProps} />
-    </SessionProvider>
+    <SnackbarProvider maxSnack={3}>
+      <SessionProvider session={session}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </SessionProvider>
+    </SnackbarProvider>
   );
 };
 

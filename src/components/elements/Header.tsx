@@ -20,7 +20,7 @@ const Header = () => {
 		handleClose();
 	}
 	return (
-		<AppBar position="static">
+		<AppBar position="static" color="default">
 			<Toolbar>
 				<Typography variant="h4" sx={{ flexGrow: 1 }}>
 					<Link href="/">

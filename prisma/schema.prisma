@@ -53,6 +53,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    musics Music[]
 }
 
 model VerificationToken {
@@ -66,6 +67,14 @@ model VerificationToken {
 model Music {
     id            String    @id @default(cuid())
     title String
+
+    user User? @relation(fields: [userId], references: [id])
+    userId String?
+
+    band Band? @relation(fields: [bandId], references: [id])
+    bandId String?
+
+    composers MusicsOnComposers[]
 }
 
 model Album {
@@ -76,9 +85,22 @@ model Album {
 model Artist {
     id            String    @id @default(cuid())
     name String
+    composers MusicsOnComposers[]
 }
 
 model Band {
     id            String    @id @default(cuid())
     name String
+    musics Music[]
+}
+
+model MusicsOnComposers{
+  composer   Artist @relation(fields: [composerId], references: [id])
+  composerId  String // relation scalar field (used in the `@relation` attribute above)
+  music Music @relation(fields: [musicId], references: [id])
+  musicId String // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([composerId, musicId])
 }

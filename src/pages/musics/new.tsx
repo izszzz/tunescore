@@ -1,26 +1,46 @@
-import Button from "@mui/material/Button";
-import { Music } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui"
+import { useSnackbar } from "notistack";
+import Button from "@mui/material/Button";
+import { Music } from "@prisma/client";
+import { FormContainer, RadioButtonGroup, TextFieldElement } from "react-hook-form-mui"
 import SingleColumnLayout from "../../components/layouts/single_column";
 import { trpc } from "../../utils/trpc";
+import { Typography } from "@mui/material";
+import Box from "@mui/system/Box";
 
 const NewMusic: NextPage = () => {
 	const router = useRouter()
-	const create = trpc.useMutation(["music.create"]);
-	const handleSubmit = (data: Music) => {
-		create.mutate(data)
-		router.push("/musics")
-	}
+	const { enqueueSnackbar } = useSnackbar()
+	const handleSubmit = (data: Music) => create.mutate(data)
+	const create = trpc.useMutation(["music.create"], {
+		onSuccess: () => router.push("/musics"),
+		onError: error => { enqueueSnackbar(String(error)) }
+	});
 	return (
 		<SingleColumnLayout>
-			<p>new music</p>
+			<Box borderBottom={1} mb={3}>
+				<Typography variant="h3">Create a New Music</Typography>
+			</Box>
+
 			<FormContainer onSuccess={handleSubmit}>
+				<Box borderBottom={1} mb={3}>
+					<RadioButtonGroup label="writing" name="writing" options={[{ id: "0", label: "original" }, { id: "1", label: "copy" }]} required />
+				</Box>
+				<Box borderBottom={1} mb={3}>
+					<RadioButtonGroup label="visibillity" name="visibility" options={[{ id: "0", label: "public" }, { id: "1", label: "private" }]} required />
+				</Box>
 				<TextFieldElement name="title" label="Title" required /><br />
+				<TextFieldElement
+					margin={'dense'}
+					label={'price'}
+					name={'number-text-field'}
+					required
+					type={'number'}
+				/><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
-		</SingleColumnLayout>
+		</SingleColumnLayout >
 	)
 }
 

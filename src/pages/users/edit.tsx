@@ -13,12 +13,10 @@ const EditUser: NextPage = () => {
 	const { data: session } = useSession()
 	const formContext = useForm<User>()
 	const update = trpc.useMutation("user.update");
-	const destroy = trpc.useMutation("user.destroy");
+	const destroy = trpc.useMutation("user.destroy", { onSuccess: () => router.push("/"), onError: error => console.log(error) });
 	const handleSubmit = (data: User) => update.mutate(data)
-	const handleDestroy = () => {
-		destroy.mutate(session?.user)
-		router.push("/")
-	}
+	const handleDestroy = () => destroy.mutate(session?.user)
+
 	useEffect(() => {
 		formContext.reset(session?.user)
 	}, [session])

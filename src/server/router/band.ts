@@ -15,6 +15,16 @@ export const bandRouter = createRouter()
       return await ctx.prisma.band.findFirst({where: {id: input.id}})
     },
   })
+  .mutation("search", {
+    input: z.object({
+      title: z.string(),
+    }),
+    async resolve({ctx, input}) {
+      return await ctx.prisma.band.findMany({
+        where: {name: {contains: input.title}},
+      })
+    },
+  })
   .mutation("create", {
     input: z.object({
       name: z.string(),

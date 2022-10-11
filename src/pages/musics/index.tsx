@@ -8,13 +8,10 @@ const Musics: NextPage = () => {
 	const { data: musics } = trpc.useQuery(["music.index"]);
 	return (
 		<SingleColumnLayout>
-			<p>musics</p>
 			<Link href="/musics/new">
 				<a>create music</a>
 			</Link>
-			<div>
-				{musics?.map(music => <MusicCard key={music.id} {...music} />)}
-			</div>
+			{musics?.map(music => <MusicCard key={music.id} {...music} />)}
 		</SingleColumnLayout>
 	)
 }

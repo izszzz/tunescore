@@ -15,7 +15,13 @@ export const musicRouter = createRouter()
     async resolve({ctx, input}) {
       return await ctx.prisma.music.findFirst({
         where: {id: input.id},
-        include: {user: true, band: true},
+        include: {
+          user: true,
+          band: true,
+          composers: {include: {composer: true}},
+          lyrists: {include: {lyrist: true}},
+          artists: {include: {artist: true}},
+        },
       })
     },
   })
@@ -41,16 +47,23 @@ export const musicRouter = createRouter()
     input: z.object({
       id: z.string(),
       title: z.string(),
-      band: z.object({
-        id: z.string(),
-      }),
+      band: z
+        .object({
+          id: z.string(),
+        })
+        .nullish(),
+      composers: z
+        .array(z.object({id: z.string(), name: z.string()}))
+        .nullish(),
+      lyrists: z.array(z.object({id: z.string(), name: z.string()})).nullish(),
     }),
     async resolve({ctx, input}) {
+      console.log(input.composers)
       return await ctx.prisma.music.update({
         where: {id: input.id},
         data: {
           title: input.title,
-          bandId: input.band.id,
+          bandId: input.band?.id,
         },
       })
     },

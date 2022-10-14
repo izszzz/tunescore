@@ -15,6 +15,16 @@ export const artistRouter = createRouter()
       return await ctx.prisma.artist.findFirst({where: {id: input.id}})
     },
   })
+  .mutation("search", {
+    input: z.object({
+      title: z.string(),
+    }),
+    async resolve({ctx, input}) {
+      return await ctx.prisma.artist.findMany({
+        where: {name: {contains: input.title}},
+      })
+    },
+  })
   .mutation("create", {
     input: z.object({
       name: z.string(),

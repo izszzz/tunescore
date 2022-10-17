@@ -1,3 +1,4 @@
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -16,6 +17,7 @@ const Music: NextPage = () => {
 		<MusicLayout>
 			{(props) =>
 				<>
+					<Button variant="contained" onClick={() => router.push("/scores/" + router.query.id)} fullWidth>Score</Button>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
 							<TableHead>
@@ -44,7 +46,7 @@ const Music: NextPage = () => {
 								<TableRow>
 									<TableCell>Band</TableCell>
 									<TableCell>
-										<Chip label={props.data?.band?.name} onClick={() => router.push("/bands/" + props.data?.band?.id)} />
+										{props.data?.band && <Chip label={props.data?.band?.name} onClick={() => router.push("/bands/" + props.data?.band?.id)} />}
 									</TableCell>
 								</TableRow>
 							</TableBody>

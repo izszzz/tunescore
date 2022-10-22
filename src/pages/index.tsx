@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import Link from 'next/link'
-import SingleColumnLayout from "../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 
 const Home: NextPage = () => {
   return (
-    <SingleColumnLayout>
+    <DefaultSingleColumnLayout>
       <>home</>
       <br /><Link href="/musics">
         <a>music</a>
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       <br /><Link href="/bands">
         <a>band</a>
       </Link>
-    </SingleColumnLayout>
+    </DefaultSingleColumnLayout>
   );
 };
 

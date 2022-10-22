@@ -5,9 +5,10 @@ import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import SingleColumnLayout from "../../../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { trpc } from "../../../utils/trpc";
 import { Band } from "@prisma/client";
+import Header from "../../../components/layouts/header";
 
 const EditBand: NextPage = () => {
 	const router = useRouter()
@@ -27,7 +28,7 @@ const EditBand: NextPage = () => {
 			formContext.reset(band)
 	}, [band])
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout>
 			<p>edit</p>
 			<FormContainer
 				formContext={formContext}
@@ -37,7 +38,7 @@ const EditBand: NextPage = () => {
 				<Button type="submit" >submit</Button>
 			</FormContainer>
 			<br /><Button type="button" onClick={handleDestroy}>Delete Band</Button>
-		</SingleColumnLayout>
+		</DefaultSingleColumnLayout>
 	)
 }
 export default EditBand;

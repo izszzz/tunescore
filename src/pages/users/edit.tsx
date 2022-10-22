@@ -5,8 +5,9 @@ import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import SingleColumnLayout from "../../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
+import Header from "../../components/layouts/header";
 
 const EditUser: NextPage = () => {
 	const router = useRouter()
@@ -21,7 +22,7 @@ const EditUser: NextPage = () => {
 		formContext.reset(session?.user)
 	}, [session])
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout>
 			<p>edit</p>
 			<FormContainer
 				formContext={formContext}
@@ -31,7 +32,7 @@ const EditUser: NextPage = () => {
 				<Button type="submit" >submit</Button>
 				<br /><Button type="button" onClick={handleDestroy}>Delete Account</Button>
 			</FormContainer>
-		</SingleColumnLayout>
+		</DefaultSingleColumnLayout>
 	)
 }
 export default EditUser;

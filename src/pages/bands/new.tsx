@@ -3,7 +3,8 @@ import { Band } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui"
-import SingleColumnLayout from "../../components/layouts/single_column";
+import Header from "../../components/layouts/header";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 
 const NewBand: NextPage = () => {
@@ -14,13 +15,13 @@ const NewBand: NextPage = () => {
 		router.push("/bands")
 	}
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout>
 			<p>new band</p>
 			<FormContainer onSuccess={handleSubmit}>
 				<TextFieldElement name="name" label="Name" required /><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
-		</SingleColumnLayout>
+		</DefaultSingleColumnLayout>
 	)
 }
 

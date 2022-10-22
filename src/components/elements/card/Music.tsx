@@ -1,14 +1,13 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import { Music, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import CardContent from "@mui/material/CardContent";
 
-interface MusicCardProps extends Music {
-	user: User;
-}
-const MusicCard = ({ id, title, user }: MusicCardProps) => {
+const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true } })
+type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
+const MusicCard = ({ id, title, user }: CustomMusic) => {
 	return (
 		<Card variant="outlined">
 			<CardContent>
@@ -16,7 +15,7 @@ const MusicCard = ({ id, title, user }: MusicCardProps) => {
 					<Link href={`/musics/${id}`} ><a>{title}</a></Link>
 				</Typography>
 				<Typography variant="subtitle1" color="text.secondary">
-					created by <Link href={`/users/${user.id}`}><a>{user.name}</a></Link>
+					created by <Link href={`/users/${user?.id}`}><a>{user?.name}</a></Link>
 				</Typography>
 			</CardContent>
 		</Card>

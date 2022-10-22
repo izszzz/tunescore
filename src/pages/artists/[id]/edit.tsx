@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import { User } from "next-auth";
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import SingleColumnLayout from "../../../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { trpc } from "../../../utils/trpc";
 import { Artist } from "@prisma/client";
+import Header from "../../../components/layouts/header";
 
 const EditArtist: NextPage = () => {
 	const router = useRouter()
@@ -27,7 +27,7 @@ const EditArtist: NextPage = () => {
 			formContext.reset(artist)
 	}, [artist])
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout>
 			<p>edit</p>
 			<FormContainer
 				formContext={formContext}
@@ -37,7 +37,7 @@ const EditArtist: NextPage = () => {
 				<Button type="submit" >submit</Button>
 			</FormContainer>
 			<br /><Button type="button" onClick={handleDestroy}>Delete Artist</Button>
-		</SingleColumnLayout>
+		</DefaultSingleColumnLayout>
 	)
 }
 export default EditArtist;

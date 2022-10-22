@@ -4,10 +4,11 @@ import { useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { Music } from "@prisma/client";
 import { FormContainer, RadioButtonGroup, TextFieldElement } from "react-hook-form-mui"
-import SingleColumnLayout from "../../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 import { Typography } from "@mui/material";
 import Box from "@mui/system/Box";
+import Header from "../../components/layouts/header";
 
 const NewMusic: NextPage = () => {
 	const router = useRouter()
@@ -18,7 +19,7 @@ const NewMusic: NextPage = () => {
 		onError: error => { enqueueSnackbar(String(error)) }
 	});
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout >
 			<Box borderBottom={1} mb={3}>
 				<Typography variant="h3">Create a New Music</Typography>
 			</Box>
@@ -40,7 +41,7 @@ const NewMusic: NextPage = () => {
 				/><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
-		</SingleColumnLayout >
+		</DefaultSingleColumnLayout >
 	)
 }
 

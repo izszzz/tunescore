@@ -17,7 +17,8 @@ const Music: NextPage = () => {
 		<MusicLayout>
 			{(props) =>
 				<>
-					<Button variant="contained" onClick={() => router.push("/scores/" + router.query.id)} fullWidth>Score</Button>
+					<Button variant="contained" onClick={() => router.push("/scores/" + router.query.id)} fullWidth>Watch Score</Button>
+					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id } })} fullWidth>Edit Score</Button>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }} aria-label="simple table">
 							<TableHead>

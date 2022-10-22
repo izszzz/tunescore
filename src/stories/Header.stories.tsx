@@ -1,4 +1,4 @@
-import HeaderElements from "../components/elements/header"
+import HeaderElements from "../components/layouts/header"
 
 export default {};
 

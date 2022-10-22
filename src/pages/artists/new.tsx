@@ -3,7 +3,7 @@ import { Artist } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui"
-import SingleColumnLayout from "../../components/layouts/single_column";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
@@ -14,13 +14,13 @@ const NewMusic: NextPage = () => {
 		router.push("/artists")
 	}
 	return (
-		<SingleColumnLayout>
+		<DefaultSingleColumnLayout >
 			<p>new artist</p>
 			<FormContainer onSuccess={handleSubmit}>
 				<TextFieldElement name="name" label="Name" required /><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
-		</SingleColumnLayout>
+		</DefaultSingleColumnLayout>
 	)
 }
 

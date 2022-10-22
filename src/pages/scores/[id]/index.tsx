@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
-import AlphatabApi from "../../../components/elements/alphatab/api"
+import ScoreLayout from "../../../components/layouts/score"
 
 const Score: NextPage = () => {
 	return (
-		<AlphatabApi></AlphatabApi>
+		<ScoreLayout />
 	)
 }
 

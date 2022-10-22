@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
+import { AlphaTabApi } from '@coderline/alphatab';
 
 const drawerWidth = 240;
 
@@ -18,11 +19,13 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 	open?: boolean;
 }>(({ theme, open }) => ({
 	flexGrow: 1,
-	padding: theme.spacing(3),
+	// padding: theme.spacing(3),
+	width: "100%",
 	transition: theme.transitions.create('margin', {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen,
 	}),
+	overflow: "hidden",
 	marginLeft: `-${drawerWidth}px`,
 	...(open && {
 		transition: theme.transitions.create('margin', {
@@ -34,19 +37,21 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 const ScoreLayout = () => {
-	const [open, setOpen] = useState(true);
-	const apiRef = useRef<any>(null)
+	const [open, setOpen] = useState(false);
+	const [tracks, setTracks] = useState<any>([]);
+	const apiRef = useRef<AlphaTabApi | null>(null)
 	const mainRef = useRef(null)
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
 		const settings = {
-			// file: "https://www.alphatab.net/files/canon.gp",
+			file: "https://www.alphatab.net/files/canon.gp",
 		};
-		apiRef.current = new window.alphaTab.AlphaTabApi(mainRef.current, settings);
-		apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
+		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
+		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));
+		// apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
 	}
 	return (
-		<Box sx={{ display: 'flex' }}>
+		<Box width="100%" sx={{ display: 'flex' }}>
 
 			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} strategy="beforeInteractive" />
 			<Drawer variant="persistent"
@@ -61,19 +66,19 @@ const ScoreLayout = () => {
 					},
 				}}>
 				<List>
-					{['All mail', 'Trash', 'Spam'].map((text, index) => (
-						<ListItem key={text} disablePadding>
+					{tracks.map((track: any, index: number) => (
+						<ListItem key={index} disablePadding>
 							<ListItemButton>
 								<ListItemIcon>
 								</ListItemIcon>
-								<ListItemText primary={text} />
+								<ListItemText primary={track.name} />
 							</ListItemButton>
 						</ListItem>
 					))}
 				</List>
 			</Drawer>
 			<Main open={open}>
-				<div ref={mainRef} />
+				<Box ref={mainRef} />
 			</Main>
 			<ScoreHeader api={apiRef} >
 				<IconButton onClick={handleOpen}>

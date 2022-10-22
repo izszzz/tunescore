@@ -13,9 +13,7 @@ const ScoreEdit: NextPage = () => {
 		editorRef.current = editor;
 	}
 	useEffect(() => {
-		Split(['#editor', '#score'], {
-			sizes: [25, 75],
-		})
+		Split(['#editor', '#score'], { sizes: [50, 50] })
 	}, [])
 	return (
 		<>

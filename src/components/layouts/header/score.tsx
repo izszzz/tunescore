@@ -1,11 +1,12 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
+import { AlphaTabApi } from "@coderline/alphatab";
 import React from "react";
 import Header from ".";
 import PlayButton from "../../elements/button/play";
 
 interface ScoreHeaderProps {
-	api: React.MutableRefObject<any>
+	api: React.MutableRefObject<AlphaTabApi | null>
 	children: React.ReactNode;
 }
 const ScoreHeader = ({ api, children }: ScoreHeaderProps) => {

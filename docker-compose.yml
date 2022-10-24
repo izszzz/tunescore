@@ -3,11 +3,12 @@ volumes:
   nextjs-node-modules:
 services:
   db:
-    image: postgres
+    image: mongo
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
 
   web:
     build: .

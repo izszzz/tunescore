@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.text annotations in model Account below
   // Further reading: 
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -14,13 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id String @id @default(cuid())
-}
+// model Example {
+// id  String @id @default(auto()) @map("_id") @db.ObjectId
+// }
 
 // Necessary for Next auth
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String
   type              String
   provider          String
@@ -38,7 +38,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -46,7 +46,7 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
@@ -57,6 +57,7 @@ model User {
 }
 
 model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
@@ -65,65 +66,43 @@ model VerificationToken {
 }
 
 model Music {
-  id    String @id @default(cuid())
-  title String
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title Json
 
   user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  userId String? @db.ObjectId
 
   band   Band?   @relation(fields: [bandId], references: [id])
-  bandId String?
+  bandId String? @db.ObjectId
 
-  composers MusicsOnComposers[]
-  lyrists   MusicsOnLyrists[]
-  artists   MusicsOnArtists[]
-  Artist    Artist?             @relation(fields: [artistId], references: [id])
-  artistId  String?
+  composers   Artist[] @relation("composers", fields: [composerIDs], references: [id])
+  composerIDs String[] @db.ObjectId
+
+  lyrists   Artist[] @relation("lyrists", fields: [lyristIDs], references: [id])
+  lyristIDs String[] @db.ObjectId
+
+  artists   Artist[] @relation("artists", fields: [artistIDs], references: [id])
+  artistIDs String[] @db.ObjectId
 }
 
 model Album {
-  id    String @id @default(cuid())
-  title String
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title Json
 }
 
 model Artist {
-  id                String              @id @default(cuid())
-  name              String
-  musics            Music[]
-  MusicsOnComposers MusicsOnComposers[]
-  MusicsOnLyrists   MusicsOnLyrists[]
-  MusicsOnArtists   MusicsOnArtists[]
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name Json
+
+  musicsOnLyrists   Music[]  @relation("lyrists", fields: [musicIDs], references: [id])
+  musicsOnComposers Music[]  @relation("composers", fields: [musicIDs], references: [id])
+  musicsOnArtists   Music[]  @relation("artists", fields: [musicIDs], references: [id])
+  musicIDs          String[] @db.ObjectId
 }
 
 model Band {
-  id     String  @id @default(cuid())
-  name   String
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name Json
+
   musics Music[]
-}
-
-model MusicsOnComposers {
-  music      Music  @relation(fields: [musicId], references: [id])
-  musicId    String
-  composer   Artist @relation(fields: [composerId], references: [id])
-  composerId String
-
-  @@id([musicId, composerId])
-}
-
-model MusicsOnLyrists {
-  music    Music  @relation(fields: [musicId], references: [id])
-  musicId  String
-  lyrist   Artist @relation(fields: [lyristId], references: [id])
-  lyristId String
-
-  @@id([musicId, lyristId])
-}
-
-model MusicsOnArtists {
-  music    Music  @relation(fields: [musicId], references: [id])
-  musicId  String
-  artist   Artist @relation(fields: [artistId], references: [id])
-  artistId String
-
-  @@id([musicId, artistId])
 }

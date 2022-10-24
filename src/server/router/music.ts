@@ -27,7 +27,7 @@ export const musicRouter = createRouter()
   })
   .mutation("create", {
     input: z.object({
-      title: z.string(),
+      title: z.any(),
     }),
     async resolve({ctx, input}) {
       if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})

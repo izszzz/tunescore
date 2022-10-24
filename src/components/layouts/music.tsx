@@ -25,7 +25,9 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ children }) => {
 		<DefaultSingleColumnLayout subHeader={
 			<>
 				<Typography variant="h5">
-					<Link href={`/users/${musicQuery.data?.user?.id}`}><a>{musicQuery.data?.user?.name}</a></Link> / {musicQuery.data?.title}
+					{/* TODO: fix Type */}
+					{/*@ts-ignore*/}
+					<Link href={`/users/${musicQuery.data?.user?.id}`}><a>{musicQuery.data?.user?.name}</a></Link> / {musicQuery.data?.title.jaJP}
 				</Typography>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={router.asPath} onChange={handleChange}>

@@ -87,7 +87,7 @@ const EditMusic: NextPage = () => {
 							formContext={formContext}
 							onSuccess={handleSubmit}
 						>
-							<TextFieldElement name="title" label="Title" margin="dense" required disabled={isLoading} />
+							<TextFieldElement name={"title." + "jaJP"} label="Title" margin="dense" required disabled={isLoading} />
 							<AutocompleteElement
 								name="band"
 								label="Band"
@@ -96,7 +96,9 @@ const EditMusic: NextPage = () => {
 								autocompleteProps={{
 									disabled: isLoading,
 									onChange: (_e, value) => value.id,
-									getOptionLabel: (option: Band) => option.name,
+									/* TODO: fix Type */
+									/*@ts-ignore*/
+									getOptionLabel: (option: Band) => option.name.jaJP,
 								}}
 								textFieldProps={{ margin: "dense", onChange: handleSearchBand }} />
 							<AutocompleteElement

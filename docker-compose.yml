@@ -3,12 +3,15 @@ volumes:
   nextjs-node-modules:
 services:
   db:
-    image: mongo
-    volumes:
-      - ./tmp/db:/var/lib/postgresql/data
+    image: "bitnami/mongodb:latest"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      - MONGODB_ADVERTISED_HOSTNAME=127.0.0.1
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=example
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    ports:
+      - "27017:27017"
 
   web:
     build: .

@@ -4,8 +4,9 @@ import { useRouter } from 'next/router'
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, AutocompleteElement, useForm } from "react-hook-form-mui"
 import MusicLayout from "../../../components/layouts/music";
+import LocaleAutocomplete from "../../../components/elements/autocomplete/locale";
 import { trpc } from "../../../utils/trpc";
-import { Artist, Band, Music, Prisma } from "@prisma/client";
+import { Artist, Band, Locales, Music, Prisma } from "@prisma/client";
 import { useSnackbar } from "notistack";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
@@ -19,8 +20,9 @@ import Box from "@mui/material/Box";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CloseIcon from '@mui/icons-material/Close';
+import Grid from "@mui/material/Grid";
 
-const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: { include: { composer: true } }, lyrists: { include: { lyrist: true } }, artists: { include: { artist: true } } } })
+const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
 type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
 const EditMusic: NextPage = () => {
 	const [artist, setArtist] = useState<Artist>()
@@ -76,9 +78,8 @@ const EditMusic: NextPage = () => {
 				const handleDestroyMusicsOnArtists = (artist: Artist) => () => music && artist && destroyMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
 				const handleCreateMusicsOnArtists = () => music && artist && createMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
 				useEffect(() => {
-					if (music) {
+					if (music)
 						formContext.reset(music)
-					}
 				}, [music])
 
 				return (
@@ -87,7 +88,14 @@ const EditMusic: NextPage = () => {
 							formContext={formContext}
 							onSuccess={handleSubmit}
 						>
-							<TextFieldElement name={"title." + "jaJP"} label="Title" margin="dense" required disabled={isLoading} />
+							<Grid container spacing={1}>
+								<Grid item xs={8}>
+									<TextFieldElement name={"title." + router.locale} label="Title" margin="dense" required disabled={isLoading} fullWidth />
+								</Grid>
+								<Grid item xs={4}>
+									<LocaleAutocomplete />
+								</Grid>
+							</Grid>
 							<AutocompleteElement
 								name="band"
 								label="Band"
@@ -96,9 +104,7 @@ const EditMusic: NextPage = () => {
 								autocompleteProps={{
 									disabled: isLoading,
 									onChange: (_e, value) => value.id,
-									/* TODO: fix Type */
-									/*@ts-ignore*/
-									getOptionLabel: (option: Band) => option.name.jaJP,
+									getOptionLabel: (option: Band) => option.name[router.locale as keyof Locales] || "",
 								}}
 								textFieldProps={{ margin: "dense", onChange: handleSearchBand }} />
 							<AutocompleteElement
@@ -117,7 +123,7 @@ const EditMusic: NextPage = () => {
 										if (reason === "removeOption")
 											handleDestroyMusicsOnComposers(details?.option)
 									},
-									getOptionLabel: (option: Artist & { composer: Artist }) => option.composer ? option.composer.name : option.name
+									getOptionLabel: (option: Artist) => option.name[router.locale as keyof Locales] || ""
 								}}
 								textFieldProps={{ margin: "dense", onChange: handleSearchArtist }}
 							/>
@@ -136,7 +142,7 @@ const EditMusic: NextPage = () => {
 										if (reason === "removeOption")
 											handleDestroyMusicsOnLyrists(details?.option)
 									},
-									getOptionLabel: (option: Artist & { lyrist: Artist }) => option.lyrist ? option.lyrist.name : option.name
+									getOptionLabel: (option: Artist) => option.name[router.locale as keyof Locales] || ""
 								}}
 								textFieldProps={{ margin: "dense", onChange: handleSearchArtist }}
 							/>
@@ -152,7 +158,7 @@ const EditMusic: NextPage = () => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{music?.artists.map(artist => artist.artist).map((artist) => (
+									{music?.artists.map((artist) => (
 										<TableRow key={artist.id}>
 											<TableCell >
 												<IconButton onClick={handleDestroyMusicsOnArtists(artist)}>
@@ -160,7 +166,7 @@ const EditMusic: NextPage = () => {
 												</IconButton>
 											</TableCell>
 											<TableCell />
-											<TableCell>{artist.name}</TableCell>
+											<TableCell>{artist.name[router.locale as keyof Locales] || ""}</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
@@ -175,7 +181,7 @@ const EditMusic: NextPage = () => {
 									if (reason === "selectOption")
 										setArtist(details?.option)
 								}}
-								getOptionLabel={(option: Artist) => option.name}
+								getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
 								renderInput={params => <TextField {...params} label="Artist" margin="dense" onChange={handleSearchArtist} />}
 							/>
 							<Button type="button" variant="outlined" color="primary" disabled={isLoading} onClick={handleCreateMusicsOnArtists} fullWidth>Add</Button>
@@ -187,5 +193,6 @@ const EditMusic: NextPage = () => {
 		</MusicLayout >
 	)
 }
+
 export default EditMusic;
 

@@ -4,10 +4,11 @@
   "service": "web",
   "workspaceFolder": "/app",
   "extensions": [
-	"dbaeumer.vscode-eslint",
-	"esbenp.prettier-vscode",
-	"ms-azuretools.vscode-docker"
-],
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-azuretools.vscode-docker",
+    "Prisma.prisma"
+  ],
   "shutdownAction": "stopCompose",
    "settings": {
     "editor.codeActionsOnSave": {

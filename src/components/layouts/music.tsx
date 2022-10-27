@@ -10,7 +10,7 @@ import { trpc } from "../../utils/trpc";
 import { UseQueryResult } from "react-query";
 import DefaultSingleColumnLayout from "./single_column/default";
 
-const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: { include: { composer: true } }, lyrists: { include: { lyrist: true } }, artists: { include: { artist: true } } } })
+const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
 type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
 
 interface MusicLayoutProps {
@@ -25,9 +25,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ children }) => {
 		<DefaultSingleColumnLayout subHeader={
 			<>
 				<Typography variant="h5">
-					{/* TODO: fix Type */}
-					{/*@ts-ignore*/}
-					<Link href={`/users/${musicQuery.data?.user?.id}`}><a>{musicQuery.data?.user?.name}</a></Link> / {musicQuery.data?.title.jaJP}
+					<Link href={`/users/${musicQuery.data?.user?.id}`}><a>{musicQuery.data?.user?.name}</a></Link> / {musicQuery.data?.title.ja}
 				</Typography>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={router.asPath} onChange={handleChange}>

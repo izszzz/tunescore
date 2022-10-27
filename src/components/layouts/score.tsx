@@ -48,7 +48,7 @@ const ScoreLayout = ({ score }: ScoreLayoutProps) => {
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
 		const settings = {
-			// file: "https://www.alphatab.net/files/canon.gp",
+			file: "https://www.alphatab.net/files/canon.gp",
 		};
 		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
 		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));

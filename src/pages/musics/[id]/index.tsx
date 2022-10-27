@@ -7,6 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { Locales } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import MusicLayout from "../../../components/layouts/music";
@@ -31,23 +32,23 @@ const Music: NextPage = () => {
 								<TableRow>
 									<TableCell>Composer</TableCell>
 									<TableCell>
-										{props.data?.composers.map(({ composer }) =>
-											<Chip label={composer.name} onClick={() => router.push("/artists/" + composer.id)} />
+										{props.data?.composers.map(composer =>
+											<Chip label={composer.name[router.locale as keyof Locales]} onClick={() => router.push("/artists/" + composer.id)} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Lyrist</TableCell>
 									<TableCell>
-										{props.data?.lyrists.map(({ lyrist }) =>
-											<Chip label={lyrist.name} onClick={() => router.push("/artists/" + lyrist.id)} />
+										{props.data?.lyrists.map(lyrist =>
+											<Chip label={lyrist.name[router.locale as keyof Locales]} onClick={() => router.push("/artists/" + lyrist.id)} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Band</TableCell>
 									<TableCell>
-										{props.data?.band && <Chip label={props.data?.band?.name} onClick={() => router.push("/bands/" + props.data?.band?.id)} />}
+										{props.data?.band && <Chip label={props.data?.band?.name[router.locale as keyof Locales]} onClick={() => router.push("/bands/" + props.data?.band?.id)} />}
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -63,11 +64,11 @@ const Music: NextPage = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{props.data?.artists.map(artist => artist.artist).map(artist => (
+								{props.data?.artists.map(artist => (
 									<TableRow key={artist.id}>
 										<TableCell />
 										<TableCell >
-											<Chip label={artist.name} onClick={() => router.push("/artists/" + artist.id)} />
+											<Chip label={artist.name[router.locale as keyof Locales]} onClick={() => router.push("/artists/" + artist.id)} />
 										</TableCell>
 									</TableRow>
 								))}

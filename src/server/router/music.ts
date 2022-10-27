@@ -18,9 +18,9 @@ export const musicRouter = createRouter()
         include: {
           user: true,
           band: true,
-          composers: {include: {composer: true}},
-          lyrists: {include: {lyrist: true}},
-          artists: {include: {artist: true}},
+          composers: true,
+          lyrists: true,
+          artists: true,
         },
       })
     },
@@ -46,7 +46,7 @@ export const musicRouter = createRouter()
   .mutation("update", {
     input: z.object({
       id: z.string(),
-      title: z.string(),
+      title: z.object({}),
       band: z
         .object({
           id: z.string(),

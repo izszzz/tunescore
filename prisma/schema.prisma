@@ -67,7 +67,7 @@ model VerificationToken {
 
 model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title Json
+  title Locales
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
@@ -87,12 +87,12 @@ model Music {
 
 model Album {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title Json
+  title Locales
 }
 
 model Artist {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Json
+  name Locales
 
   musicsOnLyrists   Music[]  @relation("lyrists", fields: [musicIDs], references: [id])
   musicsOnComposers Music[]  @relation("composers", fields: [musicIDs], references: [id])
@@ -102,7 +102,12 @@ model Artist {
 
 model Band {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Json
+  name Locales
 
   musics Music[]
+}
+
+type Locales {
+  ja String?
+  en String?
 }

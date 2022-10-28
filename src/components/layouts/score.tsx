@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Script from 'next/script'
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -48,16 +48,17 @@ const ScoreLayout = ({ score }: ScoreLayoutProps) => {
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
 		const settings = {
-			file: "https://www.alphatab.net/files/canon.gp",
+			// file: "https://www.alphatab.net/files/canon.gp",
 		};
 		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
 		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));
 		// apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
-		apiRef.current?.tex(score);
 	}
+	useEffect(() => {
+		apiRef.current?.tex(score);
+	}, [score])
 	return (
 		<Box width="100%" sx={{ display: 'flex' }}>
-
 			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} strategy="beforeInteractive" />
 			<Drawer variant="persistent"
 				anchor="left"

@@ -1,6 +1,8 @@
 import {createRouter} from "./context"
 import {z} from "zod"
 import {TRPCError} from "@trpc/server"
+import {Prisma} from "@prisma/client"
+import schemaTypeFor from "../../types/schemaForType"
 
 export const musicRouter = createRouter()
   .query("index", {
@@ -44,27 +46,18 @@ export const musicRouter = createRouter()
     },
   })
   .mutation("update", {
-    input: z.object({
-      id: z.string(),
-      title: z.object({}),
-      band: z
-        .object({
-          id: z.string(),
-        })
-        .nullish(),
-      composers: z
-        .array(z.object({id: z.string(), name: z.string()}))
-        .nullish(),
-      lyrists: z.array(z.object({id: z.string(), name: z.string()})).nullish(),
-    }),
+    input: schemaTypeFor<Prisma.MusicUpdateInput>()(
+      z.object({
+        id: z.string(),
+        title: z.object({ja: z.string(), en: z.string()}).optional(),
+        score: z.string().optional(),
+      })
+    ),
     async resolve({ctx, input}) {
-      console.log(input.composers)
+      const {id, ...data} = input
       return await ctx.prisma.music.update({
-        where: {id: input.id},
-        data: {
-          title: input.title,
-          bandId: input.band?.id,
-        },
+        where: {id},
+        data,
       })
     },
   })

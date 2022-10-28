@@ -8,7 +8,7 @@ import DefaultSingleColumnLayout from "../../components/layouts/single_column/de
 import { trpc } from "../../utils/trpc";
 import { Typography } from "@mui/material";
 import Box from "@mui/system/Box";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const NewMusic: NextPage = () => {
 	const router = useRouter()

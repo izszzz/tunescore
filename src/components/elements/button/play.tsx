@@ -8,6 +8,7 @@ interface PlayButtonProps {
 }
 const PlayButton = ({ onClick }: PlayButtonProps) => {
 	const [toggle, setToggle] = useState(false)
+
 	const handleClick = () => {
 		onClick && onClick(toggle)
 		setToggle(prev => prev ? false : true)

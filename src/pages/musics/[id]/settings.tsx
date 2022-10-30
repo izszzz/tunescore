@@ -2,11 +2,12 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { useRouter } from 'next/router'
 import Button from "@mui/material/Button";
-import { FormContainer, TextFieldElement, AutocompleteElement, useForm } from "react-hook-form-mui"
+import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
 import MusicLayout from "../../../components/layouts/music";
 import LocaleAutocomplete from "../../../components/elements/autocomplete/locale";
 import { trpc } from "../../../utils/trpc";
-import { Artist, Band, Locales, Music, Prisma } from "@prisma/client";
+import { Music, Artist, Band, Locales, Prisma } from "@prisma/client";
+
 import { useSnackbar } from "notistack";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
@@ -22,8 +23,6 @@ import TextField from "@mui/material/TextField";
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from "@mui/material/Grid";
 
-const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
-type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
 const EditMusic: NextPage = () => {
 	const [artist, setArtist] = useState<Artist>()
 	const router = useRouter()
@@ -63,24 +62,26 @@ const EditMusic: NextPage = () => {
 	const createMusicsOnArtists = trpc.useMutation("musicsOnArtists.create", {
 		onError: () => { enqueueSnackbar("create musics on composers error") }
 	});
-	const handleSubmit = (data: Music & { band: Band }) => update.mutate(data)
 	const handleSearchBand = (e: ChangeEvent<HTMLInputElement>) => searchBand.mutate({ title: e.currentTarget.value });
 	const handleSearchArtist = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ title: e.currentTarget.value });
 	return (
 		<MusicLayout>
 			{({ data: music, isLoading }) => {
-				const formContext = useForm<CustomMusic>()
+				const formContext = useForm<Music>()
+				const handleSubmit = (data: Music) => update.mutate(data)
 				const handleDestroy = () => music && destroy.mutate(music)
-				const handleDestroyMusicsOnComposers = (artist: Artist) => music && destroyMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
-				const handleCreateMusicsOnComposers = (artist: Artist) => music && createMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
-				const handleDestroyMusicsOnLyrists = (artist: Artist) => music && destroyMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
-				const handleCreateMusicsOnLyrists = (artist: Artist) => music && createMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
+				const handleDestroyMusicsOnComposers = (artist: Artist | undefined) => music && artist && destroyMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
+				const handleCreateMusicsOnComposers = (artist: Artist | undefined) => music && artist && createMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
+				const handleDestroyMusicsOnLyrists = (artist: Artist | undefined) => music && artist && destroyMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
+				const handleCreateMusicsOnLyrists = (artist: Artist | undefined) => music && artist && createMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
 				const handleDestroyMusicsOnArtists = (artist: Artist) => () => music && artist && destroyMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
 				const handleCreateMusicsOnArtists = () => music && artist && createMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
 				useEffect(() => {
-					if (music)
-						formContext.reset(music)
-				}, [music])
+					if (music) {
+						const { id, title } = music;
+						formContext.reset({ id, title })
+					}
+				}, [router.locale, music])
 
 				return (
 					<>
@@ -96,58 +97,67 @@ const EditMusic: NextPage = () => {
 									<LocaleAutocomplete />
 								</Grid>
 							</Grid>
-							<AutocompleteElement
-								name="band"
-								label="Band"
-								options={searchBand.data || []}
-								loading={searchBand.isLoading}
-								autocompleteProps={{
-									disabled: isLoading,
-									onChange: (_e, value) => value.id,
-									getOptionLabel: (option: Band) => option.name[router.locale as keyof Locales] || "",
-								}}
-								textFieldProps={{ margin: "dense", onChange: handleSearchBand }} />
-							<AutocompleteElement
-								name="composers"
-								label="Composer"
-								options={searchArtist.data || []}
-								loading={searchArtist.isLoading}
-								multiple
-								autocompleteProps={{
-									disabled: isLoading,
-									onChange: (_e, _value, reason, details) => {
-										if (reason === "selectOption") {
-											handleCreateMusicsOnComposers(details?.option)
-											return details?.option
-										}
-										if (reason === "removeOption")
-											handleDestroyMusicsOnComposers(details?.option)
-									},
-									getOptionLabel: (option: Artist) => option.name[router.locale as keyof Locales] || ""
-								}}
-								textFieldProps={{ margin: "dense", onChange: handleSearchArtist }}
-							/>
-							<AutocompleteElement
-								name="lyrists"
-								label="Lyrist"
-								options={searchArtist.data || []}
-								loading={searchArtist.isLoading}
-								multiple
-								autocompleteProps={{
-									disabled: isLoading,
-									onChange: (_e, _value, reason, details) => {
-										if (reason === "selectOption") {
-											handleCreateMusicsOnLyrists(details?.option)
-										}
-										if (reason === "removeOption")
-											handleDestroyMusicsOnLyrists(details?.option)
-									},
-									getOptionLabel: (option: Artist) => option.name[router.locale as keyof Locales] || ""
-								}}
-								textFieldProps={{ margin: "dense", onChange: handleSearchArtist }}
-							/>
-							<Button type="submit" variant="outlined" color="primary" disabled={isLoading}>Update</Button>
+							<Button type="submit" variant="outlined" fullWidth>Update</Button>
 						</FormContainer>
+						<Autocomplete
+							options={searchBand.data || []}
+							loading={searchBand.isLoading}
+							disabled={isLoading}
+							onChange={(_e, value) => value?.id}
+							getOptionLabel={(option: Band) => option.name[router.locale as keyof Locales] || ""}
+							renderInput={(params) =>
+								<TextField
+									{...params}
+									variant="outlined"
+									label="Band"
+									margin="dense"
+									onChange={handleSearchBand}
+								/>
+							}
+						/>
+
+
+						<Autocomplete
+							multiple
+							options={searchArtist.data || []}
+							loading={searchArtist.isLoading}
+							disabled={isLoading}
+							onChange={(_e, _value, reason, details) => {
+								if (reason === "selectOption") handleCreateMusicsOnComposers(details?.option)
+								if (reason === "removeOption") handleDestroyMusicsOnComposers(details?.option)
+							}}
+							getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
+							renderInput={(params) =>
+								<TextField
+									{...params}
+									variant="outlined"
+									label="Composers"
+									margin="dense"
+									onChange={handleSearchArtist}
+								/>
+							}
+						/>
+						<Autocomplete
+							multiple
+							options={searchArtist.data || []}
+							loading={searchArtist.isLoading}
+							disabled={isLoading}
+							onChange={(_e, _value, reason, details) => {
+								if (reason === "selectOption") handleCreateMusicsOnLyrists(details?.option)
+								if (reason === "removeOption") handleDestroyMusicsOnLyrists(details?.option)
+							}}
+							getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
+							renderInput={(params) =>
+								<TextField
+									{...params}
+									variant="outlined"
+									label="Lyrists"
+									placeholder="Favorites"
+									margin="dense"
+									onChange={handleSearchArtist}
+								/>
+							}
+						/>
 						<TableContainer component={Paper}>
 							<Table sx={{ minWidth: 650 }} aria-label="simple table">
 								<TableHead>
@@ -178,8 +188,7 @@ const EditMusic: NextPage = () => {
 								loading={searchArtist.isLoading}
 								disabled={isLoading}
 								onChange={(_e, _value, reason, details) => {
-									if (reason === "selectOption")
-										setArtist(details?.option)
+									if (reason === "selectOption") setArtist(details?.option)
 								}}
 								getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
 								renderInput={params => <TextField {...params} label="Artist" margin="dense" onChange={handleSearchArtist} />}

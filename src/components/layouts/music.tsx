@@ -10,7 +10,7 @@ import { trpc } from "../../utils/trpc";
 import { UseQueryResult } from "react-query";
 import DefaultSingleColumnLayout from "./single_column/default";
 
-const customMusic = Prisma.validator<Prisma.MusicArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
+const customMusic = Prisma.validator<Prisma.MusicFindFirstArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
 type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
 
 interface MusicLayoutProps {

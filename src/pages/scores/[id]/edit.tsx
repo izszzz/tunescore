@@ -13,7 +13,7 @@ const ScoreEdit: NextPage = () => {
 	const [score, setScore] = useState("")
 	const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 	const router = useRouter()
-	const musicQuery = trpc.useQuery(["music.show", { id: router.query.id as string }], {
+	trpc.useQuery(["music.show", { id: router.query.id as string }], {
 		onSuccess: (data) => {
 			setScore(data?.score || "");
 			editorRef.current?.setValue(data?.score || "")
@@ -35,7 +35,6 @@ const ScoreEdit: NextPage = () => {
 					<Editor
 						height="90vh"
 						defaultLanguage="javascript"
-						defaultValue={score}
 						onMount={handleEditorDidMount}
 						onChange={handleChange}
 					/>

@@ -49,8 +49,10 @@ export const musicRouter = createRouter()
     input: schemaTypeFor<Prisma.MusicUpdateInput>()(
       z.object({
         id: z.string(),
-        title: z.object({ja: z.string(), en: z.string()}).optional(),
-        score: z.string().optional(),
+        title: z
+          .object({ja: z.string().nullish(), en: z.string().nullish()})
+          .optional(),
+        score: z.string().nullish(),
       })
     ),
     async resolve({ctx, input}) {

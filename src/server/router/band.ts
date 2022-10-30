@@ -1,5 +1,5 @@
-import {createRouter} from "./context"
 import {z} from "zod"
+import {createRouter} from "./context"
 
 export const bandRouter = createRouter()
   .query("index", {
@@ -17,17 +17,18 @@ export const bandRouter = createRouter()
   })
   .mutation("search", {
     input: z.object({
-      title: z.string(),
+      name: z.string(),
+      locale: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.findMany({
-        where: {name: {contains: input.title}},
+      return await ctx.prisma.band.findRaw({
+        filter: {["name." + input.locale]: {$regex: input.name, $options: "i"}},
       })
     },
   })
   .mutation("create", {
     input: z.object({
-      name: z.string(),
+      name: z.object({ja: z.string().nullish(), en: z.string().nullish()}),
     }),
     async resolve({ctx, input}) {
       return await ctx.prisma.band.create({

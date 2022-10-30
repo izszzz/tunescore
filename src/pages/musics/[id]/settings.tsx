@@ -62,7 +62,8 @@ const EditMusic: NextPage = () => {
 	const createMusicsOnArtists = trpc.useMutation("musicsOnArtists.create", {
 		onError: () => { enqueueSnackbar("create musics on composers error") }
 	});
-	const handleSearchBand = (e: ChangeEvent<HTMLInputElement>) => searchBand.mutate({ title: e.currentTarget.value });
+	const handleSearchBand = (e: ChangeEvent<HTMLInputElement>) => searchBand.mutate({ name: e.currentTarget.value, locale: router.locale || "" });
+	console.log(searchBand.data)
 	const handleSearchArtist = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ title: e.currentTarget.value });
 	return (
 		<MusicLayout>
@@ -100,10 +101,15 @@ const EditMusic: NextPage = () => {
 							<Button type="submit" variant="outlined" fullWidth>Update</Button>
 						</FormContainer>
 						<Autocomplete
+							value={music?.band}
 							options={searchBand.data || []}
 							loading={searchBand.isLoading}
 							disabled={isLoading}
-							onChange={(_e, value) => value?.id}
+							onChange={(_e, value, reason, details) => {
+								console.log("select")
+								console.log("destroy")
+								// if (reason === "selectOption") (details?.option)
+							}}
 							getOptionLabel={(option: Band) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
 								<TextField
@@ -115,7 +121,6 @@ const EditMusic: NextPage = () => {
 								/>
 							}
 						/>
-
 
 						<Autocomplete
 							multiple

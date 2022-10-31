@@ -1,5 +1,8 @@
 import {createRouter} from "./context"
 import {z} from "zod"
+import {locale} from "../../utils/zod"
+import schemaTypeFor from "../../types/schemaForType"
+import {Artist, Prisma} from "@prisma/client"
 
 export const artistRouter = createRouter()
   .query("index", {
@@ -17,24 +20,31 @@ export const artistRouter = createRouter()
   })
   .mutation("search", {
     input: z.object({
-      title: z.string(),
+      name: z.string(),
+      locale: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.findMany({
-        where: {name: {contains: input.title}},
+      const result = await ctx.prisma.artist.findRaw({
+        filter: {
+          ["name." + input.locale]: {$regex: input.name, $options: "i"},
+        },
       })
+      // TODO: 型修正できないらしい
+      // https://github.com/prisma/prisma/issues/11830
+      // https://github.com/prisma/prisma/issues/5062
+      return result?.map(data => {
+        const {
+          _id: {$oid: id},
+          ...other
+        } = data
+        return {id, ...other}
+      }) as Artist[]
     },
   })
   .mutation("create", {
-    input: z.object({
-      name: z.string(),
-    }),
+    input: schemaTypeFor<Prisma.ArtistCreateInput>()(z.object({name: locale})),
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.create({
-        data: {
-          name: input.name,
-        },
-      })
+      return await ctx.prisma.artist.create({data: input})
     },
   })
   .mutation("update", {

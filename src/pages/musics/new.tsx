@@ -33,7 +33,7 @@ const NewMusic: NextPage = () => {
 				<Box borderBottom={1} mb={3}>
 					<RadioButtonGroup label="visibillity" name="visibility" options={[{ id: "0", label: "public" }, { id: "1", label: "private" }]} required />
 				</Box>
-				<TextFieldElement name={"title.set." + router.locale} label="Title" required /><br />
+				<TextFieldElement name={"title." + router.locale} label="Title" required /><br />
 				<TextFieldElement
 					margin={'dense'}
 					label={'price'}

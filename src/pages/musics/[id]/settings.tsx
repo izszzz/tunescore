@@ -7,7 +7,6 @@ import MusicLayout from "../../../components/layouts/music";
 import LocaleAutocomplete from "../../../components/elements/autocomplete/locale";
 import { trpc } from "../../../utils/trpc";
 import { Music, Artist, Band, Locales, Prisma } from "@prisma/client";
-
 import { useSnackbar } from "notistack";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
@@ -25,6 +24,9 @@ import Grid from "@mui/material/Grid";
 
 const EditMusic: NextPage = () => {
 	const [artist, setArtist] = useState<Artist>()
+	const [artists, setArtists] = useState<Artist[]>([])
+	const [composers, setComposers] = useState<Artist[]>([])
+	const [lyrists, setLyrists] = useState<Artist[]>([])
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
 	const update = trpc.useMutation("music.update", {
@@ -32,7 +34,10 @@ const EditMusic: NextPage = () => {
 		onError: () => { enqueueSnackbar("update error") }
 	});
 	const destroy = trpc.useMutation("music.destroy", {
-		onSuccess: () => router.push("/musics"),
+		onSuccess: () => {
+			enqueueSnackbar("update success")
+			router.push("/musics")
+		},
 		onError: () => { enqueueSnackbar("destroy error") }
 	});
 	const searchBand = trpc.useMutation("band.search", {
@@ -41,48 +46,41 @@ const EditMusic: NextPage = () => {
 	const searchArtist = trpc.useMutation("artist.search", {
 		onError: () => { enqueueSnackbar("search artist error") }
 	});
-	const destroyMusicsOnComposers = trpc.useMutation("musicsOnComposers.destroy", {
-		onSuccess: () => { enqueueSnackbar("destroy success") },
-		onError: () => { enqueueSnackbar("destroy musics on composers error") }
-	});
-	const createMusicsOnComposers = trpc.useMutation("musicsOnComposers.create", {
-		onError: () => { enqueueSnackbar("create musics on composers error") }
-	});
-	const destroyMusicsOnLyrists = trpc.useMutation("musicsOnLyrists.destroy", {
-		onSuccess: () => { enqueueSnackbar("destroy success") },
-		onError: () => { enqueueSnackbar("destroy musics on composers error") }
-	});
-	const createMusicsOnLyrists = trpc.useMutation("musicsOnLyrists.create", {
-		onError: () => { enqueueSnackbar("create musics on composers error") }
-	});
-	const destroyMusicsOnArtists = trpc.useMutation("musicsOnArtists.destroy", {
-		onSuccess: () => { enqueueSnackbar("destroy success") },
-		onError: () => { enqueueSnackbar("destroy musics on composers error") }
-	});
-	const createMusicsOnArtists = trpc.useMutation("musicsOnArtists.create", {
-		onError: () => { enqueueSnackbar("create musics on composers error") }
-	});
 	const handleSearchBand = (e: ChangeEvent<HTMLInputElement>) => searchBand.mutate({ name: e.currentTarget.value, locale: router.locale || "" });
-	console.log(searchBand.data)
-	const handleSearchArtist = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ title: e.currentTarget.value });
+	const handleSearchArtists = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ name: e.currentTarget.value, locale: router.locale || "" });
 	return (
 		<MusicLayout>
 			{({ data: music, isLoading }) => {
 				const formContext = useForm<Music>()
-				const handleSubmit = (data: Music) => update.mutate(data)
-				const handleDestroy = () => music && destroy.mutate(music)
-				const handleDestroyMusicsOnComposers = (artist: Artist | undefined) => music && artist && destroyMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
-				const handleCreateMusicsOnComposers = (artist: Artist | undefined) => music && artist && createMusicsOnComposers.mutate({ musicId: music.id, composerId: artist.id })
-				const handleDestroyMusicsOnLyrists = (artist: Artist | undefined) => music && artist && destroyMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
-				const handleCreateMusicsOnLyrists = (artist: Artist | undefined) => music && artist && createMusicsOnLyrists.mutate({ musicId: music.id, lyristId: artist.id })
-				const handleDestroyMusicsOnArtists = (artist: Artist) => () => music && artist && destroyMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
-				const handleCreateMusicsOnArtists = () => music && artist && createMusicsOnArtists.mutate({ musicId: music.id, artistId: artist?.id })
 				useEffect(() => {
 					if (music) {
 						const { id, title } = music;
 						formContext.reset({ id, title })
 					}
 				}, [router.locale, music])
+
+				useEffect(() => {
+					if (music) {
+						setComposers(music.composers)
+						setLyrists(music.lyrists)
+						setArtists(music.artists)
+					}
+				}, [music])
+
+				if (!music) return <>loading</>
+				const handleSubmit = (data: Music) => update.mutate(data)
+				const handleDestroy = () => destroy.mutate(music)
+				const handleCreateMusicOnArtist = () => {
+					if (!artist) return;
+					update.mutate({ id: music.id, artists: { connect: { id: artist.id } } }, {
+						onSuccess: () => setArtists(prev => [...prev, artist])
+					});
+				}
+				const handleDestroyMusicsOnArtists = (artist: Artist) => () => {
+					update.mutate({ id: music.id, artists: { disconnect: { id: artist.id } } }, {
+						onSuccess: () => setArtists(prev => prev.filter(p => p.id !== artist.id))
+					});
+				}
 
 				return (
 					<>
@@ -101,14 +99,14 @@ const EditMusic: NextPage = () => {
 							<Button type="submit" variant="outlined" fullWidth>Update</Button>
 						</FormContainer>
 						<Autocomplete
-							value={music?.band}
+							value={music.band}
 							options={searchBand.data || []}
 							loading={searchBand.isLoading}
 							disabled={isLoading}
-							onChange={(_e, value, reason, details) => {
-								console.log("select")
-								console.log("destroy")
-								// if (reason === "selectOption") (details?.option)
+							onChange={(_e, _value, reason, details) => {
+								if (reason === "clear") update.mutate({ id: music.id, band: { disconnect: true } })
+								if (!details) return console.log("details not found")
+								if (reason === "selectOption") update.mutate({ id: music.id, band: { connect: { id: details.option.id } } })
 							}}
 							getOptionLabel={(option: Band) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
@@ -121,35 +119,59 @@ const EditMusic: NextPage = () => {
 								/>
 							}
 						/>
-
 						<Autocomplete
+							value={composers}
 							multiple
+							isOptionEqualToValue={(option, v) => option.id === v.id}
 							options={searchArtist.data || []}
 							loading={searchArtist.isLoading}
 							disabled={isLoading}
 							onChange={(_e, _value, reason, details) => {
-								if (reason === "selectOption") handleCreateMusicsOnComposers(details?.option)
-								if (reason === "removeOption") handleDestroyMusicsOnComposers(details?.option)
+								if (!details) return console.log("details not found")
+								if (reason === "selectOption") {
+									update.mutate({ id: music.id, composers: { connect: details.option } }, {
+										onSuccess: () =>
+											setComposers(prev => [...prev, details.option])
+									})
+								}
+								if (reason === "removeOption") {
+									update.mutate({ id: music.id, composers: { disconnect: details.option } }, {
+										onSuccess: () =>
+											setComposers(prev => prev.filter(p => p.id !== details.option.id))
+									})
+								}
 							}}
-							getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
+							getOptionLabel={(option) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
 								<TextField
 									{...params}
 									variant="outlined"
 									label="Composers"
 									margin="dense"
-									onChange={handleSearchArtist}
+									onChange={handleSearchArtists}
 								/>
 							}
 						/>
 						<Autocomplete
+							value={lyrists}
 							multiple
 							options={searchArtist.data || []}
 							loading={searchArtist.isLoading}
 							disabled={isLoading}
 							onChange={(_e, _value, reason, details) => {
-								if (reason === "selectOption") handleCreateMusicsOnLyrists(details?.option)
-								if (reason === "removeOption") handleDestroyMusicsOnLyrists(details?.option)
+								if (!details) return console.log("details not found")
+								if (reason === "selectOption") {
+									update.mutate({ id: music.id, lyrists: { connect: details.option } }, {
+										onSuccess: () =>
+											setLyrists(prev => [...prev, details.option])
+									})
+								}
+								if (reason === "removeOption") {
+									update.mutate({ id: music.id, lyrists: { disconnect: details.option } }, {
+										onSuccess: () =>
+											setLyrists(prev => prev.filter(p => p.id !== details.option.id))
+									})
+								}
 							}}
 							getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
@@ -159,7 +181,7 @@ const EditMusic: NextPage = () => {
 									label="Lyrists"
 									placeholder="Favorites"
 									margin="dense"
-									onChange={handleSearchArtist}
+									onChange={handleSearchArtists}
 								/>
 							}
 						/>
@@ -173,7 +195,7 @@ const EditMusic: NextPage = () => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{music?.artists.map((artist) => (
+									{artists.map((artist) => (
 										<TableRow key={artist.id}>
 											<TableCell >
 												<IconButton onClick={handleDestroyMusicsOnArtists(artist)}>
@@ -196,9 +218,9 @@ const EditMusic: NextPage = () => {
 									if (reason === "selectOption") setArtist(details?.option)
 								}}
 								getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
-								renderInput={params => <TextField {...params} label="Artist" margin="dense" onChange={handleSearchArtist} />}
+								renderInput={params => <TextField {...params} label="Artist" margin="dense" onChange={handleSearchArtists} />}
 							/>
-							<Button type="button" variant="outlined" color="primary" disabled={isLoading} onClick={handleCreateMusicsOnArtists} fullWidth>Add</Button>
+							<Button type="button" variant="outlined" color="primary" disabled={isLoading} onClick={handleCreateMusicOnArtist} fullWidth>Add</Button>
 						</Box>
 						<br /><Button type="button" variant="contained" color="error" onClick={handleDestroy}>Delete Account</Button>
 					</>

@@ -1,3 +1,4 @@
+import {Band} from "@prisma/client"
 import {z} from "zod"
 import {createRouter} from "./context"
 
@@ -21,9 +22,21 @@ export const bandRouter = createRouter()
       locale: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.findRaw({
-        filter: {["name." + input.locale]: {$regex: input.name, $options: "i"}},
+      const result = await ctx.prisma.band.findRaw({
+        filter: {
+          ["name." + input.locale]: {$regex: input.name, $options: "i"},
+        },
       })
+      // TODO: 型修正できないらしい
+      // https://github.com/prisma/prisma/issues/11830
+      // https://github.com/prisma/prisma/issues/5062
+      return result?.map(data => {
+        const {
+          _id: {$oid: id},
+          ...other
+        } = data
+        return {id, ...other}
+      }) as Band[]
     },
   })
   .mutation("create", {

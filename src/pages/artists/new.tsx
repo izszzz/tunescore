@@ -17,7 +17,7 @@ const NewMusic: NextPage = () => {
 		<DefaultSingleColumnLayout >
 			<p>new artist</p>
 			<FormContainer onSuccess={handleSubmit}>
-				<TextFieldElement name="name" label="Name" required /><br />
+				<TextFieldElement name={"name." + router.locale} label="Name" required /><br />
 				<Button type="submit" >submit</Button>
 			</FormContainer>
 		</DefaultSingleColumnLayout>

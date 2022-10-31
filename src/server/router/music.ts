@@ -3,6 +3,7 @@ import {z} from "zod"
 import {TRPCError} from "@trpc/server"
 import {Prisma} from "@prisma/client"
 import schemaTypeFor from "../../types/schemaForType"
+import {locale} from "../../utils/zod"
 
 export const musicRouter = createRouter()
   .query("index", {
@@ -49,10 +50,32 @@ export const musicRouter = createRouter()
     input: schemaTypeFor<Prisma.MusicUpdateInput>()(
       z.object({
         id: z.string(),
-        title: z
-          .object({ja: z.string().nullish(), en: z.string().nullish()})
-          .optional(),
+        title: locale.optional(),
         score: z.string().nullish(),
+        band: z
+          .object({
+            disconnect: z.boolean().optional(),
+            connect: z.object({id: z.string()}).optional(),
+          })
+          .optional(),
+        composers: z
+          .object({
+            disconnect: z.object({id: z.string()}).optional(),
+            connect: z.object({id: z.string()}).optional(),
+          })
+          .optional(),
+        lyrists: z
+          .object({
+            disconnect: z.object({id: z.string()}).optional(),
+            connect: z.object({id: z.string()}).optional(),
+          })
+          .optional(),
+        artists: z
+          .object({
+            disconnect: z.object({id: z.string()}).optional(),
+            connect: z.object({id: z.string()}).optional(),
+          })
+          .optional(),
       })
     ),
     async resolve({ctx, input}) {

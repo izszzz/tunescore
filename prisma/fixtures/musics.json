@@ -1,0 +1,5 @@
+[
+  {"title": {"ja": "日本語のみ"}},
+  {"title": {"en": "only engilish"}},
+  {"title": {"ja": "日本語と英語", "en": "english and japanese"}}
+]

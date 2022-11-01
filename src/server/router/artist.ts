@@ -15,7 +15,21 @@ export const artistRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.findFirst({where: {id: input.id}})
+      return await ctx.prisma.artist.findFirst({
+        where: {id: input.id},
+        include: {
+          band: true,
+          composedMusics: {
+            include: {band: true, lyrists: true, composers: true},
+          },
+          writtenMusics: {
+            include: {band: true, lyrists: true, composers: true},
+          },
+          musics: {
+            include: {band: true, lyrists: true, composers: true},
+          },
+        },
+      })
     },
   })
   .mutation("search", {

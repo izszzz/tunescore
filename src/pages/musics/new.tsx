@@ -18,14 +18,11 @@ const NewMusic: NextPage = () => {
 		onSuccess: () => router.push("/musics"),
 		onError: error => { enqueueSnackbar(String(error)) }
 	});
-	useEffect(() => {
-	}, [])
 	return (
 		<DefaultSingleColumnLayout >
 			<Box borderBottom={1} mb={3}>
 				<Typography variant="h3">Create a New Music</Typography>
 			</Box>
-
 			<FormContainer onSuccess={handleSubmit}>
 				<Box borderBottom={1} mb={3}>
 					<RadioButtonGroup label="writing" name="writing" options={[{ id: "0", label: "original" }, { id: "1", label: "copy" }]} required />

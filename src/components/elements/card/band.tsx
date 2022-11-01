@@ -5,6 +5,7 @@ import { Band, Locales } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import CardContent from "@mui/material/CardContent";
+import setLocale from "../../../utils/setLocale"
 
 const BandCard = ({ name, id }: Band) => {
 	const router = useRouter()
@@ -12,7 +13,7 @@ const BandCard = ({ name, id }: Band) => {
 		<Card variant="outlined">
 			<CardContent>
 				<Typography variant="h5" component="div">
-					<Link key={id} href={`/bands/${id}`}><a>{name[router.locale as keyof Locales]}</a></Link>
+					<Link key={id} href={`/bands/${id}`}><a>{setLocale(name, router)}</a></Link>
 				</Typography>
 			</CardContent>
 		</Card>

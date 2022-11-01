@@ -95,10 +95,17 @@ model Artist {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name Locales
 
-  musicsOnLyrists   Music[]  @relation("lyrists", fields: [musicIDs], references: [id])
-  musicsOnComposers Music[]  @relation("composers", fields: [musicIDs], references: [id])
-  musicsOnArtists   Music[]  @relation("artists", fields: [musicIDs], references: [id])
+  writtenMusics   Music[]  @relation("lyrists", fields: [writtenMusicsIDs], references: [id])
+  writtenMusicsIDs String[] @db.ObjectId
+
+  composedMusics Music[]  @relation("composers", fields: [composedMusicsIDs], references: [id])
+  composedMusicsIDs String[] @db.ObjectId
+
+  musics Music[]  @relation("artists", fields: [musicIDs], references: [id])
   musicIDs          String[] @db.ObjectId
+
+  band   Band?   @relation(fields: [bandId], references: [id])
+  bandId String? @db.ObjectId
 }
 
 model Band {
@@ -106,6 +113,7 @@ model Band {
   name Locales
 
   musics Music[]
+  artists Artist[]
 }
 
 type Locales {

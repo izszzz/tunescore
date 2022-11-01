@@ -8,7 +8,6 @@ import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
 import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { trpc } from "../../../utils/trpc";
 import { Band } from "@prisma/client";
-import Header from "../../../components/layouts/header";
 
 const EditBand: NextPage = () => {
 	const router = useRouter()

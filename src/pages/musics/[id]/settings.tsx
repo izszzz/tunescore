@@ -6,7 +6,8 @@ import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
 import MusicLayout from "../../../components/layouts/music";
 import LocaleAutocomplete from "../../../components/elements/autocomplete/locale";
 import { trpc } from "../../../utils/trpc";
-import { Music, Artist, Band, Locales, Prisma } from "@prisma/client";
+import { Music, Artist, Band, Locales, } from "@prisma/client";
+import type { } from "@prisma/client";
 import { useSnackbar } from "notistack";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
@@ -17,10 +18,12 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import IconButton from '@mui/material/IconButton';
 import Box from "@mui/material/Box";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CloseIcon from '@mui/icons-material/Close';
 import Grid from "@mui/material/Grid";
+import { AutocompleteValue } from "@mui/material/useAutocomplete";
+import setLocale from "../../../utils/setLocale"
 
 const EditMusic: NextPage = () => {
 	const [artist, setArtist] = useState<Artist>()
@@ -40,12 +43,8 @@ const EditMusic: NextPage = () => {
 		},
 		onError: () => { enqueueSnackbar("destroy error") }
 	});
-	const searchBand = trpc.useMutation("band.search", {
-		onError: () => { enqueueSnackbar("search band error") }
-	});
-	const searchArtist = trpc.useMutation("artist.search", {
-		onError: () => { enqueueSnackbar("search artist error") }
-	});
+	const searchBand = trpc.useMutation("band.search", { onError: () => { enqueueSnackbar("search band error") } });
+	const searchArtist = trpc.useMutation("artist.search", { onError: () => { enqueueSnackbar("search artist error") } });
 	const handleSearchBand = (e: ChangeEvent<HTMLInputElement>) => searchBand.mutate({ name: e.currentTarget.value, locale: router.locale || "" });
 	const handleSearchArtists = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ name: e.currentTarget.value, locale: router.locale || "" });
 	return (
@@ -70,6 +69,21 @@ const EditMusic: NextPage = () => {
 				if (!music) return <>loading</>
 				const handleSubmit = (data: Music) => update.mutate(data)
 				const handleDestroy = () => destroy.mutate(music)
+				function handleChange<T, Multiple extends boolean | undefined, DisableClearable extends boolean | undefined, FreeSolo extends boolean | undefined,>(
+					{
+						onClear, onSelect, onRemove
+					}: {
+						onClear?: (_e: React.SyntheticEvent, _value: AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<T>) => void,
+						onSelect?: (_e: React.SyntheticEvent, _value: AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>, reason: AutocompleteChangeReason, details: AutocompleteChangeDetails<T>) => void,
+						onRemove?: (_e: React.SyntheticEvent, _value: AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>, reason: AutocompleteChangeReason, details: AutocompleteChangeDetails<T>) => void
+					}) {
+					return (_e: React.SyntheticEvent, _value: AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<T>) => {
+						if (reason === "clear") onClear && onClear(_e, _value, reason)
+						if (!details) return console.log("details not found")
+						if (reason === "selectOption") onSelect && onSelect(_e, _value, reason, details)
+						if (reason === "removeOption") onRemove && onRemove(_e, _value, reason, details)
+					}
+				}
 				const handleCreateMusicOnArtist = () => {
 					if (!artist) return;
 					update.mutate({ id: music.id, artists: { connect: { id: artist.id } } }, {
@@ -103,12 +117,13 @@ const EditMusic: NextPage = () => {
 							options={searchBand.data || []}
 							loading={searchBand.isLoading}
 							disabled={isLoading}
-							onChange={(_e, _value, reason, details) => {
-								if (reason === "clear") update.mutate({ id: music.id, band: { disconnect: true } })
-								if (!details) return console.log("details not found")
-								if (reason === "selectOption") update.mutate({ id: music.id, band: { connect: { id: details.option.id } } })
-							}}
-							getOptionLabel={(option: Band) => option.name[router.locale as keyof Locales] || ""}
+							onChange={
+								handleChange<Band, false, false, false>({
+									onClear: () => update.mutate({ id: music.id, band: { disconnect: true } }),
+									onSelect: (_e, _v, _r, details) => update.mutate({ id: music.id, band: { connect: { id: details.option.id } } })
+								})
+							}
+							getOptionLabel={(option) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
 								<TextField
 									{...params}
@@ -126,21 +141,18 @@ const EditMusic: NextPage = () => {
 							options={searchArtist.data || []}
 							loading={searchArtist.isLoading}
 							disabled={isLoading}
-							onChange={(_e, _value, reason, details) => {
-								if (!details) return console.log("details not found")
-								if (reason === "selectOption") {
-									update.mutate({ id: music.id, composers: { connect: details.option } }, {
-										onSuccess: () =>
-											setComposers(prev => [...prev, details.option])
-									})
-								}
-								if (reason === "removeOption") {
-									update.mutate({ id: music.id, composers: { disconnect: details.option } }, {
-										onSuccess: () =>
-											setComposers(prev => prev.filter(p => p.id !== details.option.id))
-									})
-								}
-							}}
+							onChange={
+								handleChange<Artist, true, false, false>({
+									onSelect: (_e, _v, _r, details) =>
+										update.mutate({ id: music.id, composers: { connect: details.option } }, {
+											onSuccess: () => setComposers(prev => [...prev, details.option])
+										}),
+									onRemove: (_e, _v, _r, details) =>
+										update.mutate({ id: music.id, composers: { disconnect: details.option } }, {
+											onSuccess: () => setComposers(prev => prev.filter(p => p.id !== details.option.id))
+										})
+								})
+							}
 							getOptionLabel={(option) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
 								<TextField
@@ -158,22 +170,19 @@ const EditMusic: NextPage = () => {
 							options={searchArtist.data || []}
 							loading={searchArtist.isLoading}
 							disabled={isLoading}
-							onChange={(_e, _value, reason, details) => {
-								if (!details) return console.log("details not found")
-								if (reason === "selectOption") {
-									update.mutate({ id: music.id, lyrists: { connect: details.option } }, {
-										onSuccess: () =>
-											setLyrists(prev => [...prev, details.option])
-									})
-								}
-								if (reason === "removeOption") {
-									update.mutate({ id: music.id, lyrists: { disconnect: details.option } }, {
-										onSuccess: () =>
-											setLyrists(prev => prev.filter(p => p.id !== details.option.id))
-									})
-								}
-							}}
-							getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
+							onChange={
+								handleChange<Artist, true, false, false>({
+									onSelect: (_e, _v, _r, details) =>
+										update.mutate({ id: music.id, lyrists: { connect: details.option } }, {
+											onSuccess: () => setLyrists(prev => [...prev, details.option])
+										}),
+									onRemove: (_e, _v, _r, details) =>
+										update.mutate({ id: music.id, lyrists: { disconnect: details.option } }, {
+											onSuccess: () => setLyrists(prev => prev.filter(p => p.id !== details.option.id))
+										})
+								})
+							}
+							getOptionLabel={(option) => option.name[router.locale as keyof Locales] || ""}
 							renderInput={(params) =>
 								<TextField
 									{...params}
@@ -214,10 +223,8 @@ const EditMusic: NextPage = () => {
 								options={searchArtist.data || []}
 								loading={searchArtist.isLoading}
 								disabled={isLoading}
-								onChange={(_e, _value, reason, details) => {
-									if (reason === "selectOption") setArtist(details?.option)
-								}}
-								getOptionLabel={(option: Artist) => option.name[router.locale as keyof Locales] || ""}
+								onChange={handleChange<Artist, false, false, false>({ onSelect: (_e, _v, _r, details) => setArtist(details.option) })}
+								getOptionLabel={option => option.name[router.locale as keyof Locales] || ""}
 								renderInput={params => <TextField {...params} label="Artist" margin="dense" onChange={handleSearchArtists} />}
 							/>
 							<Button type="button" variant="outlined" color="primary" disabled={isLoading} onClick={handleCreateMusicOnArtist} fullWidth>Add</Button>
@@ -225,7 +232,8 @@ const EditMusic: NextPage = () => {
 						<br /><Button type="button" variant="contained" color="error" onClick={handleDestroy}>Delete Account</Button>
 					</>
 				)
-			}}
+			}
+			}
 		</MusicLayout >
 	)
 }

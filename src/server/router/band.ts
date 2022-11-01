@@ -13,7 +13,13 @@ export const bandRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.findFirst({where: {id: input.id}})
+      return await ctx.prisma.band.findFirst({
+        where: {id: input.id},
+        include: {
+          artists: true,
+          musics: {include: {composers: true, lyrists: true}},
+        },
+      })
     },
   })
   .mutation("search", {
@@ -70,6 +76,6 @@ export const bandRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.delete({where: {id: input.id}})
+      return await ctx.prisma.band.delete({where: input})
     },
   })

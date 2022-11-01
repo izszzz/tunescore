@@ -9,23 +9,23 @@ import Link from "next/link";
 import { trpc } from "../../utils/trpc";
 import { UseQueryResult } from "react-query";
 import DefaultSingleColumnLayout from "./single_column/default";
+import setLocale from "../../utils/setLocale";
 
-const customMusic = Prisma.validator<Prisma.MusicFindFirstArgs>()({ include: { user: true, band: true, composers: true, lyrists: true, artists: true } })
-type CustomMusic = Prisma.MusicGetPayload<typeof customMusic>
 
 interface MusicLayoutProps {
-	children: (music: UseQueryResult<CustomMusic | null>) => React.ReactNode;
+	children: (music: UseQueryResult<Prisma.MusicGetPayload<{ include: { user: true, band: true, composers: true, lyrists: true, artists: true } }> | null>) => React.ReactNode;
 }
 
 const MusicLayout: React.FC<MusicLayoutProps> = ({ children }) => {
 	const router = useRouter()
 	const musicQuery = trpc.useQuery(["music.show", { id: router.query.id as string }]);
+	const { data: music } = musicQuery
 	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: any) => { router.push(newValue); }
 	return (
 		<DefaultSingleColumnLayout subHeader={
 			<>
 				<Typography variant="h5">
-					<Link href={`/users/${musicQuery.data?.user?.id}`}><a>{musicQuery.data?.user?.name}</a></Link> / {musicQuery.data?.title.ja}
+					<Link href={`/users/${music?.user?.id}`}><a>{music?.user?.name}</a></Link> / {music && setLocale(music.title, router)}
 				</Typography>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={router.asPath} onChange={handleChange}>

@@ -7,12 +7,15 @@ import Button from "@mui/material/Button";
 import Typography from '@mui/material/Typography'
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Header from ".";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
+import Header from ".";
+import LocaleAutocomplete from "../../elements/autocomplete/locale"
+import { useRouter } from "next/router";
 
 const DefaultHeader = () => {
+	const router = useRouter()
 	const { data: session } = useSession()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -33,7 +36,8 @@ const DefaultHeader = () => {
 				</Typography>
 				<Box sx={{ flexGrow: 0 }}>
 					{session ?
-						<>
+						<Box display="flex">
+							<LocaleAutocomplete />
 							<IconButton onClick={handleClick}>
 								<Avatar alt="Remy Sharp" src={session.user?.image || ""} />
 							</IconButton>
@@ -53,9 +57,12 @@ const DefaultHeader = () => {
 										</a>
 									</Link>
 								</MenuItem>
+								<MenuItem onClick={handleClose}>
+									Settings
+								</MenuItem>
 								<MenuItem onClick={handleSignOut}>Logout</MenuItem>
 							</Menu>
-						</>
+						</Box>
 						:
 						<>
 							<Link href="/auth/signin" passHref>

@@ -7,12 +7,10 @@ import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
 import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { trpc } from "../../../utils/trpc";
 import { Artist } from "@prisma/client";
-import Header from "../../../components/layouts/header";
 
 const EditArtist: NextPage = () => {
 	const router = useRouter()
 	const formContext = useForm<Artist>()
-	const { data: session } = useSession()
 	const { data: artist } = trpc.useQuery(["artist.show", { id: router.query.id as string }]);
 	const update = trpc.useMutation("artist.update");
 	const destroy = trpc.useMutation("artist.destroy");

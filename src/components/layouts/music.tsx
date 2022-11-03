@@ -3,14 +3,16 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import React from "react";
 import { useRouter } from "next/router";
-import { Prisma } from "@prisma/client";
+import { Locales, Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { trpc } from "../../utils/trpc";
 import { UseQueryResult } from "react-query";
 import DefaultSingleColumnLayout from "./single_column/default";
 import setLocale from "../../utils/setLocale";
-
+import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 interface MusicLayoutProps {
 	children: (music: UseQueryResult<Prisma.MusicGetPayload<{ include: { user: true, band: true, composers: true, lyrists: true, artists: true } }> | null>) => React.ReactNode;
@@ -36,6 +38,14 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ children }) => {
 				</Box>
 			</>
 		}>
+			{music?.title[router.locale as keyof Locales] === null && <Stack sx={{ width: '100%' }} spacing={2}>
+				<Alert severity="warning">
+					<AlertTitle>
+						指定された言語の曲タイトルが登録されてねえ
+					</AlertTitle>
+					登録しろ
+				</Alert>
+			</Stack>}
 			{children(musicQuery)}
 		</DefaultSingleColumnLayout>
 	)

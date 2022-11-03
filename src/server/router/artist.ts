@@ -1,8 +1,8 @@
 import {createRouter} from "./context"
 import {z} from "zod"
-import {locale} from "../../utils/zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Artist, Prisma} from "@prisma/client"
+import {locale} from "../../utils/zod"
 
 export const artistRouter = createRouter()
   .query("index", {
@@ -62,16 +62,23 @@ export const artistRouter = createRouter()
     },
   })
   .mutation("update", {
-    input: z.object({
-      id: z.string(),
-      name: z.string(),
-    }),
+    input: schemaTypeFor<Prisma.ArtistUpdateInput>()(
+      z.object({
+        id: z.string(),
+        name: locale.optional(),
+        band: z
+          .object({
+            disconnect: z.boolean().optional(),
+            connect: z.object({id: z.string().optional()}).optional(),
+          })
+          .optional(),
+      })
+    ),
     async resolve({ctx, input}) {
+      const {id, ...data} = input
       return await ctx.prisma.artist.update({
-        where: {id: input.id},
-        data: {
-          name: input.name,
-        },
+        where: {id},
+        data,
       })
     },
   })

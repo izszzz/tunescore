@@ -1,5 +1,6 @@
 import {Band} from "@prisma/client"
 import {z} from "zod"
+import {locale} from "../../utils/zod"
 import {createRouter} from "./context"
 
 export const bandRouter = createRouter()
@@ -60,14 +61,13 @@ export const bandRouter = createRouter()
   .mutation("update", {
     input: z.object({
       id: z.string(),
-      name: z.string(),
+      name: locale.optional(),
     }),
     async resolve({ctx, input}) {
+      const {id, ...data} = input
       return await ctx.prisma.band.update({
-        where: {id: input.id},
-        data: {
-          name: input.name,
-        },
+        where: {id},
+        data,
       })
     },
   })

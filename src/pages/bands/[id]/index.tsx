@@ -24,9 +24,9 @@ const Band: NextPage = () => {
 							<Table sx={{ minWidth: 650 }}>
 								<TableHead>
 									<TableRow>
-										<TableCell></TableCell>
-										<TableCell></TableCell>
-										<TableCell></TableCell>
+										<TableCell>music</TableCell>
+										<TableCell>composer</TableCell>
+										<TableCell>lyrist</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -35,6 +35,22 @@ const Band: NextPage = () => {
 											<TableCell><Link onClick={() => router.push("/musics/" + music.id)}>{setLocale(music.title, router)}</Link></TableCell>
 											<TableCell> {music.composers.map(composer => <Chip label={setLocale(composer.name, router)} onClick={() => router.push("/artists/" + composer.id)} />)}</TableCell>
 											<TableCell> {music.lyrists.map(lyrist => <Chip label={setLocale(lyrist.name, router)} onClick={() => router.push("/artists/" + lyrist.id)} />)}</TableCell>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</TableContainer>
+						<TableContainer component={Paper}>
+							<Table sx={{ minWidth: 650 }}>
+								<TableHead>
+									<TableRow>
+										<TableCell></TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{data?.artists?.map(artist =>
+										<TableRow>
+											<TableCell><Link onClick={() => router.push("/artists/" + artist.id)}>{setLocale(artist.name, router)}</Link></TableCell>
 										</TableRow>
 									)}
 								</TableBody>

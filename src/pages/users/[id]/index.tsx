@@ -3,9 +3,9 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Header from "../../components/layouts/header";
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { trpc } from "../../utils/trpc";
+import Header from "../../../components/layouts/header";
+import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
+import { trpc } from "../../../utils/trpc";
 
 const User: NextPage = () => {
 	const router = useRouter();

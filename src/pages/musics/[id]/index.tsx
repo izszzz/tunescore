@@ -16,7 +16,7 @@ const Music: NextPage = () => {
 	const router = useRouter();
 	return (
 		<MusicLayout>
-			{(props) =>
+			{({ data }) =>
 				<>
 					<Button variant="contained" onClick={() => router.push("/scores/" + router.query.id)} fullWidth>Watch Score</Button>
 					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id } })} fullWidth>Edit Score</Button>
@@ -32,23 +32,23 @@ const Music: NextPage = () => {
 								<TableRow>
 									<TableCell>Composer</TableCell>
 									<TableCell>
-										{props.data?.composers.map(composer =>
-											<Chip label={setLocale(composer.name, router)} onClick={() => router.push("/artists/" + composer.id)} />
+										{data?.composers.map(composer =>
+											<Chip key={composer.id} label={setLocale(composer.name, router)} onClick={() => router.push("/artists/" + composer.id)} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Lyrist</TableCell>
 									<TableCell>
-										{props.data?.lyrists.map(lyrist =>
-											<Chip label={setLocale(lyrist.name, router)} onClick={() => router.push("/artists/" + lyrist.id)} />
+										{data?.lyrists.map(lyrist =>
+											<Chip key={lyrist.id} label={setLocale(lyrist.name, router)} onClick={() => router.push("/artists/" + lyrist.id)} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Band</TableCell>
 									<TableCell>
-										{props.data?.band && <Chip label={setLocale(props.data?.band?.name, router)} onClick={() => router.push("/bands/" + props.data?.band?.id)} />}
+										{data?.band && <Chip label={setLocale(data?.band?.name, router)} onClick={() => router.push("/bands/" + data?.band?.id)} />}
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -64,7 +64,7 @@ const Music: NextPage = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{props.data?.artists.map(artist => (
+								{data?.artists.map(artist => (
 									<TableRow key={artist.id}>
 										<TableCell />
 										<TableCell >

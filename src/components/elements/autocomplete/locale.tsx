@@ -1,22 +1,33 @@
-import React from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router'
-import TextField from '@mui/material/TextField';
 import { Locales } from '@prisma/client';
+import { AutocompleteElement, FormContainer, useForm } from 'react-hook-form-mui';
 
 const LocaleAutocomplete = () => {
+	const formContext = useForm<{ locale: keyof Locales }>()
 	const router = useRouter()
-	const onChangeLanguage = (lang: keyof Locales | undefined) => lang && router.push(router.asPath, undefined, { locale: lang })
+	const handleChange = (lang: keyof Locales | undefined) => lang && router.push(router.asPath, undefined, { locale: lang })
+	useEffect(() => {
+		if (router.locale) formContext.reset({ locale: router.locale as keyof Locales })
+	}, [router.locale])
 	return (
-		<Autocomplete<keyof Locales, false, true>
-			disablePortal
-			defaultValue={router.locale as keyof Locales}
-			options={router.locales as (keyof Locales)[]}
-			renderInput={(params) => <TextField {...params} margin="dense" label="Locale" />}
-			fullWidth
-			disableClearable
-			onChange={(_e, _value, _reason, details) => onChangeLanguage(details?.option)}
-		/>
+		<FormContainer
+			defaultValues={{ locale: router.locale as keyof Locales }}
+			formContext={formContext}
+		>
+			<AutocompleteElement
+				name="locale"
+				label="Locale"
+				options={router.locales as (keyof Locales)[]}
+				autocompleteProps={{
+					fullWidth: true,
+					disableClearable: true,
+					onChange: (_e, _value, _reason, details) => handleChange(details?.option),
+					isOptionEqualToValue: (option, value) => option === value
+				}}
+				textFieldProps={{ margin: "dense" }}
+			/>
+		</FormContainer>
 	)
 }
 export default LocaleAutocomplete;

@@ -8,13 +8,14 @@ export const userRouter = createRouter()
     },
   })
   .query("show", {
-    input: z
-      .object({
-        id: z.string().nullish(),
-      })
-      .nullish(),
+    input: z.object({
+      id: z.string(),
+    }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.user.findFirst({where: {id: input?.id ?? ""}})
+      return await ctx.prisma.user.findFirst({
+        where: {id: input.id},
+        include: {musics: true},
+      })
     },
   })
   .mutation("update", {

@@ -1,7 +1,7 @@
 import {createRouter} from "./context"
 import {z} from "zod"
 import {TRPCError} from "@trpc/server"
-import {Prisma} from "@prisma/client"
+import {Music, Prisma} from "@prisma/client"
 import schemaTypeFor from "../../types/schemaForType"
 import {locale} from "../../utils/zod"
 
@@ -46,34 +46,80 @@ export const musicRouter = createRouter()
       })
     },
   })
+  .mutation("search", {
+    input: z.object({
+      title: z.string(),
+      locale: z.string(),
+    }),
+    async resolve({ctx, input}) {
+      const result = await ctx.prisma.band.findRaw({
+        filter: {
+          ["name." + input.locale]: {$regex: input.title, $options: "i"},
+        },
+      })
+      // TODO: 型修正できないらしい
+      // https://github.com/prisma/prisma/issues/11830
+      // https://github.com/prisma/prisma/issues/5062
+      return result?.map(data => {
+        const {
+          _id: {$oid: id},
+          ...other
+        } = data
+        return {id, ...other}
+      }) as Music[]
+    },
+  })
   .mutation("update", {
     input: schemaTypeFor<Prisma.MusicUpdateInput>()(
       z.object({
         id: z.string(),
         title: locale.optional(),
-        score: z.string().nullish(),
+        score: z
+          .string()
+          .or(
+            z.object({set: z.string().nullish(), unset: z.boolean().optional()})
+          )
+          .nullish(),
         band: z
           .object({
             disconnect: z.boolean().optional(),
-            connect: z.object({id: z.string()}).optional(),
+            connect: z.object({id: z.string().optional()}).optional(),
           })
           .optional(),
         composers: z
           .object({
-            disconnect: z.object({id: z.string()}).optional(),
-            connect: z.object({id: z.string()}).optional(),
+            disconnect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+            connect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
           })
           .optional(),
         lyrists: z
           .object({
-            disconnect: z.object({id: z.string()}).optional(),
-            connect: z.object({id: z.string()}).optional(),
+            disconnect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+            connect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
           })
           .optional(),
         artists: z
           .object({
-            disconnect: z.object({id: z.string()}).optional(),
-            connect: z.object({id: z.string()}).optional(),
+            disconnect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+            connect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
           })
           .optional(),
       })

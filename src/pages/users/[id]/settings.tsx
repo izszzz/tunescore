@@ -5,9 +5,9 @@ import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { trpc } from "../../utils/trpc";
-import Header from "../../components/layouts/header";
+import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
+import { trpc } from "../../../utils/trpc";
+import Header from "../../../components/layouts/header";
 
 const EditUser: NextPage = () => {
 	const router = useRouter()

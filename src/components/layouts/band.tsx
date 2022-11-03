@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { trpc } from "../../utils/trpc";
 import DefaultSingleColumnLayout from "./single_column/default";
 import setLocale from "../../utils/setLocale";
+import DefaultTabs from "./tabs/default";
 
 interface BandLayoutProps {
 	children: (band: UseQueryResult<Prisma.BandGetPayload<{ include: { musics: { include: { composers: true, lyrists: true } }, artists: true } }> | null>) => React.ReactNode;
@@ -25,12 +26,10 @@ const BandLayout: React.FC<BandLayoutProps> = ({ children }) => {
 				<Typography variant="h5">
 					{band && setLocale(band.name, router)}
 				</Typography>
-				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-					<Tabs value={router.asPath} onChange={handleChange}>
-						<Tab label="Info" value={"/bands/" + router.query.id} />
-						<Tab label="Settings" value={"/bands/" + router.query.id + "/settings"} />
-					</Tabs>
-				</Box>
+				<DefaultTabs tabs={[
+					{ label: "Info", href: "/bands/" + router.query.id },
+					{ label: "Settings", href: "/bands/" + router.query.id + "/settings" }
+				]} />
 			</>
 		}>
 			{children(bandQuery)}

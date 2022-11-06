@@ -37,7 +37,7 @@ type UpdateAutocompleteProps<
 	}
 
 function DefaultUpdateAutocomplete<
-	T,
+	T extends { id: string },
 	Multiple extends boolean | undefined,
 	DisableClearable extends boolean | undefined,
 	FreeSolo extends boolean | undefined,
@@ -79,8 +79,9 @@ function DefaultUpdateAutocomplete<
 							handleUpdateInclude(
 								onSelect(_e, _v, _r, details),
 								() => setValue(prev => {
-									if (Array.isArray(prev)) return [...prev, details.option]
-									else return details.option
+									const { option } = details
+									if (Array.isArray(prev)) return [...prev, option] as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
+									else return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
 								})
 							)
 						}
@@ -90,13 +91,14 @@ function DefaultUpdateAutocomplete<
 							handleUpdateInclude(
 								onRemove(_e, _v, _r, details),
 								() => setValue(prev => {
+									const { option } = details
 									if (Array.isArray(prev)) {
 										return prev.filter(prev => {
 											if (typeof prev === "string") return
-											return prev.id !== details.option.id
-										})
+											return prev.id !== option.id
+										}) as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
 									}
-									else return details.option
+									else return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
 								})
 							)
 						}

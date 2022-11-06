@@ -5,16 +5,16 @@ import Tab from "@mui/material/Tab"
 import Tabs from "@mui/material/Tabs"
 
 interface DefaultTabsProps {
-	tabs: { label: string, href: string }[]
+	tabs: { label: string, href: string, disabled?: boolean }[]
 }
 const DefaultTabs = ({ tabs }: DefaultTabsProps) => {
 	const router = useRouter()
-	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: any) => { router.push(newValue) }
+	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: string) => { router.push(newValue) }
 	if (!router) return <p>loading</p>;
 	return (
 		<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 			<Tabs value={router.asPath} onChange={handleChange}>
-				{tabs.map((tab, i) => <Tab key={i} label={tab.label} value={tab.href} />)}
+				{tabs.map((tab, i) => <Tab key={i} label={tab.label} value={tab.href} disabled={tab.disabled} />)}
 			</Tabs>
 		</Box>
 	)

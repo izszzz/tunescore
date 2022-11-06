@@ -12,10 +12,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
-import { useRouter } from "next/router";
 
 const DefaultHeader = () => {
-	const router = useRouter()
 	const { data: session } = useSession()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);

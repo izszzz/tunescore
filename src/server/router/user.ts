@@ -1,5 +1,7 @@
 import {createRouter} from "./context"
 import {z} from "zod"
+import schemaTypeFor from "../../types/schemaForType"
+import {Prisma} from "@prisma/client"
 
 export const userRouter = createRouter()
   .query("index", {
@@ -10,37 +12,83 @@ export const userRouter = createRouter()
   .query("show", {
     input: z.object({
       id: z.string(),
+      currentUserId: z.string().optional(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.user.findFirst({
-        where: {id: input.id},
-        include: {musics: true},
+      const {id, currentUserId} = input
+      const user = await ctx.prisma.user.findFirst({
+        where: {id},
+        include: {
+          musics: true,
+          followedBy: true,
+          following: true,
+          _count: {
+            select: {followedBy: true, following: true},
+          },
+        },
       })
+      const currentUser = await ctx.prisma.user.findFirst({
+        where: {id: currentUserId},
+        include: {
+          following: {where: {id}},
+        },
+      })
+      return {
+        ...user,
+        isFollowed: !!currentUser?.following.length,
+      } as typeof user & {isFollowed: boolean}
     },
   })
   .mutation("update", {
-    input: z
-      .object({
-        id: z.string().nullish(),
-        name: z.string().nullish(),
+    input: schemaTypeFor<Prisma.UserUpdateInput>()(
+      z.object({
+        id: z.string(),
+        name: z
+          .string()
+          .or(
+            z.object({set: z.string().nullish(), unset: z.boolean().optional()})
+          )
+          .nullish(),
+        following: z
+          .object({
+            disconnect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+            connect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+          })
+          .optional(),
+        followedBy: z
+          .object({
+            disconnect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+            connect: z
+              .object({id: z.string().optional()})
+              .or(z.object({id: z.string().optional()}).array())
+              .optional(),
+          })
+          .optional(),
       })
-      .nullish(),
+    ),
     async resolve({ctx, input}) {
+      const {id, ...data} = input
       return await ctx.prisma.user.update({
-        where: {id: input?.id ?? ""},
-        data: {
-          name: input?.name,
-        },
+        where: {id},
+        data,
       })
     },
   })
   .mutation("destroy", {
-    input: z
-      .object({
-        id: z.string().nullish(),
-      })
-      .nullish(),
+    input: z.object({
+      id: z.string(),
+    }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.user.delete({where: {id: input?.id ?? ""}})
+      const {id} = input
+      return await ctx.prisma.user.delete({where: {id}})
     },
   })

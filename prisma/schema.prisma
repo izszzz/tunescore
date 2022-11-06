@@ -54,6 +54,10 @@ model User {
   accounts      Account[]
   sessions      Session[]
   musics        Music[]
+  followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
+  followedByIDs String[] @db.ObjectId
+  following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
+  followingIDs  String[] @db.ObjectId
 }
 
 model VerificationToken {

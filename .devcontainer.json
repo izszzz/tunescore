@@ -10,7 +10,7 @@
     "Prisma.prisma"
   ],
   "shutdownAction": "stopCompose",
-   "settings": {
+  "settings": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
     },

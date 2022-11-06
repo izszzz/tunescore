@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Card from "@mui/material/Card";
-import { Band, Locales } from "@prisma/client";
+import { Band } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import CardContent from "@mui/material/CardContent";

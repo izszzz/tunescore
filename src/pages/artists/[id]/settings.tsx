@@ -26,17 +26,11 @@ const EditArtist: NextPage = () => {
 	useEffect(() => {
 		if (artist)
 			formContext.reset(artist)
-	}, [artist])
+	}, [formContext, artist])
 
 	return (
 		<ArtistLayout>
 			{({ data, isLoading }) => {
-				useEffect(() => {
-					if (data) {
-						const { id, name } = data;
-						formContext.reset({ id, name })
-					}
-				}, [router.locale, data])
 				const disabled = isLoading || update.isLoading
 				return (
 					<>

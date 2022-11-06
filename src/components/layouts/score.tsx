@@ -47,19 +47,21 @@ const ScoreLayout = ({ score }: ScoreLayoutProps) => {
 	const mainRef = useRef(null)
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
+		console.log("aaaa")
 		const settings = {
 			// file: "https://www.alphatab.net/files/canon.gp",
 		};
 		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
 		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));
 		// apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
+		apiRef.current?.tex(score);
 	}
 	useEffect(() => {
 		apiRef.current?.tex(score);
 	}, [score])
 	return (
 		<Box width="100%" sx={{ display: 'flex' }}>
-			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} strategy="beforeInteractive" />
+			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} strategy="lazyOnload" />
 			<Drawer variant="persistent"
 				anchor="left"
 				open={open}

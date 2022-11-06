@@ -1,13 +1,13 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "global-strict": ["error", "always"]
   },
   "plugins": ["@typescript-eslint"],
   "extends": [
-    "next/core-web-vitals", 
+    "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ]
 }

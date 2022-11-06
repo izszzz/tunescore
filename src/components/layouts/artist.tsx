@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import { trpc } from "../../utils/trpc";
 import DefaultSingleColumnLayout from "./single_column/default";
-import DefaultTabs from "./tabs/default";
+import DefaultTabs from "../elements/tabs/default";
 import setLocale from "../../utils/setLocale";
 
 interface ArtistLayoutProps {

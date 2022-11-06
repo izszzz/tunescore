@@ -9,7 +9,7 @@ const LocaleAutocomplete = () => {
 	const handleChange = (lang: keyof Locales | undefined) => lang && router.push(router.asPath, undefined, { locale: lang })
 	useEffect(() => {
 		if (router.locale) formContext.reset({ locale: router.locale as keyof Locales })
-	}, [router.locale])
+	}, [formContext, router.locale])
 	return (
 		<FormContainer
 			defaultValues={{ locale: router.locale as keyof Locales }}

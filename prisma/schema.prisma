@@ -54,6 +54,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   musics        Music[]
+  issues        Issue[]
+  pullRequests  Pull[]
   followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
   followedByIDs String[] @db.ObjectId
   following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
@@ -88,6 +90,9 @@ model Music {
 
   artists   Artist[] @relation("artists", fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
+
+  issues Issue[]
+  pullRequests Pull[]
 }
 
 model Album {
@@ -118,6 +123,31 @@ model Band {
 
   musics Music[]
   artists Artist[]
+}
+
+model Issue{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body String
+
+  music Music   @relation(fields: [musicId], references: [id])
+  musicId String @db.ObjectId
+
+  user User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
+
+model Pull{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body String
+  score String
+
+  music Music   @relation(fields: [musicId], references: [id])
+  musicId String @db.ObjectId
+
+  user User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
 }
 
 type Locales {

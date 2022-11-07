@@ -1,4 +1,5 @@
 import {env} from "./src/env/server.mjs"
+import withRoutes from "nextjs-routes/config"
 
 /**
  * Don't be scared of the generics here.
@@ -12,20 +13,22 @@ function defineNextConfig(config) {
   return config
 }
 
-export default defineNextConfig({
-  reactStrictMode: true,
-  swcMinify: true,
-  // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
-  i18n: {
-    locales: ["en", "ja"],
-    defaultLocale: "ja",
-  },
+export default withRoutes()(
+  defineNextConfig({
+    reactStrictMode: true,
+    swcMinify: true,
+    // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
+    i18n: {
+      locales: ["en", "ja"],
+      defaultLocale: "ja",
+    },
 
-  webpackDevMiddleware: config => {
-    config.watchOptions = {
-      poll: 800,
-      aggregateTimeout: 300,
-    }
-    return config
-  },
-})
+    webpackDevMiddleware: config => {
+      config.watchOptions = {
+        poll: 800,
+        aggregateTimeout: 300,
+      }
+      return config
+    },
+  })
+)

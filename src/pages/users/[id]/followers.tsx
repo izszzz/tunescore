@@ -1,6 +1,7 @@
 import React from "react";
 import type { NextPage } from "next";
 import UserLayout from "../../../components/layouts/user";
+import UserList from "../../../components/elements/list/user";
 
 const UserFollowers: NextPage = () => {
 	return (
@@ -9,7 +10,7 @@ const UserFollowers: NextPage = () => {
 				return (
 					<>
 						followers
-						{data?.followedBy?.map(followed => <p key={followed.id}>{followed.name}</p>)}
+						<UserList users={data?.followedBy || []} />
 					</>
 				)
 			}

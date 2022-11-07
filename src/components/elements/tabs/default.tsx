@@ -3,13 +3,14 @@ import { useRouter } from "next/router"
 import Box from "@mui/material/Box"
 import Tab from "@mui/material/Tab"
 import Tabs from "@mui/material/Tabs"
+import { Route } from "nextjs-routes"
 
 interface DefaultTabsProps {
-	tabs: { label: string, href: string, disabled?: boolean }[]
+	tabs: { label: string, href: Route, disabled?: boolean }[]
 }
 const DefaultTabs = ({ tabs }: DefaultTabsProps) => {
 	const router = useRouter()
-	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: string) => { router.push(newValue) }
+	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: Route) => { router.push(newValue) }
 	if (!router) return <p>loading</p>;
 	return (
 		<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

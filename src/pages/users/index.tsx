@@ -9,8 +9,8 @@ const Users: NextPage = () => {
 		<DefaultSingleColumnLayout>
 			<p>users</p>
 			<div>
-				{users?.map((user) =>
-					<Link key={user.id} href={`/users/${user.id}`} ><a>{user.name}</a></Link>)
+				{users?.map(({ id, name }) =>
+					<Link key={id} href={{ pathname: "/users/[id]", query: { id } }} ><a>{name}</a></Link>)
 				}
 			</div>
 		</DefaultSingleColumnLayout>

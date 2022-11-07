@@ -16,8 +16,16 @@ interface UserLayoutProps {
 	children: (user: UseQueryResult<Prisma.UserGetPayload<{
 		include: {
 			musics: true,
-			followedBy: true,
-			following: true,
+			followedBy: {
+				include: {
+					_count: { select: { followedBy: true, following: true } }
+				}
+			},
+			following: {
+				include: {
+					_count: { select: { followedBy: true, following: true } }
+				}
+			},
 			_count: { select: { followedBy: true, following: true } }
 		}
 	}> & { isFollowed: boolean } | null>) => React.ReactNode;
@@ -68,16 +76,16 @@ const ArtistLayout: React.FC<UserLayoutProps> = ({ children }) => {
 					label={v => v ? "unfollow" : "follow"}
 					variant={v => v ? "outlined" : "contained"}
 					onClick={handleChange} />
-				<Button onClick={() => router.push("/users/" + router.query.id + "/following")}>following:{following}</Button>
-				<Button onClick={() => router.push("/users/" + router.query.id + "/followers")}>followers:{followers}</Button>
+				<Button onClick={() => router.push({ pathname: "/users/[id]/following", query: { id: router.query.id as string } })}>following:{following}</Button>
+				<Button onClick={() => router.push({ pathname: "/users/[id]/followers", query: { id: router.query.id as string } })}>followers:{followers}</Button>
 				<DefaultTabs tabs={[
-					{ label: "Info", href: "/users/" + router.query.id },
-					{ label: "Settings", href: "/users/" + router.query.id + "/settings", disabled: router.query.id !== session.data?.user?.id }
+					{ label: "Info", href: { pathname: "/users/[id]", query: { id: router.query.id as string } } },
+					{ label: "Settings", href: { pathname: "/users/[id]/settings", query: { id: router.query.id as string } } },
 				]} />
 			</>
 		}>
 			{children(userQuery)}
-		</DefaultSingleColumnLayout>
+		</DefaultSingleColumnLayout >
 	)
 }
 

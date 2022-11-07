@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { trpc } from "../../../utils/trpc";
 import UserLayout from "../../../components/layouts/user";
 
@@ -16,11 +15,11 @@ const EditUser: NextPage = () => {
 	const update = trpc.useMutation("user.update");
 	const destroy = trpc.useMutation("user.destroy", { onSuccess: () => router.push("/"), onError: error => console.log(error) });
 	const handleSubmit = (data: User) => update.mutate(data)
-	const handleDestroy = () => destroy.mutate(session?.user)
+	const handleDestroy = () => session?.user && destroy.mutate(session.user)
 
 	useEffect(() => {
 		formContext.reset(session?.user)
-	}, [session])
+	}, [formContext, session])
 	return (
 		<UserLayout>
 			{({ data }) => {

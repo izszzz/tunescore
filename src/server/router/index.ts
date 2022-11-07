@@ -8,9 +8,8 @@ import {userRouter} from "./user"
 import {musicRouter} from "./music"
 import {artistRouter} from "./artist"
 import {bandRouter} from "./band"
-import {musicsOnComposersRouter} from "./musics_on_composers"
-import {musicsOnLyristsRouter} from "./musics_on_lyrists"
-import {musicsOnArtistsRouter} from "./musics_on_artists"
+import {issueRouter} from "./issue"
+import {pullRouter} from "./pull"
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -19,9 +18,8 @@ export const appRouter = createRouter()
   .merge("music.", musicRouter)
   .merge("artist.", artistRouter)
   .merge("band.", bandRouter)
-  .merge("musicsOnComposers.", musicsOnComposersRouter)
-  .merge("musicsOnLyrists.", musicsOnLyristsRouter)
-  .merge("musicsOnArtists.", musicsOnArtistsRouter)
+  .merge("issue.", issueRouter)
+  .merge("pull.", pullRouter)
   .merge("auth.", protectedExampleRouter)
 
 // export type definition of API

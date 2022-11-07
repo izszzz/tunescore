@@ -31,8 +31,8 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({ children }) => {
 					{artist && setLocale(artist.name, router)}
 				</Typography>
 				<DefaultTabs tabs={[
-					{ label: "Info", href: "/artists/" + router.query.id },
-					{ label: "Settings", href: "/artists/" + router.query.id + "/settings" }
+					{ label: "Info", href: { pathname: "/artists/[id]", query: { id: router.query.id as string } } },
+					{ label: "Settings", href: { pathname: "/artists/[id]/settings", query: { id: router.query.id as string } } },
 				]} />
 			</>
 		}>

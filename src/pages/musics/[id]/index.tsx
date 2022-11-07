@@ -18,8 +18,8 @@ const Music: NextPage = () => {
 		<MusicLayout>
 			{({ data }) =>
 				<>
-					<Button variant="contained" onClick={() => router.push("/scores/" + router.query.id)} fullWidth>Watch Score</Button>
-					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id } })} fullWidth>Edit Score</Button>
+					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
+					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id as string } })} fullWidth>Edit Score</Button>
 					<TableContainer component={Paper}>
 						<Table sx={{ minWidth: 650 }}>
 							<TableHead>
@@ -32,23 +32,23 @@ const Music: NextPage = () => {
 								<TableRow>
 									<TableCell>Composer</TableCell>
 									<TableCell>
-										{data?.composers.map(composer =>
-											<Chip key={composer.id} label={setLocale(composer.name, router)} onClick={() => router.push("/artists/" + composer.id)} />
+										{data?.composers.map(({ id, name }) =>
+											<Chip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Lyrist</TableCell>
 									<TableCell>
-										{data?.lyrists.map(lyrist =>
-											<Chip key={lyrist.id} label={setLocale(lyrist.name, router)} onClick={() => router.push("/artists/" + lyrist.id)} />
+										{data?.lyrists.map(({ id, name }) =>
+											<Chip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 										)}
 									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Band</TableCell>
 									<TableCell>
-										{data?.band && <Chip label={setLocale(data?.band?.name, router)} onClick={() => router.push("/bands/" + data?.band?.id)} />}
+										{data?.band && <Chip label={setLocale(data.band.name, router)} onClick={() => data?.band && router.push({ pathname: "/bands/[id]", query: { id: data.band.id } })} />}
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -64,11 +64,11 @@ const Music: NextPage = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{data?.artists.map(artist => (
-									<TableRow key={artist.id}>
+								{data?.artists.map(({ id, name }) => (
+									<TableRow key={id}>
 										<TableCell />
 										<TableCell >
-											<Chip label={setLocale(artist.name, router)} onClick={() => router.push("/artists/" + artist.id)} />
+											<Chip label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 										</TableCell>
 									</TableRow>
 								))}

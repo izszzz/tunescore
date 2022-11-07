@@ -23,8 +23,8 @@ const BandLayout: React.FC<BandLayoutProps> = ({ children }) => {
 					{band && setLocale(band.name, router)}
 				</Typography>
 				<DefaultTabs tabs={[
-					{ label: "Info", href: "/bands/" + router.query.id },
-					{ label: "Settings", href: "/bands/" + router.query.id + "/settings" }
+					{ label: "Info", href: { pathname: "/bands/[id]", query: { id: router.query.id as string } } },
+					{ label: "Settings", href: { pathname: "/bands/[id]/settings", query: { id: router.query.id as string } } },
 				]} />
 			</>
 		}>

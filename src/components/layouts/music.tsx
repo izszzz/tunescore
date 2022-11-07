@@ -24,12 +24,13 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ children }) => {
 		<DefaultSingleColumnLayout subHeader={
 			<>
 				<Typography variant="h5">
-					<Link href={`/users/${music?.user?.id}`}><a>{music?.user?.name}</a></Link> / {music && setLocale(music.title, router)}
+					{music?.user && <Link href={{ pathname: "/users/[id]", query: { id: music.user.id } }}><a>{music?.user?.name}</a></Link>} / {music && setLocale(music.title, router)}
 				</Typography>
 				<DefaultTabs tabs={[
-					{ label: "Info", href: "/musics/" + router.query.id },
-					{ label: "Issues", href: "/musics/" + router.query.id + "/issues" },
-					{ label: "Settings", href: "/musics/" + router.query.id + "/settings" }
+					{ label: "Info", href: { pathname: "/musics/[id]", query: { id: router.query.id as string } } },
+					{ label: "Issues", href: { pathname: "/musics/[id]/issues", query: { id: router.query.id as string } } },
+					{ label: "PullRequests", href: { pathname: "/musics/[id]/pulls", query: { id: router.query.id as string } } },
+					{ label: "Settings", href: { pathname: "/musics/[id]/settings", query: { id: router.query.id as string } } },
 				]} />
 			</>
 		}>

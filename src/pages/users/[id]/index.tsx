@@ -14,9 +14,10 @@ const User: NextPage = () => {
 						<p>{data?.name}</p>
 						{
 							session?.user?.id == data?.id && (
-								< Link href="/users/edit" passHref>
-									<Button>Edit</Button>
-								</Link>
+								<p>aaa</p>
+								// <Link href={{ pathname: "/users/edit" }} passHref>
+								// 	<Button>Edit</Button>
+								// </Link>
 							)
 						}
 					</>

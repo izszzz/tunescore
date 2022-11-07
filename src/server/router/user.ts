@@ -20,8 +20,16 @@ export const userRouter = createRouter()
         where: {id},
         include: {
           musics: true,
-          followedBy: true,
-          following: true,
+          followedBy: {
+            include: {
+              _count: {select: {followedBy: true, following: true}},
+            },
+          },
+          following: {
+            include: {
+              _count: {select: {followedBy: true, following: true}},
+            },
+          },
           _count: {
             select: {followedBy: true, following: true},
           },

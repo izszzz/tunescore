@@ -10,21 +10,21 @@ import Typography from "@mui/material/Typography"
 import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
 
-interface IssueListProps {
-	issues: (Prisma.IssueGetPayload<{
+interface PullListProps {
+	pulls: (Prisma.PullGetPayload<{
 		include: {
 			user: true
 		}
 	}>)[]
 }
-const IssueList = ({ issues }: IssueListProps) => {
+const PullList = ({ pulls }: PullListProps) => {
 	const router = useRouter()
 	return (
 		<List>
 			<Divider component="li" />
-			{issues.map(issue =>
+			{pulls.map(issue =>
 				<>
-					<ListItem key={issue.id} disablePadding onClick={() => router.push({ pathname: "/musics/[id]/issues/[issueId]", query: { id: router.query.id as string, issueId: issue.id } })}>
+					<ListItem key={issue.id} disablePadding onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]", query: { id: router.query.id as string, pullId: issue.id } })}>
 						<ListItemButton>
 							<ListItemText primary={issue.title}
 								secondary={
@@ -49,4 +49,4 @@ const IssueList = ({ issues }: IssueListProps) => {
 	)
 }
 
-export default IssueList
+export default PullList

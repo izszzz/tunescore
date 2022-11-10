@@ -9,7 +9,7 @@ import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete
 
 const EditMusic: NextPage = () => {
 	return (
-		<MusicLayout>
+		<MusicLayout active="settings">
 			{({ data, isLoading }) =>
 				<>
 					<DefaultSettingsForm<Prisma.MusicGetPayload<{ include: { artists: true } }>>

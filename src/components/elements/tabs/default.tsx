@@ -5,17 +5,17 @@ import Tab from "@mui/material/Tab"
 import Tabs from "@mui/material/Tabs"
 import { Route } from "nextjs-routes"
 
-interface DefaultTabsProps {
+export interface DefaultTabsProps {
+	value: string;
 	tabs: { label: string, href: Route, disabled?: boolean }[]
 }
-const DefaultTabs = ({ tabs }: DefaultTabsProps) => {
+const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
 	const router = useRouter()
-	const handleChange = (_event: React.SyntheticEvent<Element, Event>, newValue: Route) => { router.push(newValue) }
 	if (!router) return <p>loading</p>;
 	return (
 		<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-			<Tabs value={router.asPath} onChange={handleChange}>
-				{tabs.map((tab, i) => <Tab key={i} label={tab.label} value={tab.href} disabled={tab.disabled} />)}
+			<Tabs value={value}>
+				{tabs.map(({ href, ...tab }, i) => <Tab key={i} {...tab} value={tab.label} onClick={() => router.push(href)} />)}
 			</Tabs>
 		</Box>
 	)

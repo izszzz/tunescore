@@ -37,31 +37,31 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 interface ScoreLayoutProps {
-	score: string;
+	value: string;
 }
 
-const ScoreLayout = ({ score }: ScoreLayoutProps) => {
+const ScoreLayout = ({ value }: ScoreLayoutProps) => {
 	const [open, setOpen] = useState(false);
 	const [tracks, setTracks] = useState<any>([]);
 	const apiRef = useRef<AlphaTabApi | null>(null)
 	const mainRef = useRef(null)
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
-		console.log("aaaa")
 		const settings = {
 			// file: "https://www.alphatab.net/files/canon.gp",
 		};
 		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
 		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));
 		// apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
-		apiRef.current?.tex(score);
+		apiRef.current?.tex(value);
 	}
 	useEffect(() => {
-		apiRef.current?.tex(score);
-	}, [score])
+		console.log("apiRef.current:", apiRef.current)
+		apiRef.current?.tex(value);
+	}, [value])
 	return (
 		<Box width="100%" sx={{ display: 'flex' }}>
-			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} strategy="lazyOnload" />
+			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} onError={(e) => console.log(e)} />
 			<Drawer variant="persistent"
 				anchor="left"
 				open={open}

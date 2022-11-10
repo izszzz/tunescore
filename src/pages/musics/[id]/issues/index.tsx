@@ -15,7 +15,7 @@ const Issues: NextPage = () => {
 	});
 	const issuesQuery = trpc.useQuery(["issue.index", { id: router.query.id as string }])
 	return (
-		<MusicLayout>
+		<MusicLayout active="issues">
 			{() =>
 				<>
 					<p>issues</p>

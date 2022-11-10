@@ -9,7 +9,7 @@ export const pullRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.pullRequest.findMany({
+      return await ctx.prisma.pull.findMany({
         where: {music: {id: input.id}},
         include: {user: true},
       })
@@ -20,8 +20,9 @@ export const pullRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.pullRequest.findFirst({
+      return await ctx.prisma.pull.findFirst({
         where: {id: input.id},
+        include: {user: true, music: true},
       })
     },
   })
@@ -31,7 +32,7 @@ export const pullRouter = createRouter()
       locale: z.string(),
     }),
     async resolve({ctx, input}) {
-      const result = await ctx.prisma.pullRequest.findRaw({
+      const result = await ctx.prisma.pull.findRaw({
         filter: {
           ["name." + input.locale]: {$regex: input.name, $options: "i"},
         },
@@ -49,32 +50,40 @@ export const pullRouter = createRouter()
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Omit<Prisma.PullRequestCreateInput, "user">>()(
+    input: schemaTypeFor<Omit<Prisma.PullCreateInput, "user" | "score">>()(
       z.object({
         title: z.string(),
-        score: z.string(),
+        body: z.string(),
         music: z.object({
           connect: z.object({id: z.string()}),
         }),
       })
     ),
     async resolve({ctx, input}) {
-      return await ctx.prisma.pullRequest.create({
-        data: {...input, user: {connect: {id: ctx.session?.user?.id}}},
+      const music = await ctx.prisma.music.findFirst({
+        where: {id: input.music.connect.id},
+      })
+      return await ctx.prisma.pull.create({
+        data: {
+          ...input,
+          score: music?.score,
+          user: {connect: {id: ctx.session?.user?.id}},
+        },
       })
     },
   })
   .mutation("update", {
-    input: schemaTypeFor<Prisma.PullRequestUpdateInput>()(
+    input: schemaTypeFor<Prisma.PullUpdateInput>()(
       z.object({
         id: z.string(),
-        title: z.string(),
-        body: z.string(),
+        title: z.string().optional(),
+        body: z.string().optional(),
+        score: z.string().optional(),
       })
     ),
     async resolve({ctx, input}) {
       const {id, ...data} = input
-      return await ctx.prisma.pullRequest.update({
+      return await ctx.prisma.pull.update({
         where: {id},
         data,
       })
@@ -85,6 +94,6 @@ export const pullRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.pullRequest.delete({where: {id: input.id}})
+      return await ctx.prisma.pull.delete({where: {id: input.id}})
     },
   })

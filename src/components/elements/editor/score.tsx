@@ -6,23 +6,24 @@ import Score from "../../layouts/score"
 import EditorHeader from "../../layouts/header/editor"
 import Box from "@mui/material/Box";
 import { trpc } from "../../../utils/trpc";
-import { useRouter } from "next/router";
 import React from "react";
 
 interface ScoreEditorProps {
+	id: string;
 	defaultValue: string;
+	resource: "music" | "pull"
 }
-const ScoreEditor = ({ defaultValue }: ScoreEditorProps) => {
+const ScoreEditor = ({ id, defaultValue, resource }: ScoreEditorProps) => {
 	const [value, setValue] = useState(defaultValue)
-	const router = useRouter()
-	const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-	const updateMusic = trpc.useMutation("music.update");
-	const handleEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => { editorRef.current = editor; }
+	const updateMusic = trpc.useMutation(`${resource}.update`);
 	const handleChange = (value: string | undefined) => value && setValue(value)
-	const handleSave = () => updateMusic.mutate({ id: router.query.id as string, score: value })
+	const handleSave = () => updateMusic.mutate({ id, score: value })
 	useEffect(() => {
 		Split(['#editor', '#score'], { sizes: [50, 50] })
 	}, [])
+	useEffect(() => {
+		setValue(defaultValue)
+	}, [defaultValue])
 
 	return (
 		<>
@@ -30,14 +31,14 @@ const ScoreEditor = ({ defaultValue }: ScoreEditorProps) => {
 			<Box display="flex" flexDirection="row">
 				<div id="editor">
 					<Editor
+						value={value}
 						height="90vh"
 						defaultLanguage="javascript"
-						onMount={handleEditorDidMount}
 						onChange={handleChange}
 					/>
 				</div>
 				<div id="score">
-					<Score score={value} />
+					<Score value={value} />
 				</div>
 			</Box>
 		</>

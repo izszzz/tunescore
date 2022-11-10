@@ -10,6 +10,7 @@ import type { Session } from "next-auth";
 import CssBaseline from '@mui/material/CssBaseline'
 import { SnackbarProvider } from 'notistack';
 import "../styles/globals.css"
+import Script from "next/script";
 
 
 const MyApp: AppType<{ session: Session | null }> = ({

@@ -7,7 +7,7 @@ const Score: NextPage = () => {
 	const router = useRouter()
 	const musicQuery = trpc.useQuery(["music.show", { id: router.query.id as string }]);
 	return (
-		<ScoreLayout score={musicQuery.data?.score || ""} />
+		<ScoreLayout value={musicQuery.data?.score || ""} />
 	)
 }
 

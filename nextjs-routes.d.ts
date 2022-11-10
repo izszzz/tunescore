@@ -23,6 +23,9 @@ declare module "nextjs-routes" {
     | { pathname: "/musics/[id]/issues/[issueId]"; query: Query<{ "id": string; "issueId": string }> }
     | { pathname: "/musics/[id]/issues"; query: Query<{ "id": string }> }
     | { pathname: "/musics/[id]/issues/new"; query: Query<{ "id": string }> }
+    | { pathname: "/musics/[id]/pulls/[pullId]/code"; query: Query<{ "id": string; "pullId": string }> }
+    | { pathname: "/musics/[id]/pulls/[pullId]"; query: Query<{ "id": string; "pullId": string }> }
+    | { pathname: "/musics/[id]/pulls/[pullId]/score/edit"; query: Query<{ "id": string; "pullId": string }> }
     | { pathname: "/musics/[id]/pulls"; query: Query<{ "id": string }> }
     | { pathname: "/musics/[id]/pulls/new"; query: Query<{ "id": string }> }
     | { pathname: "/musics/[id]/settings"; query: Query<{ "id": string }> }

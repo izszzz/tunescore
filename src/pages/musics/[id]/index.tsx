@@ -15,7 +15,7 @@ import setLocale from "../../../utils/setLocale"
 const Music: NextPage = () => {
 	const router = useRouter();
 	return (
-		<MusicLayout>
+		<MusicLayout active="info">
 			{({ data }) =>
 				<>
 					<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>

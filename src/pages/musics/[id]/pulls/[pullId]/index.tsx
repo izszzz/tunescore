@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import PullCard from "../../../../../components/elements/card/pull";
 import MusicLayout from "../../../../../components/layouts/music";
 import PullLayout from "../../../../../components/layouts/pull";
 

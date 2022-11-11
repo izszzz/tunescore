@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Link from 'next/link'
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import MusicCard from "../../components/elements/card/music";
+import MusicList from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
 
 const Musics: NextPage = () => {
@@ -11,7 +11,7 @@ const Musics: NextPage = () => {
 			<Link href="/musics/new">
 				<a>create music</a>
 			</Link>
-			{musics?.map(music => <MusicCard key={music.id} {...music} />)}
+			<MusicList musics={musics || []} />
 		</DefaultSingleColumnLayout>
 	)
 }

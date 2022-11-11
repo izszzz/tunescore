@@ -66,7 +66,10 @@ export const pullRouter = createRouter()
       return await ctx.prisma.pull.create({
         data: {
           ...input,
-          score: music?.score,
+          score: {
+            changed: music?.score || "",
+            original: music?.score || "",
+          },
           user: {connect: {id: ctx.session?.user?.id}},
         },
       })
@@ -78,7 +81,14 @@ export const pullRouter = createRouter()
         id: z.string(),
         title: z.string().optional(),
         body: z.string().optional(),
-        score: z.string().optional(),
+        score: z
+          .object({
+            update: z.object({
+              original: z.string().optional(),
+              changed: z.string().optional(),
+            }),
+          })
+          .optional(),
       })
     ),
     async resolve({ctx, input}) {

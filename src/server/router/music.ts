@@ -29,19 +29,30 @@ export const musicRouter = createRouter()
     },
   })
   .mutation("create", {
-    input: z.object({
-      title: z.any(),
-    }),
+    input: schemaTypeFor<Prisma.MusicCreateInput>()(
+      z.object({
+        title: locale,
+        score: z.string(),
+        visibility: z.enum(["PUBLIC", "PRIVATE"]),
+        type: z.enum(["ORIGINAL", "COPY"]),
+      })
+    ),
     async resolve({ctx, input}) {
       if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
-      return await ctx.prisma.music.create({
-        data: {
-          title: input.title,
+      let customInput: Prisma.MusicCreateInput = input
+      if (input.type === "ORIGINAL") {
+        customInput = {
+          ...input,
           user: {
             connect: {
               id: ctx.session.user?.id,
             },
           },
+        }
+      }
+      return await ctx.prisma.music.create({
+        data: {
+          ...customInput,
         },
       })
     },
@@ -74,12 +85,7 @@ export const musicRouter = createRouter()
       z.object({
         id: z.string(),
         title: locale.optional(),
-        score: z
-          .string()
-          .or(
-            z.object({set: z.string().nullish(), unset: z.boolean().optional()})
-          )
-          .nullish(),
+        score: z.string(),
         band: z
           .object({
             disconnect: z.boolean().optional(),

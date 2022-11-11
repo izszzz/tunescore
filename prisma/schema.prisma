@@ -73,8 +73,10 @@ model VerificationToken {
 
 model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
+  type Type
   title Locales
   score String
+  visibility Visibility
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
@@ -93,6 +95,14 @@ model Music {
 
   issues Issue[]
   pullRequests Pull[]
+}
+enum Visibility{
+  PUBLIC
+  PRIVATE
+}
+enum Type{
+  ORIGINAL
+  COPY
 }
 
 model Album {
@@ -141,13 +151,25 @@ model Pull{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   body String
-  score String?
+  score PullScore
+  status PullStatus
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
 
   user User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
+}
+
+enum PullStatus{
+  OPEN
+  CLOSE
+  MERGED
+}
+
+type PullScore{
+  original String
+  changed String
 }
 
 type Locales {

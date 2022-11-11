@@ -8,7 +8,6 @@ import DefaultSingleColumnLayout from "../../components/layouts/single_column/de
 import { trpc } from "../../utils/trpc";
 import { Typography } from "@mui/material";
 import Box from "@mui/system/Box";
-import { useEffect } from "react";
 
 const NewMusic: NextPage = () => {
 	const router = useRouter()
@@ -25,7 +24,7 @@ const NewMusic: NextPage = () => {
 			</Box>
 			<FormContainer onSuccess={handleSubmit}>
 				<Box borderBottom={1} mb={3}>
-					<RadioButtonGroup label="writing" name="writing" options={[{ id: "0", label: "original" }, { id: "1", label: "copy" }]} required />
+					<RadioButtonGroup label="type" name="type" options={[{ id: "0", label: "original" }, { id: "1", label: "copy" }]} required />
 				</Box>
 				<Box borderBottom={1} mb={3}>
 					<RadioButtonGroup label="visibillity" name="visibility" options={[{ id: "0", label: "public" }, { id: "1", label: "private" }]} required />

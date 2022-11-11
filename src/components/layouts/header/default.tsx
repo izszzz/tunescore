@@ -33,41 +33,43 @@ const DefaultHeader = () => {
 					</Link>
 				</Typography>
 				<Box sx={{ flexGrow: 0 }}>
-					{session ?
-						<Box display="flex">
-							<LocaleAutocomplete />
-							<IconButton onClick={handleClick}>
-								<Avatar alt="Remy Sharp" src={session.user?.image || ""} />
-							</IconButton>
-							<Menu
-								id="basic-menu"
-								anchorEl={anchorEl}
-								open={Boolean(anchorEl)}
-								onClose={handleClose}
-								MenuListProps={{
-									'aria-labelledby': 'basic-button',
-								}}
-							>
-								<MenuItem onClick={handleClose}>
-									<Link href={`/users/${session?.user?.id}`}>
-										<a>
-											Profile
-										</a>
-									</Link>
-								</MenuItem>
-								<MenuItem onClick={handleClose}>
-									Settings
-								</MenuItem>
-								<MenuItem onClick={handleSignOut}>Logout</MenuItem>
-							</Menu>
-						</Box>
-						:
-						<>
-							<Link href="/auth/signin" passHref>
-								<Button variant="contained">SignIn</Button>
-							</Link>
-						</>
-					}
+					<Box display="flex">
+						<LocaleAutocomplete />
+						{session ?
+							<Box>
+								<IconButton onClick={handleClick}>
+									<Avatar alt="Remy Sharp" src={session.user?.image || ""} />
+								</IconButton>
+								<Menu
+									id="basic-menu"
+									anchorEl={anchorEl}
+									open={Boolean(anchorEl)}
+									onClose={handleClose}
+									MenuListProps={{
+										'aria-labelledby': 'basic-button',
+									}}
+								>
+									<MenuItem onClick={handleClose}>
+										<Link href={`/users/${session?.user?.id}`}>
+											<a>
+												Profile
+											</a>
+										</Link>
+									</MenuItem>
+									<MenuItem onClick={handleClose}>
+										Settings
+									</MenuItem>
+									<MenuItem onClick={handleSignOut}>Logout</MenuItem>
+								</Menu>
+							</Box>
+							:
+							<Box>
+								<Link href="/auth/signin" passHref>
+									<Button variant="contained">SignIn</Button>
+								</Link>
+							</Box>
+						}
+					</Box>
 				</Box>
 			</Header>
 			<Toolbar />

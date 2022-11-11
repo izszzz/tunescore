@@ -1,14 +1,11 @@
 import {PrismaClient} from "@prisma/client"
-import musics from "./fixtures/musics.json"
+import musics from "./fixtures/musics"
+import artists from "./fixtures/artists.json"
+import bands from "./fixtures/bands.json"
 
 const prisma = new PrismaClient()
-prisma.user
-  .create({
-    data: {
-      name: "hoge1",
-      email: "hoge1@example.com",
-    },
-  })
+prisma.music
+  .createMany({data: musics})
   .catch(e => {
     console.error(e)
     process.exit(1)
@@ -16,8 +13,19 @@ prisma.user
   .finally(async () => {
     await prisma.$disconnect()
   })
-prisma.music
-  .createMany({data: musics})
+
+prisma.artist
+  .createMany({data: artists})
+  .catch(e => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+
+prisma.band
+  .createMany({data: bands})
   .catch(e => {
     console.error(e)
     process.exit(1)

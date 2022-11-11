@@ -1,23 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
-import * as monaco from 'monaco-editor';
 import Split from 'split.js'
 import Score from "../../layouts/score"
 import EditorHeader from "../../layouts/header/editor"
 import Box from "@mui/material/Box";
-import { trpc } from "../../../utils/trpc";
 import React from "react";
 
 interface ScoreEditorProps {
-	id: string;
 	defaultValue: string;
-	resource: "music" | "pull"
+	onSave: (value: string) => void
 }
-const ScoreEditor = ({ id, defaultValue, resource }: ScoreEditorProps) => {
+const ScoreEditor = ({ defaultValue, onSave }: ScoreEditorProps) => {
 	const [value, setValue] = useState(defaultValue)
-	const updateMusic = trpc.useMutation(`${resource}.update`);
 	const handleChange = (value: string | undefined) => value && setValue(value)
-	const handleSave = () => updateMusic.mutate({ id, score: value })
+	const handleSave = () => onSave(value)
 	useEffect(() => {
 		Split(['#editor', '#score'], { sizes: [50, 50] })
 	}, [])

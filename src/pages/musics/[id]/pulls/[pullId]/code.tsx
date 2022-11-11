@@ -10,7 +10,7 @@ const Code: NextPage = () => {
 			{({ data: music }) =>
 				<PullLayout active="code">
 					{({ data: pull }) =>
-						<ReactDiffViewer oldValue={music?.score || ""} newValue={pull?.score || ""} />
+						<ReactDiffViewer oldValue={pull?.score.original || ""} newValue={pull?.score.changed || ""} />
 					}
 				</PullLayout>
 			}

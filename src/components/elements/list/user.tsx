@@ -8,6 +8,7 @@ import ListItemText from "@mui/material/ListItemText"
 import Typography from "@mui/material/Typography"
 import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
+import React from "react"
 
 interface UserListProps {
 	users: (Prisma.UserGetPayload<{
@@ -21,8 +22,8 @@ const UserList = ({ users }: UserListProps) => {
 	return (
 		<List>
 			{users.map(user =>
-				<>
-					<ListItem key={user.id} disablePadding onClick={() => router.push("/users/" + user.id)}>
+				<React.Fragment key={user.id}>
+					<ListItem disablePadding onClick={() => router.push("/users/" + user.id)}>
 						<ListItemAvatar>
 							<Avatar alt={user.name || ""} src={user.image || ""} />
 						</ListItemAvatar>
@@ -44,7 +45,7 @@ const UserList = ({ users }: UserListProps) => {
 						</ListItemButton>
 					</ListItem>
 					<Divider variant="inset" component="li" />
-				</>
+				</React.Fragment>
 			)
 			}
 		</List >

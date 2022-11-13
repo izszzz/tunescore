@@ -21,7 +21,6 @@ const PullRequests: NextPage = () => {
 		onSuccess: () => router.push({ pathname: "/musics/[id]/pulls", query: { id: router.query.id as string } }),
 		onError: error => console.log(error)
 	});
-	console.log(router)
 	return (
 		<MusicLayout active="pullrequests">
 			{({ data }) =>

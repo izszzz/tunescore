@@ -55,12 +55,25 @@ model User {
   sessions      Session[]
   musics        Music[]
   issues        Issue[]
-  pullRequests  Pull[]
+  pulls  Pull[]
+
   followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
   followedByIDs String[] @db.ObjectId
+
   following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
   followingIDs  String[] @db.ObjectId
+
+  bookmarkMusics Music[] @relation("MusicBookmarks", fields: [bookmarkMusicIDs], references: [id])
+  bookmarkMusicIDs String[] @db.ObjectId
+
+  bookmarkArtists Artist[] @relation("ArtistBookmarks", fields: [bookmarkArtistIDs], references: [id])
+  bookmarkArtistIDs String[] @db.ObjectId
+
+  bookmarkBands Band[] @relation("BandBookmarks", fields: [bookmarkBandIDs], references: [id])
+  bookmarkBandIDs String[] @db.ObjectId
+
 }
+
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -95,6 +108,9 @@ model Music {
 
   issues Issue[]
   pullRequests Pull[]
+
+  bookmarks User[] @relation("MusicBookmarks", fields: [userIDs], references: [id])
+  userIDs String[] @db.ObjectId
 }
 enum Visibility{
   PUBLIC
@@ -125,6 +141,9 @@ model Artist {
 
   band   Band?   @relation(fields: [bandId], references: [id])
   bandId String? @db.ObjectId
+
+  bookmarks User[] @relation("ArtistBookmarks", fields: [userIDs], references: [id])
+  userIDs String[] @db.ObjectId
 }
 
 model Band {
@@ -133,6 +152,9 @@ model Band {
 
   musics Music[]
   artists Artist[]
+
+  bookmarks User[] @relation("BandBookmarks", fields: [userIDs], references: [id])
+  userIDs String[] @db.ObjectId
 }
 
 model Issue{
@@ -162,8 +184,9 @@ model Pull{
 }
 
 enum PullStatus{
+  DRAFT
   OPEN
-  CLOSE
+  CLOSED
   MERGED
 }
 

@@ -16,16 +16,29 @@ export const musicRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.music.findFirst({
-        where: {id: input.id},
+      const {id} = input
+      const music = await ctx.prisma.music.findFirst({
+        where: {id},
         include: {
           user: true,
           band: true,
           composers: true,
           lyrists: true,
           artists: true,
+          _count: {
+            select: {bookmarks: true},
+          },
         },
       })
+      const bookmarked = await ctx.prisma.music.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          bookmarks: {where: {id: ctx.session?.user?.id}},
+        },
+      })
+      return {...music, bookmarked: !!bookmarked?.bookmarks.length}
     },
   })
   .mutation("create", {
@@ -135,6 +148,39 @@ export const musicRouter = createRouter()
       return await ctx.prisma.music.update({
         where: {id},
         data,
+      })
+    },
+  })
+  .mutation("bookmark.create", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ctx, input: {id}}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      const {user} = ctx.session
+      return await ctx.prisma.music.update({
+        where: {id},
+        data: {
+          bookmarks: {
+            connect: {id: user.id},
+          },
+        },
+      })
+    },
+  })
+  .mutation("bookmark.destroy", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ctx, input: {id}}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      return await ctx.prisma.music.update({
+        where: {id},
+        data: {
+          bookmarks: {
+            disconnect: {id: ctx.session.user.id},
+          },
+        },
       })
     },
   })

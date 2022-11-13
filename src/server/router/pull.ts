@@ -50,7 +50,9 @@ export const pullRouter = createRouter()
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Omit<Prisma.PullCreateInput, "user" | "score">>()(
+    input: schemaTypeFor<
+      Omit<Prisma.PullCreateInput, "user" | "score" | "status">
+    >()(
       z.object({
         title: z.string(),
         body: z.string(),
@@ -66,6 +68,7 @@ export const pullRouter = createRouter()
       return await ctx.prisma.pull.create({
         data: {
           ...input,
+          status: "OPEN",
           score: {
             changed: music?.score || "",
             original: music?.score || "",
@@ -78,6 +81,7 @@ export const pullRouter = createRouter()
   .mutation("update", {
     input: schemaTypeFor<Prisma.PullUpdateInput>()(
       z.object({
+        status: z.enum(["DRAFT", "OPEN", "CLOSED", "MERGED"]).optional(),
         id: z.string(),
         title: z.string().optional(),
         body: z.string().optional(),
@@ -86,6 +90,13 @@ export const pullRouter = createRouter()
             update: z.object({
               original: z.string().optional(),
               changed: z.string().optional(),
+            }),
+          })
+          .optional(),
+        music: z
+          .object({
+            update: z.object({
+              score: z.string().optional(),
             }),
           })
           .optional(),

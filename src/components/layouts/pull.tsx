@@ -10,7 +10,6 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Score from "../../pages/musics/[id]/pulls/[pullId]/score";
 
 interface PullLayoutProps {
 	active: "code" | "conversation";
@@ -21,16 +20,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({ active, children }) => {
 	const [conflict, setConflict] = useState(true)
 	const router = useRouter()
 	const pullQuery = trpc.useQuery(["pull.show", { id: router.query.pullId as string }]);
-	const update = trpc.useMutation(["music.update"]);
+	const update = trpc.useMutation(["pull.update"]);
 	const { data, isLoading } = pullQuery
 	const tabs: DefaultTabsProps["tabs"] = useMemo(() => ([
 		{ label: "conversation", href: { pathname: "/musics/[id]/pulls/[pullId]", query: { id: router.query.id as string, pullId: router.query.pullId as string } } },
 		{ label: "code", href: { pathname: "/musics/[id]/pulls/[pullId]/code", query: { id: router.query.id as string, pullId: router.query.pullId as string } } },
 	]), [router.query])
-	const handleMerge = () => {
-		if (data)
-			update.mutate({ id: data.music.id, score: data.score.changed })
-	}
+	const handleMerge = () => { if (data) update.mutate({ id: router.query.pullId as string, status: "MERGED", music: { update: { score: data.score.changed } } }) }
+	const handleClose = () => { if (data) update.mutate({ id: router.query.pullId as string, status: "CLOSED" }) }
 	useEffect(() => {
 		if (data) {
 			const merged = Diff3.mergeDiff3(data.music.score, data.score.original, data.score.changed)
@@ -51,7 +48,8 @@ const PullLayout: React.FC<PullLayoutProps> = ({ active, children }) => {
 					{data?.title}
 				</Typography>
 			</Box>
-			<Button variant="outlined" disabled={isLoading} onClick={handleMerge} disabled={conflict}>Merge PullRequest</Button>
+			<Button variant="outlined" color="success" disabled={isLoading || conflict} onClick={handleMerge} >Merge PullRequest</Button>
+			<Button variant="outlined" color="error" disabled={isLoading || conflict} onClick={handleClose} >Close PullRequest</Button>
 			<Button variant="outlined" disabled={isLoading} onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]/score", query: { id: router.query.id as string, pullId: router.query.pullId as string } })}>Watch Score</Button>
 			<Button variant="outlined" disabled={isLoading} onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]/score/edit", query: { id: router.query.id as string, pullId: router.query.pullId as string } })}>Edit Score</Button>
 			<DefaultTabs value={active} tabs={tabs} />

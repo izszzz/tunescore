@@ -7,46 +7,40 @@ import ListItemText from "@mui/material/ListItemText"
 import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
 import Typography from "@mui/material/Typography"
-import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
 import setLocale from "../../../utils/setLocale"
-import Chip from "@mui/material/Chip"
 
-interface MusicListProps {
-	musics: (Prisma.MusicGetPayload<{
-		include: {
-			user: true
-		}
+interface ArtistListProps {
+	artists: (Prisma.ArtistGetPayload<{
+		include: { band: true }
 	}>)[]
 }
-const MusicList = ({ musics }: MusicListProps) => {
+const ArtistList = ({ artists }: ArtistListProps) => {
 	const router = useRouter()
 	return (
 		<List>
 			<Divider component="li" />
-			{musics.map(music =>
-				<React.Fragment key={music.id}>
-					<ListItem disablePadding onClick={() => router.push({ pathname: "/musics/[id]", query: { id: music.id } })}>
+			{artists.map(artist =>
+				<React.Fragment key={artist.id}>
+					<ListItem disablePadding onClick={() => router.push({ pathname: "/artists/[id]", query: { id: artist.id } })}>
 						<ListItemButton>
 							<ListItemText primary={
 								<Box display="flex" alignItems="center">
 									<Typography variant="h6" mr={3}>
-										{setLocale(music.title, router)}
+										{setLocale(artist.name, router)}
 									</Typography>
-									<Chip label={music.type} variant="outlined" size="small" />
 								</Box>
 							}
 								secondary={
 									<Box display="flex" alignItems="center">
-										<Typography
-											mr={1}
-											variant="body2"
-											color="text.subprimary">
-											created by {music.user?.name}
-										</Typography>
-										<Avatar
-											src={music.user?.image || ""}
-											sx={{ width: 24, height: 24 }} />
+										{artist.band &&
+											<Typography
+												mr={1}
+												variant="body2"
+												color="text.subprimary">
+												{`joined by ${setLocale(artist.band.name, router)}`}
+											</Typography>
+										}
 									</Box>
 								} />
 						</ListItemButton>
@@ -58,4 +52,4 @@ const MusicList = ({ musics }: MusicListProps) => {
 	)
 }
 
-export default MusicList
+export default ArtistList

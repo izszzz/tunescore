@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { UseQueryResult } from "react-query";
 import { Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import DefaultTabs from "../elements/tabs/default";
-import ToggleLoadingButton from "../elements/button/toggleLoading"
+import DefaultTabs, { DefaultTabsProps } from "../elements/tabs/default";
+import ToggleLoadingButton from "../elements/button/toggle/loading"
 import { trpc } from "../../utils/trpc";
 import DefaultSingleColumnLayout from "./single_column/default";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 
 interface UserLayoutProps {
+	active: "info" | "settings";
 	children: (user: UseQueryResult<Prisma.UserGetPayload<{
 		include: {
 			musics: true,
@@ -31,7 +32,7 @@ interface UserLayoutProps {
 	}> & { isFollowed: boolean } | null>) => React.ReactNode;
 }
 
-const ArtistLayout: React.FC<UserLayoutProps> = ({ children }) => {
+const UserLayout: React.FC<UserLayoutProps> = ({ active, children }) => {
 	const [following, setFollowing] = useState(0)
 	const [followers, setFollowers] = useState(0)
 	const router = useRouter()
@@ -59,6 +60,10 @@ const ArtistLayout: React.FC<UserLayoutProps> = ({ children }) => {
 		setFollowing(user._count.following)
 		setFollowers(user._count.followedBy)
 	}, [user])
+	const tabs: DefaultTabsProps["tabs"] = useMemo(() => ([
+		{ label: "info", href: { pathname: "/users/[id]", query: { id: router.query.id as string } } },
+		{ label: "settings", href: { pathname: "/users/[id]/settings", query: { id: router.query.id as string } } },
+	]), [router.query.id])
 	return (
 		<DefaultSingleColumnLayout subHeader={
 			<>
@@ -78,10 +83,7 @@ const ArtistLayout: React.FC<UserLayoutProps> = ({ children }) => {
 					onClick={handleChange} />
 				<Button onClick={() => router.push({ pathname: "/users/[id]/following", query: { id: router.query.id as string } })}>following:{following}</Button>
 				<Button onClick={() => router.push({ pathname: "/users/[id]/followers", query: { id: router.query.id as string } })}>followers:{followers}</Button>
-				<DefaultTabs tabs={[
-					{ label: "Info", href: { pathname: "/users/[id]", query: { id: router.query.id as string } } },
-					{ label: "Settings", href: { pathname: "/users/[id]/settings", query: { id: router.query.id as string } } },
-				]} />
+				<DefaultTabs value={active} tabs={tabs} />
 			</>
 		}>
 			{children(userQuery)}
@@ -89,4 +91,4 @@ const ArtistLayout: React.FC<UserLayoutProps> = ({ children }) => {
 	)
 }
 
-export default ArtistLayout;
+export default UserLayout;

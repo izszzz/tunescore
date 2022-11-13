@@ -20,6 +20,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/style": "^0.8.0",
     "@emotion/styled": "^11.10.4",
+    "@fontsource/roboto": "^4.5.8",
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.10.6",
     "@mui/lab": "^5.0.0-alpha.106",

@@ -7,37 +7,45 @@ import ListItemText from "@mui/material/ListItemText"
 import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
 import Typography from "@mui/material/Typography"
-import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
+import setLocale from "../../../utils/setLocale"
 
-interface IssueListProps {
-	issues: (Prisma.IssueGetPayload<{
+interface BandListProps {
+	bands: (Prisma.BandGetPayload<{
 		include: {
-			user: true
+			_count: {
+				select: {
+					artists: true
+					musics: true
+				}
+			}
 		}
 	}>)[]
 }
-const IssueList = ({ issues }: IssueListProps) => {
+const BandList = ({ bands }: BandListProps) => {
 	const router = useRouter()
 	return (
 		<List>
 			<Divider component="li" />
-			{issues.map(issue =>
-				<React.Fragment key={issue.id}>
-					<ListItem disablePadding onClick={() => router.push({ pathname: "/musics/[id]/issues/[issueId]", query: { id: router.query.id as string, issueId: issue.id } })}>
+			{bands.map(band =>
+				<React.Fragment key={band.id}>
+					<ListItem disablePadding onClick={() => router.push({ pathname: "/bands/[id]", query: { id: band.id } })}>
 						<ListItemButton>
-							<ListItemText primary={issue.title}
+							<ListItemText primary={
+								<Box display="flex" alignItems="center">
+									<Typography variant="h6" mr={3}>
+										{setLocale(band.name, router)}
+									</Typography>
+								</Box>
+							}
 								secondary={
 									<Box display="flex" alignItems="center">
 										<Typography
 											mr={1}
 											variant="body2"
 											color="text.subprimary">
-											created by {issue.user.name}
+											musics count albums count artists count
 										</Typography>
-										<Avatar
-											src={issue.user.image || ""}
-											sx={{ width: 24, height: 24 }} />
 									</Box>
 								} />
 						</ListItemButton>
@@ -49,4 +57,4 @@ const IssueList = ({ issues }: IssueListProps) => {
 	)
 }
 
-export default IssueList
+export default BandList

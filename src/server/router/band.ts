@@ -1,4 +1,5 @@
-import {Band} from "@prisma/client"
+import {Band, Prisma} from "@prisma/client"
+import {TRPCError} from "@trpc/server"
 import {z} from "zod"
 import {locale} from "../../utils/zod"
 import {createRouter} from "./context"
@@ -6,7 +7,9 @@ import {createRouter} from "./context"
 export const bandRouter = createRouter()
   .query("index", {
     async resolve({ctx}) {
-      return await ctx.prisma.band.findMany()
+      return await ctx.prisma.band.findMany({
+        include: {_count: {select: {artists: true, musics: true}}},
+      })
     },
   })
   .query("show", {
@@ -68,6 +71,23 @@ export const bandRouter = createRouter()
       return await ctx.prisma.band.update({
         where: {id},
         data,
+      })
+    },
+  })
+  .mutation("bookmark", {
+    input: z.object({id: z.string(), value: z.boolean()}),
+    async resolve({ctx, input}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      const {id, value} = input
+      const {user} = ctx.session
+      const bookmarks: Prisma.BandUpdateInput["bookmarks"] = value
+        ? {create: {userId: user.id}}
+        : {delete: {id}}
+      return await ctx.prisma.band.update({
+        where: {id},
+        data: {
+          bookmarks,
+        },
       })
     },
   })

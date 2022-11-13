@@ -3,11 +3,12 @@ import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Artist, Prisma} from "@prisma/client"
 import {locale} from "../../utils/zod"
+import {TRPCError} from "@trpc/server"
 
 export const artistRouter = createRouter()
   .query("index", {
     async resolve({ctx}) {
-      return await ctx.prisma.artist.findMany()
+      return await ctx.prisma.artist.findMany({include: {band: true}})
     },
   })
   .query("show", {
@@ -56,7 +57,11 @@ export const artistRouter = createRouter()
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Prisma.ArtistCreateInput>()(z.object({name: locale})),
+    input: schemaTypeFor<Prisma.ArtistCreateInput>()(
+      z.object({
+        name: locale,
+      })
+    ),
     async resolve({ctx, input}) {
       return await ctx.prisma.artist.create({data: input})
     },
@@ -79,6 +84,23 @@ export const artistRouter = createRouter()
       return await ctx.prisma.artist.update({
         where: {id},
         data,
+      })
+    },
+  })
+  .mutation("bookmark", {
+    input: z.object({id: z.string(), value: z.boolean()}),
+    async resolve({ctx, input}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      const {id, value} = input
+      const {user} = ctx.session
+      const bookmarks: Prisma.ArtistUpdateInput["bookmarks"] = value
+        ? {create: {userId: user.id}}
+        : {delete: {id}}
+      return await ctx.prisma.artist.update({
+        where: {id},
+        data: {
+          bookmarks,
+        },
       })
     },
   })

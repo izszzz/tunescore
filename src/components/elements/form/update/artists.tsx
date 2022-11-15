@@ -22,8 +22,8 @@ import { handleChangeAutocomplete } from "../../autocomplete/update/default";
 import Grid from "@mui/material/Grid"
 
 interface ArtistsUpdateFormProps {
-	data: Artist[] | undefined
-	loading: boolean;
+	data: Artist[]
+	loading?: boolean;
 }
 const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 	const [artist, setArtist] = useState<Artist>()

@@ -2,6 +2,7 @@ import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Prisma} from "@prisma/client"
+import {TRPCError} from "@trpc/server"
 
 export const userRouter = createRouter()
   .query("index", {
@@ -35,6 +36,7 @@ export const userRouter = createRouter()
           },
         },
       })
+      if (!user) throw new TRPCError({code: "NOT_FOUND"})
       const currentUser = await ctx.prisma.user.findFirst({
         where: {id: currentUserId},
         include: {
@@ -43,8 +45,8 @@ export const userRouter = createRouter()
       })
       return {
         ...user,
-        isFollowed: !!currentUser?.following.length,
-      } as typeof user & {isFollowed: boolean}
+        followed: !!currentUser?.following.length,
+      }
     },
   })
   .mutation("update", {

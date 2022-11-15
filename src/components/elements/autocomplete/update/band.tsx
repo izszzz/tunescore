@@ -3,7 +3,7 @@ import React from "react"
 import DefaultUpdateAutocomplete from "./default"
 
 interface BandUpdateAutocomplete {
-	defaultValue: Band | undefined | null;
+	defaultValue: Band | null;
 	resource: "music" | "artist"
 }
 function BandUpdateAutocomplete<UpdateInput extends Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput>({ defaultValue, resource }: BandUpdateAutocomplete) {

@@ -31,7 +31,7 @@ const PullList = ({ pulls }: PullListProps) => {
 							<ListItemText primary={
 								<Typography variant="h6" >
 									<PullStatusIcon status={pull.status} />
-									pull.title
+									{pull.title}
 								</Typography>
 							}
 								secondary={

@@ -1,4 +1,3 @@
-import Container from "@mui/material/Container";
 import React from "react";
 import DefaultHeader from "../header/default";
 import SingleColumnLayout from "./index"
@@ -6,10 +5,11 @@ import SingleColumnLayout from "./index"
 interface DefaultSingleColumnProps {
 	subHeader?: React.ReactNode;
 	children: React.ReactNode;
+	contained?: boolean
 }
-const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnProps> = ({ subHeader, children }) => {
+const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnProps> = ({ subHeader, contained, children }) => {
 	return (
-		<SingleColumnLayout header={
+		<SingleColumnLayout contained={contained} header={
 			<>
 				<DefaultHeader />
 				{subHeader}

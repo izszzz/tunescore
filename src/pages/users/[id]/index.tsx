@@ -1,31 +1,42 @@
-import Button from "@mui/material/Button";
-import type { NextPage } from "next";
+import { Prisma, PrismaClient } from "@prisma/client";
+import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import UserLayout from "../../../components/layouts/user";
-
-const User: NextPage = () => {
+import UserLayout from "../../../components/layouts/show/user";
+import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+interface UserProps {
+	data: Prisma.UserGetPayload<{ include: { _count: { select: { followedBy: true, following: true } } } }>
+	followed: boolean
+}
+const User: NextPage<UserProps> = ({ data, followed }) => {
 	const { data: session } = useSession()
 	return (
-		<UserLayout>{
-			({ data }) => {
-				return (
-					<>
-						<p>{data?.name}</p>
-						{
-							session?.user?.id == data?.id && (
-								<p>aaa</p>
-								// <Link href={{ pathname: "/users/edit" }} passHref>
-								// 	<Button>Edit</Button>
-								// </Link>
-							)
-						}
-					</>
+		<UserLayout data={data} followed={followed} activeTab="info">
+			<p>{data.name}</p>
+			{
+				session?.user?.id == data.id && (
+					<p>aaa</p>
 				)
 			}
-		}
 		</UserLayout>
 	)
 }
+
+export const getServerSideProps: GetServerSideProps<UserProps> = async (ctx) => {
+	const prisma = new PrismaClient()
+	const data = await prisma.user.findUnique({ where: { id: ctx.query.id as string }, include: { _count: { select: { followedBy: true, following: true } } } })
+	if (!data) return { notFound: true };
+	const session = await getServerAuthSession(ctx)
+	const followed = await prisma.user.findFirst({
+		where: {
+			id: ctx.query.id as string,
+		},
+		include: {
+			following: { where: { id: session?.user?.id } },
+		},
+	})
+	return {
+		props: { data, followed: !!followed?.following.length },
+	};
+};
 
 export default User;

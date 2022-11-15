@@ -29,22 +29,25 @@ const MusicList = ({ musics }: MusicListProps) => {
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/musics/[id]", query: { id: music.id } })}>
 						<ListItemButton>
 							<ListItemText primary={
-								<Box display="flex" alignItems="center">
+								<Box component="span" display="flex" alignItems="center">
 									<Typography variant="h6" mr={3}>
 										{setLocale(music.title, router)}
 									</Typography>
-									<Chip label={music.type} variant="outlined" size="small" />
+									<Chip component="span" label={music.type} size="small" />
 								</Box>
 							}
 								secondary={
-									<Box display="flex" alignItems="center">
+									<Box component="span" display="flex" alignItems="center">
 										<Typography
 											mr={1}
 											variant="body2"
-											color="text.subprimary">
-											created by {music.user?.name}
+											color="text.subprimary"
+											component="span"
+										>
+											{`created by ${music.user?.name}`}
 										</Typography>
 										<Avatar
+											component="span"
 											src={music.user?.image || ""}
 											sx={{ width: 24, height: 24 }} />
 									</Box>

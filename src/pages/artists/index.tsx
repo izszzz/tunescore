@@ -1,20 +1,27 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from 'next/link'
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import ArtistList from "../../components/elements/list/artist";
-import { trpc } from "../../utils/trpc";
-
-const Artists: NextPage = () => {
-	const { data: artists } = trpc.useQuery(["artist.index"]);
+import { Prisma, PrismaClient } from "@prisma/client";
+interface ArtistsProps {
+	data: Prisma.ArtistGetPayload<{ include: { band: true } }>[]
+}
+const Artists: NextPage<ArtistsProps> = ({ data }) => {
 	return (
 		<DefaultSingleColumnLayout>
-			<p>artists</p>
 			<Link href="/artists/new">
 				<a>create artist</a>
 			</Link>
-			<ArtistList artists={artists || []} />
+			<ArtistList artists={data} />
 		</DefaultSingleColumnLayout>
 	)
 }
+export const getServerSideProps: GetServerSideProps<ArtistsProps> = async () => {
+	const prisma = new PrismaClient()
+	const data = await prisma.artist.findMany({ include: { band: true } })
+	return {
+		props: { data },
+	};
+};
 
 export default Artists;

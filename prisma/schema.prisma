@@ -107,7 +107,7 @@ model Music {
   artistIDs String[] @db.ObjectId
 
   issues Issue[]
-  pullRequests Pull[]
+  pulls Pull[]
 
   bookmarks User[] @relation("MusicBookmarks", fields: [userIDs], references: [id])
   userIDs String[] @db.ObjectId

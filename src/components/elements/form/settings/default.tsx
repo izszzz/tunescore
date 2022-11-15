@@ -9,7 +9,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 interface DefaultSettingsFormProps<T> {
 	data: T | undefined | null
-	isLoading: boolean
+	isLoading?: boolean
 	resource: "band" | "artist" | "music";
 	name: "title" | "name"
 }

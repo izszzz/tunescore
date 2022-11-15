@@ -12,9 +12,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
+import { useRouter } from "next/router";
 
 const DefaultHeader = () => {
 	const { data: session } = useSession()
+	const router = useRouter()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
 	const handleClose = () => setAnchorEl(null);
@@ -49,12 +51,12 @@ const DefaultHeader = () => {
 										'aria-labelledby': 'basic-button',
 									}}
 								>
-									<MenuItem onClick={handleClose}>
-										<Link href={`/users/${session?.user?.id}`}>
-											<a>
-												Profile
-											</a>
-										</Link>
+									<MenuItem onClick={() => {
+										handleClose()
+										if (!session?.user) return
+										router.push({ pathname: `/users/[id]`, query: { id: session.user.id } })
+									}}>
+										Profile
 									</MenuItem>
 									<MenuItem onClick={handleClose}>
 										Settings
@@ -64,9 +66,7 @@ const DefaultHeader = () => {
 							</Box>
 							:
 							<Box>
-								<Link href="/auth/signin" passHref>
-									<Button variant="contained">SignIn</Button>
-								</Link>
+								<Button variant="contained" onClick={() => router.push("/auth/signin")}>SignIn</Button>
 							</Box>
 						}
 					</Box>

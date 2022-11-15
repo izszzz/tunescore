@@ -15,9 +15,9 @@ export const artistRouter = createRouter()
     input: z.object({
       id: z.string(),
     }),
-    async resolve({ctx, input}) {
-      return await ctx.prisma.artist.findFirst({
-        where: {id: input.id},
+    async resolve({ctx, input: {id}}) {
+      const artist = await ctx.prisma.artist.findFirst({
+        where: {id},
         include: {
           band: true,
           composedMusics: {
@@ -31,6 +31,16 @@ export const artistRouter = createRouter()
           },
         },
       })
+      if (!artist) throw new TRPCError({code: "NOT_FOUND"})
+      const bookmarked = await ctx.prisma.artist.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          bookmarks: {where: {id: ctx.session?.user?.id}},
+        },
+      })
+      return {...artist, bookmarked: !!bookmarked?.bookmarks.length}
     },
   })
   .mutation("search", {
@@ -87,28 +97,44 @@ export const artistRouter = createRouter()
       })
     },
   })
-  .mutation("bookmark", {
-    input: z.object({id: z.string(), value: z.boolean()}),
-    async resolve({ctx, input}) {
-      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
-      const {id, value} = input
-      const {user} = ctx.session
-      const bookmarks: Prisma.ArtistUpdateInput["bookmarks"] = value
-        ? {create: {userId: user.id}}
-        : {delete: {id}}
-      return await ctx.prisma.artist.update({
-        where: {id},
-        data: {
-          bookmarks,
-        },
-      })
-    },
-  })
   .mutation("destroy", {
     input: z.object({
       id: z.string(),
     }),
     async resolve({ctx, input}) {
       return await ctx.prisma.artist.delete({where: {id: input.id}})
+    },
+  })
+  .mutation("bookmark.create", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ctx, input: {id}}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      const {user} = ctx.session
+      return await ctx.prisma.artist.update({
+        where: {id},
+        data: {
+          bookmarks: {
+            connect: {id: user.id},
+          },
+        },
+      })
+    },
+  })
+  .mutation("bookmark.destroy", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ctx, input: {id}}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+      return await ctx.prisma.artist.update({
+        where: {id},
+        data: {
+          bookmarks: {
+            disconnect: {id: ctx.session.user.id},
+          },
+        },
+      })
     },
   })

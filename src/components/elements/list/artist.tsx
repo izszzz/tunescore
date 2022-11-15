@@ -7,7 +7,6 @@ import ListItemText from "@mui/material/ListItemText"
 import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
 import Typography from "@mui/material/Typography"
-import Box from "@mui/material/Box"
 import setLocale from "../../../utils/setLocale"
 
 interface ArtistListProps {
@@ -25,23 +24,18 @@ const ArtistList = ({ artists }: ArtistListProps) => {
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/artists/[id]", query: { id: artist.id } })}>
 						<ListItemButton>
 							<ListItemText primary={
-								<Box display="flex" alignItems="center">
-									<Typography variant="h6" mr={3}>
-										{setLocale(artist.name, router)}
-									</Typography>
-								</Box>
+								<Typography variant="h6" mr={3}>
+									{setLocale(artist.name, router)}
+								</Typography>
 							}
 								secondary={
-									<Box display="flex" alignItems="center">
-										{artist.band &&
-											<Typography
-												mr={1}
-												variant="body2"
-												color="text.subprimary">
-												{`joined by ${setLocale(artist.band.name, router)}`}
-											</Typography>
-										}
-									</Box>
+									artist.band &&
+									<Typography
+										mr={1}
+										variant="body2"
+										color="text.subprimary">
+										{`joined by ${setLocale(artist.band.name, router)}`}
+									</Typography>
 								} />
 						</ListItemButton>
 					</ListItem>

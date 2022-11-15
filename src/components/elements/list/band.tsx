@@ -32,15 +32,18 @@ const BandList = ({ bands }: BandListProps) => {
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/bands/[id]", query: { id: band.id } })}>
 						<ListItemButton>
 							<ListItemText primary={
-								<Box display="flex" alignItems="center">
-									<Typography variant="h6" mr={3}>
+								<Box component="span" display="flex" alignItems="center">
+									<Typography
+										component="span"
+										variant="h6" mr={3}>
 										{setLocale(band.name, router)}
 									</Typography>
 								</Box>
 							}
 								secondary={
-									<Box display="flex" alignItems="center">
+									<Box component="span" display="flex" alignItems="center">
 										<Typography
+											component="span"
 											mr={1}
 											variant="body2"
 											color="text.subprimary">

@@ -17,7 +17,7 @@ export const musicRouter = createRouter()
     }),
     async resolve({ctx, input}) {
       const {id} = input
-      const music = await ctx.prisma.music.findFirst({
+      const music = await ctx.prisma.music.findUnique({
         where: {id},
         include: {
           user: true,
@@ -30,6 +30,7 @@ export const musicRouter = createRouter()
           },
         },
       })
+      if (!music) throw new TRPCError({code: "NOT_FOUND"})
       const bookmarked = await ctx.prisma.music.findFirst({
         where: {
           id,
@@ -151,6 +152,14 @@ export const musicRouter = createRouter()
       })
     },
   })
+  .mutation("destroy", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ctx, input}) {
+      return await ctx.prisma.music.delete({where: {id: input.id}})
+    },
+  })
   .mutation("bookmark.create", {
     input: z.object({
       id: z.string(),
@@ -182,13 +191,5 @@ export const musicRouter = createRouter()
           },
         },
       })
-    },
-  })
-  .mutation("destroy", {
-    input: z.object({
-      id: z.string(),
-    }),
-    async resolve({ctx, input}) {
-      return await ctx.prisma.music.delete({where: {id: input.id}})
     },
   })

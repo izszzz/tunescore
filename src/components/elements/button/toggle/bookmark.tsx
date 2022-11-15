@@ -16,8 +16,9 @@ const BookmarkToggleButton = ({ defaultValue, loading, onClick, ...props }: Book
 	return (
 		<IconButton {...props} disabled={loading} onClick={() => onClick(value, setValue)}>
 			{value ?
-				<BookmarkBorderIcon /> :
-				<BookmarkIcon />
+				<BookmarkIcon color="primary" />
+				:
+				<BookmarkBorderIcon />
 			}
 		</IconButton>
 	)

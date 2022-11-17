@@ -11,6 +11,8 @@ import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
 import setLocale from "../../../utils/setLocale"
 import Chip from "@mui/material/Chip"
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import ListItemIcon from "@mui/material/ListItemIcon"
 
 interface MusicListProps {
 	musics: (Prisma.MusicGetPayload<{
@@ -28,6 +30,9 @@ const MusicList = ({ musics }: MusicListProps) => {
 				<React.Fragment key={music.id}>
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/musics/[id]", query: { id: music.id } })}>
 						<ListItemButton>
+							<ListItemIcon>
+								<MusicNoteIcon />
+							</ListItemIcon>
 							<ListItemText primary={
 								<Box component="span" display="flex" alignItems="center">
 									<Typography variant="h6" mr={3}>

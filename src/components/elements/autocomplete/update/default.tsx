@@ -1,12 +1,12 @@
-import React, { ChangeEvent, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSnackbar } from "notistack";
-import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteProps } from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { Locales, Prisma } from "@prisma/client";
+import { AutocompleteChangeDetails, AutocompleteChangeReason } from "@mui/material/Autocomplete";
+import { Prisma } from "@prisma/client";
+import { Resource, PrismaModelNameLowercase } from "../../../../types/common";
 import { useRouter } from "next/router";
-import { AutocompleteFreeSoloValueMapping, AutocompleteValue } from "@mui/material/useAutocomplete";
-import setLocale from "../../../../utils/setLocale";
+import { AutocompleteValue } from "@mui/material/useAutocomplete";
 import { trpc } from "../../../../utils/trpc";
+import SearchAutocomplete, { SearchAutocompleteProps } from "../search"
 
 type HandleChangeReasonFunction<T, Multiple, DisableClearable, FreeSolo, UpdateInput> = (
 	_e: React.SyntheticEvent,
@@ -20,28 +20,26 @@ type UpdateAutocompleteProps<
 	Multiple extends boolean | undefined,
 	DisableClearable extends boolean | undefined,
 	FreeSolo extends boolean | undefined,
-	UpdateInput extends Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput
+	UpdateInput
 > =
-	Omit<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>, "getOptionLabel" | "onChange" | "renderInput" | "options" | "resource"> & {
+	Omit<SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>, "onChange" | "resource"> & {
 		resource: {
-			retrieval: "artist" | "music" | "band"
-			update: "artist" | "music" | "band"
+			retrieval: PrismaModelNameLowercase
+			update: PrismaModelNameLowercase
 		}
-		getOptionLabel: (option: T | AutocompleteFreeSoloValueMapping<FreeSolo>) => Locales;
 		onChange: {
 			onClear?: () => UpdateInput
 			onSelect?: HandleChangeReasonFunction<T, Multiple, DisableClearable, FreeSolo, UpdateInput>
 			onRemove?: HandleChangeReasonFunction<T, Multiple, DisableClearable, FreeSolo, UpdateInput>
 		}
-		label: string
 	}
 
 function DefaultUpdateAutocomplete<
-	T extends { id: string },
-	Multiple extends boolean | undefined,
-	DisableClearable extends boolean | undefined,
-	FreeSolo extends boolean | undefined,
-	UpdateInput extends Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput
+	T extends Resource = Resource,
+	Multiple extends boolean | undefined = undefined,
+	DisableClearable extends boolean | undefined = undefined,
+	FreeSolo extends boolean | undefined = undefined,
+	UpdateInput = Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput
 >(
 	{ defaultValue, resource, loading, label, getOptionLabel, onChange: { onClear, onSelect, onRemove }, ...props }:
 		UpdateAutocompleteProps<T, Multiple, DisableClearable, FreeSolo, UpdateInput>
@@ -49,7 +47,6 @@ function DefaultUpdateAutocomplete<
 	const [value, setValue] = useState<AutocompleteValue<T, Multiple, DisableClearable, FreeSolo> | undefined>(defaultValue)
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
-	const search = trpc.useMutation(`${resource.retrieval}.search`, { onError: () => { enqueueSnackbar(`search ${resource.retrieval} error`) } });
 	const update = trpc.useMutation(`${resource.update}.update`, {
 		onSuccess: () => { enqueueSnackbar("update success") },
 		onError: () => { enqueueSnackbar("update error") }
@@ -60,62 +57,54 @@ function DefaultUpdateAutocomplete<
 	function handleUpdateInclude(params: UpdateInput, onSuccess?: () => void) {
 		update.mutate({ id: router.query.id as string, ...params }, { onSuccess: () => { onSuccess && onSuccess() } })
 	}
-	const handleSearch = (e: ChangeEvent<HTMLInputElement>) => search.mutate({ name: e.currentTarget.value, locale: router.locale as string });
 	const disabled = loading || update.isLoading
 	return (
-		<Autocomplete<T, Multiple, DisableClearable, FreeSolo>
+		<SearchAutocomplete<T, Multiple, DisableClearable, FreeSolo>
 			{...props}
 			value={value}
-			options={search.data || []}
-			loading={search.isLoading}
+			resource={resource.retrieval}
+			getOptionLabel={getOptionLabel}
+			label={label}
 			disabled={disabled}
-			onChange={
-				handleChangeAutocomplete<T, Multiple, DisableClearable, FreeSolo>({
-					onClear: () => {
-						if (onClear) handleUpdateInclude(onClear(), () => setValue(undefined))
-					},
-					onSelect: (_e, _v, _r, details) => {
-						if (onSelect) {
-							handleUpdateInclude(
-								onSelect(_e, _v, _r, details),
-								() => setValue(prev => {
-									const { option } = details
-									if (Array.isArray(prev)) return [...prev, option] as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
-									else return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
-								})
-							)
-						}
-					},
-					onRemove: (_e, _v, _r, details) => {
-						if (onRemove) {
-							handleUpdateInclude(
-								onRemove(_e, _v, _r, details),
-								() => setValue(prev => {
-									const { option } = details
-									if (Array.isArray(prev)) {
-										return prev.filter(prev => {
-											if (typeof prev === "string") return
-											return prev.id !== option.id
-										}) as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
-									}
-									else return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>
-								})
-							)
-						}
+			onChange={handleChangeAutocomplete<T, Multiple, DisableClearable, FreeSolo>({
+				onClear: () => {
+					if (onClear)
+						handleUpdateInclude(onClear(), () => setValue(undefined));
+				},
+				onSelect: (_e, _v, _r, details) => {
+					if (onSelect) {
+						handleUpdateInclude(
+							onSelect(_e, _v, _r, details),
+							() => setValue(prev => {
+								const { option } = details;
+								if (Array.isArray(prev))
+									return [...prev, option] as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>;
+								else
+									return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>;
+							})
+						);
 					}
-				})
-			}
-			getOptionLabel={option => getOptionLabel && setLocale(getOptionLabel(option), router) || ""}
-			renderInput={(params) =>
-				<TextField
-					{...params}
-					label={label}
-					variant="outlined"
-					margin="dense"
-					onChange={handleSearch}
-				/>
-			}
-		/>
+				},
+				onRemove: (_e, _v, _r, details) => {
+					if (onRemove) {
+						handleUpdateInclude(
+							onRemove(_e, _v, _r, details),
+							() => setValue(prev => {
+								const { option } = details;
+								if (Array.isArray(prev)) {
+									return prev.filter(prev => {
+										if (typeof prev === "string")
+											return;
+										return prev.id !== option.id;
+									}) as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>;
+								}
+								else
+									return option as AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>;
+							})
+						);
+					}
+				}
+			})} />
 	)
 }
 export function handleChangeAutocomplete<

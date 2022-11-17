@@ -7,7 +7,7 @@ interface UsersProps {
 }
 const Users: NextPage<UsersProps> = ({ data }) => {
 	return (
-		<DefaultSingleColumnLayout>
+		<DefaultSingleColumnLayout contained>
 			<p>users</p>
 			<div>
 				{data.map(({ id, name }) =>

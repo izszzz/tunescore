@@ -38,7 +38,7 @@ export const bandRouter = createRouter()
   })
   .mutation("search", {
     input: z.object({
-      name: z.string(),
+      name: z.string().optional(),
       locale: z.string(),
     }),
     async resolve({ctx, input}) {

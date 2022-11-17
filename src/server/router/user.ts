@@ -49,6 +49,7 @@ export const userRouter = createRouter()
       }
     },
   })
+  .mutation("search", {})
   .mutation("update", {
     input: schemaTypeFor<Prisma.UserUpdateInput>()(
       z.object({

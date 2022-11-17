@@ -8,6 +8,8 @@ import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
 import Typography from "@mui/material/Typography"
 import setLocale from "../../../utils/setLocale"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import PersonIcon from '@mui/icons-material/Person';
 
 interface ArtistListProps {
 	artists: (Prisma.ArtistGetPayload<{
@@ -23,6 +25,9 @@ const ArtistList = ({ artists }: ArtistListProps) => {
 				<React.Fragment key={artist.id}>
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/artists/[id]", query: { id: artist.id } })}>
 						<ListItemButton>
+							<ListItemIcon>
+								<PersonIcon />
+							</ListItemIcon>
 							<ListItemText primary={
 								<Typography variant="h6" mr={3}>
 									{setLocale(artist.name, router)}

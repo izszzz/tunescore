@@ -13,6 +13,7 @@ interface MusicProps {
 }
 
 const SettingsMusic: NextPage<MusicProps> = ({ data, bookmarked }) => {
+	console.log(data)
 	return (
 		<MusicLayout data={data} bookmarked={bookmarked} activeTab="settings">
 			<DefaultSettingsForm<Prisma.MusicGetPayload<{ include: { artists: true } }>>
@@ -42,7 +43,7 @@ const SettingsMusic: NextPage<MusicProps> = ({ data, bookmarked }) => {
 				}}
 				multiple
 			/>
-			<ArtistsUpdateForm data={data?.artists} />
+			<ArtistsUpdateForm data={data.artists} />
 		</MusicLayout >
 	)
 }

@@ -73,13 +73,13 @@ export const musicRouter = createRouter()
   })
   .mutation("search", {
     input: z.object({
-      title: z.string(),
+      title: z.string().optional(),
       locale: z.string(),
     }),
     async resolve({ctx, input}) {
-      const result = await ctx.prisma.band.findRaw({
+      const result = await ctx.prisma.music.findRaw({
         filter: {
-          ["name." + input.locale]: {$regex: input.title, $options: "i"},
+          ["title." + input.locale]: {$regex: input.title, $options: "i"},
         },
       })
       // TODO: 型修正できないらしい
@@ -99,7 +99,7 @@ export const musicRouter = createRouter()
       z.object({
         id: z.string(),
         title: locale.optional(),
-        score: z.string(),
+        score: z.string().optional(),
         band: z
           .object({
             disconnect: z.boolean().optional(),

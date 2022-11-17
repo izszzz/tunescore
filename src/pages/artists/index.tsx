@@ -1,26 +1,36 @@
 import type { GetServerSideProps, NextPage } from "next";
-import Link from 'next/link'
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import ArtistList from "../../components/elements/list/artist";
 import { Prisma, PrismaClient } from "@prisma/client";
+import { createPaginator, PaginatedResult } from "prisma-pagination";
+import DefaultIndexLayout from "../../components/layouts/index/default";
 interface ArtistsProps {
 	data: Prisma.ArtistGetPayload<{ include: { band: true } }>[]
+	meta: PaginatedResult<null>["meta"]
 }
-const Artists: NextPage<ArtistsProps> = ({ data }) => {
+const Artists: NextPage<ArtistsProps> = ({ data, meta }) => {
 	return (
-		<DefaultSingleColumnLayout>
-			<Link href="/artists/new">
-				<a>create artist</a>
-			</Link>
+		<DefaultIndexLayout
+			resource="artist"
+			pathname="/artists"
+			meta={meta}>
 			<ArtistList artists={data} />
-		</DefaultSingleColumnLayout>
+		</DefaultIndexLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps<ArtistsProps> = async () => {
+export const getServerSideProps: GetServerSideProps<ArtistsProps> = async (ctx) => {
 	const prisma = new PrismaClient()
-	const data = await prisma.artist.findMany({ include: { band: true } })
+	const paginate = createPaginator({ perPage: 10 })
+	const data = await paginate<Prisma.ArtistGetPayload<{ include: { band: true } }>, Prisma.ArtistFindManyArgs>(
+		prisma.artist,
+		{
+			where: {
+				name: { is: { ja: { contains: ctx.query.q as string } } }
+			},
+			include: { band: true }
+		},
+		{ page: ctx.query.page as string })
 	return {
-		props: { data },
+		props: { ...data },
 	};
 };
 

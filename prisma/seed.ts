@@ -1,7 +1,7 @@
 import {PrismaClient} from "@prisma/client"
 import musics from "./fixtures/musics"
-import artists from "./fixtures/artists.json"
-import bands from "./fixtures/bands.json"
+import artists from "./fixtures/artists"
+import bands from "./fixtures/bands"
 
 const prisma = new PrismaClient()
 prisma.music

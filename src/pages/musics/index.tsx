@@ -1,27 +1,37 @@
 import { Prisma, PrismaClient } from '@prisma/client'
+import { createPaginator, PaginatedResult } from 'prisma-pagination'
 import type { GetServerSideProps, NextPage } from "next";
-import Link from 'next/link'
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicList from "../../components/elements/list/music";
 interface MusicsProps {
 	data: Prisma.MusicGetPayload<{ include: { user: true } }>[]
+	meta: PaginatedResult<null>["meta"]
 }
-const Musics: NextPage<MusicsProps> = ({ data }) => {
+const Musics: NextPage<MusicsProps> = ({ data, meta }) => {
 	return (
-		<DefaultSingleColumnLayout >
-			<Link href="/musics/new">
-				<a>create music</a>
-			</Link>
+		<DefaultIndexLayout
+			resource="music"
+			pathname="/musics"
+			meta={meta}>
 			<MusicList musics={data} />
-		</DefaultSingleColumnLayout>
+		</DefaultIndexLayout>
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<MusicsProps> = async () => {
+export const getServerSideProps: GetServerSideProps<MusicsProps> = async (ctx) => {
 	const prisma = new PrismaClient()
-	const data = await prisma.music.findMany({ include: { user: true } })
+	const paginate = createPaginator({ perPage: 10 })
+	const data = await paginate<Prisma.MusicGetPayload<{ include: { user: true } }>, Prisma.MusicFindManyArgs>(
+		prisma.music,
+		{
+			where: {
+				title: { is: { ja: { contains: ctx.query.q as string } } }
+			},
+			include: { user: true }
+		},
+		{ page: ctx.query.page as string })
 	return {
-		props: { data },
+		props: { ...data },
 	};
 };
 

@@ -1,36 +1,38 @@
 import { useRouter } from 'next/router'
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
+import Alert from "@mui/material/Alert"
+import { PrismaModelNameLowercase } from '../../../../types/common';
+import { trpc } from "../../../../utils/trpc";
 interface DefaultSettingsFormProps<T> {
-	data: T | undefined | null
+	data: T
 	isLoading?: boolean
-	resource: "band" | "artist" | "music";
+	resource: PrismaModelNameLowercase
 	name: "title" | "name"
 }
 function DefaultSettingsForm<T extends { id: string }>({ name, data, isLoading, resource }: DefaultSettingsFormProps<T>) {
 	const router = useRouter()
 	const formContext = useForm<T>()
 	const { enqueueSnackbar } = useSnackbar()
-	const destroy = trpc.useMutation(`${resource}.destroy`);
-	const update = trpc.useMutation(`${resource}.update`, {
-		onSuccess: () => { enqueueSnackbar("update success") },
-		onError: () => { enqueueSnackbar("destroy error") }
-	});
-	const handleSubmit = (data: T) => { if (data) update.mutate(data) }
-	const handleDestroy = () => {
-		if (data) {
-			destroy.mutate(data)
+	const destroy = trpc.useMutation(`${resource}.destroy`, {
+		onSuccess: () => {
+			enqueueSnackbar("destroy success")
 			router.push("/bands")
 		}
-	}
+	});
+	const update = trpc.useMutation(`${resource}.update`, {
+		onSuccess: () => { enqueueSnackbar("update success") },
+		onError: () => { enqueueSnackbar("update error") }
+	});
+	const handleSubmit = (data: T) => update.mutate(data)
+	const handleDestroy = () => destroy.mutate(data)
 	useEffect(() => {
-		if (data) formContext.reset(data)
+		formContext.reset(data)
 	}, [router.locale, formContext, data])
 	const disabled = isLoading || update.isLoading
 	return (
@@ -57,7 +59,13 @@ function DefaultSettingsForm<T extends { id: string }>({ name, data, isLoading, 
 					</Grid>
 				</Grid>
 			</FormContainer>
-			<br /><Button type="button" onClick={handleDestroy}>Delete {resource}</Button>
+			<Alert
+				variant="outlined"
+				severity="warning"
+				action={<Button type="button" variant="contained" color="warning" onClick={handleDestroy} disableElevation>Delete {resource}</Button>}
+			>
+				This is a warning alert
+			</Alert>
 		</>
 	)
 }

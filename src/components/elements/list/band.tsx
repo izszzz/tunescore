@@ -8,9 +8,9 @@ import { Prisma } from "@prisma/client"
 import { useRouter } from "next/router"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
-import setLocale from "../../../utils/setLocale"
-import Groups3Icon from '@mui/icons-material/Groups3';
 import ListItemIcon from "@mui/material/ListItemIcon"
+import setLocale from "../../../utils/setLocale"
+import ResourceIcon from "../icon/resource"
 
 interface BandListProps {
 	bands: (Prisma.BandGetPayload<{
@@ -34,7 +34,7 @@ const BandList = ({ bands }: BandListProps) => {
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/bands/[id]", query: { id: band.id } })}>
 						<ListItemButton>
 							<ListItemIcon>
-								<Groups3Icon />
+								<ResourceIcon resource="band" />
 							</ListItemIcon>
 							<ListItemText primary={
 								<Box component="span" display="flex" alignItems="center">

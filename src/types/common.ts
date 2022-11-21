@@ -9,8 +9,13 @@ export type ResourceCreateManyInput =
   | Prisma.MusicCreateManyInput
   | Prisma.ArtistCreateManyInput
   | Prisma.BandCreateManyInput
-// TODO: add "album"
 export type PrismaModelNameLowercase = Exclude<
   Lowercase<Prisma.ModelName>,
-  "account" | "session" | "verificationtoken" | "album"
+  | "user"
+  | "account"
+  | "session"
+  | "verificationtoken"
+  | "musiclink"
+  | "bandlink"
+  | "artistlink"
 >

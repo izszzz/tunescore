@@ -19,6 +19,7 @@ interface PullLayoutProps {
 
 const PullLayout: React.FC<PullLayoutProps> = ({ data, activeTab, children }) => {
 	const [conflict, setConflict] = useState(true)
+	const [diff, setDiff] = useState(true)
 	const router = useRouter()
 	const update = trpc.useMutation(["pull.update"]);
 	const tabs: DefaultTabsProps["tabs"] = useMemo(() => ([
@@ -31,6 +32,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({ data, activeTab, children }) =>
 		if (data) {
 			const merged = Diff3.mergeDiff3(data.music.score, data.score.original, data.score.changed)
 			setConflict(merged.conflict)
+			setDiff(data.score.original !== data.score.changed)
 		}
 	}, [data])
 
@@ -52,7 +54,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({ data, activeTab, children }) =>
 							{data.title}
 						</Typography>
 					</Box>
-					<Button variant="outlined" color="success" disabled={conflict} onClick={handleMerge} >Merge PullRequest</Button>
+					<Button variant="outlined" color="success" disabled={conflict || !diff} onClick={handleMerge} >Merge PullRequest</Button>
 					<Button variant="outlined" color="error" disabled={conflict} onClick={handleClose} >Close PullRequest</Button>
 					<Button variant="outlined" onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]/score", query: { id: router.query.id as string, pullId: router.query.pullId as string } })}>Watch Score</Button>
 					<Button variant="outlined" onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]/score/edit", query: { id: router.query.id as string, pullId: router.query.pullId as string } })}>Edit Score</Button>

@@ -2,7 +2,6 @@ import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Prisma} from "@prisma/client"
-import {TRPCError} from "@trpc/server"
 
 export const userRouter = createRouter()
   .query("index", {
@@ -10,46 +9,6 @@ export const userRouter = createRouter()
       return await ctx.prisma.user.findMany()
     },
   })
-  .query("show", {
-    input: z.object({
-      id: z.string(),
-      currentUserId: z.string().optional(),
-    }),
-    async resolve({ctx, input}) {
-      const {id, currentUserId} = input
-      const user = await ctx.prisma.user.findFirst({
-        where: {id},
-        include: {
-          musics: true,
-          followedBy: {
-            include: {
-              _count: {select: {followedBy: true, following: true}},
-            },
-          },
-          following: {
-            include: {
-              _count: {select: {followedBy: true, following: true}},
-            },
-          },
-          _count: {
-            select: {followedBy: true, following: true},
-          },
-        },
-      })
-      if (!user) throw new TRPCError({code: "NOT_FOUND"})
-      const currentUser = await ctx.prisma.user.findFirst({
-        where: {id: currentUserId},
-        include: {
-          following: {where: {id}},
-        },
-      })
-      return {
-        ...user,
-        followed: !!currentUser?.following.length,
-      }
-    },
-  })
-  .mutation("search", {})
   .mutation("update", {
     input: schemaTypeFor<Prisma.UserUpdateInput>()(
       z.object({

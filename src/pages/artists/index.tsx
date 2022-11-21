@@ -1,8 +1,8 @@
 import type { GetServerSideProps, NextPage } from "next";
-import ArtistList from "../../components/elements/list/artist";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { createPaginator, PaginatedResult } from "prisma-pagination";
 import DefaultIndexLayout from "../../components/layouts/index/default";
+import ArtistList from "../../components/elements/list/artist";
 interface ArtistsProps {
 	data: Prisma.ArtistGetPayload<{ include: { band: true } }>[]
 	meta: PaginatedResult<null>["meta"]
@@ -11,7 +11,7 @@ const Artists: NextPage<ArtistsProps> = ({ data, meta }) => {
 	return (
 		<DefaultIndexLayout
 			resource="artist"
-			pathname="/artists"
+			route={{ pathname: "/artists" }}
 			meta={meta}>
 			<ArtistList artists={data} />
 		</DefaultIndexLayout>

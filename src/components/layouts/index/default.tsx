@@ -10,20 +10,21 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import DefaultSingleColumnLayout from '../single_column/default';
 import { PrismaModelNameLowercase, Resource } from '../../../types/common';
+import { Route } from 'nextjs-routes';
 
 interface DefaultIndexLayoutProps {
 	resource: PrismaModelNameLowercase
-	pathname: "/musics" | "/bands" | "/artists"
+	route: Route
 	meta: PaginatedResult<null>["meta"]
 	children: React.ReactNode
 }
-const DefaultIndexLayout = ({ resource, meta, pathname, children }: DefaultIndexLayoutProps) => {
+const DefaultIndexLayout = ({ resource, meta, route, children }: DefaultIndexLayoutProps) => {
 	const router = useRouter()
 	const handleChange = (_event: React.ChangeEvent<unknown>, value: number) =>
-		router.replace({ pathname, query: { page: String(value) } });
+		router.replace({ ...route, query: { page: String(value), ...route.query } });
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter")
-			router.replace({ pathname, query: { page: String(1), q: String((e.target as HTMLInputElement).value) } })
+			router.replace({ ...route, query: { page: String(1), q: String((e.target as HTMLInputElement).value), ...route.query } })
 	}
 	const getOptionLabel = (option: Resource) => {
 		if (resource === "music") return (option as Music).title
@@ -31,16 +32,16 @@ const DefaultIndexLayout = ({ resource, meta, pathname, children }: DefaultIndex
 	}
 	return (
 		<DefaultSingleColumnLayout contained>
-			<Grid container>
-				<Grid item xs={10}>
+			<Grid container spacing={1}>
+				<Grid item xs={11}>
 					<SearchAutocomplete
 						resource={resource}
 						getOptionLabel={getOptionLabel}
 						onKeyDown={handleKeyDown}
 					/>
 				</Grid>
-				<Grid item xs={2}>
-					<Button variant="outlined" startIcon={<AddIcon />} onClick={() => router.push({ pathname: `${pathname}/new` })}>New</Button>
+				<Grid item xs={1} display="flex" alignItems="stretch">
+					<Button variant="outlined" startIcon={<AddIcon />} onClick={() => router.push(route)} fullWidth>New</Button>
 				</Grid>
 			</Grid>
 			{children}

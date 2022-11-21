@@ -23,9 +23,8 @@ import Grid from "@mui/material/Grid"
 
 interface ArtistsUpdateFormProps {
 	data: Artist[]
-	loading?: boolean;
 }
-const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
+const ArtistsUpdateForm = ({ data }: ArtistsUpdateFormProps) => {
 	const [artist, setArtist] = useState<Artist>()
 	const [artists, setArtists] = useState<Artist[]>([])
 	const router = useRouter()
@@ -34,10 +33,7 @@ const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 		onSuccess: () => { enqueueSnackbar("update success") },
 		onError: () => { enqueueSnackbar("update error") }
 	});
-	const searchArtist = trpc.useMutation("artist.search", { onError: () => { enqueueSnackbar("search artist error") } });
-	useEffect(() => {
-		if (data) setArtists(data)
-	}, [data])
+	const searchArtist = trpc.useMutation("artist.index", { onError: () => { enqueueSnackbar("search artist error") } });
 	function handleUpdateInclude(params: Prisma.MusicUpdateInput, onSuccess?: () => void) {
 		update.mutate({ id: router.query.id as string, ...params }, {
 			onSuccess: () => { onSuccess && onSuccess() }
@@ -57,8 +53,8 @@ const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 			() => setArtists(prev => prev.filter(p => p.id !== artist.id))
 		)
 	}
-	const handleSearchArtists = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ name: e.currentTarget.value, locale: router.locale as string });
-	const disabled = loading || update.isLoading
+	const handleSearchArtists = (e: ChangeEvent<HTMLInputElement>) => searchArtist.mutate({ where: { name: { is: { [router.locale]: e.currentTarget.value } } } });
+	useEffect(() => { setArtists(data) }, [data])
 	return (
 		<>
 			<TableContainer component={Paper}>
@@ -79,7 +75,7 @@ const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 									</IconButton>
 								</TableCell>
 								<TableCell />
-								<TableCell>{setLocale(artist.name, router) || ""}</TableCell>
+								<TableCell>{setLocale(artist.name, router)}</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
@@ -91,7 +87,6 @@ const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 						<Autocomplete
 							options={searchArtist.data || []}
 							loading={searchArtist.isLoading}
-							disabled={disabled}
 							onChange={handleChangeAutocomplete<Artist, false, false, false>({ onSelect: (_e, _v, _r, details) => setArtist(details.option) })}
 							getOptionLabel={option => option.name[router.locale as keyof Locales] || ""}
 							renderInput={params => <TextField {...params} label="Artist" onChange={handleSearchArtists} />}
@@ -102,7 +97,7 @@ const ArtistsUpdateForm = ({ data, loading }: ArtistsUpdateFormProps) => {
 						<LoadingButton
 							type="button"
 							variant="outlined"
-							disabled={disabled || !artist}
+							disabled={!artist}
 							loading={update.isLoading}
 							endIcon={<SendIcon />}
 							onClick={handleCreateMusicOnArtist}

@@ -1,14 +1,29 @@
 import {createRouter} from "./context"
 import {z} from "zod"
 import {TRPCError} from "@trpc/server"
-import {Music, Prisma} from "@prisma/client"
+import {Prisma} from "@prisma/client"
 import schemaTypeFor from "../../types/schemaForType"
 import {locale} from "../../utils/zod"
 
 export const musicRouter = createRouter()
-  .query("index", {
-    async resolve({ctx}) {
-      return await ctx.prisma.music.findMany({include: {user: true}})
+  .mutation("index", {
+    input: z.object({
+      include: z.object({user: z.boolean()}).optional(),
+      where: z
+        .object({
+          title: z
+            .object({
+              is: z.object({
+                ja: z.object({contains: z.string()}).optional(),
+                en: z.object({contains: z.string()}).optional(),
+              }),
+            })
+            .optional(),
+        })
+        .optional(),
+    }),
+    async resolve({ctx, input}) {
+      return await ctx.prisma.music.findMany(input)
     },
   })
   .query("show", {
@@ -71,35 +86,16 @@ export const musicRouter = createRouter()
       })
     },
   })
-  .mutation("search", {
-    input: z.object({
-      title: z.string().optional(),
-      locale: z.string(),
-    }),
-    async resolve({ctx, input}) {
-      const result = await ctx.prisma.music.findRaw({
-        filter: {
-          ["title." + input.locale]: {$regex: input.title, $options: "i"},
-        },
-      })
-      // TODO: 型修正できないらしい
-      // https://github.com/prisma/prisma/issues/11830
-      // https://github.com/prisma/prisma/issues/5062
-      return result?.map(data => {
-        const {
-          _id: {$oid: id},
-          ...other
-        } = data
-        return {id, ...other}
-      }) as Music[]
-    },
-  })
+
   .mutation("update", {
     input: schemaTypeFor<Prisma.MusicUpdateInput>()(
       z.object({
         id: z.string(),
         title: locale.optional(),
-        score: z.string().optional(),
+        score: z
+          .string()
+          .or(z.object({set: z.string().optional()}))
+          .optional(),
         band: z
           .object({
             disconnect: z.boolean().optional(),
@@ -142,6 +138,17 @@ export const musicRouter = createRouter()
               .optional(),
           })
           .optional(),
+        link: z
+          .object({
+            streaming: z
+              .object({
+                youtube: z.string().nullish(),
+                twitter: z.string().nullish(),
+                itunes: z.string().nullish(),
+              })
+              .nullish(),
+          })
+          .nullish(),
       })
     ),
     async resolve({ctx, input}) {

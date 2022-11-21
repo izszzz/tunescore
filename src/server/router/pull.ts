@@ -2,6 +2,7 @@ import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Artist, Prisma} from "@prisma/client"
+import {TRPCError} from "@trpc/server"
 
 export const pullRouter = createRouter()
   .query("index", {
@@ -62,6 +63,7 @@ export const pullRouter = createRouter()
       })
     ),
     async resolve({ctx, input}) {
+      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
       const music = await ctx.prisma.music.findFirst({
         where: {id: input.music.connect.id},
       })

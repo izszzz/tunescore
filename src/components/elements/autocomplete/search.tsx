@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react"
 import { useSnackbar } from "notistack";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { trpc } from "../../../utils/trpc";
 import { Locales } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -17,16 +17,16 @@ export type SearchAutocompleteProps<
 > =
 	Omit<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>, "getOptionLabel" | "renderInput" | "options" | "resource"> & {
 		resource: PrismaModelNameLowercase
+		textFieldProps: TextFieldProps
 		getOptionLabel: (option: T | AutocompleteFreeSoloValueMapping<FreeSolo>) => Locales;
-		label?: string
-		onKeyDown: React.KeyboardEventHandler<HTMLInputElement>
+		onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
 	}
 function SearchAutocomplete<
 	T extends Resource = Resource,
 	Multiple extends boolean | undefined = undefined,
 	DisableClearable extends boolean | undefined = undefined,
 	FreeSolo extends boolean | undefined = undefined,
->({ resource, getOptionLabel, onKeyDown, ...props }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
+>({ resource, getOptionLabel, onKeyDown, textFieldProps, ...props }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
 	const search = trpc.useMutation(`${resource}.search`, { onError: () => { enqueueSnackbar(`search ${resource} error`) } });
@@ -36,7 +36,6 @@ function SearchAutocomplete<
 			data = { title: e.currentTarget.value }
 		if (resource === "artist" || resource === "band")
 			data = { name: e.currentTarget.value }
-
 		search.mutate({ ...data, locale: router.locale as string });
 	}
 	return (
@@ -49,6 +48,7 @@ function SearchAutocomplete<
 			renderInput={(props) =>
 				<TextField
 					{...props}
+					{...textFieldProps}
 					// InputProps={{
 					// 	autoFocus: true,
 					// 	startAdornment: (
@@ -57,9 +57,7 @@ function SearchAutocomplete<
 					// 		</InputAdornment>
 					// 	),
 					// }}
-					label="Search"
 					variant="outlined"
-					margin="dense"
 					onChange={handleSearch}
 					onKeyDown={onKeyDown}
 				/>

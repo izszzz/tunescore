@@ -5,7 +5,6 @@ import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Typography from '@mui/material/Typography'
-import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,6 +12,7 @@ import Menu from "@mui/material/Menu";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
 import { useRouter } from "next/router";
+import Grid from "@mui/material/Grid";
 
 const DefaultHeader = () => {
 	const { data: session } = useSession()
@@ -27,18 +27,21 @@ const DefaultHeader = () => {
 	return (
 		<>
 			<Header>
-				<Typography variant="h4" sx={{ flexGrow: 1 }}>
+				<Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
 					<Link href="/">
 						<a>
 							tunescore
 						</a>
 					</Link>
 				</Typography>
-				<Box sx={{ flexGrow: 0 }}>
-					<Box display="flex">
+				<Grid container spacing={1} sx={{ flexGrow: 1 }}>
+					<Grid item xs={10} />
+					<Grid item xs={1}>
 						<LocaleAutocomplete />
+					</Grid>
+					<Grid item xs={1} display="flex" alignItems="stretch" >
 						{session ?
-							<Box>
+							<>
 								<IconButton onClick={handleClick}>
 									<Avatar alt="Remy Sharp" src={session.user?.image || ""} />
 								</IconButton>
@@ -63,14 +66,12 @@ const DefaultHeader = () => {
 									</MenuItem>
 									<MenuItem onClick={handleSignOut}>Logout</MenuItem>
 								</Menu>
-							</Box>
+							</>
 							:
-							<Box>
-								<Button variant="contained" onClick={() => router.push("/auth/signin")}>SignIn</Button>
-							</Box>
+							<Button variant="contained" onClick={() => router.push("/auth/signin")} disableElevation>SignIn</Button>
 						}
-					</Box>
-				</Box>
+					</Grid>
+				</Grid>
 			</Header>
 			<Toolbar />
 		</>

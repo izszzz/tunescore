@@ -41,7 +41,7 @@ function DefaultUpdateAutocomplete<
 	FreeSolo extends boolean | undefined = undefined,
 	UpdateInput = Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput
 >(
-	{ defaultValue, resource, loading, label, getOptionLabel, onChange: { onClear, onSelect, onRemove }, ...props }:
+	{ defaultValue, resource, loading, textFieldProps, getOptionLabel, onChange: { onClear, onSelect, onRemove }, ...props }:
 		UpdateAutocompleteProps<T, Multiple, DisableClearable, FreeSolo, UpdateInput>
 ) {
 	const [value, setValue] = useState<AutocompleteValue<T, Multiple, DisableClearable, FreeSolo> | undefined>(defaultValue)
@@ -64,12 +64,11 @@ function DefaultUpdateAutocomplete<
 			value={value}
 			resource={resource.retrieval}
 			getOptionLabel={getOptionLabel}
-			label={label}
 			disabled={disabled}
+			textFieldProps={textFieldProps}
 			onChange={handleChangeAutocomplete<T, Multiple, DisableClearable, FreeSolo>({
 				onClear: () => {
-					if (onClear)
-						handleUpdateInclude(onClear(), () => setValue(undefined));
+					if (onClear) handleUpdateInclude(onClear(), () => setValue(undefined));
 				},
 				onSelect: (_e, _v, _r, details) => {
 					if (onSelect) {

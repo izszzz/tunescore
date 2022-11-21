@@ -71,7 +71,6 @@ model User {
 
   bookmarkBands Band[] @relation("BandBookmarks", fields: [bookmarkBandIDs], references: [id])
   bookmarkBandIDs String[] @db.ObjectId
-
 }
 
 
@@ -90,12 +89,17 @@ model Music {
   title Locales
   score String
   visibility Visibility
+  image String?
+  link Link?
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
 
   band   Band?   @relation(fields: [bandId], references: [id])
   bandId String? @db.ObjectId
+
+  albums Album[] @relation("AlbumMusics", fields: [albumIDs], references: [id])
+  albumIDs String[] @db.ObjectId
 
   composers   Artist[] @relation("composers", fields: [composerIDs], references: [id])
   composerIDs String[] @db.ObjectId
@@ -112,23 +116,23 @@ model Music {
   bookmarks User[] @relation("MusicBookmarks", fields: [userIDs], references: [id])
   userIDs String[] @db.ObjectId
 }
-enum Visibility{
-  PUBLIC
-  PRIVATE
-}
-enum Type{
-  ORIGINAL
-  COPY
-}
+
 
 model Album {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   title Locales
+
+  band Band? @relation(fields: [bandId], references: [id])
+  bandId String? @db.ObjectId
+
+  musics Music[] @relation("AlbumMusics", fields: [musicIDs], references: [id])
+  musicIDs String[] @db.ObjectId
 }
 
 model Artist {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name Locales
+  link Link?
 
   writtenMusics   Music[]  @relation("lyrists", fields: [writtenMusicsIDs], references: [id])
   writtenMusicsIDs String[] @db.ObjectId
@@ -139,8 +143,8 @@ model Artist {
   musics Music[]  @relation("artists", fields: [musicIDs], references: [id])
   musicIDs          String[] @db.ObjectId
 
-  band   Band?   @relation(fields: [bandId], references: [id])
-  bandId String? @db.ObjectId
+  band  Band[] @relation(fields: [bandIDs], references: [id])
+  bandIDs String[] @db.ObjectId
 
   bookmarks User[] @relation("ArtistBookmarks", fields: [userIDs], references: [id])
   userIDs String[] @db.ObjectId
@@ -149,9 +153,14 @@ model Artist {
 model Band {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name Locales
+  link Link?
 
   musics Music[]
-  artists Artist[]
+
+  artists Artist[] @relation(fields: [artistIDs], references: [id])
+  artistIDs String[] @db.ObjectId
+
+  albums Album[]
 
   bookmarks User[] @relation("BandBookmarks", fields: [userIDs], references: [id])
   userIDs String[] @db.ObjectId
@@ -183,6 +192,14 @@ model Pull{
   userId String @db.ObjectId
 }
 
+enum Visibility{
+  PUBLIC
+  PRIVATE
+}
+enum Type{
+  ORIGINAL
+  COPY
+}
 enum PullStatus{
   DRAFT
   OPEN
@@ -198,4 +215,20 @@ type PullScore{
 type Locales {
   ja String?
   en String?
+}
+
+type Link{
+  streaming StreamingLink?
+  account AccountLink?
+}
+
+type StreamingLink{
+  youtube String?
+  spotify String?
+  itunes String?
+}
+
+type AccountLink {
+  twitter String?
+  wikipedia String?
 }

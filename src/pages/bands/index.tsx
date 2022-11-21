@@ -12,7 +12,7 @@ const Bands: NextPage<BandsProps> = ({ data, meta }) => {
 	return (
 		<DefaultIndexLayout
 			resource="band"
-			pathname="/bands"
+			route={{ pathname: "/bands" }}
 			meta={meta}>
 			<BandList bands={data} />
 		</DefaultIndexLayout>

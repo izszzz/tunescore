@@ -12,6 +12,7 @@ import Box from "@mui/material/Box"
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LockIcon from '@mui/icons-material/Lock';
+import ListItemIcon from "@mui/material/ListItemIcon"
 interface PullListProps {
 	pulls: (Prisma.PullGetPayload<{
 		include: {
@@ -28,9 +29,11 @@ const PullList = ({ pulls }: PullListProps) => {
 				<React.Fragment key={pull.id}>
 					<ListItem disablePadding onClick={() => router.push({ pathname: "/musics/[id]/pulls/[pullId]", query: { id: router.query.id as string, pullId: pull.id } })}>
 						<ListItemButton>
+							<ListItemIcon>
+								<PullStatusIcon status={pull.status} />
+							</ListItemIcon>
 							<ListItemText primary={
 								<Typography variant="h6" >
-									<PullStatusIcon status={pull.status} />
 									{pull.title}
 								</Typography>
 							}

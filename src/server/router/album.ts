@@ -1,14 +1,17 @@
-import {TRPCError} from "@trpc/server"
-import {z} from "zod"
-import {locale} from "../../utils/zod"
 import {createRouter} from "./context"
+import {z} from "zod"
+import schemaTypeFor from "../../types/schemaForType"
+import {Prisma} from "@prisma/client"
+import {locale} from "../../utils/zod"
+import {TRPCError} from "@trpc/server"
 
-export const bandRouter = createRouter()
+export const albumRouter = createRouter()
   .mutation("index", {
     input: z.object({
+      include: z.object({band: z.boolean().optional()}).optional(),
       where: z
         .object({
-          name: z
+          title: z
             .object({
               is: z.object({
                 ja: z.object({contains: z.string()}).optional(),
@@ -20,15 +23,17 @@ export const bandRouter = createRouter()
         .optional(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.findMany(input)
+      return await ctx.prisma.album.findMany(input)
     },
   })
   .mutation("create", {
-    input: z.object({
-      name: z.object({ja: z.string().nullish(), en: z.string().nullish()}),
-    }),
+    input: schemaTypeFor<Prisma.AlbumCreateInput>()(
+      z.object({
+        title: locale,
+      })
+    ),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.create({
+      return await ctx.prisma.album.create({
         data: {
           ...input,
         },
@@ -36,13 +41,15 @@ export const bandRouter = createRouter()
     },
   })
   .mutation("update", {
-    input: z.object({
-      id: z.string(),
-      name: locale.optional(),
-    }),
+    input: schemaTypeFor<Prisma.AlbumUpdateInput>()(
+      z.object({
+        id: z.string(),
+        title: locale.optional(),
+      })
+    ),
     async resolve({ctx, input}) {
       const {id, ...data} = input
-      return await ctx.prisma.band.update({
+      return await ctx.prisma.artist.update({
         where: {id},
         data,
       })
@@ -53,7 +60,7 @@ export const bandRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.delete({where: input})
+      return await ctx.prisma.album.delete({where: {id: input.id}})
     },
   })
   .mutation("bookmark.create", {
@@ -63,7 +70,7 @@ export const bandRouter = createRouter()
     async resolve({ctx, input: {id}}) {
       if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
       const {user} = ctx.session
-      return await ctx.prisma.band.update({
+      return await ctx.prisma.artist.update({
         where: {id},
         data: {
           bookmarks: {
@@ -79,7 +86,7 @@ export const bandRouter = createRouter()
     }),
     async resolve({ctx, input: {id}}) {
       if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
-      return await ctx.prisma.band.update({
+      return await ctx.prisma.artist.update({
         where: {id},
         data: {
           bookmarks: {

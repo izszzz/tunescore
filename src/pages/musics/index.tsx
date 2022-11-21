@@ -3,6 +3,7 @@ import { createPaginator, PaginatedResult } from 'prisma-pagination'
 import type { GetServerSideProps, NextPage } from "next";
 import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicList from "../../components/elements/list/music";
+import { Locale } from 'nextjs-routes';
 interface MusicsProps {
 	data: Prisma.MusicGetPayload<{ include: { user: true } }>[]
 	meta: PaginatedResult<null>["meta"]
@@ -11,7 +12,7 @@ const Musics: NextPage<MusicsProps> = ({ data, meta }) => {
 	return (
 		<DefaultIndexLayout
 			resource="music"
-			pathname="/musics"
+			route={{ pathname: "/musics" }}
 			meta={meta}>
 			<MusicList musics={data} />
 		</DefaultIndexLayout>
@@ -25,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<MusicsProps> = async (ctx) =
 		prisma.music,
 		{
 			where: {
-				title: { is: { ja: { contains: ctx.query.q as string } } }
+				title: { is: { [ctx.locale as Locale]: { contains: ctx.query.q as string } } }
 			},
 			include: { user: true }
 		},

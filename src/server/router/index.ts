@@ -10,6 +10,7 @@ import {artistRouter} from "./artist"
 import {bandRouter} from "./band"
 import {issueRouter} from "./issue"
 import {pullRouter} from "./pull"
+import {albumRouter} from "./album"
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -18,6 +19,7 @@ export const appRouter = createRouter()
   .merge("music.", musicRouter)
   .merge("artist.", artistRouter)
   .merge("band.", bandRouter)
+  .merge("album.", albumRouter)
   .merge("issue.", issueRouter)
   .merge("pull.", pullRouter)
   .merge("auth.", protectedExampleRouter)

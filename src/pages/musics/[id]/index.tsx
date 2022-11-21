@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import { Prisma, PrismaClient } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router";
+import ArtistChip from "../../../components/elements/chip/artist";
+import BandChip from "../../../components/elements/chip/band";
 import MusicLayout from "../../../components/layouts/show/music";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import setLocale from "../../../utils/setLocale"
@@ -24,7 +25,7 @@ const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id as string } })} fullWidth>Edit Score</Button>
 			<TableContainer component={Paper}>
-				<Table sx={{ minWidth: 650 }}>
+				<Table>
 					<TableHead>
 						<TableRow>
 							<TableCell></TableCell>
@@ -36,7 +37,7 @@ const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
 							<TableCell>Composer</TableCell>
 							<TableCell>
 								{data.composers.map(({ id, name }) =>
-									<Chip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
+									<ArtistChip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 								)}
 							</TableCell>
 						</TableRow>
@@ -44,24 +45,23 @@ const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
 							<TableCell>Lyrist</TableCell>
 							<TableCell>
 								{data.lyrists.map(({ id, name }) =>
-									<Chip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
+									<ArtistChip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 								)}
 							</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell>Band</TableCell>
 							<TableCell>
-								{data.band && <Chip label={setLocale(data.band.name, router)} onClick={() => data.band && router.push({ pathname: "/bands/[id]", query: { id: data.band.id } })} />}
+								{data.band && <BandChip label={setLocale(data.band.name, router)} onClick={() => data.band && router.push({ pathname: "/bands/[id]", query: { id: data.band.id } })} />}
 							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>
 			<TableContainer component={Paper}>
-				<Table sx={{ minWidth: 650 }} aria-label="simple table">
+				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell></TableCell>
 							<TableCell></TableCell>
 							<TableCell></TableCell>
 						</TableRow>
@@ -71,7 +71,7 @@ const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
 							<TableRow key={id}>
 								<TableCell />
 								<TableCell >
-									<Chip label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
+									<ArtistChip label={setLocale(name, router)} onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })} />
 								</TableCell>
 							</TableRow>
 						))}

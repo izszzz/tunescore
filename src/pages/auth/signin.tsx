@@ -25,7 +25,7 @@ const SignIn: NextPage<{ providers: Record<LiteralUnion<BuiltInProviderType, str
 
 export default SignIn;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
 	return {
 		props: { providers },

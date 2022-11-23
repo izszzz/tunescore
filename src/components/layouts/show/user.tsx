@@ -7,18 +7,18 @@ import Box from "@mui/material/Box";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import ToggleLoadingButton from "../../elements/button/toggle/loading"
 import { trpc } from "../../../utils/trpc";
-import { useSession } from "next-auth/react";
+import { getProviders, useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import ShowLayout from "./default";
+import ShowLayout, { ShowLayoutProps } from "./default";
+import { GetServerSideProps } from "next";
 
-interface UserLayoutProps {
+interface UserLayoutProps extends Pick<ShowLayoutProps, "providers" | "children"> {
 	data: Prisma.UserGetPayload<{ include: { _count: { select: { following: true, followedBy: true } } } }>
 	followed: boolean
 	activeTab: "info" | "settings" | "";
-	children: React.ReactNode;
 }
 
-const UserLayout: React.FC<UserLayoutProps> = ({ data, followed, activeTab, children }) => {
+const UserLayout: React.FC<UserLayoutProps> = ({ providers, data, followed, activeTab, children }) => {
 	const [following, setFollowing] = useState(0)
 	const [followers, setFollowers] = useState(0)
 	const router = useRouter()
@@ -50,6 +50,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ data, followed, activeTab, chil
 	]), [router.query.id])
 	return (
 		<ShowLayout
+			providers={providers}
 			tabs={tabs}
 			activeTab={activeTab}
 			title={
@@ -78,3 +79,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({ data, followed, activeTab, chil
 }
 
 export default UserLayout;
+export const getServerSideProps: GetServerSideProps = async () => {
+	const providers = await getProviders()
+	return {
+		props: { providers },
+	};
+};

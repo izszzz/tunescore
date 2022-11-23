@@ -9,24 +9,24 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-import BandLayout from "../../../components/layouts/show/band";
+import BandLayout, { BandLayoutProps } from "../../../components/layouts/show/band";
 import setLocale from "../../../utils/setLocale"
 import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-interface BandProps {
+import { getProviders } from "next-auth/react";
+interface BandProps extends Pick<BandLayoutProps, "providers" | "bookmarked"> {
 	data: Prisma.BandGetPayload<{
 		include: {
 			musics: { include: { band: true, composers: true, lyrists: true } },
 			artists: true
 		}
 	}>
-	bookmarked: boolean;
 }
 
-const Band: NextPage<BandProps> = ({ data, bookmarked }) => {
+const Band: NextPage<BandProps> = ({ providers, data, bookmarked }) => {
 	const router = useRouter();
 	return (
-		<BandLayout data={data} bookmarked={bookmarked} activeTab="info">
+		<BandLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }}>
 					<TableHead>
@@ -66,9 +66,10 @@ const Band: NextPage<BandProps> = ({ data, bookmarked }) => {
 		</BandLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps<BandProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
 	const data = await prisma.band.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, artists: true, } })
+	const providers = await getProviders()
 	if (!data) return { notFound: true };
 	const session = await getServerAuthSession(ctx)
 	const bookmarked = await prisma.band.findFirst({
@@ -80,7 +81,7 @@ export const getServerSideProps: GetServerSideProps<BandProps> = async (ctx) => 
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 

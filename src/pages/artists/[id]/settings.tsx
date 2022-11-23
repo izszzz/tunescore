@@ -8,18 +8,18 @@ import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from '@mui/icons-material/Send';
 import { trpc } from "../../../utils/trpc";
-import ArtistLayout from "../../../components/layouts/show/artist";
+import ArtistLayout, { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-interface ArtistProps {
+import { getProviders } from "next-auth/react";
+interface ArtistProps extends Pick<ArtistLayoutProps, "bookmarked" | "providers"> {
 	data: Prisma.ArtistGetPayload<{
 		include: {
-			band: true,
+			bands: true,
 		}
 	}>
-	bookmarked: boolean;
 }
-const EditArtist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
+const EditArtist: NextPage<ArtistProps> = ({ providers, data, bookmarked }) => {
 	const router = useRouter()
 	const update = trpc.useMutation("artist.update");
 	const destroy = trpc.useMutation("artist.destroy");
@@ -31,7 +31,7 @@ const EditArtist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
 		})
 	}
 	return (
-		<ArtistLayout data={data} bookmarked={bookmarked} activeTab="settings">
+		<ArtistLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="settings">
 			<FormContainer
 				defaultValues={data}
 				onSuccess={handleSubmit}
@@ -54,15 +54,16 @@ const EditArtist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
 					</Grid>
 				</Grid>
 			</FormContainer>
-			<BandUpdateAutocomplete defaultValue={data.band} resource="artist" />
+			<BandUpdateAutocomplete defaultValue={data.bands} resource="artist" />
 			<br /><Button type="button" onClick={handleDestroy}>Delete Artist</Button>
 		</ArtistLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps<ArtistProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
 	const data = await prisma.artist.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, band: true, composedMusics: { include: { band: true, composers: true, lyrists: true } }, writtenMusics: { include: { band: true, composers: true, lyrists: true } } } })
 	if (!data) return { notFound: true };
+	const providers = await getProviders()
 	const session = await getServerAuthSession(ctx)
 	const bookmarked = await prisma.artist.findFirst({
 		where: {
@@ -73,7 +74,7 @@ export const getServerSideProps: GetServerSideProps<ArtistProps> = async (ctx) =
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 export default EditArtist;

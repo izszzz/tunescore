@@ -20,6 +20,7 @@ export type SearchAutocompleteProps<
 		textFieldProps: TextFieldProps
 		getOptionLabel: (option: T | AutocompleteFreeSoloValueMapping<FreeSolo>) => Locales;
 		onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
+		onSearch?: () => void
 	}
 function SearchAutocomplete<
 	T extends Resource = Resource,
@@ -29,14 +30,15 @@ function SearchAutocomplete<
 >({ resource, getOptionLabel, onKeyDown, textFieldProps, ...props }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
-	const search = trpc.useMutation(`${resource}.search`, { onError: () => { enqueueSnackbar(`search ${resource} error`) } });
+	const search = trpc.useMutation(`${resource}.index`, { onError: () => { enqueueSnackbar(`search ${resource} error`) } });
 	const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-		let data
+		let where
 		if (resource === "music")
-			data = { title: e.currentTarget.value }
+			where = { title: { is: { [router.locale]: { contains: e.currentTarget.value } } } }
+
 		if (resource === "artist" || resource === "band")
-			data = { name: e.currentTarget.value }
-		search.mutate({ ...data, locale: router.locale as string });
+			where = { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }
+		search.mutate({ where, include: { user: true } });
 	}
 	return (
 		<Autocomplete

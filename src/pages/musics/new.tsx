@@ -1,15 +1,18 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import Button from "@mui/material/Button";
 import { Music } from "@prisma/client";
 import { FormContainer, RadioButtonGroup, TextFieldElement } from "react-hook-form-mui"
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import DefaultSingleColumnLayout, { DefaultSingleColumnLayoutProps } from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 import { Typography } from "@mui/material";
 import Box from "@mui/system/Box";
-
-const NewMusic: NextPage = () => {
+import { getProviders } from "next-auth/react";
+interface NewMusicProps {
+	providers: DefaultSingleColumnLayoutProps["providers"]
+}
+const NewMusic: NextPage<NewMusicProps> = ({ providers }) => {
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
 	const handleSubmit = (data: Music) => { create.mutate(data) }
@@ -18,7 +21,7 @@ const NewMusic: NextPage = () => {
 		onError: error => { enqueueSnackbar(String(error)) }
 	});
 	return (
-		<DefaultSingleColumnLayout >
+		<DefaultSingleColumnLayout providers={providers}>
 			<Box borderBottom={1} mb={3}>
 				<Typography variant="h3">Create a New Music</Typography>
 			</Box>
@@ -44,3 +47,10 @@ const NewMusic: NextPage = () => {
 }
 
 export default NewMusic;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+	const providers = await getProviders()
+	return {
+		props: { providers },
+	}
+}

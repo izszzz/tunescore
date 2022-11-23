@@ -1,51 +1,20 @@
 import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
-import {Artist, Prisma} from "@prisma/client"
+import {Prisma} from "@prisma/client"
 
 export const issueRouter = createRouter()
-  .query("index", {
+  .mutation("index", {
     input: z.object({
-      id: z.string(),
+      include: z.object({user: z.boolean()}).optional(),
+      where: z
+        .object({
+          title: z.string().optional(),
+        })
+        .optional(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.issue.findMany({
-        where: {music: {id: input.id}},
-        include: { user: true}
-      })
-    },
-  })
-  .query("show", {
-    input: z.object({
-      id: z.string(),
-    }),
-    async resolve({ctx, input}) {
-      return await ctx.prisma.issue.findFirst({
-        where: {id: input.id},
-      })
-    },
-  })
-  .mutation("search", {
-    input: z.object({
-      name: z.string(),
-      locale: z.string(),
-    }),
-    async resolve({ctx, input}) {
-      const result = await ctx.prisma.issue.findRaw({
-        filter: {
-          ["name." + input.locale]: {$regex: input.name, $options: "i"},
-        },
-      })
-      // TODO: 型修正できないらしい
-      // https://github.com/prisma/prisma/issues/11830
-      // https://github.com/prisma/prisma/issues/5062
-      return result?.map(data => {
-        const {
-          _id: {$oid: id},
-          ...other
-        } = data
-        return {id, ...other}
-      }) as Artist[]
+      return await ctx.prisma.issue.findMany(input)
     },
   })
   .mutation("create", {

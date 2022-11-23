@@ -1,17 +1,18 @@
 import React from "react";
-import DefaultHeader from "../header/default";
+import DefaultHeader, { DefaultHeaderProps } from "../header/default";
 import SingleColumnLayout from "./index"
 
-interface DefaultSingleColumnProps {
+export interface DefaultSingleColumnLayoutProps {
 	subHeader?: React.ReactNode;
 	children: React.ReactNode;
 	contained?: boolean
+	providers: DefaultHeaderProps["providers"]
 }
-const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnProps> = ({ subHeader, contained, children }) => {
+const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnLayoutProps> = ({ providers, subHeader, contained, children }) => {
 	return (
 		<SingleColumnLayout contained={contained} header={
 			<>
-				<DefaultHeader />
+				<DefaultHeader providers={providers} />
 				{subHeader}
 			</>
 		}>

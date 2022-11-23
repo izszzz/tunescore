@@ -143,7 +143,7 @@ model Artist {
   musics Music[]  @relation("artists", fields: [musicIDs], references: [id])
   musicIDs          String[] @db.ObjectId
 
-  band  Band[] @relation(fields: [bandIDs], references: [id])
+  bands  Band[] @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
 
   bookmarks User[] @relation("ArtistBookmarks", fields: [userIDs], references: [id])

@@ -51,7 +51,7 @@ export interface ItunesResponse<T> {
   results: T[]
 }
 
-export const limit = 12
+export const LIMIT = 12
 const itunes = axios.create({
   baseURL: "https://itunes.apple.com",
 })
@@ -85,7 +85,8 @@ export const lookupItunesMusic = ({
 
 export const searchItunesMusics = (
   term: TermType,
-  offset: number
+  offset: number,
+  limit: number = LIMIT
 ): Promise<ItunesResponse<ItunesMusic>> =>
   itunes.jsonp<null, ItunesResponse<ItunesMusic>>("/search", {
     params: {
@@ -103,7 +104,7 @@ export const searchItunesArtists = (
     params: {
       entity: "musicArtist",
       term,
-      limit,
+      limit: LIMIT,
       offset,
     },
   })
@@ -115,7 +116,7 @@ export const searchItunesAlbums = (
     params: {
       entity: "album",
       term,
-      limit,
+      limit: LIMIT,
       offset,
     },
   })

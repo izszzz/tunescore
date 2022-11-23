@@ -1,19 +1,21 @@
 import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
-import {Artist, Prisma} from "@prisma/client"
+import {Prisma} from "@prisma/client"
 import {TRPCError} from "@trpc/server"
 
 export const pullRouter = createRouter()
-  .query("index", {
+  .mutation("index", {
     input: z.object({
-      id: z.string(),
+      include: z.object({user: z.boolean()}).optional(),
+      where: z
+        .object({
+          title: z.string().optional(),
+        })
+        .optional(),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.pull.findMany({
-        where: {music: {id: input.id}},
-        include: {user: true},
-      })
+      return await ctx.prisma.issue.findMany(input)
     },
   })
   .query("show", {
@@ -25,29 +27,6 @@ export const pullRouter = createRouter()
         where: {id: input.id},
         include: {user: true, music: true},
       })
-    },
-  })
-  .mutation("search", {
-    input: z.object({
-      name: z.string(),
-      locale: z.string(),
-    }),
-    async resolve({ctx, input}) {
-      const result = await ctx.prisma.pull.findRaw({
-        filter: {
-          ["name." + input.locale]: {$regex: input.name, $options: "i"},
-        },
-      })
-      // TODO: 型修正できないらしい
-      // https://github.com/prisma/prisma/issues/11830
-      // https://github.com/prisma/prisma/issues/5062
-      return result?.map(data => {
-        const {
-          _id: {$oid: id},
-          ...other
-        } = data
-        return {id, ...other}
-      }) as Artist[]
     },
   })
   .mutation("create", {

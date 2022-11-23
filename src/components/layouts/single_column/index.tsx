@@ -1,11 +1,11 @@
 import Container from "@mui/material/Container";
 
-interface SingleColumnProps {
-	header: React.ReactNode;
+export interface SingleColumnLayoutProps {
+	header?: React.ReactNode;
 	children: React.ReactNode;
 	contained?: boolean;
 }
-const SingleColumnLayout: React.FC<SingleColumnProps> = ({ header, children, contained }) => {
+const SingleColumnLayout: React.FC<SingleColumnLayoutProps> = ({ header, children, contained }) => {
 	return (
 		<>
 			{header}

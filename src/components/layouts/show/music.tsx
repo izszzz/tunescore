@@ -4,7 +4,7 @@ import { Locales, Prisma, } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { trpc } from "../../../utils/trpc";
-import ShowLayout from "./default";
+import ShowLayout, { ShowLayoutProps } from "./default";
 import setLocale from "../../../utils/setLocale";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
@@ -14,15 +14,13 @@ import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 
-
-interface MusicLayoutProps {
+export interface MusicLayoutProps extends Pick<ShowLayoutProps, "providers" | "children"> {
 	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
 	bookmarked: boolean
 	activeTab: "info" | "issues" | "pullrequests" | "settings";
-	children: React.ReactNode
 }
 
-const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, children }) => {
+const MusicLayout: React.FC<MusicLayoutProps> = ({ providers, data, activeTab, bookmarked, children }) => {
 	const router = useRouter()
 	const bookmarkCreate = trpc.useMutation(["music.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["music.bookmark.destroy"]);
@@ -40,6 +38,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, 
 
 	return (
 		<ShowLayout
+			providers={providers}
 			activeTab={activeTab}
 			tabs={tabs}
 			title={

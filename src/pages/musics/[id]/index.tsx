@@ -8,20 +8,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Prisma, PrismaClient } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next"
+import { getProviders } from "next-auth/react";
 import { useRouter } from "next/router";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
-import MusicLayout from "../../../components/layouts/show/music";
+import MusicLayout, { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import setLocale from "../../../utils/setLocale"
-interface MusicProps {
+export interface MusicProps extends Pick<MusicLayoutProps, "bookmarked" | "providers"> {
 	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
-	bookmarked: boolean;
 }
-const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
+const Music: NextPage<MusicProps> = ({ providers, data, bookmarked }) => {
 	const router = useRouter();
 	return (
-		<MusicLayout data={data} bookmarked={bookmarked} activeTab="info">
+		<MusicLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id as string } })} fullWidth>Edit Score</Button>
 			<TableContainer component={Paper}>
@@ -82,8 +82,9 @@ const Music: NextPage<MusicProps> = ({ data, bookmarked }) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps<MusicProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
+	const providers = await getProviders()
 	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true } })
 	if (!data) return { notFound: true };
 	const session = await getServerAuthSession(ctx)
@@ -96,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<MusicProps> = async (ctx) =>
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 

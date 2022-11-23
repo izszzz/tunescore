@@ -9,12 +9,11 @@ import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Prisma } from "@prisma/client";
-import ShowLayout from "./default";
+import ShowLayout, { ShowLayoutProps } from "./";
 
-interface PullLayoutProps {
+interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
 	data: Prisma.PullGetPayload<{ include: { music: true, user: true } }>
 	activeTab: "code" | "conversation";
-	children: React.ReactNode;
 }
 
 const PullLayout: React.FC<PullLayoutProps> = ({ data, activeTab, children }) => {

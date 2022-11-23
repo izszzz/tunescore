@@ -2,21 +2,20 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { trpc } from "../../../utils/trpc";
-import ShowLayout from "./default";
+import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import setLocale from "../../../utils/setLocale";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import Box from "@mui/material/Box";
 import { Prisma } from "@prisma/client";
 
-interface BandLayoutProps {
+export interface BandLayoutProps extends Pick<DefaultShowLayoutProps, "providers" | "children"> {
 	data: Prisma.BandGetPayload<null>
 	bookmarked: boolean
 	activeTab: "info" | "settings"
-	children: React.ReactNode;
 }
 
-const BandLayout: React.FC<BandLayoutProps> = ({ data, bookmarked, activeTab, children }) => {
+const BandLayout: React.FC<BandLayoutProps> = ({ providers, data, bookmarked, activeTab, children }) => {
 	const router = useRouter()
 	const bookmarkCreate = trpc.useMutation(["band.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["band.bookmark.destroy"]);
@@ -31,7 +30,8 @@ const BandLayout: React.FC<BandLayoutProps> = ({ data, bookmarked, activeTab, ch
 		else bookmarkCreate.mutate({ id: router.query.id as string }, { onSuccess: () => setValue(true) })
 	}
 	return (
-		<ShowLayout
+		<DefaultShowLayout
+			providers={providers}
 			tabs={tabs}
 			activeTab={activeTab}
 			title={
@@ -43,7 +43,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({ data, bookmarked, activeTab, ch
 				</Box>
 			}>
 			{children}
-		</ShowLayout>
+		</DefaultShowLayout>
 	)
 }
 

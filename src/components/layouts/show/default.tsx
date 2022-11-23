@@ -1,25 +1,11 @@
 import React from "react";
-import DefaultSingleColumnLayout from "../single_column/default";
-import DefaultTabs, { DefaultTabsProps } from "../../elements/tabs/default";
+import DefaultHeader, { DefaultHeaderProps } from "../header/default";
+import ShowLayout, { ShowLayoutProps } from "./"
 
-interface ShowLayoutProps {
-	activeTab: string;
-	tabs: DefaultTabsProps["tabs"]
-	title: React.ReactNode
-	contained?: boolean;
-	children: React.ReactNode
+export interface DefaultShowLayoutProps extends ShowLayoutProps {
+	providers: DefaultHeaderProps["providers"]
 }
-const ShowLayout = ({ title, activeTab, tabs, contained = true, children }: ShowLayoutProps) => {
-	return (
-		<DefaultSingleColumnLayout contained={contained} subHeader={
-			<>
-				{title}
-				<DefaultTabs value={activeTab} tabs={tabs} />
-			</>
-		}>
-			{children}
-		</DefaultSingleColumnLayout>
-	)
-}
+const DefaultShowLayout = ({ providers, ...props }: DefaultShowLayoutProps) =>
+	<ShowLayout {...props} header={<DefaultHeader providers={providers} />} />
 
-export default ShowLayout
+export default DefaultShowLayout

@@ -1,15 +1,13 @@
 import type { GetServerSideProps, NextPage } from "next";
-import BandLayout from "../../../components/layouts/show/band";
+import BandLayout, { BandLayoutProps } from "../../../components/layouts/show/band";
 import DefaultSettingsForm from "../../../components/elements/form/settings/default"
 import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-interface BandProps {
-	data: Prisma.BandGetPayload<null>
-	bookmarked: boolean;
-}
-const EditBand: NextPage<BandProps> = ({ data, bookmarked }) => {
+import { getProviders } from "next-auth/react";
+type BandProps = Pick<BandLayoutProps, "data" | "bookmarked" | "providers">
+const EditBand: NextPage<BandProps> = ({ providers, data, bookmarked }) => {
 	return (
-		<BandLayout data={data} bookmarked={bookmarked} activeTab="settings">
+		<BandLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="settings">
 			<DefaultSettingsForm<Prisma.BandGetPayload<null>>
 				data={data}
 				resource="band"
@@ -17,9 +15,10 @@ const EditBand: NextPage<BandProps> = ({ data, bookmarked }) => {
 		</BandLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps<BandProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
 	const data = await prisma.band.findUnique({ where: { id: ctx.query.id as string } })
+	const providers = await getProviders()
 	if (!data) return { notFound: true };
 	const session = await getServerAuthSession(ctx)
 	const bookmarked = await prisma.band.findFirst({
@@ -31,7 +30,7 @@ export const getServerSideProps: GetServerSideProps<BandProps> = async (ctx) => 
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 export default EditBand;

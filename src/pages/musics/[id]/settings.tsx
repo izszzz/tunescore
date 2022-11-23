@@ -3,22 +3,24 @@ import type { GetServerSideProps, NextPage } from "next";
 import { Artist, Prisma, PrismaClient, } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MusicLayout from "../../../components/layouts/show/music";
+import MusicLayout, { MusicLayoutProps } from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import DefaultSettingsForm from "../../../components/elements/form/settings/default"
-import ArtistsUpdateForm from "../../../components/elements/form/update/artists"
+import ArtistsUpdateForm from "../../../components/elements/form/settings/artists"
 import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import ResourceIcon from "../../../components/elements/icon/resource";
 import LinkForm from "../../../components/elements/form/settings/link"
-interface MusicProps {
-	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
-	bookmarked: boolean;
-}
+import MusicItunesSelectForm from "../../../components/elements/form/settings/select/music";
+import setLocale from "../../../utils/setLocale";
+import { useRouter } from "next/router";
+import { getProviders } from "next-auth/react";
+type MusicProps = Pick<MusicLayoutProps, "data" | "bookmarked" | "providers">
 
-const SettingsMusic: NextPage<MusicProps> = ({ data, bookmarked }) => {
+const SettingsMusic: NextPage<MusicProps> = ({ providers, data, bookmarked }) => {
+	const router = useRouter()
 	return (
-		<MusicLayout data={data} bookmarked={bookmarked} activeTab="settings">
+		<MusicLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="settings">
 			<Typography variant="h4"> Info</Typography>
 			<Divider />
 			<DefaultSettingsForm<Prisma.MusicGetPayload<{ include: { artists: true } }>>
@@ -61,11 +63,13 @@ const SettingsMusic: NextPage<MusicProps> = ({ data, bookmarked }) => {
 			<Typography variant="h4">SNS</Typography>
 			<Divider />
 			<LinkForm defaultValue={data.link} resource="music" />
+			<MusicItunesSelectForm term={setLocale(data.title, router) || ""} id={data.link?.streaming?.itunes} />
 		</MusicLayout >
 	)
 }
-export const getServerSideProps: GetServerSideProps<MusicProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
+	const providers = await getProviders()
 	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true } })
 	if (!data) return { notFound: true };
 	const session = await getServerAuthSession(ctx)
@@ -78,7 +82,7 @@ export const getServerSideProps: GetServerSideProps<MusicProps> = async (ctx) =>
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 

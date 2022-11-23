@@ -1,12 +1,14 @@
 import Button from "@mui/material/Button";
 import { Artist } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
+import { getProviders } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui"
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import DefaultSingleColumnLayout, { DefaultSingleColumnLayoutProps } from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 
-const NewMusic: NextPage = () => {
+type NewMusicProps = Pick<DefaultSingleColumnLayoutProps, "providers">
+const NewMusic: NextPage<NewMusicProps> = ({ providers }) => {
 	const router = useRouter()
 	const create = trpc.useMutation(["artist.create"]);
 	const handleSubmit = (data: Artist) => {
@@ -14,7 +16,7 @@ const NewMusic: NextPage = () => {
 		router.push("/artists")
 	}
 	return (
-		<DefaultSingleColumnLayout >
+		<DefaultSingleColumnLayout providers={providers}>
 			<p>new artist</p>
 			<FormContainer onSuccess={handleSubmit}>
 				<TextFieldElement name={"name." + router.locale} label="Name" required /><br />
@@ -23,5 +25,11 @@ const NewMusic: NextPage = () => {
 		</DefaultSingleColumnLayout>
 	)
 }
+export const getServerSideProps: GetServerSideProps = async () => {
+	const providers = await getProviders()
+	return {
+		props: { providers },
+	};
+};
 
 export default NewMusic;

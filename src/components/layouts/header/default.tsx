@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { ClientSafeProvider, LiteralUnion, signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Typography from '@mui/material/Typography'
@@ -9,17 +10,28 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
+import Grid from "@mui/material/Grid";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
-import { useRouter } from "next/router";
-import Grid from "@mui/material/Grid";
+import GoogleIcon from "../../elements/icon/Google"
+import { BuiltInProviderType } from "next-auth/providers";
 
-const DefaultHeader = () => {
+export interface DefaultHeaderProps {
+	providers: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>
+}
+
+const DefaultHeader = ({ providers }: DefaultHeaderProps) => {
 	const { data: session } = useSession()
-	const router = useRouter()
+	const [open, setOpen] = useState(false)
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const router = useRouter()
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
 	const handleClose = () => setAnchorEl(null);
+	const handleOpenModal = () => setOpen(true)
+	const handleCloseDialog = () => setOpen(false)
 	const handleSignOut = () => {
 		signOut();
 		handleClose();
@@ -68,12 +80,25 @@ const DefaultHeader = () => {
 								</Menu>
 							</>
 							:
-							<Button variant="contained" onClick={() => router.push("/auth/signin")} disableElevation>SignIn</Button>
+							<Button variant="contained" onClick={handleOpenModal} disableElevation>SignIn</Button>
 						}
 					</Grid>
 				</Grid>
 			</Header>
 			<Toolbar />
+			<Dialog
+				open={open}
+				onClose={handleCloseDialog}
+			>
+				<DialogTitle>
+					Sign In
+				</DialogTitle>
+				<DialogActions>
+					{Object.values(providers).map((provider) =>
+						<Button key={provider.name} variant="outlined" startIcon={<GoogleIcon />} onClick={() => signIn(provider.id, { callbackUrl: "http://localhost/" })}>Login with {provider.name}</Button>
+					)}
+				</DialogActions>
+			</Dialog>
 		</>
 	);
 };

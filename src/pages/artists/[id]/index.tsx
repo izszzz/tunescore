@@ -10,24 +10,24 @@ import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import { Link } from "@mui/material";
 import setLocale from "../../../utils/setLocale"
-import ArtistLayout from "../../../components/layouts/show/artist";
+import ArtistLayout, { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-interface ArtistProps {
+import { getProviders } from "next-auth/react";
+interface ArtistProps extends Pick<ArtistLayoutProps, "bookmarked" | "providers"> {
 	data: Prisma.ArtistGetPayload<{
 		include: {
-			band: true,
+			bands: true,
 			musics: { include: { band: true, composers: true, lyrists: true } },
 			composedMusics: { include: { band: true, composers: true, lyrists: true } },
 			writtenMusics: { include: { band: true, composers: true, lyrists: true } }
 		}
 	}>
-	bookmarked: boolean;
 }
-const Artist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
+const Artist: NextPage<ArtistProps> = ({ providers, data, bookmarked }) => {
 	const router = useRouter();
 	return (
-		<ArtistLayout data={data} bookmarked={bookmarked} activeTab="info">
+		<ArtistLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }}>
 					<TableHead>
@@ -39,7 +39,7 @@ const Artist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
 					<TableBody>
 						<TableRow>
 							<TableCell>band</TableCell>
-							<TableCell>{data.band && <Chip label={setLocale(data.band.name, router)} onClick={() => data.band && router.push({ pathname: "/bands/[id]", query: { id: data.band.id } })} />}</TableCell>
+							<TableCell>{data.bands.map(({ id, name }) => <Chip key={id} label={setLocale(name, router)} onClick={() => router.push({ pathname: "/bands/[id]", query: { id } })} />)}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
@@ -120,9 +120,10 @@ const Artist: NextPage<ArtistProps> = ({ data, bookmarked }) => {
 		</ArtistLayout >
 	)
 }
-export const getServerSideProps: GetServerSideProps<ArtistProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	const prisma = new PrismaClient()
-	const data = await prisma.artist.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, band: true, composedMusics: { include: { band: true, composers: true, lyrists: true } }, writtenMusics: { include: { band: true, composers: true, lyrists: true } } } })
+	const providers = await getProviders()
+	const data = await prisma.artist.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, bands: true, composedMusics: { include: { band: true, composers: true, lyrists: true } }, writtenMusics: { include: { band: true, composers: true, lyrists: true } } } })
 	if (!data) return { notFound: true };
 	const session = await getServerAuthSession(ctx)
 	const bookmarked = await prisma.artist.findFirst({
@@ -134,7 +135,7 @@ export const getServerSideProps: GetServerSideProps<ArtistProps> = async (ctx) =
 		},
 	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
+		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
 	};
 };
 

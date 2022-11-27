@@ -1,56 +1,46 @@
 import { useRouter } from 'next/router'
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui"
-import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
-import Button from '@mui/material/Button';
 import Alert from "@mui/material/Alert"
 import { PrismaModelNameLowercase } from '../../../../types/common';
-import { trpc } from "../../../../utils/trpc";
 interface DefaultSettingsFormProps<T> {
 	data: T
-	isLoading?: boolean
 	resource: PrismaModelNameLowercase
 	name: "title" | "name"
+	updateLoadingButtonProps: {
+		onClick: (data: T) => void
+		loading: boolean
+	},
+	destroyLoadingButtonProps: {
+		onClick: (data: T) => void
+		loading: boolean
+	}
 }
-function DefaultSettingsForm<T extends { id: string }>({ name, data, isLoading, resource }: DefaultSettingsFormProps<T>) {
+function DefaultSettingsForm<T extends { id: string }>({ name, data, resource, updateLoadingButtonProps: updateButtonProps, destroyLoadingButtonProps: destroyButtonProps }: DefaultSettingsFormProps<T>) {
 	const router = useRouter()
 	const formContext = useForm<T>()
-	const { enqueueSnackbar } = useSnackbar()
-	const destroy = trpc.useMutation(`${resource}.destroy`, {
-		onSuccess: () => {
-			enqueueSnackbar("destroy success")
-			router.push("/bands")
-		}
-	});
-	const update = trpc.useMutation(`${resource}.update`, {
-		onSuccess: () => { enqueueSnackbar("update success") },
-		onError: () => { enqueueSnackbar("update error") }
-	});
-	const handleSubmit = (data: T) => update.mutate(data)
-	const handleDestroy = () => destroy.mutate(data)
 	useEffect(() => {
 		formContext.reset(data)
 	}, [router.locale, formContext, data])
-	const disabled = isLoading || update.isLoading
 	return (
 		<>
 			<FormContainer
 				formContext={formContext}
-				onSuccess={handleSubmit}
+				onSuccess={(data) => updateButtonProps.onClick(data)}
 			>
 				<Grid container spacing={1} my={1}>
 					<Grid item xs={10} >
-						<TextFieldElement name={name + "." + router.locale} label={name} disabled={disabled} required fullWidth />
+						<TextFieldElement name={name + "." + router.locale} label={name} disabled={updateButtonProps.loading} required fullWidth />
 					</Grid>
 					<Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
 						<LoadingButton
 							type="submit"
 							variant="outlined"
-							disabled={disabled || !formContext.formState.isDirty}
-							loading={update.isLoading}
+							disabled={updateButtonProps.loading || !formContext.formState.isDirty}
+							loading={updateButtonProps.loading}
 							endIcon={<SendIcon />}
 							fullWidth
 						>
@@ -62,7 +52,7 @@ function DefaultSettingsForm<T extends { id: string }>({ name, data, isLoading, 
 			<Alert
 				variant="outlined"
 				severity="warning"
-				action={<Button type="button" variant="contained" color="warning" onClick={handleDestroy} disableElevation>Delete {resource}</Button>}
+				action={<LoadingButton type="button" variant="contained" color="warning" loading={destroyButtonProps.loading} onClick={() => destroyButtonProps.onClick(data)} disableElevation>Delete {resource}</LoadingButton>}
 			>
 				This is a warning alert
 			</Alert>

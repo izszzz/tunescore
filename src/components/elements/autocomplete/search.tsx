@@ -1,71 +1,34 @@
-import React, { ChangeEvent } from "react"
-import { useSnackbar } from "notistack";
+import React from "react"
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { trpc } from "../../../utils/trpc";
-import { Locales } from "@prisma/client";
-import { useRouter } from "next/router";
-import setLocale from "../../../utils/setLocale";
-import { AutocompleteFreeSoloValueMapping } from "@mui/material/useAutocomplete";
-import { PrismaModelNameLowercase, Resource } from "../../../types/common";
 
-export type SearchAutocompleteProps<
+export type CustomAutocompleteProps<
 	T,
 	Multiple extends boolean | undefined,
 	DisableClearable extends boolean | undefined,
 	FreeSolo extends boolean | undefined,
 > =
-	Omit<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>, "getOptionLabel" | "renderInput" | "options" | "resource"> & {
-		resource: PrismaModelNameLowercase
-		textFieldProps: TextFieldProps
-		getOptionLabel: (option: T | AutocompleteFreeSoloValueMapping<FreeSolo>) => Locales;
-		onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
-		onSearch?: () => void
+	Omit<AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>, "renderInput"> & {
+		textFieldProps?: TextFieldProps
 	}
-function SearchAutocomplete<
-	T extends Resource = Resource,
+function CustomAutocomplete<
+	T,
 	Multiple extends boolean | undefined = undefined,
 	DisableClearable extends boolean | undefined = undefined,
 	FreeSolo extends boolean | undefined = undefined,
->({ resource, getOptionLabel, onKeyDown, textFieldProps, ...props }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
-	const router = useRouter()
-	const { enqueueSnackbar } = useSnackbar()
-	const search = trpc.useMutation(`${resource}.index`, { onError: () => { enqueueSnackbar(`search ${resource} error`) } });
-	const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-		let where
-		if (resource === "music")
-			where = { title: { is: { [router.locale]: { contains: e.currentTarget.value } } } }
-
-		if (resource === "artist" || resource === "band")
-			where = { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }
-		search.mutate({ where, include: { user: true } });
-	}
+>({ textFieldProps, ...props }: CustomAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
 	return (
 		<Autocomplete
-			disablePortal
 			{...props}
-			options={search.data as T[] | undefined || []}
-			loading={search.isLoading}
-			getOptionLabel={option => getOptionLabel && setLocale(getOptionLabel(option), router) || ""}
-			renderInput={(props) =>
+			renderInput={(params) =>
 				<TextField
-					{...props}
+					{...params}
 					{...textFieldProps}
-					// InputProps={{
-					// 	autoFocus: true,
-					// 	startAdornment: (
-					// 		<InputAdornment position="start">
-					// 			<SearchIcon />
-					// 		</InputAdornment>
-					// 	),
-					// }}
 					variant="outlined"
-					onChange={handleSearch}
-					onKeyDown={onKeyDown}
 				/>
 			}
 			fullWidth
 		/>
 	)
 }
-export default SearchAutocomplete
+export default CustomAutocomplete

@@ -1,24 +1,17 @@
-import { Band, Prisma } from "@prisma/client"
+import { Band } from "@prisma/client"
 import React from "react"
-import DefaultUpdateAutocomplete from "./default"
+import DefaultUpdateAutocomplete, { DefaultUpdateAutocompleteProps } from "./default"
 
-interface BandUpdateAutocomplete {
-	defaultValue: Band | null;
-	resource: "music" | "artist"
-}
-function BandUpdateAutocomplete<UpdateInput extends Prisma.MusicUpdateInput | Prisma.ArtistUpdateInput | Prisma.BandUpdateInput>({ defaultValue, resource }: BandUpdateAutocomplete) {
+type BandUpdateAutocomplete = DefaultUpdateAutocompleteProps<Band, false, false, false>
+function BandUpdateAutocomplete({ textFieldProps, defaultValue, ...props }: BandUpdateAutocomplete) {
 	return (
-		<DefaultUpdateAutocomplete<Band, false, false, false, UpdateInput>
+		<DefaultUpdateAutocomplete<Band, false, false, false>
+			{...props}
 			defaultValue={defaultValue}
-			resource={{ retrieval: "band", update: resource }}
-			getOptionLabel={(option) => option.name}
 			textFieldProps={{
+				...textFieldProps,
 				label: "band",
 				margin: "dense"
-			}}
-			onChange={{
-				onClear: () => ({ band: { disconnect: true } }) as UpdateInput,
-				onSelect: (_e, _v, _r, details) => ({ band: { connect: { id: details?.option.id } } }) as UpdateInput
 			}}
 		/>
 	)

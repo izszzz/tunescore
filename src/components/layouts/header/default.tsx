@@ -16,7 +16,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
-import GoogleIcon from "../../elements/icon/Google"
+import GoogleIcon from "../../elements/icon/google"
 import { BuiltInProviderType } from "next-auth/providers";
 
 export interface DefaultHeaderProps {

@@ -1,15 +1,17 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import { Prisma, PrismaClient } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import { getProviders } from "next-auth/react";
 import Link from 'next/link'
 import DefaultMusicCard from "../components/elements/card/music/default";
 import DefaultSingleColumnLayout, { DefaultSingleColumnLayoutProps } from "../components/layouts/single_column/default";
+import { trpc } from "../utils/trpc";
 
-interface HomeProps extends Pick<DefaultSingleColumnLayoutProps, "providers"> {
-  data: Prisma.MusicGetPayload<{ include: { composers: true, lyrists: true, band: true, user: true } }>[]
-}
-const Home: NextPage<HomeProps> = ({ data, providers }) => {
+type HomeProps = Pick<DefaultSingleColumnLayoutProps, "providers">
+const Home: NextPage<HomeProps> = ({ providers }) => {
+  const musics = trpc.useQuery(["music.index", {
+    args: { include: { composers: true, lyrists: true, band: true, user: true } },
+    options: { page: 0, perPage: 12 }
+  }])
   return (
     <DefaultSingleColumnLayout providers={providers}>
       <>home</>
@@ -26,7 +28,7 @@ const Home: NextPage<HomeProps> = ({ data, providers }) => {
         <a>band</a>
       </Link>
       <Grid container spacing={1} >
-        {data.map((music) =>
+        {musics.data?.data.map((music) =>
           <Grid key={music.id} xs={6} sm={4} md={2} px={2} display="flex" justifyContent="center">
             <DefaultMusicCard data={music} />
           </Grid>
@@ -37,11 +39,9 @@ const Home: NextPage<HomeProps> = ({ data, providers }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const prisma = new PrismaClient()
   const providers = await getProviders()
-  const data = await prisma.music.findMany({ include: { composers: true, lyrists: true, band: true, user: true }, take: 12 })
   return {
-    props: { data, providers },
+    props: { providers },
   };
 };
 

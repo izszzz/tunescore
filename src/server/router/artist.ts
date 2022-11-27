@@ -4,26 +4,72 @@ import schemaTypeFor from "../../types/schemaForType"
 import {Prisma} from "@prisma/client"
 import {locale} from "../../utils/zod"
 import {TRPCError} from "@trpc/server"
+import {createPaginator, PaginateOptions} from "prisma-pagination"
 
 export const artistRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
-      include: z.object({band: z.boolean().optional()}).optional(),
-      where: z
-        .object({
-          name: z
+      options: schemaTypeFor<PaginateOptions>()(
+        z.object({
+          page: z.number().or(z.string()).optional(),
+          perPage: z.number().or(z.string()).optional(),
+        })
+      ),
+      args: schemaTypeFor<Prisma.ArtistFindManyArgs>()(
+        z.object({
+          include: z
             .object({
-              is: z.object({
-                ja: z.object({contains: z.string()}).optional(),
-                en: z.object({contains: z.string()}).optional(),
-              }),
+              bands: z.boolean(),
+            })
+            .optional(),
+          where: z
+            .object({
+              name: z
+                .object({
+                  is: z.object({
+                    ja: z.object({contains: z.string()}).optional(),
+                    en: z.object({contains: z.string()}).optional(),
+                  }),
+                })
+                .optional(),
             })
             .optional(),
         })
-        .optional(),
+      ),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.ArtistGetPayload<{
+          include: {bands: true}
+        }>,
+        Prisma.ArtistFindManyArgs
+      >(ctx.prisma.artist, args)
+    },
+  })
+  .mutation("search", {
+    input: schemaTypeFor<Prisma.ArtistFindManyArgs>()(
+      z.object({
+        where: z
+          .object({
+            name: z
+              .object({
+                is: z
+                  .object({
+                    ja: z.object({contains: z.string()}).optional(),
+                    en: z.object({contains: z.string()}).optional(),
+                  })
+                  .optional(),
+              })
+              .optional(),
+          })
+          .optional(),
+        take: z.number(),
+      })
+    ),
+    async resolve({ctx, input}) {
+      return ctx.prisma.artist.findMany(input)
     },
   })
   .mutation("create", {
@@ -47,7 +93,7 @@ export const artistRouter = createRouter()
         name: locale.optional(),
         bands: z
           .object({
-            disconnect: z.boolean().optional(),
+            disconnect: z.object({id: z.string().optional()}).optional(),
             connect: z.object({id: z.string().optional()}).optional(),
           })
           .optional(),

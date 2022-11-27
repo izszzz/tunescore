@@ -1,5 +1,9 @@
 import axios from "axios-jsonp-pro"
-import {UseQueryOptions} from "react-query"
+
+const itunes = axios.create({
+  baseURL: "https://itunes.apple.com",
+})
+
 type ItunesArtwork = Record<
   "artworkUrl30" | "artworkUrl60" | "artworkUrl100",
   string
@@ -51,72 +55,52 @@ export interface ItunesResponse<T> {
   results: T[]
 }
 
-export const LIMIT = 12
-const itunes = axios.create({
-  baseURL: "https://itunes.apple.com",
-})
-type TermType = string | undefined
-export interface LookupQueryFnArgs<T> {
-  id: number | string | null | undefined
-  options?: UseQueryOptions<T[]>
+export interface BaseParams {
+  entity: "musicArtist" | "album" | "song"
 }
 
-export const lookupItunesArtist = ({
-  id,
-}: LookupQueryFnArgs<ItunesArtist>): Promise<ItunesResponse<ItunesArtist>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesArtist>>("/lookup", {
-    params: {
-      id,
-      entity: "musicArtist",
-    },
-  })
-export const lookupItunesAlbum = ({
-  id,
-}: LookupQueryFnArgs<ItunesAlbum>): Promise<ItunesResponse<ItunesAlbum>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesAlbum>>("/lookup", {
-    params: {id, entity: "album"},
-  })
-export const lookupItunesMusic = ({
-  id,
-}: LookupQueryFnArgs<ItunesMusic>): Promise<ItunesResponse<ItunesMusic>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesMusic>>("/lookup", {
-    params: {id, entity: "song"},
-  })
+export interface BaseSearchParams {
+  term: string
+  limit: number
+  offset: number
+}
 
-export const searchItunesMusics = (
-  term: TermType,
-  offset: number,
-  limit: number = LIMIT
-): Promise<ItunesResponse<ItunesMusic>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesMusic>>("/search", {
-    params: {
-      entity: "song",
-      term,
-      limit,
-      offset,
-    },
+export interface BaseLookupParams {
+  id: number | string
+}
+
+export interface LookupParams extends BaseParams, BaseLookupParams {}
+
+export interface SearchParams extends BaseParams, BaseSearchParams {}
+
+export function lookupItunes<T>(
+  params: LookupParams
+): Promise<ItunesResponse<T>> {
+  return itunes.jsonp<null, ItunesResponse<T>>("/lookup", {
+    params,
   })
-export const searchItunesArtists = (
-  term: TermType,
-  offset: number
-): Promise<ItunesResponse<ItunesArtist>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesArtist>>("/search", {
-    params: {
-      entity: "musicArtist",
-      term,
-      limit: LIMIT,
-      offset,
-    },
+}
+
+export const lookupItunesArtist = ({id}: BaseLookupParams) =>
+  lookupItunes<ItunesArtist>({id, entity: "musicArtist"})
+
+export const lookupItunesAlbum = ({id}: BaseLookupParams) =>
+  lookupItunes<ItunesAlbum>({id, entity: "album"})
+
+export const lookupItunesMusic = ({id}: BaseLookupParams) =>
+  lookupItunes<ItunesMusic>({id, entity: "song"})
+
+export function searchItunes<T>(params: SearchParams) {
+  return itunes.jsonp<null, ItunesResponse<T>>("/search", {
+    params,
   })
-export const searchItunesAlbums = (
-  term: TermType,
-  offset: number
-): Promise<ItunesResponse<ItunesAlbum>> =>
-  itunes.jsonp<null, ItunesResponse<ItunesAlbum>>("/search", {
-    params: {
-      entity: "album",
-      term,
-      limit: LIMIT,
-      offset,
-    },
-  })
+}
+
+export const searchItunesMusics = (params: BaseSearchParams) =>
+  searchItunes<ItunesMusic>({...params, entity: "song"})
+
+export const searchItunesArtists = (params: BaseSearchParams) =>
+  searchItunes<ItunesArtist>({...params, entity: "musicArtist"})
+
+export const searchItunesAlbums = (params: BaseSearchParams) =>
+  searchItunes<ItunesAlbum>({...params, entity: "album"})

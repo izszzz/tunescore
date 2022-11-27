@@ -9,6 +9,7 @@ import type { AppRouter } from "../server/router";
 import type { Session } from "next-auth";
 import CssBaseline from '@mui/material/CssBaseline'
 import { SnackbarProvider } from 'notistack';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import "../styles/globals.css"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -25,6 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <SessionProvider session={session}>
         <CssBaseline />
         <Component {...pageProps} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </SessionProvider>
     </SnackbarProvider>
   );

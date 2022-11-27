@@ -1,39 +1,34 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { createPaginator, PaginatedResult } from "prisma-pagination";
-import IndexLayout, { IndexLayoutProps } from "../../components/layouts/index/default";
+import IndexLayout, { DefaultIndexLayoutProps } from "../../components/layouts/index/default";
 import ArtistList from "../../components/elements/list/artist";
 import { getProviders } from "next-auth/react";
-interface ArtistsProps extends Pick<IndexLayoutProps, "providers"> {
-	data: Prisma.ArtistGetPayload<{ include: { bands: true } }>[]
-	meta: PaginatedResult<null>["meta"]
-}
-const Artists: NextPage<ArtistsProps> = ({ providers, data, meta }) => {
+import { trpc } from "../../utils/trpc";
+import { useRouter } from "next/router";
+type ArtistsProps = Pick<DefaultIndexLayoutProps, "providers">
+const Artists: NextPage<ArtistsProps> = ({ providers }) => {
+	const router = useRouter()
+	const { data } = trpc.useQuery(["artist.index", {
+		args: {
+			include: { bands: true },
+			where: { name: { is: { [router.locale]: { contains: router.query.q as string } } } }
+		},
+		options: { page: router.query.page as string || 0, perPage: 12 }
+	}])
+	if (!data) return <></>
 	return (
 		<IndexLayout
 			providers={providers}
 			resource="artist"
 			route={{ pathname: "/artists" }}
-			meta={meta}>
-			<ArtistList artists={data} />
+			meta={data.meta}>
+			<ArtistList artists={data.data} />
 		</IndexLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
-	const paginate = createPaginator({ perPage: 10 })
-	const data = await paginate<Prisma.ArtistGetPayload<{ include: { bands: true } }>, Prisma.ArtistFindManyArgs>(
-		prisma.artist,
-		{
-			where: {
-				name: { is: { ja: { contains: ctx.query.q as string } } }
-			},
-			include: { bands: true }
-		},
-		{ page: ctx.query.page as string })
 	return {
-		props: { ...data, providers },
+		props: { providers },
 	};
 };
 

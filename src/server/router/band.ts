@@ -1,26 +1,89 @@
+import {Prisma} from "@prisma/client"
 import {TRPCError} from "@trpc/server"
+import schemaTypeFor from "../../types/schemaForType"
+import {createPaginator, PaginateOptions} from "prisma-pagination"
 import {z} from "zod"
 import {locale} from "../../utils/zod"
 import {createRouter} from "./context"
 
 export const bandRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
-      where: z
-        .object({
-          name: z
+      options: schemaTypeFor<PaginateOptions>()(
+        z.object({
+          page: z.number().or(z.string()).optional(),
+          perPage: z.number().or(z.string()).optional(),
+        })
+      ),
+      args: schemaTypeFor<Prisma.BandFindManyArgs>()(
+        z.object({
+          include: z
             .object({
-              is: z.object({
-                ja: z.object({contains: z.string()}).optional(),
-                en: z.object({contains: z.string()}).optional(),
-              }),
+              _count: z
+                .object({
+                  select: z.object({
+                    musics: z.boolean(),
+                    artists: z.boolean(),
+                  }),
+                })
+                .optional(),
+            })
+            .optional(),
+          where: z
+            .object({
+              name: z
+                .object({
+                  is: z.object({
+                    ja: z.object({contains: z.string()}).optional(),
+                    en: z.object({contains: z.string()}).optional(),
+                  }),
+                })
+                .optional(),
             })
             .optional(),
         })
-        .optional(),
+      ),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.band.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.BandGetPayload<{
+          include: {
+            _count: {
+              select: {
+                artists: true
+                musics: true
+              }
+            }
+          }
+        }>,
+        Prisma.BandFindManyArgs
+      >(ctx.prisma.band, args)
+    },
+  })
+  .mutation("search", {
+    input: schemaTypeFor<Prisma.BandFindManyArgs>()(
+      z.object({
+        where: z
+          .object({
+            name: z
+              .object({
+                is: z
+                  .object({
+                    ja: z.object({contains: z.string()}).optional(),
+                    en: z.object({contains: z.string()}).optional(),
+                  })
+                  .optional(),
+              })
+              .optional(),
+          })
+          .optional(),
+        take: z.number(),
+      })
+    ),
+    async resolve({ctx, input}) {
+      return ctx.prisma.band.findMany(input)
     },
   })
   .mutation("create", {

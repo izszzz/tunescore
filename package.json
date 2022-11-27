@@ -32,6 +32,8 @@
     "@trpc/next": "^9.27.2",
     "@trpc/react": "^9.27.2",
     "@trpc/server": "^9.27.2",
+    "@types/gapi": "0.0.43",
+    "@types/gapi.client.youtube": "^3.0.3",
     "@types/split": "^1.0.2",
     "@types/url-parse": "^1.4.8",
     "@uiw/react-md-editor": "^3.6.5",
@@ -56,6 +58,7 @@
     "superjson": "^1.10.0",
     "ts-node": "^10.9.1",
     "use-debounce": "^8.0.4",
+    "youtubei": "^1.0.0-rc.6",
     "zod": "^3.18.0"
   },
   "devDependencies": {

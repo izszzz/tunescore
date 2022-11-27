@@ -6,22 +6,25 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Prisma, PrismaClient } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next"
 import { getProviders } from "next-auth/react";
 import { useRouter } from "next/router";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
 import MusicLayout, { MusicLayoutProps } from "../../../components/layouts/show/music";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import ItunesButton from "../../../components/elements/button/itunes"
+import YoutubeButton from "../../../components/elements/button/youtube"
 import setLocale from "../../../utils/setLocale"
-export interface MusicProps extends Pick<MusicLayoutProps, "bookmarked" | "providers"> {
-	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
-}
-const Music: NextPage<MusicProps> = ({ providers, data, bookmarked }) => {
+import { trpc } from "../../../utils/trpc";
+export type MusicProps = Pick<MusicLayoutProps, "providers">
+const Music: NextPage<MusicProps> = ({ providers }) => {
 	const router = useRouter();
+	const { data } = trpc.useQuery(["music.show", { id: router.query.id as string }],);
+	if (!data) return <></>
 	return (
-		<MusicLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
+		<MusicLayout providers={providers} data={data} bookmarked={data.bookmarked} activeTab="info">
+			{data.link?.streaming?.itunes && <ItunesButton href={data.link?.streaming?.itunes} />}
+			{data.link?.streaming?.youtube && <YoutubeButton href={`https://www.youtube.com/watch?v=${data.link?.streaming?.youtube}`} />}
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id as string } })} fullWidth>Edit Score</Button>
 			<TableContainer component={Paper}>
@@ -82,22 +85,10 @@ const Music: NextPage<MusicProps> = ({ providers, data, bookmarked }) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
-	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true } })
-	if (!data) return { notFound: true };
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.music.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
+		props: { providers },
 	};
 };
 

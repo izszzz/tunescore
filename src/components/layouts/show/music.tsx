@@ -4,7 +4,7 @@ import { Locales, Prisma, } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { trpc } from "../../../utils/trpc";
-import ShowLayout, { ShowLayoutProps } from "./default";
+import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import setLocale from "../../../utils/setLocale";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
@@ -14,7 +14,7 @@ import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 
-export interface MusicLayoutProps extends Pick<ShowLayoutProps, "providers" | "children"> {
+export interface MusicLayoutProps extends Pick<DefaultShowLayoutProps, "providers" | "children"> {
 	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
 	bookmarked: boolean
 	activeTab: "info" | "issues" | "pullrequests" | "settings";
@@ -37,7 +37,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ providers, data, activeTab, b
 	}
 
 	return (
-		<ShowLayout
+		<DefaultShowLayout
 			providers={providers}
 			activeTab={activeTab}
 			tabs={tabs}
@@ -59,7 +59,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ providers, data, activeTab, b
 				</Alert>
 			</Stack>}
 			{children}
-		</ShowLayout>
+		</DefaultShowLayout>
 	)
 }
 

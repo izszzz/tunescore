@@ -4,26 +4,53 @@ import {TRPCError} from "@trpc/server"
 import {Prisma} from "@prisma/client"
 import schemaTypeFor from "../../types/schemaForType"
 import {locale} from "../../utils/zod"
+import {createPaginator, PaginateOptions} from "prisma-pagination"
 
 export const musicRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
-      include: z.object({user: z.boolean()}).optional(),
-      where: z
-        .object({
-          title: z
+      options: schemaTypeFor<PaginateOptions>()(
+        z.object({
+          page: z.number().or(z.string()).optional(),
+          perPage: z.number().or(z.string()).optional(),
+        })
+      ),
+      args: schemaTypeFor<Prisma.MusicFindManyArgs>()(
+        z.object({
+          include: z
             .object({
-              is: z.object({
-                ja: z.object({contains: z.string()}).optional(),
-                en: z.object({contains: z.string()}).optional(),
-              }),
+              user: z.boolean(),
+              composers: z.boolean(),
+              lyrists: z.boolean(),
+              band: z.boolean(),
+            })
+            .optional(),
+          where: z
+            .object({
+              title: z
+                .object({
+                  is: z
+                    .object({
+                      ja: z.object({contains: z.string()}).optional(),
+                      en: z.object({contains: z.string()}).optional(),
+                    })
+                    .optional(),
+                })
+                .optional(),
             })
             .optional(),
         })
-        .optional(),
+      ),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.music.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.MusicGetPayload<{
+          include: {user: true; composers: true; lyrists: true; band: true}
+        }>,
+        Prisma.MusicFindManyArgs
+      >(ctx.prisma.music, args)
     },
   })
   .query("show", {
@@ -40,9 +67,6 @@ export const musicRouter = createRouter()
           composers: true,
           lyrists: true,
           artists: true,
-          _count: {
-            select: {bookmarks: true},
-          },
         },
       })
       if (!music) throw new TRPCError({code: "NOT_FOUND"})
@@ -55,6 +79,30 @@ export const musicRouter = createRouter()
         },
       })
       return {...music, bookmarked: !!bookmarked?.bookmarks.length}
+    },
+  })
+  .mutation("search", {
+    input: schemaTypeFor<Prisma.MusicFindManyArgs>()(
+      z.object({
+        where: z
+          .object({
+            title: z
+              .object({
+                is: z
+                  .object({
+                    ja: z.object({contains: z.string()}).optional(),
+                    en: z.object({contains: z.string()}).optional(),
+                  })
+                  .optional(),
+              })
+              .optional(),
+          })
+          .optional(),
+        take: z.number(),
+      })
+    ),
+    async resolve({ctx, input}) {
+      return ctx.prisma.music.findMany(input)
     },
   })
   .mutation("create", {
@@ -154,6 +202,7 @@ export const musicRouter = createRouter()
     async resolve({ctx, input}) {
       const {id, ...data} = input
       return await ctx.prisma.music.update({
+        include: {composers: true, lyrists: true, band: true, artists: true},
         where: {id},
         data,
       })

@@ -1,42 +1,50 @@
-import { Prisma, PrismaClient } from '@prisma/client'
-import { createPaginator, PaginatedResult } from 'prisma-pagination'
 import type { GetServerSideProps, NextPage } from "next";
-import IndexLayout, { IndexLayoutProps } from "../../components/layouts/index/default";
-import MusicList from "../../components/elements/list/music";
-import { Locale } from 'nextjs-routes';
+import { useRouter } from 'next/router';
 import { getProviders } from 'next-auth/react';
-interface MusicsProps {
-	data: Prisma.MusicGetPayload<{ include: { user: true } }>[]
-	meta: PaginatedResult<null>["meta"]
-	providers: IndexLayoutProps["providers"]
-}
-const Musics: NextPage<MusicsProps> = ({ providers, data, meta }) => {
+import { useSnackbar } from "notistack";
+import DefaultIndexLayout, { DefaultIndexLayoutProps } from "../../components/layouts/index/default";
+import MusicList from "../../components/elements/list/music";
+import { trpc } from '../../utils/trpc';
+import setLocale from "../../utils/setLocale";
+import { Music } from "@prisma/client";
+type MusicsProps = Pick<DefaultIndexLayoutProps<Music>, "providers">
+const Musics: NextPage<MusicsProps> = ({ providers }) => {
+	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
+	const search = trpc.useMutation(["music.search"], { onError: () => { enqueueSnackbar("music.search error") } })
+	const { data } = trpc.useQuery(["music.index", {
+		args: {
+			include: { composers: true, lyrists: true, band: true, user: true },
+			where: { title: { is: { [router.locale]: { contains: router.query.q as string || "" } } } }
+		},
+		options: { page: router.query.page as string || 0, perPage: 12 }
+	}], {
+		onError: () => { enqueueSnackbar("music.index error") }
+	})
+	if (!data) return <></>
 	return (
-		<IndexLayout
+		<DefaultIndexLayout<Music>
 			providers={providers}
-			resource="music"
 			route={{ pathname: "/musics" }}
-			meta={meta}>
-			<MusicList musics={data} />
-		</IndexLayout>
+			meta={data.meta}
+			searchAutocompleteProps={{
+				options: search.data || [],
+				loading: search.isLoading,
+				getOptionLabel: option => setLocale(option.title, router) || "",
+				textFieldProps: {
+					onChange: (e) => search.mutate({ where: { title: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
+				}
+			}}
+		>
+			<MusicList musics={data.data} />
+		</DefaultIndexLayout >
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
-	const paginate = createPaginator({ perPage: 10 })
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
-	const data = await paginate<Prisma.MusicGetPayload<{ include: { user: true } }>, Prisma.MusicFindManyArgs>(
-		prisma.music,
-		{
-			where: {
-				title: { is: { [ctx.locale as Locale]: { contains: ctx.query.q as string } } }
-			},
-			include: { user: true }
-		},
-		{ page: ctx.query.page as string })
 	return {
-		props: { ...data, providers },
+		props: { providers },
 	};
 };
 

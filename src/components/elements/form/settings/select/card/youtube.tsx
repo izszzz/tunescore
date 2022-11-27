@@ -1,0 +1,78 @@
+import React, { useEffect, useState } from "react";
+import Script from 'next/script'
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import TablePagination from "@mui/material/TablePagination";
+import MusicYoutubeCard from "../../../../card/music/youtube";
+import { StreamingLink } from "@prisma/client";
+
+interface MusicItunesSelectFormProps {
+	streamingLink: StreamingLink | null | undefined
+	term: string
+	onSelect: (data: gapi.client.youtube.SearchResult | undefined) => void
+	onRemove: (data: gapi.client.youtube.SearchResult | undefined) => void
+}
+
+const MusicYoutubeSelectForm = ({ streamingLink, term, onSelect, onRemove }: MusicItunesSelectFormProps) => {
+	const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>()
+	const [value, setValue] = useState<gapi.client.youtube.Video>()
+	const [loading, setLoading] = useState(true)
+	const [rowsPerPage, setRowsPerPage] = useState(0)
+	const [count, setCount] = useState(0)
+	const [page, setPage] = useState(0)
+	const [next, setNext] = useState("")
+	const [prev, setPrev] = useState("")
+	const [current, setCurrent] = useState("")
+
+	useEffect(() => {
+		if (!loading)
+			if (streamingLink?.youtube)
+				gapi.client.youtube.videos.list({ id: streamingLink?.youtube, part: "snippet" }).then(data => setValue(data.result.items[0]))
+			else gapi.client.youtube.search.list({
+				q: term,
+				part: 'snippet',
+				type: "video",
+				videoCategoryId: "10",
+				maxResults: 6,
+				pageToken: current,
+			}).then(data => {
+				setOptions(data.result.items)
+				setRowsPerPage(data.result.pageInfo?.resultsPerPage || 0)
+				setCount(data.result.pageInfo?.totalResults || 0)
+				setNext(data.result?.nextPageToken || "")
+				setPrev(data.result?.prevPageToken || "")
+				setValue(undefined)
+			}).catch(error => {
+				console.log(error)
+			})
+	}, [term, loading, current, streamingLink?.youtube])
+
+	const handleLoad = () => {
+		gapi.load('client', () =>
+			gapi.client.init({ apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY }).then(() =>
+				gapi.client.load("https://youtube.googleapis.com/$discovery/rest?version=v3").then(() => setLoading(false))
+			)
+		);
+	}
+
+	return (
+		<Box my={2}>
+			<Script src="https://apis.google.com/js/api.js" onReady={handleLoad} />
+			{value ?
+				<MusicYoutubeCard data={value} size="large" onClick={onRemove} />
+				: <>
+					<Grid container spacing={2}>
+						{options?.map(data =>
+							<Grid item xs={6} sm={4} md={4} key={data.id?.videoId} display="flex" justifyContent="center">
+								<MusicYoutubeCard data={data} size="small" onClick={onSelect} />
+							</Grid>
+						)}
+					</Grid>
+					<TablePagination component="div" count={count} rowsPerPage={rowsPerPage} page={page} onPageChange={() => undefined} nextIconButtonProps={{ onClick: () => { setCurrent(next); setPage(p => ++p) } }} backIconButtonProps={{ onClick: () => { setCurrent(prev); setPage(p => --p) } }} />
+				</>
+			}
+		</Box>
+	)
+}
+
+export default MusicYoutubeSelectForm

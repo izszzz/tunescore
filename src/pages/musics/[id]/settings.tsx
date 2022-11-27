@@ -34,7 +34,7 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 	});
 	const update = trpc.useMutation(`music.update`, {
 		onSuccess: (data) => {
-			queryClient.setQueryData<typeof data>(["music.show", { id: data.id }], (prev) => ({ ...prev, ...data }))
+			queryClient.setQueryData<typeof data>(["music.show", { id: data.id }], data)
 			enqueueSnackbar("music.update success")
 		},
 		onError: () => { enqueueSnackbar("music.update error") }
@@ -48,7 +48,6 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 			<Divider />
 			<DefaultSettingsForm
 				data={data}
-				resource="music"
 				name="title"
 				updateLoadingButtonProps={{
 					onClick: ({ id, title }) => update.mutate({ id, title }),
@@ -60,7 +59,6 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 				}}
 			/>
 			<BandUpdateAutocomplete
-				resource="music"
 				value={data.band}
 				options={searchBand.data || []}
 				getOptionLabel={option => setLocale(option.name, router) || ""}
@@ -130,12 +128,17 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 			<LinkForm defaultValue={data.link} resource="music" />
 			<Typography variant="h6">itunes</Typography>
 
-			<MusicItunesSelectForm term={setLocale(data.title, router) || ""} streamingLink={data.link?.streaming} />
+			<MusicItunesSelectForm
+				term={setLocale(data.title, router) || ""}
+				streamingLink={data.link?.streaming}
+				onSelect={value => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, itunes: value?.trackViewUrl } } })}
+				onRemove={() => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, itunes: undefined } } })}
+			/>
 			<MusicYoutubeSelectForm
 				term={setLocale(data.title, router) || ""}
 				streamingLink={data.link?.streaming}
 				onSelect={value => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, youtube: value?.id?.videoId } } })}
-				onRemove={_v => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, youtube: undefined } } })}
+				onRemove={() => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, youtube: undefined } } })}
 			/>
 		</MusicLayout >
 	)

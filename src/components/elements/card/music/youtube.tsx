@@ -11,9 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 
 interface MusicYoutubeCardProps {
-	data: gapi.client.youtube.SearchResult | undefined
-	onClick: (value: gapi.client.youtube.SearchResult | undefined) => void
+	data: gapi.client.youtube.SearchResult | gapi.client.youtube.Video | undefined
 	size: 'small' | 'medium' | 'large'
+	onClick: (value: gapi.client.youtube.SearchResult | gapi.client.youtube.Video | undefined) => void
 }
 const MusicYoutubeCard = ({ data, size, onClick }: MusicYoutubeCardProps) => {
 	if (size === "small") return (
@@ -36,7 +36,7 @@ const MusicYoutubeCard = ({ data, size, onClick }: MusicYoutubeCardProps) => {
 	)
 	if (size === "large") return (
 		<Card sx={{ display: "flex" }}>
-			<CardContent >
+			<CardContent>
 				<CardMedia
 					component="img"
 					sx={{ width: data?.snippet?.thumbnails?.medium?.width, height: "auto", borderRadius: "3px" }}

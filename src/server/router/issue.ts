@@ -2,31 +2,42 @@ import {createRouter} from "./context"
 import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Prisma} from "@prisma/client"
+import {createPaginator, PaginateOptions} from "prisma-pagination"
+import {IssueFindManySchema} from "../../../prisma/generated/schemas/findManyIssue.schema"
+import {IssueCreateInputObjectSchema} from "../../../prisma/generated/schemas/objects/IssueCreateInput.schema"
+import {IssueUpdateOneSchema} from "../../../prisma/generated/schemas/updateOneIssue.schema"
+import {IssueDeleteOneSchema} from "../../../prisma/generated/schemas/deleteOneIssue.schema"
 
 export const issueRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
-      include: z.object({user: z.boolean()}).optional(),
-      where: z
-        .object({
-          title: z.string().optional(),
+      options: schemaTypeFor<PaginateOptions>()(
+        z.object({
+          page: z.number().or(z.string()).optional(),
+          perPage: z.number().or(z.string()).optional(),
         })
-        .optional(),
+      ),
+      args: IssueFindManySchema,
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.issue.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.IssueGetPayload<{
+          include: {user: true; music: true}
+        }>,
+        Prisma.IssueFindManyArgs
+      >(ctx.prisma.issue, args)
+    },
+  })
+  .mutation("search", {
+    input: IssueFindManySchema,
+    async resolve({ctx, input}) {
+      return ctx.prisma.issue.findMany(input)
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Omit<Prisma.IssueCreateInput, "user">>()(
-      z.object({
-        title: z.string(),
-        body: z.string(),
-        music: z.object({
-          connect: z.object({id: z.string()}),
-        }),
-      })
-    ),
+    input: IssueCreateInputObjectSchema,
     async resolve({ctx, input}) {
       return await ctx.prisma.issue.create({
         data: {...input, user: {connect: {id: ctx.session?.user?.id}}},
@@ -34,26 +45,14 @@ export const issueRouter = createRouter()
     },
   })
   .mutation("update", {
-    input: schemaTypeFor<Prisma.IssueUpdateInput>()(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-        body: z.string(),
-      })
-    ),
+    input: IssueUpdateOneSchema,
     async resolve({ctx, input}) {
-      const {id, ...data} = input
-      return await ctx.prisma.issue.update({
-        where: {id},
-        data,
-      })
+      return await ctx.prisma.issue.update(input)
     },
   })
   .mutation("destroy", {
-    input: z.object({
-      id: z.string(),
-    }),
+    input: IssueDeleteOneSchema,
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.delete({where: {id: input.id}})
+      return await ctx.prisma.artist.delete(input)
     },
   })

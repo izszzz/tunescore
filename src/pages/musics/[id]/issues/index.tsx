@@ -1,40 +1,49 @@
-import Button from "@mui/material/Button";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Issue } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import { getProviders } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import IndexLayout from "../../../../components/layouts/index";
 import IssueList from "../../../../components/elements/list/issue";
 import MusicLayout, { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getServerAuthSession } from "../../../../server/common/get-server-auth-session";
-interface MusicProps extends Pick<MusicLayoutProps, "providers"> {
-	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true, issues: { include: { user: true } } } }>
-	bookmarked: boolean;
-}
-const Issues: NextPage<MusicProps> = ({ data, bookmarked, providers }) => {
+import { trpc } from "../../../../utils/trpc";
+type MusicProps = Pick<MusicLayoutProps, "providers">
+const Issues: NextPage<MusicProps> = ({ providers }) => {
+	const { enqueueSnackbar } = useSnackbar()
 	const router = useRouter()
+	const { data: musicData } = trpc.useQuery(["music.show", { id: router.query.id as string }], { onError: () => { enqueueSnackbar("music.show error") } })
+	const { data: issueData } = trpc.useQuery(["issue.index", {
+		args: {
+			include: { user: true },
+			where: { title: { contains: router.query.q as string || "" }, music: { id: router.query.id as string } }
+		},
+		options: { page: router.query.page as string || 0, perPage: 12 }
+	}], { onError: () => { enqueueSnackbar("music.show error") } })
+	const search = trpc.useMutation(["issue.search"], { onError: () => { enqueueSnackbar("music.search error") } })
+	if (!musicData || !issueData) return <></>
 	return (
-		<MusicLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="issues">
-			<Button onClick={() => router.push({ pathname: "/musics/[id]/issues/new", query: { id: router.query.id as string } })}>New</Button>
-			<IssueList issues={data.issues} />
+		<MusicLayout providers={providers} data={musicData} bookmarked={musicData.bookmarked} activeTab="issues">
+			<IndexLayout<Issue>
+				meta={issueData.meta}
+				route={{ pathname: "/musics/[id]/issues", query: { id: router.query.id as string } }}
+				searchAutocompleteProps={{
+					options: search.data || [],
+					loading: search.isLoading,
+					getOptionLabel: option => option.title,
+					textFieldProps: {
+						onChange: (e) => search.mutate({ where: { title: { contains: e.currentTarget.value }, music: { id: router.query.id as string } }, take: 10 })
+					}
+				}}
+			>
+				<IssueList issues={issueData.data} />
+			</IndexLayout>
 		</MusicLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
-	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true, issues: { include: { user: true } } } })
-	if (!data) return { notFound: true }
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.music.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
+		props: { providers },
 	};
 };
 

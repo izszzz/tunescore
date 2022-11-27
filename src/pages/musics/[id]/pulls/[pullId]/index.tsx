@@ -5,9 +5,11 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import MusicLayout, { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import PullLayout from "../../../../../components/layouts/show/pull";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { getServerAuthSession } from "../../../../../server/common/get-server-auth-session";
+import { Prisma } from "@prisma/client";
 import { getProviders } from "next-auth/react";
+import { trpc } from "../../../../../utils/trpc";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 const Markdown = dynamic(
 	() => import("@uiw/react-markdown-preview"),
@@ -22,31 +24,24 @@ interface MusicProps extends Pick<MusicLayoutProps, "providers" | "bookmarked"> 
 		}
 	}>
 }
-const Pull: NextPage<MusicProps> = ({ providers, data, bookmarked }) => {
+const Pull: NextPage<MusicProps> = ({ providers }) => {
+	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
+	const { data: musicData } = trpc.useQuery(["music.show", { id: router.query.id as string }], { onError: () => { enqueueSnackbar("music.show error") } })
+	const { data: pullData } = trpc.useQuery(["pull.show", { id: router.query.pullId as string }], { onError: () => { enqueueSnackbar("music.show error") } })
+	if (!musicData || !pullData) return <></>
 	return (
-		<MusicLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="pullrequests">
-			<PullLayout data={data.pulls[0] as Prisma.PullGetPayload<{ include: { music: true, user: true } }>} activeTab="conversation">
-				<Markdown source={data.pulls[0]?.body} />
+		<MusicLayout providers={providers} data={musicData} bookmarked={musicData.bookmarked} activeTab="pullrequests">
+			<PullLayout data={pullData} activeTab="conversation">
+				<Markdown source={pullData.body} />
 			</PullLayout>
 		</MusicLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
-	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true, pulls: { where: { id: ctx.query.pullId as string }, include: { user: true, music: true } } } })
+export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders()
-	if (!data) return { notFound: true }
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.music.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
 	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
+		props: { providers },
 	};
 };
 export default Pull

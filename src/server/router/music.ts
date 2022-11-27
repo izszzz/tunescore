@@ -5,6 +5,8 @@ import {Prisma} from "@prisma/client"
 import schemaTypeFor from "../../types/schemaForType"
 import {locale} from "../../utils/zod"
 import {createPaginator, PaginateOptions} from "prisma-pagination"
+import {MusicFindManySchema} from "../../../prisma/generated/schemas/findManyMusic.schema"
+import {MusicCreateInputObjectSchema} from "../../../prisma/generated/schemas/objects/MusicCreateInput.schema"
 
 export const musicRouter = createRouter()
   .query("index", {
@@ -15,32 +17,7 @@ export const musicRouter = createRouter()
           perPage: z.number().or(z.string()).optional(),
         })
       ),
-      args: schemaTypeFor<Prisma.MusicFindManyArgs>()(
-        z.object({
-          include: z
-            .object({
-              user: z.boolean(),
-              composers: z.boolean(),
-              lyrists: z.boolean(),
-              band: z.boolean(),
-            })
-            .optional(),
-          where: z
-            .object({
-              title: z
-                .object({
-                  is: z
-                    .object({
-                      ja: z.object({contains: z.string()}).optional(),
-                      en: z.object({contains: z.string()}).optional(),
-                    })
-                    .optional(),
-                })
-                .optional(),
-            })
-            .optional(),
-        })
-      ),
+      args: MusicFindManySchema,
     }),
     async resolve({ctx, input}) {
       const {args, options} = input
@@ -82,38 +59,13 @@ export const musicRouter = createRouter()
     },
   })
   .mutation("search", {
-    input: schemaTypeFor<Prisma.MusicFindManyArgs>()(
-      z.object({
-        where: z
-          .object({
-            title: z
-              .object({
-                is: z
-                  .object({
-                    ja: z.object({contains: z.string()}).optional(),
-                    en: z.object({contains: z.string()}).optional(),
-                  })
-                  .optional(),
-              })
-              .optional(),
-          })
-          .optional(),
-        take: z.number(),
-      })
-    ),
+    input: MusicFindManySchema,
     async resolve({ctx, input}) {
       return ctx.prisma.music.findMany(input)
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Prisma.MusicCreateInput>()(
-      z.object({
-        title: locale,
-        score: z.string(),
-        visibility: z.enum(["PUBLIC", "PRIVATE"]),
-        type: z.enum(["ORIGINAL", "COPY"]),
-      })
-    ),
+    input: MusicCreateInputObjectSchema,
     async resolve({ctx, input}) {
       if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
       let customInput: Prisma.MusicCreateInput = input

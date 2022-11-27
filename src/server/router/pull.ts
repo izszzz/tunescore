@@ -3,19 +3,42 @@ import {z} from "zod"
 import schemaTypeFor from "../../types/schemaForType"
 import {Prisma} from "@prisma/client"
 import {TRPCError} from "@trpc/server"
+import {createPaginator, PaginateOptions} from "prisma-pagination"
 
 export const pullRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
-      include: z.object({user: z.boolean()}).optional(),
-      where: z
-        .object({
-          title: z.string().optional(),
+      options: schemaTypeFor<PaginateOptions>()(
+        z.object({
+          page: z.number().or(z.string()).optional(),
+          perPage: z.number().or(z.string()).optional(),
         })
-        .optional(),
+      ),
+      args: schemaTypeFor<Prisma.PullFindManyArgs>()(
+        z.object({
+          include: z
+            .object({
+              user: z.boolean(),
+            })
+            .optional(),
+          where: z
+            .object({
+              title: z.object({contains: z.string()}).optional(),
+              music: z.object({id: z.string()}),
+            })
+            .optional(),
+        })
+      ),
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.issue.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.PullGetPayload<{
+          include: {user: true; music: true}
+        }>,
+        Prisma.PullFindManyArgs
+      >(ctx.prisma.pull, args)
     },
   })
   .query("show", {
@@ -27,6 +50,28 @@ export const pullRouter = createRouter()
         where: {id: input.id},
         include: {user: true, music: true},
       })
+    },
+  })
+  .mutation("search", {
+    input: schemaTypeFor<Prisma.PullFindManyArgs>()(
+      z.object({
+        where: z
+          .object({
+            title: z
+              .object({
+                contains: z.string().optional(),
+              })
+              .optional(),
+            music: z.object({
+              id: z.string(),
+            }),
+          })
+          .optional(),
+        take: z.number(),
+      })
+    ),
+    async resolve({ctx, input}) {
+      return ctx.prisma.pull.findMany(input)
     },
   })
   .mutation("create", {

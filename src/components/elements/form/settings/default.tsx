@@ -5,10 +5,8 @@ import Grid from '@mui/material/Grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import Alert from "@mui/material/Alert"
-import { PrismaModelNameLowercase } from '../../../../types/common';
 interface DefaultSettingsFormProps<T> {
 	data: T
-	resource: PrismaModelNameLowercase
 	name: "title" | "name"
 	updateLoadingButtonProps: {
 		onClick: (data: T) => void
@@ -19,7 +17,7 @@ interface DefaultSettingsFormProps<T> {
 		loading: boolean
 	}
 }
-function DefaultSettingsForm<T extends { id: string }>({ name, data, resource, updateLoadingButtonProps: updateButtonProps, destroyLoadingButtonProps: destroyButtonProps }: DefaultSettingsFormProps<T>) {
+function DefaultSettingsForm<T extends { id: string }>({ name, data, updateLoadingButtonProps: updateButtonProps, destroyLoadingButtonProps: destroyButtonProps }: DefaultSettingsFormProps<T>) {
 	const router = useRouter()
 	const formContext = useForm<T>()
 	useEffect(() => {
@@ -52,7 +50,7 @@ function DefaultSettingsForm<T extends { id: string }>({ name, data, resource, u
 			<Alert
 				variant="outlined"
 				severity="warning"
-				action={<LoadingButton type="button" variant="contained" color="warning" loading={destroyButtonProps.loading} onClick={() => destroyButtonProps.onClick(data)} disableElevation>Delete {resource}</LoadingButton>}
+				action={<LoadingButton type="button" variant="contained" color="warning" loading={destroyButtonProps.loading} onClick={() => destroyButtonProps.onClick(data)} disableElevation>Delete</LoadingButton>}
 			>
 				This is a warning alert
 			</Alert>

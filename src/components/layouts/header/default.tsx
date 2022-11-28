@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { ClientSafeProvider, LiteralUnion, signIn, signOut, useSession } from "next-auth/react";
+import { getProviders, signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
@@ -17,15 +17,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
 import GoogleIcon from "../../elements/icon/google"
-import { BuiltInProviderType } from "next-auth/providers";
 
-export interface DefaultHeaderProps {
-	providers: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>
-}
 
-const DefaultHeader = ({ providers }: DefaultHeaderProps) => {
+const DefaultHeader = () => {
 	const { data: session } = useSession()
 	const [open, setOpen] = useState(false)
+	const [providers, setProviders] = useState<Awaited<ReturnType<typeof getProviders>>>()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const router = useRouter()
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -36,6 +33,9 @@ const DefaultHeader = ({ providers }: DefaultHeaderProps) => {
 		signOut();
 		handleClose();
 	}
+	useEffect(() => {
+		(async () => { setProviders(await getProviders()) })()
+	}, [])
 	return (
 		<>
 			<Header>
@@ -80,7 +80,7 @@ const DefaultHeader = ({ providers }: DefaultHeaderProps) => {
 								</Menu>
 							</>
 							:
-							<Button variant="contained" onClick={handleOpenModal} disableElevation>SignIn</Button>
+							<Button variant="contained" onClick={handleOpenModal} disabled={!providers} disableElevation>SignIn</Button>
 						}
 					</Grid>
 				</Grid>
@@ -94,7 +94,7 @@ const DefaultHeader = ({ providers }: DefaultHeaderProps) => {
 					Sign In
 				</DialogTitle>
 				<DialogActions>
-					{Object.values(providers).map((provider) =>
+					{providers && Object.values(providers).map((provider) =>
 						<Button key={provider.name} variant="outlined" startIcon={<GoogleIcon />} onClick={() => signIn(provider.id, { callbackUrl: "http://localhost/" })}>Login with {provider.name}</Button>
 					)}
 				</DialogActions>

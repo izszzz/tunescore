@@ -1,19 +1,17 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import type { GetServerSideProps, NextPage } from "next";
-import { getProviders } from "next-auth/react";
+import type { NextPage } from "next";
 import Link from 'next/link'
 import DefaultMusicCard from "../components/elements/card/music/default";
-import DefaultSingleColumnLayout, { DefaultSingleColumnLayoutProps } from "../components/layouts/single_column/default";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
 
-type HomeProps = Pick<DefaultSingleColumnLayoutProps, "providers">
-const Home: NextPage<HomeProps> = ({ providers }) => {
+const Home: NextPage = () => {
   const musics = trpc.useQuery(["music.index", {
     args: { include: { composers: true, lyrists: true, band: true, user: true } },
     options: { page: 0, perPage: 12 }
   }])
   return (
-    <DefaultSingleColumnLayout providers={providers}>
+    <DefaultSingleColumnLayout>
       <>home</>
       <br /><Link href="/musics">
         <a>music</a>
@@ -36,13 +34,6 @@ const Home: NextPage<HomeProps> = ({ providers }) => {
       </Grid>
     </DefaultSingleColumnLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const providers = await getProviders()
-  return {
-    props: { providers },
-  };
 };
 
 export default Home;

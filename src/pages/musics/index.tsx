@@ -1,14 +1,12 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from 'next/router';
-import { getProviders } from 'next-auth/react';
 import { useSnackbar } from "notistack";
-import DefaultIndexLayout, { DefaultIndexLayoutProps } from "../../components/layouts/index/default";
+import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicList from "../../components/elements/list/music";
 import { trpc } from '../../utils/trpc';
 import setLocale from "../../utils/setLocale";
 import { Music } from "@prisma/client";
-type MusicsProps = Pick<DefaultIndexLayoutProps<Music>, "providers">
-const Musics: NextPage<MusicsProps> = ({ providers }) => {
+const Musics: NextPage = () => {
 	const router = useRouter()
 	const { enqueueSnackbar } = useSnackbar()
 	const search = trpc.useMutation(["music.search"], { onError: () => { enqueueSnackbar("music.search error") } })
@@ -24,7 +22,6 @@ const Musics: NextPage<MusicsProps> = ({ providers }) => {
 	if (!data) return <></>
 	return (
 		<DefaultIndexLayout<Music>
-			providers={providers}
 			route={{ pathname: "/musics" }}
 			meta={data.meta}
 			searchAutocompleteProps={{
@@ -41,11 +38,5 @@ const Musics: NextPage<MusicsProps> = ({ providers }) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
 
 export default Musics;

@@ -14,13 +14,13 @@ import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 
-export interface MusicLayoutProps extends Pick<DefaultShowLayoutProps, "providers" | "children"> {
+export interface MusicLayoutProps extends Pick<DefaultShowLayoutProps, "children"> {
 	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
 	bookmarked: boolean
 	activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
-const MusicLayout: React.FC<MusicLayoutProps> = ({ providers, data, activeTab, bookmarked, children }) => {
+const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, children }) => {
 	const router = useRouter()
 	const bookmarkCreate = trpc.useMutation(["music.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["music.bookmark.destroy"]);
@@ -38,7 +38,6 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ providers, data, activeTab, b
 
 	return (
 		<DefaultShowLayout
-			providers={providers}
 			activeTab={activeTab}
 			tabs={tabs}
 			title={

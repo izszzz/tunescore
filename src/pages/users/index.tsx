@@ -1,11 +1,24 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Link from 'next/link';
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-interface UsersProps {
-	data: Prisma.UserGetPayload<null>[]
-}
-const Users: NextPage<UsersProps> = ({ data }) => {
+import { trpc } from "../../utils/trpc";
+
+const Users: NextPage = () => {
+	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
+	const search = trpc.useMutation(["user.search"], { onError: () => { enqueueSnackbar("music.search error") } })
+	const { data } = trpc.useQuery(["user.index", {
+		args: {
+			include: { composers: true, lyrists: true, band: true, user: true },
+			where: { title: { is: { [router.locale]: { contains: router.query.q as string || "" } } } }
+		},
+		options: { page: router.query.page as string || 0, perPage: 12 }
+	}], {
+		onError: () => { enqueueSnackbar("music.index error") }
+	})
+	if (!data) return <></>
 	return (
 		<DefaultSingleColumnLayout contained>
 			<p>users</p>
@@ -17,12 +30,5 @@ const Users: NextPage<UsersProps> = ({ data }) => {
 		</DefaultSingleColumnLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps<UsersProps> = async () => {
-	const prisma = new PrismaClient()
-	const data = await prisma.user.findMany()
-	return {
-		props: { data },
-	};
-};
 
 export default Users;

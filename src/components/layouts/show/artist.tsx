@@ -8,12 +8,12 @@ import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import { Prisma } from "@prisma/client";
 import Box from "@mui/material/Box";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
-export interface ArtistLayoutProps extends Pick<DefaultShowLayoutProps, "providers" | "children"> {
+export interface ArtistLayoutProps extends Pick<DefaultShowLayoutProps, "children"> {
 	data: Prisma.ArtistGetPayload<null>
 	bookmarked: boolean
 	activeTab: "info" | "settings"
 }
-const ArtistLayout: React.FC<ArtistLayoutProps> = ({ data, bookmarked, activeTab, providers, children }) => {
+const ArtistLayout: React.FC<ArtistLayoutProps> = ({ data, bookmarked, activeTab, children }) => {
 	const router = useRouter()
 	const bookmarkCreate = trpc.useMutation(["artist.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["artist.bookmark.destroy"]);
@@ -29,7 +29,6 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({ data, bookmarked, activeTab
 	}
 	return (
 		<DefaultShowLayout
-			providers={providers}
 			activeTab={activeTab}
 			tabs={tabs}
 			title={

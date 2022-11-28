@@ -16,6 +16,8 @@ datasource db {
 
 generator zod {
   provider = "prisma-zod-generator"
+  isGenerateSelect  = true
+  isGenerateInclude = true
 }
 
 // model Example {

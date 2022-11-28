@@ -1,66 +1,47 @@
 import {createRouter} from "./context"
 import {z} from "zod"
-import schemaTypeFor from "../../types/schemaForType"
-import {Prisma} from "@prisma/client"
-import {locale} from "../../utils/zod"
 import {TRPCError} from "@trpc/server"
+import {AlbumCreateInputObjectSchema} from "../../../prisma/generated/schemas/objects/AlbumCreateInput.schema"
+import {AlbumUpdateOneSchema} from "../../../prisma/generated/schemas/updateOneAlbum.schema"
+import {AlbumDeleteOneSchema} from "../../../prisma/generated/schemas/deleteOneAlbum.schema"
+import {createPaginator} from "prisma-pagination"
+import {AlbumFindManySchema} from "../../../prisma/generated/schemas/findManyAlbum.schema"
+import {Prisma} from "@prisma/client"
+import {PaginateOptionsSchema} from "../../utils/zod"
 
 export const albumRouter = createRouter()
   .mutation("index", {
     input: z.object({
-      include: z.object({band: z.boolean().optional()}).optional(),
-      where: z
-        .object({
-          title: z
-            .object({
-              is: z.object({
-                ja: z.object({contains: z.string()}).optional(),
-                en: z.object({contains: z.string()}).optional(),
-              }),
-            })
-            .optional(),
-        })
-        .optional(),
+      options: PaginateOptionsSchema,
+      args: AlbumFindManySchema,
     }),
     async resolve({ctx, input}) {
-      return await ctx.prisma.album.findMany(input)
+      const {args, options} = input
+      const paginate = createPaginator(options)
+      return await paginate<
+        Prisma.AlbumGetPayload<{
+          include: {composers: true; lyrists: true; band: true}
+        }>,
+        Prisma.AlbumFindManyArgs
+      >(ctx.prisma.album, args)
     },
   })
   .mutation("create", {
-    input: schemaTypeFor<Prisma.AlbumCreateInput>()(
-      z.object({
-        title: locale,
-      })
-    ),
+    input: AlbumCreateInputObjectSchema,
     async resolve({ctx, input}) {
-      return await ctx.prisma.album.create({
-        data: {
-          ...input,
-        },
-      })
+      return await ctx.prisma.album.create({data: input})
     },
   })
   .mutation("update", {
-    input: schemaTypeFor<Prisma.AlbumUpdateInput>()(
-      z.object({
-        id: z.string(),
-        title: locale.optional(),
-      })
-    ),
+    input: AlbumUpdateOneSchema,
     async resolve({ctx, input}) {
-      const {id, ...data} = input
-      return await ctx.prisma.artist.update({
-        where: {id},
-        data,
-      })
+      return await ctx.prisma.artist.update(input)
     },
   })
   .mutation("destroy", {
-    input: z.object({
-      id: z.string(),
-    }),
+    input: AlbumDeleteOneSchema,
     async resolve({ctx, input}) {
-      return await ctx.prisma.album.delete({where: {id: input.id}})
+      return await ctx.prisma.album.delete(input)
     },
   })
   .mutation("bookmark.create", {

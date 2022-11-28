@@ -1,17 +1,14 @@
-import { Issue } from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
-import { getProviders } from "next-auth/react";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import IndexLayout from "../../../../components/layouts/index";
 import IssueList from "../../../../components/elements/list/issue";
-import MusicLayout, { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import MusicLayout from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
-type MusicProps = Pick<MusicLayoutProps, "providers">
-const Issues: NextPage<MusicProps> = ({ providers }) => {
+const Issues: NextPage = () => {
 	const { enqueueSnackbar } = useSnackbar()
 	const router = useRouter()
-	const { data: musicData } = trpc.useQuery(["music.show", { id: router.query.id as string }], { onError: () => { enqueueSnackbar("music.show error") } })
+	const { data: musicData } = trpc.useQuery(["music.show", { where: { id: router.query.id as string } }], { onError: () => { enqueueSnackbar("music.show error") } })
 	const { data: issueData } = trpc.useQuery(["issue.index", {
 		args: {
 			include: { user: true },
@@ -22,8 +19,8 @@ const Issues: NextPage<MusicProps> = ({ providers }) => {
 	const search = trpc.useMutation(["issue.search"], { onError: () => { enqueueSnackbar("music.search error") } })
 	if (!musicData || !issueData) return <></>
 	return (
-		<MusicLayout providers={providers} data={musicData} bookmarked={musicData.bookmarked} activeTab="issues">
-			<IndexLayout<Issue>
+		<MusicLayout data={musicData} bookmarked={musicData.bookmarked} activeTab="issues">
+			<IndexLayout
 				meta={issueData.meta}
 				route={{ pathname: "/musics/[id]/issues", query: { id: router.query.id as string } }}
 				searchAutocompleteProps={{
@@ -40,11 +37,6 @@ const Issues: NextPage<MusicProps> = ({ providers }) => {
 		</MusicLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
+
 
 export default Issues;

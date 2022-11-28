@@ -15,17 +15,13 @@ interface BandSettingsFormProps {
 }
 const BandSettingsForm = ({ data, isLoading }: BandSettingsFormProps) => {
 	const router = useRouter()
+	const id = router.query.id as string
 	const formContext = useForm<Band>()
 	const { enqueueSnackbar } = useSnackbar()
-	const destroy = trpc.useMutation("band.destroy");
+	const destroy = trpc.useMutation("band.destroy", { onError: () => { router.push("/bands") } });
 	const update = trpc.useMutation("band.update", { onSuccess: () => { enqueueSnackbar("update success") } });
-	const handleSubmit = (data: Band) => update.mutate(data)
-	const handleDestroy = () => {
-		if (data) {
-			destroy.mutate(data)
-			router.push("/bands")
-		}
-	}
+	const handleSubmit = (data: Band) => update.mutate({ where: { id }, data })
+	const handleDestroy = () => data && destroy.mutate(data)
 	useEffect(() => {
 		if (data) formContext.reset(data)
 	}, [router.locale, formContext, data])

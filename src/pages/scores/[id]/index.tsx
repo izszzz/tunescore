@@ -1,32 +1,17 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import ScoreLayout from "../../../components/layouts/score"
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import { trpc } from "../../../utils/trpc";
 
-interface ScoreProps {
-	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
-}
-const Score: NextPage<ScoreProps> = ({ data }) => {
+const Score: NextPage = () => {
+	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
+	const { data } = trpc.useQuery(["music.show", { where: { id: router.query.id as string } }], { onError: () => { enqueueSnackbar("music.show error") } })
+	if (!data) return <></>
 	return (
 		<ScoreLayout value={data.score} />
 	)
 }
-export const getServerSideProps: GetServerSideProps<ScoreProps> = async (ctx) => {
-	const prisma = new PrismaClient()
-	const data = await prisma.music.findUnique({ where: { id: ctx.query.id as string }, include: { artists: true, band: true, composers: true, lyrists: true, user: true } })
-	if (!data) return { notFound: true };
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.music.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
-	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length },
-	};
-};
 
 export default Score;

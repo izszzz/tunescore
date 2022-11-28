@@ -1,34 +1,18 @@
 import {createRouter} from "./context"
 import {z} from "zod"
-import schemaTypeFor from "../../types/schemaForType"
+import schemaTypeFor from "../../utils/schemaForType"
 import {Prisma} from "@prisma/client"
 import {TRPCError} from "@trpc/server"
-import {createPaginator, PaginateOptions} from "prisma-pagination"
+import {createPaginator} from "prisma-pagination"
+import {PullFindUniqueSchema} from "../../../prisma/generated/schemas/findUniquePull.schema"
+import {PaginateOptionsSchema} from "../../utils/zod"
+import {PullFindManySchema} from "../../../prisma/generated/schemas/findManyPull.schema"
 
 export const pullRouter = createRouter()
   .query("index", {
     input: z.object({
-      options: schemaTypeFor<PaginateOptions>()(
-        z.object({
-          page: z.number().or(z.string()).optional(),
-          perPage: z.number().or(z.string()).optional(),
-        })
-      ),
-      args: schemaTypeFor<Prisma.PullFindManyArgs>()(
-        z.object({
-          include: z
-            .object({
-              user: z.boolean(),
-            })
-            .optional(),
-          where: z
-            .object({
-              title: z.object({contains: z.string()}).optional(),
-              music: z.object({id: z.string()}),
-            })
-            .optional(),
-        })
-      ),
+      options: PaginateOptionsSchema,
+      args: PullFindManySchema,
     }),
     async resolve({ctx, input}) {
       const {args, options} = input
@@ -42,34 +26,16 @@ export const pullRouter = createRouter()
     },
   })
   .query("show", {
-    input: z.object({
-      id: z.string(),
-    }),
+    input: PullFindUniqueSchema,
     async resolve({ctx, input}) {
-      return await ctx.prisma.pull.findFirst({
-        where: {id: input.id},
+      return await ctx.prisma.pull.findUnique({
+        ...input,
         include: {user: true, music: true},
       })
     },
   })
   .mutation("search", {
-    input: schemaTypeFor<Prisma.PullFindManyArgs>()(
-      z.object({
-        where: z
-          .object({
-            title: z
-              .object({
-                contains: z.string().optional(),
-              })
-              .optional(),
-            music: z.object({
-              id: z.string(),
-            }),
-          })
-          .optional(),
-        take: z.number(),
-      })
-    ),
+    input: PullFindManySchema,
     async resolve({ctx, input}) {
       return ctx.prisma.pull.findMany(input)
     },

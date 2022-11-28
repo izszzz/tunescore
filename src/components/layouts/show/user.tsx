@@ -7,25 +7,24 @@ import Box from "@mui/material/Box";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import ToggleLoadingButton from "../../elements/button/toggle/loading"
 import { trpc } from "../../../utils/trpc";
-import { getProviders, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import ShowLayout, { ShowLayoutProps } from "./default";
-import { GetServerSideProps } from "next";
+import ShowLayout from "./default";
 
-interface UserLayoutProps extends Pick<ShowLayoutProps, "providers" | "children"> {
+interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
 	data: Prisma.UserGetPayload<{ include: { _count: { select: { following: true, followedBy: true } } } }>
 	followed: boolean
 	activeTab: "info" | "settings" | "";
 }
 
-const UserLayout: React.FC<UserLayoutProps> = ({ providers, data, followed, activeTab, children }) => {
+const UserLayout: React.FC<UserLayoutProps> = ({ data, followed, activeTab, children }) => {
 	const [following, setFollowing] = useState(0)
 	const [followers, setFollowers] = useState(0)
 	const router = useRouter()
 	const session = useSession()
 	const update = trpc.useMutation("user.update");
 	function handleUpdateInclude(params: Prisma.UserUpdateInput, onSuccess?: () => void) {
-		update.mutate({ id: router.query.id as string, ...params }, {
+		update.mutate({ where: { id: router.query.id as string }, ...params }, {
 			onSuccess: () => { onSuccess && onSuccess() }
 		})
 	}
@@ -50,7 +49,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({ providers, data, followed, acti
 	]), [router.query.id])
 	return (
 		<ShowLayout
-			providers={providers}
 			tabs={tabs}
 			activeTab={activeTab}
 			title={
@@ -79,9 +77,3 @@ const UserLayout: React.FC<UserLayoutProps> = ({ providers, data, followed, acti
 }
 
 export default UserLayout;
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};

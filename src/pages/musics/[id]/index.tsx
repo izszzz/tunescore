@@ -6,23 +6,21 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import type { GetServerSideProps, NextPage } from "next"
-import { getProviders } from "next-auth/react";
+import type { NextPage } from "next"
 import { useRouter } from "next/router";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
-import MusicLayout, { MusicLayoutProps } from "../../../components/layouts/show/music";
+import MusicLayout from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes"
 import YoutubeButton from "../../../components/elements/button/youtube"
 import setLocale from "../../../utils/setLocale"
 import { trpc } from "../../../utils/trpc";
-export type MusicProps = Pick<MusicLayoutProps, "providers">
-const Music: NextPage<MusicProps> = ({ providers }) => {
+const Music: NextPage = () => {
 	const router = useRouter();
-	const { data } = trpc.useQuery(["music.show", { id: router.query.id as string }],);
+	const { data } = trpc.useQuery(["music.show", { where: { id: router.query.id as string } }],);
 	if (!data) return <></>
 	return (
-		<MusicLayout providers={providers} data={data} bookmarked={data.bookmarked} activeTab="info">
+		<MusicLayout data={data} bookmarked={data.bookmarked} activeTab="info">
 			{data.link?.streaming?.itunes && <ItunesButton href={data.link?.streaming?.itunes} />}
 			{data.link?.streaming?.youtube && <YoutubeButton href={`https://www.youtube.com/watch?v=${data.link?.streaming?.youtube}`} />}
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
@@ -84,12 +82,5 @@ const Music: NextPage<MusicProps> = ({ providers }) => {
 		</MusicLayout >
 	)
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
 
 export default Music;

@@ -1,10 +1,14 @@
 import { z } from 'zod';
+import { BandSelectObjectSchema } from './objects/BandSelect.schema';
+import { BandIncludeObjectSchema } from './objects/BandInclude.schema';
 import { BandWhereInputObjectSchema } from './objects/BandWhereInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './objects/BandOrderByWithRelationInput.schema';
 import { BandWhereUniqueInputObjectSchema } from './objects/BandWhereUniqueInput.schema';
 import { BandScalarFieldEnumSchema } from './enums/BandScalarFieldEnum.schema';
 
 export const BandFindManySchema = z.object({
+  select: z.lazy(() => BandSelectObjectSchema.optional()),
+  include: z.lazy(() => BandIncludeObjectSchema.optional()),
   where: BandWhereInputObjectSchema.optional(),
   orderBy: z
     .union([

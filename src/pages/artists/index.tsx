@@ -1,12 +1,14 @@
-import type { GetServerSideProps, NextPage } from "next";
-import IndexLayout, { DefaultIndexLayoutProps } from "../../components/layouts/index/default";
-import ArtistList from "../../components/elements/list/artist";
-import { getProviders } from "next-auth/react";
-import { trpc } from "../../utils/trpc";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-type ArtistsProps = Pick<DefaultIndexLayoutProps, "providers">
-const Artists: NextPage<ArtistsProps> = ({ providers }) => {
+import { useSnackbar } from "notistack";
+import IndexLayout from "../../components/layouts/index/default";
+import ArtistList from "../../components/elements/list/artist";
+import { trpc } from "../../utils/trpc";
+import setLocale from "../../utils/setLocale";
+const Artists: NextPage = () => {
 	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
+	const search = trpc.useMutation(["artist.search"], { onError: () => { enqueueSnackbar("music.search error") } })
 	const { data } = trpc.useQuery(["artist.index", {
 		args: {
 			include: { bands: true },
@@ -17,19 +19,20 @@ const Artists: NextPage<ArtistsProps> = ({ providers }) => {
 	if (!data) return <></>
 	return (
 		<IndexLayout
-			providers={providers}
-			resource="artist"
 			route={{ pathname: "/artists" }}
-			meta={data.meta}>
+			meta={data.meta}
+			searchAutocompleteProps={{
+				options: search.data || [],
+				loading: search.isLoading,
+				getOptionLabel: option => setLocale(option.name, router) || "",
+				textFieldProps: {
+					onChange: (e) => search.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
+				}
+			}}
+		>
 			<ArtistList artists={data.data} />
 		</IndexLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
 
 export default Artists;

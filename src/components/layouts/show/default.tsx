@@ -1,11 +1,9 @@
 import React from "react";
-import DefaultHeader, { DefaultHeaderProps } from "../header/default";
+import DefaultHeader from "../header/default";
 import ShowLayout, { ShowLayoutProps } from "./"
 
-export interface DefaultShowLayoutProps extends ShowLayoutProps {
-	providers: DefaultHeaderProps["providers"]
-}
-const DefaultShowLayout = ({ providers, ...props }: DefaultShowLayoutProps) =>
-	<ShowLayout {...props} header={<DefaultHeader providers={providers} />} />
+export type DefaultShowLayoutProps = ShowLayoutProps
+const DefaultShowLayout = (props: ShowLayoutProps) =>
+	<ShowLayout {...props} header={<DefaultHeader />} />
 
 export default DefaultShowLayout

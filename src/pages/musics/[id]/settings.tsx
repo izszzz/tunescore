@@ -1,9 +1,9 @@
 import React from "react";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { Artist } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MusicLayout, { MusicLayoutProps } from "../../../components/layouts/show/music";
+import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import DefaultSettingsForm from "../../../components/elements/form/settings/default"
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists"
@@ -14,17 +14,16 @@ import MusicItunesSelectForm from "../../../components/elements/form/settings/se
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
 import setLocale from "../../../utils/setLocale";
 import { useRouter } from "next/router";
-import { getProviders } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useQueryClient } from "react-query";
-type MusicProps = Pick<MusicLayoutProps, "providers">
 
-const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
+const SettingsMusic: NextPage = () => {
 	const queryClient = useQueryClient()
 	const router = useRouter()
+	const id = router.query.id as string
 	const { enqueueSnackbar } = useSnackbar()
-	const { data } = trpc.useQuery(["music.show", { id: router.query.id as string }]);
+	const { data } = trpc.useQuery(["music.show", { where: { id } }]);
 	const destroy = trpc.useMutation(`music.destroy`, {
 		onSuccess: () => {
 			enqueueSnackbar("music.destroy success")
@@ -34,7 +33,7 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 	});
 	const update = trpc.useMutation(`music.update`, {
 		onSuccess: (data) => {
-			queryClient.setQueryData<typeof data>(["music.show", { id: data.id }], data)
+			queryClient.setQueryData<typeof data>(["music.show", { where: { id } }], data)
 			enqueueSnackbar("music.update success")
 		},
 		onError: () => { enqueueSnackbar("music.update error") }
@@ -43,14 +42,14 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 	const searchArtist = trpc.useMutation("artist.search", { onError: () => { enqueueSnackbar("artist.search error") } })
 	if (!data) return <></>
 	return (
-		<MusicLayout providers={providers} data={data} bookmarked={data.bookmarked} activeTab="settings">
+		<MusicLayout data={data} bookmarked={data.bookmarked} activeTab="settings">
 			<Typography variant="h4"> Info</Typography>
 			<Divider />
 			<DefaultSettingsForm
 				data={data}
 				name="title"
 				updateLoadingButtonProps={{
-					onClick: ({ id, title }) => update.mutate({ id, title }),
+					onClick: ({ id, title }) => update.mutate({ where: { id }, data: { title } }),
 					loading: update.isLoading,
 				}}
 				destroyLoadingButtonProps={{
@@ -64,8 +63,8 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 				getOptionLabel={option => setLocale(option.name, router) || ""}
 				loading={update.isLoading}
 				onChange={{
-					onClear: () => update.mutate({ id: data.id, band: { disconnect: true } }),
-					onSelect: (_e, _v, _r, details) => update.mutate({ id: data.id, band: { connect: { id: details?.option.id } } })
+					onClear: () => update.mutate({ where: { id }, data: { band: { disconnect: true } } }),
+					onSelect: (_e, _v, _r, details) => update.mutate({ where: { id }, data: { band: { connect: { id: details?.option.id } } } })
 				}}
 				textFieldProps={{
 					onChange: (e) => searchBand.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
@@ -83,8 +82,8 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 					onChange: (e) => searchArtist.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
 				}}
 				onChange={{
-					onSelect: (_e, _v, _r, details) => update.mutate({ id: data.id, composers: { connect: { id: details?.option.id } } }),
-					onRemove: (_e, _v, _r, details) => update.mutate({ id: data.id, composers: { disconnect: { id: details?.option.id } } })
+					onSelect: (_e, _v, _r, details) => update.mutate({ where: { id }, data: { composers: { connect: { id: details?.option.id } } } }),
+					onRemove: (_e, _v, _r, details) => update.mutate({ where: { id }, data: { composers: { disconnect: { id: details?.option.id } } } })
 				}}
 				multiple
 			/>
@@ -100,8 +99,8 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 					onChange: (e) => searchArtist.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
 				}}
 				onChange={{
-					onSelect: (_e, _v, _r, details) => update.mutate({ id: data.id, lyrists: { connect: { id: details?.option.id } } }),
-					onRemove: (_e, _v, _r, details) => update.mutate({ id: data.id, lyrists: { disconnect: { id: details?.option.id } } }),
+					onSelect: (_e, _v, _r, details) => update.mutate({ where: { id }, data: { lyrists: { connect: { id: details?.option.id } } } }),
+					onRemove: (_e, _v, _r, details) => update.mutate({ where: { id }, data: { lyrists: { disconnect: { id: details?.option.id } } } }),
 				}}
 				multiple
 			/>
@@ -118,9 +117,9 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 				}}
 				loadingButtonProps={{
 					loading: update.isLoading,
-					onClick: artist => update.mutate({ id: data.id, artists: { connect: { id: artist?.id } } })
+					onClick: artist => update.mutate({ where: { id }, data: { artists: { connect: { id: artist?.id } } } })
 				}}
-				onDestroy={artist => update.mutate({ id: data.id, artists: { disconnect: { id: artist.id } } })}
+				onDestroy={artist => update.mutate({ where: { id }, data: { artists: { disconnect: { id: artist.id } } } })}
 			/>
 
 			<Typography variant="h4">SNS</Typography>
@@ -131,24 +130,18 @@ const SettingsMusic: NextPage<MusicProps> = ({ providers }) => {
 			<MusicItunesSelectForm
 				term={setLocale(data.title, router) || ""}
 				streamingLink={data.link?.streaming}
-				onSelect={value => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, itunes: value?.trackViewUrl } } })}
-				onRemove={() => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, itunes: undefined } } })}
+				onSelect={value => update.mutate({ where: { id }, data: { link: { streaming: { ...data.link?.streaming, itunes: value?.trackViewUrl } } } })}
+				onRemove={() => update.mutate({ where: { id }, data: { link: { streaming: { ...data.link?.streaming, itunes: undefined } } } })}
 			/>
 			<MusicYoutubeSelectForm
 				term={setLocale(data.title, router) || ""}
 				streamingLink={data.link?.streaming}
-				onSelect={value => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, youtube: value?.id?.videoId } } })}
-				onRemove={() => update.mutate({ id: data.id, link: { streaming: { ...data.link?.streaming, youtube: undefined } } })}
+				onSelect={value => update.mutate({ where: { id }, data: { link: { streaming: { ...data.link?.streaming, youtube: value?.id?.videoId } } } })}
+				onRemove={() => update.mutate({ where: { id }, data: { link: { streaming: { ...data.link?.streaming, youtube: undefined } } } })}
 			/>
 		</MusicLayout >
 	)
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
 
 export default SettingsMusic;
 

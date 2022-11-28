@@ -1,48 +1,19 @@
 import {Prisma} from "@prisma/client"
 import {TRPCError} from "@trpc/server"
-import schemaTypeFor from "../../types/schemaForType"
-import {createPaginator, PaginateOptions} from "prisma-pagination"
+import {createPaginator} from "prisma-pagination"
 import {z} from "zod"
-import {locale} from "../../utils/zod"
 import {createRouter} from "./context"
+import {BandFindManySchema} from "../../../prisma/generated/schemas/findManyBand.schema"
+import {BandCreateInputObjectSchema} from "../../../prisma/generated/schemas/objects/BandCreateInput.schema"
+import {BandUpdateOneSchema} from "../../../prisma/generated/schemas/updateOneBand.schema"
+import {PaginateOptionsSchema} from "../../utils/zod"
+import {BandFindUniqueSchema} from "../../../prisma/generated/schemas/findUniqueBand.schema"
 
 export const bandRouter = createRouter()
   .query("index", {
     input: z.object({
-      options: schemaTypeFor<PaginateOptions>()(
-        z.object({
-          page: z.number().or(z.string()).optional(),
-          perPage: z.number().or(z.string()).optional(),
-        })
-      ),
-      args: schemaTypeFor<Prisma.BandFindManyArgs>()(
-        z.object({
-          include: z
-            .object({
-              _count: z
-                .object({
-                  select: z.object({
-                    musics: z.boolean(),
-                    artists: z.boolean(),
-                  }),
-                })
-                .optional(),
-            })
-            .optional(),
-          where: z
-            .object({
-              name: z
-                .object({
-                  is: z.object({
-                    ja: z.object({contains: z.string()}).optional(),
-                    en: z.object({contains: z.string()}).optional(),
-                  }),
-                })
-                .optional(),
-            })
-            .optional(),
-        })
-      ),
+      options: PaginateOptionsSchema,
+      args: BandFindManySchema,
     }),
     async resolve({ctx, input}) {
       const {args, options} = input
@@ -62,53 +33,50 @@ export const bandRouter = createRouter()
       >(ctx.prisma.band, args)
     },
   })
-  .mutation("search", {
-    input: schemaTypeFor<Prisma.BandFindManyArgs>()(
-      z.object({
-        where: z
-          .object({
-            name: z
-              .object({
-                is: z
-                  .object({
-                    ja: z.object({contains: z.string()}).optional(),
-                    en: z.object({contains: z.string()}).optional(),
-                  })
-                  .optional(),
-              })
-              .optional(),
-          })
-          .optional(),
-        take: z.number(),
+  .query("show", {
+    input: BandFindUniqueSchema,
+    async resolve({ctx, input}) {
+      const band = await ctx.prisma.band.findUnique({
+        ...input,
+        include: {
+          artists: true,
+          musics: {
+            include: {
+              band: true,
+              composers: true,
+              lyrists: true,
+            },
+          },
+        },
       })
-    ),
+      if (!band) throw new TRPCError({code: "NOT_FOUND"})
+      const bookmarked = await ctx.prisma.artist.findFirst({
+        where: input.where,
+        include: {
+          bookmarks: {where: {id: ctx.session?.user?.id}},
+        },
+      })
+      return {...band, bookmarked: !!bookmarked?.bookmarks.length}
+    },
+  })
+  .mutation("search", {
+    input: BandFindManySchema,
     async resolve({ctx, input}) {
       return ctx.prisma.band.findMany(input)
     },
   })
   .mutation("create", {
-    input: z.object({
-      name: z.object({ja: z.string().nullish(), en: z.string().nullish()}),
-    }),
+    input: BandCreateInputObjectSchema,
     async resolve({ctx, input}) {
       return await ctx.prisma.band.create({
-        data: {
-          ...input,
-        },
+        data: {...input},
       })
     },
   })
   .mutation("update", {
-    input: z.object({
-      id: z.string(),
-      name: locale.optional(),
-    }),
+    input: BandUpdateOneSchema,
     async resolve({ctx, input}) {
-      const {id, ...data} = input
-      return await ctx.prisma.band.update({
-        where: {id},
-        data,
-      })
+      return await ctx.prisma.band.update(input)
     },
   })
   .mutation("destroy", {

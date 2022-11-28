@@ -9,13 +9,13 @@ import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import Box from "@mui/material/Box";
 import { Prisma } from "@prisma/client";
 
-export interface BandLayoutProps extends Pick<DefaultShowLayoutProps, "providers" | "children"> {
+export interface BandLayoutProps extends Pick<DefaultShowLayoutProps, "children"> {
 	data: Prisma.BandGetPayload<null>
 	bookmarked: boolean
 	activeTab: "info" | "settings"
 }
 
-const BandLayout: React.FC<BandLayoutProps> = ({ providers, data, bookmarked, activeTab, children }) => {
+const BandLayout: React.FC<BandLayoutProps> = ({ data, bookmarked, activeTab, children }) => {
 	const router = useRouter()
 	const bookmarkCreate = trpc.useMutation(["band.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["band.bookmark.destroy"]);
@@ -31,7 +31,6 @@ const BandLayout: React.FC<BandLayoutProps> = ({ providers, data, bookmarked, ac
 	}
 	return (
 		<DefaultShowLayout
-			providers={providers}
 			tabs={tabs}
 			activeTab={activeTab}
 			title={

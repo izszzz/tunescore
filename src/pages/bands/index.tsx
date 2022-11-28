@@ -1,13 +1,14 @@
-import type { GetServerSideProps, NextPage } from "next";
-import BandList from "../../components/elements/list/band";
-import IndexLayout, { DefaultIndexLayoutProps } from "../../components/layouts/index/default";
-import { getProviders } from "next-auth/react";
-import { trpc } from "../../utils/trpc";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import BandList from "../../components/elements/list/band";
+import IndexLayout from "../../components/layouts/index/default";
+import { trpc } from "../../utils/trpc";
+import setLocale from "../../utils/setLocale";
 
-type BandsProps = Pick<DefaultIndexLayoutProps, "providers">
-const Bands: NextPage<BandsProps> = ({ providers }) => {
+const Bands: NextPage = () => {
 	const router = useRouter()
+	const { enqueueSnackbar } = useSnackbar()
 	const { data } = trpc.useQuery(["band.index", {
 		args: {
 			include: { _count: { select: { artists: true, musics: true } } },
@@ -15,23 +16,26 @@ const Bands: NextPage<BandsProps> = ({ providers }) => {
 		},
 		options: { page: router.query.page as string || 0, perPage: 12 }
 	}])
+	const search = trpc.useMutation(["band.search"], { onError: () => { enqueueSnackbar("music.search error") } })
 	if (!data) return <></>
 	return (
 		<IndexLayout
-			providers={providers}
-			resource="band"
 			route={{ pathname: "/bands" }}
-			meta={data.meta}>
+			meta={data.meta}
+			searchAutocompleteProps={{
+				options: search.data || [],
+				loading: search.isLoading,
+				getOptionLabel: option => setLocale(option.name, router) || "",
+				textFieldProps: {
+					onChange: (e) => search.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
+				}
+			}}
+		>
 			<BandList bands={data.data} />
 		</IndexLayout>
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
+
 
 export default Bands;

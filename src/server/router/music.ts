@@ -2,21 +2,17 @@ import {createRouter} from "./context"
 import {z} from "zod"
 import {TRPCError} from "@trpc/server"
 import {Prisma} from "@prisma/client"
-import schemaTypeFor from "../../types/schemaForType"
-import {locale} from "../../utils/zod"
-import {createPaginator, PaginateOptions} from "prisma-pagination"
+import {createPaginator} from "prisma-pagination"
 import {MusicFindManySchema} from "../../../prisma/generated/schemas/findManyMusic.schema"
 import {MusicCreateInputObjectSchema} from "../../../prisma/generated/schemas/objects/MusicCreateInput.schema"
+import {MusicFindUniqueSchema} from "../../../prisma/generated/schemas/findUniqueMusic.schema"
+import {MusicUpdateOneSchema} from "../../../prisma/generated/schemas/updateOneMusic.schema"
+import {PaginateOptionsSchema} from "../../utils/zod"
 
 export const musicRouter = createRouter()
   .query("index", {
     input: z.object({
-      options: schemaTypeFor<PaginateOptions>()(
-        z.object({
-          page: z.number().or(z.string()).optional(),
-          perPage: z.number().or(z.string()).optional(),
-        })
-      ),
+      options: PaginateOptionsSchema,
       args: MusicFindManySchema,
     }),
     async resolve({ctx, input}) {
@@ -31,13 +27,10 @@ export const musicRouter = createRouter()
     },
   })
   .query("show", {
-    input: z.object({
-      id: z.string(),
-    }),
+    input: MusicFindUniqueSchema,
     async resolve({ctx, input}) {
-      const {id} = input
       const music = await ctx.prisma.music.findUnique({
-        where: {id},
+        ...input,
         include: {
           user: true,
           band: true,
@@ -48,9 +41,7 @@ export const musicRouter = createRouter()
       })
       if (!music) throw new TRPCError({code: "NOT_FOUND"})
       const bookmarked = await ctx.prisma.music.findFirst({
-        where: {
-          id,
-        },
+        where: input.where,
         include: {
           bookmarks: {where: {id: ctx.session?.user?.id}},
         },
@@ -88,75 +79,11 @@ export const musicRouter = createRouter()
   })
 
   .mutation("update", {
-    input: schemaTypeFor<Prisma.MusicUpdateInput>()(
-      z.object({
-        id: z.string(),
-        title: locale.optional(),
-        score: z
-          .string()
-          .or(z.object({set: z.string().optional()}))
-          .optional(),
-        band: z
-          .object({
-            disconnect: z.boolean().optional(),
-            connect: z.object({id: z.string().optional()}).optional(),
-          })
-          .optional(),
-        composers: z
-          .object({
-            disconnect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-            connect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-          })
-          .optional(),
-        lyrists: z
-          .object({
-            disconnect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-            connect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-          })
-          .optional(),
-        artists: z
-          .object({
-            disconnect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-            connect: z
-              .object({id: z.string().optional()})
-              .or(z.object({id: z.string().optional()}).array())
-              .optional(),
-          })
-          .optional(),
-        link: z
-          .object({
-            streaming: z
-              .object({
-                youtube: z.string().nullish(),
-                twitter: z.string().nullish(),
-                itunes: z.string().nullish(),
-              })
-              .nullish(),
-          })
-          .nullish(),
-      })
-    ),
+    input: MusicUpdateOneSchema,
     async resolve({ctx, input}) {
-      const {id, ...data} = input
       return await ctx.prisma.music.update({
+        ...input,
         include: {composers: true, lyrists: true, band: true, artists: true},
-        where: {id},
-        data,
       })
     },
   })

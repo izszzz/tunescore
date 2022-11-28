@@ -1,10 +1,14 @@
 import { z } from 'zod';
+import { IssueSelectObjectSchema } from './objects/IssueSelect.schema';
+import { IssueIncludeObjectSchema } from './objects/IssueInclude.schema';
 import { IssueWhereInputObjectSchema } from './objects/IssueWhereInput.schema';
 import { IssueOrderByWithRelationInputObjectSchema } from './objects/IssueOrderByWithRelationInput.schema';
 import { IssueWhereUniqueInputObjectSchema } from './objects/IssueWhereUniqueInput.schema';
 import { IssueScalarFieldEnumSchema } from './enums/IssueScalarFieldEnum.schema';
 
 export const IssueFindManySchema = z.object({
+  select: z.lazy(() => IssueSelectObjectSchema.optional()),
+  include: z.lazy(() => IssueIncludeObjectSchema.optional()),
   where: IssueWhereInputObjectSchema.optional(),
   orderBy: z
     .union([

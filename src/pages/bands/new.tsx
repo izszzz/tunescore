@@ -1,22 +1,17 @@
 import Button from "@mui/material/Button";
 import { Band } from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
-import { getProviders } from "next-auth/react";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui"
-import DefaultSingleColumnLayout, { DefaultSingleColumnLayoutProps } from "../../components/layouts/single_column/default";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 
-type NewBandProps = Pick<DefaultSingleColumnLayoutProps, "providers">
-const NewBand: NextPage<NewBandProps> = ({ providers }) => {
+const NewBand: NextPage = () => {
 	const router = useRouter()
-	const create = trpc.useMutation(["band.create"]);
-	const handleSubmit = (data: Band) => {
-		create.mutate(data)
-		router.push("/bands")
-	}
+	const create = trpc.useMutation(["band.create"], { onSuccess: () => router.push("/bands") });
+	const handleSubmit = (data: Band) => create.mutate(data)
 	return (
-		<DefaultSingleColumnLayout providers={providers}>
+		<DefaultSingleColumnLayout>
 			<p>new band</p>
 			<FormContainer onSuccess={handleSubmit}>
 				<TextFieldElement name={"name." + router.locale} label="Name" required /><br />
@@ -25,12 +20,5 @@ const NewBand: NextPage<NewBandProps> = ({ providers }) => {
 		</DefaultSingleColumnLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-	const providers = await getProviders()
-	return {
-		props: { providers },
-	};
-};
-
 
 export default NewBand;

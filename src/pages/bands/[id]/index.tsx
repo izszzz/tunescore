@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -9,24 +9,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
-import BandLayout, { BandLayoutProps } from "../../../components/layouts/show/band";
+import BandLayout from "../../../components/layouts/show/band";
 import setLocale from "../../../utils/setLocale"
-import { Prisma, PrismaClient } from "@prisma/client";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import { getProviders } from "next-auth/react";
-interface BandProps extends Pick<BandLayoutProps, "providers" | "bookmarked"> {
-	data: Prisma.BandGetPayload<{
-		include: {
-			musics: { include: { band: true, composers: true, lyrists: true } },
-			artists: true
-		}
-	}>
-}
+import { trpc } from "../../../utils/trpc";
 
-const Band: NextPage<BandProps> = ({ providers, data, bookmarked }) => {
+const Band: NextPage = () => {
 	const router = useRouter();
+	const { data } = trpc.useQuery(["band.show", { where: { id: router.query.id as string } }],);
+	if (!data) return <></>
 	return (
-		<BandLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
+		<BandLayout data={data} bookmarked={data.bookmarked} activeTab="info">
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }}>
 					<TableHead>
@@ -66,23 +58,5 @@ const Band: NextPage<BandProps> = ({ providers, data, bookmarked }) => {
 		</BandLayout>
 	)
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
-	const data = await prisma.band.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, artists: true, } })
-	const providers = await getProviders()
-	if (!data) return { notFound: true };
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.band.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
-	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
-	};
-};
 
 export default Band;

@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -10,24 +10,15 @@ import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import { Link } from "@mui/material";
 import setLocale from "../../../utils/setLocale"
-import ArtistLayout, { ArtistLayoutProps } from "../../../components/layouts/show/artist";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import { getProviders } from "next-auth/react";
-interface ArtistProps extends Pick<ArtistLayoutProps, "bookmarked" | "providers"> {
-	data: Prisma.ArtistGetPayload<{
-		include: {
-			bands: true,
-			musics: { include: { band: true, composers: true, lyrists: true } },
-			composedMusics: { include: { band: true, composers: true, lyrists: true } },
-			writtenMusics: { include: { band: true, composers: true, lyrists: true } }
-		}
-	}>
-}
-const Artist: NextPage<ArtistProps> = ({ providers, data, bookmarked }) => {
+import ArtistLayout from "../../../components/layouts/show/artist";
+import { trpc } from "../../../utils/trpc";
+
+const Artist: NextPage = () => {
 	const router = useRouter();
+	const { data } = trpc.useQuery(["artist.show", { where: { id: router.query.id as string }, }]);
+	if (!data) return <></>
 	return (
-		<ArtistLayout providers={providers} data={data} bookmarked={bookmarked} activeTab="info">
+		<ArtistLayout data={data} bookmarked={data.bookmarked} activeTab="info" >
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }}>
 					<TableHead>
@@ -95,7 +86,7 @@ const Artist: NextPage<ArtistProps> = ({ providers, data, bookmarked }) => {
 				</Table>
 			</TableContainer >
 			musics
-			<TableContainer component={Paper}>
+			<TableContainer component={Paper} >
 				<Table sx={{ minWidth: 650 }}>
 					<TableHead>
 						<TableRow>
@@ -120,23 +111,5 @@ const Artist: NextPage<ArtistProps> = ({ providers, data, bookmarked }) => {
 		</ArtistLayout >
 	)
 }
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const prisma = new PrismaClient()
-	const providers = await getProviders()
-	const data = await prisma.artist.findUnique({ where: { id: ctx.query.id as string }, include: { musics: { include: { band: true, composers: true, lyrists: true } }, bands: true, composedMusics: { include: { band: true, composers: true, lyrists: true } }, writtenMusics: { include: { band: true, composers: true, lyrists: true } } } })
-	if (!data) return { notFound: true };
-	const session = await getServerAuthSession(ctx)
-	const bookmarked = await prisma.artist.findFirst({
-		where: {
-			id: ctx.query.id as string,
-		},
-		include: {
-			bookmarks: { where: { id: session?.user?.id } },
-		},
-	})
-	return {
-		props: { data, bookmarked: !!bookmarked?.bookmarks.length, providers },
-	};
-};
 
 export default Artist;

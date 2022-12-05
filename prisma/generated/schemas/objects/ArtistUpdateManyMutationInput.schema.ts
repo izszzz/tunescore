@@ -7,6 +7,7 @@ import { ArtistUpdatewrittenMusicsIDsInputObjectSchema } from './ArtistUpdatewri
 import { ArtistUpdatecomposedMusicsIDsInputObjectSchema } from './ArtistUpdatecomposedMusicsIDsInput.schema';
 import { ArtistUpdatemusicIDsInputObjectSchema } from './ArtistUpdatemusicIDsInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
+import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
 import { ArtistUpdateuserIDsInputObjectSchema } from './ArtistUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -47,6 +48,12 @@ const Schema: z.ZodType<Prisma.ArtistUpdateManyMutationInput> = z
     bandIDs: z
       .union([
         z.lazy(() => ArtistUpdatebandIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    albumIDs: z
+      .union([
+        z.lazy(() => ArtistUpdatealbumIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

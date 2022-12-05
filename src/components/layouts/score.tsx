@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
-import { AlphaTabApi } from '@coderline/alphatab';
+import { AlphaTabApi, model } from '@coderline/alphatab';
 
 const drawerWidth = 240;
 
@@ -42,21 +42,24 @@ interface ScoreLayoutProps {
 
 const ScoreLayout = ({ value }: ScoreLayoutProps) => {
 	const [open, setOpen] = useState(false);
-	const [tracks, setTracks] = useState<any>([]);
+	const [tracks, setTracks] = useState<model.Track[]>([]);
 	const apiRef = useRef<AlphaTabApi | null>(null)
 	const mainRef = useRef(null)
 	const handleOpen = () => setOpen(p => !p)
 	const handleLoad = () => {
 		const settings = {
-			// file: "https://www.alphatab.net/files/canon.gp",
+			file: "/test.gp",
+			player: {
+				enablePlayer: true,
+				soundFont: 'https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2',
+				// scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
+			}
 		};
-		apiRef.current = (new window.alphaTab.AlphaTabApi(mainRef.current, settings)) as AlphaTabApi
-		apiRef.current.scoreLoaded.on((score) => setTracks(score.tracks));
-		// apiRef.current?.tex('\\title "Hello AlphaTab" . 1.1*4')
+		if (mainRef.current) apiRef.current = new window.alphaTab.AlphaTabApi(mainRef.current, settings)
+		apiRef.current?.scoreLoaded.on((score) => setTracks(score.tracks));
 		apiRef.current?.tex(value);
 	}
 	useEffect(() => {
-		console.log("apiRef.current:", apiRef.current)
 		apiRef.current?.tex(value);
 	}, [value])
 	return (
@@ -74,7 +77,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
 					},
 				}}>
 				<List>
-					{tracks.map((track: any, index: number) => (
+					{tracks.map((track, index) =>
 						<ListItem key={index} disablePadding>
 							<ListItemButton>
 								<ListItemIcon>
@@ -82,7 +85,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
 								<ListItemText primary={track.name} />
 							</ListItemButton>
 						</ListItem>
-					))}
+					)}
 				</List>
 			</Drawer>
 			<Main open={open}>
@@ -99,7 +102,9 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
 
 declare global {
 	interface Window {
-		alphaTab: any;
+		alphaTab: {
+			AlphaTabApi: typeof AlphaTabApi
+		}
 	}
 }
 

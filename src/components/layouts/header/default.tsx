@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
-import { getProviders, signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Avatar from "@mui/material/Avatar";
@@ -11,31 +11,22 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import Grid from "@mui/material/Grid";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
 import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale"
-import GoogleIcon from "../../elements/icon/google"
+import { useModal } from "../../../hooks/useModal"
 
 
 const DefaultHeader = () => {
 	const { data: session } = useSession()
-	const [open, setOpen] = useState(false)
-	const [providers, setProviders] = useState<Awaited<ReturnType<typeof getProviders>>>()
+	const { handleOpen } = useModal()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const router = useRouter()
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
 	const handleClose = () => setAnchorEl(null);
-	const handleOpenModal = () => setOpen(true)
-	const handleCloseDialog = () => setOpen(false)
 	const handleSignOut = () => {
 		signOut();
 		handleClose();
 	}
-	useEffect(() => {
-		(async () => { setProviders(await getProviders()) })()
-	}, [])
 	return (
 		<>
 			<Header>
@@ -80,25 +71,12 @@ const DefaultHeader = () => {
 								</Menu>
 							</>
 							:
-							<Button variant="contained" onClick={handleOpenModal} disabled={!providers} disableElevation>SignIn</Button>
+							<Button variant="contained" onClick={handleOpen} disableElevation>SignIn</Button>
 						}
 					</Grid>
 				</Grid>
 			</Header>
 			<Toolbar />
-			<Dialog
-				open={open}
-				onClose={handleCloseDialog}
-			>
-				<DialogTitle>
-					Sign In
-				</DialogTitle>
-				<DialogActions>
-					{providers && Object.values(providers).map((provider) =>
-						<Button key={provider.name} variant="outlined" startIcon={<GoogleIcon />} onClick={() => signIn(provider.id, { callbackUrl: "http://localhost/" })}>Login with {provider.name}</Button>
-					)}
-				</DialogActions>
-			</Dialog>
 		</>
 	);
 };

@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { EnumTypeFilterObjectSchema } from './EnumTypeFilter.schema';
 import { TypeSchema } from '../enums/Type.schema';
+import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { EnumVisibilityFilterObjectSchema } from './EnumVisibilityFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -37,8 +38,9 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereInput> = z
       ])
       .optional(),
     score: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     visibility: z
       .union([
         z.lazy(() => EnumVisibilityFilterObjectSchema),
@@ -47,6 +49,10 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereInput> = z
       .optional(),
     image: z
       .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
+    price: z
+      .union([z.lazy(() => IntNullableFilterObjectSchema), z.number()])
       .optional()
       .nullable(),
     userId: z

@@ -13,7 +13,7 @@ import ResourceIcon from "../icon/resource"
 
 interface ArtistListProps {
 	artists: (Prisma.ArtistGetPayload<{
-		include: { band: true }
+		include: { bands: true }
 	}>)[]
 }
 const ArtistList = ({ artists }: ArtistListProps) => {

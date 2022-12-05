@@ -10,11 +10,13 @@ import type { Session } from "next-auth";
 import CssBaseline from '@mui/material/CssBaseline'
 import { SnackbarProvider } from 'notistack';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { RecoilRoot } from "recoil";
 
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -22,13 +24,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SnackbarProvider maxSnack={3}>
-      <SessionProvider session={session}>
-        <CssBaseline />
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </SessionProvider>
-    </SnackbarProvider>
+    <RecoilRoot>
+      <SnackbarProvider maxSnack={3}>
+        <SessionProvider session={session}>
+          <CssBaseline />
+          <Component {...pageProps} />
+          <ReactQueryDevtools initialIsOpen={false} />
+          <AuthDialog />
+        </SessionProvider>
+      </SnackbarProvider>
+    </RecoilRoot>
   );
 };
 
@@ -60,7 +65,13 @@ export default withTRPC<AppRouter>({
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
-      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            staleTime: 60,
+          }
+        }
+      },
 
       // To use SSR properly you need to forward the client's headers to the server
       // headers: () => {

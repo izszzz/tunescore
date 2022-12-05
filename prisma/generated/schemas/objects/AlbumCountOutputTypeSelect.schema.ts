@@ -5,6 +5,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.AlbumCountOutputTypeSelect> = z
   .object({
     musics: z.boolean().optional(),
+    artists: z.boolean().optional(),
   })
   .strict();
 

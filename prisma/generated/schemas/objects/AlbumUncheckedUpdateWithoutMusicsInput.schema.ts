@@ -3,6 +3,8 @@ import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeI
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { AlbumUpdatemusicIDsInputObjectSchema } from './AlbumUpdatemusicIDsInput.schema';
+import { ArtistUncheckedUpdateManyWithoutAlbumsNestedInputObjectSchema } from './ArtistUncheckedUpdateManyWithoutAlbumsNestedInput.schema';
+import { AlbumUpdateartistIDsInputObjectSchema } from './AlbumUpdateartistIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -24,6 +26,15 @@ const Schema: z.ZodType<Prisma.AlbumUncheckedUpdateWithoutMusicsInput> = z
     musicIDs: z
       .union([
         z.lazy(() => AlbumUpdatemusicIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    artists: z
+      .lazy(() => ArtistUncheckedUpdateManyWithoutAlbumsNestedInputObjectSchema)
+      .optional(),
+    artistIDs: z
+      .union([
+        z.lazy(() => AlbumUpdateartistIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

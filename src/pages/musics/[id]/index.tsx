@@ -1,3 +1,6 @@
+import type { NextPage } from "next"
+import { useRouter } from "next/router";
+import YouTube from 'react-youtube';
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -6,13 +9,10 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import type { NextPage } from "next"
-import { useRouter } from "next/router";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
 import MusicLayout from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes"
-import YoutubeButton from "../../../components/elements/button/youtube"
 import setLocale from "../../../utils/setLocale"
 import { trpc } from "../../../utils/trpc";
 const Music: NextPage = () => {
@@ -22,7 +22,7 @@ const Music: NextPage = () => {
 	return (
 		<MusicLayout data={data} bookmarked={data.bookmarked} activeTab="info">
 			{data.link?.streaming?.itunes && <ItunesButton href={data.link?.streaming?.itunes} />}
-			{data.link?.streaming?.youtube && <YoutubeButton href={`https://www.youtube.com/watch?v=${data.link?.streaming?.youtube}`} />}
+			{data.link?.streaming?.youtube && <YouTube videoId={data.link?.streaming?.youtube} opts={{ width: "100%", height: "100%" }} />}
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]", query: { id: router.query.id as string } })} fullWidth>Watch Score</Button>
 			<Button variant="contained" onClick={() => router.push({ pathname: "/scores/[id]/edit", query: { id: router.query.id as string } })} fullWidth>Edit Score</Button>
 			<TableContainer component={Paper}>

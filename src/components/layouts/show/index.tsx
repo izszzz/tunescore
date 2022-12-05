@@ -7,18 +7,15 @@ export interface ShowLayoutProps extends SingleColumnLayoutProps {
 	tabs: DefaultTabsProps["tabs"]
 	title: React.ReactNode
 }
-const ShowLayout = ({ header, title, activeTab, tabs, contained = true, children }: ShowLayoutProps) => {
-	return (
-		<SingleColumnLayout contained={contained} header={
-			<>
-				{header}
-				{title}
-				<DefaultTabs value={activeTab} tabs={tabs} />
-			</>
-		}>
-			{children}
-		</SingleColumnLayout>
-	)
-}
+const ShowLayout = ({ header, title, activeTab, tabs, contained = true, children }: ShowLayoutProps) =>
+	<SingleColumnLayout contained={contained} header={
+		<>
+			{header}
+			{title}
+			<DefaultTabs value={activeTab} tabs={tabs} />
+		</>
+	}>
+		{children}
+	</SingleColumnLayout>
 
 export default ShowLayout

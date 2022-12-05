@@ -4,9 +4,10 @@ import { EnumTypeFilterObjectSchema } from './EnumTypeFilter.schema';
 import { TypeSchema } from '../enums/Type.schema';
 import { LocalesCompositeFilterObjectSchema } from './LocalesCompositeFilter.schema';
 import { LocalesObjectEqualityInputObjectSchema } from './LocalesObjectEqualityInput.schema';
+import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { EnumVisibilityFilterObjectSchema } from './EnumVisibilityFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { LinkNullableCompositeFilterObjectSchema } from './LinkNullableCompositeFilter.schema';
 import { LinkObjectEqualityInputObjectSchema } from './LinkObjectEqualityInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
@@ -56,8 +57,9 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
       ])
       .optional(),
     score: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     visibility: z
       .union([
         z.lazy(() => EnumVisibilityFilterObjectSchema),
@@ -66,6 +68,10 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
       .optional(),
     image: z
       .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
+    price: z
+      .union([z.lazy(() => IntNullableFilterObjectSchema), z.number()])
       .optional()
       .nullable(),
     link: z

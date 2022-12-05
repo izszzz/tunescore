@@ -27,7 +27,7 @@ const SettingsMusic: NextPage = () => {
 	const destroy = trpc.useMutation(`music.destroy`, {
 		onSuccess: () => {
 			enqueueSnackbar("music.destroy success")
-			router.push("/bands")
+			router.push("/musics")
 		},
 		onError: () => { enqueueSnackbar("music.destroy error") }
 	});

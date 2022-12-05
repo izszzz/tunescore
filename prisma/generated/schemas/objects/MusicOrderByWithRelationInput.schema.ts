@@ -20,6 +20,7 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
     score: z.lazy(() => SortOrderSchema).optional(),
     visibility: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    price: z.lazy(() => SortOrderSchema).optional(),
     link: z.lazy(() => LinkOrderByInputObjectSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),

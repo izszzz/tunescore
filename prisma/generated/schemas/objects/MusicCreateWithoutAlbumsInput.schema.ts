@@ -29,9 +29,10 @@ const Schema: z.ZodType<Prisma.MusicCreateWithoutAlbumsInput> = z
       z.lazy(() => LocalesCreateEnvelopeInputObjectSchema),
       z.lazy(() => LocalesCreateInputObjectSchema),
     ]),
-    score: z.string(),
+    score: z.string().optional().nullable(),
     visibility: z.lazy(() => VisibilitySchema),
     image: z.string().optional().nullable(),
+    price: z.number().optional().nullable(),
     link: z
       .union([
         z.lazy(() => LinkNullableCreateEnvelopeInputObjectSchema),

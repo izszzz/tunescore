@@ -3,7 +3,6 @@ import DefaultHeader from "../header/default";
 import ShowLayout, { ShowLayoutProps } from "./"
 
 export type DefaultShowLayoutProps = ShowLayoutProps
-const DefaultShowLayout = (props: ShowLayoutProps) =>
-	<ShowLayout {...props} header={<DefaultHeader />} />
+const DefaultShowLayout = (props: ShowLayoutProps) => <ShowLayout {...props} header={<DefaultHeader />} />
 
 export default DefaultShowLayout

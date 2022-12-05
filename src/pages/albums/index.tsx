@@ -12,7 +12,7 @@ const Albums: NextPage = () => {
 	const { data } = trpc.useQuery(["album.index", {
 		args: {
 			include: { _count: { select: { artists: true, musics: true } } },
-			where: { name: { is: { [router.locale]: { contains: router.query.q as string } } } }
+			where: { title: { is: { [router.locale]: { contains: router.query.q as string } } } }
 		},
 		options: { page: router.query.page as string || 0, perPage: 12 }
 	}])
@@ -25,9 +25,9 @@ const Albums: NextPage = () => {
 			searchAutocompleteProps={{
 				options: search.data || [],
 				loading: search.isLoading,
-				getOptionLabel: option => setLocale(option.name, router) || "",
+				getOptionLabel: option => setLocale(option.title, router) || "",
 				textFieldProps: {
-					onChange: (e) => search.mutate({ where: { name: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
+					onChange: (e) => search.mutate({ where: { title: { is: { [router.locale]: { contains: e.currentTarget.value } } } }, take: 10 })
 				}
 			}}
 		>

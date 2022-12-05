@@ -43,7 +43,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({ data, activeTab, children }) =>
 			title={
 				<>
 					<Box display="flex">
-						<Box >
+						<Box>
 							<Avatar src={data.user.image || ""} />
 							<Link href={{ pathname: "/users/[id]", query: { id: data.user.id as string } }}>
 								<Typography variant="subtitle2" color="text.secondary" >{data.user.name}</Typography>

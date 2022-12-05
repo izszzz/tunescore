@@ -10,7 +10,7 @@ import {Prisma} from "@prisma/client"
 import {PaginateOptionsSchema} from "../../utils/zod"
 
 export const albumRouter = createRouter()
-  .mutation("index", {
+  .query("index", {
     input: z.object({
       options: PaginateOptionsSchema,
       args: AlbumFindManySchema,
@@ -20,10 +20,16 @@ export const albumRouter = createRouter()
       const paginate = createPaginator(options)
       return await paginate<
         Prisma.AlbumGetPayload<{
-          include: {composers: true; lyrists: true; band: true}
+          include: {musics: true; artists: true}
         }>,
         Prisma.AlbumFindManyArgs
       >(ctx.prisma.album, args)
+    },
+  })
+  .mutation("search", {
+    input: AlbumFindManySchema,
+    async resolve({ctx, input}) {
+      return ctx.prisma.album.findMany(input)
     },
   })
   .mutation("create", {
@@ -35,7 +41,7 @@ export const albumRouter = createRouter()
   .mutation("update", {
     input: AlbumUpdateOneSchema,
     async resolve({ctx, input}) {
-      return await ctx.prisma.artist.update(input)
+      return await ctx.prisma.album.update(input)
     },
   })
   .mutation("destroy", {

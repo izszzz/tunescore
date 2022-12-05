@@ -5,6 +5,8 @@ import { MusicWhereUniqueInputObjectSchema } from './objects/MusicWhereUniqueInp
 import { MusicCountAggregateInputObjectSchema } from './objects/MusicCountAggregateInput.schema';
 import { MusicMinAggregateInputObjectSchema } from './objects/MusicMinAggregateInput.schema';
 import { MusicMaxAggregateInputObjectSchema } from './objects/MusicMaxAggregateInput.schema';
+import { MusicAvgAggregateInputObjectSchema } from './objects/MusicAvgAggregateInput.schema';
+import { MusicSumAggregateInputObjectSchema } from './objects/MusicSumAggregateInput.schema';
 
 export const MusicAggregateSchema = z.object({
   where: MusicWhereInputObjectSchema.optional(),
@@ -22,4 +24,6 @@ export const MusicAggregateSchema = z.object({
     .optional(),
   _min: MusicMinAggregateInputObjectSchema.optional(),
   _max: MusicMaxAggregateInputObjectSchema.optional(),
+  _avg: MusicAvgAggregateInputObjectSchema.optional(),
+  _sum: MusicSumAggregateInputObjectSchema.optional(),
 });

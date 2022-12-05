@@ -13,6 +13,10 @@ import { DefaultTabsProps } from "../../elements/tabs/default";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
+import { useSession } from "next-auth/react";
+import { useModal } from "../../../hooks/useModal"
+import ResourceIcon from "../../elements/icon/resource";
+import { IconButton } from "@mui/material";
 
 export interface MusicLayoutProps extends Pick<DefaultShowLayoutProps, "children"> {
 	data: Prisma.MusicGetPayload<{ include: { artists: true, band: true, composers: true, lyrists: true, user: true } }>
@@ -22,6 +26,8 @@ export interface MusicLayoutProps extends Pick<DefaultShowLayoutProps, "children
 
 const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, children }) => {
 	const router = useRouter()
+	const session = useSession()
+	const { handleOpen } = useModal()
 	const bookmarkCreate = trpc.useMutation(["music.bookmark.create"]);
 	const bookmarkDestroy = trpc.useMutation(["music.bookmark.destroy"]);
 	const tabs: DefaultTabsProps["tabs"] = useMemo(() => ([
@@ -32,6 +38,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, 
 	]), [router.query.id])
 
 	const handleUpdate = (value: boolean, setValue: React.Dispatch<React.SetStateAction<boolean>>) => {
+		if (!session.data?.user) return handleOpen()
 		if (value) bookmarkDestroy.mutate({ id: router.query.id as string }, { onSuccess: () => setValue(false) })
 		else bookmarkCreate.mutate({ id: router.query.id as string }, { onSuccess: () => setValue(true) })
 	}
@@ -42,6 +49,9 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({ data, activeTab, bookmarked, 
 			tabs={tabs}
 			title={
 				<Box display="flex" alignItems="center">
+					<IconButton onClick={() => router.push("/musics")}>
+						<ResourceIcon resource="music" />
+					</IconButton>
 					<MusicTitle data={data} />
 					<Box ml={3}>
 						<Chip label={data?.type} size="small" />
@@ -95,7 +105,7 @@ const MusicTitle = ({ data }: MusicTitleProps) => {
 			)
 		}
 	}
-	return <></>
+	return <Typography variant="h5"> {setLocale(data.title, router)} </Typography>
 }
 
 export default MusicLayout;

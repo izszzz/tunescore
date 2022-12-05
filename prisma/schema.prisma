@@ -5,6 +5,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "prisma-zod-generator"
+  isGenerateSelect  = true
+  isGenerateInclude = true
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output="../erd.md"
+}
+
 datasource db {
   provider = "mongodb"
   // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.text annotations in model Account below
@@ -12,12 +23,6 @@ datasource db {
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
   // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
-}
-
-generator zod {
-  provider = "prisma-zod-generator"
-  isGenerateSelect  = true
-  isGenerateInclude = true
 }
 
 // model Example {
@@ -93,9 +98,10 @@ model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   type Type
   title Locales
-  score String
+  score String?
   visibility Visibility
   image String?
+  price Int?
   link Link?
 
   user   User?   @relation(fields: [userId], references: [id])
@@ -133,6 +139,9 @@ model Album {
 
   musics Music[] @relation("AlbumMusics", fields: [musicIDs], references: [id])
   musicIDs String[] @db.ObjectId
+
+  artists Artist[] @relation("ArtistAlbums",fields: [artistIDs], references: [id])
+  artistIDs String[] @db.ObjectId
 }
 
 model Artist {
@@ -151,6 +160,9 @@ model Artist {
 
   bands  Band[] @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
+
+  albums Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
+  albumIDs          String[] @db.ObjectId
 
   bookmarks User[] @relation("ArtistBookmarks", fields: [userIDs], references: [id])
   userIDs String[] @db.ObjectId

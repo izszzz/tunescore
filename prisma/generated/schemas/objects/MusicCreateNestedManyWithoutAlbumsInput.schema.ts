@@ -6,44 +6,33 @@ import { MusicWhereUniqueInputObjectSchema } from './MusicWhereUniqueInput.schem
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.MusicCreateNestedManyWithoutAlbumsInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => MusicCreateWithoutAlbumsInputObjectSchema),
-            z.lazy(() => MusicCreateWithoutAlbumsInputObjectSchema).array(),
-            z.lazy(() => MusicUncheckedCreateWithoutAlbumsInputObjectSchema),
-            z
-              .lazy(() => MusicUncheckedCreateWithoutAlbumsInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => MusicCreateOrConnectWithoutAlbumsInputObjectSchema),
-            z
-              .lazy(() => MusicCreateOrConnectWithoutAlbumsInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => MusicWhereUniqueInputObjectSchema),
-            z.lazy(() => MusicWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+const Schema: z.ZodType<Prisma.MusicCreateNestedManyWithoutAlbumsInput> = z
+  .object({
+    create: z
+      .union([
+        z.lazy(() => MusicCreateWithoutAlbumsInputObjectSchema),
+        z.lazy(() => MusicCreateWithoutAlbumsInputObjectSchema).array(),
+        z.lazy(() => MusicUncheckedCreateWithoutAlbumsInputObjectSchema),
+        z
+          .lazy(() => MusicUncheckedCreateWithoutAlbumsInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    connectOrCreate: z
+      .union([
+        z.lazy(() => MusicCreateOrConnectWithoutAlbumsInputObjectSchema),
+        z
+          .lazy(() => MusicCreateOrConnectWithoutAlbumsInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    connect: z
+      .union([
+        z.lazy(() => MusicWhereUniqueInputObjectSchema),
+        z.lazy(() => MusicWhereUniqueInputObjectSchema).array(),
+      ])
+      .optional(),
+  })
+  .strict();
 
 export const MusicCreateNestedManyWithoutAlbumsInputObjectSchema = Schema;

@@ -18,8 +18,17 @@ import { trpc } from "../../../utils/trpc";
 const Music: NextPage = () => {
   const router = useRouter();
   const { data } = trpc.useQuery([
-    "music.show",
-    { where: { id: router.query.id as string } },
+    "music.findUniqueMusic",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        user: true,
+        band: true,
+        composers: true,
+        lyrists: true,
+        artists: true,
+      },
+    },
   ]);
   if (!data) return <></>;
   return (

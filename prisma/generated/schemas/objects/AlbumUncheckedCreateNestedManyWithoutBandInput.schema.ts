@@ -8,51 +8,37 @@ import { AlbumWhereUniqueInputObjectSchema } from './AlbumWhereUniqueInput.schem
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.AlbumUncheckedCreateNestedManyWithoutBandInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => AlbumCreateWithoutBandInputObjectSchema),
-            z.lazy(() => AlbumCreateWithoutBandInputObjectSchema).array(),
-            z.lazy(() => AlbumUncheckedCreateWithoutBandInputObjectSchema),
-            z
-              .lazy(() => AlbumUncheckedCreateWithoutBandInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => AlbumCreateOrConnectWithoutBandInputObjectSchema),
-            z
-              .lazy(() => AlbumCreateOrConnectWithoutBandInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        createMany: z
-          .lazy(() => AlbumCreateManyBandInputEnvelopeObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => AlbumWhereUniqueInputObjectSchema),
-            z.lazy(() => AlbumWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => AlbumCreateWithoutBandInputObjectSchema),
+          z.lazy(() => AlbumCreateWithoutBandInputObjectSchema).array(),
+          z.lazy(() => AlbumUncheckedCreateWithoutBandInputObjectSchema),
+          z
+            .lazy(() => AlbumUncheckedCreateWithoutBandInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .union([
+          z.lazy(() => AlbumCreateOrConnectWithoutBandInputObjectSchema),
+          z
+            .lazy(() => AlbumCreateOrConnectWithoutBandInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      createMany: z
+        .lazy(() => AlbumCreateManyBandInputEnvelopeObjectSchema)
+        .optional(),
+      connect: z
+        .union([
+          z.lazy(() => AlbumWhereUniqueInputObjectSchema),
+          z.lazy(() => AlbumWhereUniqueInputObjectSchema).array(),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const AlbumUncheckedCreateNestedManyWithoutBandInputObjectSchema =
   Schema;

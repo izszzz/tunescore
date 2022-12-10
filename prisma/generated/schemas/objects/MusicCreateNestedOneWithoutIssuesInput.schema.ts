@@ -6,30 +6,19 @@ import { MusicWhereUniqueInputObjectSchema } from './MusicWhereUniqueInput.schem
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.MusicCreateNestedOneWithoutIssuesInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => MusicCreateWithoutIssuesInputObjectSchema),
-            z.lazy(() => MusicUncheckedCreateWithoutIssuesInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .lazy(() => MusicCreateOrConnectWithoutIssuesInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
-      })
-      .strict(),
-  ]);
+const Schema: z.ZodType<Prisma.MusicCreateNestedOneWithoutIssuesInput> = z
+  .object({
+    create: z
+      .union([
+        z.lazy(() => MusicCreateWithoutIssuesInputObjectSchema),
+        z.lazy(() => MusicUncheckedCreateWithoutIssuesInputObjectSchema),
+      ])
+      .optional(),
+    connectOrCreate: z
+      .lazy(() => MusicCreateOrConnectWithoutIssuesInputObjectSchema)
+      .optional(),
+    connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
+  })
+  .strict();
 
 export const MusicCreateNestedOneWithoutIssuesInputObjectSchema = Schema;

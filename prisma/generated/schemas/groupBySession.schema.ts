@@ -6,12 +6,10 @@ import { SessionScalarFieldEnumSchema } from './enums/SessionScalarFieldEnum.sch
 
 export const SessionGroupBySchema = z.object({
   where: SessionWhereInputObjectSchema.optional(),
-  orderBy: z
-    .union([
-      SessionOrderByWithAggregationInputObjectSchema,
-      SessionOrderByWithAggregationInputObjectSchema.array(),
-    ])
-    .optional(),
+  orderBy: z.union([
+    SessionOrderByWithAggregationInputObjectSchema,
+    SessionOrderByWithAggregationInputObjectSchema.array(),
+  ]),
   having: SessionScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

@@ -8,51 +8,37 @@ import { IssueWhereUniqueInputObjectSchema } from './IssueWhereUniqueInput.schem
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.IssueUncheckedCreateNestedManyWithoutUserInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => IssueCreateWithoutUserInputObjectSchema),
-            z.lazy(() => IssueCreateWithoutUserInputObjectSchema).array(),
-            z.lazy(() => IssueUncheckedCreateWithoutUserInputObjectSchema),
-            z
-              .lazy(() => IssueUncheckedCreateWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => IssueCreateOrConnectWithoutUserInputObjectSchema),
-            z
-              .lazy(() => IssueCreateOrConnectWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        createMany: z
-          .lazy(() => IssueCreateManyUserInputEnvelopeObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => IssueWhereUniqueInputObjectSchema),
-            z.lazy(() => IssueWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => IssueCreateWithoutUserInputObjectSchema),
+          z.lazy(() => IssueCreateWithoutUserInputObjectSchema).array(),
+          z.lazy(() => IssueUncheckedCreateWithoutUserInputObjectSchema),
+          z
+            .lazy(() => IssueUncheckedCreateWithoutUserInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .union([
+          z.lazy(() => IssueCreateOrConnectWithoutUserInputObjectSchema),
+          z
+            .lazy(() => IssueCreateOrConnectWithoutUserInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      createMany: z
+        .lazy(() => IssueCreateManyUserInputEnvelopeObjectSchema)
+        .optional(),
+      connect: z
+        .union([
+          z.lazy(() => IssueWhereUniqueInputObjectSchema),
+          z.lazy(() => IssueWhereUniqueInputObjectSchema).array(),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const IssueUncheckedCreateNestedManyWithoutUserInputObjectSchema =
   Schema;

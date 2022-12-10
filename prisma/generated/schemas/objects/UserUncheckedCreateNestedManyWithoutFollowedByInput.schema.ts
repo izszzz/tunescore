@@ -7,44 +7,34 @@ import { UserWhereUniqueInputObjectSchema } from './UserWhereUniqueInput.schema'
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.UserUncheckedCreateNestedManyWithoutFollowedByInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => UserCreateWithoutFollowedByInputObjectSchema),
-            z.lazy(() => UserCreateWithoutFollowedByInputObjectSchema).array(),
-            z.lazy(() => UserUncheckedCreateWithoutFollowedByInputObjectSchema),
-            z
-              .lazy(() => UserUncheckedCreateWithoutFollowedByInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => UserCreateOrConnectWithoutFollowedByInputObjectSchema),
-            z
-              .lazy(() => UserCreateOrConnectWithoutFollowedByInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => UserWhereUniqueInputObjectSchema),
-            z.lazy(() => UserWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => UserCreateWithoutFollowedByInputObjectSchema),
+          z.lazy(() => UserCreateWithoutFollowedByInputObjectSchema).array(),
+          z.lazy(() => UserUncheckedCreateWithoutFollowedByInputObjectSchema),
+          z
+            .lazy(() => UserUncheckedCreateWithoutFollowedByInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .union([
+          z.lazy(() => UserCreateOrConnectWithoutFollowedByInputObjectSchema),
+          z
+            .lazy(() => UserCreateOrConnectWithoutFollowedByInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      connect: z
+        .union([
+          z.lazy(() => UserWhereUniqueInputObjectSchema),
+          z.lazy(() => UserWhereUniqueInputObjectSchema).array(),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema =
   Schema;

@@ -6,12 +6,10 @@ import { AccountScalarFieldEnumSchema } from './enums/AccountScalarFieldEnum.sch
 
 export const AccountGroupBySchema = z.object({
   where: AccountWhereInputObjectSchema.optional(),
-  orderBy: z
-    .union([
-      AccountOrderByWithAggregationInputObjectSchema,
-      AccountOrderByWithAggregationInputObjectSchema.array(),
-    ])
-    .optional(),
+  orderBy: z.union([
+    AccountOrderByWithAggregationInputObjectSchema,
+    AccountOrderByWithAggregationInputObjectSchema.array(),
+  ]),
   having: AccountScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

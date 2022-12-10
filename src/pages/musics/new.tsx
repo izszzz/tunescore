@@ -19,16 +19,16 @@ import AlphaTexExporter from "../../utils/AlphaTexExporter";
 
 const NewMusic: NextPage = () => {
   const router = useRouter();
-  const formContext = useForm();
+  const formContext = useForm<Music>();
   const { enqueueSnackbar } = useSnackbar();
-  const create = trpc.useMutation(["music.create"], {
+  const create = trpc.useMutation(["music.createOneMusic"], {
     onSuccess: () => router.push("/musics"),
     onError: (error) => {
       enqueueSnackbar(String(error));
     },
   });
   const handleSubmit = (data: Music) => {
-    create.mutate({ ...data, price: Number(data.price) });
+    create.mutate({ data: { ...data, price: Number(data.price) } });
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

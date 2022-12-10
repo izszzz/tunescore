@@ -29,21 +29,25 @@ export interface MusicLayoutProps
       user: true;
     };
   }>;
-  bookmarked: boolean;
+  // bookmarked: boolean;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
 const MusicLayout: React.FC<MusicLayoutProps> = ({
   data,
   activeTab,
-  bookmarked,
+  // bookmarked,
   children,
 }) => {
   const router = useRouter();
   const session = useSession();
   const { handleOpen } = useModal();
-  const bookmarkCreate = trpc.useMutation(["music.bookmark.create"]);
-  const bookmarkDestroy = trpc.useMutation(["music.bookmark.destroy"]);
+  const bookmarked = trpc.useQuery([
+    "bookmarked.music",
+    { id: router.query.id as string },
+  ]);
+  const bookmarkCreate = trpc.useMutation(["music.updateOneMusic"]);
+  const bookmarkDestroy = trpc.useMutation(["music.updateOneMusic"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -85,12 +89,26 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
     if (!session.data?.user) return handleOpen();
     if (value)
       bookmarkDestroy.mutate(
-        { id: router.query.id as string },
+        {
+          where: { id: router.query.id as string },
+          data: {
+            bookmarks: {
+              disconnect: { id: session.data?.user.id },
+            },
+          },
+        },
         { onSuccess: () => setValue(false) }
       );
     else
       bookmarkCreate.mutate(
-        { id: router.query.id as string },
+        {
+          where: { id: router.query.id as string },
+          data: {
+            bookmarks: {
+              connect: { id: session.data?.user.id },
+            },
+          },
+        },
         { onSuccess: () => setValue(true) }
       );
   };
@@ -109,8 +127,12 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
             <Chip label={data?.type} size="small" />
           </Box>
           <BookmarkToggleButton
-            defaultValue={bookmarked}
-            loading={bookmarkCreate.isLoading || bookmarkDestroy.isLoading}
+            defaultValue={!!bookmarked}
+            loading={
+              bookmarked.isLoading ||
+              bookmarkCreate.isLoading ||
+              bookmarkDestroy.isLoading
+            }
             onClick={handleUpdate}
           />
         </Box>

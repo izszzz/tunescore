@@ -5,15 +5,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider = "prisma-zod-generator"
-  isGenerateSelect  = true
-  isGenerateInclude = true
-}
+// generator zod {
+//   provider = "prisma-zod-generator"
+//   isGenerateSelect  = true
+//   isGenerateInclude = true
+// }
 
 generator erd {
   provider = "prisma-erd-generator"
   output="../erd.md"
+}
+
+generator trpc {
+  provider       = "prisma-trpc-generator"
+  withMiddleware = false
+  withShield     = false
+  contextPath    = "../../../../src/context"
+  isGenerateSelect   = true
+  isGenerateInclude  = true
 }
 
 datasource db {

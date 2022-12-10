@@ -6,31 +6,19 @@ import { UserWhereUniqueInputObjectSchema } from './UserWhereUniqueInput.schema'
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.UserCreateNestedOneWithoutIssuesInput> = z.union(
-  [
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => UserCreateWithoutIssuesInputObjectSchema),
-            z.lazy(() => UserUncheckedCreateWithoutIssuesInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .lazy(() => UserCreateOrConnectWithoutIssuesInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
-      })
-      .strict(),
-  ],
-);
+const Schema: z.ZodType<Prisma.UserCreateNestedOneWithoutIssuesInput> = z
+  .object({
+    create: z
+      .union([
+        z.lazy(() => UserCreateWithoutIssuesInputObjectSchema),
+        z.lazy(() => UserUncheckedCreateWithoutIssuesInputObjectSchema),
+      ])
+      .optional(),
+    connectOrCreate: z
+      .lazy(() => UserCreateOrConnectWithoutIssuesInputObjectSchema)
+      .optional(),
+    connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
+  })
+  .strict();
 
 export const UserCreateNestedOneWithoutIssuesInputObjectSchema = Schema;

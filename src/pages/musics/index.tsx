@@ -9,14 +9,14 @@ import { Music } from "@prisma/client";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation(["music.search"], {
+  const search = trpc.useMutation(["search.music"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
   const { data } = trpc.useQuery(
     [
-      "music.index",
+      "pagination.music",
       {
         args: {
           include: { composers: true, lyrists: true, band: true, user: true },

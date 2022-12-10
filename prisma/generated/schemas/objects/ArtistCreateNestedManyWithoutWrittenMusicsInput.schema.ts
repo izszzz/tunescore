@@ -7,56 +7,44 @@ import { ArtistWhereUniqueInputObjectSchema } from './ArtistWhereUniqueInput.sch
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.ArtistCreateNestedManyWithoutWrittenMusicsInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => ArtistCreateWithoutWrittenMusicsInputObjectSchema),
-            z
-              .lazy(() => ArtistCreateWithoutWrittenMusicsInputObjectSchema)
-              .array(),
-            z.lazy(
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => ArtistCreateWithoutWrittenMusicsInputObjectSchema),
+          z
+            .lazy(() => ArtistCreateWithoutWrittenMusicsInputObjectSchema)
+            .array(),
+          z.lazy(
+            () => ArtistUncheckedCreateWithoutWrittenMusicsInputObjectSchema,
+          ),
+          z
+            .lazy(
               () => ArtistUncheckedCreateWithoutWrittenMusicsInputObjectSchema,
-            ),
-            z
-              .lazy(
-                () =>
-                  ArtistUncheckedCreateWithoutWrittenMusicsInputObjectSchema,
-              )
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(
+            )
+            .array(),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .union([
+          z.lazy(
+            () => ArtistCreateOrConnectWithoutWrittenMusicsInputObjectSchema,
+          ),
+          z
+            .lazy(
               () => ArtistCreateOrConnectWithoutWrittenMusicsInputObjectSchema,
-            ),
-            z
-              .lazy(
-                () =>
-                  ArtistCreateOrConnectWithoutWrittenMusicsInputObjectSchema,
-              )
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => ArtistWhereUniqueInputObjectSchema),
-            z.lazy(() => ArtistWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+            )
+            .array(),
+        ])
+        .optional(),
+      connect: z
+        .union([
+          z.lazy(() => ArtistWhereUniqueInputObjectSchema),
+          z.lazy(() => ArtistWhereUniqueInputObjectSchema).array(),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const ArtistCreateNestedManyWithoutWrittenMusicsInputObjectSchema =
   Schema;

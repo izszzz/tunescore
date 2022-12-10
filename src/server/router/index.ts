@@ -5,12 +5,15 @@ import superjson from "superjson";
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
 import { userRouter } from "./user";
-import { musicRouter } from "./music";
 import { artistRouter } from "./artist";
 import { bandRouter } from "./band";
 import { issueRouter } from "./issue";
 import { pullRouter } from "./pull";
 import { albumRouter } from "./album";
+import { musicRouter } from "../../../prisma/generated/routers/Music.router";
+import { bookmarkedRouter } from "./bookmarked";
+import { paginationRouter } from "./pagination";
+import { searchRouter } from "./search";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -22,6 +25,9 @@ export const appRouter = createRouter()
   .merge("album.", albumRouter)
   .merge("issue.", issueRouter)
   .merge("pull.", pullRouter)
+  .merge("pagination.", paginationRouter)
+  .merge("bookmarked.", bookmarkedRouter)
+  .merge("search.", searchRouter)
   .merge("auth.", protectedExampleRouter);
 
 // export type definition of API

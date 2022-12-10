@@ -11,139 +11,84 @@ import { SessionScalarWhereInputObjectSchema } from './SessionScalarWhereInput.s
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.SessionUpdateManyWithoutUserNestedInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => SessionCreateWithoutUserInputObjectSchema),
-            z.lazy(() => SessionCreateWithoutUserInputObjectSchema).array(),
-            z.lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema),
-            z
-              .lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema),
-            z
-              .lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        upsert: z
-          .union([
-            z.lazy(
-              () => SessionUpsertWithWhereUniqueWithoutUserInputObjectSchema,
-            ),
-            z
-              .lazy(
-                () => SessionUpsertWithWhereUniqueWithoutUserInputObjectSchema,
-              )
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        createMany: z
-          .lazy(() => SessionCreateManyUserInputEnvelopeObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        set: z
-          .union([
-            z.lazy(() => SessionWhereUniqueInputObjectSchema),
-            z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        disconnect: z
-          .union([
-            z.lazy(() => SessionWhereUniqueInputObjectSchema),
-            z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        delete: z
-          .union([
-            z.lazy(() => SessionWhereUniqueInputObjectSchema),
-            z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => SessionWhereUniqueInputObjectSchema),
-            z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        update: z
-          .union([
-            z.lazy(
-              () => SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema,
-            ),
-            z
-              .lazy(
-                () => SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema,
-              )
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        updateMany: z
-          .union([
-            z.lazy(
-              () => SessionUpdateManyWithWhereWithoutUserInputObjectSchema,
-            ),
-            z
-              .lazy(
-                () => SessionUpdateManyWithWhereWithoutUserInputObjectSchema,
-              )
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        deleteMany: z
-          .union([
-            z.lazy(() => SessionScalarWhereInputObjectSchema),
-            z.lazy(() => SessionScalarWhereInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+const Schema: z.ZodType<Prisma.SessionUpdateManyWithoutUserNestedInput> = z
+  .object({
+    create: z
+      .union([
+        z.lazy(() => SessionCreateWithoutUserInputObjectSchema),
+        z.lazy(() => SessionCreateWithoutUserInputObjectSchema).array(),
+        z.lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema),
+        z
+          .lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    connectOrCreate: z
+      .union([
+        z.lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema),
+        z
+          .lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    upsert: z
+      .union([
+        z.lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputObjectSchema),
+        z
+          .lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    createMany: z
+      .lazy(() => SessionCreateManyUserInputEnvelopeObjectSchema)
+      .optional(),
+    set: z
+      .union([
+        z.lazy(() => SessionWhereUniqueInputObjectSchema),
+        z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
+      ])
+      .optional(),
+    disconnect: z
+      .union([
+        z.lazy(() => SessionWhereUniqueInputObjectSchema),
+        z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
+      ])
+      .optional(),
+    delete: z
+      .union([
+        z.lazy(() => SessionWhereUniqueInputObjectSchema),
+        z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
+      ])
+      .optional(),
+    connect: z
+      .union([
+        z.lazy(() => SessionWhereUniqueInputObjectSchema),
+        z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
+      ])
+      .optional(),
+    update: z
+      .union([
+        z.lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema),
+        z
+          .lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    updateMany: z
+      .union([
+        z.lazy(() => SessionUpdateManyWithWhereWithoutUserInputObjectSchema),
+        z
+          .lazy(() => SessionUpdateManyWithWhereWithoutUserInputObjectSchema)
+          .array(),
+      ])
+      .optional(),
+    deleteMany: z
+      .union([
+        z.lazy(() => SessionScalarWhereInputObjectSchema),
+        z.lazy(() => SessionScalarWhereInputObjectSchema).array(),
+      ])
+      .optional(),
+  })
+  .strict();
 
 export const SessionUpdateManyWithoutUserNestedInputObjectSchema = Schema;

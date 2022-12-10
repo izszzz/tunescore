@@ -9,58 +9,28 @@ import { BandUncheckedUpdateWithoutAlbumsInputObjectSchema } from './BandUncheck
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.BandUpdateOneWithoutAlbumsNestedInput> = z.union(
-  [
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => BandCreateWithoutAlbumsInputObjectSchema),
-            z.lazy(() => BandUncheckedCreateWithoutAlbumsInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .lazy(() => BandCreateOrConnectWithoutAlbumsInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        upsert: z
-          .lazy(() => BandUpsertWithoutAlbumsInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        disconnect: z.boolean().optional(),
-      })
-      .strict(),
-    z
-      .object({
-        delete: z.boolean().optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z.lazy(() => BandWhereUniqueInputObjectSchema).optional(),
-      })
-      .strict(),
-    z
-      .object({
-        update: z
-          .union([
-            z.lazy(() => BandUpdateWithoutAlbumsInputObjectSchema),
-            z.lazy(() => BandUncheckedUpdateWithoutAlbumsInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ],
-);
+const Schema: z.ZodType<Prisma.BandUpdateOneWithoutAlbumsNestedInput> = z
+  .object({
+    create: z
+      .union([
+        z.lazy(() => BandCreateWithoutAlbumsInputObjectSchema),
+        z.lazy(() => BandUncheckedCreateWithoutAlbumsInputObjectSchema),
+      ])
+      .optional(),
+    connectOrCreate: z
+      .lazy(() => BandCreateOrConnectWithoutAlbumsInputObjectSchema)
+      .optional(),
+    upsert: z.lazy(() => BandUpsertWithoutAlbumsInputObjectSchema).optional(),
+    disconnect: z.boolean().optional(),
+    delete: z.boolean().optional(),
+    connect: z.lazy(() => BandWhereUniqueInputObjectSchema).optional(),
+    update: z
+      .union([
+        z.lazy(() => BandUpdateWithoutAlbumsInputObjectSchema),
+        z.lazy(() => BandUncheckedUpdateWithoutAlbumsInputObjectSchema),
+      ])
+      .optional(),
+  })
+  .strict();
 
 export const BandUpdateOneWithoutAlbumsNestedInputObjectSchema = Schema;

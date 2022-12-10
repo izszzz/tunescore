@@ -6,12 +6,10 @@ import { PullScalarFieldEnumSchema } from './enums/PullScalarFieldEnum.schema';
 
 export const PullGroupBySchema = z.object({
   where: PullWhereInputObjectSchema.optional(),
-  orderBy: z
-    .union([
-      PullOrderByWithAggregationInputObjectSchema,
-      PullOrderByWithAggregationInputObjectSchema.array(),
-    ])
-    .optional(),
+  orderBy: z.union([
+    PullOrderByWithAggregationInputObjectSchema,
+    PullOrderByWithAggregationInputObjectSchema.array(),
+  ]),
   having: PullScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

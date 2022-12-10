@@ -10,47 +10,29 @@ import { MusicUncheckedUpdateWithoutIssuesInputObjectSchema } from './MusicUnche
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.MusicUpdateOneRequiredWithoutIssuesNestedInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => MusicCreateWithoutIssuesInputObjectSchema),
-            z.lazy(() => MusicUncheckedCreateWithoutIssuesInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .lazy(() => MusicCreateOrConnectWithoutIssuesInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        upsert: z
-          .lazy(() => MusicUpsertWithoutIssuesInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
-      })
-      .strict(),
-    z
-      .object({
-        update: z
-          .union([
-            z.lazy(() => MusicUpdateWithoutIssuesInputObjectSchema),
-            z.lazy(() => MusicUncheckedUpdateWithoutIssuesInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => MusicCreateWithoutIssuesInputObjectSchema),
+          z.lazy(() => MusicUncheckedCreateWithoutIssuesInputObjectSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => MusicCreateOrConnectWithoutIssuesInputObjectSchema)
+        .optional(),
+      upsert: z
+        .lazy(() => MusicUpsertWithoutIssuesInputObjectSchema)
+        .optional(),
+      connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
+      update: z
+        .union([
+          z.lazy(() => MusicUpdateWithoutIssuesInputObjectSchema),
+          z.lazy(() => MusicUncheckedUpdateWithoutIssuesInputObjectSchema),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const MusicUpdateOneRequiredWithoutIssuesNestedInputObjectSchema =
   Schema;

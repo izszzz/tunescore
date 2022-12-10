@@ -6,12 +6,10 @@ import { IssueScalarFieldEnumSchema } from './enums/IssueScalarFieldEnum.schema'
 
 export const IssueGroupBySchema = z.object({
   where: IssueWhereInputObjectSchema.optional(),
-  orderBy: z
-    .union([
-      IssueOrderByWithAggregationInputObjectSchema,
-      IssueOrderByWithAggregationInputObjectSchema.array(),
-    ])
-    .optional(),
+  orderBy: z.union([
+    IssueOrderByWithAggregationInputObjectSchema,
+    IssueOrderByWithAggregationInputObjectSchema.array(),
+  ]),
   having: IssueScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

@@ -10,46 +10,26 @@ import { MusicUncheckedUpdateWithoutPullsInputObjectSchema } from './MusicUnchec
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.MusicUpdateOneRequiredWithoutPullsNestedInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => MusicCreateWithoutPullsInputObjectSchema),
-            z.lazy(() => MusicUncheckedCreateWithoutPullsInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .lazy(() => MusicCreateOrConnectWithoutPullsInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        upsert: z
-          .lazy(() => MusicUpsertWithoutPullsInputObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
-      })
-      .strict(),
-    z
-      .object({
-        update: z
-          .union([
-            z.lazy(() => MusicUpdateWithoutPullsInputObjectSchema),
-            z.lazy(() => MusicUncheckedUpdateWithoutPullsInputObjectSchema),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => MusicCreateWithoutPullsInputObjectSchema),
+          z.lazy(() => MusicUncheckedCreateWithoutPullsInputObjectSchema),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .lazy(() => MusicCreateOrConnectWithoutPullsInputObjectSchema)
+        .optional(),
+      upsert: z.lazy(() => MusicUpsertWithoutPullsInputObjectSchema).optional(),
+      connect: z.lazy(() => MusicWhereUniqueInputObjectSchema).optional(),
+      update: z
+        .union([
+          z.lazy(() => MusicUpdateWithoutPullsInputObjectSchema),
+          z.lazy(() => MusicUncheckedUpdateWithoutPullsInputObjectSchema),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const MusicUpdateOneRequiredWithoutPullsNestedInputObjectSchema = Schema;

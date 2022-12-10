@@ -8,51 +8,37 @@ import { SessionWhereUniqueInputObjectSchema } from './SessionWhereUniqueInput.s
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.SessionUncheckedCreateNestedManyWithoutUserInput> =
-  z.union([
-    z
-      .object({
-        create: z
-          .union([
-            z.lazy(() => SessionCreateWithoutUserInputObjectSchema),
-            z.lazy(() => SessionCreateWithoutUserInputObjectSchema).array(),
-            z.lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema),
-            z
-              .lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connectOrCreate: z
-          .union([
-            z.lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema),
-            z
-              .lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema)
-              .array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        createMany: z
-          .lazy(() => SessionCreateManyUserInputEnvelopeObjectSchema)
-          .optional(),
-      })
-      .strict(),
-    z
-      .object({
-        connect: z
-          .union([
-            z.lazy(() => SessionWhereUniqueInputObjectSchema),
-            z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
-          ])
-          .optional(),
-      })
-      .strict(),
-  ]);
+  z
+    .object({
+      create: z
+        .union([
+          z.lazy(() => SessionCreateWithoutUserInputObjectSchema),
+          z.lazy(() => SessionCreateWithoutUserInputObjectSchema).array(),
+          z.lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema),
+          z
+            .lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      connectOrCreate: z
+        .union([
+          z.lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema),
+          z
+            .lazy(() => SessionCreateOrConnectWithoutUserInputObjectSchema)
+            .array(),
+        ])
+        .optional(),
+      createMany: z
+        .lazy(() => SessionCreateManyUserInputEnvelopeObjectSchema)
+        .optional(),
+      connect: z
+        .union([
+          z.lazy(() => SessionWhereUniqueInputObjectSchema),
+          z.lazy(() => SessionWhereUniqueInputObjectSchema).array(),
+        ])
+        .optional(),
+    })
+    .strict();
 
 export const SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema =
   Schema;

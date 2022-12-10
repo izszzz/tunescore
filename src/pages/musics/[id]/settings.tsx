@@ -23,8 +23,8 @@ const SettingsMusic: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(["music.show", { where: { id } }]);
-  const destroy = trpc.useMutation(`music.destroy`, {
+  const { data } = trpc.useQuery(["music.findUniqueMusic", { where: { id } }]);
+  const destroy = trpc.useMutation("music.deleteOneMusic", {
     onSuccess: () => {
       enqueueSnackbar("music.destroy success");
       router.push("/musics");
@@ -33,10 +33,10 @@ const SettingsMusic: NextPage = () => {
       enqueueSnackbar("music.destroy error");
     },
   });
-  const update = trpc.useMutation(`music.update`, {
+  const update = trpc.useMutation(`music.updateOneMusic`, {
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(
-        ["music.show", { where: { id } }],
+        ["music.findUniqueMusic", { where: { id } }],
         data
       );
       enqueueSnackbar("music.update success");

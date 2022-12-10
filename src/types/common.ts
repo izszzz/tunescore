@@ -1,14 +1,14 @@
-import {Artist, Band, Music, Prisma} from "@prisma/client"
+import { Artist, Band, Music, Prisma } from "@prisma/client";
 
-export type Resource = Music | Artist | Band
+export type Resource = Music | Artist | Band;
 export type ResourceCreateInput =
   | Prisma.MusicCreateInput
   | Prisma.ArtistCreateInput
-  | Prisma.BandCreateInput
+  | Prisma.BandCreateInput;
 export type ResourceCreateManyInput =
   | Prisma.MusicCreateManyInput
   | Prisma.ArtistCreateManyInput
-  | Prisma.BandCreateManyInput
+  | Prisma.BandCreateManyInput;
 export type PrismaModelNameLowercase = Exclude<
   Lowercase<Prisma.ModelName>,
   | "user"
@@ -18,4 +18,4 @@ export type PrismaModelNameLowercase = Exclude<
   | "musiclink"
   | "bandlink"
   | "artistlink"
->
+>;

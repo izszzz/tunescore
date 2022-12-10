@@ -1,24 +1,30 @@
 import React from "react";
 import DefaultHeader from "../header/default";
-import SingleColumnLayout from "./index"
+import SingleColumnLayout from "./index";
 
 export interface DefaultSingleColumnLayoutProps {
-	subHeader?: React.ReactNode;
-	children: React.ReactNode;
-	contained?: boolean
+  subHeader?: React.ReactNode;
+  children: React.ReactNode;
+  contained?: boolean;
 }
-const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnLayoutProps> = ({ subHeader, contained, children }) => {
-	return (
-		<SingleColumnLayout contained={contained} header={
-			<>
-				<DefaultHeader />
-				{subHeader}
-			</>
-		}>
-			{children}
-		</SingleColumnLayout >
-
-	)
-}
+const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnLayoutProps> = ({
+  subHeader,
+  contained,
+  children,
+}) => {
+  return (
+    <SingleColumnLayout
+      contained={contained}
+      header={
+        <>
+          <DefaultHeader />
+          {subHeader}
+        </>
+      }
+    >
+      {children}
+    </SingleColumnLayout>
+  );
+};
 
 export default DefaultSingleColumnLayout;

@@ -9,23 +9,40 @@ import { trpc } from "../../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 
-const Markdown = dynamic(
-	() => import("@uiw/react-markdown-preview"),
-	{ ssr: false }
-);
+const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
+  ssr: false,
+});
 const Pull: NextPage = () => {
-	const router = useRouter()
-	const { enqueueSnackbar } = useSnackbar()
-	const { data: musicData } = trpc.useQuery(["music.show", { where: { id: router.query.id as string } }], { onError: () => { enqueueSnackbar("music.show error") } })
-	const { data: pullData } = trpc.useQuery(["pull.show", { where: { id: router.query.pullId as string } }], { onError: () => { enqueueSnackbar("music.show error") } })
-	if (!musicData || !pullData) return <></>
-	return (
-		<MusicLayout data={musicData} bookmarked={musicData.bookmarked} activeTab="pullrequests">
-			<PullLayout data={pullData} activeTab="conversation">
-				<Markdown source={pullData.body} />
-			</PullLayout>
-		</MusicLayout>
-	)
-}
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  const { data: musicData } = trpc.useQuery(
+    ["music.show", { where: { id: router.query.id as string } }],
+    {
+      onError: () => {
+        enqueueSnackbar("music.show error");
+      },
+    }
+  );
+  const { data: pullData } = trpc.useQuery(
+    ["pull.show", { where: { id: router.query.pullId as string } }],
+    {
+      onError: () => {
+        enqueueSnackbar("music.show error");
+      },
+    }
+  );
+  if (!musicData || !pullData) return <></>;
+  return (
+    <MusicLayout
+      data={musicData}
+      bookmarked={musicData.bookmarked}
+      activeTab="pullrequests"
+    >
+      <PullLayout data={pullData} activeTab="conversation">
+        <Markdown source={pullData.body} />
+      </PullLayout>
+    </MusicLayout>
+  );
+};
 
-export default Pull
+export default Pull;

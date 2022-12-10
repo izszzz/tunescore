@@ -1,9 +1,9 @@
-import {z} from "zod"
+import { z } from "zod";
 
 const schemaForType =
   <T>() =>
   <S extends z.ZodType<T, any, any>>(arg: S) => {
-    return arg
-  }
+    return arg;
+  };
 
-export default schemaForType
+export default schemaForType;

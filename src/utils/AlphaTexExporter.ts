@@ -1,293 +1,331 @@
-import {model as Model} from "@coderline/alphatab"
+import { model as Model } from "@coderline/alphatab";
 export default class AlphaTexExporter {
-  _builder: string
+  _builder: string;
   constructor() {
-    this._builder = ""
+    this._builder = "";
   }
-  Export(track: Model.Track) {
-    this.Score(track)
+  Export(score: Model.Score) {
+    this.Score(score);
   }
-  Score(track: Model.Track) {
-    this.MetaData(track)
-    this.Bars(track)
+  Score(score: Model.Score) {
+    this.ScoreMetaData(score);
+    console.log(score);
+    score.tracks.forEach((track) => {
+      this.TrackMetaData(track);
+      this.Bars(track);
+    });
   }
   ToTex() {
-    return this._builder
+    return this._builder;
   }
-  MetaData(track: Model.Track) {
-    const score = track.score
-    this.StringMetaData("title", score.title)
-    this.StringMetaData("subtitle", score.subTitle)
-    this.StringMetaData("artist", score.artist)
-    this.StringMetaData("album", score.album)
-    this.StringMetaData("words", score.words)
-    this.StringMetaData("music", score.music)
-    this.StringMetaData("copyright", score?.copyright)
-    this._builder += "\\tempo "
-    this._builder += score.tempo
-    this._builder += "" + "\r\n"
-    if (track.staves[0] && track.staves[0].capo > 0) {
-      this._builder += "\\capo "
-      this._builder += track.staves[0].capo
-      this._builder += "" + "\r\n"
+  ScoreMetaData(score: Model.Score) {
+    this.StringMetaData("title", score.title);
+    this.StringMetaData("subtitle", score.subTitle);
+    this.StringMetaData("artist", score.artist);
+    this.StringMetaData("album", score.album);
+    this.StringMetaData("words", score.words);
+    this.StringMetaData("music", score.music);
+    this.StringMetaData("copyright", score?.copyright);
+    this._builder += "\\tempo ";
+    this._builder += score.tempo;
+    this._builder += "" + "\r\n";
+    this._builder += ".";
+    this._builder += "" + "\r\n";
+  }
+  TrackMetaData(track: Model.Track) {
+    this._builder += "" + "\r\n";
+    this._builder += `\\track \"${track.name}\" \"${track.shortName}\"`;
+    this._builder += "" + "\r\n";
+  }
+  StaveMetaData(stave: Model.Staff) {
+    this._builder += "\\staff ";
+    this._builder += "" + "\r\n";
+    if (stave.capo > 0) {
+      this._builder += `\\capo ${stave.capo}`;
     }
-    this._builder += "\\tuning"
-    track.staves[0]?.stringTuning.tunings.forEach(tuning => {
-      this._builder += " "
-      this._builder += Model.Tuning.getTextForTuning(tuning, true)
-    })
-    this._builder += "" + "\r\n"
-    this._builder += "\\instrument "
-    this._builder += track.playbackInfo.program
-    this._builder += "" + "\r\n"
-    this._builder += "."
-    this._builder += "" + "\r\n"
+    this._builder += "\\tuning";
+    stave.stringTuning.tunings.forEach((tuning) => {
+      this._builder += " ";
+      this._builder += Model.Tuning.getTextForTuning(tuning, true);
+    });
+    this._builder += "" + "\r\n";
+    this._builder += `\\instrument ${stave.track.playbackInfo.program}`;
+    this._builder += "" + "\r\n";
+    this._builder += "" + "\r\n";
   }
-  StringMetaData(key, value) {
+  StringMetaData(key: string, value: string) {
     if (value && value.trim() === "") {
-      this._builder += "\\"
-      this._builder += key
-      this._builder += ' "'
-      this._builder += value.replace('"', '\\"')
-      this._builder += '"'
-      this._builder += "" + "\r\n"
+      this._builder += "\\";
+      this._builder += key;
+      this._builder += ' "';
+      this._builder += value.replace('"', '\\"');
+      this._builder += '"';
+      this._builder += "" + "\r\n";
     }
   }
   Bars(track: Model.Track) {
-    track.staves.forEach(stave =>
+    track.staves.forEach((stave) => {
+      this.StaveMetaData(stave);
       stave.bars.forEach((bar, i) => {
         if (i > 0) {
-          this._builder += " |"
-          this._builder += "" + "\r\n"
+          this._builder += " |";
+          this._builder += "" + "\r\n";
         }
-        this.Bar(bar)
-      })
-    )
+        this.Bar(bar);
+      });
+    });
   }
   Bar(bar: Model.Bar) {
-    this.BarMeta(bar)
-    if (bar.voices[0]) this.Voice(bar.voices[0])
+    this.BarMeta(bar);
+    if (bar.voices[0]) this.Voice(bar.voices[0]);
   }
   Voice(voice: Model.Voice) {
-    voice.beats.forEach(beat => this.Beat(beat))
+    voice.beats.forEach((beat) => this.Beat(beat));
   }
   Beat(beat: Model.Beat) {
     if (beat.isRest) {
-      this._builder += "r"
+      this._builder += "r";
     } else {
       if (beat.notes.length > 1) {
-        this._builder += "("
+        this._builder += "(";
       }
-      beat.notes.forEach(note => this.Note(note))
+      beat.notes.forEach((note) => this.Note(note));
       if (beat.notes.length > 1) {
-        this._builder += ")"
+        this._builder += ")";
       }
     }
-    this._builder += "."
-    this._builder += beat.duration
-    this._builder += " "
-    this.BeatEffects(beat)
+    this._builder += ".";
+    this._builder += beat.duration;
+    this._builder += " ";
+    this.BeatEffects(beat);
   }
   Note(note: Model.Note) {
     if (note.isDead) {
-      this._builder += "x"
+      this._builder += "x";
     } else if (note.isTieDestination) {
-      this._builder += "-"
+      this._builder += "-";
     } else {
-      this._builder += note.fret
+      this._builder += note.fret;
     }
-    this._builder += "."
+    this._builder += ".";
     if (note.beat.voice.bar.staff.track.staves[0])
       this._builder +=
         note.beat.voice.bar.staff.track.staves[0].stringTuning.tunings.length -
         note.string +
-        1
-    this._builder += " "
-    this.NoteEffects(note)
+        1;
+    this._builder += " ";
+    this.NoteEffects(note);
   }
   NoteEffects(note: Model.Note) {
-    let hasEffectOpen = false
+    let hasEffectOpen = false;
     if (note.hasBend) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "b ("
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "b (";
 
       for (let i = 0; i < note.bendPoints.length; i++) {
-        console.log(note)
-        this._builder += note.bendPoints[i]?.offset
-        this._builder += " "
-        this._builder += note.bendPoints[i]?.value
-        this._builder += " "
+        console.log(note);
+        this._builder += note.bendPoints[i]?.offset;
+        this._builder += " ";
+        this._builder += note.bendPoints[i]?.value;
+        this._builder += " ";
       }
-      this._builder += ")"
+      this._builder += ")";
     }
     switch (note.harmonicType) {
       case Model.HarmonicType.Natural:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "nh "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "nh ";
+        break;
       case Model.HarmonicType.Artificial:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "ah "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "ah ";
+        break;
       case Model.HarmonicType.Tap:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "th "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "th ";
+        break;
       case Model.HarmonicType.Pinch:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "ph "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "ph ";
+        break;
       case Model.HarmonicType.Semi:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "sh "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sh ";
+        break;
     }
     if (note.isTrill) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "tr "
-      this._builder += note.trillFret
-      this._builder += " "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "tr ";
+      this._builder += note.trillFret;
+      this._builder += " ";
       switch (note.trillSpeed) {
         case Model.Duration.Sixteenth:
-          this._builder += "16 "
-          break
+          this._builder += "16 ";
+          break;
         case Model.Duration.ThirtySecond:
-          this._builder += "32 "
-          break
+          this._builder += "32 ";
+          break;
         case Model.Duration.SixtyFourth:
-          this._builder += "64 "
-          break
+          this._builder += "64 ";
+          break;
       }
     }
     if (note.vibrato != Model.VibratoType.None) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "v "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "v ";
     }
-    //TODO:
-    //     if (note.SlideType == Model.SlideType.Legato) {
-    //       hasEffectOpen = this.EffectOpen(hasEffectOpen)
-    //       this._builder += "sl "
-    //     }
-    //     if (note.SlideType == Model.SlideType.Shift) {
-    //       hasEffectOpen = this.EffectOpen(hasEffectOpen)
-    //       this._builder += "ss "
-    //     }
+    switch (note.slideOutType) {
+      case Model.SlideOutType.Legato:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sl ";
+        break;
+      case Model.SlideOutType.Shift:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "ss ";
+        break;
+      case Model.SlideOutType.PickSlideDown:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "psd ";
+        break;
+      case Model.SlideOutType.PickSlideUp:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "psu ";
+        break;
+      case Model.SlideOutType.OutUp:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sou ";
+        break;
+      case Model.SlideOutType.OutDown:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sod ";
+        break;
+    }
+    switch (note.slideInType) {
+      case Model.SlideInType.IntoFromBelow:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sib ";
+        break;
+      case Model.SlideInType.IntoFromAbove:
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "sia ";
+        break;
+    }
     if (note.isHammerPullOrigin) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "h "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "h ";
     }
     if (note.isGhost) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "g "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "g ";
     }
     if (note.accentuated == Model.AccentuationType.Normal) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "ac "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "ac ";
     } else if (note.accentuated == Model.AccentuationType.Heavy) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "hac "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "hac ";
     }
     if (note.isPalmMute) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "pm "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "pm ";
     }
     if (note.isStaccato) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "st "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "st ";
     }
     if (note.isLetRing) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "lr "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "lr ";
     }
     switch (note.leftHandFinger) {
       case Model.Fingers.Thumb:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "1 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "1 ";
+        break;
       case Model.Fingers.IndexFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "2 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "2 ";
+        break;
       case Model.Fingers.MiddleFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "3 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "3 ";
+        break;
       case Model.Fingers.AnnularFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "4 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "4 ";
+        break;
       case Model.Fingers.LittleFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "5 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "5 ";
+        break;
     }
     switch (note.rightHandFinger) {
       case Model.Fingers.Thumb:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "1 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "1 ";
+        break;
       case Model.Fingers.IndexFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "2 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "2 ";
+        break;
       case Model.Fingers.MiddleFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "3 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "3 ";
+        break;
       case Model.Fingers.AnnularFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "4 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "4 ";
+        break;
       case Model.Fingers.LittleFinger:
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "5 "
-        break
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "5 ";
+        break;
     }
-    this.EffectClose(hasEffectOpen)
+    this.EffectClose(hasEffectOpen);
   }
   EffectOpen(hasBeatEffectOpen: boolean) {
     if (!hasBeatEffectOpen) {
-      this._builder += "{"
+      this._builder += "{";
     }
-    return true
+    return true;
   }
   EffectClose(hasBeatEffectOpen: boolean) {
     if (hasBeatEffectOpen) {
-      this._builder += "}"
+      this._builder += "}";
     }
   }
   BeatEffects(beat: Model.Beat) {
-    let hasEffectOpen = false
+    let hasEffectOpen = false;
     if (beat.fadeIn) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "f "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "f ";
     }
     switch (beat.graceType) {
       case Model.GraceType.OnBeat:
-        this._builder += "gr ob "
-        break
+        this._builder += "gr ob ";
+        break;
       case Model.GraceType.BeforeBeat:
-        this._builder += "gr "
-        break
+        this._builder += "gr ";
+        break;
     }
     if (beat.vibrato != Model.VibratoType.None) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "v "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "v ";
     }
     if (beat.slap) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "s "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "s ";
     }
     if (beat.pop) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "p "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "p ";
     }
     if (beat.dots == 2) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "dd "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "dd ";
     } else if (beat.dots == 1) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "d "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "d ";
     }
     //TODO:
     //     if (beat.PickStroke == Model.PickStrokeType.Up) {
@@ -298,45 +336,45 @@ export default class AlphaTexExporter {
     //       this._builder += "sd "
     //     }
     if (beat.hasTuplet) {
-      let tupletValue = 0
+      let tupletValue = 0;
       if (beat.tupletDenominator == 3 && beat.tupletNumerator == 2) {
-        tupletValue = 3
+        tupletValue = 3;
       } else if (beat.tupletDenominator == 5 && beat.tupletNumerator == 4) {
-        tupletValue = 5
+        tupletValue = 5;
       } else if (beat.tupletDenominator == 6 && beat.tupletNumerator == 4) {
-        tupletValue = 6
+        tupletValue = 6;
       } else if (beat.tupletDenominator == 7 && beat.tupletNumerator == 4) {
-        tupletValue = 7
+        tupletValue = 7;
       } else if (beat.tupletDenominator == 9 && beat.tupletNumerator == 8) {
-        tupletValue = 9
+        tupletValue = 9;
       } else if (beat.tupletDenominator == 10 && beat.tupletNumerator == 8) {
-        tupletValue = 10
+        tupletValue = 10;
       } else if (beat.tupletDenominator == 11 && beat.tupletNumerator == 8) {
-        tupletValue = 11
+        tupletValue = 11;
       } else if (beat.tupletDenominator == 12 && beat.tupletNumerator == 8) {
-        tupletValue = 12
+        tupletValue = 12;
       }
       if (tupletValue != 0) {
-        hasEffectOpen = this.EffectOpen(hasEffectOpen)
-        this._builder += "tu "
-        this._builder += tupletValue
-        this._builder += " "
+        hasEffectOpen = this.EffectOpen(hasEffectOpen);
+        this._builder += "tu ";
+        this._builder += tupletValue;
+        this._builder += " ";
       }
     }
     if (beat.hasWhammyBar) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "tbe ("
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "tbe (";
       for (let i = 0; i < beat.whammyBarPoints.length; i++) {
-        this._builder += beat.whammyBarPoints[i]?.offset
-        this._builder += " "
-        this._builder += beat.whammyBarPoints[i]?.value
-        this._builder += " "
+        this._builder += beat.whammyBarPoints[i]?.offset;
+        this._builder += " ";
+        this._builder += beat.whammyBarPoints[i]?.value;
+        this._builder += " ";
       }
-      this._builder += ")"
+      this._builder += ")";
     }
     if (beat.isTremolo) {
-      hasEffectOpen = this.EffectOpen(hasEffectOpen)
-      this._builder += "tp "
+      hasEffectOpen = this.EffectOpen(hasEffectOpen);
+      this._builder += "tp ";
       //TODO:
       //       if (beat.TremoloSpeed == AlphaTab.Model.Duration.Eighth) {
       //         this._builder += "8 "
@@ -348,111 +386,111 @@ export default class AlphaTexExporter {
       //         this._builder += "8 "
       //       }
     }
-    this.EffectClose(hasEffectOpen)
+    this.EffectClose(hasEffectOpen);
   }
   BarMeta(bar: Model.Bar) {
-    const masterBar = bar.masterBar
+    const masterBar = bar.masterBar;
     if (masterBar.index > 0) {
-      const previousMasterBar = masterBar.previousMasterBar
-      const previousBar = bar.previousBar
+      const previousMasterBar = masterBar.previousMasterBar;
+      const previousBar = bar.previousBar;
       if (
         previousMasterBar?.timeSignatureDenominator !=
           masterBar.timeSignatureDenominator ||
         previousMasterBar?.timeSignatureNumerator !=
           masterBar.timeSignatureNumerator
       ) {
-        this._builder += "\\ts "
-        this._builder += masterBar.timeSignatureNumerator
-        this._builder += " "
-        this._builder += masterBar.timeSignatureDenominator
-        this._builder += "" + "\r\n"
+        this._builder += "\\ts ";
+        this._builder += masterBar.timeSignatureNumerator;
+        this._builder += " ";
+        this._builder += masterBar.timeSignatureDenominator;
+        this._builder += "" + "\r\n";
       }
       if (previousMasterBar?.keySignature != masterBar.keySignature) {
-        this._builder += "\\ks "
+        this._builder += "\\ks ";
         switch (masterBar.keySignature) {
           case -7:
-            this._builder += "cb"
-            break
+            this._builder += "cb";
+            break;
           case -6:
-            this._builder += "gb"
-            break
+            this._builder += "gb";
+            break;
           case -5:
-            this._builder += "db"
-            break
+            this._builder += "db";
+            break;
           case -4:
-            this._builder += "ab"
-            break
+            this._builder += "ab";
+            break;
           case -3:
-            this._builder += "eb"
-            break
+            this._builder += "eb";
+            break;
           case -2:
-            this._builder += "bb"
-            break
+            this._builder += "bb";
+            break;
           case -1:
-            this._builder += "f"
-            break
+            this._builder += "f";
+            break;
           case 0:
-            this._builder += "c"
-            break
+            this._builder += "c";
+            break;
           case 1:
-            this._builder += "g"
-            break
+            this._builder += "g";
+            break;
           case 2:
-            this._builder += "d"
-            break
+            this._builder += "d";
+            break;
           case 3:
-            this._builder += "a"
-            break
+            this._builder += "a";
+            break;
           case 4:
-            this._builder += "e"
-            break
+            this._builder += "e";
+            break;
           case 5:
-            this._builder += "b"
-            break
+            this._builder += "b";
+            break;
           case 6:
-            this._builder += "f#"
-            break
+            this._builder += "f#";
+            break;
           case 7:
-            this._builder += "c#"
-            break
+            this._builder += "c#";
+            break;
         }
-        this._builder += "" + "\r\n"
+        this._builder += "" + "\r\n";
       }
       if (bar.clef != previousBar?.clef) {
-        this._builder += "\\clef "
+        this._builder += "\\clef ";
         switch (bar.clef) {
           case Model.Clef.Neutral:
-            this._builder += "n"
-            break
+            this._builder += "n";
+            break;
           case Model.Clef.C3:
-            this._builder += "c3"
-            break
+            this._builder += "c3";
+            break;
           case Model.Clef.C4:
-            this._builder += "c4"
-            break
+            this._builder += "c4";
+            break;
           case Model.Clef.F4:
-            this._builder += "f4"
-            break
+            this._builder += "f4";
+            break;
           case Model.Clef.G2:
-            this._builder += "g2"
-            break
+            this._builder += "g2";
+            break;
         }
-        this._builder += "" + "\r\n"
+        this._builder += "" + "\r\n";
       }
       if (masterBar.tempoAutomation != null) {
-        this._builder += "\\tempo "
-        this._builder += masterBar.tempoAutomation.value
-        this._builder += "" + "\r\n"
+        this._builder += "\\tempo ";
+        this._builder += masterBar.tempoAutomation.value;
+        this._builder += "" + "\r\n";
       }
     }
     if (masterBar.isRepeatStart) {
-      this._builder += "\\ro "
-      this._builder += "" + "\r\n"
+      this._builder += "\\ro ";
+      this._builder += "" + "\r\n";
     }
     if (masterBar.isRepeatEnd) {
-      this._builder += "\\rc "
-      this._builder += masterBar.repeatCount + 1
-      this._builder += "" + "\r\n"
+      this._builder += "\\rc ";
+      this._builder += masterBar.repeatCount + 1;
+      this._builder += "" + "\r\n";
     }
   }
 }

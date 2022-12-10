@@ -1,16 +1,16 @@
 // src/server/router/index.ts
-import {createRouter} from "./context"
-import superjson from "superjson"
+import { createRouter } from "./context";
+import superjson from "superjson";
 
-import {exampleRouter} from "./example"
-import {protectedExampleRouter} from "./protected-example-router"
-import {userRouter} from "./user"
-import {musicRouter} from "./music"
-import {artistRouter} from "./artist"
-import {bandRouter} from "./band"
-import {issueRouter} from "./issue"
-import {pullRouter} from "./pull"
-import {albumRouter} from "./album"
+import { exampleRouter } from "./example";
+import { protectedExampleRouter } from "./protected-example-router";
+import { userRouter } from "./user";
+import { musicRouter } from "./music";
+import { artistRouter } from "./artist";
+import { bandRouter } from "./band";
+import { issueRouter } from "./issue";
+import { pullRouter } from "./pull";
+import { albumRouter } from "./album";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -22,7 +22,7 @@ export const appRouter = createRouter()
   .merge("album.", albumRouter)
   .merge("issue.", issueRouter)
   .merge("pull.", pullRouter)
-  .merge("auth.", protectedExampleRouter)
+  .merge("auth.", protectedExampleRouter);
 
 // export type definition of API
-export type AppRouter = typeof appRouter
+export type AppRouter = typeof appRouter;

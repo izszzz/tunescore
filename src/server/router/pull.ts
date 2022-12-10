@@ -1,12 +1,12 @@
-import {createRouter} from "./context"
-import {z} from "zod"
-import schemaTypeFor from "../../utils/schemaForType"
-import {Prisma} from "@prisma/client"
-import {TRPCError} from "@trpc/server"
-import {createPaginator} from "prisma-pagination"
-import {PullFindUniqueSchema} from "../../../prisma/generated/schemas/findUniquePull.schema"
-import {PaginateOptionsSchema} from "../../utils/zod"
-import {PullFindManySchema} from "../../../prisma/generated/schemas/findManyPull.schema"
+import { createRouter } from "./context";
+import { z } from "zod";
+import schemaTypeFor from "../../utils/schemaForType";
+import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { createPaginator } from "prisma-pagination";
+import { PullFindUniqueSchema } from "../../../prisma/generated/schemas/findUniquePull.schema";
+import { PaginateOptionsSchema } from "../../utils/zod";
+import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
 
 export const pullRouter = createRouter()
   .query("index", {
@@ -14,30 +14,30 @@ export const pullRouter = createRouter()
       options: PaginateOptionsSchema,
       args: PullFindManySchema,
     }),
-    async resolve({ctx, input}) {
-      const {args, options} = input
-      const paginate = createPaginator(options)
+    async resolve({ ctx, input }) {
+      const { args, options } = input;
+      const paginate = createPaginator(options);
       return await paginate<
         Prisma.PullGetPayload<{
-          include: {user: true; music: true}
+          include: { user: true; music: true };
         }>,
         Prisma.PullFindManyArgs
-      >(ctx.prisma.pull, args)
+      >(ctx.prisma.pull, args);
     },
   })
   .query("show", {
     input: PullFindUniqueSchema,
-    async resolve({ctx, input}) {
+    async resolve({ ctx, input }) {
       return await ctx.prisma.pull.findUnique({
         ...input,
-        include: {user: true, music: true},
-      })
+        include: { user: true, music: true },
+      });
     },
   })
   .mutation("search", {
     input: PullFindManySchema,
-    async resolve({ctx, input}) {
-      return ctx.prisma.pull.findMany(input)
+    async resolve({ ctx, input }) {
+      return ctx.prisma.pull.findMany(input);
     },
   })
   .mutation("create", {
@@ -48,15 +48,15 @@ export const pullRouter = createRouter()
         title: z.string(),
         body: z.string(),
         music: z.object({
-          connect: z.object({id: z.string()}),
+          connect: z.object({ id: z.string() }),
         }),
       })
     ),
-    async resolve({ctx, input}) {
-      if (!ctx.session?.user) throw new TRPCError({code: "UNAUTHORIZED"})
+    async resolve({ ctx, input }) {
+      if (!ctx.session?.user) throw new TRPCError({ code: "UNAUTHORIZED" });
       const music = await ctx.prisma.music.findFirst({
-        where: {id: input.music.connect.id},
-      })
+        where: { id: input.music.connect.id },
+      });
       return await ctx.prisma.pull.create({
         data: {
           ...input,
@@ -65,9 +65,9 @@ export const pullRouter = createRouter()
             changed: music?.score || "",
             original: music?.score || "",
           },
-          user: {connect: {id: ctx.session?.user?.id}},
+          user: { connect: { id: ctx.session?.user?.id } },
         },
-      })
+      });
     },
   })
   .mutation("update", {
@@ -94,19 +94,19 @@ export const pullRouter = createRouter()
           .optional(),
       })
     ),
-    async resolve({ctx, input}) {
-      const {id, ...data} = input
+    async resolve({ ctx, input }) {
+      const { id, ...data } = input;
       return await ctx.prisma.pull.update({
-        where: {id},
+        where: { id },
         data,
-      })
+      });
     },
   })
   .mutation("destroy", {
     input: z.object({
       id: z.string(),
     }),
-    async resolve({ctx, input}) {
-      return await ctx.prisma.pull.delete({where: {id: input.id}})
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.pull.delete({ where: { id: input.id } });
     },
-  })
+  });

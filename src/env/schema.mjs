@@ -1,5 +1,5 @@
 // @ts-check
-import {z} from "zod"
+import { z } from "zod";
 
 /**
  * Specify your server-side environment variables schema here.
@@ -14,7 +14,7 @@ export const serverSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-})
+});
 
 /**
  * Specify your client-side environment variables schema here.
@@ -24,7 +24,7 @@ export const serverSchema = z.object({
 export const clientSchema = z.object({
   // NEXT_PUBLIC_BAR: z.string(),
   NEXT_PUBLIC_GOOGLE_API_KEY: z.string(),
-})
+});
 
 /**
  * You can't destruct `process.env` as a regular object, so you have to do
@@ -35,4 +35,4 @@ export const clientSchema = z.object({
 export const clientEnv = {
   // NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
   NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-}
+};

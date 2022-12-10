@@ -19,9 +19,7 @@ export const AccountAggregateSchema = z.object({
   cursor: AccountWhereUniqueInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  _count: z
-    .union([z.literal(true), AccountCountAggregateInputObjectSchema])
-    .optional(),
+  _count: z.union([z.literal(true), AccountCountAggregateInputObjectSchema]).optional(),
   _min: AccountMinAggregateInputObjectSchema.optional(),
   _max: AccountMaxAggregateInputObjectSchema.optional(),
   _avg: AccountAvgAggregateInputObjectSchema.optional(),

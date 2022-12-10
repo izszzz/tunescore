@@ -1,111 +1,194 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Script from 'next/script'
+import React, { useEffect, useRef, useState } from "react";
+import Script from "next/script";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import ScoreHeader from './header/score'
-import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Box from '@mui/material/Box';
-import { AlphaTabApi, model } from '@coderline/alphatab';
+import ScoreHeader from "./header/score";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Box from "@mui/material/Box";
+import { AlphaTabApi, model } from "@coderline/alphatab";
+import VolumeSliderInput from "../elements/input/slider/volume";
+import { useToggle } from "react-use";
 
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
-	open?: boolean;
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+  open?: boolean;
 }>(({ theme, open }) => ({
-	flexGrow: 1,
-	// padding: theme.spacing(3),
-	width: "100%",
-	transition: theme.transitions.create('margin', {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	overflow: "hidden",
-	marginLeft: `-${drawerWidth}px`,
-	...(open && {
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-		marginLeft: 0,
-	}),
+  flexGrow: 1,
+  // padding: theme.spacing(3),
+  width: "100%",
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflow: "hidden",
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
 }));
 
 interface ScoreLayoutProps {
-	value: string;
+  value: string;
 }
 
 const ScoreLayout = ({ value }: ScoreLayoutProps) => {
-	const [open, setOpen] = useState(false);
-	const [tracks, setTracks] = useState<model.Track[]>([]);
-	const apiRef = useRef<AlphaTabApi | null>(null)
-	const mainRef = useRef(null)
-	const handleOpen = () => setOpen(p => !p)
-	const handleLoad = () => {
-		const settings = {
-			file: "/test.gp",
-			player: {
-				enablePlayer: true,
-				soundFont: 'https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2',
-				// scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
-			}
-		};
-		if (mainRef.current) apiRef.current = new window.alphaTab.AlphaTabApi(mainRef.current, settings)
-		apiRef.current?.scoreLoaded.on((score) => setTracks(score.tracks));
-		apiRef.current?.tex(value);
-	}
-	useEffect(() => {
-		apiRef.current?.tex(value);
-	}, [value])
-	return (
-		<Box width="100%" sx={{ display: 'flex' }}>
-			<Script src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js" onReady={handleLoad} onError={(e) => console.log(e)} />
-			<Drawer variant="persistent"
-				anchor="left"
-				open={open}
-				sx={{
-					width: drawerWidth,
-					flexShrink: 0,
-					'& .MuiDrawer-paper': {
-						width: drawerWidth,
-						boxSizing: 'border-box',
-					},
-				}}>
-				<List>
-					{tracks.map((track, index) =>
-						<ListItem key={index} disablePadding>
-							<ListItemButton>
-								<ListItemIcon>
-								</ListItemIcon>
-								<ListItemText primary={track.name} />
-							</ListItemButton>
-						</ListItem>
-					)}
-				</List>
-			</Drawer>
-			<Main open={open}>
-				<Box ref={mainRef} />
-			</Main>
-			<ScoreHeader api={apiRef} >
-				<IconButton onClick={handleOpen}>
-					<MenuIcon />
-				</IconButton>
-			</ScoreHeader>
-		</Box>
-	)
+  const [open, setOpen] = useState(false);
+  const [tracks, setTracks] = useState<model.Track[]>([]);
+  const [activeTracks, setActiveTracks] = useState<model.Track[]>([]);
+  const apiRef = useRef<AlphaTabApi | null>(null);
+  const mainRef = useRef(null);
+  const handleOpen = () => setOpen((p) => !p);
+  const handleLoad = () => {
+    const settings = {
+      // file: "/asymmetry.gp",
+      player: {
+        enablePlayer: true,
+        soundFont:
+          "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2",
+        // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
+      },
+    };
+    if (mainRef.current)
+      apiRef.current = new window.alphaTab.AlphaTabApi(
+        mainRef.current,
+        settings
+      );
+    apiRef.current?.scoreLoaded.on((score) => {
+      setTracks(score.tracks);
+    });
+    apiRef.current?.renderStarted.on(() => {
+      if (apiRef.current) setActiveTracks(apiRef.current?.tracks);
+    });
+    apiRef.current?.tex(value);
+  };
+  const handleTrackClick = (track: model.Track) => {
+    setActiveTracks((prevTracks) => {
+      if (prevTracks.some((prevTrack) => prevTrack.index === track.index)) {
+        if (prevTracks.length > 1)
+          return prevTracks.filter(
+            (prevTrack) => prevTrack.index !== track.index
+          );
+        else return prevTracks;
+      } else {
+        return [...prevTracks, track];
+      }
+    });
+  };
+  useEffect(() => {
+    apiRef.current?.renderTracks(activeTracks);
+  }, [activeTracks]);
+  useEffect(() => {
+    return apiRef.current?.stop;
+  }, []);
+  useEffect(() => {
+    apiRef.current?.tex(value);
+  }, [value]);
+  return (
+    <Box width="100%" sx={{ display: "flex" }}>
+      <Script
+        strategy="lazyOnload"
+        src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
+        onLoad={handleLoad}
+        onError={(e) => console.log(e)}
+      />
+      <Drawer
+        variant="persistent"
+        anchor="left"
+        open={open}
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <List sx={{ width: "100%" }} disablePadding>
+          {tracks.map((track, index) => (
+            <Track
+              track={track}
+              activeTracks={activeTracks}
+              apiRef={apiRef}
+              key={index}
+              onClick={handleTrackClick}
+            />
+          ))}
+        </List>
+      </Drawer>
+      <Main open={open}>
+        <Box ref={mainRef} />
+      </Main>
+      <ScoreHeader apiRef={apiRef}>
+        <IconButton onClick={handleOpen}>
+          <MenuIcon />
+        </IconButton>
+      </ScoreHeader>
+    </Box>
+  );
+};
+
+interface TrackProps {
+  track: model.Track;
+  activeTracks: model.Track[];
+  apiRef: React.MutableRefObject<AlphaTabApi | null>;
+  onClick: (track: model.Track) => void;
 }
+const Track = ({ apiRef, track, activeTracks, onClick }: TrackProps) => {
+  const [masterVolume, setMasterVolume] = useState(100);
+  const [muted, toggleMuted] = useToggle(false);
+  const handleMute = () => {
+    if (!apiRef.current) return;
+    toggleMuted();
+    if (apiRef.current.masterVolume === 100)
+      apiRef.current.masterVolume = masterVolume / 100;
+    else apiRef.current.masterVolume = 0;
+  };
+  const handleVolume = (_event: Event, value: number | number[]) => {
+    if (!apiRef.current) return;
+    if (!Array.isArray(value)) {
+      setMasterVolume(value);
+      apiRef.current.masterVolume = value / 100;
+    }
+  };
+  return (
+    <ListItemButton
+      disableGutters
+      onClick={() => onClick(track)}
+      selected={activeTracks.some(
+        (activeTrack) => activeTrack.index === track.index
+      )}
+    >
+      <ListItemText
+        primary={track.name}
+        secondary={
+          <VolumeSliderInput
+            muted={muted}
+            volume={masterVolume}
+            onMute={handleMute}
+            onVolume={handleVolume}
+          />
+        }
+      />
+    </ListItemButton>
+  );
+};
 
 declare global {
-	interface Window {
-		alphaTab: {
-			AlphaTabApi: typeof AlphaTabApi
-		}
-	}
+  interface Window {
+    alphaTab: {
+      AlphaTabApi: typeof AlphaTabApi;
+    };
+  }
 }
 
-export default ScoreLayout
+export default ScoreLayout;

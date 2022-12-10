@@ -7,17 +7,16 @@ import superjson from "superjson";
 import type { AppType } from "next/app";
 import type { AppRouter } from "../server/router";
 import type { Session } from "next-auth";
-import CssBaseline from '@mui/material/CssBaseline'
-import { SnackbarProvider } from 'notistack';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import CssBaseline from "@mui/material/CssBaseline";
+import { SnackbarProvider } from "notistack";
+import { ReactQueryDevtools } from "react-query/devtools";
 import AuthDialog from "../components/elements/dialog/auth";
-import "../styles/globals.css"
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "../styles/globals.css";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import { RecoilRoot } from "recoil";
-
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -69,8 +68,8 @@ export default withTRPC<AppRouter>({
         defaultOptions: {
           queries: {
             staleTime: 60,
-          }
-        }
+          },
+        },
       },
 
       // To use SSR properly you need to forward the client's headers to the server

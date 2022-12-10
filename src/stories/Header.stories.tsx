@@ -1,5 +1,5 @@
-import HeaderElements from "../components/layouts/header"
+import HeaderElements from "../components/layouts/header";
 
 export default {};
 
-export const Header = () => <HeaderElements />
+export const Header = () => <HeaderElements />;

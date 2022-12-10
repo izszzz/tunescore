@@ -1,5 +1,5 @@
-import Users from "../pages/users/index"
+import Users from "../pages/users/index";
 
 export default {};
 
-export const UsersPage = () => <Users />
+export const UsersPage = () => <Users />;

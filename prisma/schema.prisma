@@ -20,7 +20,7 @@ generator trpc {
   provider       = "prisma-trpc-generator"
   withMiddleware = false
   withShield     = false
-  contextPath    = "../../../../src/context"
+  contextPath    = "../../../../src/server/router/context"
   isGenerateSelect   = true
   isGenerateInclude  = true
 }

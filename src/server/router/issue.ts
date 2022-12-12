@@ -35,12 +35,6 @@ export const issueRouter = createRouter()
       });
     },
   })
-  .mutation("search", {
-    input: IssueFindManySchema,
-    async resolve({ ctx, input }) {
-      return ctx.prisma.issue.findMany(input);
-    },
-  })
   .mutation("create", {
     input: IssueCreateWithoutUserInputObjectSchema,
     async resolve({ ctx, input }) {

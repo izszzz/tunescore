@@ -11,7 +11,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
-import MusicLayout from "../../../components/layouts/show/music";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes";
 import setLocale from "../../../utils/setLocale";
 import { trpc } from "../../../utils/trpc";
@@ -31,8 +33,9 @@ const Music: NextPage = () => {
     },
   ]);
   if (!data) return <></>;
+  const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={data} bookmarked={data.bookmarked} activeTab="info">
+    <MusicLayout data={musicData} activeTab="info">
       {data.link?.streaming?.itunes && (
         <ItunesButton href={data.link?.streaming?.itunes} />
       )}
@@ -78,7 +81,7 @@ const Music: NextPage = () => {
             <TableRow>
               <TableCell>Composer</TableCell>
               <TableCell>
-                {data.composers.map(({ id, name }) => (
+                {musicData.composers.map(({ id, name }) => (
                   <ArtistChip
                     key={id}
                     label={setLocale(name, router)}
@@ -92,7 +95,7 @@ const Music: NextPage = () => {
             <TableRow>
               <TableCell>Lyrist</TableCell>
               <TableCell>
-                {data.lyrists.map(({ id, name }) => (
+                {musicData.lyrists.map(({ id, name }) => (
                   <ArtistChip
                     key={id}
                     label={setLocale(name, router)}
@@ -106,14 +109,14 @@ const Music: NextPage = () => {
             <TableRow>
               <TableCell>Band</TableCell>
               <TableCell>
-                {data.band && (
+                {musicData.band && (
                   <BandChip
-                    label={setLocale(data.band.name, router)}
+                    label={setLocale(musicData.band.name, router)}
                     onClick={() =>
-                      data.band &&
+                      musicData.band &&
                       router.push({
                         pathname: "/bands/[id]",
-                        query: { id: data.band.id },
+                        query: { id: musicData.band.id },
                       })
                     }
                   />
@@ -132,7 +135,7 @@ const Music: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.artists.map(({ id, name }) => (
+            {musicData.artists.map(({ id, name }) => (
               <TableRow key={id}>
                 <TableCell />
                 <TableCell>

@@ -10,7 +10,9 @@ import {
   TextFieldElement,
   useForm,
 } from "react-hook-form-mui";
-import MusicLayout from "../../../../components/layouts/show/music";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
@@ -22,7 +24,19 @@ const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const { data } = trpc.useQuery(
-    ["music.show", { where: { id: router.query.id as string } }],
+    [
+      "music.findUniqueMusic",
+      {
+        where: { id: router.query.id as string },
+        include: {
+          user: true,
+          band: true,
+          artists: true,
+          composers: true,
+          lyrists: true,
+        },
+      },
+    ],
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -45,8 +59,9 @@ const Issues: NextPage = () => {
       music: { connect: { id: router.query.id as string } },
     });
   if (!data) return <></>;
+  const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={data} bookmarked={data.bookmarked} activeTab="issues">
+    <MusicLayout data={musicData} activeTab="issues">
       <FormContainer onSuccess={handleSubmit} formContext={formContext}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

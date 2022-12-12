@@ -3,13 +3,27 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import IndexLayout from "../../../../components/layouts/index";
 import IssueList from "../../../../components/elements/list/issue";
-import MusicLayout from "../../../../components/layouts/show/music";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const { data: musicData } = trpc.useQuery(
-    ["music.show", { where: { id: router.query.id as string } }],
+  const music = trpc.useQuery(
+    [
+      "music.findUniqueMusic",
+      {
+        where: { id: router.query.id as string },
+        include: {
+          user: true,
+          band: true,
+          artists: true,
+          composers: true,
+          lyrists: true,
+        },
+      },
+    ],
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -18,7 +32,7 @@ const Issues: NextPage = () => {
   );
   const { data: issueData } = trpc.useQuery(
     [
-      "issue.index",
+      "pagination.issue",
       {
         args: {
           include: { user: true },
@@ -36,22 +50,23 @@ const Issues: NextPage = () => {
       },
     }
   );
-  const search = trpc.useMutation(["issue.search"], {
+  const search = trpc.useMutation(["search.issue"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
-  if (!musicData || !issueData) return <></>;
+  if (!music.data || !issueData) return <></>;
+  const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout
-      data={musicData}
-      bookmarked={musicData.bookmarked}
-      activeTab="issues"
-    >
+    <MusicLayout data={musicData} activeTab="issues">
       <IndexLayout
         meta={issueData.meta}
         route={{
           pathname: "/musics/[id]/issues",
+          query: { id: router.query.id as string },
+        }}
+        newRoute={{
+          pathname: "/musics/[id]/issues/new",
           query: { id: router.query.id as string },
         }}
         searchAutocompleteProps={{

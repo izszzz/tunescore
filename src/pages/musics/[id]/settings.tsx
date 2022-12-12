@@ -3,7 +3,9 @@ import type { NextPage } from "next";
 import { Artist } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MusicLayout from "../../../components/layouts/show/music";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import DefaultSettingsForm from "../../../components/elements/form/settings/default";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
@@ -23,7 +25,19 @@ const SettingsMusic: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(["music.findUniqueMusic", { where: { id } }]);
+  const { data } = trpc.useQuery([
+    "music.findUniqueMusic",
+    {
+      where: { id },
+      include: {
+        user: true,
+        band: true,
+        artists: true,
+        composers: true,
+        lyrists: true,
+      },
+    },
+  ]);
   const destroy = trpc.useMutation("music.deleteOneMusic", {
     onSuccess: () => {
       enqueueSnackbar("music.destroy success");
@@ -56,12 +70,13 @@ const SettingsMusic: NextPage = () => {
     },
   });
   if (!data) return <></>;
+  const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={data} bookmarked={data.bookmarked} activeTab="settings">
+    <MusicLayout data={musicData} activeTab="settings">
       <Typography variant="h4"> Info</Typography>
       <Divider />
       <DefaultSettingsForm
-        data={data}
+        data={musicData}
         name="title"
         updateLoadingButtonProps={{
           onClick: ({ id, title }) =>
@@ -69,12 +84,12 @@ const SettingsMusic: NextPage = () => {
           loading: update.isLoading,
         }}
         destroyLoadingButtonProps={{
-          onClick: (data) => destroy.mutate(data),
+          onClick: (data) => destroy.mutate({ where: { id: data.id } }),
           loading: destroy.isLoading,
         }}
       />
       <BandUpdateAutocomplete
-        value={data.band}
+        value={musicData.band}
         options={searchBand.data || []}
         getOptionLabel={(option) => setLocale(option.name, router) || ""}
         loading={update.isLoading}
@@ -103,7 +118,7 @@ const SettingsMusic: NextPage = () => {
         }}
       />
       <DefaultUpdateAutocomplete<Artist, true>
-        value={data.composers}
+        value={musicData.composers}
         options={searchArtist.data || []}
         getOptionLabel={(option) => setLocale(option.name, router) || ""}
         ChipProps={{ icon: <ResourceIcon resource="artist" /> }}
@@ -136,7 +151,7 @@ const SettingsMusic: NextPage = () => {
         multiple
       />
       <DefaultUpdateAutocomplete<Artist, true>
-        value={data.lyrists}
+        value={musicData.lyrists}
         options={searchArtist.data || []}
         getOptionLabel={(option) => setLocale(option.name, router) || ""}
         ChipProps={{ icon: <ResourceIcon resource="artist" /> }}
@@ -169,7 +184,7 @@ const SettingsMusic: NextPage = () => {
         multiple
       />
       <ArtistsUpdateForm
-        data={data.artists}
+        data={musicData.artists}
         autocompleteProps={{
           options: searchArtist.data || [],
           loading: searchArtist.isLoading,

@@ -152,15 +152,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
 };
 
 interface MusicTitleProps {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      artists: true;
-      band: true;
-      composers: true;
-      lyrists: true;
-      user: true;
-    };
-  }>;
+  data: MusicLayoutProps["data"];
 }
 
 const MusicTitle = ({ data }: MusicTitleProps) => {
@@ -187,9 +179,12 @@ const MusicTitle = ({ data }: MusicTitleProps) => {
       return (
         <Typography variant="h5">
           {
-            <Link href={{ pathname: "/bands/[id]", query: { id: band.id } }}>
-              <a>{setLocale(band.name, router)} /</a>
-            </Link>
+            <>
+              <Link href={{ pathname: "/bands/[id]", query: { id: band.id } }}>
+                <a>{setLocale(band.name, router)} </a>
+              </Link>{" "}
+              /
+            </>
           }
           {setLocale(data.title, router)}
         </Typography>

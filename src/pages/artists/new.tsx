@@ -8,10 +8,10 @@ import { trpc } from "../../utils/trpc";
 
 const NewArtist: NextPage = () => {
   const router = useRouter();
-  const create = trpc.useMutation(["artist.create"], {
+  const create = trpc.useMutation(["artist.createOneArtist"], {
     onSuccess: () => router.push("/artists"),
   });
-  const handleSubmit = (data: Artist) => create.mutate(data);
+  const handleSubmit = (data: Artist) => create.mutate({ data });
   return (
     <DefaultSingleColumnLayout>
       <FormContainer onSuccess={handleSubmit}>

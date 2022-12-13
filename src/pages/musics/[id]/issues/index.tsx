@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import IndexLayout from "../../../../components/layouts/index";
-import IssueList from "../../../../components/elements/list/issue";
+import IssueLists from "../../../../components/elements/list/issue";
 import MusicLayout, {
   MusicLayoutProps,
 } from "../../../../components/layouts/show/music";
@@ -85,7 +85,7 @@ const Issues: NextPage = () => {
           },
         }}
       >
-        <IssueList issues={issueData.data} />
+        <IssueLists issues={issueData.data} />
       </IndexLayout>
     </MusicLayout>
   );

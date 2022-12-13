@@ -8,23 +8,18 @@ import { trpc } from "../../utils/trpc";
 const Users: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation(["user.search"], {
+  const search = trpc.useMutation(["search.user"], {
     onError: () => {
-      enqueueSnackbar("music.search error");
+      enqueueSnackbar("user.search error");
     },
   });
   const { data } = trpc.useQuery(
     [
-      "user.index",
+      "pagination.user",
       {
         args: {
-          include: { composers: true, lyrists: true, band: true, user: true },
           where: {
-            title: {
-              is: {
-                [router.locale]: { contains: (router.query.q as string) || "" },
-              },
-            },
+            name: { contains: (router.query.q as string) || "" },
           },
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
@@ -32,7 +27,7 @@ const Users: NextPage = () => {
     ],
     {
       onError: () => {
-        enqueueSnackbar("music.index error");
+        enqueueSnackbar("user.index error");
       },
     }
   );
@@ -41,7 +36,7 @@ const Users: NextPage = () => {
     <DefaultSingleColumnLayout contained>
       <p>users</p>
       <div>
-        {data.map(({ id, name }) => (
+        {data.data.map(({ id, name }) => (
           <Link key={id} href={{ pathname: "/users/[id]", query: { id } }}>
             <a>{name}</a>
           </Link>

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import BandList from "../../components/elements/list/band";
+import BandLists from "../../components/elements/list/band";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
@@ -10,7 +10,7 @@ const Bands: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.useQuery([
-    "band.index",
+    "pagination.band",
     {
       args: {
         include: { _count: { select: { artists: true, musics: true } } },
@@ -23,7 +23,7 @@ const Bands: NextPage = () => {
       options: { page: (router.query.page as string) || 0, perPage: 12 },
     },
   ]);
-  const search = trpc.useMutation(["band.search"], {
+  const search = trpc.useMutation(["search.band"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
@@ -51,7 +51,7 @@ const Bands: NextPage = () => {
         },
       }}
     >
-      <BandList bands={data.data} />
+      <BandLists data={data.data} />
     </IndexLayout>
   );
 };

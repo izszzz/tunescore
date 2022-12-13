@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import BandList from "../../components/elements/list/band";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
@@ -10,7 +9,7 @@ const Albums: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.useQuery([
-    "album.index",
+    "pagination.album",
     {
       args: {
         include: { _count: { select: { artists: true, musics: true } } },
@@ -23,7 +22,7 @@ const Albums: NextPage = () => {
       options: { page: (router.query.page as string) || 0, perPage: 12 },
     },
   ]);
-  const search = trpc.useMutation(["album.search"], {
+  const search = trpc.useMutation(["search.album"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
@@ -31,7 +30,8 @@ const Albums: NextPage = () => {
   if (!data) return <></>;
   return (
     <IndexLayout
-      route={{ pathname: "/bands" }}
+      route={{ pathname: "/albums" }}
+      newRoute={{ pathname: "/albums/new" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],
@@ -50,7 +50,7 @@ const Albums: NextPage = () => {
         },
       }}
     >
-      <BandList bands={data.data} />
+      <AlbumList data={data.data} />
     </IndexLayout>
   );
 };

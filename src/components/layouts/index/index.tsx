@@ -54,35 +54,37 @@ function IndexLayout<T>({
   };
   return (
     <SingleColumnLayout contained header={header}>
-      <Grid container spacing={1}>
-        <Grid item xs={11}>
-          <CustomAutocomplete
-            {...searchAutocompleteProps}
-            textFieldProps={{
-              ...searchAutocompleteProps.textFieldProps,
-              onKeyDown: handleKeyDown,
-            }}
-          />
+      <Box my={3}>
+        <Grid container spacing={1}>
+          <Grid item xs={11}>
+            <CustomAutocomplete
+              {...searchAutocompleteProps}
+              textFieldProps={{
+                ...searchAutocompleteProps.textFieldProps,
+                onKeyDown: handleKeyDown,
+              }}
+            />
+          </Grid>
+          <Grid item xs={1} display="flex" alignItems="stretch">
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleClick}
+              fullWidth
+            >
+              New
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={1} display="flex" alignItems="stretch">
-          <Button
+        {children}
+        <Box display="flex" justifyContent="center">
+          <Pagination
+            page={meta.currentPage}
+            count={meta.lastPage}
             variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={handleClick}
-            fullWidth
-          >
-            New
-          </Button>
-        </Grid>
-      </Grid>
-      {children}
-      <Box display="flex" justifyContent="center">
-        <Pagination
-          page={meta.currentPage}
-          count={meta.lastPage}
-          variant="outlined"
-          onChange={handleChange}
-        />
+            onChange={handleChange}
+          />
+        </Box>
       </Box>
     </SingleColumnLayout>
   );

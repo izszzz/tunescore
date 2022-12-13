@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import MusicLayout from "../../../../components/layouts/show/music";
-import PullList from "../../../../components/elements/list/pull";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../../components/layouts/show/music";
+import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
@@ -9,8 +11,20 @@ import { Pull } from "@prisma/client";
 const Issues: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { data: musicData } = trpc.useQuery(
-    ["music.show", { where: { id: router.query.id as string } }],
+  const music = trpc.useQuery(
+    [
+      "music.findUniqueMusic",
+      {
+        where: { id: router.query.id as string },
+        include: {
+          user: true,
+          band: true,
+          artists: true,
+          composers: true,
+          lyrists: true,
+        },
+      },
+    ],
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -42,17 +56,18 @@ const Issues: NextPage = () => {
       enqueueSnackbar("music.search error");
     },
   });
-  if (!musicData || !pullsData) return <></>;
+  if (!music.data || !pullsData) return <></>;
+  const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout
-      data={musicData}
-      bookmarked={musicData.bookmarked}
-      activeTab="pullrequests"
-    >
+    <MusicLayout data={musicData} activeTab="pullrequests">
       <IndexLayout<Pull>
         meta={pullsData.meta}
         route={{
           pathname: "/musics/[id]/pulls",
+          query: { id: router.query.id as string },
+        }}
+        newRoute={{
+          pathname: "/musics/[id]/pulls/new",
           query: { id: router.query.id as string },
         }}
         searchAutocompleteProps={{
@@ -71,7 +86,7 @@ const Issues: NextPage = () => {
           },
         }}
       >
-        <PullList pulls={pullsData.data} />
+        <PullLists pulls={pullsData.data} />
       </IndexLayout>
     </MusicLayout>
   );

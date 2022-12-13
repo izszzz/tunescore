@@ -12,16 +12,35 @@ import Link from "@mui/material/Link";
 import BandLayout from "../../../components/layouts/show/band";
 import setLocale from "../../../utils/setLocale";
 import { trpc } from "../../../utils/trpc";
+import { Prisma } from "@prisma/client";
 
 const Band: NextPage = () => {
   const router = useRouter();
   const { data } = trpc.useQuery([
-    "band.show",
-    { where: { id: router.query.id as string } },
+    "band.findUniqueBand",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        artists: true,
+        musics: {
+          include: {
+            band: true,
+            composers: true,
+            lyrists: true,
+          },
+        },
+      },
+    },
   ]);
   if (!data) return <></>;
+  const bandData = data as Prisma.BandGetPayload<{
+    include: {
+      artists: true;
+      musics: { include: { band: true; composers: true; lyrists: true } };
+    };
+  }>;
   return (
-    <BandLayout data={data} bookmarked={data.bookmarked} activeTab="info">
+    <BandLayout data={data} activeTab="info">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -32,7 +51,7 @@ const Band: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.musics.map((music) => (
+            {bandData.musics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link
@@ -89,7 +108,7 @@ const Band: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.artists.map(({ id, name }) => (
+            {bandData.artists.map(({ id, name }) => (
               <TableRow key={id}>
                 <TableCell>
                   <Link

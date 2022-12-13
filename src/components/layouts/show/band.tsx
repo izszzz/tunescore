@@ -5,26 +5,28 @@ import { trpc } from "../../../utils/trpc";
 import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import setLocale from "../../../utils/setLocale";
 import { DefaultTabsProps } from "../../elements/tabs/default";
-import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
-import Box from "@mui/material/Box";
 import { Prisma } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<null>;
-  bookmarked: boolean;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
   data,
-  bookmarked,
   activeTab,
   children,
 }) => {
   const router = useRouter();
-  const bookmarkCreate = trpc.useMutation(["band.bookmark.create"]);
-  const bookmarkDestroy = trpc.useMutation(["band.bookmark.destroy"]);
+  const session = useSession();
+  const bookmarked = trpc.useQuery([
+    "bookmarked.band",
+    { id: router.query.id as string },
+  ]);
+  const bookmarkCreate = trpc.useMutation(["band.updateOneBand"]);
+  const bookmarkDestroy = trpc.useMutation(["band.updateOneBand"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -44,35 +46,41 @@ const BandLayout: React.FC<BandLayoutProps> = ({
     ],
     [router.query.id]
   );
-  const handleUpdate = (
-    value: boolean,
-    setValue: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    if (value)
-      bookmarkDestroy.mutate(
-        { id: router.query.id as string },
-        { onSuccess: () => setValue(false) }
-      );
-    else
-      bookmarkCreate.mutate(
-        { id: router.query.id as string },
-        { onSuccess: () => setValue(true) }
-      );
-  };
   return (
     <DefaultShowLayout
       tabs={tabs}
       activeTab={activeTab}
       title={
-        <Box display="flex" alignItems="center">
-          <Typography variant="h5">{setLocale(data.name, router)}</Typography>
-          <BookmarkToggleButton
-            defaultValue={bookmarked}
-            loading={bookmarkCreate.isLoading || bookmarkDestroy.isLoading}
-            onClick={handleUpdate}
-          />
-        </Box>
+        <Typography variant="h5">{setLocale(data.name, router)}</Typography>
       }
+      bookmarkToggleButtonProps={{
+        defaultValue: !!bookmarked.data,
+        loading: bookmarkCreate.isLoading || bookmarkDestroy.isLoading,
+        onEnabled: (setValue) =>
+          bookmarkDestroy.mutate(
+            {
+              where: { id: router.query.id as string },
+              data: {
+                bookmarks: {
+                  disconnect: { id: session.data?.user?.id },
+                },
+              },
+            },
+            { onSuccess: () => setValue(false) }
+          ),
+        onDisabled: (setValue) =>
+          bookmarkCreate.mutate(
+            {
+              where: { id: router.query.id as string },
+              data: {
+                bookmarks: {
+                  connect: { id: session.data?.user?.id },
+                },
+              },
+            },
+            { onSuccess: () => setValue(true) }
+          ),
+      }}
     >
       {children}
     </DefaultShowLayout>

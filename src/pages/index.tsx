@@ -7,7 +7,7 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const musics = trpc.useQuery([
-    "music.index",
+    "pagination.music",
     {
       args: {
         include: { composers: true, lyrists: true, band: true, user: true },

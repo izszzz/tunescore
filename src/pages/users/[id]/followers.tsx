@@ -1,7 +1,7 @@
 import React from "react";
 import type { GetServerSideProps, NextPage } from "next";
 import UserLayout from "../../../components/layouts/show/user";
-import UserList from "../../../components/elements/list/user";
+import UserLists from "../../../components/elements/list/user";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 interface UserProps {
@@ -20,7 +20,7 @@ interface UserProps {
 const UserFollowers: NextPage<UserProps> = ({ data, followed }) => {
   return (
     <UserLayout data={data} followed={followed} activeTab="">
-      <UserList users={data.followedBy} />
+      <UserLists users={data.followedBy} />
     </UserLayout>
   );
 };

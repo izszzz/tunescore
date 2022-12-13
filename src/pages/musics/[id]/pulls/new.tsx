@@ -10,7 +10,9 @@ import {
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
-import MusicLayout from "../../../../components/layouts/show/music";
+import MusicLayout, {
+  MusicLayoutProps,
+} from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 
@@ -19,11 +21,26 @@ const NewPull: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(["music.show", { where: { id } }], {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
+  const music = trpc.useQuery(
+    [
+      "music.findUniqueMusic",
+      {
+        where: { id: router.query.id as string },
+        include: {
+          user: true,
+          band: true,
+          artists: true,
+          composers: true,
+          lyrists: true,
+        },
+      },
+    ],
+    {
+      onError: () => {
+        enqueueSnackbar("music.show error");
+      },
+    }
+  );
   const create = trpc.useMutation(["pull.create"], {
     onSuccess: () =>
       router.push({ pathname: "/musics/[id]/pulls", query: { id } }),
@@ -31,13 +48,10 @@ const NewPull: NextPage = () => {
   });
   const handleSubmit = (data: Pull) =>
     create.mutate({ ...data, music: { connect: { id } } });
-  if (!data) return <></>;
+  if (!music.data) return <></>;
+  const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout
-      data={data}
-      bookmarked={data.bookmarked}
-      activeTab="pullrequests"
-    >
+    <MusicLayout data={musicData} activeTab="pullrequests">
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

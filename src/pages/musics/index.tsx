@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import DefaultIndexLayout from "../../components/layouts/index/default";
-import MusicList from "../../components/elements/list/music";
+import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
 import { Music } from "@prisma/client";
@@ -60,7 +60,7 @@ const Musics: NextPage = () => {
         },
       }}
     >
-      <MusicList musics={data.data} />
+      <MusicLists data={data.data} />
     </DefaultIndexLayout>
   );
 };

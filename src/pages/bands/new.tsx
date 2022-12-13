@@ -8,10 +8,10 @@ import { trpc } from "../../utils/trpc";
 
 const NewBand: NextPage = () => {
   const router = useRouter();
-  const create = trpc.useMutation(["band.create"], {
+  const create = trpc.useMutation(["band.createOneBand"], {
     onSuccess: () => router.push("/bands"),
   });
-  const handleSubmit = (data: Band) => create.mutate(data);
+  const handleSubmit = (data: Band) => create.mutate({ data });
   return (
     <DefaultSingleColumnLayout>
       <p>new band</p>

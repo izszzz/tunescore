@@ -12,9 +12,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
-import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import { useSession } from "next-auth/react";
-import { useModal } from "../../../hooks/useModal";
 import ResourceIcon from "../../elements/icon/resource";
 import { IconButton } from "@mui/material";
 
@@ -29,19 +27,16 @@ export interface MusicLayoutProps
       user: true;
     };
   }>;
-  // bookmarked: boolean;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
 const MusicLayout: React.FC<MusicLayoutProps> = ({
   data,
   activeTab,
-  // bookmarked,
   children,
 }) => {
   const router = useRouter();
   const session = useSession();
-  const { handleOpen } = useModal();
   const bookmarked = trpc.useQuery([
     "bookmarked.music",
     { id: router.query.id as string },
@@ -82,43 +77,12 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
     [router.query.id]
   );
 
-  const handleUpdate = (
-    value: boolean,
-    setValue: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    if (!session.data?.user) return handleOpen();
-    if (value)
-      bookmarkDestroy.mutate(
-        {
-          where: { id: router.query.id as string },
-          data: {
-            bookmarks: {
-              disconnect: { id: session.data?.user.id },
-            },
-          },
-        },
-        { onSuccess: () => setValue(false) }
-      );
-    else
-      bookmarkCreate.mutate(
-        {
-          where: { id: router.query.id as string },
-          data: {
-            bookmarks: {
-              connect: { id: session.data?.user.id },
-            },
-          },
-        },
-        { onSuccess: () => setValue(true) }
-      );
-  };
-
   return (
     <DefaultShowLayout
       activeTab={activeTab}
       tabs={tabs}
       title={
-        <Box display="flex" alignItems="center">
+        <>
           <IconButton onClick={() => router.push("/musics")}>
             <ResourceIcon resource="music" />
           </IconButton>
@@ -126,17 +90,36 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
           <Box ml={3}>
             <Chip label={data?.type} size="small" />
           </Box>
-          <BookmarkToggleButton
-            defaultValue={!!bookmarked}
-            loading={
-              bookmarked.isLoading ||
-              bookmarkCreate.isLoading ||
-              bookmarkDestroy.isLoading
-            }
-            onClick={handleUpdate}
-          />
-        </Box>
+        </>
       }
+      bookmarkToggleButtonProps={{
+        defaultValue: !!bookmarked.data,
+        loading: bookmarkCreate.isLoading || bookmarkDestroy.isLoading,
+        onEnabled: (setValue) =>
+          bookmarkDestroy.mutate(
+            {
+              where: { id: router.query.id as string },
+              data: {
+                bookmarks: {
+                  disconnect: { id: session.data?.user?.id },
+                },
+              },
+            },
+            { onSuccess: () => setValue(false) }
+          ),
+        onDisabled: (setValue) =>
+          bookmarkCreate.mutate(
+            {
+              where: { id: router.query.id as string },
+              data: {
+                bookmarks: {
+                  connect: { id: session.data?.user?.id },
+                },
+              },
+            },
+            { onSuccess: () => setValue(true) }
+          ),
+      }}
     >
       {data.title[router.locale as keyof Locales] === null && (
         <Stack sx={{ width: "100%" }} spacing={2}>

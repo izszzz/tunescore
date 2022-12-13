@@ -2,19 +2,19 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import IndexLayout from "../../components/layouts/index/default";
-import ArtistList from "../../components/elements/list/artist";
+import ArtistLists from "../../components/elements/list/artist";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
 const Artists: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation(["artist.search"], {
+  const search = trpc.useMutation(["search.artist"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
   const { data } = trpc.useQuery([
-    "artist.index",
+    "pagination.artist",
     {
       args: {
         include: { bands: true },
@@ -31,6 +31,7 @@ const Artists: NextPage = () => {
   return (
     <IndexLayout
       route={{ pathname: "/artists" }}
+      newRoute={{ pathname: "/artists/new" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],
@@ -49,7 +50,7 @@ const Artists: NextPage = () => {
         },
       }}
     >
-      <ArtistList artists={data.data} />
+      <ArtistLists data={data.data} />
     </IndexLayout>
   );
 };

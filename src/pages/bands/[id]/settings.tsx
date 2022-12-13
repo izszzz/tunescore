@@ -7,12 +7,30 @@ import { trpc } from "../../../utils/trpc";
 const EditBand: NextPage = () => {
   const router = useRouter();
   const { data } = trpc.useQuery([
-    "band.show",
-    { where: { id: router.query.id as string } },
+    "band.findUniqueBand",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        artists: true,
+        musics: {
+          include: {
+            band: true,
+            composers: true,
+            lyrists: true,
+          },
+        },
+      },
+    },
   ]);
   if (!data) return <></>;
+  const bandData = data as Prisma.BandGetPayload<{
+    include: {
+      artists: true;
+      musics: { include: { band: true; composers: true; lyrists: true } };
+    };
+  }>;
   return (
-    <BandLayout data={data} bookmarked={data.bookmarked} activeTab="settings">
+    <BandLayout data={data} activeTab="settings">
       <DefaultSettingsForm<Prisma.BandGetPayload<null>>
         data={data}
         name="name"

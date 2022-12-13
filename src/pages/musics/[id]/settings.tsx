@@ -59,12 +59,12 @@ const SettingsMusic: NextPage = () => {
       enqueueSnackbar("music.update error");
     },
   });
-  const searchBand = trpc.useMutation("band.search", {
+  const searchBand = trpc.useMutation("search.band", {
     onError: () => {
       enqueueSnackbar("band.search error");
     },
   });
-  const searchArtist = trpc.useMutation("artist.search", {
+  const searchArtist = trpc.useMutation("search.artist", {
     onError: () => {
       enqueueSnackbar("artist.search error");
     },

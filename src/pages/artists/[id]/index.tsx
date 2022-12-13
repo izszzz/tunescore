@@ -12,16 +12,45 @@ import { Link } from "@mui/material";
 import setLocale from "../../../utils/setLocale";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import { trpc } from "../../../utils/trpc";
+import { Prisma } from "@prisma/client";
 
 const Artist: NextPage = () => {
   const router = useRouter();
   const { data } = trpc.useQuery([
-    "artist.show",
-    { where: { id: router.query.id as string } },
+    "artist.findUniqueArtist",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        bands: true,
+        composedMusics: {
+          include: { composers: true, lyrists: true, band: true },
+        },
+        writtenMusics: {
+          include: { composers: true, lyrists: true, band: true },
+        },
+        musics: {
+          include: { composers: true, lyrists: true, band: true },
+        },
+      },
+    },
   ]);
   if (!data) return <></>;
+  const musicData = data as Prisma.ArtistGetPayload<{
+    include: {
+      bands: true;
+      composedMusics: {
+        include: { composers: true; lyrists: true; band: true };
+      };
+      writtenMusics: {
+        include: { composers: true; lyrists: true; band: true };
+      };
+      musics: {
+        include: { composers: true; lyrists: true; band: true };
+      };
+    };
+  }>;
   return (
-    <ArtistLayout data={data} bookmarked={data.bookmarked} activeTab="info">
+    <ArtistLayout data={musicData} activeTab="info">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -34,7 +63,7 @@ const Artist: NextPage = () => {
             <TableRow>
               <TableCell>band</TableCell>
               <TableCell>
-                {data.bands.map(({ id, name }) => (
+                {musicData.bands.map(({ id, name }) => (
                   <Chip
                     key={id}
                     label={setLocale(name, router)}
@@ -60,7 +89,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.composedMusics.map((music) => (
+            {musicData.composedMusics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link
@@ -135,7 +164,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.composedMusics.map((music) => (
+            {musicData.composedMusics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link
@@ -210,7 +239,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.musics.map((music) => (
+            {musicData.musics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link

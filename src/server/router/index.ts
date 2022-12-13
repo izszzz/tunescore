@@ -5,12 +5,12 @@ import superjson from "superjson";
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
 import { userRouter } from "./user";
-import { artistRouter } from "./artist";
-import { bandRouter } from "./band";
 import { issueRouter } from "./issue";
 import { pullRouter } from "./pull";
-import { albumRouter } from "./album";
+import { albumsRouter } from "../../../prisma/generated/routers/Album.router";
 import { musicRouter } from "../../../prisma/generated/routers/Music.router";
+import { artistsRouter } from "../../../prisma/generated/routers/Artist.router";
+import { bandsRouter } from "../../../prisma/generated/routers/Band.router";
 import { bookmarkedRouter } from "./bookmarked";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
@@ -20,9 +20,9 @@ export const appRouter = createRouter()
   .merge("example.", exampleRouter)
   .merge("user.", userRouter)
   .merge("music.", musicRouter)
-  .merge("artist.", artistRouter)
-  .merge("band.", bandRouter)
-  .merge("album.", albumRouter)
+  .merge("artist.", artistsRouter)
+  .merge("band.", bandsRouter)
+  .merge("album.", albumsRouter)
   .merge("issue.", issueRouter)
   .merge("pull.", pullRouter)
   .merge("pagination.", paginationRouter)

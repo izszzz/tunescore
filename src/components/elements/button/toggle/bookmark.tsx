@@ -3,7 +3,7 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
-interface BookmarkToggleButtonProps
+export interface BookmarkToggleButtonProps
   extends Omit<IconButtonProps, "onClick" | "defaultValue"> {
   defaultValue: boolean;
   loading: boolean;

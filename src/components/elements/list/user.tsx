@@ -1,59 +1,10 @@
-import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
-import { Prisma } from "@prisma/client";
-import { useRouter } from "next/router";
 import React from "react";
-
+import Lists from "./";
+import UserListItem, { UserListItemProps } from "./item/user";
 interface UserListProps {
-  users: Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { followedBy: true; following: true } };
-    };
-  }>[];
+  data: UserListItemProps["data"][];
 }
-const UserList = ({ users }: UserListProps) => {
-  const router = useRouter();
-  return (
-    <List>
-      {users.map((user) => (
-        <React.Fragment key={user.id}>
-          <ListItem
-            disablePadding
-            onClick={() => router.push("/users/" + user.id)}
-          >
-            <ListItemAvatar>
-              <Avatar alt={user.name || ""} src={user.image || ""} />
-            </ListItemAvatar>
-            <ListItemButton>
-              <ListItemText
-                primary={user.name}
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      following : {user._count.following} / followers :{" "}
-                      {user._count.followedBy}
-                    </Typography>
-                  </>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-        </React.Fragment>
-      ))}
-    </List>
-  );
-};
-
-export default UserList;
+const UserLists = ({ data }: UserListProps) => (
+  <Lists data={data} listItem={(props) => <UserListItem data={props} />} />
+);
+export default UserLists;

@@ -20,7 +20,11 @@ export interface DefaultShowLayoutProps extends ShowLayoutProps {
 }
 
 const DefaultShowLayout = ({
-  bookmarkToggleButtonProps,
+  bookmarkToggleButtonProps: {
+    onEnabled,
+    onDisabled,
+    ...bookmarkToggleButtonProps
+  },
   ...props
 }: DefaultShowLayoutProps) => {
   const session = useSession();
@@ -30,8 +34,8 @@ const DefaultShowLayout = ({
     setValue: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     if (!session.data?.user) return handleOpen();
-    if (value) bookmarkToggleButtonProps.onEnabled(setValue);
-    else bookmarkToggleButtonProps.onDisabled(setValue);
+    if (value) onEnabled(setValue);
+    else onDisabled(setValue);
   };
   return (
     <ShowLayout

@@ -3,6 +3,7 @@ import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeI
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { AlbumUpdatemusicIDsInputObjectSchema } from './AlbumUpdatemusicIDsInput.schema';
 import { AlbumUpdateartistIDsInputObjectSchema } from './AlbumUpdateartistIDsInput.schema';
+import { AlbumUpdateuserIDsInputObjectSchema } from './AlbumUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -23,6 +24,12 @@ const Schema: z.ZodType<Prisma.AlbumUpdateManyMutationInput> = z
     artistIDs: z
       .union([
         z.lazy(() => AlbumUpdateartistIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    userIDs: z
+      .union([
+        z.lazy(() => AlbumUpdateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

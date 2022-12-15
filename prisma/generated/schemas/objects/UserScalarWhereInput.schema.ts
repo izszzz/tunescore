@@ -56,6 +56,9 @@ const Schema: z.ZodType<Prisma.UserScalarWhereInput> = z
     bookmarkBandIDs: z
       .lazy(() => StringNullableListFilterObjectSchema)
       .optional(),
+    bookmarkAlbumIDs: z
+      .lazy(() => StringNullableListFilterObjectSchema)
+      .optional(),
   })
   .strict();
 

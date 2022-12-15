@@ -15,6 +15,7 @@ const Schema: z.ZodType<Prisma.UserCountOrderByAggregateInput> = z
     bookmarkMusicIDs: z.lazy(() => SortOrderSchema).optional(),
     bookmarkArtistIDs: z.lazy(() => SortOrderSchema).optional(),
     bookmarkBandIDs: z.lazy(() => SortOrderSchema).optional(),
+    bookmarkAlbumIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

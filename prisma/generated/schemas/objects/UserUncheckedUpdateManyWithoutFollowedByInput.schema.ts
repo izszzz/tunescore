@@ -6,6 +6,7 @@ import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingID
 import { UserUpdatebookmarkMusicIDsInputObjectSchema } from './UserUpdatebookmarkMusicIDsInput.schema';
 import { UserUpdatebookmarkArtistIDsInputObjectSchema } from './UserUpdatebookmarkArtistIDsInput.schema';
 import { UserUpdatebookmarkBandIDsInputObjectSchema } from './UserUpdatebookmarkBandIDsInput.schema';
+import { UserUpdatebookmarkAlbumIDsInputObjectSchema } from './UserUpdatebookmarkAlbumIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -67,6 +68,12 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateManyWithoutFollowedByInput> =
       bookmarkBandIDs: z
         .union([
           z.lazy(() => UserUpdatebookmarkBandIDsInputObjectSchema),
+          z.string().array(),
+        ])
+        .optional(),
+      bookmarkAlbumIDs: z
+        .union([
+          z.lazy(() => UserUpdatebookmarkAlbumIDsInputObjectSchema),
           z.string().array(),
         ])
         .optional(),

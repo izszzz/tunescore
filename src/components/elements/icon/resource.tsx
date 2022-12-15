@@ -3,11 +3,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AlbumIcon from "@mui/icons-material/Album";
-import { PrismaModelNameLowercase } from "../../../types/common";
 import { SvgIconProps } from "@mui/material/SvgIcon";
 
-interface ResourceIconProps extends SvgIconProps {
-  resource: PrismaModelNameLowercase;
+export interface ResourceIconProps extends SvgIconProps {
+  resource: "artist" | "band" | "music" | "album";
 }
 const ResourceIcon = ({ resource, ...props }: ResourceIconProps) => {
   if (resource === "artist") return <PersonIcon {...props} />;

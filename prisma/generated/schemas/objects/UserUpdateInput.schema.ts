@@ -16,6 +16,8 @@ import { ArtistUpdateManyWithoutBookmarksNestedInputObjectSchema } from './Artis
 import { UserUpdatebookmarkArtistIDsInputObjectSchema } from './UserUpdatebookmarkArtistIDsInput.schema';
 import { BandUpdateManyWithoutBookmarksNestedInputObjectSchema } from './BandUpdateManyWithoutBookmarksNestedInput.schema';
 import { UserUpdatebookmarkBandIDsInputObjectSchema } from './UserUpdatebookmarkBandIDsInput.schema';
+import { AlbumUpdateManyWithoutBookmarksNestedInputObjectSchema } from './AlbumUpdateManyWithoutBookmarksNestedInput.schema';
+import { UserUpdatebookmarkAlbumIDsInputObjectSchema } from './UserUpdatebookmarkAlbumIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -106,6 +108,15 @@ const Schema: z.ZodType<Prisma.UserUpdateInput> = z
     bookmarkBandIDs: z
       .union([
         z.lazy(() => UserUpdatebookmarkBandIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    bookmarkAlbums: z
+      .lazy(() => AlbumUpdateManyWithoutBookmarksNestedInputObjectSchema)
+      .optional(),
+    bookmarkAlbumIDs: z
+      .union([
+        z.lazy(() => UserUpdatebookmarkAlbumIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

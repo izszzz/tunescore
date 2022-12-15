@@ -14,6 +14,8 @@ import { ArtistCreateNestedManyWithoutBookmarksInputObjectSchema } from './Artis
 import { UserCreatebookmarkArtistIDsInputObjectSchema } from './UserCreatebookmarkArtistIDsInput.schema';
 import { BandCreateNestedManyWithoutBookmarksInputObjectSchema } from './BandCreateNestedManyWithoutBookmarksInput.schema';
 import { UserCreatebookmarkBandIDsInputObjectSchema } from './UserCreatebookmarkBandIDsInput.schema';
+import { AlbumCreateNestedManyWithoutBookmarksInputObjectSchema } from './AlbumCreateNestedManyWithoutBookmarksInput.schema';
+import { UserCreatebookmarkAlbumIDsInputObjectSchema } from './UserCreatebookmarkAlbumIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -81,6 +83,15 @@ const Schema: z.ZodType<Prisma.UserCreateInput> = z
     bookmarkBandIDs: z
       .union([
         z.lazy(() => UserCreatebookmarkBandIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    bookmarkAlbums: z
+      .lazy(() => AlbumCreateNestedManyWithoutBookmarksInputObjectSchema)
+      .optional(),
+    bookmarkAlbumIDs: z
+      .union([
+        z.lazy(() => UserCreatebookmarkAlbumIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

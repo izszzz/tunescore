@@ -5,6 +5,8 @@ import { BandCreateNestedOneWithoutAlbumsInputObjectSchema } from './BandCreateN
 import { MusicCreateNestedManyWithoutAlbumsInputObjectSchema } from './MusicCreateNestedManyWithoutAlbumsInput.schema';
 import { AlbumCreatemusicIDsInputObjectSchema } from './AlbumCreatemusicIDsInput.schema';
 import { AlbumCreateartistIDsInputObjectSchema } from './AlbumCreateartistIDsInput.schema';
+import { UserCreateNestedManyWithoutBookmarkAlbumsInputObjectSchema } from './UserCreateNestedManyWithoutBookmarkAlbumsInput.schema';
+import { AlbumCreateuserIDsInputObjectSchema } from './AlbumCreateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -30,6 +32,15 @@ const Schema: z.ZodType<Prisma.AlbumCreateWithoutArtistsInput> = z
     artistIDs: z
       .union([
         z.lazy(() => AlbumCreateartistIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    bookmarks: z
+      .lazy(() => UserCreateNestedManyWithoutBookmarkAlbumsInputObjectSchema)
+      .optional(),
+    userIDs: z
+      .union([
+        z.lazy(() => AlbumCreateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

@@ -91,6 +91,9 @@ model User {
 
   bookmarkBands Band[] @relation("BandBookmarks", fields: [bookmarkBandIDs], references: [id])
   bookmarkBandIDs String[] @db.ObjectId
+
+  bookmarkAlbums Album[] @relation("AlbumBookmarks", fields: [bookmarkAlbumIDs], references: [id])
+  bookmarkAlbumIDs String[] @db.ObjectId
 }
 
 
@@ -151,6 +154,9 @@ model Album {
 
   artists Artist[] @relation("ArtistAlbums",fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
+
+  bookmarks User[] @relation("AlbumBookmarks", fields: [userIDs], references: [id])
+  userIDs String[] @db.ObjectId
 }
 
 model Artist {

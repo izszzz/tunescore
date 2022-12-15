@@ -4,6 +4,7 @@ import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingID
 import { UserCreatebookmarkMusicIDsInputObjectSchema } from './UserCreatebookmarkMusicIDsInput.schema';
 import { UserCreatebookmarkArtistIDsInputObjectSchema } from './UserCreatebookmarkArtistIDsInput.schema';
 import { UserCreatebookmarkBandIDsInputObjectSchema } from './UserCreatebookmarkBandIDsInput.schema';
+import { UserCreatebookmarkAlbumIDsInputObjectSchema } from './UserCreatebookmarkAlbumIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -41,6 +42,12 @@ const Schema: z.ZodType<Prisma.UserCreateManyInput> = z
     bookmarkBandIDs: z
       .union([
         z.lazy(() => UserCreatebookmarkBandIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
+    bookmarkAlbumIDs: z
+      .union([
+        z.lazy(() => UserCreatebookmarkAlbumIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

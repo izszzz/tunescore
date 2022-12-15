@@ -23,6 +23,13 @@ const Music: NextPage = () => {
     "music.findUniqueMusic",
     {
       where: { id: router.query.id as string },
+      include: {
+        user: true,
+        band: true,
+        artists: true,
+        composers: true,
+        lyrists: true,
+      },
     },
   ]);
   if (!data) return <></>;

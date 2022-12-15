@@ -11,4 +11,5 @@ export const UserScalarFieldEnumSchema = z.enum([
   'bookmarkMusicIDs',
   'bookmarkArtistIDs',
   'bookmarkBandIDs',
+  'bookmarkAlbumIDs',
 ]);

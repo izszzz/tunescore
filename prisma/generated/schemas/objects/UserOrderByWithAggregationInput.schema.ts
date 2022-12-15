@@ -18,6 +18,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithAggregationInput> = z
     bookmarkMusicIDs: z.lazy(() => SortOrderSchema).optional(),
     bookmarkArtistIDs: z.lazy(() => SortOrderSchema).optional(),
     bookmarkBandIDs: z.lazy(() => SortOrderSchema).optional(),
+    bookmarkAlbumIDs: z.lazy(() => SortOrderSchema).optional(),
     _count: z.lazy(() => UserCountOrderByAggregateInputObjectSchema).optional(),
     _max: z.lazy(() => UserMaxOrderByAggregateInputObjectSchema).optional(),
     _min: z.lazy(() => UserMinOrderByAggregateInputObjectSchema).optional(),

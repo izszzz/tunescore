@@ -6,6 +6,7 @@ const Schema: z.ZodType<Prisma.AlbumCountOutputTypeSelect> = z
   .object({
     musics: z.boolean().optional(),
     artists: z.boolean().optional(),
+    bookmarks: z.boolean().optional(),
   })
   .strict();
 

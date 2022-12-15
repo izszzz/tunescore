@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import React from "react";
 import DefaultTabs, { DefaultTabsProps } from "../../elements/tabs/default";
 import SingleColumnLayout, { SingleColumnLayoutProps } from "../single_column";
@@ -25,7 +26,7 @@ const ShowLayout = ({
       </>
     }
   >
-    {children}
+    <Box my={3}>{children}</Box>
   </SingleColumnLayout>
 );
 

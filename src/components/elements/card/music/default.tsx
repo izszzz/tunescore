@@ -2,40 +2,48 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Prisma } from "@prisma/client";
 import setLocale from "../../../../utils/setLocale";
-import ArtistChip from "../../chip/artist";
-import BandChip from "../../chip/band";
 import MusicCard from ".";
+import musicOwner from "../../../../utils/musicOwner";
 import Typography from "@mui/material/Typography";
+import IndexChip from "../../chip";
 
-const DefaultMusicCard = ({
-  data: { id, title, image, composers, band, user },
-}: {
+interface DefaultMusicCard {
   data: Prisma.MusicGetPayload<{
-    include: { user: true; composers: true; lyrists: true; band: true };
+    include: {
+      user: true;
+      composers: true;
+      lyrists: true;
+      band: true;
+      artists: true;
+    };
   }>;
-}) => {
+}
+const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
   const router = useRouter();
   return (
     <MusicCard
       size="200px"
       title={
         <>
-          <Typography variant="h6">{setLocale(title, router)}</Typography>
-          {user ? (
-            <BandChip label={user.name} />
-          ) : band ? (
-            <BandChip label={setLocale(band.name, router)} />
-          ) : composers[0] ? (
-            <ArtistChip label={setLocale(composers[0].name, router)} />
-          ) : (
-            <></>
-          )}
+          <Typography variant="h6">{setLocale(data.title, router)}</Typography>
+          <Chip data={data} />
         </>
       }
-      image={image}
-      onClick={() => router.push({ pathname: "/musics/[id]", query: { id } })}
+      image={data.image}
+      onClick={() =>
+        router.push({ pathname: "/musics/[id]", query: { id: data.id } })
+      }
     />
   );
+};
+
+const Chip = ({ data }: DefaultMusicCard) => {
+  const router = useRouter();
+  const { type, owner } = musicOwner(data, router);
+  if (type === "none" || owner === null) return <></>;
+  if (type === "composer" || type === "lyrist" || type === "artist")
+    return <IndexChip label={owner.name} resource="artist" />;
+  return <IndexChip label={owner.name} resource={type} />;
 };
 
 export default DefaultMusicCard;

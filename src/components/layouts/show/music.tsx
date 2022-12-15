@@ -1,20 +1,21 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { Locales, Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import { trpc } from "../../../utils/trpc";
 import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
-import setLocale from "../../../utils/setLocale";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { DefaultTabsProps } from "../../elements/tabs/default";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
-import ResourceIcon from "../../elements/icon/resource";
 import { IconButton } from "@mui/material";
+import ResourceIcon from "../../elements/icon/resource";
+import { DefaultTabsProps } from "../../elements/tabs/default";
+import { trpc } from "../../../utils/trpc";
+import setLocale from "../../../utils/setLocale";
+import musicOwner from "../../../utils/musicOwner";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -137,64 +138,46 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
 interface MusicTitleProps {
   data: MusicLayoutProps["data"];
 }
-
 const MusicTitle = ({ data }: MusicTitleProps) => {
   const router = useRouter();
-  if (data.type === "ORIGINAL")
-    return (
-      <Typography variant="h5">
-        {data.user && (
-          <>
-            <Link
-              href={{ pathname: "/users/[id]", query: { id: data.user.id } }}
-            >
-              <a>{data.user?.name}</a>
-            </Link>{" "}
-            /
-          </>
-        )}
-        {setLocale(data.title, router)}
-      </Typography>
-    );
-  if (data.type === "COPY") {
-    if (data.band) {
-      const { band } = data;
-      return (
-        <Typography variant="h5">
-          {
-            <>
-              <Link href={{ pathname: "/bands/[id]", query: { id: band.id } }}>
-                <a>{setLocale(band.name, router)} </a>
-              </Link>{" "}
-              /
-            </>
-          }
-          {setLocale(data.title, router)}
-        </Typography>
-      );
-    }
-    if (data.composers.length) {
-      const { composers } = data;
-      const composer = composers[0];
-      return (
-        <Typography variant="h5">
-          {composer && (
-            <>
-              <Link
-                href={{ pathname: "/artists/[id]", query: { id: composer.id } }}
-              >
-                <a>{setLocale(composer.name, router)}</a>
-              </Link>{" "}
-              /
-            </>
-          )}
-          {setLocale(data.title, router)}
-        </Typography>
-      );
-    }
-  }
   return (
-    <Typography variant="h5"> {setLocale(data.title, router)} </Typography>
+    <Typography variant="h5">
+      <Owner data={data} /> {setLocale(data.title, router)}
+    </Typography>
+  );
+};
+
+interface OwnerProps {
+  data: MusicTitleProps["data"];
+}
+const Owner = ({ data }: OwnerProps) => {
+  const [pathname, setPathname] = useState<
+    "/users/[id]" | "/bands/[id]" | "/artists/[id]"
+  >("/users/[id]");
+  const router = useRouter();
+  const { type, owner } = musicOwner(data, router);
+  useEffect(() => {
+    switch (type) {
+      case "user":
+        setPathname("/users/[id]");
+        break;
+      case "band":
+        setPathname("/bands/[id]");
+        break;
+      case "composer":
+      case "lyrist":
+        setPathname("/artists/[id]");
+        break;
+    }
+  }, [type]);
+  if (type === "none" || owner === null) return <></>;
+  return (
+    <>
+      <Link href={{ pathname, query: { id: owner.id } }}>
+        <a>{owner.name}</a>
+      </Link>{" "}
+      /
+    </>
   );
 };
 

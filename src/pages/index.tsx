@@ -10,7 +10,13 @@ const Home: NextPage = () => {
     "pagination.music",
     {
       args: {
-        include: { composers: true, lyrists: true, band: true, user: true },
+        include: {
+          composers: true,
+          lyrists: true,
+          band: true,
+          user: true,
+          artists: true,
+        },
       },
       options: { page: 0, perPage: 12 },
     },

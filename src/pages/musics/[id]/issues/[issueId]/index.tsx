@@ -31,7 +31,7 @@ const Issue: NextPage = () => {
     }
   );
   const { data: issueData } = trpc.useQuery(
-    ["issue.show", { where: { id: router.query.pullId as string } }],
+    ["issue.findUniqueIssue", { where: { id: router.query.pullId as string } }],
     {
       onError: () => {
         enqueueSnackbar("music.show error");

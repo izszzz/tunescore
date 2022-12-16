@@ -8,7 +8,7 @@ const Score: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.useQuery(
-    ["music.show", { where: { id: router.query.id as string } }],
+    ["music.findUniqueMusic", { where: { id: router.query.id as string } }],
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -16,7 +16,7 @@ const Score: NextPage = () => {
     }
   );
   if (!data) return <></>;
-  return <ScoreLayout value={data.score} />;
+  return <ScoreLayout value={data.score || ""} />;
 };
 
 export default Score;

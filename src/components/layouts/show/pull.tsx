@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import { Prisma } from "@prisma/client";
 import ShowLayout, { ShowLayoutProps } from "./";
 
-interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
+export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{ include: { music: true; user: true } }>;
   activeTab: "code" | "conversation";
 }
@@ -24,7 +24,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   const [conflict, setConflict] = useState(true);
   const [diff, setDiff] = useState(true);
   const router = useRouter();
-  const update = trpc.useMutation(["pull.update"]);
+  const update = trpc.useMutation(["pull.updateOnePull"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -52,13 +52,22 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   );
   const handleMerge = () => {
     update.mutate({
-      id: router.query.pullId as string,
-      status: "MERGED",
-      music: { update: { score: data.score.changed } },
+      where: {
+        id: router.query.pullId as string,
+      },
+      data: {
+        status: "MERGED",
+        music: { update: { score: data.score.changed } },
+      },
     });
   };
   const handleClose = () => {
-    update.mutate({ id: router.query.pullId as string, status: "CLOSED" });
+    update.mutate({
+      where: {
+        id: router.query.pullId as string,
+      },
+      data: { status: "CLOSED" },
+    });
   };
   useEffect(() => {
     if (data?.music.score) {

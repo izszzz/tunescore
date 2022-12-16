@@ -17,12 +17,14 @@ import { trpc } from "../../../../utils/trpc";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
   const formContext = useForm<Issue>();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+  const session = useSession();
   const { data } = trpc.useQuery(
     [
       "music.findUniqueMusic",
@@ -43,7 +45,7 @@ const Issues: NextPage = () => {
       },
     }
   );
-  const create = trpc.useMutation(["issue.create"], {
+  const create = trpc.useMutation(["issue.createOneIssue"], {
     onSuccess: () =>
       router.push({
         pathname: "/musics/[id]/issues",
@@ -55,8 +57,11 @@ const Issues: NextPage = () => {
   });
   const handleSubmit = (data: Issue) =>
     create.mutate({
-      ...data,
-      music: { connect: { id: router.query.id as string } },
+      data: {
+        ...data,
+        music: { connect: { id: router.query.id as string } },
+        user: { connect: { id: session.data?.user?.id as string } },
+      },
     });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];

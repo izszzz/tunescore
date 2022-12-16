@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import { createPaginator } from "prisma-pagination";
 import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
 import { PaginateOptionsSchema } from "../../utils/zod";
-import { IssueFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
+import { IssueFindManySchema as PullFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
@@ -21,7 +21,13 @@ export const paginationRouter = createRouter()
       const paginate = createPaginator(options);
       return await paginate<
         Prisma.MusicGetPayload<{
-          include: { user: true; composers: true; lyrists: true; band: true };
+          include: {
+            user: true;
+            composers: true;
+            lyrists: true;
+            band: true;
+            artists: true;
+          };
         }>,
         Prisma.MusicFindManyArgs
       >(ctx.prisma.music, args);
@@ -106,16 +112,32 @@ export const paginationRouter = createRouter()
   .query("issue", {
     input: z.object({
       options: PaginateOptionsSchema,
-      args: IssueFindManySchema,
+      args: PullFindManySchema,
     }),
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
         Prisma.IssueGetPayload<{
-          include: { user: true; music: true };
+          include: { user: true };
         }>,
         Prisma.IssueFindManyArgs
       >(ctx.prisma.issue, args);
+    },
+  })
+  .query("pull", {
+    input: z.object({
+      options: PaginateOptionsSchema,
+      args: PullFindManySchema,
+    }),
+    async resolve({ ctx, input }) {
+      const { args, options } = input;
+      const paginate = createPaginator(options);
+      return await paginate<
+        Prisma.PullGetPayload<{
+          include: { user: true };
+        }>,
+        Prisma.PullFindManyArgs
+      >(ctx.prisma.pull, args);
     },
   });

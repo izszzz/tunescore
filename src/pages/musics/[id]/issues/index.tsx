@@ -85,7 +85,7 @@ const Issues: NextPage = () => {
           },
         }}
       >
-        <IssueLists issues={issueData.data} />
+        <IssueLists data={issueData.data} />
       </IndexLayout>
     </MusicLayout>
   );

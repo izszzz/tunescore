@@ -19,7 +19,13 @@ const Musics: NextPage = () => {
       "pagination.music",
       {
         args: {
-          include: { composers: true, lyrists: true, band: true, user: true },
+          include: {
+            composers: true,
+            lyrists: true,
+            band: true,
+            user: true,
+            artists: true,
+          },
           where: {
             title: {
               is: {

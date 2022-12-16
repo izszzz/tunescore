@@ -7,14 +7,18 @@ import { trpc } from "../../../../../../utils/trpc";
 const Pull: NextPage = () => {
   const router = useRouter();
   const pullQuery = trpc.useQuery([
-    "pull.show",
+    "pull.findUniquePull",
     { where: { id: router.query.pullId as string } },
   ]);
-  const update = trpc.useMutation(["pull.update"]);
+  const update = trpc.useMutation(["pull.updateOnePull"]);
   const handleSave = (value: string) => {
     update.mutate({
-      id: router.query.pullId as string,
-      score: { update: { changed: value } },
+      where: {
+        id: router.query.pullId as string,
+      },
+      data: {
+        score: { update: { changed: value } },
+      },
     });
   };
   return (

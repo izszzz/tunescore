@@ -15,10 +15,12 @@ import MusicLayout, {
 } from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
   const music = trpc.useQuery(
@@ -41,13 +43,29 @@ const NewPull: NextPage = () => {
       },
     }
   );
-  const create = trpc.useMutation(["pull.create"], {
-    onSuccess: () =>
-      router.push({ pathname: "/musics/[id]/pulls", query: { id } }),
+  const create = trpc.useMutation(["pull.createOnePull"], {
+    onSuccess: (data) =>
+      router.push({
+        pathname: "/musics/[id]/pulls/[pullId]",
+        query: { id, pullId: data.id },
+      }),
     onError: (error) => console.log(error),
   });
   const handleSubmit = (data: Pull) =>
-    create.mutate({ ...data, music: { connect: { id } } });
+    create.mutate({
+      data: {
+        ...data,
+        score: {
+          set: {
+            original: "",
+            changed: "",
+          },
+        },
+        status: "DRAFT",
+        music: { connect: { id } },
+        user: { connect: { id: session.data?.user?.id as string } },
+      },
+    });
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
@@ -62,6 +80,8 @@ const NewPull: NextPage = () => {
           type="submit"
           loading={create.isLoading}
           variant="contained"
+          fullWidth
+          disableElevation
         >
           Submit
         </LoadingButton>

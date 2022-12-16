@@ -41,8 +41,6 @@ const Chip = ({ data }: DefaultMusicCard) => {
   const router = useRouter();
   const { type, owner } = musicOwner(data, router);
   if (type === "none" || owner === null) return <></>;
-  if (type === "composer" || type === "lyrist" || type === "artist")
-    return <IndexChip label={owner.name} resource="artist" />;
   return <IndexChip label={owner.name} resource={type} />;
 };
 

@@ -5,12 +5,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import setLocale from "../../../../utils/setLocale";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ResourceIcon from "../../icon/resource";
+import musicOwner from "../../../../utils/musicOwner";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -19,6 +19,7 @@ export interface MusicListItemProps {
       composers: true;
       lyrists: true;
       band: true;
+      artists: true;
     };
   }>;
 }
@@ -44,26 +45,29 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
               <Chip component="span" label={data.type} size="small" />
             </Box>
           }
-          secondary={
-            <Box component="span" display="flex" alignItems="center">
-              <Typography
-                mr={1}
-                variant="body2"
-                color="text.subprimary"
-                component="span"
-              >
-                {`created by ${data.user?.name}`}
-              </Typography>
-              <Avatar
-                component="span"
-                src={data.user?.image || ""}
-                sx={{ width: 24, height: 24 }}
-              />
-            </Box>
-          }
+          secondary={<Owner data={data} />}
         />
       </ListItemButton>
     </ListItem>
+  );
+};
+
+const Owner = ({ data }: MusicListItemProps) => {
+  const router = useRouter();
+  const { type, owner } = musicOwner(data, router);
+  if (type === "none" || owner === null) return <>no info</>;
+  return (
+    <Box component="span" display="flex" alignItems="center">
+      <Typography
+        mr={1}
+        variant="body2"
+        color="text.subprimary"
+        component="span"
+      >
+        {owner.name}
+      </Typography>
+      <ResourceIcon resource={type} />
+    </Box>
   );
 };
 

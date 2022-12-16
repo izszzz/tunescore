@@ -7,10 +7,18 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { SvgIconProps } from "@mui/material/SvgIcon";
 
 export interface ResourceIconProps extends SvgIconProps {
-  resource: "artist" | "band" | "music" | "album" | "user";
+  resource:
+    | "artist"
+    | "composer"
+    | "lyrist"
+    | "band"
+    | "music"
+    | "album"
+    | "user";
 }
 const ResourceIcon = ({ resource, ...props }: ResourceIconProps) => {
-  if (resource === "artist") return <PersonIcon {...props} />;
+  if (resource === "artist" || resource === "composer" || resource === "lyrist")
+    return <PersonIcon {...props} />;
   if (resource === "band") return <GroupIcon {...props} />;
   if (resource === "music") return <MusicNoteIcon {...props} />;
   if (resource === "album") return <AlbumIcon {...props} />;

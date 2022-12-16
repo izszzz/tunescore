@@ -33,7 +33,7 @@ const Issues: NextPage = () => {
   );
   const { data: pullsData } = trpc.useQuery(
     [
-      "pull.index",
+      "pagination.pull",
       {
         args: {
           include: { user: true },
@@ -51,7 +51,7 @@ const Issues: NextPage = () => {
       },
     }
   );
-  const search = trpc.useMutation(["pull.search"], {
+  const search = trpc.useMutation(["search.pull"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
@@ -86,7 +86,7 @@ const Issues: NextPage = () => {
           },
         }}
       >
-        <PullLists pulls={pullsData.data} />
+        <PullLists data={pullsData.data} />
       </IndexLayout>
     </MusicLayout>
   );

@@ -83,6 +83,7 @@ export const paginationRouter = createRouter()
       return await paginate<
         Prisma.AlbumGetPayload<{
           include: {
+            band: true;
             _count: {
               select: {
                 artists: true;

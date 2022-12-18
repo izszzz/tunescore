@@ -4,6 +4,8 @@ import { PullScoreCompositeFilterObjectSchema } from './PullScoreCompositeFilter
 import { PullScoreObjectEqualityInputObjectSchema } from './PullScoreObjectEqualityInput.schema';
 import { EnumPullStatusFilterObjectSchema } from './EnumPullStatusFilter.schema';
 import { PullStatusSchema } from '../enums/PullStatus.schema';
+import { VoteRelationFilterObjectSchema } from './VoteRelationFilter.schema';
+import { VoteWhereInputObjectSchema } from './VoteWhereInput.schema';
 import { MusicRelationFilterObjectSchema } from './MusicRelationFilter.schema';
 import { MusicWhereInputObjectSchema } from './MusicWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
@@ -50,6 +52,13 @@ const Schema: z.ZodType<Prisma.PullWhereInput> = z
         z.lazy(() => PullStatusSchema),
       ])
       .optional(),
+    vote: z
+      .union([
+        z.lazy(() => VoteRelationFilterObjectSchema),
+        z.lazy(() => VoteWhereInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     music: z
       .union([
         z.lazy(() => MusicRelationFilterObjectSchema),

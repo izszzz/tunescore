@@ -7,7 +7,7 @@ interface PullStatusIconProps {
   status: PullStatus;
 }
 const PullStatusIcon = ({ status }: PullStatusIconProps) => {
-  if (status === "DRAFT") return <LockIcon color="success" />;
+  if (status === "DRAFT") return <LockIcon color="disabled" />;
   if (status === "OPEN") return <TaskAltIcon color="success" />;
   if (status === "CLOSED") return <HighlightOffIcon color="error" />;
   if (status === "MERGED") return <TaskAltIcon color="disabled" />;

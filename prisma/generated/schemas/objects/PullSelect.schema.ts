@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { VoteArgsObjectSchema } from './VoteArgs.schema';
 import { MusicArgsObjectSchema } from './MusicArgs.schema';
 import { UserArgsObjectSchema } from './UserArgs.schema';
 
@@ -11,6 +12,7 @@ const Schema: z.ZodType<Prisma.PullSelect> = z
     body: z.boolean().optional(),
     score: z.boolean().optional(),
     status: z.boolean().optional(),
+    vote: z.union([z.boolean(), z.lazy(() => VoteArgsObjectSchema)]).optional(),
     music: z
       .union([z.boolean(), z.lazy(() => MusicArgsObjectSchema)])
       .optional(),

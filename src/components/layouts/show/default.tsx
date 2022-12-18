@@ -42,8 +42,15 @@ const DefaultShowLayout = ({
       {...props}
       header={<DefaultHeader />}
       title={
-        <Box display="flex" alignItems="center">
-          {props.title}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mx={4}
+        >
+          <Box display="flex" alignItems="center">
+            {props.title}
+          </Box>
           <BookmarkToggleButton
             {...bookmarkToggleButtonProps}
             onClick={handleUpdate}

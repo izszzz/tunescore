@@ -9,6 +9,7 @@ import { artistsRouter } from "./Artist.router";
 import { bandsRouter } from "./Band.router";
 import { issuesRouter } from "./Issue.router";
 import { pullsRouter } from "./Pull.router";
+import { votesRouter } from "./Vote.router";
 
 export const appRouter = createRouter()
 
@@ -31,3 +32,5 @@ export const appRouter = createRouter()
   .merge('issue.', issuesRouter)
 
   .merge('pull.', pullsRouter)
+
+  .merge('vote.', votesRouter)

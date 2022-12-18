@@ -1,5 +1,5 @@
 import React, { MouseEvent } from "react";
-import ToggleButton from "@mui/lab/ToggleButton";
+import ToggleButton from "@mui/material/ToggleButton";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";

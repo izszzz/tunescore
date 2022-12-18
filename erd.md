@@ -101,6 +101,15 @@ MERGED MERGED
     }
   
 
+  Vote {
+    String id PK 
+    DateTime start  
+    DateTime end  
+    Int good  
+    Int bad  
+    }
+  
+
   PullScore {
     String original  
     String changed  
@@ -172,6 +181,7 @@ MERGED MERGED
     Pull o|--|| PullStatus : "enum:status"
     Pull o{--|| Music : "music"
     Pull o{--|| User : "user"
+    Vote o|--|| Pull : "pull"
     Link o|--|o StreamingLink : "streaming"
     Link o|--|o AccountLink : "account"
 ```

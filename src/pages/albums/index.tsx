@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import AlbumLists from "../../components/elements/list/album";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
@@ -12,7 +13,10 @@ const Albums: NextPage = () => {
     "pagination.album",
     {
       args: {
-        include: { _count: { select: { artists: true, musics: true } } },
+        include: {
+          _count: { select: { artists: true, musics: true } },
+          band: true,
+        },
         where: {
           title: {
             is: { [router.locale]: { contains: router.query.q as string } },
@@ -50,7 +54,7 @@ const Albums: NextPage = () => {
         },
       }}
     >
-      <AlbumList data={data.data} />
+      <AlbumLists data={data.data} />
     </IndexLayout>
   );
 };

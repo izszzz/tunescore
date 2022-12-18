@@ -21,7 +21,7 @@ const ShowLayout = ({
     header={
       <>
         {header}
-        {title}
+        <Box my={3}>{title}</Box>
         <DefaultTabs value={activeTab} tabs={tabs} />
       </>
     }

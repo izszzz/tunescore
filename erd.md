@@ -18,6 +18,7 @@ COPY COPY
         PullStatus {
             DRAFT DRAFT
 OPEN OPEN
+VOTE VOTE
 CLOSED CLOSED
 MERGED MERGED
         }
@@ -50,6 +51,14 @@ MERGED MERGED
     String email  "nullable"
     DateTime emailVerified  "nullable"
     String image  "nullable"
+    }
+  
+
+  Notification {
+    String id PK 
+    String type  
+    DateTime createdAt  
+    DateTime readAt  
     }
   
 
@@ -147,6 +156,7 @@ MERGED MERGED
     User o{--}o Artist : "bookmarkArtists"
     User o{--}o Band : "bookmarkBands"
     User o{--}o Album : "bookmarkAlbums"
+    Notification o{--|| User : "user"
     Music o|--|| Type : "enum:type"
     Music o|--|| Locales : "title"
     Music o|--|| Visibility : "enum:visibility"

@@ -1,22 +1,25 @@
 import React, { useEffect, useMemo, useState } from "react";
-import * as Diff3 from "node-diff3";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useQueryClient } from "react-query";
+import * as Diff3 from "node-diff3";
+import { addWeeks } from "date-fns";
+import { Prisma, PullStatus } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import Link from "next/link";
 import Box from "@mui/material/Box";
-import { Prisma } from "@prisma/client";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import LoadingButton from "@mui/lab/LoadingButton";
 import ShowLayout, { ShowLayoutProps } from "./";
 import { trpc } from "../../../utils/trpc";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import PullButton from "../../elements/button/group/pull";
-import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
-  data: Prisma.PullGetPayload<{ include: { music: true; user: true } }>;
+  data: Prisma.PullGetPayload<{
+    include: { music: true; user: true; vote: true };
+  }>;
   activeTab: "code" | "conversation";
 }
 
@@ -25,8 +28,8 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const [conflict, setConflict] = useState(true);
-  const [diff, setDiff] = useState(true);
+  const [conflict, setConflict] = useState(false);
+  const [diff, setDiff] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
@@ -38,7 +41,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         [
           "pull.findUniquePull",
           {
-            include: { music: true, user: true },
+            include: { music: true, user: true, vote: true },
             where: {
               id: pullId,
             },
@@ -51,11 +54,13 @@ const PullLayout: React.FC<PullLayoutProps> = ({
                 score: prev.score,
                 user: prev.user,
                 music: prev.music,
+                vote: prev.vote,
               }
             : (data as PullLayoutProps["data"])
       );
     },
   });
+  const create = trpc.useMutation("vote.createOneVote");
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -81,24 +86,24 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     ],
     [id, pullId]
   );
-  const handleOpen = () =>
+  const handleUpdateStatus = (status: PullStatus) =>
     update.mutate({
       where: {
         id: pullId,
       },
       data: {
-        status: "OPEN",
+        status,
       },
     });
-  const handleDraft = () =>
-    update.mutate({
-      where: {
-        id: pullId,
-      },
-      data: {
-        status: "DRAFT",
-      },
+  const handleVote = () => {
+    handleUpdateStatus("VOTE");
+    create.mutate({
+      data: { end: addWeeks(Date.now(), 1), pull: { connect: { id: pullId } } },
     });
+  };
+  const handleOpen = () => handleUpdateStatus("OPEN");
+  const handleDraft = () => handleUpdateStatus("DRAFT");
+  const handleClose = () => handleUpdateStatus("CLOSED");
   const handleMerge = () => {
     update.mutate({
       where: {
@@ -110,25 +115,15 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       },
     });
   };
-  const handleClose = () => {
-    update.mutate({
-      where: {
-        id: pullId,
-      },
-      data: { status: "CLOSED" },
-    });
-  };
   useEffect(() => {
-    if (data?.music.score) {
-      const merged = Diff3.mergeDiff3(
-        data.music.score,
-        data.score.original,
-        data.score.changed
-      );
-      setConflict(merged.conflict);
-      setDiff(data.score.original !== data.score.changed);
-    }
-  }, [data]);
+    const merged = Diff3.mergeDiff3(
+      data.music.score || "",
+      data.score.original,
+      data.score.changed
+    );
+    setConflict(merged.conflict);
+    setDiff(data.score.original !== data.score.changed);
+  }, [data.music.score, data.score.changed, data.score.original]);
 
   return (
     <ShowLayout
@@ -161,11 +156,12 @@ const PullLayout: React.FC<PullLayoutProps> = ({
                 conflict={conflict}
                 diff={diff}
                 loading={update.isLoading}
+                vote={data.vote}
                 onOpen={handleOpen}
                 onClose={handleClose}
                 onMerge={handleMerge}
                 onDraft={handleDraft}
-                onVote={() => console.log("create vote")}
+                onVote={handleVote}
               />
             )}
           </Box>

@@ -5,6 +5,7 @@ import { AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './
 import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { IssueUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { PullUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PullUncheckedUpdateManyWithoutUserNestedInput.schema';
+import { NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowingNestedInput.schema';
 import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
 import { UserUncheckedUpdateManyWithoutFollowedByNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowedByNestedInput.schema';
@@ -61,6 +62,11 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMusicsInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    notifications: z
+      .lazy(
+        () => NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema,
+      )
       .optional(),
     followedBy: z
       .lazy(

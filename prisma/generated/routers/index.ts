@@ -2,6 +2,7 @@ import { createRouter } from "./helpers/createRouter";
 import { accountsRouter } from "./Account.router";
 import { sessionsRouter } from "./Session.router";
 import { usersRouter } from "./User.router";
+import { notificationsRouter } from "./Notification.router";
 import { verificationtokensRouter } from "./VerificationToken.router";
 import { musicRouter } from "./Music.router";
 import { albumsRouter } from "./Album.router";
@@ -18,6 +19,8 @@ export const appRouter = createRouter()
   .merge('session.', sessionsRouter)
 
   .merge('user.', usersRouter)
+
+  .merge('notification.', notificationsRouter)
 
   .merge('verificationtoken.', verificationtokensRouter)
 

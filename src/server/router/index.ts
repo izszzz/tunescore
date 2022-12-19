@@ -10,6 +10,7 @@ import { albumsRouter } from "../../../prisma/generated/routers/Album.router";
 import { musicRouter } from "../../../prisma/generated/routers/Music.router";
 import { artistsRouter } from "../../../prisma/generated/routers/Artist.router";
 import { bandsRouter } from "../../../prisma/generated/routers/Band.router";
+import { votesRouter } from "../../../prisma/generated/routers/Vote.router";
 import { bookmarkedRouter } from "./bookmarked";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
@@ -23,6 +24,7 @@ export const appRouter = createRouter()
   .merge("album.", albumsRouter)
   .merge("issue.", issuesRouter)
   .merge("pull.", pullsRouter)
+  .merge("vote.", votesRouter)
   .merge("pagination.", paginationRouter)
   .merge("bookmarked.", bookmarkedRouter)
   .merge("search.", searchRouter)

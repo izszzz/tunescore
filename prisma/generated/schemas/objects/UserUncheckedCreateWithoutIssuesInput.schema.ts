@@ -3,6 +3,7 @@ import { AccountUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './
 import { SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './SessionUncheckedCreateNestedManyWithoutUserInput.schema';
 import { MusicUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './MusicUncheckedCreateNestedManyWithoutUserInput.schema';
 import { PullUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PullUncheckedCreateNestedManyWithoutUserInput.schema';
+import { NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutUserInput.schema';
 import { UserUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowingInput.schema';
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowedByInput.schema';
@@ -36,6 +37,11 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutIssuesInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullUncheckedCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    notifications: z
+      .lazy(
+        () => NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema,
+      )
       .optional(),
     followedBy: z
       .lazy(

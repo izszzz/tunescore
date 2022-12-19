@@ -44,7 +44,7 @@ const Pull: NextPage = () => {
       "pull.findUniquePull",
       {
         where: { id: router.query.pullId as string },
-        include: { user: true, music: true },
+        include: { user: true, music: true, vote: true },
       },
     ],
     {

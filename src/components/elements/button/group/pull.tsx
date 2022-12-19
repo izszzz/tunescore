@@ -1,8 +1,12 @@
 import React from "react";
-import { PullStatus, Type } from "@prisma/client";
+import { PullStatus, Type, Vote } from "@prisma/client";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import PullStatusIcon from "../../icon/pull/status";
 import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import Box from "@mui/material/Box";
+import PullStatusIcon from "../../icon/pull/status";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 
 interface PullButtonProps {
   type: Type;
@@ -10,6 +14,7 @@ interface PullButtonProps {
   conflict: boolean;
   diff: boolean;
   loading: boolean;
+  vote: Vote | null;
   onOpen: () => void;
   onMerge: () => void;
   onClose: () => void;
@@ -23,6 +28,7 @@ const PullButton = ({
   conflict,
   diff,
   loading,
+  vote,
   onOpen,
   onMerge,
   onClose,
@@ -32,7 +38,7 @@ const PullButton = ({
   if (type === "ORIGINAL")
     switch (status) {
       case "DRAFT":
-        return <PullOpenButton loading={loading} onClick={onOpen} fullWidth />;
+        return <PullOpenButton loading={loading} onClick={onOpen} />;
       case "OPEN": {
         return (
           <ButtonGroup fullWidth>
@@ -48,6 +54,8 @@ const PullButton = ({
       }
       case "MERGED":
         return <>revert</>;
+      case "VOTE":
+        return <>vote</>;
       case "CLOSED":
         return <PullDraftButton loading={loading} onClick={onDraft} />;
     }
@@ -57,7 +65,7 @@ const PullButton = ({
         return <PullOpenButton loading={loading} onClick={onOpen} />;
       case "OPEN":
         return (
-          <ButtonGroup>
+          <ButtonGroup fullWidth>
             <VoteCreateButton
               loading={loading}
               disabled={conflict || !diff}
@@ -66,6 +74,23 @@ const PullButton = ({
             <PullCloseButton loading={loading} onClick={onClose} />
             <PullDraftButton loading={loading} onClick={onDraft} />
           </ButtonGroup>
+        );
+      case "VOTE":
+        console.log((vote.good + vote.bad / vote.good) * 100);
+        return (
+          <Box display="flex" alignItems="center">
+            {vote && (
+              <>
+                <ThumbUpIcon />
+                <Box sx={{ width: "100%", mr: 1 }}>
+                  <LinearProgress
+                    value={(vote.good + vote.bad / vote.good) * 100}
+                  />
+                </Box>
+                <ThumbDownIcon />
+              </>
+            )}
+          </Box>
         );
       case "MERGED":
         return <>revert</>;
@@ -81,6 +106,7 @@ const PullOpenButton = (props: LoadingButtonProps) => (
     color="success"
     startIcon={<PullStatusIcon status="OPEN" />}
     {...props}
+    fullWidth
   >
     OPEN
   </LoadingButton>
@@ -123,10 +149,10 @@ const VoteCreateButton = (props: LoadingButtonProps) => (
   <LoadingButton
     variant="outlined"
     color="success"
-    startIcon={<PullStatusIcon status="OPEN" />}
+    startIcon={<PullStatusIcon status="VOTE" />}
     {...props}
   >
-    OPEN
+    Vote
   </LoadingButton>
 );
 

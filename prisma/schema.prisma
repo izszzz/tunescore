@@ -77,6 +77,8 @@ model User {
   issues        Issue[]
   pulls  Pull[]
 
+  notifications Notification[]
+
   followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
   followedByIDs String[] @db.ObjectId
 
@@ -96,6 +98,16 @@ model User {
   bookmarkAlbumIDs String[] @db.ObjectId
 }
 
+model Notification{
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+
+  createdAt DateTime @default(now())
+  readAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -248,6 +260,7 @@ enum Type{
 enum PullStatus{
   DRAFT
   OPEN
+  VOTE
   CLOSED
   MERGED
 }

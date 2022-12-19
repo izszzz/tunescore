@@ -26,11 +26,18 @@ const EditBand: NextPage = () => {
   const bandData = data as Prisma.BandGetPayload<{
     include: {
       artists: true;
-      musics: { include: { band: true; composers: true; lyrists: true } };
+      musics: {
+        include: {
+          band: true;
+          composers: true;
+          lyrists: true;
+        };
+      };
+      bookmarks: true;
     };
   }>;
   return (
-    <BandLayout data={data} activeTab="settings">
+    <BandLayout data={bandData} activeTab="settings">
       <DefaultSettingsForm<Prisma.BandGetPayload<null>>
         data={data}
         name="name"

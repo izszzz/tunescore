@@ -26,6 +26,7 @@ export interface MusicLayoutProps
       composers: true;
       lyrists: true;
       user: true;
+      bookmarks: true;
     };
   }>;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
@@ -38,12 +39,7 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const bookmarked = trpc.useQuery([
-    "bookmarked.music",
-    { id: router.query.id as string },
-  ]);
-  const bookmarkCreate = trpc.useMutation(["music.updateOneMusic"]);
-  const bookmarkDestroy = trpc.useMutation(["music.updateOneMusic"]);
+  const update = trpc.useMutation(["music.updateOneMusic"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -94,32 +90,19 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
         </>
       }
       bookmarkToggleButtonProps={{
-        defaultValue: !!bookmarked.data,
-        loading: bookmarkCreate.isLoading || bookmarkDestroy.isLoading,
-        onEnabled: (setValue) =>
-          bookmarkDestroy.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  disconnect: { id: session.data?.user?.id },
+        value: !!data.bookmarks.length,
+        disabled: update.isLoading,
+        onClick: (value) =>
+          update.mutate({
+            where: { id: router.query.id as string },
+            data: {
+              bookmarks: {
+                [value ? "disconnect" : "connect"]: {
+                  id: session.data?.user?.id,
                 },
               },
             },
-            { onSuccess: () => setValue(false) }
-          ),
-        onDisabled: (setValue) =>
-          bookmarkCreate.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  connect: { id: session.data?.user?.id },
-                },
-              },
-            },
-            { onSuccess: () => setValue(true) }
-          ),
+          }),
       }}
     >
       {data.title[router.locale as keyof Locales] === null && (

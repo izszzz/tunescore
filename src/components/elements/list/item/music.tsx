@@ -11,6 +11,9 @@ import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ResourceIcon from "../../icon/resource";
 import musicOwner from "../../../../utils/musicOwner";
+import BookmarkToggleButton from "../../button/toggle/bookmark";
+import { trpc } from "../../../../utils/trpc";
+import { useSession } from "next-auth/react";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -20,11 +23,14 @@ export interface MusicListItemProps {
       lyrists: true;
       band: true;
       artists: true;
+      bookmarks: true;
     };
   }>;
 }
 const MusicListItem = ({ data }: MusicListItemProps) => {
   const router = useRouter();
+  const session = useSession();
+  const update = trpc.useMutation(["music.updateOneMusic"]);
   return (
     <ListItem
       disablePadding
@@ -43,6 +49,22 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
                 {setLocale(data.title, router)}
               </Typography>
               <Chip component="span" label={data.type} size="small" />
+              <BookmarkToggleButton
+                value={!!data.bookmarks.length}
+                disabled={update.isLoading}
+                onClick={(value) =>
+                  update.mutate({
+                    where: { id: router.query.id as string },
+                    data: {
+                      bookmarks: {
+                        [value ? "disconnect" : "connect"]: {
+                          id: session.data?.user?.id,
+                        },
+                      },
+                    },
+                  })
+                }
+              />
             </Box>
           }
           secondary={<Owner data={data} />}

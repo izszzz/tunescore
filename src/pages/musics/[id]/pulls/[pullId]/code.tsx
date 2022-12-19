@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React from "react";
@@ -14,6 +15,7 @@ import { trpc } from "../../../../../utils/trpc";
 const Code: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const session = useSession();
   const music = trpc.useQuery(
     [
       "music.findUniqueMusic",
@@ -25,6 +27,7 @@ const Code: NextPage = () => {
           artists: true,
           composers: true,
           lyrists: true,
+          bookmarks: { where: { id: session.data?.user?.id } },
         },
       },
     ],

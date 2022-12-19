@@ -45,6 +45,7 @@ const EditArtist: NextPage = () => {
             lyrists: true,
           },
         },
+        bookmarks: true,
       },
     },
   ]);
@@ -74,10 +75,11 @@ const EditArtist: NextPage = () => {
       musics: {
         include: { composers: true; lyrists: true; band: true };
       };
+      bookmarks: true;
     };
   }>;
   return (
-    <ArtistLayout data={data} activeTab="settings">
+    <ArtistLayout data={musicData} activeTab="settings">
       <FormContainer defaultValues={data} onSuccess={handleSubmit}>
         <Grid container spacing={1} my={1}>
           <Grid item xs={10}>

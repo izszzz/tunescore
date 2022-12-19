@@ -17,8 +17,10 @@ import MusicLayout, {
 import ItunesButton from "../../../components/elements/button/itunes";
 import setLocale from "../../../utils/setLocale";
 import { trpc } from "../../../utils/trpc";
+import { useSession } from "next-auth/react";
 const Music: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
   const { data } = trpc.useQuery([
     "music.findUniqueMusic",
     {
@@ -29,6 +31,7 @@ const Music: NextPage = () => {
         artists: true,
         composers: true,
         lyrists: true,
+        bookmarks: { where: { id: session.data?.user?.id } },
       },
     },
   ]);

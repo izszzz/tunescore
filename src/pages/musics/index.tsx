@@ -6,9 +6,11 @@ import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../utils/setLocale";
 import { Music } from "@prisma/client";
+import { useSession } from "next-auth/react";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const session = useSession();
   const search = trpc.useMutation(["search.music"], {
     onError: () => {
       enqueueSnackbar("music.search error");
@@ -25,6 +27,7 @@ const Musics: NextPage = () => {
             band: true,
             user: true,
             artists: true,
+            bookmarks: { where: { id: session.data?.user?.id } },
           },
           where: {
             title: {

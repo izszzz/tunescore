@@ -31,6 +31,7 @@ const Artist: NextPage = () => {
         musics: {
           include: { composers: true, lyrists: true, band: true },
         },
+        bookmarks: true,
       },
     },
   ]);
@@ -38,6 +39,7 @@ const Artist: NextPage = () => {
   const musicData = data as Prisma.ArtistGetPayload<{
     include: {
       bands: true;
+      bookmarks: true;
       composedMusics: {
         include: { composers: true; lyrists: true; band: true };
       };

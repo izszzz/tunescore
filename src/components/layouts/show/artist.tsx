@@ -9,7 +9,7 @@ import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.ArtistGetPayload<null>;
+  data: Prisma.ArtistGetPayload<{ include: { bookmarks: true } }>;
   activeTab: "info" | "settings";
 }
 const ArtistLayout: React.FC<ArtistLayoutProps> = ({
@@ -19,12 +19,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const bookmarked = trpc.useQuery([
-    "bookmarked.artist",
-    { id: router.query.id as string },
-  ]);
-  const bookmarkCreate = trpc.useMutation(["artist.updateOneArtist"]);
-  const bookmarkDestroy = trpc.useMutation(["artist.updateOneArtist"]);
+  const update = trpc.useMutation(["artist.updateOneArtist"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -52,32 +47,19 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         <Typography variant="h5">{setLocale(data.name, router)}</Typography>
       }
       bookmarkToggleButtonProps={{
-        defaultValue: !!bookmarked.data,
-        loading: bookmarkCreate.isLoading || bookmarkDestroy.isLoading,
-        onEnabled: (setValue) =>
-          bookmarkDestroy.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  disconnect: { id: session.data?.user?.id },
+        value: !!data.bookmarks.length,
+        disabled: update.isLoading,
+        onClick: (value) =>
+          update.mutate({
+            where: { id: router.query.id as string },
+            data: {
+              bookmarks: {
+                [value ? "disconnect" : "connect"]: {
+                  id: session.data?.user?.id,
                 },
               },
             },
-            { onSuccess: () => setValue(false) }
-          ),
-        onDisabled: (setValue) =>
-          bookmarkCreate.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  connect: { id: session.data?.user?.id },
-                },
-              },
-            },
-            { onSuccess: () => setValue(true) }
-          ),
+          }),
       }}
     >
       {children}

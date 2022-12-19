@@ -8,9 +8,11 @@ import IndexLayout from "../../../../components/layouts/index";
 import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { Pull } from "@prisma/client";
+import { useSession } from "next-auth/react";
 const Issues: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const session = useSession();
   const music = trpc.useQuery(
     [
       "music.findUniqueMusic",
@@ -22,6 +24,7 @@ const Issues: NextPage = () => {
           artists: true,
           composers: true,
           lyrists: true,
+          bookmarks: { where: { id: session.data?.user?.id } },
         },
       },
     ],

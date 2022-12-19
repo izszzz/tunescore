@@ -10,7 +10,11 @@ import { useSession } from "next-auth/react";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.BandGetPayload<null>;
+  data: Prisma.BandGetPayload<{
+    include: {
+      bookmarks: true;
+    };
+  }>;
   activeTab: "info" | "settings";
 }
 
@@ -21,12 +25,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const bookmarked = trpc.useQuery([
-    "bookmarked.band",
-    { id: router.query.id as string },
-  ]);
-  const bookmarkCreate = trpc.useMutation(["band.updateOneBand"]);
-  const bookmarkDestroy = trpc.useMutation(["band.updateOneBand"]);
+  const update = trpc.useMutation(["band.updateOneBand"]);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -54,32 +53,19 @@ const BandLayout: React.FC<BandLayoutProps> = ({
         <Typography variant="h5">{setLocale(data.name, router)}</Typography>
       }
       bookmarkToggleButtonProps={{
-        defaultValue: !!bookmarked.data,
-        loading: bookmarkCreate.isLoading || bookmarkDestroy.isLoading,
-        onEnabled: (setValue) =>
-          bookmarkDestroy.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  disconnect: { id: session.data?.user?.id },
+        value: !!data.bookmarks.length,
+        disabled: update.isLoading,
+        onClick: (value) =>
+          update.mutate({
+            where: { id: router.query.id as string },
+            data: {
+              bookmarks: {
+                [value ? "disconnect" : "connect"]: {
+                  id: session.data?.user?.id,
                 },
               },
             },
-            { onSuccess: () => setValue(false) }
-          ),
-        onDisabled: (setValue) =>
-          bookmarkCreate.mutate(
-            {
-              where: { id: router.query.id as string },
-              data: {
-                bookmarks: {
-                  connect: { id: session.data?.user?.id },
-                },
-              },
-            },
-            { onSuccess: () => setValue(true) }
-          ),
+          }),
       }}
     >
       {children}

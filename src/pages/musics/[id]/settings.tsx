@@ -19,10 +19,12 @@ import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useQueryClient } from "react-query";
+import { useSession } from "next-auth/react";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const session = useSession();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.useQuery([
@@ -35,6 +37,7 @@ const SettingsMusic: NextPage = () => {
         artists: true,
         composers: true,
         lyrists: true,
+        bookmarks: { where: { id: session.data?.user?.id } },
       },
     },
   ]);

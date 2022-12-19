@@ -27,6 +27,7 @@ const Band: NextPage = () => {
             band: true,
             composers: true,
             lyrists: true,
+            bookmarks: true,
           },
         },
       },
@@ -37,10 +38,11 @@ const Band: NextPage = () => {
     include: {
       artists: true;
       musics: { include: { band: true; composers: true; lyrists: true } };
+      bookmarks: true;
     };
   }>;
   return (
-    <BandLayout data={data} activeTab="info">
+    <BandLayout data={bandData} activeTab="info">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>

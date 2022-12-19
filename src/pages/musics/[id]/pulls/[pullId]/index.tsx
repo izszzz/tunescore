@@ -12,6 +12,7 @@ import PullLayout, {
 import { trpc } from "../../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
@@ -19,6 +20,7 @@ const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
 const Pull: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const session = useSession();
   const music = trpc.useQuery(
     [
       "music.findUniqueMusic",
@@ -30,6 +32,7 @@ const Pull: NextPage = () => {
           artists: true,
           composers: true,
           lyrists: true,
+          bookmarks: { where: { id: session.data?.user?.id } },
         },
       },
     ],

@@ -6,10 +6,12 @@ import MusicLayout, {
   MusicLayoutProps,
 } from "../../../../../components/layouts/show/music";
 import { trpc } from "../../../../../utils/trpc";
+import { useSession } from "next-auth/react";
 
 const Issue: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const session = useSession();
   const music = trpc.useQuery(
     [
       "music.findUniqueMusic",
@@ -21,6 +23,7 @@ const Issue: NextPage = () => {
           artists: true,
           composers: true,
           lyrists: true,
+          bookmarks: { where: { id: session.data?.user?.id } },
         },
       },
     ],

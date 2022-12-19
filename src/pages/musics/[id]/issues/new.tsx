@@ -36,6 +36,7 @@ const Issues: NextPage = () => {
           artists: true,
           composers: true,
           lyrists: true,
+          bookmarks: { where: { id: session.data?.user?.id } },
         },
       },
     ],

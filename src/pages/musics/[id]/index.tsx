@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import YouTube from "react-youtube";
-import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,6 +17,7 @@ import ItunesButton from "../../../components/elements/button/itunes";
 import setLocale from "../../../utils/setLocale";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
+import ScoreButtonGroup from "../../../components/elements/button/group/score";
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
@@ -48,30 +48,24 @@ const Music: NextPage = () => {
           opts={{ width: "100%", height: "100%" }}
         />
       )}
-      <Button
-        variant="contained"
-        onClick={() =>
-          router.push({
+      <ScoreButtonGroup
+        watchButton={{
+          route: {
             pathname: "/scores/[id]",
             query: { id: router.query.id as string },
-          })
-        }
-        fullWidth
-      >
-        Watch Score
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() =>
-          router.push({
+          },
+        }}
+        editButton={{
+          route: {
             pathname: "/scores/[id]/edit",
             query: { id: router.query.id as string },
-          })
-        }
-        fullWidth
-      >
-        Edit Score
-      </Button>
+          },
+          hidden: !(
+            data.type === "ORIGINAL" &&
+            musicData.user?.id === session.data?.user?.id
+          ),
+        }}
+      />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

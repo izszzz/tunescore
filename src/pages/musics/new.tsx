@@ -16,9 +16,11 @@ import Box from "@mui/system/Box";
 import Script from "next/script";
 import { importer } from "@coderline/alphatab";
 import AlphaTexExporter from "../../utils/AlphaTexExporter";
+import { useSession } from "next-auth/react";
 
 const NewMusic: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
   const formContext = useForm<Music>();
   const { enqueueSnackbar } = useSnackbar();
   const create = trpc.useMutation(["music.createOneMusic"], {
@@ -28,7 +30,13 @@ const NewMusic: NextPage = () => {
     },
   });
   const handleSubmit = (data: Music) => {
-    create.mutate({ data: { ...data, price: Number(data.price) } });
+    create.mutate({
+      data: {
+        ...data,
+        price: Number(data.price),
+        user: { connect: { id: session.data?.user?.id } },
+      },
+    });
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

@@ -2,11 +2,8 @@ import React from "react";
 import { PullStatus, Type, Vote } from "@prisma/client";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
 import PullStatusIcon from "../../icon/pull/status";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import VoteCard from "../../card/Vote";
 
 interface PullButtonProps {
   type: Type;
@@ -76,22 +73,7 @@ const PullButton = ({
           </ButtonGroup>
         );
       case "VOTE":
-        console.log((vote.good + vote.bad / vote.good) * 100);
-        return (
-          <Box display="flex" alignItems="center">
-            {vote && (
-              <>
-                <ThumbUpIcon />
-                <Box sx={{ width: "100%", mr: 1 }}>
-                  <LinearProgress
-                    value={(vote.good + vote.bad / vote.good) * 100}
-                  />
-                </Box>
-                <ThumbDownIcon />
-              </>
-            )}
-          </Box>
-        );
+        return vote && <VoteCard data={vote} />;
       case "MERGED":
         return <>revert</>;
       case "CLOSED":

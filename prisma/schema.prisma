@@ -79,6 +79,9 @@ model User {
 
   notifications Notification[]
 
+  vote Vote[] @relation(fields:[voteIDs], references: [id])
+  voteIDs String[] @db.ObjectId
+
   followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
   followedByIDs String[] @db.ObjectId
 
@@ -247,6 +250,9 @@ model Vote{
 
   pull Pull @relation(fields: [pullId], references: [id])
   pullId String @db.ObjectId @unique
+
+  users User[] @relation(fields:[userIDs] , references: [id])
+  userIDs String[] @db.ObjectId
 }
 
 enum Visibility{

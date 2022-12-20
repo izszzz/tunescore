@@ -9,12 +9,11 @@ import { Prisma, PullStatus } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import LoadingButton from "@mui/lab/LoadingButton";
 import ShowLayout, { ShowLayoutProps } from "./";
 import { trpc } from "../../../utils/trpc";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import PullButton from "../../elements/button/group/pull";
+import ScoreButtonGroup from "../../elements/button/group/score";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{
@@ -165,38 +164,29 @@ const PullLayout: React.FC<PullLayoutProps> = ({
               />
             )}
           </Box>
-          <ButtonGroup fullWidth>
-            <LoadingButton
-              loading={update.isLoading}
-              variant="outlined"
-              onClick={() =>
-                router.push({
-                  pathname: "/musics/[id]/pulls/[pullId]/score",
-                  query: {
-                    id: router.query.id as string,
-                    pullId: router.query.pullId as string,
-                  },
-                })
-              }
-            >
-              Watch Score
-            </LoadingButton>
-            <LoadingButton
-              loading={update.isLoading}
-              variant="outlined"
-              onClick={() =>
-                router.push({
-                  pathname: "/musics/[id]/pulls/[pullId]/score/edit",
-                  query: {
-                    id: router.query.id as string,
-                    pullId: router.query.pullId as string,
-                  },
-                })
-              }
-            >
-              Edit Score
-            </LoadingButton>
-          </ButtonGroup>
+          <ScoreButtonGroup
+            loading={update.isLoading}
+            watchButton={{
+              route: {
+                pathname: "/musics/[id]/pulls/[pullId]/score",
+                query: {
+                  id: router.query.id as string,
+                  pullId: router.query.pullId as string,
+                },
+              },
+              hidden: false,
+            }}
+            editButton={{
+              route: {
+                pathname: "/musics/[id]/pulls/[pullId]/score/edit",
+                query: {
+                  id: router.query.id as string,
+                  pullId: router.query.pullId as string,
+                },
+              },
+              hidden: false,
+            }}
+          />
         </>
       }
     >

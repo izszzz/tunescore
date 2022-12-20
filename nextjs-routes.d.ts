@@ -8,8 +8,8 @@ declare module "nextjs-routes" {
     | { pathname: "/albums/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/albums"; query?: Query | undefined }
     | { pathname: "/albums/new"; query?: Query | undefined }
+    | { pathname: "/api/agenda"; query?: Query | undefined }
     | { pathname: "/api/auth/[...nextauth]"; query: Query<{ "nextauth": string[] }> }
-    | { pathname: "/api/examples"; query?: Query | undefined }
     | { pathname: "/api/restricted"; query?: Query | undefined }
     | { pathname: "/api/trpc/[trpc]"; query: Query<{ "trpc": string }> }
     | { pathname: "/artists/[id]"; query: Query<{ "id": string }> }

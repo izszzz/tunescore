@@ -59,7 +59,18 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       );
     },
   });
-  const create = trpc.useMutation("vote.createOneVote");
+  const create = trpc.useMutation("vote.createOneVote", {
+    onSuccess: (successData) => {
+      fetch("/api/agenda", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({ voteId: successData.id, pullId: data.id }),
+      });
+    },
+  });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -97,7 +108,10 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   const handleVote = () => {
     handleUpdateStatus("VOTE");
     create.mutate({
-      data: { end: addWeeks(Date.now(), 1), pull: { connect: { id: pullId } } },
+      data: {
+        end: addWeeks(Date.now(), 1),
+        pull: { connect: { id: pullId } },
+      },
     });
   };
   const handleOpen = () => handleUpdateStatus("OPEN");

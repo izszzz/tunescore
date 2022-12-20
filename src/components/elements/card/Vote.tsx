@@ -4,17 +4,19 @@ import Box from "@mui/material/Box";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import LinearProgress from "@mui/material/LinearProgress";
-import { Vote } from "@prisma/client";
+import { Pull, Vote } from "@prisma/client";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 interface VoteCardProps {
+  pull: Pull;
   data: Vote;
   onGood: () => void;
   onBad: () => void;
 }
-const VoteCard = ({ data }: VoteCardProps) => {
+const VoteCard = ({ pull, data, onGood, onBad }: VoteCardProps) => {
   const [time, setTime] = useState("");
   useEffect(() => {
     const intervalID = window.setInterval(() => {
@@ -34,9 +36,12 @@ const VoteCard = ({ data }: VoteCardProps) => {
   return (
     <Card variant="outlined">
       <CardContent>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          {pull.title}
+        </Typography>
         <Box>{time}</Box>
         <Box display="flex" alignItems="center">
-          <IconButton>
+          <IconButton onClick={onGood}>
             <ThumbUpIcon />
           </IconButton>
           <Box sx={{ width: "100%", mr: 1 }}>
@@ -45,7 +50,7 @@ const VoteCard = ({ data }: VoteCardProps) => {
               value={data.good ? (data.good + data.bad / data.good) * 100 : 50}
             />
           </Box>
-          <IconButton>
+          <IconButton onClick={onBad}>
             <ThumbDownIcon />
           </IconButton>
         </Box>

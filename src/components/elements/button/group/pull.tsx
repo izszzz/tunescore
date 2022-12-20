@@ -3,7 +3,7 @@ import { PullStatus, Type, Vote } from "@prisma/client";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import PullStatusIcon from "../../icon/pull/status";
-import VoteCard from "../../card/Vote";
+import VoteCard from "../../card/vote";
 
 interface PullButtonProps {
   type: Type;

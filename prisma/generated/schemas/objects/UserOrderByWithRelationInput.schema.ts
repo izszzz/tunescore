@@ -6,6 +6,7 @@ import { MusicOrderByRelationAggregateInputObjectSchema } from './MusicOrderByRe
 import { IssueOrderByRelationAggregateInputObjectSchema } from './IssueOrderByRelationAggregateInput.schema';
 import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRelationAggregateInput.schema';
 import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
+import { VoteOrderByRelationAggregateInputObjectSchema } from './VoteOrderByRelationAggregateInput.schema';
 import { UserOrderByRelationAggregateInputObjectSchema } from './UserOrderByRelationAggregateInput.schema';
 import { ArtistOrderByRelationAggregateInputObjectSchema } from './ArtistOrderByRelationAggregateInput.schema';
 import { BandOrderByRelationAggregateInputObjectSchema } from './BandOrderByRelationAggregateInput.schema';
@@ -38,6 +39,10 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
     notifications: z
       .lazy(() => NotificationOrderByRelationAggregateInputObjectSchema)
       .optional(),
+    vote: z
+      .lazy(() => VoteOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    voteIDs: z.lazy(() => SortOrderSchema).optional(),
     followedBy: z
       .lazy(() => UserOrderByRelationAggregateInputObjectSchema)
       .optional(),

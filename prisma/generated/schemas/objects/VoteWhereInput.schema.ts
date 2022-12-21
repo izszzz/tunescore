@@ -4,6 +4,8 @@ import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { IntFilterObjectSchema } from './IntFilter.schema';
 import { PullRelationFilterObjectSchema } from './PullRelationFilter.schema';
 import { PullWhereInputObjectSchema } from './PullWhereInput.schema';
+import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
+import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -45,6 +47,8 @@ const Schema: z.ZodType<Prisma.VoteWhereInput> = z
     pullId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
+    users: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
+    userIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();
 

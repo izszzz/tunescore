@@ -5,6 +5,7 @@ import { MusicFindManySchema } from '../findManyMusic.schema';
 import { IssueFindManySchema } from '../findManyIssue.schema';
 import { PullFindManySchema } from '../findManyPull.schema';
 import { NotificationFindManySchema } from '../findManyNotification.schema';
+import { VoteFindManySchema } from '../findManyVote.schema';
 import { UserFindManySchema } from '../findManyUser.schema';
 import { ArtistFindManySchema } from '../findManyArtist.schema';
 import { BandFindManySchema } from '../findManyBand.schema';
@@ -31,6 +32,7 @@ const Schema: z.ZodType<Prisma.UserInclude> = z
     notifications: z
       .union([z.boolean(), z.lazy(() => NotificationFindManySchema)])
       .optional(),
+    vote: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
     followedBy: z
       .union([z.boolean(), z.lazy(() => UserFindManySchema)])
       .optional(),

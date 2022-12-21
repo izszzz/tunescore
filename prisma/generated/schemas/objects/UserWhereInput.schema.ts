@@ -8,8 +8,9 @@ import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.s
 import { IssueListRelationFilterObjectSchema } from './IssueListRelationFilter.schema';
 import { PullListRelationFilterObjectSchema } from './PullListRelationFilter.schema';
 import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
-import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
+import { VoteListRelationFilterObjectSchema } from './VoteListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
+import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
 import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter.schema';
 import { BandListRelationFilterObjectSchema } from './BandListRelationFilter.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
@@ -61,6 +62,8 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
     notifications: z
       .lazy(() => NotificationListRelationFilterObjectSchema)
       .optional(),
+    vote: z.lazy(() => VoteListRelationFilterObjectSchema).optional(),
+    voteIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
     followedBy: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
     followedByIDs: z
       .lazy(() => StringNullableListFilterObjectSchema)

@@ -10,6 +10,7 @@ const Schema: z.ZodType<Prisma.VoteCountAggregateInputType> = z
     good: z.literal(true).optional(),
     bad: z.literal(true).optional(),
     pullId: z.literal(true).optional(),
+    userIDs: z.literal(true).optional(),
     _all: z.literal(true).optional(),
   })
   .strict();

@@ -9,6 +9,7 @@ const Schema: z.ZodType<Prisma.UserCountAggregateInputType> = z
     email: z.literal(true).optional(),
     emailVerified: z.literal(true).optional(),
     image: z.literal(true).optional(),
+    voteIDs: z.literal(true).optional(),
     followedByIDs: z.literal(true).optional(),
     followingIDs: z.literal(true).optional(),
     bookmarkMusicIDs: z.literal(true).optional(),

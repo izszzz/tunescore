@@ -137,9 +137,7 @@ MERGED MERGED
   
 
   StreamingLink {
-    String youtube  "nullable"
-    String spotify  "nullable"
-    String itunes  "nullable"
+
     }
   
 
@@ -148,8 +146,27 @@ MERGED MERGED
     String wikipedia  "nullable"
     }
   
+
+  LinkImage {
+    String id  "nullable"
+    String url  "nullable"
+    }
+  
+
+  Image {
+
+    }
+  
+
+  ImageSize {
+    String small  
+    String medium  
+    String large  
+    }
+  
     Account o{--|| User : "user"
     Session o{--|| User : "user"
+    User o{--}o Vote : "vote"
     User o{--}o User : "followedBy"
     User o{--}o User : "following"
     User o{--}o Music : "bookmarkMusics"
@@ -192,6 +209,12 @@ MERGED MERGED
     Pull o{--|| Music : "music"
     Pull o{--|| User : "user"
     Vote o|--|| Pull : "pull"
+    Vote o{--}o User : "users"
     Link o|--|o StreamingLink : "streaming"
     Link o|--|o AccountLink : "account"
+    StreamingLink o|--|o LinkImage : "youtube"
+    StreamingLink o|--|o LinkImage : "spotify"
+    StreamingLink o|--|o LinkImage : "itunes"
+    LinkImage ||--|| Image : "image"
+    Image ||--|| ImageSize : "size"
 ```

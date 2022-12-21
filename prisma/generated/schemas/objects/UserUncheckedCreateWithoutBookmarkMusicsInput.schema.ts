@@ -5,6 +5,8 @@ import { MusicUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './Mu
 import { IssueUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './IssueUncheckedCreateNestedManyWithoutUserInput.schema';
 import { PullUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PullUncheckedCreateNestedManyWithoutUserInput.schema';
 import { NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutUserInput.schema';
+import { VoteUncheckedCreateNestedManyWithoutUsersInputObjectSchema } from './VoteUncheckedCreateNestedManyWithoutUsersInput.schema';
+import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
 import { UserUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowingInput.schema';
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowedByInput.schema';
@@ -51,6 +53,15 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutBookmarkMusicsInput> =
           () =>
             NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema,
         )
+        .optional(),
+      vote: z
+        .lazy(() => VoteUncheckedCreateNestedManyWithoutUsersInputObjectSchema)
+        .optional(),
+      voteIDs: z
+        .union([
+          z.lazy(() => UserCreatevoteIDsInputObjectSchema),
+          z.string().array(),
+        ])
         .optional(),
       followedBy: z
         .lazy(

@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { LinkImageNullableCompositeFilterObjectSchema } from './LinkImageNullableCompositeFilter.schema';
+import { LinkImageObjectEqualityInputObjectSchema } from './LinkImageObjectEqualityInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -22,15 +23,24 @@ const Schema: z.ZodType<Prisma.StreamingLinkWhereInput> = z
       ])
       .optional(),
     youtube: z
-      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .union([
+        z.lazy(() => LinkImageNullableCompositeFilterObjectSchema),
+        z.lazy(() => LinkImageObjectEqualityInputObjectSchema),
+      ])
       .optional()
       .nullable(),
     spotify: z
-      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .union([
+        z.lazy(() => LinkImageNullableCompositeFilterObjectSchema),
+        z.lazy(() => LinkImageObjectEqualityInputObjectSchema),
+      ])
       .optional()
       .nullable(),
     itunes: z
-      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .union([
+        z.lazy(() => LinkImageNullableCompositeFilterObjectSchema),
+        z.lazy(() => LinkImageObjectEqualityInputObjectSchema),
+      ])
       .optional()
       .nullable(),
   })

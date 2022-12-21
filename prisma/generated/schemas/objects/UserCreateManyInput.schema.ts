@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
 import { UserCreatebookmarkMusicIDsInputObjectSchema } from './UserCreatebookmarkMusicIDsInput.schema';
@@ -15,6 +16,12 @@ const Schema: z.ZodType<Prisma.UserCreateManyInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    voteIDs: z
+      .union([
+        z.lazy(() => UserCreatevoteIDsInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
     followedByIDs: z
       .union([
         z.lazy(() => UserCreatefollowedByIDsInputObjectSchema),

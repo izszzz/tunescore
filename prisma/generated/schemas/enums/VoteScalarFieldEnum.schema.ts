@@ -7,4 +7,5 @@ export const VoteScalarFieldEnumSchema = z.enum([
   'good',
   'bad',
   'pullId',
+  'userIDs',
 ]);

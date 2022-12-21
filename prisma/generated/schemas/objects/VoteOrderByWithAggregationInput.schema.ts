@@ -16,6 +16,7 @@ const Schema: z.ZodType<Prisma.VoteOrderByWithAggregationInput> = z
     good: z.lazy(() => SortOrderSchema).optional(),
     bad: z.lazy(() => SortOrderSchema).optional(),
     pullId: z.lazy(() => SortOrderSchema).optional(),
+    userIDs: z.lazy(() => SortOrderSchema).optional(),
     _count: z.lazy(() => VoteCountOrderByAggregateInputObjectSchema).optional(),
     _avg: z.lazy(() => VoteAvgOrderByAggregateInputObjectSchema).optional(),
     _max: z.lazy(() => VoteMaxOrderByAggregateInputObjectSchema).optional(),

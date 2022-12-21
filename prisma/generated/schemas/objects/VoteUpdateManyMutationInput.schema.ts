@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { IntFieldUpdateOperationsInputObjectSchema } from './IntFieldUpdateOperationsInput.schema';
+import { VoteUpdateuserIDsInputObjectSchema } from './VoteUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -28,6 +29,12 @@ const Schema: z.ZodType<Prisma.VoteUpdateManyMutationInput> = z
       .union([
         z.number(),
         z.lazy(() => IntFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
+    userIDs: z
+      .union([
+        z.lazy(() => VoteUpdateuserIDsInputObjectSchema),
+        z.string().array(),
       ])
       .optional(),
   })

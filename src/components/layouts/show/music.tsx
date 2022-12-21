@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import Link from "next/link";
 import { Locales, Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
@@ -16,6 +17,7 @@ import { DefaultTabsProps } from "../../elements/tabs/default";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/setLocale";
 import musicOwner from "../../../helpers/musicOwner";
+import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -88,6 +90,20 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
           <Box ml={3}>
             <Chip label={data?.type} size="small" />
           </Box>
+          {data.link?.streaming && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              <Image
+                style={{ borderRadius: 5 }}
+                height="80"
+                width="80"
+                alt={setLocale(data.title, router) || ""}
+                src={
+                  selectSuitableStreamingImage(data.link.streaming)?.image?.size
+                    ?.medium || ""
+                }
+              />
+            </Box>
+          )}
         </>
       }
       bookmarkToggleButtonProps={{

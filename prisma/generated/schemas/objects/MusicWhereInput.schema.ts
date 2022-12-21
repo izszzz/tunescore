@@ -8,8 +8,8 @@ import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema'
 import { EnumVisibilityFilterObjectSchema } from './EnumVisibilityFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
 import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
-import { LinkNullableCompositeFilterObjectSchema } from './LinkNullableCompositeFilter.schema';
-import { LinkObjectEqualityInputObjectSchema } from './LinkObjectEqualityInput.schema';
+import { LinkListNullableCompositeFilterObjectSchema } from './LinkListNullableCompositeFilter.schema';
+import { LinkListObjectEqualityInputObjectSchema } from './LinkListObjectEqualityInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 import { BandRelationFilterObjectSchema } from './BandRelationFilter.schema';
@@ -66,18 +66,14 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
         z.lazy(() => VisibilitySchema),
       ])
       .optional(),
-    image: z
-      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
-      .optional()
-      .nullable(),
     price: z
       .union([z.lazy(() => IntNullableFilterObjectSchema), z.number()])
       .optional()
       .nullable(),
     link: z
       .union([
-        z.lazy(() => LinkNullableCompositeFilterObjectSchema),
-        z.lazy(() => LinkObjectEqualityInputObjectSchema),
+        z.lazy(() => LinkListNullableCompositeFilterObjectSchema),
+        z.lazy(() => LinkListObjectEqualityInputObjectSchema),
       ])
       .optional()
       .nullable(),

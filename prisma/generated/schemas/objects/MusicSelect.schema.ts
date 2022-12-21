@@ -17,7 +17,6 @@ const Schema: z.ZodType<Prisma.MusicSelect> = z
     title: z.boolean().optional(),
     score: z.boolean().optional(),
     visibility: z.boolean().optional(),
-    image: z.boolean().optional(),
     price: z.boolean().optional(),
     link: z.boolean().optional(),
     user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),

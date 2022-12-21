@@ -3,8 +3,8 @@ import { TypeSchema } from '../enums/Type.schema';
 import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
-import { LinkNullableCreateEnvelopeInputObjectSchema } from './LinkNullableCreateEnvelopeInput.schema';
-import { LinkCreateInputObjectSchema } from './LinkCreateInput.schema';
+import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
+import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { AlbumUncheckedCreateNestedManyWithoutMusicsInputObjectSchema } from './AlbumUncheckedCreateNestedManyWithoutMusicsInput.schema';
 import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput.schema';
 import { ArtistUncheckedCreateNestedManyWithoutComposedMusicsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutComposedMusicsInput.schema';
@@ -30,12 +30,11 @@ const Schema: z.ZodType<Prisma.MusicUncheckedCreateWithoutUserInput> = z
     ]),
     score: z.string().optional().nullable(),
     visibility: z.lazy(() => VisibilitySchema),
-    image: z.string().optional().nullable(),
     price: z.number().optional().nullable(),
     link: z
       .union([
-        z.lazy(() => LinkNullableCreateEnvelopeInputObjectSchema),
-        z.lazy(() => LinkCreateInputObjectSchema),
+        z.lazy(() => LinkListNullableCreateEnvelopeInputObjectSchema),
+        z.lazy(() => LinkListCreateInputObjectSchema),
       ])
       .optional()
       .nullable(),

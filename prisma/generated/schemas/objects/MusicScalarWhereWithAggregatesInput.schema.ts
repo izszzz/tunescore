@@ -50,13 +50,6 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereWithAggregatesInput> = z
         z.lazy(() => VisibilitySchema),
       ])
       .optional(),
-    image: z
-      .union([
-        z.lazy(() => StringNullableWithAggregatesFilterObjectSchema),
-        z.string(),
-      ])
-      .optional()
-      .nullable(),
     price: z
       .union([
         z.lazy(() => IntNullableWithAggregatesFilterObjectSchema),

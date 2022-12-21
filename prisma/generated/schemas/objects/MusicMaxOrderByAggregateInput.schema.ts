@@ -9,7 +9,6 @@ const Schema: z.ZodType<Prisma.MusicMaxOrderByAggregateInput> = z
     type: z.lazy(() => SortOrderSchema).optional(),
     score: z.lazy(() => SortOrderSchema).optional(),
     visibility: z.lazy(() => SortOrderSchema).optional(),
-    image: z.lazy(() => SortOrderSchema).optional(),
     price: z.lazy(() => SortOrderSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
     bandId: z.lazy(() => SortOrderSchema).optional(),

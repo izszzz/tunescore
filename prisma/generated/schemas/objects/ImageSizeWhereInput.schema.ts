@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { StringFilterObjectSchema } from './StringFilter.schema';
+import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -22,14 +22,17 @@ const Schema: z.ZodType<Prisma.ImageSizeWhereInput> = z
       ])
       .optional(),
     small: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     medium: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     large: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
   })
   .strict();
 

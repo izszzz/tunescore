@@ -1,13 +1,13 @@
 import { z } from 'zod';
-import { LinkImageOrderByInputObjectSchema } from './LinkImageOrderByInput.schema';
+import { LinkOrderByInputObjectSchema } from './LinkOrderByInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.StreamingLinkOrderByInput> = z
   .object({
-    youtube: z.lazy(() => LinkImageOrderByInputObjectSchema).optional(),
-    spotify: z.lazy(() => LinkImageOrderByInputObjectSchema).optional(),
-    itunes: z.lazy(() => LinkImageOrderByInputObjectSchema).optional(),
+    youtube: z.lazy(() => LinkOrderByInputObjectSchema).optional(),
+    spotify: z.lazy(() => LinkOrderByInputObjectSchema).optional(),
+    itunes: z.lazy(() => LinkOrderByInputObjectSchema).optional(),
   })
   .strict();
 

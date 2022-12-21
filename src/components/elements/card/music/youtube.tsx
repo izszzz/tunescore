@@ -10,20 +10,17 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 
-interface MusicYoutubeCardProps {
-  data:
+interface MusicYoutubeCardProps<T> {
+  data: T;
+  size: "small" | "medium" | "large";
+  onClick: (value: T) => void;
+}
+function MusicYoutubeCard<
+  T extends
     | gapi.client.youtube.SearchResult
     | gapi.client.youtube.Video
-    | undefined;
-  size: "small" | "medium" | "large";
-  onClick: (
-    value:
-      | gapi.client.youtube.SearchResult
-      | gapi.client.youtube.Video
-      | undefined
-  ) => void;
-}
-const MusicYoutubeCard = ({ data, size, onClick }: MusicYoutubeCardProps) => {
+    | undefined
+>({ data, size, onClick }: MusicYoutubeCardProps<T>) {
   if (size === "small")
     return (
       <Tooltip
@@ -83,6 +80,6 @@ const MusicYoutubeCard = ({ data, size, onClick }: MusicYoutubeCardProps) => {
       </Card>
     );
   return <></>;
-};
+}
 
 export default MusicYoutubeCard;

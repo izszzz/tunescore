@@ -5,7 +5,10 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.ImageObjectEqualityInput> = z
   .object({
-    size: z.lazy(() => ImageSizeObjectEqualityInputObjectSchema),
+    size: z
+      .lazy(() => ImageSizeObjectEqualityInputObjectSchema)
+      .optional()
+      .nullable(),
   })
   .strict();
 

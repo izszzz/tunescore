@@ -34,8 +34,8 @@ const MusicItunesSelectForm = ({
     });
   };
   useEffect(() => {
-    if (streamingLink?.itunes) {
-      const id = new URL(streamingLink.itunes).searchParams.get("i");
+    if (streamingLink?.itunes?.id) {
+      const id = new URL(streamingLink.itunes.id).searchParams.get("i");
       if (id) lookupItunesMusic({ id }).then((res) => setValue(res.results[0]));
     } else
       searchItunesMusics({ term, offset: 0, limit: 12 }).then((res) => {

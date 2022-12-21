@@ -6,3 +6,5 @@ npx prisma db seed
 npx prisma migrate reset
 npx prisma studio
 ```
+
+ER

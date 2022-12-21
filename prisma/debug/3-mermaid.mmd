@@ -1,4 +1,3 @@
-```mermaid
 erDiagram
 
         Visibility {
@@ -131,7 +130,7 @@ MERGED MERGED
     }
   
 
-  Link {
+  LinkList {
 
     }
   
@@ -147,9 +146,8 @@ MERGED MERGED
     }
   
 
-  LinkImage {
+  Link {
     String id  "nullable"
-    String url  "nullable"
     }
   
 
@@ -159,9 +157,9 @@ MERGED MERGED
   
 
   ImageSize {
-    String small  
-    String medium  
-    String large  
+    String small  "nullable"
+    String medium  "nullable"
+    String large  "nullable"
     }
   
     Account o{--|| User : "user"
@@ -177,7 +175,7 @@ MERGED MERGED
     Music o|--|| Type : "enum:type"
     Music o|--|| Locales : "title"
     Music o|--|| Visibility : "enum:visibility"
-    Music o|--|o Link : "link"
+    Music o|--|o LinkList : "link"
     Music o{--|o User : "user"
     Music o{--|o Band : "band"
     Music o{--}o Album : "albums"
@@ -191,7 +189,7 @@ MERGED MERGED
     Album o{--}o Artist : "artists"
     Album o{--}o User : "bookmarks"
     Artist o|--|| Locales : "name"
-    Artist o|--|o Link : "link"
+    Artist o|--|o LinkList : "link"
     Artist o{--}o Music : "writtenMusics"
     Artist o{--}o Music : "composedMusics"
     Artist o{--}o Music : "musics"
@@ -199,7 +197,7 @@ MERGED MERGED
     Artist o{--}o Album : "albums"
     Artist o{--}o User : "bookmarks"
     Band o|--|| Locales : "name"
-    Band o|--|o Link : "link"
+    Band o|--|o LinkList : "link"
     Band o{--}o Artist : "artists"
     Band o{--}o User : "bookmarks"
     Issue o{--|| Music : "music"
@@ -210,11 +208,10 @@ MERGED MERGED
     Pull o{--|| User : "user"
     Vote o|--|| Pull : "pull"
     Vote o{--}o User : "users"
-    Link o|--|o StreamingLink : "streaming"
-    Link o|--|o AccountLink : "account"
-    StreamingLink o|--|o LinkImage : "youtube"
-    StreamingLink o|--|o LinkImage : "spotify"
-    StreamingLink o|--|o LinkImage : "itunes"
-    LinkImage ||--|| Image : "image"
-    Image ||--|| ImageSize : "size"
-```
+    LinkList o|--|o StreamingLink : "streaming"
+    LinkList o|--|o AccountLink : "account"
+    StreamingLink o|--|o Link : "youtube"
+    StreamingLink o|--|o Link : "spotify"
+    StreamingLink o|--|o Link : "itunes"
+    Link o|--|o Image : "image"
+    Image o|--|o ImageSize : "size"

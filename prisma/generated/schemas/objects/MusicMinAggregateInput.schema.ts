@@ -8,7 +8,6 @@ const Schema: z.ZodType<Prisma.MusicMinAggregateInputType> = z
     type: z.literal(true).optional(),
     score: z.literal(true).optional(),
     visibility: z.literal(true).optional(),
-    image: z.literal(true).optional(),
     price: z.literal(true).optional(),
     userId: z.literal(true).optional(),
     bandId: z.literal(true).optional(),

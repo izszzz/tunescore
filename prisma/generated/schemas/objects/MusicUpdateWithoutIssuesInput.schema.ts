@@ -7,8 +7,8 @@ import { NullableStringFieldUpdateOperationsInputObjectSchema } from './Nullable
 import { VisibilitySchema } from '../enums/Visibility.schema';
 import { EnumVisibilityFieldUpdateOperationsInputObjectSchema } from './EnumVisibilityFieldUpdateOperationsInput.schema';
 import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
-import { LinkNullableUpdateEnvelopeInputObjectSchema } from './LinkNullableUpdateEnvelopeInput.schema';
-import { LinkCreateInputObjectSchema } from './LinkCreateInput.schema';
+import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
+import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { UserUpdateOneWithoutMusicsNestedInputObjectSchema } from './UserUpdateOneWithoutMusicsNestedInput.schema';
 import { BandUpdateOneWithoutMusicsNestedInputObjectSchema } from './BandUpdateOneWithoutMusicsNestedInput.schema';
 import { AlbumUpdateManyWithoutMusicsNestedInputObjectSchema } from './AlbumUpdateManyWithoutMusicsNestedInput.schema';
@@ -52,13 +52,6 @@ const Schema: z.ZodType<Prisma.MusicUpdateWithoutIssuesInput> = z
         z.lazy(() => EnumVisibilityFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
-    image: z
-      .union([
-        z.string(),
-        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
-      ])
-      .optional()
-      .nullable(),
     price: z
       .union([
         z.number(),
@@ -68,8 +61,8 @@ const Schema: z.ZodType<Prisma.MusicUpdateWithoutIssuesInput> = z
       .nullable(),
     link: z
       .union([
-        z.lazy(() => LinkNullableUpdateEnvelopeInputObjectSchema),
-        z.lazy(() => LinkCreateInputObjectSchema),
+        z.lazy(() => LinkListNullableUpdateEnvelopeInputObjectSchema),
+        z.lazy(() => LinkListCreateInputObjectSchema),
       ])
       .optional()
       .nullable(),

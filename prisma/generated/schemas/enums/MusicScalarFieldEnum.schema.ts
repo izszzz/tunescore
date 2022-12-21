@@ -5,7 +5,6 @@ export const MusicScalarFieldEnumSchema = z.enum([
   'type',
   'score',
   'visibility',
-  'image',
   'price',
   'userId',
   'bandId',

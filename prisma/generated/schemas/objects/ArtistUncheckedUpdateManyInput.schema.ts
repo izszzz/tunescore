@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
-import { LinkNullableUpdateEnvelopeInputObjectSchema } from './LinkNullableUpdateEnvelopeInput.schema';
-import { LinkCreateInputObjectSchema } from './LinkCreateInput.schema';
+import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
+import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { ArtistUpdatewrittenMusicsIDsInputObjectSchema } from './ArtistUpdatewrittenMusicsIDsInput.schema';
 import { ArtistUpdatecomposedMusicsIDsInputObjectSchema } from './ArtistUpdatecomposedMusicsIDsInput.schema';
 import { ArtistUpdatemusicIDsInputObjectSchema } from './ArtistUpdatemusicIDsInput.schema';
@@ -22,8 +22,8 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateManyInput> = z
       .optional(),
     link: z
       .union([
-        z.lazy(() => LinkNullableUpdateEnvelopeInputObjectSchema),
-        z.lazy(() => LinkCreateInputObjectSchema),
+        z.lazy(() => LinkListNullableUpdateEnvelopeInputObjectSchema),
+        z.lazy(() => LinkListCreateInputObjectSchema),
       ])
       .optional()
       .nullable(),

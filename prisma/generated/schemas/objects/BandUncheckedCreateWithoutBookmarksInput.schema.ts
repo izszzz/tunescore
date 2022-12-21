@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
-import { LinkNullableCreateEnvelopeInputObjectSchema } from './LinkNullableCreateEnvelopeInput.schema';
-import { LinkCreateInputObjectSchema } from './LinkCreateInput.schema';
+import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
+import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { MusicUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './MusicUncheckedCreateNestedManyWithoutBandInput.schema';
 import { ArtistUncheckedCreateNestedManyWithoutBandsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutBandsInput.schema';
 import { BandCreateartistIDsInputObjectSchema } from './BandCreateartistIDsInput.schema';
@@ -20,8 +20,8 @@ const Schema: z.ZodType<Prisma.BandUncheckedCreateWithoutBookmarksInput> = z
     ]),
     link: z
       .union([
-        z.lazy(() => LinkNullableCreateEnvelopeInputObjectSchema),
-        z.lazy(() => LinkCreateInputObjectSchema),
+        z.lazy(() => LinkListNullableCreateEnvelopeInputObjectSchema),
+        z.lazy(() => LinkListCreateInputObjectSchema),
       ])
       .optional()
       .nullable(),

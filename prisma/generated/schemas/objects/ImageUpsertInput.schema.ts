@@ -4,11 +4,11 @@ import { ImageUpdateInputObjectSchema } from './ImageUpdateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.ImageUpdateEnvelopeInput> = z
+const Schema: z.ZodType<Prisma.ImageUpsertInput> = z
   .object({
-    set: z.lazy(() => ImageCreateInputObjectSchema).optional(),
-    update: z.lazy(() => ImageUpdateInputObjectSchema).optional(),
+    set: z.lazy(() => ImageCreateInputObjectSchema).nullable(),
+    update: z.lazy(() => ImageUpdateInputObjectSchema),
   })
   .strict();
 
-export const ImageUpdateEnvelopeInputObjectSchema = Schema;
+export const ImageUpsertInputObjectSchema = Schema;

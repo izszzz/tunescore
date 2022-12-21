@@ -1,9 +1,11 @@
 import React from "react";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Prisma } from "@prisma/client";
-import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import setLocale from "../../../../helpers/setLocale";
@@ -13,7 +15,7 @@ import ResourceIcon from "../../icon/resource";
 import musicOwner from "../../../../helpers/musicOwner";
 import BookmarkToggleButton from "../../button/toggle/bookmark";
 import { trpc } from "../../../../utils/trpc";
-import { useSession } from "next-auth/react";
+import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -69,6 +71,18 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           }
           secondary={<Owner data={data} />}
         />
+        {data.link?.streaming && (
+          <Image
+            width="60"
+            height="60"
+            alt={setLocale(data.title, router) || ""}
+            objectPosition="relative"
+            src={
+              selectSuitableStreamingImage(data.link.streaming)?.image?.size
+                ?.medium || ""
+            }
+          />
+        )}
       </ListItemButton>
     </ListItem>
   );

@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { StreamingLinkNullableCompositeFilterObjectSchema } from './StreamingLinkNullableCompositeFilter.schema';
-import { StreamingLinkObjectEqualityInputObjectSchema } from './StreamingLinkObjectEqualityInput.schema';
-import { AccountLinkNullableCompositeFilterObjectSchema } from './AccountLinkNullableCompositeFilter.schema';
-import { AccountLinkObjectEqualityInputObjectSchema } from './AccountLinkObjectEqualityInput.schema';
+import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { ImageNullableCompositeFilterObjectSchema } from './ImageNullableCompositeFilter.schema';
+import { ImageObjectEqualityInputObjectSchema } from './ImageObjectEqualityInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -24,17 +23,14 @@ const Schema: z.ZodType<Prisma.LinkWhereInput> = z
         z.lazy(() => LinkWhereInputObjectSchema).array(),
       ])
       .optional(),
-    streaming: z
-      .union([
-        z.lazy(() => StreamingLinkNullableCompositeFilterObjectSchema),
-        z.lazy(() => StreamingLinkObjectEqualityInputObjectSchema),
-      ])
+    id: z
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
       .optional()
       .nullable(),
-    account: z
+    image: z
       .union([
-        z.lazy(() => AccountLinkNullableCompositeFilterObjectSchema),
-        z.lazy(() => AccountLinkObjectEqualityInputObjectSchema),
+        z.lazy(() => ImageNullableCompositeFilterObjectSchema),
+        z.lazy(() => ImageObjectEqualityInputObjectSchema),
       ])
       .optional()
       .nullable(),

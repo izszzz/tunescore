@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { LocalesOrderByInputObjectSchema } from './LocalesOrderByInput.schema';
-import { LinkOrderByInputObjectSchema } from './LinkOrderByInput.schema';
+import { LinkListOrderByInputObjectSchema } from './LinkListOrderByInput.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './BandOrderByWithRelationInput.schema';
 import { AlbumOrderByRelationAggregateInputObjectSchema } from './AlbumOrderByRelationAggregateInput.schema';
@@ -19,9 +19,8 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
     title: z.lazy(() => LocalesOrderByInputObjectSchema).optional(),
     score: z.lazy(() => SortOrderSchema).optional(),
     visibility: z.lazy(() => SortOrderSchema).optional(),
-    image: z.lazy(() => SortOrderSchema).optional(),
     price: z.lazy(() => SortOrderSchema).optional(),
-    link: z.lazy(() => LinkOrderByInputObjectSchema).optional(),
+    link: z.lazy(() => LinkListOrderByInputObjectSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
     band: z.lazy(() => BandOrderByWithRelationInputObjectSchema).optional(),

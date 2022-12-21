@@ -1,20 +1,20 @@
 import { z } from 'zod';
-import { LinkImageObjectEqualityInputObjectSchema } from './LinkImageObjectEqualityInput.schema';
+import { LinkObjectEqualityInputObjectSchema } from './LinkObjectEqualityInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.StreamingLinkObjectEqualityInput> = z
   .object({
     youtube: z
-      .lazy(() => LinkImageObjectEqualityInputObjectSchema)
+      .lazy(() => LinkObjectEqualityInputObjectSchema)
       .optional()
       .nullable(),
     spotify: z
-      .lazy(() => LinkImageObjectEqualityInputObjectSchema)
+      .lazy(() => LinkObjectEqualityInputObjectSchema)
       .optional()
       .nullable(),
     itunes: z
-      .lazy(() => LinkImageObjectEqualityInputObjectSchema)
+      .lazy(() => LinkObjectEqualityInputObjectSchema)
       .optional()
       .nullable(),
   })

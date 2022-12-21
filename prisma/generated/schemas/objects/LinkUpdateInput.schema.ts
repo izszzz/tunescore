@@ -1,24 +1,23 @@
 import { z } from 'zod';
-import { StreamingLinkNullableUpdateEnvelopeInputObjectSchema } from './StreamingLinkNullableUpdateEnvelopeInput.schema';
-import { StreamingLinkCreateInputObjectSchema } from './StreamingLinkCreateInput.schema';
-import { AccountLinkNullableUpdateEnvelopeInputObjectSchema } from './AccountLinkNullableUpdateEnvelopeInput.schema';
-import { AccountLinkCreateInputObjectSchema } from './AccountLinkCreateInput.schema';
+import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
+import { ImageNullableUpdateEnvelopeInputObjectSchema } from './ImageNullableUpdateEnvelopeInput.schema';
+import { ImageCreateInputObjectSchema } from './ImageCreateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.LinkUpdateInput> = z
   .object({
-    streaming: z
+    id: z
       .union([
-        z.lazy(() => StreamingLinkNullableUpdateEnvelopeInputObjectSchema),
-        z.lazy(() => StreamingLinkCreateInputObjectSchema),
+        z.string(),
+        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional()
       .nullable(),
-    account: z
+    image: z
       .union([
-        z.lazy(() => AccountLinkNullableUpdateEnvelopeInputObjectSchema),
-        z.lazy(() => AccountLinkCreateInputObjectSchema),
+        z.lazy(() => ImageNullableUpdateEnvelopeInputObjectSchema),
+        z.lazy(() => ImageCreateInputObjectSchema),
       ])
       .optional()
       .nullable(),

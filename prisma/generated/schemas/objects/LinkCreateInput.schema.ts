@@ -1,17 +1,13 @@
 import { z } from 'zod';
-import { StreamingLinkCreateInputObjectSchema } from './StreamingLinkCreateInput.schema';
-import { AccountLinkCreateInputObjectSchema } from './AccountLinkCreateInput.schema';
+import { ImageCreateInputObjectSchema } from './ImageCreateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.LinkCreateInput> = z
   .object({
-    streaming: z
-      .lazy(() => StreamingLinkCreateInputObjectSchema)
-      .optional()
-      .nullable(),
-    account: z
-      .lazy(() => AccountLinkCreateInputObjectSchema)
+    id: z.string().optional().nullable(),
+    image: z
+      .lazy(() => ImageCreateInputObjectSchema)
       .optional()
       .nullable(),
   })

@@ -238,7 +238,16 @@ const SettingsMusic: NextPage = () => {
               link: {
                 streaming: {
                   ...data.link?.streaming,
-                  itunes: value?.trackViewUrl,
+                  itunes: {
+                    id: value?.trackViewUrl,
+                    image: {
+                      size: {
+                        small: value?.artworkUrl30,
+                        medium: value?.artworkUrl60,
+                        large: value?.artworkUrl100,
+                      },
+                    },
+                  },
                 },
               },
             },
@@ -259,13 +268,24 @@ const SettingsMusic: NextPage = () => {
         term={setLocale(data.title, router) || ""}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
+          value?.id &&
+          data.link &&
           update.mutate({
             where: { id },
             data: {
               link: {
                 streaming: {
-                  ...data.link?.streaming,
-                  youtube: value?.id?.videoId,
+                  ...data.link.streaming,
+                  youtube: {
+                    id: value.id.videoId,
+                    image: {
+                      size: {
+                        small: value.snippet?.thumbnails?.standard?.url,
+                        medium: value.snippet?.thumbnails?.medium?.url,
+                        large: value.snippet?.thumbnails?.high?.url,
+                      },
+                    },
+                  },
                 },
               },
             },

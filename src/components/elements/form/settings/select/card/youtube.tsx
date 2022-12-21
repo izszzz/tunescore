@@ -17,7 +17,9 @@ const MusicYoutubeSelectForm = ({
   onSelect,
   onRemove,
 }: MusicYoutubeSelectFormProps) => {
-  const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>();
+  const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>(
+    []
+  );
   const [value, setValue] = useState<gapi.client.youtube.Video>();
   const [loading, setLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(0);
@@ -29,9 +31,9 @@ const MusicYoutubeSelectForm = ({
 
   useEffect(() => {
     if (!loading)
-      if (streamingLink?.youtube)
+      if (streamingLink?.youtube?.id)
         gapi.client.youtube.videos
-          .list({ id: streamingLink?.youtube, part: "snippet" })
+          .list({ id: streamingLink?.youtube.id, part: "snippet" })
           .then((data) => data.result.items && setValue(data.result.items[0]));
       else
         gapi.client.youtube.search
@@ -44,7 +46,7 @@ const MusicYoutubeSelectForm = ({
             pageToken: current,
           })
           .then((data) => {
-            setOptions(data.result.items);
+            data.result.items && setOptions(data.result.items);
             setRowsPerPage(data.result.pageInfo?.resultsPerPage || 0);
             setCount(data.result.pageInfo?.totalResults || 0);
             setNext(data.result?.nextPageToken || "");
@@ -73,7 +75,7 @@ const MusicYoutubeSelectForm = ({
       <Script src="https://apis.google.com/js/api.js" onReady={handleLoad} />
       <CardSelectForm
         value={value}
-        options={options || []}
+        options={options}
         largeCard={(value) =>
           value && (
             <MusicYoutubeCard size="large" data={value} onClick={onRemove} />

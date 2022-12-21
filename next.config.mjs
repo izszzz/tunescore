@@ -1,6 +1,6 @@
-import {env} from "./src/env/server.mjs"
-import withRoutes from "nextjs-routes/config"
-import removeImports from "next-remove-imports"
+import { env } from "./src/env/server.mjs";
+import withRoutes from "nextjs-routes/config";
+import removeImports from "next-remove-imports";
 
 /**
  * Don't be scared of the generics here.
@@ -11,7 +11,7 @@ import removeImports from "next-remove-imports"
  * @constraint {{import('next').NextConfig}}
  */
 function defineNextConfig(config) {
-  return withRoutes()(removeImports()(config))
+  return withRoutes()(removeImports()(config));
 }
 
 export default defineNextConfig({
@@ -22,11 +22,23 @@ export default defineNextConfig({
     locales: ["en", "ja"],
     defaultLocale: "ja",
   },
-  webpackDevMiddleware: config => {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "is4-ssl.mzstatic.com",
+      },
+      {
+        protocol: "https",
+        hostname: "is2-ssl.mzstatic.com",
+      },
+    ],
+  },
+  webpackDevMiddleware: (config) => {
     config.watchOptions = {
       poll: 800,
       aggregateTimeout: 300,
-    }
-    return config
+    };
+    return config;
   },
-})
+});

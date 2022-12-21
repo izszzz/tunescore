@@ -1,12 +1,12 @@
 import React from "react";
-import CardMedia from "@mui/material/CardMedia";
+import Image from "next/image";
 import ResourceIcon from "../../icon/resource";
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
 
 export interface MusicCardProps {
   title: string | React.ReactNode;
-  image: string | null;
+  image: string | null | undefined;
   size: string;
   onClick?: () => void;
 }
@@ -14,7 +14,9 @@ const MusicCard = ({ title, image, size, onClick }: MusicCardProps) => (
   <Box width={size} onClick={() => onClick && onClick()}>
     <CardActionArea>
       {image ? (
-        <CardMedia component="img" height="auto" width="100%" image={image} />
+        <Box position="relative" width={size} height={size}>
+          <Image layout="fill" alt="image" src={image} />
+        </Box>
       ) : (
         <Box
           borderRadius="medium"

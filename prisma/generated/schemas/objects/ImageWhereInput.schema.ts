@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ImageSizeCompositeFilterObjectSchema } from './ImageSizeCompositeFilter.schema';
+import { ImageSizeNullableCompositeFilterObjectSchema } from './ImageSizeNullableCompositeFilter.schema';
 import { ImageSizeObjectEqualityInputObjectSchema } from './ImageSizeObjectEqualityInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -24,10 +24,11 @@ const Schema: z.ZodType<Prisma.ImageWhereInput> = z
       .optional(),
     size: z
       .union([
-        z.lazy(() => ImageSizeCompositeFilterObjectSchema),
+        z.lazy(() => ImageSizeNullableCompositeFilterObjectSchema),
         z.lazy(() => ImageSizeObjectEqualityInputObjectSchema),
       ])
-      .optional(),
+      .optional()
+      .nullable(),
   })
   .strict();
 

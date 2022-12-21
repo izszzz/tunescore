@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import AlbumLists from "../../components/elements/list/album";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../utils/setLocale";
+import setLocale from "../../helpers/setLocale";
 
 const Albums: NextPage = () => {
   const router = useRouter();

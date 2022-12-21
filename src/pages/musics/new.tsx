@@ -15,7 +15,7 @@ import { Typography } from "@mui/material";
 import Box from "@mui/system/Box";
 import Script from "next/script";
 import { importer } from "@coderline/alphatab";
-import AlphaTexExporter from "../../utils/AlphaTexExporter";
+import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { useSession } from "next-auth/react";
 
 const NewMusic: NextPage = () => {

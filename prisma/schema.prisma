@@ -287,12 +287,28 @@ type Link{
 }
 
 type StreamingLink{
-  youtube String?
-  spotify String?
-  itunes String?
+  youtube LinkImage?
+  spotify LinkImage?
+  itunes LinkImage?
 }
 
 type AccountLink {
   twitter String?
   wikipedia String?
+}
+
+type LinkImage{
+  id String?
+  url String?
+  image Image
+}
+
+type Image{
+  size ImageSize
+}
+
+type ImageSize{
+  small String
+  medium String
+  large String
 }

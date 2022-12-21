@@ -5,7 +5,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import setLocale from "../../../../utils/setLocale";
+import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import { useRouter } from "next/router";
 

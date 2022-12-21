@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import setLocale from "../../../../utils/setLocale";
+import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import { useRouter } from "next/router";
 export interface BandListItemProps {

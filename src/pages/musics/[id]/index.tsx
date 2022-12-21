@@ -14,10 +14,12 @@ import MusicLayout, {
   MusicLayoutProps,
 } from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes";
-import setLocale from "../../../utils/setLocale";
+import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
+import Box from "@mui/material/Box";
+import VoteAlert from "../../../components/elements/alert/vote";
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
@@ -31,6 +33,7 @@ const Music: NextPage = () => {
         artists: true,
         composers: true,
         lyrists: true,
+        pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
         bookmarks: { where: { id: session.data?.user?.id } },
       },
     },
@@ -66,6 +69,15 @@ const Music: NextPage = () => {
           ),
         }}
       />
+      {musicData.pulls.map((pull) => (
+        <Box key={pull.id} mb={2}>
+          <VoteAlert
+            data={pull}
+            goodIconButtonProps={{ disabled: true }}
+            badIconButtonProps={{ disabled: true }}
+          />
+        </Box>
+      ))}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

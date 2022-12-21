@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
 import BandLayout from "../../../components/layouts/show/band";
-import setLocale from "../../../utils/setLocale";
+import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import { Prisma } from "@prisma/client";
 

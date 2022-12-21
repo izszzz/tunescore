@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import IndexLayout from "../../components/layouts/index/default";
 import ArtistLists from "../../components/elements/list/artist";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../utils/setLocale";
+import setLocale from "../../helpers/setLocale";
 const Artists: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

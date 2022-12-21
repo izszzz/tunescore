@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../utils/setLocale";
+import setLocale from "../../helpers/setLocale";
 import { Music } from "@prisma/client";
 import { useSession } from "next-auth/react";
 const Musics: NextPage = () => {

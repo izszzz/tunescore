@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import { Link } from "@mui/material";
-import setLocale from "../../../utils/setLocale";
+import setLocale from "../../../helpers/setLocale";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import { trpc } from "../../../utils/trpc";
 import { Prisma } from "@prisma/client";

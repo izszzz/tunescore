@@ -16,7 +16,7 @@ import { TextFieldProps } from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import { Artist } from "@prisma/client";
-import setLocale from "../../../../utils/setLocale";
+import setLocale from "../../../../helpers/setLocale";
 import { handleChangeAutocomplete } from "../../autocomplete/update/default";
 import CustomAutocomplete from "../../autocomplete/search";
 

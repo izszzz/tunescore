@@ -14,7 +14,7 @@ import ResourceIcon from "../../../components/elements/icon/resource";
 import LinkForm from "../../../components/elements/form/settings/link";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
-import setLocale from "../../../utils/setLocale";
+import setLocale from "../../../helpers/setLocale";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
 import { useSnackbar } from "notistack";

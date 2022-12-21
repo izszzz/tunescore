@@ -1,9 +1,9 @@
 import React from "react";
-import { PullStatus, Type, Vote } from "@prisma/client";
+import { PullStatus, Type } from "@prisma/client";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import PullStatusIcon from "../../icon/pull/status";
-import VoteCard from "../../card/vote";
+import VoteAlert, { VoteAlertProps } from "../../alert/vote";
 
 interface PullButtonProps {
   type: Type;
@@ -11,7 +11,7 @@ interface PullButtonProps {
   conflict: boolean;
   diff: boolean;
   loading: boolean;
-  vote: Vote | null;
+  data: VoteAlertProps["data"];
   onOpen: () => void;
   onMerge: () => void;
   onClose: () => void;
@@ -25,7 +25,7 @@ const PullButton = ({
   conflict,
   diff,
   loading,
-  vote,
+  data,
   onOpen,
   onMerge,
   onClose,
@@ -73,7 +73,13 @@ const PullButton = ({
           </ButtonGroup>
         );
       case "VOTE":
-        return vote && <VoteCard data={vote} />;
+        return (
+          <VoteAlert
+            data={data}
+            goodIconButtonProps={{ onClick: () => console.log("good") }}
+            badIconButtonProps={{ onClick: () => console.log("good") }}
+          />
+        );
       case "MERGED":
         return <>revert</>;
       case "CLOSED":

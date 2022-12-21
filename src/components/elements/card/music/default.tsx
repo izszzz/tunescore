@@ -1,9 +1,9 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Prisma } from "@prisma/client";
-import setLocale from "../../../../utils/setLocale";
+import setLocale from "../../../../helpers/setLocale";
 import MusicCard from ".";
-import musicOwner from "../../../../utils/musicOwner";
+import musicOwner from "../../../../helpers/musicOwner";
 import Typography from "@mui/material/Typography";
 import IndexChip from "../../chip";
 

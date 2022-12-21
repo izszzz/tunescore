@@ -14,8 +14,8 @@ import { IconButton } from "@mui/material";
 import ResourceIcon from "../../elements/icon/resource";
 import { DefaultTabsProps } from "../../elements/tabs/default";
 import { trpc } from "../../../utils/trpc";
-import setLocale from "../../../utils/setLocale";
-import musicOwner from "../../../utils/musicOwner";
+import setLocale from "../../../helpers/setLocale";
+import musicOwner from "../../../helpers/musicOwner";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -26,6 +26,7 @@ export interface MusicLayoutProps
       composers: true;
       lyrists: true;
       user: true;
+      pulls: { include: { vote: true } };
       bookmarks: true;
     };
   }>;

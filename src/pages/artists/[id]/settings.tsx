@@ -12,7 +12,7 @@ import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
 import ResourceIcon from "../../../components/elements/icon/resource";
-import setLocale from "../../../utils/setLocale";
+import setLocale from "../../../helpers/setLocale";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();

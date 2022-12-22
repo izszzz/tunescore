@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -72,15 +71,16 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           secondary={<Owner data={data} />}
         />
         {data.link?.streaming && (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             width="60"
             height="60"
             alt={setLocale(data.title, router) || ""}
-            objectPosition="relative"
             src={
               selectSuitableStreamingImage(data.link.streaming)?.image?.size
                 ?.medium || ""
             }
+            style={{ borderRadius: 3 }}
           />
         )}
       </ListItemButton>

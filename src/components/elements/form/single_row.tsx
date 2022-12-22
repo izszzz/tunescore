@@ -1,21 +1,26 @@
 import { useRouter } from "next/router";
-import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui";
+import {
+  FormContainer,
+  FormContainerProps,
+  TextFieldElement,
+  TextFieldElementProps,
+  useForm,
+} from "react-hook-form-mui";
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import LoadingButton from "@mui/lab/LoadingButton";
+import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 interface DefaultSettingsFormProps<T> {
   data: T;
-  name: "title" | "name";
-  updateLoadingButtonProps: {
-    onClick: (data: T) => void;
-    loading: boolean;
-  };
+  formContainerProps: Omit<FormContainerProps, "formContext">;
+  textFieldElementProps: TextFieldElementProps;
+  loadingButtonProps: LoadingButtonProps;
 }
 function DefaultSettingsForm<T extends { id: string }>({
-  name,
   data,
-  updateLoadingButtonProps: updateButtonProps,
+  formContainerProps,
+  textFieldElementProps,
+  loadingButtonProps,
 }: DefaultSettingsFormProps<T>) {
   const router = useRouter();
   const formContext = useForm<T>();
@@ -23,16 +28,14 @@ function DefaultSettingsForm<T extends { id: string }>({
     formContext.reset(data);
   }, [router.locale, formContext, data]);
   return (
-    <FormContainer
-      formContext={formContext}
-      onSuccess={(data) => updateButtonProps.onClick(data)}
-    >
+    <FormContainer<T> {...formContainerProps} formContext={formContext}>
       <Grid container spacing={1} my={1}>
         <Grid item xs={10}>
           <TextFieldElement
-            name={name + "." + router.locale}
-            label={name}
-            disabled={updateButtonProps.loading}
+            {...textFieldElementProps}
+            name={textFieldElementProps.name + "." + router.locale}
+            label={textFieldElementProps.name}
+            disabled={loadingButtonProps.loading}
             required
             fullWidth
           />
@@ -42,9 +45,9 @@ function DefaultSettingsForm<T extends { id: string }>({
             type="submit"
             variant="outlined"
             disabled={
-              updateButtonProps.loading || !formContext.formState.isDirty
+              loadingButtonProps.loading || !formContext.formState.isDirty
             }
-            loading={updateButtonProps.loading}
+            loading={loadingButtonProps.loading}
             endIcon={<SendIcon />}
             fullWidth
           >

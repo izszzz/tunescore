@@ -11,10 +11,11 @@ import DefaultSettingsForm from "../../../components/elements/form/settings/defa
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
 import ResourceIcon from "../../../components/elements/icon/resource";
-import LinkForm from "../../../components/elements/form/settings/link";
+import DangerAlert from "../../../components/elements/alert/delete";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
 import setLocale from "../../../helpers/setLocale";
+import { createPath } from "../../../helpers/createPath";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
 import { useSnackbar } from "notistack";
@@ -25,10 +26,10 @@ const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
-  const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery([
-    "music.findUniqueMusic",
+  const id = router.query.id as string;
+  const path = createPath([
+    "music.findUniqueMusic" as const,
     {
       where: { id },
       include: {
@@ -41,6 +42,8 @@ const SettingsMusic: NextPage = () => {
       },
     },
   ]);
+  const query = path[1];
+  const { data } = trpc.useQuery(path);
   const destroy = trpc.useMutation("music.deleteOneMusic", {
     onSuccess: () => {
       enqueueSnackbar("music.destroy success");
@@ -52,10 +55,7 @@ const SettingsMusic: NextPage = () => {
   });
   const update = trpc.useMutation(`music.updateOneMusic`, {
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(
-        ["music.findUniqueMusic", { where: { id } }],
-        data
-      );
+      queryClient.setQueryData<typeof data>(path, data);
       enqueueSnackbar("music.update success");
     },
     onError: () => {
@@ -82,13 +82,8 @@ const SettingsMusic: NextPage = () => {
         data={musicData}
         name="title"
         updateLoadingButtonProps={{
-          onClick: ({ id, title }) =>
-            update.mutate({ where: { id }, data: { title } }),
+          onClick: ({ title }) => update.mutate({ ...query, data: { title } }),
           loading: update.isLoading,
-        }}
-        destroyLoadingButtonProps={{
-          onClick: (data) => destroy.mutate({ where: { id: data.id } }),
-          loading: destroy.isLoading,
         }}
       />
       <BandUpdateAutocomplete
@@ -99,12 +94,12 @@ const SettingsMusic: NextPage = () => {
         onChange={{
           onClear: () =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { band: { disconnect: true } },
             }),
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { band: { connect: { id: details?.option.id } } },
             }),
         }}
@@ -142,12 +137,12 @@ const SettingsMusic: NextPage = () => {
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { composers: { connect: { id: details?.option.id } } },
             }),
           onRemove: (_e, _v, _r, details) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { composers: { disconnect: { id: details?.option.id } } },
             }),
         }}
@@ -175,12 +170,12 @@ const SettingsMusic: NextPage = () => {
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { lyrists: { connect: { id: details?.option.id } } },
             }),
           onRemove: (_e, _v, _r, details) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { lyrists: { disconnect: { id: details?.option.id } } },
             }),
         }}
@@ -211,29 +206,27 @@ const SettingsMusic: NextPage = () => {
           loading: update.isLoading,
           onClick: (artist) =>
             update.mutate({
-              where: { id },
+              ...query,
               data: { artists: { connect: { id: artist?.id } } },
             }),
         }}
         onDestroy={(artist) =>
           update.mutate({
-            where: { id },
+            ...query,
             data: { artists: { disconnect: { id: artist.id } } },
           })
         }
       />
 
-      <Typography variant="h4">SNS</Typography>
+      <Typography variant="h4">iTunes</Typography>
       <Divider />
-      <LinkForm defaultValue={data.link} resource="music" />
-      <Typography variant="h6">itunes</Typography>
 
       <MusicItunesSelectForm
         term={setLocale(data.title, router) || ""}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
           update.mutate({
-            where: { id },
+            ...query,
             data: {
               link: {
                 streaming: {
@@ -255,7 +248,7 @@ const SettingsMusic: NextPage = () => {
         }
         onRemove={() =>
           update.mutate({
-            where: { id },
+            ...query,
             data: {
               link: {
                 streaming: { ...data.link?.streaming, itunes: undefined },
@@ -264,6 +257,10 @@ const SettingsMusic: NextPage = () => {
           })
         }
       />
+
+      <Typography variant="h4">Youtube</Typography>
+      <Divider />
+
       <MusicYoutubeSelectForm
         term={setLocale(data.title, router) || ""}
         streamingLink={data.link?.streaming}
@@ -271,7 +268,7 @@ const SettingsMusic: NextPage = () => {
           value?.id &&
           data.link &&
           update.mutate({
-            where: { id },
+            ...query,
             data: {
               link: {
                 streaming: {
@@ -293,7 +290,7 @@ const SettingsMusic: NextPage = () => {
         }
         onRemove={() =>
           update.mutate({
-            where: { id },
+            ...query,
             data: {
               link: {
                 streaming: { ...data.link?.streaming, youtube: undefined },
@@ -301,6 +298,15 @@ const SettingsMusic: NextPage = () => {
             },
           })
         }
+      />
+      <Typography variant="h4">Danger Zone</Typography>
+      <Divider />
+
+      <DangerAlert
+        loadingButtonProps={{
+          onClick: () => destroy.mutate({ ...query }),
+          loading: destroy.isLoading,
+        }}
       />
     </MusicLayout>
   );

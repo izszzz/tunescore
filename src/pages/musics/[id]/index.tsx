@@ -42,12 +42,12 @@ const Music: NextPage = () => {
   const musicData = data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} activeTab="info">
-      {data.link?.streaming?.itunes && (
-        <ItunesButton href={data.link?.streaming?.itunes} />
+      {data.link?.streaming?.itunes?.id && (
+        <ItunesButton href={data.link?.streaming?.itunes.id} />
       )}
-      {data.link?.streaming?.youtube && (
+      {data.link?.streaming?.youtube?.id && (
         <YouTube
-          videoId={data.link?.streaming?.youtube}
+          videoId={data.link?.streaming?.youtube.id}
           opts={{ width: "100%", height: "100%" }}
         />
       )}

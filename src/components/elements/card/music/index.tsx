@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import ResourceIcon from "../../icon/resource";
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
@@ -14,9 +13,8 @@ const MusicCard = ({ title, image, size, onClick }: MusicCardProps) => (
   <Box width={size} onClick={() => onClick && onClick()}>
     <CardActionArea>
       {image ? (
-        <Box position="relative" width={size} height={size}>
-          <Image layout="fill" alt="image" src={image} />
-        </Box>
+        // eslint-disable-next-line @next/next/no-img-element
+        <img width={size} height={size} alt="image" src={image} />
       ) : (
         <Box
           borderRadius="medium"

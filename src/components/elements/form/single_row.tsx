@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import {
+  FieldValues,
   FormContainer,
   FormContainerProps,
   TextFieldElement,
@@ -8,19 +9,19 @@ import {
 } from "react-hook-form-mui";
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
-interface DefaultSettingsFormProps<T> {
+interface DefaultSettingsFormProps<T extends FieldValues> {
   data: T;
-  formContainerProps: Omit<FormContainerProps, "formContext">;
+  loading: boolean;
+  formContainerProps: Omit<FormContainerProps<T>, "formContext">;
   textFieldElementProps: TextFieldElementProps;
-  loadingButtonProps: LoadingButtonProps;
 }
-function DefaultSettingsForm<T extends { id: string }>({
+function SingleRowForm<T extends FieldValues>({
   data,
+  loading,
   formContainerProps,
   textFieldElementProps,
-  loadingButtonProps,
 }: DefaultSettingsFormProps<T>) {
   const router = useRouter();
   const formContext = useForm<T>();
@@ -28,14 +29,14 @@ function DefaultSettingsForm<T extends { id: string }>({
     formContext.reset(data);
   }, [router.locale, formContext, data]);
   return (
-    <FormContainer<T> {...formContainerProps} formContext={formContext}>
+    <FormContainer {...formContainerProps} formContext={formContext}>
       <Grid container spacing={1} my={1}>
         <Grid item xs={10}>
           <TextFieldElement
             {...textFieldElementProps}
             name={textFieldElementProps.name + "." + router.locale}
             label={textFieldElementProps.name}
-            disabled={loadingButtonProps.loading}
+            disabled={loading}
             required
             fullWidth
           />
@@ -44,10 +45,7 @@ function DefaultSettingsForm<T extends { id: string }>({
           <LoadingButton
             type="submit"
             variant="outlined"
-            disabled={
-              loadingButtonProps.loading || !formContext.formState.isDirty
-            }
-            loading={loadingButtonProps.loading}
+            disabled={loading || !formContext.formState.isDirty}
             endIcon={<SendIcon />}
             fullWidth
           >
@@ -59,4 +57,4 @@ function DefaultSettingsForm<T extends { id: string }>({
   );
 }
 
-export default DefaultSettingsForm;
+export default SingleRowForm;

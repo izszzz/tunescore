@@ -7,7 +7,6 @@ import MusicLayout, {
   MusicLayoutProps,
 } from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import DefaultSettingsForm from "../../../components/elements/form/settings/default";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
 import ResourceIcon from "../../../components/elements/icon/resource";
@@ -21,6 +20,7 @@ import { trpc } from "../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useQueryClient } from "react-query";
 import { useSession } from "next-auth/react";
+import SingleRowForm from "../../../components/elements/form/single_row";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
@@ -29,7 +29,7 @@ const SettingsMusic: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const id = router.query.id as string;
   const path = createPath([
-    "music.findUniqueMusic" as const,
+    "music.findUniqueMusic",
     {
       where: { id },
       include: {
@@ -78,12 +78,16 @@ const SettingsMusic: NextPage = () => {
     <MusicLayout data={musicData} activeTab="settings">
       <Typography variant="h4"> Info</Typography>
       <Divider />
-      <DefaultSettingsForm
+      <SingleRowForm
         data={musicData}
-        name="title"
-        updateLoadingButtonProps={{
-          onClick: ({ title }) => update.mutate({ ...query, data: { title } }),
-          loading: update.isLoading,
+        loading={update.isLoading}
+        formContainerProps={{
+          onSuccess: ({ title }) => {
+            update.mutate({ ...query, data: { title } });
+          },
+        }}
+        textFieldElementProps={{
+          name: "title",
         }}
       />
       <BandUpdateAutocomplete

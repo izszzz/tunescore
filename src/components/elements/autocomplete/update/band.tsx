@@ -1,6 +1,7 @@
-import { Band } from "@prisma/client";
 import React from "react";
-import DefaultUpdateAutocomplete, {
+import DefaultUpdateAutocomplete from "./default";
+import type { Band } from "@prisma/client";
+import type {
   DefaultUpdateAutocompleteProps,
 } from "./default";
 

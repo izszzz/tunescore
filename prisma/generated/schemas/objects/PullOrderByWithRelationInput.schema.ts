@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { PullScoreOrderByInputObjectSchema } from './PullScoreOrderByInput.schema';
 import { VoteOrderByWithRelationInputObjectSchema } from './VoteOrderByWithRelationInput.schema';
+import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrderByRelationAggregateInput.schema';
 import { MusicOrderByWithRelationInputObjectSchema } from './MusicOrderByWithRelationInput.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
 
@@ -15,6 +16,9 @@ const Schema: z.ZodType<Prisma.PullOrderByWithRelationInput> = z
     score: z.lazy(() => PullScoreOrderByInputObjectSchema).optional(),
     status: z.lazy(() => SortOrderSchema).optional(),
     vote: z.lazy(() => VoteOrderByWithRelationInputObjectSchema).optional(),
+    comments: z
+      .lazy(() => CommentOrderByRelationAggregateInputObjectSchema)
+      .optional(),
     music: z.lazy(() => MusicOrderByWithRelationInputObjectSchema).optional(),
     musicId: z.lazy(() => SortOrderSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),

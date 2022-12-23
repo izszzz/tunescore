@@ -1,11 +1,11 @@
 import React from "react";
-import type { NextPage } from "next";
-import { Artist } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../components/layouts/show/music";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import { useQueryClient } from "react-query";
+import { useSession } from "next-auth/react";
+import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
@@ -15,12 +15,13 @@ import MusicItunesSelectForm from "../../../components/elements/form/settings/se
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
 import setLocale from "../../../helpers/setLocale";
 import { createPath } from "../../../helpers/createPath";
-import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
-import { useSnackbar } from "notistack";
-import { useQueryClient } from "react-query";
-import { useSession } from "next-auth/react";
 import SingleRowForm from "../../../components/elements/form/single_row";
+import type {
+  MusicLayoutProps,
+} from "../../../components/layouts/show/music";
+import type { Artist } from "@prisma/client";
+import type { NextPage } from "next";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();

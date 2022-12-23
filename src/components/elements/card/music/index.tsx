@@ -1,7 +1,7 @@
 import React from "react";
-import ResourceIcon from "../../icon/resource";
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
+import ResourceIcon from "../../icon/resource";
 
 export interface MusicCardProps {
   title: string | React.ReactNode;

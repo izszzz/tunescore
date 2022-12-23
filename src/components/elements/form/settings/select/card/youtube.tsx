@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Script from "next/script";
-import { StreamingLink } from "@prisma/client";
 import MusicYoutubeCard from "../../../../card/music/youtube";
 import CardSelectForm from ".";
+import type { StreamingLink } from "@prisma/client";
 
 interface MusicYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

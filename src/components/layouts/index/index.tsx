@@ -1,18 +1,20 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Pagination from "@mui/material/Pagination";
-import { PaginatedResult } from "prisma-pagination";
-import CustomAutocomplete, {
-  CustomAutocompleteProps,
-} from "../../../components/elements/autocomplete/search";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import SingleColumnLayout, { SingleColumnLayoutProps } from "../single_column";
-import { Route } from "nextjs-routes";
-import { useModal } from "../../../hooks/useModal";
 import { useSession } from "next-auth/react";
+import SingleColumnLayout from "../single_column";
+import { useModal } from "../../../hooks/useModal";
+import CustomAutocomplete from "../../../components/elements/autocomplete/search";
+import type {
+  CustomAutocompleteProps,
+} from "../../../components/elements/autocomplete/search";
+import type { SingleColumnLayoutProps } from "../single_column";
+import type { Route } from "nextjs-routes";
+import type { PaginatedResult } from "prisma-pagination";
 
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {

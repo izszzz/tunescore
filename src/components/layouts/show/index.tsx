@@ -1,7 +1,9 @@
 import Box from "@mui/material/Box";
 import React from "react";
-import DefaultTabs, { DefaultTabsProps } from "../../elements/tabs/default";
-import SingleColumnLayout, { SingleColumnLayoutProps } from "../single_column";
+import DefaultTabs from "../../elements/tabs/default";
+import SingleColumnLayout from "../single_column";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+import type { SingleColumnLayoutProps } from "../single_column";
 
 export interface ShowLayoutProps extends SingleColumnLayoutProps {
   activeTab: string;

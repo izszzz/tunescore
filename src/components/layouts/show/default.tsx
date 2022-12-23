@@ -1,10 +1,12 @@
 import Box from "@mui/material/Box";
 import React from "react";
-import BookmarkToggleButton, {
+import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
+import DefaultHeader from "../header/default";
+import ShowLayout from "./";
+import type { ShowLayoutProps } from "./";
+import type {
   BookmarkToggleButtonProps,
 } from "../../elements/button/toggle/bookmark";
-import DefaultHeader from "../header/default";
-import ShowLayout, { ShowLayoutProps } from "./";
 
 export interface DefaultShowLayoutProps extends ShowLayoutProps {
   bookmarkToggleButtonProps: BookmarkToggleButtonProps;

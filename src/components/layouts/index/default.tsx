@@ -1,6 +1,7 @@
 import React from "react";
 import DefaultHeader from "../header/default";
-import IndexLayout, { IndexLayoutProps } from "./";
+import IndexLayout from "./";
+import type { IndexLayoutProps } from "./";
 
 function DefaultIndexLayout<T>({ ...props }: IndexLayoutProps<T>) {
   return <IndexLayout {...props} header={<DefaultHeader />} />;

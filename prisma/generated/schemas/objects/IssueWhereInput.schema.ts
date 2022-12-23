@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
+import { CommentListRelationFilterObjectSchema } from './CommentListRelationFilter.schema';
 import { MusicRelationFilterObjectSchema } from './MusicRelationFilter.schema';
 import { MusicWhereInputObjectSchema } from './MusicWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
@@ -34,6 +35,7 @@ const Schema: z.ZodType<Prisma.IssueWhereInput> = z
     body: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
+    comments: z.lazy(() => CommentListRelationFilterObjectSchema).optional(),
     music: z
       .union([
         z.lazy(() => MusicRelationFilterObjectSchema),

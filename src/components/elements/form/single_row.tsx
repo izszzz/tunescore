@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
 import {
-  FieldValues,
   FormContainer,
-  FormContainerProps,
   TextFieldElement,
-  TextFieldElementProps,
   useForm,
 } from "react-hook-form-mui";
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
+import type {
+  FieldValues,
+  FormContainerProps,
+  TextFieldElementProps} from "react-hook-form-mui";
 interface DefaultSettingsFormProps<T extends FieldValues> {
   data: T;
   loading: boolean;
@@ -46,6 +47,7 @@ function SingleRowForm<T extends FieldValues>({
             type="submit"
             variant="outlined"
             disabled={loading || !formContext.formState.isDirty}
+            loading={loading}
             endIcon={<SendIcon />}
             fullWidth
           >

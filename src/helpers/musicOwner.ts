@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
-import { NextRouter } from "next/router";
 import setLocale from "./setLocale";
+import type { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 type Data = Prisma.MusicGetPayload<{
   include: {
     artists: true;

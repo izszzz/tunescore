@@ -1,9 +1,10 @@
 import React from "react";
-import type { GetServerSideProps, NextPage } from "next";
+import { PrismaClient } from "@prisma/client";
 import UserLayout from "../../../components/layouts/show/user";
 import UserLists from "../../../components/elements/list/user";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import type { Prisma} from "@prisma/client";
+import type { GetServerSideProps, NextPage } from "next";
 interface UserProps {
   data: Prisma.UserGetPayload<{
     include: {

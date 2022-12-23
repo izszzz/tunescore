@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { DefaultTabsProps } from "../../elements/tabs/default";
-import ToggleLoadingButton from "../../elements/button/toggle/loading";
-import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
+import ToggleLoadingButton from "../../elements/button/toggle/loading";
+import { trpc } from "../../../utils/trpc";
 import ShowLayout from "./default";
-import { ShowLayoutProps } from ".";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+import type { Prisma } from "@prisma/client";
+import type { ShowLayoutProps } from ".";
 
 interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{

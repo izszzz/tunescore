@@ -1,14 +1,14 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import ResourceIcon from "../../icon/resource";
-import MusicCard from ".";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
+import ResourceIcon from "../../icon/resource";
+import MusicCard from ".";
 
 interface MusicYoutubeCardProps<T> {
   data: T;

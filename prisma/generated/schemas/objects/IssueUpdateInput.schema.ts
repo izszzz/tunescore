@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
+import { CommentUpdateManyWithoutIssueNestedInputObjectSchema } from './CommentUpdateManyWithoutIssueNestedInput.schema';
 import { MusicUpdateOneRequiredWithoutIssuesNestedInputObjectSchema } from './MusicUpdateOneRequiredWithoutIssuesNestedInput.schema';
 import { UserUpdateOneRequiredWithoutIssuesNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutIssuesNestedInput.schema';
 
@@ -18,6 +19,9 @@ const Schema: z.ZodType<Prisma.IssueUpdateInput> = z
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
+      .optional(),
+    comments: z
+      .lazy(() => CommentUpdateManyWithoutIssueNestedInputObjectSchema)
       .optional(),
     music: z
       .lazy(() => MusicUpdateOneRequiredWithoutIssuesNestedInputObjectSchema)

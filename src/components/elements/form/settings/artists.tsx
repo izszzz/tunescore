@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
-import { AutocompleteProps } from "@mui/material/Autocomplete";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
@@ -12,13 +11,15 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { TextFieldProps } from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
-import { Artist } from "@prisma/client";
 import setLocale from "../../../../helpers/setLocale";
 import { handleChangeAutocomplete } from "../../autocomplete/update/default";
 import CustomAutocomplete from "../../autocomplete/search";
+import type { Artist } from "@prisma/client";
+import type { TextFieldProps } from "@mui/material/TextField";
+import type { AutocompleteProps } from "@mui/material/Autocomplete";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 
 interface ArtistsUpdateFormProps<T> {
   data: T[];

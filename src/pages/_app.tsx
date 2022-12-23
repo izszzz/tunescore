@@ -4,19 +4,19 @@ import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import superjson from "superjson";
-import type { AppType } from "next/app";
-import type { AppRouter } from "../server/router";
-import type { Session } from "next-auth";
 import CssBaseline from "@mui/material/CssBaseline";
 import { SnackbarProvider } from "notistack";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { RecoilRoot } from "recoil";
 import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { RecoilRoot } from "recoil";
+import type { Session } from "next-auth";
+import type { AppRouter } from "../server/router";
+import type { AppType } from "next/app";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

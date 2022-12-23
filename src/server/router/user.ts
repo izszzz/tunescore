@@ -1,6 +1,6 @@
-import { createRouter } from "./context";
 import { z } from "zod";
 import { UserUpdateOneSchema } from "../../../prisma/generated/schemas/updateOneUser.schema";
+import { createRouter } from "./context";
 
 export const userRouter = createRouter()
   .query("index", {

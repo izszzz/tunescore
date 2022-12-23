@@ -1,5 +1,6 @@
 import React from "react";
-import IndexChip, { IndexChipProps } from "./";
+import IndexChip from "./";
+import type { IndexChipProps } from "./";
 
 const ArtistChip = (props: Omit<IndexChipProps, "resource">) => (
   <IndexChip {...props} resource="artist" />

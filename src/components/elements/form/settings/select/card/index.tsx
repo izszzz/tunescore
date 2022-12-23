@@ -1,8 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Grid, { GridProps } from "@mui/material/Grid";
+import Grid, { type GridProps } from "@mui/material/Grid";
 import TablePagination, {
-  TablePaginationProps,
+  type TablePaginationProps,
 } from "@mui/material/TablePagination";
 
 interface CardSelectFormProps<T> {

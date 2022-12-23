@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -12,7 +11,8 @@ import { Link } from "@mui/material";
 import setLocale from "../../../helpers/setLocale";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import { trpc } from "../../../utils/trpc";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 
 const Artist: NextPage = () => {
   const router = useRouter();

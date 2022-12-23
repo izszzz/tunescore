@@ -1,8 +1,6 @@
 import React from "react";
 import { useSnackbar } from "notistack";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { Band, Prisma } from "@prisma/client";
 import Button from "@mui/material/Button";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
@@ -11,6 +9,8 @@ import ResourceIcon from "../../../components/elements/icon/resource";
 import setLocale from "../../../helpers/setLocale";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import { createPath } from "../../../helpers/createPath";
+import type { Band, Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();

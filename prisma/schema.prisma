@@ -10,6 +10,11 @@ generator erd {
   output="../erd.png"
 }
 
+generator custom_models {
+  provider       = "prisma-custom-models-generator"
+  behavior       = "EXTEND"
+}
+
 generator trpc {
   provider       = "prisma-trpc-generator"
   withMiddleware = false
@@ -27,10 +32,6 @@ datasource db {
   // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
-
-// model Example {
-// id  String @id @default(auto()) @map("_id") @db.ObjectId
-// }
 
 // Necessary for Next auth
 model Account {
@@ -95,16 +96,6 @@ model User {
   bookmarkAlbumIDs String[] @db.ObjectId
 }
 
-model Notification{
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  type String
-
-  createdAt DateTime @default(now())
-  readAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
-}
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -212,6 +203,8 @@ model Issue{
   title String
   body String
 
+  comments Comment[] @relation("IssueComment")
+
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
 
@@ -226,6 +219,8 @@ model Pull{
   score PullScore
   status PullStatus
   vote Vote?
+
+  comments Comment[] @relation("PullComment")
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
@@ -248,6 +243,40 @@ model Vote{
   userIDs String[] @db.ObjectId
 }
 
+
+model Comment{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  body String
+
+  pull Pull? @relation("PullComment", fields: [resourceId], references: [id])
+  issue Issue? @relation("IssueComment", fields: [resourceId], references: [id])
+
+  resourceId String @db.ObjectId
+  resurceType CommentType 
+}
+
+// https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
+model Notification{
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+
+  resourceId Int
+  resurceType NotificationType
+
+  createdAt DateTime @default(now())
+  readAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
+
+enum CommentType{
+  Pull
+  Issue
+}
+enum NotificationType{
+  User
+}
 enum Visibility{
   PUBLIC
   PRIVATE

@@ -1,9 +1,9 @@
 import React from "react";
-import { PullStatus } from "@prisma/client";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import LockIcon from "@mui/icons-material/Lock";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
+import type { PullStatus } from "@prisma/client";
 interface PullStatusIconProps {
   status: PullStatus;
 }

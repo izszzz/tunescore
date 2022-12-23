@@ -1,12 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { Prisma } from "@prisma/client";
-import setLocale from "../../../../helpers/setLocale";
-import MusicCard from ".";
-import musicOwner from "../../../../helpers/musicOwner";
 import Typography from "@mui/material/Typography";
+import musicOwner from "../../../../helpers/musicOwner";
+import setLocale from "../../../../helpers/setLocale";
 import IndexChip from "../../chip";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
+import MusicCard from ".";
+import type { Prisma } from "@prisma/client";
 
 interface DefaultMusicCard {
   data: Prisma.MusicGetPayload<{

@@ -1,6 +1,4 @@
-import { createRouter } from "./context";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 import { createPaginator } from "prisma-pagination";
 import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
 import { PaginateOptionsSchema } from "../../utils/zod";
@@ -9,6 +7,8 @@ import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findMany
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
+import { createRouter } from "./context";
+import type { Prisma } from "@prisma/client";
 
 export const paginationRouter = createRouter()
   .query("music", {

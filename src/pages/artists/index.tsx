@@ -1,10 +1,10 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import IndexLayout from "../../components/layouts/index/default";
 import ArtistLists from "../../components/elements/list/artist";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
+import type { NextPage } from "next";
 const Artists: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

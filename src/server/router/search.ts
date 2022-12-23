@@ -1,4 +1,3 @@
-import { createRouter } from "./context";
 import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
 import { IssueFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
@@ -6,6 +5,7 @@ import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBa
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
+import { createRouter } from "./context";
 
 export const searchRouter = createRouter()
   .mutation("music", {

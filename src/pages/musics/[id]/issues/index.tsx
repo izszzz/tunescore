@@ -1,13 +1,14 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
 import IndexLayout from "../../../../components/layouts/index";
 import IssueLists from "../../../../components/elements/list/issue";
-import MusicLayout, {
+import MusicLayout from "../../../../components/layouts/show/music";
+import { trpc } from "../../../../utils/trpc";
+import type {
   MusicLayoutProps,
 } from "../../../../components/layouts/show/music";
-import { trpc } from "../../../../utils/trpc";
-import { useSession } from "next-auth/react";
+import type { NextPage } from "next";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();

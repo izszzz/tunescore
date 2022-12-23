@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import GoogleIcon from "../../elements/icon/google";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { getProviders, signIn } from "next-auth/react";
 import Button from "@mui/material/Button";
+import GoogleIcon from "../../elements/icon/google";
 import { useModal } from "../../../hooks/useModal";
 
 const AuthDialog = () => {

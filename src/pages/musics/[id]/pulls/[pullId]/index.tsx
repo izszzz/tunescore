@@ -1,18 +1,20 @@
 import React from "react";
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../../../components/layouts/show/music";
-import PullLayout, {
-  PullLayoutProps,
-} from "../../../../../components/layouts/show/pull";
-import { trpc } from "../../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import MusicLayout from "../../../../../components/layouts/show/music";
+import PullLayout from "../../../../../components/layouts/show/pull";
+import { trpc } from "../../../../../utils/trpc";
+import type {
+  PullLayoutProps,
+} from "../../../../../components/layouts/show/pull";
+import type {
+  MusicLayoutProps,
+} from "../../../../../components/layouts/show/music";
 
 const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,

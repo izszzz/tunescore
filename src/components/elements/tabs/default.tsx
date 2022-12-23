@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { Route } from "nextjs-routes";
 import { useSession } from "next-auth/react";
 import { useModal } from "../../../hooks/useModal";
+import type { Route } from "nextjs-routes";
 
 export interface DefaultTabsProps {
   value: string;

@@ -1,5 +1,6 @@
 import React from "react";
-import IndexChip, { IndexChipProps } from "./";
+import IndexChip from "./";
+import type { IndexChipProps } from "./";
 
 const BandChip = (props: Omit<IndexChipProps, "resource">) => (
   <IndexChip {...props} resource="band" />

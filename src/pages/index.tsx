@@ -1,9 +1,9 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import type { NextPage } from "next";
 import Link from "next/link";
 import DefaultMusicCard from "../components/elements/card/music/default";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const musics = trpc.useQuery([

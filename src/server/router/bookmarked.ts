@@ -1,8 +1,8 @@
-import { createRouter } from "./context";
 import { MusicFindUniqueSchema } from "../../../prisma/generated/schemas/findUniqueMusic.schema";
 import { ArtistFindUniqueSchema } from "../../../prisma/generated/schemas/findUniqueArtist.schema";
 import { BandFindUniqueSchema } from "../../../prisma/generated/schemas/findUniqueBand.schema";
 import { AlbumFindUniqueSchema } from "../../../prisma/generated/schemas/findUniqueAlbum.schema";
+import { createRouter } from "./context";
 
 export const bookmarkedRouter = createRouter()
   .query("music", {

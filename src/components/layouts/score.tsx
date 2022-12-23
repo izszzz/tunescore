@@ -4,14 +4,14 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import ScoreHeader from "./header/score";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
-import { AlphaTabApi, model } from "@coderline/alphatab";
-import VolumeSliderInput from "../elements/input/slider/volume";
 import { useToggle } from "react-use";
+import VolumeSliderInput from "../elements/input/slider/volume";
+import ScoreHeader from "./header/score";
+import type { AlphaTabApi, model } from "@coderline/alphatab";
 
 const drawerWidth = 240;
 

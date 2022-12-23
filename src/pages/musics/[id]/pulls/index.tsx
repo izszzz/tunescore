@@ -1,14 +1,15 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../../components/layouts/show/music";
+import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
+import MusicLayout from "../../../../components/layouts/show/music";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import { trpc } from "../../../../utils/trpc";
-import { useSnackbar } from "notistack";
-import { Pull } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import type {
+  MusicLayoutProps,
+} from "../../../../components/layouts/show/music";
+import type { Pull } from "@prisma/client";
+import type { NextPage } from "next";
 const Issues: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

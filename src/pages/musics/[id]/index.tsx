@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import YouTube from "react-youtube";
@@ -12,14 +11,16 @@ import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 import ArtistChip from "../../../components/elements/chip/artist";
 import BandChip from "../../../components/elements/chip/band";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../components/layouts/show/music";
+import MusicLayout from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes";
 import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
+import type {
+  MusicLayoutProps,
+} from "../../../components/layouts/show/music";
+import type { NextPage } from "next";
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();

@@ -4,9 +4,9 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
+import type { Prisma } from "@prisma/client";
 
 export interface UserListItemProps {
   data: Prisma.UserGetPayload<{

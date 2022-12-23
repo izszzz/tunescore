@@ -1,13 +1,13 @@
 import React from "react";
-import { Prisma } from "@prisma/client";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
-import { useRouter } from "next/router";
+import type { Prisma } from "@prisma/client";
 
 export interface AlbumListItemProps {
   data: Prisma.AlbumGetPayload<{

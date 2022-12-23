@@ -1,16 +1,18 @@
-import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React from "react";
 import ReactDiffViewer from "react-diff-viewer";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../../../components/layouts/show/music";
-import PullLayout, {
+import MusicLayout from "../../../../../components/layouts/show/music";
+import PullLayout from "../../../../../components/layouts/show/pull";
+import { trpc } from "../../../../../utils/trpc";
+import type {
   PullLayoutProps,
 } from "../../../../../components/layouts/show/pull";
-import { trpc } from "../../../../../utils/trpc";
+import type {
+  MusicLayoutProps,
+} from "../../../../../components/layouts/show/music";
+import type { NextPage } from "next";
 
 const Code: NextPage = () => {
   const router = useRouter();

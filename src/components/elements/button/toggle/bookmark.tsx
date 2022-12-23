@@ -1,7 +1,8 @@
 import React from "react";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import type { IconButtonProps } from "@mui/material/IconButton";
 
 export interface BookmarkToggleButtonProps
   extends Omit<IconButtonProps, "onClick" | "value"> {

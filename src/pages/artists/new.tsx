@@ -1,10 +1,10 @@
 import Button from "@mui/material/Button";
-import { Artist } from "@prisma/client";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
+import type { Artist } from "@prisma/client";
+import type { NextPage } from "next";
 
 const NewArtist: NextPage = () => {
   const router = useRouter();

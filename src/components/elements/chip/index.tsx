@@ -1,6 +1,8 @@
 import React from "react";
-import Chip, { ChipProps } from "@mui/material/Chip";
-import ResourceIcon, { ResourceIconProps } from "../icon/resource";
+import Chip from "@mui/material/Chip";
+import ResourceIcon from "../icon/resource";
+import type { ChipProps } from "@mui/material/Chip";
+import type { ResourceIconProps } from "../icon/resource";
 
 export interface IndexChipProps extends Omit<ChipProps, "icon"> {
   resource: ResourceIconProps["resource"];

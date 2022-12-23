@@ -1,14 +1,14 @@
 import React from "react";
-import { Prisma } from "@prisma/client";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
-import { useRouter } from "next/router";
+import type { Prisma } from "@prisma/client";
 export interface BandListItemProps {
   data: Prisma.BandGetPayload<{
     include: {

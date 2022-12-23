@@ -8,6 +8,8 @@ const Schema: z.ZodType<Prisma.NotificationOrderByWithRelationInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
     type: z.lazy(() => SortOrderSchema).optional(),
+    resourceId: z.lazy(() => SortOrderSchema).optional(),
+    resurceType: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     readAt: z.lazy(() => SortOrderSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),

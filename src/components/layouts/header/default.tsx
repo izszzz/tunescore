@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,9 +10,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import Grid from "@mui/material/Grid";
-import Header from ".";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
+import Header from ".";
 
 const DefaultHeader = () => {
   const { data: session } = useSession();

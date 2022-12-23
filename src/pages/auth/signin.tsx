@@ -1,14 +1,15 @@
 // reference https://next-auth.js.org/configuration/pages#oauth-sign-in
 
-import type { GetServerSideProps, NextPage } from "next";
-import { BuiltInProviderType } from "next-auth/providers";
 import {
-  ClientSafeProvider,
   getProviders,
-  LiteralUnion,
   signIn,
   useSession,
 } from "next-auth/react";
+import type { BuiltInProviderType } from "next-auth/providers";
+import type {
+  ClientSafeProvider,
+  LiteralUnion} from "next-auth/react";
+import type { GetServerSideProps, NextPage } from "next";
 
 const SignIn: NextPage<{
   providers: Record<

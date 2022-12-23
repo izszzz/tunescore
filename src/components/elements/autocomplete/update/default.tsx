@@ -1,10 +1,11 @@
 import React from "react";
-import {
+import CustomAutocomplete from "../search";
+import type {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
 } from "@mui/material/Autocomplete";
-import { AutocompleteValue } from "@mui/material/useAutocomplete";
-import CustomAutocomplete, { CustomAutocompleteProps } from "../search";
+import type { AutocompleteValue } from "@mui/material/useAutocomplete";
+import type { CustomAutocompleteProps } from "../search";
 
 export type HandleChangeReasonFunction<
   T,

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { StreamingLink } from "@prisma/client";
 import {
-  ItunesMusic,
-  ItunesResponse,
   searchItunesMusics,
   lookupItunesMusic,
 } from "../../../../../../utils/itunes";
 import MusicItunesCard from "../../../../card/music/itunes";
 import CardSelectForm from "./";
+import type {
+  ItunesMusic,
+  ItunesResponse} from "../../../../../../utils/itunes";
+import type { StreamingLink } from "@prisma/client";
 
 interface MusicItunesSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

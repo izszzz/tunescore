@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import Split from "split.js";
+import Box from "@mui/material/Box";
 import Score from "../../layouts/score";
 import EditorHeader from "../../layouts/header/editor";
-import Box from "@mui/material/Box";
-import React from "react";
 
 interface ScoreEditorProps {
   defaultValue: string;

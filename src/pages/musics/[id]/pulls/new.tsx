@@ -1,21 +1,20 @@
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Pull } from "@prisma/client";
 import {
   Controller,
   FormContainer,
   TextFieldElement,
 } from "react-hook-form-mui";
-import MusicLayout, {
-  MusicLayoutProps,
-} from "../../../../components/layouts/show/music";
-import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
+import { trpc } from "../../../../utils/trpc";
+import MusicLayout from "../../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import type { Pull } from "@prisma/client";
+import type { NextPage } from "next";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {

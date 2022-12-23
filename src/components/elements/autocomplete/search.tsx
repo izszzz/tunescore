@@ -1,6 +1,8 @@
 import React from "react";
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Autocomplete, {
+  type AutocompleteProps,
+} from "@mui/material/Autocomplete";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
 
 export type CustomAutocompleteProps<
   T,

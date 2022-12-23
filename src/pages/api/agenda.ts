@@ -1,8 +1,8 @@
 // src/pages/api/examples.ts
-import type { NextApiRequest, NextApiResponse } from "next";
 import { Agenda } from "@hokify/agenda";
 import { env } from "../../env/server.mjs";
 import { prisma } from "../../server/db/client";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {

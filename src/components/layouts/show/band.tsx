@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
-import { trpc } from "../../../utils/trpc";
-import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
-import setLocale from "../../../helpers/setLocale";
-import { DefaultTabsProps } from "../../elements/tabs/default";
-import { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { trpc } from "../../../utils/trpc";
+import setLocale from "../../../helpers/setLocale";
+import DefaultShowLayout from "./default";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+import type { DefaultShowLayoutProps } from "./default";
+import type { Prisma } from "@prisma/client";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {

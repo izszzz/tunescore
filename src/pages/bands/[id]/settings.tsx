@@ -1,12 +1,12 @@
-import type { NextPage } from "next";
-import BandLayout from "../../../components/layouts/show/band";
-import { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
-import { trpc } from "../../../utils/trpc";
-import SingleRowForm from "../../../components/elements/form/single_row";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import { trpc } from "../../../utils/trpc";
+import SingleRowForm from "../../../components/elements/form/single_row";
+import BandLayout from "../../../components/layouts/show/band";
 import { createPath } from "../../../helpers/createPath";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 const EditBand: NextPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();

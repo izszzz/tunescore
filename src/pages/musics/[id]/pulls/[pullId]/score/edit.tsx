@@ -1,8 +1,8 @@
-import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import ScoreEditor from "../../../../../../components/elements/editor/score";
 import { trpc } from "../../../../../../utils/trpc";
+import type { NextPage } from "next";
 
 const Pull: NextPage = () => {
   const router = useRouter();

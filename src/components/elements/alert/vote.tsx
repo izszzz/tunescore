@@ -4,13 +4,14 @@ import Box from "@mui/material/Box";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import LinearProgress from "@mui/material/LinearProgress";
-import { Prisma } from "@prisma/client";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
+import type { Prisma } from "@prisma/client";
+import type { IconButtonProps } from "@mui/material/IconButton";
 
 export interface VoteAlertProps {
   data: Prisma.PullGetPayload<{

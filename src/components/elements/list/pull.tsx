@@ -1,6 +1,7 @@
 import React from "react";
+import PullListItem from "./item/pull";
 import Lists from ".";
-import PullListItem, { PullListItemProps } from "./item/pull";
+import type { PullListItemProps } from "./item/pull";
 interface PullListProps {
   data: PullListItemProps["data"][];
 }

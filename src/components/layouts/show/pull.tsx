@@ -5,15 +5,16 @@ import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import * as Diff3 from "node-diff3";
 import { addWeeks } from "date-fns";
-import { Prisma, PullStatus } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import ShowLayout, { ShowLayoutProps } from "./";
 import { trpc } from "../../../utils/trpc";
-import { DefaultTabsProps } from "../../elements/tabs/default";
 import PullButton from "../../elements/button/group/pull";
 import ScoreButtonGroup from "../../elements/button/group/score";
+import ShowLayout from "./";
+import type { ShowLayoutProps } from "./";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+import type { Prisma, PullStatus } from "@prisma/client";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{

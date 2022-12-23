@@ -1,6 +1,7 @@
 import React from "react";
 import Alert from "@mui/material/Alert";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 
 interface DeleteAlertProps {
   loadingButtonProps: LoadingButtonProps;

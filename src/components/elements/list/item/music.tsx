@@ -4,17 +4,17 @@ import { useSession } from "next-auth/react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import setLocale from "../../../../helpers/setLocale";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import musicOwner from "../../../../helpers/musicOwner";
 import BookmarkToggleButton from "../../button/toggle/bookmark";
 import { trpc } from "../../../../utils/trpc";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
+import type { Prisma } from "@prisma/client";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{

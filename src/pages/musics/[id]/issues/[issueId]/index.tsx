@@ -1,12 +1,15 @@
 import React from "react";
-import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import MusicLayout, {
+import { useSession } from "next-auth/react";
+import Card from "@mui/material/Card";
+import { Typography } from "@mui/material";
+import { trpc } from "../../../../../utils/trpc";
+import MusicLayout from "../../../../../components/layouts/show/music";
+import type {
   MusicLayoutProps,
 } from "../../../../../components/layouts/show/music";
-import { trpc } from "../../../../../utils/trpc";
-import { useSession } from "next-auth/react";
+import type { NextPage } from "next";
 
 const Issue: NextPage = () => {
   const router = useRouter();
@@ -45,7 +48,9 @@ const Issue: NextPage = () => {
   const musicData = music.data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} activeTab="issues">
-      <p>issue</p>
+      <Card variant="outlined">
+        <Typography />
+      </Card>
     </MusicLayout>
   );
 };

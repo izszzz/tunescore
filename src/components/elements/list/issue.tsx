@@ -1,6 +1,7 @@
 import React from "react";
-import IssueListItem, { IssueListItemProps } from "./item/issue";
+import IssueListItem from "./item/issue";
 import Lists from ".";
+import type { IssueListItemProps } from "./item/issue";
 interface IssueListProps {
   data: IssueListItemProps["data"][];
 }

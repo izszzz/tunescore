@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 
 interface ToggleLoadingButtonProps
   extends Omit<LoadingButtonProps, "onClick" | "defaultValue" | "variant"> {

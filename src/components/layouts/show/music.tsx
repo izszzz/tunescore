@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
-import { Locales, Prisma } from "@prisma/client";
 import Typography from "@mui/material/Typography";
-import DefaultShowLayout, { DefaultShowLayoutProps } from "./default";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -13,11 +10,14 @@ import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
 import ResourceIcon from "../../elements/icon/resource";
-import { DefaultTabsProps } from "../../elements/tabs/default";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/setLocale";
 import musicOwner from "../../../helpers/musicOwner";
 import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
+import DefaultShowLayout from "./default";
+import type { DefaultShowLayoutProps } from "./default";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+import type { Locales, Prisma } from "@prisma/client";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -92,7 +92,8 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
           </Box>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 style={{ borderRadius: 5 }}
                 height="80"
                 width="80"

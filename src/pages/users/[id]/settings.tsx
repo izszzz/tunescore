@@ -1,14 +1,15 @@
 import { useEffect } from "react";
-import type { GetServerSideProps, NextPage } from "next";
-import { User } from "next-auth";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui";
+import { PrismaClient } from "@prisma/client";
 import { trpc } from "../../../utils/trpc";
 import UserLayout from "../../../components/layouts/show/user";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import type { Prisma} from "@prisma/client";
+import type { User } from "next-auth";
+import type { GetServerSideProps, NextPage } from "next";
 interface UserProps {
   data: Prisma.UserGetPayload<{
     include: { _count: { select: { followedBy: true; following: true } } };

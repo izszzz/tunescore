@@ -1,4 +1,4 @@
-import { Artist, Band, Music, Prisma } from "@prisma/client";
+import type { Artist, Band, Music, Prisma } from "@prisma/client";
 
 export type Resource = Music | Artist | Band;
 export type ResourceCreateInput =

@@ -1,8 +1,5 @@
 import React from "react";
-import { ItunesMusic } from "../../../../utils/itunes";
 import Tooltip from "@mui/material/Tooltip";
-import ResourceIcon from "../../icon/resource";
-import MusicCard from ".";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -10,6 +7,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
+import ResourceIcon from "../../icon/resource";
+import MusicCard from ".";
+import type { ItunesMusic } from "../../../../utils/itunes";
 
 interface MusicItunesCardProps {
   data: ItunesMusic;

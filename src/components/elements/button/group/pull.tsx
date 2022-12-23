@@ -1,9 +1,11 @@
 import React from "react";
-import { PullStatus, Type } from "@prisma/client";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 import PullStatusIcon from "../../icon/pull/status";
-import VoteAlert, { VoteAlertProps } from "../../alert/vote";
+import VoteAlert from "../../alert/vote";
+import type { VoteAlertProps } from "../../alert/vote";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import type { PullStatus, Type } from "@prisma/client";
 
 interface PullButtonProps {
   type: Type;

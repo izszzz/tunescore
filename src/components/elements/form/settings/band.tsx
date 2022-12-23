@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
-import { Band, Prisma } from "@prisma/client";
 import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui";
-import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
 import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
+import { trpc } from "../../../../utils/trpc";
+import type { Band, Prisma } from "@prisma/client";
 
 interface BandSettingsFormProps {
   data:

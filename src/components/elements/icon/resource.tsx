@@ -4,7 +4,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AlbumIcon from "@mui/icons-material/Album";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { SvgIconProps } from "@mui/material/SvgIcon";
+import type { SvgIconProps } from "@mui/material/SvgIcon";
 
 export interface ResourceIconProps extends SvgIconProps {
   resource:

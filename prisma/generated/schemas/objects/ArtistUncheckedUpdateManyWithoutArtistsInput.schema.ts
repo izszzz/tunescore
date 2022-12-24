@@ -8,7 +8,6 @@ import { ArtistUpdatecomposedMusicsIDsInputObjectSchema } from './ArtistUpdateco
 import { ArtistUpdatemusicIDsInputObjectSchema } from './ArtistUpdatemusicIDsInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
-import { ArtistUpdateuserIDsInputObjectSchema } from './ArtistUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -54,12 +53,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateManyWithoutArtistsInput> = z
     albumIDs: z
       .union([
         z.lazy(() => ArtistUpdatealbumIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => ArtistUpdateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

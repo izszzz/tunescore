@@ -18,8 +18,7 @@ import { MusicUpdatelyristIDsInputObjectSchema } from './MusicUpdatelyristIDsInp
 import { ArtistUncheckedUpdateManyWithoutMusicsNestedInputObjectSchema } from './ArtistUncheckedUpdateManyWithoutMusicsNestedInput.schema';
 import { MusicUpdateartistIDsInputObjectSchema } from './MusicUpdateartistIDsInput.schema';
 import { PullUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PullUncheckedUpdateManyWithoutMusicNestedInput.schema';
-import { UserUncheckedUpdateManyWithoutBookmarkMusicsNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutBookmarkMusicsNestedInput.schema';
-import { MusicUpdateuserIDsInputObjectSchema } from './MusicUpdateuserIDsInput.schema';
+import { BookmarkUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutMusicNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -125,15 +124,8 @@ const Schema: z.ZodType<Prisma.MusicUncheckedUpdateWithoutIssuesInput> = z
       .optional(),
     bookmarks: z
       .lazy(
-        () =>
-          UserUncheckedUpdateManyWithoutBookmarkMusicsNestedInputObjectSchema,
+        () => BookmarkUncheckedUpdateManyWithoutMusicNestedInputObjectSchema,
       )
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => MusicUpdateuserIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
   })
   .strict();

@@ -14,10 +14,7 @@ const Schema: z.ZodType<Prisma.UserCountOutputTypeSelect> = z
     vote: z.boolean().optional(),
     followedBy: z.boolean().optional(),
     following: z.boolean().optional(),
-    bookmarkMusics: z.boolean().optional(),
-    bookmarkArtists: z.boolean().optional(),
-    bookmarkBands: z.boolean().optional(),
-    bookmarkAlbums: z.boolean().optional(),
+    bookmarks: z.boolean().optional(),
   })
   .strict();
 

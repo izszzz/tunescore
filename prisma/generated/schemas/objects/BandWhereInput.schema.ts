@@ -8,7 +8,7 @@ import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.s
 import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
-import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
+import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -50,8 +50,7 @@ const Schema: z.ZodType<Prisma.BandWhereInput> = z
     artists: z.lazy(() => ArtistListRelationFilterObjectSchema).optional(),
     artistIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
     albums: z.lazy(() => AlbumListRelationFilterObjectSchema).optional(),
-    bookmarks: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
-    userIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

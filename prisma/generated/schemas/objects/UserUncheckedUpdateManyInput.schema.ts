@@ -4,10 +4,6 @@ import { NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './Nullab
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
 import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
 import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
-import { UserUpdatebookmarkMusicIDsInputObjectSchema } from './UserUpdatebookmarkMusicIDsInput.schema';
-import { UserUpdatebookmarkArtistIDsInputObjectSchema } from './UserUpdatebookmarkArtistIDsInput.schema';
-import { UserUpdatebookmarkBandIDsInputObjectSchema } from './UserUpdatebookmarkBandIDsInput.schema';
-import { UserUpdatebookmarkAlbumIDsInputObjectSchema } from './UserUpdatebookmarkAlbumIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -56,30 +52,6 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateManyInput> = z
     followingIDs: z
       .union([
         z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkMusicIDs: z
-      .union([
-        z.lazy(() => UserUpdatebookmarkMusicIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkArtistIDs: z
-      .union([
-        z.lazy(() => UserUpdatebookmarkArtistIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkBandIDs: z
-      .union([
-        z.lazy(() => UserUpdatebookmarkBandIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkAlbumIDs: z
-      .union([
-        z.lazy(() => UserUpdatebookmarkAlbumIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

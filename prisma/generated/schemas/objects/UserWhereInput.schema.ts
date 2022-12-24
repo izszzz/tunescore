@@ -12,9 +12,7 @@ import { NotificationListRelationFilterObjectSchema } from './NotificationListRe
 import { VoteListRelationFilterObjectSchema } from './VoteListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
-import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter.schema';
-import { BandListRelationFilterObjectSchema } from './BandListRelationFilter.schema';
-import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
+import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -72,28 +70,7 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
       .optional(),
     following: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
     followingIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    bookmarkMusics: z
-      .lazy(() => MusicListRelationFilterObjectSchema)
-      .optional(),
-    bookmarkMusicIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkArtists: z
-      .lazy(() => ArtistListRelationFilterObjectSchema)
-      .optional(),
-    bookmarkArtistIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkBands: z.lazy(() => BandListRelationFilterObjectSchema).optional(),
-    bookmarkBandIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkAlbums: z
-      .lazy(() => AlbumListRelationFilterObjectSchema)
-      .optional(),
-    bookmarkAlbumIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
+    bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

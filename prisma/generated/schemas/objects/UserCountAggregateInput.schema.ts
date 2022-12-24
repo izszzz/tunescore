@@ -12,10 +12,6 @@ const Schema: z.ZodType<Prisma.UserCountAggregateInputType> = z
     voteIDs: z.literal(true).optional(),
     followedByIDs: z.literal(true).optional(),
     followingIDs: z.literal(true).optional(),
-    bookmarkMusicIDs: z.literal(true).optional(),
-    bookmarkArtistIDs: z.literal(true).optional(),
-    bookmarkBandIDs: z.literal(true).optional(),
-    bookmarkAlbumIDs: z.literal(true).optional(),
     _all: z.literal(true).optional(),
   })
   .strict();

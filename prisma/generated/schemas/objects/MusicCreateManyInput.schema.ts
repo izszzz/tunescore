@@ -9,7 +9,6 @@ import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput
 import { MusicCreatecomposerIDsInputObjectSchema } from './MusicCreatecomposerIDsInput.schema';
 import { MusicCreatelyristIDsInputObjectSchema } from './MusicCreatelyristIDsInput.schema';
 import { MusicCreateartistIDsInputObjectSchema } from './MusicCreateartistIDsInput.schema';
-import { MusicCreateuserIDsInputObjectSchema } from './MusicCreateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -54,12 +53,6 @@ const Schema: z.ZodType<Prisma.MusicCreateManyInput> = z
     artistIDs: z
       .union([
         z.lazy(() => MusicCreateartistIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => MusicCreateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

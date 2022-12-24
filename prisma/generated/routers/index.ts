@@ -11,6 +11,7 @@ import { issuesRouter } from "./Issue.router";
 import { pullsRouter } from "./Pull.router";
 import { votesRouter } from "./Vote.router";
 import { commentsRouter } from "./Comment.router";
+import { bookmarksRouter } from "./Bookmark.router";
 import { notificationsRouter } from "./Notification.router";
 
 export const appRouter = createRouter()
@@ -38,5 +39,7 @@ export const appRouter = createRouter()
   .merge('vote.', votesRouter)
 
   .merge('comment.', commentsRouter)
+
+  .merge('bookmark.', bookmarksRouter)
 
   .merge('notification.', notificationsRouter)

@@ -5,7 +5,7 @@ import { AlbumFindManySchema } from '../findManyAlbum.schema';
 import { ArtistFindManySchema } from '../findManyArtist.schema';
 import { IssueFindManySchema } from '../findManyIssue.schema';
 import { PullFindManySchema } from '../findManyPull.schema';
-import { UserFindManySchema } from '../findManyUser.schema';
+import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { MusicCountOutputTypeArgsObjectSchema } from './MusicCountOutputTypeArgs.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -31,7 +31,7 @@ const Schema: z.ZodType<Prisma.MusicInclude> = z
       .optional(),
     pulls: z.union([z.boolean(), z.lazy(() => PullFindManySchema)]).optional(),
     bookmarks: z
-      .union([z.boolean(), z.lazy(() => UserFindManySchema)])
+      .union([z.boolean(), z.lazy(() => BookmarkFindManySchema)])
       .optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => MusicCountOutputTypeArgsObjectSchema)])

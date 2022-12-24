@@ -7,5 +7,4 @@ export const ArtistScalarFieldEnumSchema = z.enum([
   'musicIDs',
   'bandIDs',
   'albumIDs',
-  'userIDs',
 ]);

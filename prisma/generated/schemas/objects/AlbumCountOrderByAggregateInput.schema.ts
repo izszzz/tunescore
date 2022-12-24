@@ -9,7 +9,6 @@ const Schema: z.ZodType<Prisma.AlbumCountOrderByAggregateInput> = z
     bandId: z.lazy(() => SortOrderSchema).optional(),
     musicIDs: z.lazy(() => SortOrderSchema).optional(),
     artistIDs: z.lazy(() => SortOrderSchema).optional(),
-    userIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

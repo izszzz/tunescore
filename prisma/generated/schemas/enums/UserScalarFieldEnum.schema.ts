@@ -9,8 +9,4 @@ export const UserScalarFieldEnumSchema = z.enum([
   'voteIDs',
   'followedByIDs',
   'followingIDs',
-  'bookmarkMusicIDs',
-  'bookmarkArtistIDs',
-  'bookmarkBandIDs',
-  'bookmarkAlbumIDs',
 ]);

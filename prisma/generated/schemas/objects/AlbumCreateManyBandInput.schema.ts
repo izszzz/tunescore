@@ -3,7 +3,6 @@ import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeI
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { AlbumCreatemusicIDsInputObjectSchema } from './AlbumCreatemusicIDsInput.schema';
 import { AlbumCreateartistIDsInputObjectSchema } from './AlbumCreateartistIDsInput.schema';
-import { AlbumCreateuserIDsInputObjectSchema } from './AlbumCreateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -23,12 +22,6 @@ const Schema: z.ZodType<Prisma.AlbumCreateManyBandInput> = z
     artistIDs: z
       .union([
         z.lazy(() => AlbumCreateartistIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => AlbumCreateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

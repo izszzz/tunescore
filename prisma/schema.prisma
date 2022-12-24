@@ -84,19 +84,8 @@ model User {
   following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
   followingIDs  String[] @db.ObjectId
 
-  bookmarkMusics Music[] @relation("MusicBookmarks", fields: [bookmarkMusicIDs], references: [id])
-  bookmarkMusicIDs String[] @db.ObjectId
-
-  bookmarkArtists Artist[] @relation("ArtistBookmarks", fields: [bookmarkArtistIDs], references: [id])
-  bookmarkArtistIDs String[] @db.ObjectId
-
-  bookmarkBands Band[] @relation("BandBookmarks", fields: [bookmarkBandIDs], references: [id])
-  bookmarkBandIDs String[] @db.ObjectId
-
-  bookmarkAlbums Album[] @relation("AlbumBookmarks", fields: [bookmarkAlbumIDs], references: [id])
-  bookmarkAlbumIDs String[] @db.ObjectId
+  bookmarks Bookmark[]
 }
-
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -137,8 +126,7 @@ model Music {
   issues Issue[]
   pulls Pull[]
 
-  bookmarks User[] @relation("MusicBookmarks", fields: [userIDs], references: [id])
-  userIDs String[] @db.ObjectId
+  bookmarks Bookmark[] @relation("MusicBookmark")
 }
 
 
@@ -155,8 +143,7 @@ model Album {
   artists Artist[] @relation("ArtistAlbums",fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
 
-  bookmarks User[] @relation("AlbumBookmarks", fields: [userIDs], references: [id])
-  userIDs String[] @db.ObjectId
+  bookmarks Bookmark[] @relation("AlbumBookmark")
 }
 
 model Artist {
@@ -179,8 +166,7 @@ model Artist {
   albums Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
   albumIDs          String[] @db.ObjectId
 
-  bookmarks User[] @relation("ArtistBookmarks", fields: [userIDs], references: [id])
-  userIDs String[] @db.ObjectId
+  bookmarks Bookmark[] @relation("ArtistBookmark")
 }
 
 model Band {
@@ -195,8 +181,7 @@ model Band {
 
   albums Album[]
 
-  bookmarks User[] @relation("BandBookmarks", fields: [userIDs], references: [id])
-  userIDs String[] @db.ObjectId
+  bookmarks Bookmark[] @relation("BandBookmark")
 }
 
 model Issue{
@@ -244,7 +229,6 @@ model Vote{
   userIDs String[] @db.ObjectId
 }
 
-
 model Comment{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   body String
@@ -257,6 +241,21 @@ model Comment{
 
   resourceId String @db.ObjectId
   resourceType CommentType 
+}
+
+model Bookmark{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+  music Music? @relation("MusicBookmark", fields: [resourceId], references: [id])
+  band Band? @relation("BandBookmark",fields: [resourceId], references: [id])
+  album Album? @relation("AlbumBookmark",fields: [resourceId], references: [id])
+  artist Artist? @relation("ArtistBookmark",fields: [resourceId], references: [id])
+
+  user User   @relation(fields: [userIDs], references: [id])
+  userIDs String[] @db.ObjectId
+
+  resourceId String @db.ObjectId
+  resourceType BookmarkType 
 }
 
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
@@ -274,6 +273,12 @@ model Notification{
   userId String @db.ObjectId
 }
 
+enum BookmarkType{
+  Music
+  Band
+  Artist
+  Album
+}
 enum CommentType{
   Pull
   Issue

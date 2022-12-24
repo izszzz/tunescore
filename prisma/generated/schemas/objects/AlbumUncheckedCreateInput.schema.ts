@@ -5,8 +5,7 @@ import { MusicUncheckedCreateNestedManyWithoutAlbumsInputObjectSchema } from './
 import { AlbumCreatemusicIDsInputObjectSchema } from './AlbumCreatemusicIDsInput.schema';
 import { ArtistUncheckedCreateNestedManyWithoutAlbumsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutAlbumsInput.schema';
 import { AlbumCreateartistIDsInputObjectSchema } from './AlbumCreateartistIDsInput.schema';
-import { UserUncheckedCreateNestedManyWithoutBookmarkAlbumsInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutBookmarkAlbumsInput.schema';
-import { AlbumCreateuserIDsInputObjectSchema } from './AlbumCreateuserIDsInput.schema';
+import { BookmarkUncheckedCreateNestedManyWithoutAlbumInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutAlbumInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -38,15 +37,8 @@ const Schema: z.ZodType<Prisma.AlbumUncheckedCreateInput> = z
       .optional(),
     bookmarks: z
       .lazy(
-        () =>
-          UserUncheckedCreateNestedManyWithoutBookmarkAlbumsInputObjectSchema,
+        () => BookmarkUncheckedCreateNestedManyWithoutAlbumInputObjectSchema,
       )
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => AlbumCreateuserIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
   })
   .strict();

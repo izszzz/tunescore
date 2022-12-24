@@ -60,18 +60,6 @@ const Schema: z.ZodType<Prisma.UserScalarWhereWithAggregatesInput> = z
       .lazy(() => StringNullableListFilterObjectSchema)
       .optional(),
     followingIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    bookmarkMusicIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkArtistIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkBandIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    bookmarkAlbumIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
   })
   .strict();
 

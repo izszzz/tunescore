@@ -4,7 +4,6 @@ import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { AlbumUpdatemusicIDsInputObjectSchema } from './AlbumUpdatemusicIDsInput.schema';
 import { AlbumUpdateartistIDsInputObjectSchema } from './AlbumUpdateartistIDsInput.schema';
-import { AlbumUpdateuserIDsInputObjectSchema } from './AlbumUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -32,12 +31,6 @@ const Schema: z.ZodType<Prisma.AlbumUncheckedUpdateManyInput> = z
     artistIDs: z
       .union([
         z.lazy(() => AlbumUpdateartistIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    userIDs: z
-      .union([
-        z.lazy(() => AlbumUpdateuserIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

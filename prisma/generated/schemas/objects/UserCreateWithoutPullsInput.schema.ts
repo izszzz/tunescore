@@ -11,14 +11,7 @@ import { UserCreateNestedManyWithoutFollowingInputObjectSchema } from './UserCre
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserCreateNestedManyWithoutFollowedByInput.schema';
 import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
-import { MusicCreateNestedManyWithoutBookmarksInputObjectSchema } from './MusicCreateNestedManyWithoutBookmarksInput.schema';
-import { UserCreatebookmarkMusicIDsInputObjectSchema } from './UserCreatebookmarkMusicIDsInput.schema';
-import { ArtistCreateNestedManyWithoutBookmarksInputObjectSchema } from './ArtistCreateNestedManyWithoutBookmarksInput.schema';
-import { UserCreatebookmarkArtistIDsInputObjectSchema } from './UserCreatebookmarkArtistIDsInput.schema';
-import { BandCreateNestedManyWithoutBookmarksInputObjectSchema } from './BandCreateNestedManyWithoutBookmarksInput.schema';
-import { UserCreatebookmarkBandIDsInputObjectSchema } from './UserCreatebookmarkBandIDsInput.schema';
-import { AlbumCreateNestedManyWithoutBookmarksInputObjectSchema } from './AlbumCreateNestedManyWithoutBookmarksInput.schema';
-import { UserCreatebookmarkAlbumIDsInputObjectSchema } from './UserCreatebookmarkAlbumIDsInput.schema';
+import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -74,41 +67,8 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutPullsInput> = z
         z.string().array(),
       ])
       .optional(),
-    bookmarkMusics: z
-      .lazy(() => MusicCreateNestedManyWithoutBookmarksInputObjectSchema)
-      .optional(),
-    bookmarkMusicIDs: z
-      .union([
-        z.lazy(() => UserCreatebookmarkMusicIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkArtists: z
-      .lazy(() => ArtistCreateNestedManyWithoutBookmarksInputObjectSchema)
-      .optional(),
-    bookmarkArtistIDs: z
-      .union([
-        z.lazy(() => UserCreatebookmarkArtistIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkBands: z
-      .lazy(() => BandCreateNestedManyWithoutBookmarksInputObjectSchema)
-      .optional(),
-    bookmarkBandIDs: z
-      .union([
-        z.lazy(() => UserCreatebookmarkBandIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    bookmarkAlbums: z
-      .lazy(() => AlbumCreateNestedManyWithoutBookmarksInputObjectSchema)
-      .optional(),
-    bookmarkAlbumIDs: z
-      .union([
-        z.lazy(() => UserCreatebookmarkAlbumIDsInputObjectSchema),
-        z.string().array(),
-      ])
+    bookmarks: z
+      .lazy(() => BookmarkCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
   })
   .strict();

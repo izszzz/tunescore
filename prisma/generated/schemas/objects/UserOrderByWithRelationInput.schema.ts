@@ -9,9 +9,7 @@ import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrder
 import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
 import { VoteOrderByRelationAggregateInputObjectSchema } from './VoteOrderByRelationAggregateInput.schema';
 import { UserOrderByRelationAggregateInputObjectSchema } from './UserOrderByRelationAggregateInput.schema';
-import { ArtistOrderByRelationAggregateInputObjectSchema } from './ArtistOrderByRelationAggregateInput.schema';
-import { BandOrderByRelationAggregateInputObjectSchema } from './BandOrderByRelationAggregateInput.schema';
-import { AlbumOrderByRelationAggregateInputObjectSchema } from './AlbumOrderByRelationAggregateInput.schema';
+import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -55,22 +53,9 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
       .lazy(() => UserOrderByRelationAggregateInputObjectSchema)
       .optional(),
     followingIDs: z.lazy(() => SortOrderSchema).optional(),
-    bookmarkMusics: z
-      .lazy(() => MusicOrderByRelationAggregateInputObjectSchema)
+    bookmarks: z
+      .lazy(() => BookmarkOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    bookmarkMusicIDs: z.lazy(() => SortOrderSchema).optional(),
-    bookmarkArtists: z
-      .lazy(() => ArtistOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    bookmarkArtistIDs: z.lazy(() => SortOrderSchema).optional(),
-    bookmarkBands: z
-      .lazy(() => BandOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    bookmarkBandIDs: z.lazy(() => SortOrderSchema).optional(),
-    bookmarkAlbums: z
-      .lazy(() => AlbumOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    bookmarkAlbumIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

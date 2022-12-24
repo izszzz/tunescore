@@ -4,7 +4,7 @@ import { LocalesOrderByInputObjectSchema } from './LocalesOrderByInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './BandOrderByWithRelationInput.schema';
 import { MusicOrderByRelationAggregateInputObjectSchema } from './MusicOrderByRelationAggregateInput.schema';
 import { ArtistOrderByRelationAggregateInputObjectSchema } from './ArtistOrderByRelationAggregateInput.schema';
-import { UserOrderByRelationAggregateInputObjectSchema } from './UserOrderByRelationAggregateInput.schema';
+import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -23,9 +23,8 @@ const Schema: z.ZodType<Prisma.AlbumOrderByWithRelationInput> = z
       .optional(),
     artistIDs: z.lazy(() => SortOrderSchema).optional(),
     bookmarks: z
-      .lazy(() => UserOrderByRelationAggregateInputObjectSchema)
+      .lazy(() => BookmarkOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    userIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

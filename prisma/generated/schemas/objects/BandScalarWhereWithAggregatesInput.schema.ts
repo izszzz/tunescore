@@ -26,7 +26,6 @@ const Schema: z.ZodType<Prisma.BandScalarWhereWithAggregatesInput> = z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
     artistIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    userIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();
 

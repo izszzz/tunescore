@@ -15,7 +15,6 @@ const Schema: z.ZodType<Prisma.MusicCountAggregateInputType> = z
     composerIDs: z.literal(true).optional(),
     lyristIDs: z.literal(true).optional(),
     artistIDs: z.literal(true).optional(),
-    userIDs: z.literal(true).optional(),
     _all: z.literal(true).optional(),
   })
   .strict();

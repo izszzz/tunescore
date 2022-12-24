@@ -8,6 +8,9 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
+import { createPath } from "../../../helpers/createPath";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<{ include: { bookmarks: true } }>;
@@ -20,7 +23,37 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const update = trpc.useMutation(["artist.updateOneArtist"]);
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  const path = createPath([
+    "band.findUniqueBand",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        artists: true,
+        musics: {
+          include: {
+            band: true,
+            composers: true,
+            lyrists: true,
+            bookmarks: {
+              where: {
+                user: { id: session.data?.user?.id },
+                resourceType: "Artist",
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+  const query = path[1];
+  const update = trpc.useMutation(["artist.updateOneArtist"], {
+    onSuccess: (data) => {
+      queryClient.setQueryData<typeof data>(path, data);
+      enqueueSnackbar("artist.update success");
+    },
+  });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -52,11 +85,12 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         disabled: update.isLoading,
         onClick: (value) =>
           update.mutate({
-            where: { id: router.query.id as string },
+            ...query,
             data: {
               bookmarks: {
-                [value ? "disconnect" : "connect"]: {
-                  id: session.data?.user?.id,
+                [value ? "delete" : "create"]: {
+                  resourceType: "Artist",
+                  user: { connect: session.data?.user?.id },
                 },
               },
             },

@@ -6,6 +6,7 @@ import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './
 import { IssueUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { PullUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PullUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { CommentUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './CommentUncheckedUpdateManyWithoutUserNestedInput.schema';
+import { BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { VoteUncheckedUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUncheckedUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
@@ -13,7 +14,6 @@ import { UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from '
 import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
 import { UserUncheckedUpdateManyWithoutFollowedByNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowedByNestedInput.schema';
 import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
-import { BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutUserNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -62,6 +62,9 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMusicsInput> = z
     comments: z
       .lazy(() => CommentUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
+    bookmarks: z
+      .lazy(() => BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
     notifications: z
       .lazy(
         () => NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema,
@@ -97,9 +100,6 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMusicsInput> = z
         z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
         z.string().array(),
       ])
-      .optional(),
-    bookmarks: z
-      .lazy(() => BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
   })
   .strict();

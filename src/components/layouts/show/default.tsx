@@ -4,9 +4,7 @@ import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import DefaultHeader from "../header/default";
 import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
-import type {
-  BookmarkToggleButtonProps,
-} from "../../elements/button/toggle/bookmark";
+import type { BookmarkToggleButtonProps } from "../../elements/button/toggle/bookmark";
 
 export interface DefaultShowLayoutProps extends ShowLayoutProps {
   bookmarkToggleButtonProps: BookmarkToggleButtonProps;

@@ -13,10 +13,11 @@ import ArtistLayout from "../../../components/layouts/show/artist";
 import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
+import { createPath } from "../../../helpers/createPath";
 
 const Artist: NextPage = () => {
   const router = useRouter();
-  const { data } = trpc.useQuery([
+  const path = createPath([
     "artist.findUniqueArtist",
     {
       where: { id: router.query.id as string },
@@ -35,6 +36,7 @@ const Artist: NextPage = () => {
       },
     },
   ]);
+  const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const musicData = data as Prisma.ArtistGetPayload<{
     include: {

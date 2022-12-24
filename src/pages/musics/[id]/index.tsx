@@ -17,14 +17,13 @@ import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
-import type {
-  MusicLayoutProps,
-} from "../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { NextPage } from "next";
+import { createPath } from "../../../helpers/createPath";
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const { data } = trpc.useQuery([
+  const path = createPath([
     "music.findUniqueMusic",
     {
       where: { id: router.query.id as string },
@@ -35,10 +34,16 @@ const Music: NextPage = () => {
         composers: true,
         lyrists: true,
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
-        bookmarks: { where: { id: session.data?.user?.id } },
+        bookmarks: {
+          where: {
+            user: { id: session.data?.user?.id },
+            resourceType: "Music",
+          },
+        },
       },
     },
   ]);
+  const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (

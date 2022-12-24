@@ -27,7 +27,12 @@ const Musics: NextPage = () => {
             band: true,
             user: true,
             artists: true,
-            bookmarks: { where: { id: session.data?.user?.id } },
+            bookmarks: {
+              where: {
+                user: { id: session.data?.user?.id },
+                resourceType: "Music",
+              },
+            },
           },
           where: {
             title: {

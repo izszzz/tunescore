@@ -4,6 +4,7 @@ import { SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './
 import { MusicUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './MusicUncheckedCreateNestedManyWithoutUserInput.schema';
 import { PullUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PullUncheckedCreateNestedManyWithoutUserInput.schema';
 import { CommentUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './CommentUncheckedCreateNestedManyWithoutUserInput.schema';
+import { BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutUserInput.schema';
 import { NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutUserInput.schema';
 import { VoteUncheckedCreateNestedManyWithoutUsersInputObjectSchema } from './VoteUncheckedCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
@@ -11,7 +12,6 @@ import { UserUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from '
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowedByInput.schema';
 import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
-import { BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutUserInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -36,6 +36,9 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutIssuesInput> = z
       .optional(),
     comments: z
       .lazy(() => CommentUncheckedCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    bookmarks: z
+      .lazy(() => BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     notifications: z
       .lazy(
@@ -72,9 +75,6 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutIssuesInput> = z
         z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
         z.string().array(),
       ])
-      .optional(),
-    bookmarks: z
-      .lazy(() => BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
   })
   .strict();

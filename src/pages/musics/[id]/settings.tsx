@@ -17,9 +17,7 @@ import setLocale from "../../../helpers/setLocale";
 import { createPath } from "../../../helpers/createPath";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
-import type {
-  MusicLayoutProps,
-} from "../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { Artist } from "@prisma/client";
 import type { NextPage } from "next";
 
@@ -39,7 +37,12 @@ const SettingsMusic: NextPage = () => {
         artists: true,
         composers: true,
         lyrists: true,
-        bookmarks: { where: { id: session.data?.user?.id } },
+        bookmarks: {
+          where: {
+            user: { id: session.data?.user?.id },
+            resourceType: "Music",
+          },
+        },
       },
     },
   ]);

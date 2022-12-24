@@ -18,6 +18,9 @@ import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locales, Prisma } from "@prisma/client";
+import { createPath } from "../../../helpers/createPath";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -35,14 +38,38 @@ export interface MusicLayoutProps
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
-const MusicLayout: React.FC<MusicLayoutProps> = ({
-  data,
-  activeTab,
-  children,
-}) => {
+const MusicLayout = ({ data, activeTab, children }: MusicLayoutProps) => {
   const router = useRouter();
   const session = useSession();
-  const update = trpc.useMutation(["music.updateOneMusic"]);
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  const id = router.query.id as string;
+  const path = createPath([
+    "music.findUniqueMusic",
+    {
+      where: { id },
+      include: {
+        user: true,
+        band: true,
+        artists: true,
+        composers: true,
+        lyrists: true,
+        bookmarks: {
+          where: {
+            user: { id: session.data?.user?.id },
+            resourceType: "Music",
+          },
+        },
+      },
+    },
+  ]);
+  const query = path[1];
+  const update = trpc.useMutation(["music.updateOneMusic"], {
+    onSuccess: (data) => {
+      queryClient.setQueryData<typeof data>(path, data);
+      enqueueSnackbar("music.update success");
+    },
+  });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -112,11 +139,12 @@ const MusicLayout: React.FC<MusicLayoutProps> = ({
         disabled: update.isLoading,
         onClick: (value) =>
           update.mutate({
-            where: { id: router.query.id as string },
+            ...query,
             data: {
               bookmarks: {
-                [value ? "disconnect" : "connect"]: {
-                  id: session.data?.user?.id,
+                [value ? "delete" : "create"]: {
+                  resourceType: "Music",
+                  user: { connect: { id: session.data?.user?.id } },
                 },
               },
             },

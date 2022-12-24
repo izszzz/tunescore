@@ -28,7 +28,6 @@ export const appRouter = createRouter()
   .merge("comment.", commentsRouter)
   .merge("vote.", votesRouter)
   .merge("pagination.", paginationRouter)
-  .merge("bookmarked.", bookmarkedRouter)
   .merge("search.", searchRouter)
   .merge("auth.", protectedExampleRouter);
 

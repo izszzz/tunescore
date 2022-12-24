@@ -6,6 +6,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.BookmarkMinOrderByAggregateInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
+    userId: z.lazy(() => SortOrderSchema).optional(),
     resourceId: z.lazy(() => SortOrderSchema).optional(),
     resourceType: z.lazy(() => SortOrderSchema).optional(),
   })

@@ -5,10 +5,10 @@ import { MusicFindManySchema } from '../findManyMusic.schema';
 import { IssueFindManySchema } from '../findManyIssue.schema';
 import { PullFindManySchema } from '../findManyPull.schema';
 import { CommentFindManySchema } from '../findManyComment.schema';
+import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { NotificationFindManySchema } from '../findManyNotification.schema';
 import { VoteFindManySchema } from '../findManyVote.schema';
 import { UserFindManySchema } from '../findManyUser.schema';
-import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -36,6 +36,9 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
     comments: z
       .union([z.boolean(), z.lazy(() => CommentFindManySchema)])
       .optional(),
+    bookmarks: z
+      .union([z.boolean(), z.lazy(() => BookmarkFindManySchema)])
+      .optional(),
     notifications: z
       .union([z.boolean(), z.lazy(() => NotificationFindManySchema)])
       .optional(),
@@ -49,9 +52,6 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
       .union([z.boolean(), z.lazy(() => UserFindManySchema)])
       .optional(),
     followingIDs: z.boolean().optional(),
-    bookmarks: z
-      .union([z.boolean(), z.lazy(() => BookmarkFindManySchema)])
-      .optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)])
       .optional(),

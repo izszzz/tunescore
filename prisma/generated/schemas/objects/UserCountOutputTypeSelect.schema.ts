@@ -10,11 +10,11 @@ const Schema: z.ZodType<Prisma.UserCountOutputTypeSelect> = z
     issues: z.boolean().optional(),
     pulls: z.boolean().optional(),
     comments: z.boolean().optional(),
+    bookmarks: z.boolean().optional(),
     notifications: z.boolean().optional(),
     vote: z.boolean().optional(),
     followedBy: z.boolean().optional(),
     following: z.boolean().optional(),
-    bookmarks: z.boolean().optional(),
   })
   .strict();
 

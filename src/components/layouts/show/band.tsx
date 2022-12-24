@@ -8,6 +8,9 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
+import { createPath } from "../../../helpers/createPath";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -26,7 +29,37 @@ const BandLayout: React.FC<BandLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const update = trpc.useMutation(["band.updateOneBand"]);
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  const path = createPath([
+    "band.findUniqueBand",
+    {
+      where: { id: router.query.id as string },
+      include: {
+        artists: true,
+        musics: {
+          include: {
+            band: true,
+            composers: true,
+            lyrists: true,
+            bookmarks: {
+              where: {
+                user: { id: session.data?.user?.id },
+                resourceType: "Band",
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+  const query = path[1];
+  const update = trpc.useMutation(["band.updateOneBand"], {
+    onSuccess: (data) => {
+      queryClient.setQueryData<typeof data>(path, data);
+      enqueueSnackbar("band.update success");
+    },
+  });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -58,11 +91,12 @@ const BandLayout: React.FC<BandLayoutProps> = ({
         disabled: update.isLoading,
         onClick: (value) =>
           update.mutate({
-            where: { id: router.query.id as string },
+            ...query,
             data: {
               bookmarks: {
-                [value ? "disconnect" : "connect"]: {
-                  id: session.data?.user?.id,
+                [value ? "delete" : "create"]: {
+                  resourceType: "Band",
+                  user: { connect: session.data?.user?.id },
                 },
               },
             },

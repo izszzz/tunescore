@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
-import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { EnumBookmarkTypeWithAggregatesFilterObjectSchema } from './EnumBookmarkTypeWithAggregatesFilter.schema';
 import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
 
@@ -31,7 +30,9 @@ const Schema: z.ZodType<Prisma.BookmarkScalarWhereWithAggregatesInput> = z
     id: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
-    userIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    userId: z
+      .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
+      .optional(),
     resourceId: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),

@@ -6,6 +6,7 @@ import { SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUp
 import { MusicUpdateManyWithoutUserNestedInputObjectSchema } from './MusicUpdateManyWithoutUserNestedInput.schema';
 import { IssueUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUpdateManyWithoutUserNestedInput.schema';
 import { PullUpdateManyWithoutUserNestedInputObjectSchema } from './PullUpdateManyWithoutUserNestedInput.schema';
+import { BookmarkUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema';
 import { VoteUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
@@ -13,7 +14,6 @@ import { UserUpdateManyWithoutFollowingNestedInputObjectSchema } from './UserUpd
 import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
 import { UserUpdateManyWithoutFollowedByNestedInputObjectSchema } from './UserUpdateManyWithoutFollowedByNestedInput.schema';
 import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
-import { BookmarkUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUpdateManyWithoutUserNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -62,6 +62,9 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutCommentsInput> = z
     pulls: z
       .lazy(() => PullUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
+    bookmarks: z
+      .lazy(() => BookmarkUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
     notifications: z
       .lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
@@ -91,9 +94,6 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutCommentsInput> = z
         z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
         z.string().array(),
       ])
-      .optional(),
-    bookmarks: z
-      .lazy(() => BookmarkUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
   })
   .strict();

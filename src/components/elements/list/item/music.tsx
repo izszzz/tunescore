@@ -58,8 +58,10 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
                     where: { id: router.query.id as string },
                     data: {
                       bookmarks: {
-                        [value ? "disconnect" : "connect"]: {
-                          id: session.data?.user?.id,
+                        [value ? "delete" : "create"]: {
+                          resourceType: "Music",
+                          music: { connect: data.id },
+                          user: { connect: session.data?.user?.id },
                         },
                       },
                     },

@@ -4,6 +4,7 @@ import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCr
 import { MusicCreateNestedManyWithoutUserInputObjectSchema } from './MusicCreateNestedManyWithoutUserInput.schema';
 import { PullCreateNestedManyWithoutUserInputObjectSchema } from './PullCreateNestedManyWithoutUserInput.schema';
 import { CommentCreateNestedManyWithoutUserInputObjectSchema } from './CommentCreateNestedManyWithoutUserInput.schema';
+import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
@@ -11,7 +12,6 @@ import { UserCreateNestedManyWithoutFollowingInputObjectSchema } from './UserCre
 import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
 import { UserCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserCreateNestedManyWithoutFollowedByInput.schema';
 import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
-import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -36,6 +36,9 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutIssuesInput> = z
       .optional(),
     comments: z
       .lazy(() => CommentCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    bookmarks: z
+      .lazy(() => BookmarkCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)
@@ -66,9 +69,6 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutIssuesInput> = z
         z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
         z.string().array(),
       ])
-      .optional(),
-    bookmarks: z
-      .lazy(() => BookmarkCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
   })
   .strict();

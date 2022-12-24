@@ -21,7 +21,7 @@ const Schema: z.ZodType<Prisma.BookmarkSelect> = z
       .union([z.boolean(), z.lazy(() => ArtistArgsObjectSchema)])
       .optional(),
     user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
-    userIDs: z.boolean().optional(),
+    userId: z.boolean().optional(),
     resourceId: z.boolean().optional(),
     resourceType: z.boolean().optional(),
   })

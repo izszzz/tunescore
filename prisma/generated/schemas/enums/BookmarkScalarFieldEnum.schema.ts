@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const BookmarkScalarFieldEnumSchema = z.enum([
   'id',
-  'userIDs',
+  'userId',
   'resourceId',
   'resourceType',
 ]);

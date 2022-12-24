@@ -10,7 +10,6 @@ import { ArtistRelationFilterObjectSchema } from './ArtistRelationFilter.schema'
 import { ArtistWhereInputObjectSchema } from './ArtistWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
-import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { EnumBookmarkTypeFilterObjectSchema } from './EnumBookmarkTypeFilter.schema';
 import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
 
@@ -71,7 +70,9 @@ const Schema: z.ZodType<Prisma.BookmarkWhereInput> = z
         z.lazy(() => UserWhereInputObjectSchema),
       ])
       .optional(),
-    userIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    userId: z
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
     resourceId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),

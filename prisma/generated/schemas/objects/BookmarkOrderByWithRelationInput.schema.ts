@@ -16,7 +16,7 @@ const Schema: z.ZodType<Prisma.BookmarkOrderByWithRelationInput> = z
     album: z.lazy(() => AlbumOrderByWithRelationInputObjectSchema).optional(),
     artist: z.lazy(() => ArtistOrderByWithRelationInputObjectSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
-    userIDs: z.lazy(() => SortOrderSchema).optional(),
+    userId: z.lazy(() => SortOrderSchema).optional(),
     resourceId: z.lazy(() => SortOrderSchema).optional(),
     resourceType: z.lazy(() => SortOrderSchema).optional(),
   })

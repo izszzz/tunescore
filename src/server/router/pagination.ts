@@ -27,6 +27,7 @@ export const paginationRouter = createRouter()
             lyrists: true;
             band: true;
             artists: true;
+            bookmarks: true;
           };
         }>,
         Prisma.MusicFindManyArgs
@@ -43,7 +44,10 @@ export const paginationRouter = createRouter()
       const paginate = createPaginator(options);
       return await paginate<
         Prisma.ArtistGetPayload<{
-          include: { bands: true };
+          include: {
+            bands: true;
+            bookmarks: true;
+          };
         }>,
         Prisma.ArtistFindManyArgs
       >(ctx.prisma.artist, args);
@@ -60,6 +64,7 @@ export const paginationRouter = createRouter()
       return await paginate<
         Prisma.BandGetPayload<{
           include: {
+            bookmarks: true;
             _count: {
               select: {
                 artists: true;
@@ -83,6 +88,7 @@ export const paginationRouter = createRouter()
       return await paginate<
         Prisma.AlbumGetPayload<{
           include: {
+            bookmarks: true;
             band: true;
             _count: {
               select: {

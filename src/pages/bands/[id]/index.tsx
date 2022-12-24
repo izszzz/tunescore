@@ -13,10 +13,11 @@ import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
+import { createPath } from "../../../helpers/createPath";
 
 const Band: NextPage = () => {
   const router = useRouter();
-  const { data } = trpc.useQuery([
+  const path = createPath([
     "band.findUniqueBand",
     {
       where: { id: router.query.id as string },
@@ -33,6 +34,7 @@ const Band: NextPage = () => {
       },
     },
   ]);
+  const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const bandData = data as Prisma.BandGetPayload<{
     include: {

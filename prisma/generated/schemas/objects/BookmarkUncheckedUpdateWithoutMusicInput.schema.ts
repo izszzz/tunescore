@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BookmarkUpdateuserIDsInputObjectSchema } from './BookmarkUpdateuserIDsInput.schema';
+import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
 import { EnumBookmarkTypeFieldUpdateOperationsInputObjectSchema } from './EnumBookmarkTypeFieldUpdateOperationsInput.schema';
 
@@ -7,10 +7,10 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.BookmarkUncheckedUpdateWithoutMusicInput> = z
   .object({
-    userIDs: z
+    userId: z
       .union([
-        z.lazy(() => BookmarkUpdateuserIDsInputObjectSchema),
-        z.string().array(),
+        z.string(),
+        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
     resourceType: z

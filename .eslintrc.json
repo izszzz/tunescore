@@ -9,8 +9,10 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:import/recommended",
-    "prettier"
+    "prettier",
+    "prettier/@typescript-eslint"
   ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "warn",

@@ -7,6 +7,7 @@ import { SessionListRelationFilterObjectSchema } from './SessionListRelationFilt
 import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.schema';
 import { IssueListRelationFilterObjectSchema } from './IssueListRelationFilter.schema';
 import { PullListRelationFilterObjectSchema } from './PullListRelationFilter.schema';
+import { CommentListRelationFilterObjectSchema } from './CommentListRelationFilter.schema';
 import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
 import { VoteListRelationFilterObjectSchema } from './VoteListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
@@ -59,6 +60,7 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
     musics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),
     issues: z.lazy(() => IssueListRelationFilterObjectSchema).optional(),
     pulls: z.lazy(() => PullListRelationFilterObjectSchema).optional(),
+    comments: z.lazy(() => CommentListRelationFilterObjectSchema).optional(),
     notifications: z
       .lazy(() => NotificationListRelationFilterObjectSchema)
       .optional(),

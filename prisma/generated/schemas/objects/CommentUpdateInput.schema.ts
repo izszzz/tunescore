@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { PullUpdateOneWithoutCommentsNestedInputObjectSchema } from './PullUpdateOneWithoutCommentsNestedInput.schema';
 import { IssueUpdateOneWithoutCommentsNestedInputObjectSchema } from './IssueUpdateOneWithoutCommentsNestedInput.schema';
+import { UserUpdateOneRequiredWithoutCommentsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutCommentsNestedInput.schema';
 import { CommentTypeSchema } from '../enums/CommentType.schema';
 import { EnumCommentTypeFieldUpdateOperationsInputObjectSchema } from './EnumCommentTypeFieldUpdateOperationsInput.schema';
 
@@ -21,7 +22,10 @@ const Schema: z.ZodType<Prisma.CommentUpdateInput> = z
     issue: z
       .lazy(() => IssueUpdateOneWithoutCommentsNestedInputObjectSchema)
       .optional(),
-    resurceType: z
+    user: z
+      .lazy(() => UserUpdateOneRequiredWithoutCommentsNestedInputObjectSchema)
+      .optional(),
+    resourceType: z
       .union([
         z.lazy(() => CommentTypeSchema),
         z.lazy(() => EnumCommentTypeFieldUpdateOperationsInputObjectSchema),

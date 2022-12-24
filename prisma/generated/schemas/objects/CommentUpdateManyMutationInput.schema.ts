@@ -13,7 +13,7 @@ const Schema: z.ZodType<Prisma.CommentUpdateManyMutationInput> = z
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => CommentTypeSchema),
         z.lazy(() => EnumCommentTypeFieldUpdateOperationsInputObjectSchema),

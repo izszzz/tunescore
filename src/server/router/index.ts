@@ -14,6 +14,7 @@ import { createRouter } from "./context";
 import { bookmarkedRouter } from "./bookmarked";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
+import { commentsRouter } from "../../../prisma/generated/routers/Comment.router";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -24,6 +25,7 @@ export const appRouter = createRouter()
   .merge("album.", albumsRouter)
   .merge("issue.", issuesRouter)
   .merge("pull.", pullsRouter)
+  .merge("comment.", commentsRouter)
   .merge("vote.", votesRouter)
   .merge("pagination.", paginationRouter)
   .merge("bookmarked.", bookmarkedRouter)

@@ -71,6 +71,7 @@ model User {
   musics        Music[]
   issues        Issue[]
   pulls  Pull[]
+  comments Comment[]
 
   notifications Notification[]
 
@@ -251,8 +252,11 @@ model Comment{
   pull Pull? @relation("PullComment", fields: [resourceId], references: [id])
   issue Issue? @relation("IssueComment", fields: [resourceId], references: [id])
 
+  user User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
   resourceId String @db.ObjectId
-  resurceType CommentType 
+  resourceType CommentType 
 }
 
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices

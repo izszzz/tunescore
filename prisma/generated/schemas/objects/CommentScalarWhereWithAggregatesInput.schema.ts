@@ -29,10 +29,13 @@ const Schema: z.ZodType<Prisma.CommentScalarWhereWithAggregatesInput> = z
     body: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
+    userId: z
+      .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
+      .optional(),
     resourceId: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => EnumCommentTypeWithAggregatesFilterObjectSchema),
         z.lazy(() => CommentTypeSchema),

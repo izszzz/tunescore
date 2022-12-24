@@ -13,13 +13,19 @@ const Schema: z.ZodType<Prisma.CommentUncheckedUpdateInput> = z
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
+    userId: z
+      .union([
+        z.string(),
+        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
     resourceId: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => CommentTypeSchema),
         z.lazy(() => EnumCommentTypeFieldUpdateOperationsInputObjectSchema),

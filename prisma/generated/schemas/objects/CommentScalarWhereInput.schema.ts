@@ -29,10 +29,13 @@ const Schema: z.ZodType<Prisma.CommentScalarWhereInput> = z
     body: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
+    userId: z
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
     resourceId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => EnumCommentTypeFilterObjectSchema),
         z.lazy(() => CommentTypeSchema),

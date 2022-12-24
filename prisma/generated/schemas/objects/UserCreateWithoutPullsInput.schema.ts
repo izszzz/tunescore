@@ -3,6 +3,7 @@ import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCr
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { MusicCreateNestedManyWithoutUserInputObjectSchema } from './MusicCreateNestedManyWithoutUserInput.schema';
 import { IssueCreateNestedManyWithoutUserInputObjectSchema } from './IssueCreateNestedManyWithoutUserInput.schema';
+import { CommentCreateNestedManyWithoutUserInputObjectSchema } from './CommentCreateNestedManyWithoutUserInput.schema';
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
@@ -39,6 +40,9 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutPullsInput> = z
       .optional(),
     issues: z
       .lazy(() => IssueCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    comments: z
+      .lazy(() => CommentCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)

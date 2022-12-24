@@ -7,7 +7,8 @@ const Schema: z.ZodType<Prisma.CommentCreateManyIssueInput> = z
   .object({
     id: z.string().optional(),
     body: z.string(),
-    resurceType: z.lazy(() => CommentTypeSchema),
+    userId: z.string(),
+    resourceType: z.lazy(() => CommentTypeSchema),
   })
   .strict();
 

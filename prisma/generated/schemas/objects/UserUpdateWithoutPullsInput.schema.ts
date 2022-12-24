@@ -5,6 +5,7 @@ import { AccountUpdateManyWithoutUserNestedInputObjectSchema } from './AccountUp
 import { SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { MusicUpdateManyWithoutUserNestedInputObjectSchema } from './MusicUpdateManyWithoutUserNestedInput.schema';
 import { IssueUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUpdateManyWithoutUserNestedInput.schema';
+import { CommentUpdateManyWithoutUserNestedInputObjectSchema } from './CommentUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema';
 import { VoteUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
@@ -64,6 +65,9 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutPullsInput> = z
       .optional(),
     issues: z
       .lazy(() => IssueUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    comments: z
+      .lazy(() => CommentUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
     notifications: z
       .lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema)

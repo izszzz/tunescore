@@ -4,6 +4,8 @@ import { PullRelationFilterObjectSchema } from './PullRelationFilter.schema';
 import { PullWhereInputObjectSchema } from './PullWhereInput.schema';
 import { IssueRelationFilterObjectSchema } from './IssueRelationFilter.schema';
 import { IssueWhereInputObjectSchema } from './IssueWhereInput.schema';
+import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
+import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 import { EnumCommentTypeFilterObjectSchema } from './EnumCommentTypeFilter.schema';
 import { CommentTypeSchema } from '../enums/CommentType.schema';
 
@@ -47,10 +49,19 @@ const Schema: z.ZodType<Prisma.CommentWhereInput> = z
       ])
       .optional()
       .nullable(),
+    user: z
+      .union([
+        z.lazy(() => UserRelationFilterObjectSchema),
+        z.lazy(() => UserWhereInputObjectSchema),
+      ])
+      .optional(),
+    userId: z
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
     resourceId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => EnumCommentTypeFilterObjectSchema),
         z.lazy(() => CommentTypeSchema),

@@ -1,11 +1,16 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
-import { IntFilterObjectSchema } from './IntFilter.schema';
+import { BookmarkRelationFilterObjectSchema } from './BookmarkRelationFilter.schema';
+import { BookmarkWhereInputObjectSchema } from './BookmarkWhereInput.schema';
+import { FollowRelationFilterObjectSchema } from './FollowRelationFilter.schema';
+import { FollowWhereInputObjectSchema } from './FollowWhereInput.schema';
+import { CommentRelationFilterObjectSchema } from './CommentRelationFilter.schema';
+import { CommentWhereInputObjectSchema } from './CommentWhereInput.schema';
+import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
+import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 import { EnumNotificationTypeFilterObjectSchema } from './EnumNotificationTypeFilter.schema';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
-import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
-import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -30,11 +35,38 @@ const Schema: z.ZodType<Prisma.NotificationWhereInput> = z
     id: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
-    type: z
+    bookmarked: z
+      .union([
+        z.lazy(() => BookmarkRelationFilterObjectSchema),
+        z.lazy(() => BookmarkWhereInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
+    followed: z
+      .union([
+        z.lazy(() => FollowRelationFilterObjectSchema),
+        z.lazy(() => FollowWhereInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
+    commented: z
+      .union([
+        z.lazy(() => CommentRelationFilterObjectSchema),
+        z.lazy(() => CommentWhereInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
+    user: z
+      .union([
+        z.lazy(() => UserRelationFilterObjectSchema),
+        z.lazy(() => UserWhereInputObjectSchema),
+      ])
+      .optional(),
+    userId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
     resourceId: z
-      .union([z.lazy(() => IntFilterObjectSchema), z.number()])
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
     resurceType: z
       .union([
@@ -47,15 +79,6 @@ const Schema: z.ZodType<Prisma.NotificationWhereInput> = z
       .optional(),
     readAt: z
       .union([z.lazy(() => DateTimeFilterObjectSchema), z.date()])
-      .optional(),
-    user: z
-      .union([
-        z.lazy(() => UserRelationFilterObjectSchema),
-        z.lazy(() => UserWhereInputObjectSchema),
-      ])
-      .optional(),
-    userId: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
   })
   .strict();

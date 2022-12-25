@@ -11,10 +11,8 @@ import { BookmarkUpdateManyWithoutUserNestedInputObjectSchema } from './Bookmark
 import { NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema';
 import { VoteUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
-import { UserUpdateManyWithoutFollowingNestedInputObjectSchema } from './UserUpdateManyWithoutFollowingNestedInput.schema';
-import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
-import { UserUpdateManyWithoutFollowedByNestedInputObjectSchema } from './UserUpdateManyWithoutFollowedByNestedInput.schema';
-import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
+import { FollowUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUpdateManyWithoutFollowerNestedInput.schema';
+import { FollowUpdateManyWithoutFollowingNestedInputObjectSchema } from './FollowUpdateManyWithoutFollowingNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -81,23 +79,11 @@ const Schema: z.ZodType<Prisma.UserUpdateInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
-      .lazy(() => UserUpdateManyWithoutFollowingNestedInputObjectSchema)
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
+    followers: z
+      .lazy(() => FollowUpdateManyWithoutFollowerNestedInputObjectSchema)
       .optional(),
     following: z
-      .lazy(() => UserUpdateManyWithoutFollowedByNestedInputObjectSchema)
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
+      .lazy(() => FollowUpdateManyWithoutFollowingNestedInputObjectSchema)
       .optional(),
   })
   .strict();

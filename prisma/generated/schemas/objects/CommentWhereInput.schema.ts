@@ -6,6 +6,7 @@ import { IssueRelationFilterObjectSchema } from './IssueRelationFilter.schema';
 import { IssueWhereInputObjectSchema } from './IssueWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
+import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
 import { EnumCommentTypeFilterObjectSchema } from './EnumCommentTypeFilter.schema';
 import { CommentTypeSchema } from '../enums/CommentType.schema';
 
@@ -57,6 +58,9 @@ const Schema: z.ZodType<Prisma.CommentWhereInput> = z
       .optional(),
     userId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
+    notifications: z
+      .lazy(() => NotificationListRelationFilterObjectSchema)
       .optional(),
     resourceId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])

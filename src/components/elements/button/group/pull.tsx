@@ -5,10 +5,10 @@ import PullStatusIcon from "../../icon/pull/status";
 import VoteAlert from "../../alert/vote";
 import type { VoteAlertProps } from "../../alert/vote";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
-import type { PullStatus, Type } from "@prisma/client";
+import type { PullStatus, MusicType } from "@prisma/client";
 
 interface PullButtonProps {
-  type: Type;
+  type: MusicType;
   status: PullStatus;
   conflict: boolean;
   diff: boolean;

@@ -8,7 +8,7 @@ import { CommentFindManySchema } from '../findManyComment.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { NotificationFindManySchema } from '../findManyNotification.schema';
 import { VoteFindManySchema } from '../findManyVote.schema';
-import { UserFindManySchema } from '../findManyUser.schema';
+import { FollowFindManySchema } from '../findManyFollow.schema';
 import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -44,14 +44,12 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
       .optional(),
     vote: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
     voteIDs: z.boolean().optional(),
-    followedBy: z
-      .union([z.boolean(), z.lazy(() => UserFindManySchema)])
+    followers: z
+      .union([z.boolean(), z.lazy(() => FollowFindManySchema)])
       .optional(),
-    followedByIDs: z.boolean().optional(),
     following: z
-      .union([z.boolean(), z.lazy(() => UserFindManySchema)])
+      .union([z.boolean(), z.lazy(() => FollowFindManySchema)])
       .optional(),
-    followingIDs: z.boolean().optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)])
       .optional(),

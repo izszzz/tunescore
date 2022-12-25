@@ -11,9 +11,7 @@ import { BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from '.
 import { NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { VoteUncheckedUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUncheckedUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
-import { UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowingNestedInput.schema';
-import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
-import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
+import { FollowUncheckedUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUncheckedUpdateManyWithoutFollowerNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -82,22 +80,10 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutFollowingInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
+    followers: z
       .lazy(
-        () => UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema,
+        () => FollowUncheckedUpdateManyWithoutFollowerNestedInputObjectSchema,
       )
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
   })
   .strict();

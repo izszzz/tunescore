@@ -11,7 +11,6 @@ import { bandsRouter } from "../../../prisma/generated/routers/Band.router";
 import { votesRouter } from "../../../prisma/generated/routers/Vote.router";
 import { protectedExampleRouter } from "./protected-example-router";
 import { createRouter } from "./context";
-import { bookmarkedRouter } from "./bookmarked";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
 import { commentsRouter } from "../../../prisma/generated/routers/Comment.router";

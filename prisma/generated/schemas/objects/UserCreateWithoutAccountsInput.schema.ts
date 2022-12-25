@@ -8,10 +8,8 @@ import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './Bookmark
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
-import { UserCreateNestedManyWithoutFollowingInputObjectSchema } from './UserCreateNestedManyWithoutFollowingInput.schema';
-import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
-import { UserCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserCreateNestedManyWithoutFollowedByInput.schema';
-import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
+import { FollowCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowCreateNestedManyWithoutFollowerInput.schema';
+import { FollowCreateNestedManyWithoutFollowingInputObjectSchema } from './FollowCreateNestedManyWithoutFollowingInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -52,23 +50,11 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutAccountsInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
-      .lazy(() => UserCreateNestedManyWithoutFollowingInputObjectSchema)
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
+    followers: z
+      .lazy(() => FollowCreateNestedManyWithoutFollowerInputObjectSchema)
       .optional(),
     following: z
-      .lazy(() => UserCreateNestedManyWithoutFollowedByInputObjectSchema)
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
+      .lazy(() => FollowCreateNestedManyWithoutFollowingInputObjectSchema)
       .optional(),
   })
   .strict();

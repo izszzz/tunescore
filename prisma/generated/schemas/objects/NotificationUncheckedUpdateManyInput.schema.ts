@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
-import { IntFieldUpdateOperationsInputObjectSchema } from './IntFieldUpdateOperationsInput.schema';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { EnumNotificationTypeFieldUpdateOperationsInputObjectSchema } from './EnumNotificationTypeFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
@@ -9,7 +8,7 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.NotificationUncheckedUpdateManyInput> = z
   .object({
-    type: z
+    userId: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
@@ -17,8 +16,8 @@ const Schema: z.ZodType<Prisma.NotificationUncheckedUpdateManyInput> = z
       .optional(),
     resourceId: z
       .union([
-        z.number(),
-        z.lazy(() => IntFieldUpdateOperationsInputObjectSchema),
+        z.string(),
+        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
     resurceType: z
@@ -39,12 +38,6 @@ const Schema: z.ZodType<Prisma.NotificationUncheckedUpdateManyInput> = z
       .union([
         z.date(),
         z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema),
-      ])
-      .optional(),
-    userId: z
-      .union([
-        z.string(),
-        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
   })

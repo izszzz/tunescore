@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { TypeSchema } from '../enums/Type.schema';
-import { EnumTypeFieldUpdateOperationsInputObjectSchema } from './EnumTypeFieldUpdateOperationsInput.schema';
+import { MusicTypeSchema } from '../enums/MusicType.schema';
+import { EnumMusicTypeFieldUpdateOperationsInputObjectSchema } from './EnumMusicTypeFieldUpdateOperationsInput.schema';
 import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
@@ -26,8 +26,8 @@ const Schema: z.ZodType<Prisma.MusicUncheckedUpdateWithoutLyristsInput> = z
   .object({
     type: z
       .union([
-        z.lazy(() => TypeSchema),
-        z.lazy(() => EnumTypeFieldUpdateOperationsInputObjectSchema),
+        z.lazy(() => MusicTypeSchema),
+        z.lazy(() => EnumMusicTypeFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
     title: z

@@ -2,10 +2,9 @@ import { z } from 'zod';
 
 export const NotificationScalarFieldEnumSchema = z.enum([
   'id',
-  'type',
+  'userId',
   'resourceId',
   'resurceType',
   'createdAt',
   'readAt',
-  'userId',
 ]);

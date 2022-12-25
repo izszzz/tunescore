@@ -8,10 +8,8 @@ import { BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema } from '.
 import { NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutUserInput.schema';
 import { VoteUncheckedCreateNestedManyWithoutUsersInputObjectSchema } from './VoteUncheckedCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
-import { UserUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowingInput.schema';
-import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
-import { UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutFollowedByInput.schema';
-import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
+import { FollowUncheckedCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowUncheckedCreateNestedManyWithoutFollowerInput.schema';
+import { FollowUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from './FollowUncheckedCreateNestedManyWithoutFollowingInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -54,27 +52,15 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutSessionsInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
+    followers: z
       .lazy(
-        () => UserUncheckedCreateNestedManyWithoutFollowingInputObjectSchema,
+        () => FollowUncheckedCreateNestedManyWithoutFollowerInputObjectSchema,
       )
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
     following: z
       .lazy(
-        () => UserUncheckedCreateNestedManyWithoutFollowedByInputObjectSchema,
+        () => FollowUncheckedCreateNestedManyWithoutFollowingInputObjectSchema,
       )
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
   })
   .strict();

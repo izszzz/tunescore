@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TypeSchema } from '../enums/Type.schema';
+import { MusicTypeSchema } from '../enums/MusicType.schema';
 import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
@@ -15,7 +15,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.MusicCreateManyBandInput> = z
   .object({
     id: z.string().optional(),
-    type: z.lazy(() => TypeSchema),
+    type: z.lazy(() => MusicTypeSchema),
     title: z.union([
       z.lazy(() => LocalesCreateEnvelopeInputObjectSchema),
       z.lazy(() => LocalesCreateInputObjectSchema),

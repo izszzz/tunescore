@@ -10,10 +10,8 @@ import { BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from '.
 import { NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { VoteUncheckedUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUncheckedUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
-import { UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowingNestedInput.schema';
-import { UserUpdatefollowedByIDsInputObjectSchema } from './UserUpdatefollowedByIDsInput.schema';
-import { UserUncheckedUpdateManyWithoutFollowedByNestedInputObjectSchema } from './UserUncheckedUpdateManyWithoutFollowedByNestedInput.schema';
-import { UserUpdatefollowingIDsInputObjectSchema } from './UserUpdatefollowingIDsInput.schema';
+import { FollowUncheckedUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUncheckedUpdateManyWithoutFollowerNestedInput.schema';
+import { FollowUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from './FollowUncheckedUpdateManyWithoutFollowingNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -79,27 +77,15 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutPullsInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
+    followers: z
       .lazy(
-        () => UserUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema,
+        () => FollowUncheckedUpdateManyWithoutFollowerNestedInputObjectSchema,
       )
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
     following: z
       .lazy(
-        () => UserUncheckedUpdateManyWithoutFollowedByNestedInputObjectSchema,
+        () => FollowUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema,
       )
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserUpdatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
   })
   .strict();

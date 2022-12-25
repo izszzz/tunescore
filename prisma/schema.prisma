@@ -73,17 +73,30 @@ model User {
   pulls  Pull[]
   comments Comment[]
   bookmarks Bookmark[]
-
-  notifications Notification[]
+  notifications Notification[] 
 
   vote Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
 
-  followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
-  followedByIDs String[] @db.ObjectId
+  // followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
+  // followedByIDs String[] @db.ObjectId
 
-  following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
-  followingIDs  String[] @db.ObjectId
+  // following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
+  // followingIDs  String[] @db.ObjectId
+  followers Follow[] @relation("UserFollower")
+  following Follow[] @relation("UserFollowing")
+}
+
+model Follow {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  notifications Notification[] @relation("FollowNotification")
+
+  follower User @relation("UserFollower", fields: [followerId], references: [id])
+  followerId String @db.ObjectId
+
+  following User @relation("UserFollowing", fields: [followingId], references: [id])
+  followingId String @db.ObjectId
+  @@unique([followerId, followingId])
 }
 
 model VerificationToken {
@@ -97,7 +110,7 @@ model VerificationToken {
 
 model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  type Type
+  type MusicType
   title Locales
   score String?
   visibility Visibility
@@ -238,6 +251,8 @@ model Comment{
   user User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
+  notifications Notification[] @relation("CommentNotification")
+
   resourceId String @db.ObjectId
   resourceType CommentType 
 }
@@ -245,13 +260,15 @@ model Comment{
 model Bookmark{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
+  notifications Notification[] @relation("BookmarkNotification")
+
   music Music? @relation("MusicBookmark", fields: [resourceId], references: [id])
   band Band? @relation("BandBookmark",fields: [resourceId], references: [id])
   album Album? @relation("AlbumBookmark",fields: [resourceId], references: [id])
   artist Artist? @relation("ArtistBookmark",fields: [resourceId], references: [id])
 
   user User   @relation(fields: [userId], references: [id])
-  userId String@db.ObjectId
+  userId String @db.ObjectId
 
   resourceId String @db.ObjectId
   resourceType BookmarkType 
@@ -260,16 +277,19 @@ model Bookmark{
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
 model Notification{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  type String
 
-  resourceId Int
+  bookmarked Bookmark? @relation("BookmarkNotification", fields: [resourceId], references: [id])
+  followed Follow? @relation("FollowNotification", fields:[resourceId], references: [id])
+  commented Comment? @relation("CommentNotification", fields: [resourceId], references:[id])
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  resourceId String @db.ObjectId
   resurceType NotificationType
 
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
 }
 
 enum BookmarkType{
@@ -284,12 +304,14 @@ enum CommentType{
 }
 enum NotificationType{
   User
+  Bookmark
+  Comment
 }
 enum Visibility{
   PUBLIC
   PRIVATE
 }
-enum Type{
+enum MusicType{
   ORIGINAL
   COPY
 }

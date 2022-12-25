@@ -1,7 +1,5 @@
 import { z } from 'zod';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
-import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
-import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -15,18 +13,6 @@ const Schema: z.ZodType<Prisma.UserCreateManyInput> = z
     voteIDs: z
       .union([
         z.lazy(() => UserCreatevoteIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

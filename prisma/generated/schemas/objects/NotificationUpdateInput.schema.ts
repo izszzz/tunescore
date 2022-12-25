@@ -1,26 +1,29 @@
 import { z } from 'zod';
-import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
-import { IntFieldUpdateOperationsInputObjectSchema } from './IntFieldUpdateOperationsInput.schema';
+import { BookmarkUpdateOneWithoutNotificationsNestedInputObjectSchema } from './BookmarkUpdateOneWithoutNotificationsNestedInput.schema';
+import { FollowUpdateOneWithoutNotificationsNestedInputObjectSchema } from './FollowUpdateOneWithoutNotificationsNestedInput.schema';
+import { CommentUpdateOneWithoutNotificationsNestedInputObjectSchema } from './CommentUpdateOneWithoutNotificationsNestedInput.schema';
+import { UserUpdateOneRequiredWithoutNotificationsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutNotificationsNestedInput.schema';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { EnumNotificationTypeFieldUpdateOperationsInputObjectSchema } from './EnumNotificationTypeFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
-import { UserUpdateOneRequiredWithoutNotificationsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutNotificationsNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.NotificationUpdateInput> = z
   .object({
-    type: z
-      .union([
-        z.string(),
-        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-      ])
+    bookmarked: z
+      .lazy(() => BookmarkUpdateOneWithoutNotificationsNestedInputObjectSchema)
       .optional(),
-    resourceId: z
-      .union([
-        z.number(),
-        z.lazy(() => IntFieldUpdateOperationsInputObjectSchema),
-      ])
+    followed: z
+      .lazy(() => FollowUpdateOneWithoutNotificationsNestedInputObjectSchema)
+      .optional(),
+    commented: z
+      .lazy(() => CommentUpdateOneWithoutNotificationsNestedInputObjectSchema)
+      .optional(),
+    user: z
+      .lazy(
+        () => UserUpdateOneRequiredWithoutNotificationsNestedInputObjectSchema,
+      )
       .optional(),
     resurceType: z
       .union([
@@ -41,11 +44,6 @@ const Schema: z.ZodType<Prisma.NotificationUpdateInput> = z
         z.date(),
         z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema),
       ])
-      .optional(),
-    user: z
-      .lazy(
-        () => UserUpdateOneRequiredWithoutNotificationsNestedInputObjectSchema,
-      )
       .optional(),
   })
   .strict();

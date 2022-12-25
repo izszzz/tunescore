@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { NotificationUpdateManyWithoutBookmarkedNestedInputObjectSchema } from './NotificationUpdateManyWithoutBookmarkedNestedInput.schema';
 import { BandUpdateOneWithoutBookmarksNestedInputObjectSchema } from './BandUpdateOneWithoutBookmarksNestedInput.schema';
 import { AlbumUpdateOneWithoutBookmarksNestedInputObjectSchema } from './AlbumUpdateOneWithoutBookmarksNestedInput.schema';
 import { ArtistUpdateOneWithoutBookmarksNestedInputObjectSchema } from './ArtistUpdateOneWithoutBookmarksNestedInput.schema';
@@ -10,6 +11,11 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.BookmarkUpdateWithoutMusicInput> = z
   .object({
+    notifications: z
+      .lazy(
+        () => NotificationUpdateManyWithoutBookmarkedNestedInputObjectSchema,
+      )
+      .optional(),
     band: z
       .lazy(() => BandUpdateOneWithoutBookmarksNestedInputObjectSchema)
       .optional(),

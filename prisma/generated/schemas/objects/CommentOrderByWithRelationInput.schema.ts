@@ -3,6 +3,7 @@ import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { PullOrderByWithRelationInputObjectSchema } from './PullOrderByWithRelationInput.schema';
 import { IssueOrderByWithRelationInputObjectSchema } from './IssueOrderByWithRelationInput.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
+import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -14,6 +15,9 @@ const Schema: z.ZodType<Prisma.CommentOrderByWithRelationInput> = z
     issue: z.lazy(() => IssueOrderByWithRelationInputObjectSchema).optional(),
     user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
+    notifications: z
+      .lazy(() => NotificationOrderByRelationAggregateInputObjectSchema)
+      .optional(),
     resourceId: z.lazy(() => SortOrderSchema).optional(),
     resourceType: z.lazy(() => SortOrderSchema).optional(),
   })

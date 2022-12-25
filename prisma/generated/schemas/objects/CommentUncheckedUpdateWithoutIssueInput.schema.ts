@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
+import { NotificationUncheckedUpdateManyWithoutCommentedNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutCommentedNestedInput.schema';
 import { CommentTypeSchema } from '../enums/CommentType.schema';
 import { EnumCommentTypeFieldUpdateOperationsInputObjectSchema } from './EnumCommentTypeFieldUpdateOperationsInput.schema';
 
@@ -18,6 +19,12 @@ const Schema: z.ZodType<Prisma.CommentUncheckedUpdateWithoutIssueInput> = z
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
+      .optional(),
+    notifications: z
+      .lazy(
+        () =>
+          NotificationUncheckedUpdateManyWithoutCommentedNestedInputObjectSchema,
+      )
       .optional(),
     resourceType: z
       .union([

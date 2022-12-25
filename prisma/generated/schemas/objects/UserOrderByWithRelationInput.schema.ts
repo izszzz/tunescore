@@ -9,7 +9,7 @@ import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrder
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
 import { VoteOrderByRelationAggregateInputObjectSchema } from './VoteOrderByRelationAggregateInput.schema';
-import { UserOrderByRelationAggregateInputObjectSchema } from './UserOrderByRelationAggregateInput.schema';
+import { FollowOrderByRelationAggregateInputObjectSchema } from './FollowOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -48,14 +48,12 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
       .lazy(() => VoteOrderByRelationAggregateInputObjectSchema)
       .optional(),
     voteIDs: z.lazy(() => SortOrderSchema).optional(),
-    followedBy: z
-      .lazy(() => UserOrderByRelationAggregateInputObjectSchema)
+    followers: z
+      .lazy(() => FollowOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    followedByIDs: z.lazy(() => SortOrderSchema).optional(),
     following: z
-      .lazy(() => UserOrderByRelationAggregateInputObjectSchema)
+      .lazy(() => FollowOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    followingIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

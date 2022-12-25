@@ -6,8 +6,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.NotificationCreateManyUserInput> = z
   .object({
     id: z.string().optional(),
-    type: z.string(),
-    resourceId: z.number(),
+    resourceId: z.string(),
     resurceType: z.lazy(() => NotificationTypeSchema),
     createdAt: z.date().optional(),
     readAt: z.date().optional(),

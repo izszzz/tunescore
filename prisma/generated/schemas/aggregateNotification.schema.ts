@@ -5,8 +5,6 @@ import { NotificationWhereUniqueInputObjectSchema } from './objects/Notification
 import { NotificationCountAggregateInputObjectSchema } from './objects/NotificationCountAggregateInput.schema';
 import { NotificationMinAggregateInputObjectSchema } from './objects/NotificationMinAggregateInput.schema';
 import { NotificationMaxAggregateInputObjectSchema } from './objects/NotificationMaxAggregateInput.schema';
-import { NotificationAvgAggregateInputObjectSchema } from './objects/NotificationAvgAggregateInput.schema';
-import { NotificationSumAggregateInputObjectSchema } from './objects/NotificationSumAggregateInput.schema';
 
 export const NotificationAggregateSchema = z.object({
   where: NotificationWhereInputObjectSchema.optional(),
@@ -24,6 +22,4 @@ export const NotificationAggregateSchema = z.object({
     .optional(),
   _min: NotificationMinAggregateInputObjectSchema.optional(),
   _max: NotificationMaxAggregateInputObjectSchema.optional(),
-  _avg: NotificationAvgAggregateInputObjectSchema.optional(),
-  _sum: NotificationSumAggregateInputObjectSchema.optional(),
 });

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
+import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
 import { MusicRelationFilterObjectSchema } from './MusicRelationFilter.schema';
 import { MusicWhereInputObjectSchema } from './MusicWhereInput.schema';
 import { BandRelationFilterObjectSchema } from './BandRelationFilter.schema';
@@ -35,6 +36,9 @@ const Schema: z.ZodType<Prisma.BookmarkWhereInput> = z
       .optional(),
     id: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
+    notifications: z
+      .lazy(() => NotificationListRelationFilterObjectSchema)
       .optional(),
     music: z
       .union([

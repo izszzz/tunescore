@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
-import { EnumTypeFilterObjectSchema } from './EnumTypeFilter.schema';
-import { TypeSchema } from '../enums/Type.schema';
+import { EnumMusicTypeFilterObjectSchema } from './EnumMusicTypeFilter.schema';
+import { MusicTypeSchema } from '../enums/MusicType.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { EnumVisibilityFilterObjectSchema } from './EnumVisibilityFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
@@ -33,8 +33,8 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereInput> = z
       .optional(),
     type: z
       .union([
-        z.lazy(() => EnumTypeFilterObjectSchema),
-        z.lazy(() => TypeSchema),
+        z.lazy(() => EnumMusicTypeFilterObjectSchema),
+        z.lazy(() => MusicTypeSchema),
       ])
       .optional(),
     score: z

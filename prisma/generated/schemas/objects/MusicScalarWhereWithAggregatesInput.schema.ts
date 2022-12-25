@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
-import { EnumTypeWithAggregatesFilterObjectSchema } from './EnumTypeWithAggregatesFilter.schema';
-import { TypeSchema } from '../enums/Type.schema';
+import { EnumMusicTypeWithAggregatesFilterObjectSchema } from './EnumMusicTypeWithAggregatesFilter.schema';
+import { MusicTypeSchema } from '../enums/MusicType.schema';
 import { StringNullableWithAggregatesFilterObjectSchema } from './StringNullableWithAggregatesFilter.schema';
 import { EnumVisibilityWithAggregatesFilterObjectSchema } from './EnumVisibilityWithAggregatesFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
@@ -33,8 +33,8 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereWithAggregatesInput> = z
       .optional(),
     type: z
       .union([
-        z.lazy(() => EnumTypeWithAggregatesFilterObjectSchema),
-        z.lazy(() => TypeSchema),
+        z.lazy(() => EnumMusicTypeWithAggregatesFilterObjectSchema),
+        z.lazy(() => MusicTypeSchema),
       ])
       .optional(),
     score: z

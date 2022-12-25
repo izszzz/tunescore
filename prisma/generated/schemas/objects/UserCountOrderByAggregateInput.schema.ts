@@ -11,8 +11,6 @@ const Schema: z.ZodType<Prisma.UserCountOrderByAggregateInput> = z
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
     voteIDs: z.lazy(() => SortOrderSchema).optional(),
-    followedByIDs: z.lazy(() => SortOrderSchema).optional(),
-    followingIDs: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

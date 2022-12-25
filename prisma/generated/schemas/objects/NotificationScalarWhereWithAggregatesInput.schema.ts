@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
-import { IntWithAggregatesFilterObjectSchema } from './IntWithAggregatesFilter.schema';
 import { EnumNotificationTypeWithAggregatesFilterObjectSchema } from './EnumNotificationTypeWithAggregatesFilter.schema';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema';
@@ -32,11 +31,11 @@ const Schema: z.ZodType<Prisma.NotificationScalarWhereWithAggregatesInput> = z
     id: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
-    type: z
+    userId: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
     resourceId: z
-      .union([z.lazy(() => IntWithAggregatesFilterObjectSchema), z.number()])
+      .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
     resurceType: z
       .union([
@@ -49,9 +48,6 @@ const Schema: z.ZodType<Prisma.NotificationScalarWhereWithAggregatesInput> = z
       .optional(),
     readAt: z
       .union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()])
-      .optional(),
-    userId: z
-      .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
   })
   .strict();

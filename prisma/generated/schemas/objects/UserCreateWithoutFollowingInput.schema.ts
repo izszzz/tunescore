@@ -9,9 +9,7 @@ import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './Bookmark
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
-import { UserCreateNestedManyWithoutFollowingInputObjectSchema } from './UserCreateNestedManyWithoutFollowingInput.schema';
-import { UserCreatefollowedByIDsInputObjectSchema } from './UserCreatefollowedByIDsInput.schema';
-import { UserCreatefollowingIDsInputObjectSchema } from './UserCreatefollowingIDsInput.schema';
+import { FollowCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowCreateNestedManyWithoutFollowerInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -55,20 +53,8 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutFollowingInput> = z
         z.string().array(),
       ])
       .optional(),
-    followedBy: z
-      .lazy(() => UserCreateNestedManyWithoutFollowingInputObjectSchema)
-      .optional(),
-    followedByIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowedByIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    followingIDs: z
-      .union([
-        z.lazy(() => UserCreatefollowingIDsInputObjectSchema),
-        z.string().array(),
-      ])
+    followers: z
+      .lazy(() => FollowCreateNestedManyWithoutFollowerInputObjectSchema)
       .optional(),
   })
   .strict();

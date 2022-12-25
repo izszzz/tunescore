@@ -12,7 +12,7 @@ import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFi
 import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
 import { VoteListRelationFilterObjectSchema } from './VoteListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
-import { UserListRelationFilterObjectSchema } from './UserListRelationFilter.schema';
+import { FollowListRelationFilterObjectSchema } from './FollowListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -65,12 +65,8 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
       .optional(),
     vote: z.lazy(() => VoteListRelationFilterObjectSchema).optional(),
     voteIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    followedBy: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
-    followedByIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    following: z.lazy(() => UserListRelationFilterObjectSchema).optional(),
-    followingIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    followers: z.lazy(() => FollowListRelationFilterObjectSchema).optional(),
+    following: z.lazy(() => FollowListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

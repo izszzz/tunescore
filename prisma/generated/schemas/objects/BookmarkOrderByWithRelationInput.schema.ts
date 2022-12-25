@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
+import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
 import { MusicOrderByWithRelationInputObjectSchema } from './MusicOrderByWithRelationInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './BandOrderByWithRelationInput.schema';
 import { AlbumOrderByWithRelationInputObjectSchema } from './AlbumOrderByWithRelationInput.schema';
@@ -11,6 +12,9 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.BookmarkOrderByWithRelationInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
+    notifications: z
+      .lazy(() => NotificationOrderByRelationAggregateInputObjectSchema)
+      .optional(),
     music: z.lazy(() => MusicOrderByWithRelationInputObjectSchema).optional(),
     band: z.lazy(() => BandOrderByWithRelationInputObjectSchema).optional(),
     album: z.lazy(() => AlbumOrderByWithRelationInputObjectSchema).optional(),

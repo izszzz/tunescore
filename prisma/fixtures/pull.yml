@@ -1,0 +1,44 @@
+entity: pull
+connectedFileds: ["user", "music"]
+items:
+  pull:
+    title: "pull"
+    body : "pull"
+    status: "OPEN"
+    music: "@music"
+    user: "@user"
+
+  pull_open:
+    title: "open pull"
+    body : "open pull"
+    status: "OPEN"
+    music: "@music"
+    user: "@user"
+
+  pull_close:
+    title: "closed issue"
+    body : "closing issue"
+    status: "CLOSE"
+    music: "@music"
+    user: "@user"
+
+  pull_draft:
+    title: "draft"
+    body : "draft"
+    status: "DRAFT"
+    music: "@music"
+    user: "@user"
+
+  pull_vote:
+    title: "vote"
+    body : "vote"
+    status: "VOTE"
+    music: "@music"
+    user: "@user"
+
+  pull_merged:
+    title: "merged"
+    body : "merged"
+    status: "MERGED"
+    music: "@music"
+    user: "@user"

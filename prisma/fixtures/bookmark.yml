@@ -1,0 +1,23 @@
+entity: bookmark
+connectedFileds: ["user", "music", "band", "album"]
+items:
+  bookmark_music:
+    resourceType: "Music"
+    music: "@music"
+    user: "@user"
+
+  bookmark_band:
+    resourceType: "Band"
+    music: "@band"
+    user: "@user"
+
+  bookmark_album:
+    resourceType: "Album"
+    music: "@album"
+    user: "@user"
+  
+  bookmark_artist:
+    resourceType: "Artist"
+    music: "@artist"
+    user: "@user"
+

@@ -1,0 +1,12 @@
+entity: comment
+connectedFileds: ["user", "issue", "pull"]
+items:
+  comment_issue:
+    body: issue_comment
+    issue: "@issue"
+    resourceType: "Issue"
+
+  comment_pull:
+    body: pull_comment
+    issue: "@pull"
+    resourceType: "Pull"

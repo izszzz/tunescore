@@ -1,0 +1,20 @@
+entity: issue
+connectedFileds: ["user", "music"]
+items:
+  issue:
+    title: "issue"
+    body : "issue"
+    music: "@music"
+    user: "@user"
+
+  issue_open:
+    title: "open issue"
+    body : "open issue"
+    music: "@music"
+    user: "@user"
+
+  issue_close:
+    title: "closed issue"
+    body : "closing issue"
+    music: "@music"
+    user: "@user"

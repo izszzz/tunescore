@@ -11,7 +11,7 @@ import type { Prisma } from "@prisma/client";
 export interface UserListItemProps {
   data: Prisma.UserGetPayload<{
     include: {
-      _count: { select: { followedBy: true; following: true } };
+      _count: { select: { followers: true; following: true } };
     };
   }>;
 }
@@ -21,7 +21,7 @@ const UserListItem = ({ data }: UserListItemProps) => {
     <ListItem
       disablePadding
       onClick={() =>
-        router.push({ pathname: "/users", query: { id: data.id } })
+        router.push({ pathname: "/users/[id]", query: { id: data.id } })
       }
     >
       <ListItemAvatar>
@@ -39,7 +39,7 @@ const UserListItem = ({ data }: UserListItemProps) => {
                 color="text.primary"
               >
                 following : {data._count.following} / followers :{" "}
-                {data._count.followedBy}
+                {data._count.followers}
               </Typography>
             </>
           }

@@ -1,0 +1,29 @@
+entity: band
+items:
+  band:
+    name:
+      ja: バンド
+      en: band
+
+  band_only_japanese:
+    name:
+      ja: 日本語のみ
+
+  band_only_english:
+    name:
+      en: only english
+
+  band_long_name:
+    name:
+      ja: <%= "あ".repeat(100) %>
+      en: <%= "a".repeat(100) %>
+
+  ling_tosite_sigure:
+    name:
+      ja: 凛として時雨
+      en: Ling tosite Sigure
+
+  tk_ling_tosite_sigure:
+    name:
+      ja: TK from 凛として時雨
+      en: TK from Ling tosite Sigure

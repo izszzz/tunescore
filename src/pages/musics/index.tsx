@@ -34,13 +34,17 @@ const Musics: NextPage = () => {
               },
             },
           },
-          where: {
-            title: {
-              is: {
-                [router.locale]: { contains: (router.query.q as string) || "" },
-              },
-            },
-          },
+          where: (router.query.q as string)
+            ? {
+                title: {
+                  is: {
+                    [router.locale]: {
+                      contains: (router.query.q as string) || "",
+                    },
+                  },
+                },
+              }
+            : {},
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
       },

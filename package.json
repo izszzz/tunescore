@@ -74,6 +74,7 @@
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@faker-js/faker": "^7.6.0",
+    "@getbigger-io/prisma-fixtures-cli": "^2.0.1",
     "@mermaid-js/mermaid-cli": "^9.2.2",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",

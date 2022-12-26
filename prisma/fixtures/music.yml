@@ -1,0 +1,125 @@
+entity: music
+connectedFields: ["user", "band", "artists", "composers", "lyrists"]
+items:
+  music_original:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: オリジナル曲
+      en: original music
+
+  music_copy:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: コピー曲
+      en: copy music
+
+  music_score:
+    type: COPY
+    score: 3.3 3.2 3.4
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: スコア
+      en: score
+
+  music_only_japanese:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: 日本語のみ
+
+  music_only_english:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      en: only english
+
+  music_long_title:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: <%= "あ".repeat(100) %>
+      en: <%= "a".repeat(100) %>
+
+  music_owend_by_user:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    user: "@user"
+    title:
+      ja: ユーザー
+      en: User
+
+  music_owend_by_band:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    band: "@band"
+    title:
+      ja: バンド
+      en: band
+
+  music_owend_by_artist:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    artists:
+      - "@artist"
+    title:
+      ja: アーティスト
+      en: Artist
+
+  music_owend_by_composer:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    composers:
+      - "@artist"
+    title:
+      ja: 作曲者
+      en: Composer
+
+  music_owend_by_lyrist:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    lyrists:
+      - "@artist"
+    title:
+      ja: 作詞者
+      en: lyrist
+
+  beautiful_circus:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: Beautiful Circus
+      en: Beautiful Circus
+    band: "@ling_tosite_sigure"
+    composers:
+      - "@tk"
+    lyrists:
+      - "@tk"
+    artists:
+      - "@tk"
+      - "@miyoko"
+      - "@pierre_nakano"

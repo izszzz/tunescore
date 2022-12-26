@@ -9,7 +9,7 @@ interface ListsProps<T> {
 function Lists<T>({ data, listItem }: ListsProps<T>) {
   return (
     <List>
-      {data.length && <Divider component="li" />}
+      {data.length ? <Divider component="li" /> : "No Data"}
       {data.map((resource) => (
         <>
           {listItem(resource)}

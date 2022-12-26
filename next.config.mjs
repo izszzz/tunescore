@@ -22,21 +22,9 @@ export default defineNextConfig({
     locales: ["en", "ja"],
     defaultLocale: "ja",
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "is4-ssl.mzstatic.com",
-      },
-      {
-        protocol: "https",
-        hostname: "is2-ssl.mzstatic.com",
-      },
-    ],
-  },
   webpackDevMiddleware: (config) => {
     config.watchOptions = {
-      poll: 800,
+      poll: 5000,
       aggregateTimeout: 300,
     };
     return config;

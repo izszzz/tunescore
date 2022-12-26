@@ -1,0 +1,14 @@
+entity: album
+items:
+  album_only_japanese:
+    title:
+      ja: 日本語のみ
+
+  album_only_english:
+    title:
+      en: only english
+
+  album_long_title:
+    title:
+      ja: <%= "あ".repeat(100) %>
+      en: <%= "a".repeat(100) %>

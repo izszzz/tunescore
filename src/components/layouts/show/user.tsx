@@ -1,103 +1,67 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import ToggleLoadingButton from "../../elements/button/toggle/loading";
 import { trpc } from "../../../utils/trpc";
-import ShowLayout from "./default";
+import ShowLayout from "./index";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma } from "@prisma/client";
 import type { ShowLayoutProps } from ".";
+import LoadingButton from "@mui/lab/LoadingButton";
+import DefaultHeader from "../header/default";
 
 interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{
-    include: { _count: { select: { following: true; followedBy: true } } };
+    include: {
+      _count: { select: { following: true; followers: true } };
+      followers: true;
+      bookmarks: true;
+    };
   }>;
-  followed: boolean;
   activeTab: "info" | "settings" | "";
 }
 
 const UserLayout: React.FC<UserLayoutProps> = ({
   data,
-  followed,
   activeTab,
   children,
 }) => {
-  const [following, setFollowing] = useState(0);
-  const [followers, setFollowers] = useState(0);
   const router = useRouter();
   const session = useSession();
-  const update = trpc.useMutation("user.update");
-  function handleUpdateInclude(
-    params: Prisma.UserUpdateInput,
-    onSuccess?: () => void
-  ) {
-    update.mutate(
-      { where: { id: router.query.id as string }, data: params },
-      {
-        onSuccess: () => {
-          onSuccess && onSuccess();
-        },
-      }
-    );
-  }
-  const handleChange = (
-    value: boolean,
-    setValue: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    if (!session.data?.user?.id) return;
-    if (value)
-      handleUpdateInclude(
-        { followedBy: { disconnect: { id: session.data.user.id as string } } },
-        () => {
-          setValue(false);
-          setFollowers((p) => --p);
-        }
-      );
-    else
-      handleUpdateInclude(
-        { followedBy: { connect: { id: session.data.user.id as string } } },
-        () => {
-          setValue(true);
-          setFollowers((p) => ++p);
-        }
-      );
-  };
-  useEffect(() => {
-    setFollowing(data._count.following);
-    setFollowers(data._count.followedBy);
-  }, [data._count.followedBy, data._count.following]);
+  const id = router.query.id as string;
+  const userId = session.data?.user?.id;
+  const update = trpc.useMutation("user.updateOneUser");
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
         label: "info",
         href: {
           pathname: "/users/[id]",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "settings",
         href: {
           pathname: "/users/[id]/settings",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "bookmarks",
         href: {
           pathname: "/users/[id]/bookmarks",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "repositories",
         href: {
           pathname: "/users/[id]/repositories",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
     ],
@@ -107,6 +71,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     <ShowLayout
       tabs={tabs}
       activeTab={activeTab}
+      header={<DefaultHeader />}
       title={
         <>
           <Box display="flex" justifyContent="center">
@@ -118,13 +83,32 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               <Typography variant="h5">{data.name}</Typography>
             </Box>
           </Box>
-          <ToggleLoadingButton
-            defaultValue={followed}
-            loading={update.isLoading}
-            label={(v) => (v ? "unfollow" : "follow")}
-            variant={(v) => (v ? "outlined" : "contained")}
-            onClick={handleChange}
-          />
+          {id !== userId && (
+            <LoadingButton
+              loading={update.isLoading}
+              variant={data.followers.length ? "outlined" : "contained"}
+              onClick={() =>
+                update.mutate({
+                  where: { id: router.query.id as string },
+                  data: {
+                    followers: data.followers.length
+                      ? {
+                          delete: {
+                            id: data.followers[0]?.id,
+                          },
+                        }
+                      : {
+                          create: {
+                            following: { connect: { id: userId } },
+                          },
+                        },
+                  },
+                })
+              }
+            >
+              {data.followers.length ? "unfollow" : "follow"}
+            </LoadingButton>
+          )}
           <Button
             onClick={() =>
               router.push({
@@ -133,7 +117,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               })
             }
           >
-            following:{following}
+            following:{data._count.following}
           </Button>
           <Button
             onClick={() =>
@@ -143,7 +127,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               })
             }
           >
-            followers:{followers}
+            followers:{data._count.followers}
           </Button>
         </>
       }

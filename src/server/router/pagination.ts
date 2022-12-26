@@ -19,6 +19,7 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
+      prisma?.follow.create({ data: {} });
       return await paginate<
         Prisma.MusicGetPayload<{
           include: {

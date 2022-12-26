@@ -78,11 +78,6 @@ model User {
   vote Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
 
-  // followedBy    User[]   @relation("UserFollows", fields: [followedByIDs], references: [id])
-  // followedByIDs String[] @db.ObjectId
-
-  // following     User[]   @relation("UserFollows", fields: [followingIDs], references: [id])
-  // followingIDs  String[] @db.ObjectId
   followers Follow[] @relation("UserFollower")
   following Follow[] @relation("UserFollowing")
 }

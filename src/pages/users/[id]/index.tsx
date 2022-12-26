@@ -1,45 +1,50 @@
-import { PrismaClient } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import UserLayout from "../../../components/layouts/show/user";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import type { Prisma} from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
+import { createPath } from "../../../helpers/createPath";
+import { useRouter } from "next/router";
+import { trpc } from "../../../utils/trpc";
 interface UserProps {
   data: Prisma.UserGetPayload<{
-    include: { _count: { select: { followedBy: true; following: true } } };
+    include: {
+      _count: { select: { followedBy: true; following: true } };
+    };
   }>;
   followed: boolean;
 }
-const User: NextPage<UserProps> = ({ data, followed }) => {
+const User: NextPage<UserProps> = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+  const id = router.query.id as string;
+  const userId = session?.user?.id;
+  const path = createPath([
+    "user.findUniqueUser",
+    {
+      where: { id },
+      include: {
+        _count: { select: { following: true, followers: true } },
+        followers: {
+          where: { followerId: id, followingId: userId },
+        },
+        bookmarks: true,
+      },
+    },
+  ]);
+  const { data } = trpc.useQuery(path);
+  if (!data) return <></>;
+  const userData = data as Prisma.UserGetPayload<{
+    include: {
+      _count: { select: { following: true; followers: true } };
+      followers: true;
+      bookmarks: true;
+    };
+  }>;
   return (
-    <UserLayout data={data} followed={followed} activeTab="info">
-      {session?.user?.id == data.id && <p>aaa</p>}
+    <UserLayout data={userData} activeTab="info">
+      {session?.user?.id === data.id && <p>aaa</p>}
     </UserLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<UserProps> = async (
-  ctx
-) => {
-  const prisma = new PrismaClient();
-  const data = await prisma.user.findUnique({
-    where: { id: ctx.query.id as string },
-    include: { _count: { select: { followedBy: true, following: true } } },
-  });
-  if (!data) return { notFound: true };
-  const session = await getServerAuthSession(ctx);
-  const followed = await prisma.user.findFirst({
-    where: {
-      id: ctx.query.id as string,
-    },
-    include: {
-      following: { where: { id: session?.user?.id } },
-    },
-  });
-  return {
-    props: { data, followed: !!followed?.following.length },
-  };
 };
 
 export default User;

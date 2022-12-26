@@ -7,4 +7,10 @@ npx prisma migrate reset
 npx prisma studio
 ```
 
+fixtures
+
+```
+npx fixtures ./prisma/fixtures
+```
+
 ER

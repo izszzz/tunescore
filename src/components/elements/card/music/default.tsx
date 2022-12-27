@@ -27,7 +27,9 @@ const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
       size="200px"
       title={
         <>
-          <Typography variant="h6">{setLocale(data.title, router)}</Typography>
+          <Typography variant="h6" noWrap>
+            {setLocale(data.title, router)}
+          </Typography>
           {owner && <IndexChip label={owner.name} resource={type} />}
         </>
       }

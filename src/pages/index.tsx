@@ -4,6 +4,7 @@ import DefaultMusicCard from "../components/elements/card/music/default";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
 import type { NextPage } from "next";
+import { Typography } from "@mui/material";
 
 const Home: NextPage = () => {
   const musics = trpc.useQuery([
@@ -23,23 +24,11 @@ const Home: NextPage = () => {
   ]);
   return (
     <DefaultSingleColumnLayout>
-      <>home</>
-      <br />
-      <Link href="/musics">
-        <a>music</a>
-      </Link>
-      <br />
-      <Link href="/users">
-        <a>user</a>
-      </Link>
-      <br />
-      <Link href="/artists">
-        <a>artist</a>
-      </Link>
-      <br />
-      <Link href="/bands">
-        <a>band</a>
-      </Link>
+      <Typography variant="h3">
+        <Link href="/musics">
+          <a>music</a>
+        </Link>
+      </Typography>
       <Grid container spacing={1}>
         {musics.data?.data.map((music) => (
           <Grid
@@ -55,6 +44,21 @@ const Home: NextPage = () => {
           </Grid>
         ))}
       </Grid>
+      <Typography variant="h3">
+        <Link href="/artists">
+          <a>artist</a>
+        </Link>
+      </Typography>
+      <Typography variant="h3">
+        <Link href="/bands">
+          <a>band</a>
+        </Link>
+      </Typography>
+      <Typography variant="h3">
+        <Link href="/users">
+          <a>user</a>
+        </Link>
+      </Typography>
     </DefaultSingleColumnLayout>
   );
 };

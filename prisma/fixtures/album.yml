@@ -1,5 +1,10 @@
 entity: album
 items:
+  album:
+    title:
+      ja: アルバム
+      en: album
+
   album_only_japanese:
     title:
       ja: 日本語のみ

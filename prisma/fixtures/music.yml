@@ -1,6 +1,15 @@
 entity: music
 connectedFields: ["user", "band", "artists", "composers", "lyrists"]
 items:
+  music:
+    type: ORIGINAL
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: 曲
+      en: music
+
   music_original:
     type: ORIGINAL
     score: ""
@@ -114,6 +123,24 @@ items:
     title:
       ja: Beautiful Circus
       en: Beautiful Circus
+    band: "@ling_tosite_sigure"
+    composers:
+      - "@tk"
+    lyrists:
+      - "@tk"
+    artists:
+      - "@tk"
+      - "@miyoko"
+      - "@pierre_nakano"
+
+  abnormalize:
+    type: COPY
+    score: ""
+    visibility: PUBLIC
+    price: 0
+    title:
+      ja: abnormalize
+      en: abonormalize
     band: "@ling_tosite_sigure"
     composers:
       - "@tk"

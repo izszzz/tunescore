@@ -1,5 +1,5 @@
 entity: bookmark
-connectedFileds: ["user", "music", "band", "album"]
+connectedFields: ["user", "music", "band", "album", "artist"]
 items:
   bookmark_music:
     resourceType: "Music"
@@ -8,16 +8,15 @@ items:
 
   bookmark_band:
     resourceType: "Band"
-    music: "@band"
+    band: "@band"
     user: "@user"
 
   bookmark_album:
     resourceType: "Album"
-    music: "@album"
-    user: "@user"
-  
-  bookmark_artist:
-    resourceType: "Artist"
-    music: "@artist"
+    album: "@album"
     user: "@user"
 
+  bookmark_artist:
+    resourceType: "Artist"
+    artist: "@artist"
+    user: "@user"

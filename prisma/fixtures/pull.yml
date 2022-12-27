@@ -1,44 +1,62 @@
 entity: pull
-connectedFileds: ["user", "music"]
+connectedFields: ["user", "music"]
 items:
   pull:
     title: "pull"
-    body : "pull"
+    body: "pull"
     status: "OPEN"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"
 
   pull_open:
     title: "open pull"
-    body : "open pull"
+    body: "open pull"
     status: "OPEN"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"
 
   pull_close:
     title: "closed issue"
-    body : "closing issue"
-    status: "CLOSE"
+    body: "closing issue"
+    status: "CLOSED"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"
 
   pull_draft:
     title: "draft"
-    body : "draft"
+    body: "draft"
     status: "DRAFT"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"
 
   pull_vote:
     title: "vote"
-    body : "vote"
+    body: "vote"
     status: "VOTE"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"
 
   pull_merged:
     title: "merged"
-    body : "merged"
+    body: "merged"
     status: "MERGED"
+    score:
+      original: ""
+      changed: ""
     music: "@music"
     user: "@user"

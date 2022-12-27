@@ -7,6 +7,7 @@ import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
+import { createPath } from "../../helpers/createPath";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -16,45 +17,43 @@ const Musics: NextPage = () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const { data } = trpc.useQuery(
-    [
-      "pagination.music",
-      {
-        args: {
-          include: {
-            composers: true,
-            lyrists: true,
-            band: true,
-            user: true,
-            artists: true,
-            bookmarks: {
-              where: {
-                user: { id: session.data?.user?.id },
-                resourceType: "Music",
-              },
+  const path = createPath([
+    "pagination.music",
+    {
+      args: {
+        include: {
+          composers: true,
+          lyrists: true,
+          band: true,
+          user: true,
+          artists: true,
+          bookmarks: {
+            where: {
+              user: { id: session.data?.user?.id },
+              resourceType: "Music",
             },
           },
-          where: (router.query.q as string)
-            ? {
-                title: {
-                  is: {
-                    [router.locale]: {
-                      contains: (router.query.q as string) || "",
-                    },
+        },
+        where: (router.query.q as string)
+          ? {
+              title: {
+                is: {
+                  [router.locale]: {
+                    contains: (router.query.q as string) || "",
                   },
                 },
-              }
-            : {},
-        },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
+              },
+            }
+          : {},
       },
-    ],
-    {
-      onError: () => {
-        enqueueSnackbar("music.index error");
-      },
-    }
-  );
+      options: { page: (router.query.page as string) || 0, perPage: 12 },
+    },
+  ]);
+  const { data } = trpc.useQuery(path, {
+    onError: () => {
+      enqueueSnackbar("music.index error");
+    },
+  });
   if (!data) return <></>;
   return (
     <DefaultIndexLayout<Music>

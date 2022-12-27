@@ -19,7 +19,6 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
-      prisma?.follow.create({ data: {} });
       return await paginate<
         Prisma.MusicGetPayload<{
           include: {
@@ -112,7 +111,11 @@ export const paginationRouter = createRouter()
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
-        Prisma.UserGetPayload<null>,
+        Prisma.UserGetPayload<{
+          include: {
+            _count: { select: { following: true; followers: true } };
+          };
+        }>,
         Prisma.UserFindManyArgs
       >(ctx.prisma.user, args);
     },

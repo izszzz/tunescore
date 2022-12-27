@@ -4,6 +4,7 @@ import { useSnackbar } from "notistack";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
 import type { NextPage } from "next";
+import UserLists from "../../components/elements/list/user";
 
 const Users: NextPage = () => {
   const router = useRouter();
@@ -21,6 +22,9 @@ const Users: NextPage = () => {
           where: {
             name: { contains: (router.query.q as string) || "" },
           },
+          include: {
+            _count: { select: { following: true, followers: true } },
+          },
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
       },
@@ -34,14 +38,7 @@ const Users: NextPage = () => {
   if (!data) return <></>;
   return (
     <DefaultSingleColumnLayout contained>
-      <p>users</p>
-      <div>
-        {data.data.map(({ id, name }) => (
-          <Link key={id} href={{ pathname: "/users/[id]", query: { id } }}>
-            <a>{name}</a>
-          </Link>
-        ))}
-      </div>
+      <UserLists data={data.data} />
     </DefaultSingleColumnLayout>
   );
 };

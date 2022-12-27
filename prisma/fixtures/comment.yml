@@ -1,12 +1,14 @@
 entity: comment
-connectedFileds: ["user", "issue", "pull"]
+connectedFields: ["user", "issue", "pull"]
 items:
   comment_issue:
     body: issue_comment
-    issue: "@issue"
     resourceType: "Issue"
+    issue: "@issue"
+    user: "@user"
 
   comment_pull:
     body: pull_comment
-    issue: "@pull"
     resourceType: "Pull"
+    pull: "@pull"
+    user: "@user"

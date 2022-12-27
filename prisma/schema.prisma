@@ -134,8 +134,8 @@ model Music {
   pulls Pull[]
 
   bookmarks Bookmark[] @relation("MusicBookmark")
+  tags Tag[] @relation("MusicTag")
 }
-
 
 model Album {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
@@ -151,6 +151,7 @@ model Album {
   artistIDs String[] @db.ObjectId
 
   bookmarks Bookmark[] @relation("AlbumBookmark")
+  tags Tag[] @relation("AlbumTag")
 }
 
 model Artist {
@@ -174,6 +175,7 @@ model Artist {
   albumIDs          String[] @db.ObjectId
 
   bookmarks Bookmark[] @relation("ArtistBookmark")
+  tags Tag[] @relation("ArtistTag")
 }
 
 model Band {
@@ -189,6 +191,7 @@ model Band {
   albums Album[]
 
   bookmarks Bookmark[] @relation("BandBookmark")
+  tags Tag[] @relation("BandTag")
 }
 
 model Issue{
@@ -269,6 +272,20 @@ model Bookmark{
   resourceType BookmarkType 
 }
 
+model Tag{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  
+  name Locales
+
+  music Music? @relation("MusicTag", fields: [resourceId], references: [id])
+  band Band? @relation("BandTag",fields: [resourceId], references: [id])
+  album Album? @relation("AlbumTag",fields: [resourceId], references: [id])
+  artist Artist? @relation("ArtistTag",fields: [resourceId], references: [id])
+
+  resourceId String @db.ObjectId
+  resourceType TagType 
+}
+
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
 model Notification{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -286,7 +303,12 @@ model Notification{
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
 }
-
+enum TagType{
+  Music
+  Band
+  Artist
+  Album
+}
 enum BookmarkType{
   Music
   Band
@@ -298,7 +320,7 @@ enum CommentType{
   Issue
 }
 enum NotificationType{
-  User
+  Follow
   Bookmark
   Comment
 }

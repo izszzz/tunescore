@@ -1,25 +1,19 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import YouTube from "react-youtube";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
-import ArtistChip from "../../../components/elements/chip/artist";
-import BandChip from "../../../components/elements/chip/band";
 import MusicLayout from "../../../components/layouts/show/music";
 import ItunesButton from "../../../components/elements/button/itunes";
-import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import { createPath } from "../../../helpers/createPath";
+import BandLists from "../../../components/elements/list/band";
+import ArtistLists from "../../../components/elements/list/artist";
+import Typography from "@mui/material/Typography";
+
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
@@ -29,10 +23,47 @@ const Music: NextPage = () => {
       where: { id: router.query.id as string },
       include: {
         user: true,
-        band: true,
-        artists: true,
-        composers: true,
-        lyrists: true,
+        band: {
+          include: {
+            _count: {
+              select: {
+                bookmarks: true,
+                artists: true,
+                musics: true,
+              },
+            },
+          },
+        },
+        artists: {
+          include: {
+            bands: true,
+            _count: {
+              select: {
+                bookmarks: true,
+              },
+            },
+          },
+        },
+        composers: {
+          include: {
+            bands: true,
+            _count: {
+              select: {
+                bookmarks: true,
+              },
+            },
+          },
+        },
+        lyrists: {
+          include: {
+            bands: true,
+            _count: {
+              select: {
+                bookmarks: true,
+              },
+            },
+          },
+        },
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
         bookmarks: {
           where: {
@@ -53,6 +84,7 @@ const Music: NextPage = () => {
       )}
       {data.link?.streaming?.youtube?.id && (
         <YouTube
+          className="youtubeContainer"
           videoId={data.link?.streaming?.youtube.id}
           opts={{ width: "100%", height: "100%" }}
         />
@@ -75,6 +107,7 @@ const Music: NextPage = () => {
           ),
         }}
       />
+
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
           <VoteAlert
@@ -84,88 +117,18 @@ const Music: NextPage = () => {
           />
         </Box>
       ))}
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>Composer</TableCell>
-              <TableCell>
-                {musicData.composers.map(({ id, name }) => (
-                  <ArtistChip
-                    key={id}
-                    label={setLocale(name, router)}
-                    onClick={() =>
-                      router.push({ pathname: "/artists/[id]", query: { id } })
-                    }
-                  />
-                ))}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Lyrist</TableCell>
-              <TableCell>
-                {musicData.lyrists.map(({ id, name }) => (
-                  <ArtistChip
-                    key={id}
-                    label={setLocale(name, router)}
-                    onClick={() =>
-                      router.push({ pathname: "/artists/[id]", query: { id } })
-                    }
-                  />
-                ))}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Band</TableCell>
-              <TableCell>
-                {musicData.band && (
-                  <BandChip
-                    label={setLocale(musicData.band.name, router)}
-                    onClick={() =>
-                      musicData.band &&
-                      router.push({
-                        pathname: "/bands/[id]",
-                        query: { id: musicData.band.id },
-                      })
-                    }
-                  />
-                )}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {musicData.artists.map(({ id, name }) => (
-              <TableRow key={id}>
-                <TableCell />
-                <TableCell>
-                  <ArtistChip
-                    label={setLocale(name, router)}
-                    onClick={() =>
-                      router.push({ pathname: "/artists/[id]", query: { id } })
-                    }
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+
+      <Typography variant="h6">Band</Typography>
+      {musicData.band && <BandLists data={[musicData.band]} />}
+
+      <Typography variant="h6">Composers</Typography>
+      <ArtistLists data={musicData.composers} />
+
+      <Typography variant="h6">Lyrists</Typography>
+      <ArtistLists data={musicData.lyrists} />
+
+      <Typography variant="h6">Artists</Typography>
+      <ArtistLists data={musicData.artists} />
     </MusicLayout>
   );
 };

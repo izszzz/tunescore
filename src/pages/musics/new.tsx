@@ -7,7 +7,7 @@ import {
   TextFieldElement,
   useForm,
 } from "react-hook-form-mui";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import Script from "next/script";
 import { importer } from "@coderline/alphatab";
@@ -43,10 +43,10 @@ const NewMusic: NextPage = () => {
     if (files && files.length > 0) {
       const reader = new FileReader();
       reader.onload = ({ target }) => {
-        const result = target?.result;
+        const result = target?.result as ArrayBuffer;
         if (result) exportFile(new Uint8Array(result));
       };
-      reader.readAsArrayBuffer(files[0]);
+      reader.readAsArrayBuffer(files[0] as Blob);
     }
     e.target.value = "";
   };

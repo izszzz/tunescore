@@ -28,6 +28,11 @@ export const paginationRouter = createRouter()
             band: true;
             artists: true;
             bookmarks: true;
+            _count: {
+              select: {
+                bookmarks: true;
+              };
+            };
           };
         }>,
         Prisma.MusicFindManyArgs
@@ -47,6 +52,11 @@ export const paginationRouter = createRouter()
           include: {
             bands: true;
             bookmarks: true;
+            _count: {
+              select: {
+                bookmarks: true;
+              };
+            };
           };
         }>,
         Prisma.ArtistFindManyArgs
@@ -67,6 +77,7 @@ export const paginationRouter = createRouter()
             bookmarks: true;
             _count: {
               select: {
+                bookmarks: true;
                 artists: true;
                 musics: true;
               };
@@ -92,6 +103,7 @@ export const paginationRouter = createRouter()
             band: true;
             _count: {
               select: {
+                bookmarks: true;
                 artists: true;
                 musics: true;
               };

@@ -14,6 +14,7 @@ export interface BandListItemProps {
     include: {
       _count: {
         select: {
+          bookmarks: true;
           artists: true;
           musics: true;
         };

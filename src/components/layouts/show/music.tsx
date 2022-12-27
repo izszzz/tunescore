@@ -26,10 +26,47 @@ export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<{
     include: {
-      artists: true;
-      band: true;
-      composers: true;
-      lyrists: true;
+      band: {
+        include: {
+          _count: {
+            select: {
+              bookmarks: true;
+              artists: true;
+              musics: true;
+            };
+          };
+        };
+      };
+      artists: {
+        include: {
+          bands: true;
+          _count: {
+            select: {
+              bookmarks: true;
+            };
+          };
+        };
+      };
+      composers: {
+        include: {
+          bands: true;
+          _count: {
+            select: {
+              bookmarks: true;
+            };
+          };
+        };
+      };
+      lyrists: {
+        include: {
+          bands: true;
+          _count: {
+            select: {
+              bookmarks: true;
+            };
+          };
+        };
+      };
       user: true;
       pulls: { include: { vote: true } };
       bookmarks: true;

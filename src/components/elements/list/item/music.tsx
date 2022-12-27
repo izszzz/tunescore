@@ -8,15 +8,13 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import musicOwner from "../../../../helpers/musicOwner";
-import BookmarkToggleButton from "../../button/toggle/bookmark";
 import { trpc } from "../../../../utils/trpc";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import type { Prisma } from "@prisma/client";
-import { useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -27,13 +25,16 @@ export interface MusicListItemProps {
       band: true;
       artists: true;
       bookmarks: true;
+      _count: {
+        select: {
+          bookmarks: true;
+        };
+      };
     };
   }>;
 }
 const MusicListItem = ({ data }: MusicListItemProps) => {
   const router = useRouter();
-  const session = useSession();
-  const update = trpc.useMutation(["music.updateOneMusic"]);
   return (
     <ListItem
       disablePadding
@@ -52,27 +53,17 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
                 {setLocale(data.title, router)}
               </Typography>
               <Chip component="span" label={data.type} size="small" />
-              <BookmarkToggleButton
-                value={!!data.bookmarks.length}
-                disabled={update.isLoading}
-                onClick={(value) =>
-                  update.mutate({
-                    where: { id: router.query.id as string },
-                    data: {
-                      bookmarks: {
-                        [value ? "delete" : "create"]: {
-                          resourceType: "Music",
-                          music: { connect: data.id },
-                          user: { connect: session.data?.user?.id },
-                        },
-                      },
-                    },
-                  })
-                }
-              />
             </Box>
           }
-          secondary={<Owner data={data} />}
+          secondary={
+            <Box display="flex" alignItems="center">
+              <Owner data={data} />
+              <Box display="flex" alignItems="center">
+                <BookmarkBorderIcon fontSize="small" />
+                {data._count.bookmarks}
+              </Box>
+            </Box>
+          }
         />
         {data.link?.streaming && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -95,9 +86,10 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
 const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
   const { type, owner } = musicOwner(data, router);
-  if (type === "none" || owner === null) return <>no info</>;
+  if (type === "none" || owner === null) return <></>;
   return (
     <Box component="span" display="flex" alignItems="center">
+      <ResourceIcon resource={type} />
       <Typography
         mr={1}
         variant="body2"
@@ -106,7 +98,6 @@ const Owner = ({ data }: MusicListItemProps) => {
       >
         {owner.name}
       </Typography>
-      <ResourceIcon resource={type} />
     </Box>
   );
 };

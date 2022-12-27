@@ -7,6 +7,9 @@ import IndexChip from "../../chip";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import MusicCard from ".";
 import type { Prisma } from "@prisma/client";
+import Box from "@mui/material/Box";
+import BookmarkToggleButton from "../../button/toggle/bookmark";
+import { useSession } from "next-auth/react";
 
 interface DefaultMusicCard {
   data: Prisma.MusicGetPayload<{
@@ -16,20 +19,25 @@ interface DefaultMusicCard {
       lyrists: true;
       band: true;
       artists: true;
+      bookmarks: true;
     };
   }>;
 }
 const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
   const router = useRouter();
+  const session = useSession();
   const { type, owner } = musicOwner(data, router);
   return (
     <MusicCard
       size="200px"
       title={
         <>
-          <Typography variant="h6" noWrap>
-            {setLocale(data.title, router)}
-          </Typography>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="h6" noWrap>
+              {setLocale(data.title, router)}
+            </Typography>
+            <BookmarkToggleButton value={!!data.bookmarks.length} />
+          </Box>
           {owner && <IndexChip label={owner.name} resource={type} />}
         </>
       }

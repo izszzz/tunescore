@@ -33,6 +33,11 @@ const Musics: NextPage = () => {
               resourceType: "Music",
             },
           },
+          _count: {
+            select: {
+              bookmarks: true,
+            },
+          },
         },
         where: (router.query.q as string)
           ? {

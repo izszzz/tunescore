@@ -5,8 +5,10 @@ import DefaultSingleColumnLayout from "../components/layouts/single_column/defau
 import { trpc } from "../utils/trpc";
 import type { NextPage } from "next";
 import { Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
+  const session = useSession();
   const musics = trpc.useQuery([
     "pagination.music",
     {
@@ -17,6 +19,12 @@ const Home: NextPage = () => {
           band: true,
           user: true,
           artists: true,
+          bookmarks: {
+            where: {
+              user: { id: session.data?.user?.id },
+              resourceType: "Music",
+            },
+          },
         },
       },
       options: { page: 0, perPage: 12 },

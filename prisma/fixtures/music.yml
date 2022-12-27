@@ -140,7 +140,7 @@ items:
     price: 0
     title:
       ja: abnormalize
-      en: abonormalize
+      en: abnormalize
     band: "@ling_tosite_sigure"
     composers:
       - "@tk"

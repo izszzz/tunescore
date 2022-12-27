@@ -7,14 +7,14 @@ import type { IconButtonProps } from "@mui/material/IconButton";
 export interface BookmarkToggleButtonProps
   extends Omit<IconButtonProps, "onClick" | "value"> {
   value: boolean;
-  onClick: (value: boolean) => void;
+  onClick?: (value: boolean) => void;
 }
 const BookmarkToggleButton = ({
   value,
   onClick,
   ...props
 }: BookmarkToggleButtonProps) => (
-  <IconButton {...props} onClick={() => onClick(value)}>
+  <IconButton {...props} onClick={() => onClick && onClick(value)}>
     {value ? <BookmarkIcon color="primary" /> : <BookmarkBorderIcon />}
   </IconButton>
 );

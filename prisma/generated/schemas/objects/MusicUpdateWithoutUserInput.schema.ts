@@ -21,6 +21,7 @@ import { MusicUpdateartistIDsInputObjectSchema } from './MusicUpdateartistIDsInp
 import { IssueUpdateManyWithoutMusicNestedInputObjectSchema } from './IssueUpdateManyWithoutMusicNestedInput.schema';
 import { PullUpdateManyWithoutMusicNestedInputObjectSchema } from './PullUpdateManyWithoutMusicNestedInput.schema';
 import { BookmarkUpdateManyWithoutMusicNestedInputObjectSchema } from './BookmarkUpdateManyWithoutMusicNestedInput.schema';
+import { TagMapUpdateManyWithoutMusicNestedInputObjectSchema } from './TagMapUpdateManyWithoutMusicNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -112,6 +113,9 @@ const Schema: z.ZodType<Prisma.MusicUpdateWithoutUserInput> = z
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkUpdateManyWithoutMusicNestedInputObjectSchema)
+      .optional(),
+    tagMaps: z
+      .lazy(() => TagMapUpdateManyWithoutMusicNestedInputObjectSchema)
       .optional(),
   })
   .strict();

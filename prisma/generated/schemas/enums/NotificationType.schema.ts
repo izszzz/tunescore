@@ -1,3 +1,3 @@
 import { z } from 'zod';
 
-export const NotificationTypeSchema = z.enum(['User', 'Bookmark', 'Comment']);
+export const NotificationTypeSchema = z.enum(['Follow', 'Bookmark', 'Comment']);

@@ -9,6 +9,7 @@ import { ArtistOrderByRelationAggregateInputObjectSchema } from './ArtistOrderBy
 import { IssueOrderByRelationAggregateInputObjectSchema } from './IssueOrderByRelationAggregateInput.schema';
 import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRelationAggregateInput.schema';
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
+import { TagMapOrderByRelationAggregateInputObjectSchema } from './TagMapOrderByRelationAggregateInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -49,6 +50,9 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    tagMaps: z
+      .lazy(() => TagMapOrderByRelationAggregateInputObjectSchema)
       .optional(),
   })
   .strict();

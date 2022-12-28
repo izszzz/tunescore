@@ -1,0 +1,16 @@
+entity: tag
+items:
+  rock:
+    name: "Rock"
+
+  metal:
+    name: "Metal"
+
+  punk:
+    name: "Punk"
+
+  jpop:
+    name: "J-Pop"
+
+  jazz:
+    name: "Jazz"

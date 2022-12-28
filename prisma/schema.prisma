@@ -134,7 +134,7 @@ model Music {
   pulls Pull[]
 
   bookmarks Bookmark[] @relation("MusicBookmark")
-  tags Tag[] @relation("MusicTag")
+  tagMaps TagMap[] @relation("MusicTagMap")
 }
 
 model Album {
@@ -151,7 +151,7 @@ model Album {
   artistIDs String[] @db.ObjectId
 
   bookmarks Bookmark[] @relation("AlbumBookmark")
-  tags Tag[] @relation("AlbumTag")
+  tagMaps TagMap[] @relation("AlbumTagMap")
 }
 
 model Artist {
@@ -175,7 +175,7 @@ model Artist {
   albumIDs          String[] @db.ObjectId
 
   bookmarks Bookmark[] @relation("ArtistBookmark")
-  tags Tag[] @relation("ArtistTag")
+  tagMaps TagMap[] @relation("ArtistTagMap")
 }
 
 model Band {
@@ -191,7 +191,7 @@ model Band {
   albums Album[]
 
   bookmarks Bookmark[] @relation("BandBookmark")
-  tags Tag[] @relation("BandTag")
+  tagMaps TagMap[] @relation("BandTagMap")
 }
 
 model Issue{
@@ -275,12 +275,20 @@ model Bookmark{
 model Tag{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   
-  name Locales
+  name String 
+  tagMap TagMap[]
+}
 
-  music Music? @relation("MusicTag", fields: [resourceId], references: [id])
-  band Band? @relation("BandTag",fields: [resourceId], references: [id])
-  album Album? @relation("AlbumTag",fields: [resourceId], references: [id])
-  artist Artist? @relation("ArtistTag",fields: [resourceId], references: [id])
+model TagMap{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+  tag Tag @relation(fields:[tagId], references: [id])
+  tagId String @db.ObjectId
+
+  music Music? @relation("MusicTagMap", fields: [resourceId], references: [id])
+  band Band? @relation("BandTagMap",fields: [resourceId], references: [id])
+  album Album? @relation("AlbumTagMap",fields: [resourceId], references: [id])
+  artist Artist? @relation("ArtistTagMap",fields: [resourceId], references: [id])
 
   resourceId String @db.ObjectId
   resourceType TagType 

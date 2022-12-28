@@ -20,6 +20,7 @@ import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter
 import { IssueListRelationFilterObjectSchema } from './IssueListRelationFilter.schema';
 import { PullListRelationFilterObjectSchema } from './PullListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
+import { TagMapListRelationFilterObjectSchema } from './TagMapListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -110,6 +111,7 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
     issues: z.lazy(() => IssueListRelationFilterObjectSchema).optional(),
     pulls: z.lazy(() => PullListRelationFilterObjectSchema).optional(),
     bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
+    tagMaps: z.lazy(() => TagMapListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

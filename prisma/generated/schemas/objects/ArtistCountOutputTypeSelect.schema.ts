@@ -10,6 +10,7 @@ const Schema: z.ZodType<Prisma.ArtistCountOutputTypeSelect> = z
     bands: z.boolean().optional(),
     albums: z.boolean().optional(),
     bookmarks: z.boolean().optional(),
+    tagMaps: z.boolean().optional(),
   })
   .strict();
 

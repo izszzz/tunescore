@@ -3,6 +3,7 @@ import { BandArgsObjectSchema } from './BandArgs.schema';
 import { MusicFindManySchema } from '../findManyMusic.schema';
 import { ArtistFindManySchema } from '../findManyArtist.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
+import { TagMapFindManySchema } from '../findManyTagMap.schema';
 import { AlbumCountOutputTypeArgsObjectSchema } from './AlbumCountOutputTypeArgs.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -18,6 +19,9 @@ const Schema: z.ZodType<Prisma.AlbumInclude> = z
       .optional(),
     bookmarks: z
       .union([z.boolean(), z.lazy(() => BookmarkFindManySchema)])
+      .optional(),
+    tagMaps: z
+      .union([z.boolean(), z.lazy(() => TagMapFindManySchema)])
       .optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => AlbumCountOutputTypeArgsObjectSchema)])

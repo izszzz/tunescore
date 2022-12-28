@@ -11,6 +11,7 @@ const Schema: z.ZodType<Prisma.MusicCountOutputTypeSelect> = z
     issues: z.boolean().optional(),
     pulls: z.boolean().optional(),
     bookmarks: z.boolean().optional(),
+    tagMaps: z.boolean().optional(),
   })
   .strict();
 

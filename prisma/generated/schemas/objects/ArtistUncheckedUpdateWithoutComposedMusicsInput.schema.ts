@@ -13,6 +13,7 @@ import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput
 import { AlbumUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutArtistNestedInput.schema';
+import { TagMapUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutArtistNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -85,6 +86,11 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateWithoutComposedMusicsInput> 
       bookmarks: z
         .lazy(
           () => BookmarkUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
+        )
+        .optional(),
+      tagMaps: z
+        .lazy(
+          () => TagMapUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
         )
         .optional(),
     })

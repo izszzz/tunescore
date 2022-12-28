@@ -1,13 +1,12 @@
-schema chenge
+# Schema chenge
 
 ```
 npx prisma db push
-npx prisma db seed
 npx prisma migrate reset
 npx prisma studio
 ```
 
-fixtures
+# Fixtures
 
 ```
 npx fixtures ./prisma/fixtures

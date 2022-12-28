@@ -7,6 +7,7 @@ import type { ShowLayoutProps } from "./";
 import type { BookmarkToggleButtonProps } from "../../elements/button/toggle/bookmark";
 import { Prisma } from "@prisma/client";
 import Chip from "@mui/material/Chip";
+import ResourceIcon from "../../elements/icon/resource";
 
 export interface DefaultShowLayoutProps extends ShowLayoutProps {
   bookmarkToggleButtonProps: BookmarkToggleButtonProps;
@@ -23,12 +24,11 @@ const DefaultShowLayout = ({
       {...props}
       header={<DefaultHeader />}
       title={
-        <>
+        <Box mx={3}>
           <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            mx={3}
           >
             <Box display="flex" alignItems="center">
               {props.title}
@@ -36,9 +36,13 @@ const DefaultShowLayout = ({
             <BookmarkToggleButton {...bookmarkToggleButtonProps} />
           </Box>
           {tagMaps.map((tagMap) => (
-            <Chip label={tagMap.tag.name} />
+            <Chip
+              icon={<ResourceIcon resource="tag" />}
+              label={tagMap.tag.name}
+              variant="outlined"
+            />
           ))}
-        </>
+        </Box>
       }
     />
   );

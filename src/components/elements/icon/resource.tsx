@@ -4,6 +4,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AlbumIcon from "@mui/icons-material/Album";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 
 export interface ResourceIconProps extends SvgIconProps {
@@ -14,7 +15,8 @@ export interface ResourceIconProps extends SvgIconProps {
     | "band"
     | "music"
     | "album"
-    | "user";
+    | "user"
+    | "tag";
 }
 const ResourceIcon = ({ resource, ...props }: ResourceIconProps) => {
   if (resource === "artist" || resource === "composer" || resource === "lyrist")
@@ -23,6 +25,7 @@ const ResourceIcon = ({ resource, ...props }: ResourceIconProps) => {
   if (resource === "music") return <MusicNoteIcon {...props} />;
   if (resource === "album") return <AlbumIcon {...props} />;
   if (resource === "user") return <AccountCircleIcon {...props} />;
+  if (resource === "tag") return <LocalOfferIcon {...props} />;
   return <>no icon</>;
 };
 export default ResourceIcon;

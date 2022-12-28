@@ -17,7 +17,7 @@ import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import type { Artist } from "@prisma/client";
+import type { Artist, Tag, TagMap } from "@prisma/client";
 import type { NextPage } from "next";
 import { musicShowPath } from "../../../paths/musics/[id]";
 
@@ -54,6 +54,11 @@ const SettingsMusic: NextPage = () => {
     },
   });
   const searchArtist = trpc.useMutation("search.artist", {
+    onError: () => {
+      enqueueSnackbar("artist.search error");
+    },
+  });
+  const searchTag = trpc.useMutation("search.tag", {
     onError: () => {
       enqueueSnackbar("artist.search error");
     },
@@ -206,6 +211,58 @@ const SettingsMusic: NextPage = () => {
             data: { artists: { disconnect: { id: artist.id } } },
           })
         }
+      />
+      <DefaultUpdateAutocomplete<Tag, true>
+        value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
+        options={searchTag.data || []}
+        getOptionLabel={(option) => option.name || ""}
+        ChipProps={{ icon: <ResourceIcon resource="tag" /> }}
+        loading={update.isLoading}
+        textFieldProps={{
+          label: "tags",
+          margin: "dense",
+          onChange: (e) =>
+            searchTag.mutate({
+              where: {
+                name: {
+                  contains: e.currentTarget.value,
+                },
+              },
+              take: 10,
+            }),
+        }}
+        onChange={{
+          onSelect: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  create: {
+                    tag: { connect: { id: details.option.id } },
+                    resourceType: "Music",
+                  },
+                },
+              },
+            }),
+          onRemove: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  delete: {
+                    resourceId_tagId_resourceType: {
+                      resourceType: "Music",
+                      resourceId: id,
+                      tagId: details.option.id,
+                    },
+                  },
+                },
+              },
+            }),
+        }}
+        multiple
       />
 
       <Typography variant="h4">iTunes</Typography>

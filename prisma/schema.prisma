@@ -292,6 +292,8 @@ model TagMap{
 
   resourceId String @db.ObjectId
   resourceType TagType 
+
+  @@unique([resourceId, tagId, resourceType])
 }
 
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices

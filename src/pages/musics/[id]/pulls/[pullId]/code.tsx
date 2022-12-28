@@ -6,39 +6,24 @@ import ReactDiffViewer from "react-diff-viewer";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import PullLayout from "../../../../../components/layouts/show/pull";
 import { trpc } from "../../../../../utils/trpc";
-import type {
-  PullLayoutProps,
-} from "../../../../../components/layouts/show/pull";
-import type {
-  MusicLayoutProps,
-} from "../../../../../components/layouts/show/music";
+import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
+import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import type { NextPage } from "next";
+import { musicShowPath } from "../../../../../paths/musics/[id]";
 
 const Code: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
-  const music = trpc.useQuery(
-    [
-      "music.findUniqueMusic",
-      {
-        where: { id: router.query.id as string },
-        include: {
-          user: true,
-          band: true,
-          artists: true,
-          composers: true,
-          lyrists: true,
-          bookmarks: { where: { id: session.data?.user?.id } },
-        },
-      },
-    ],
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
-  );
+  const path = musicShowPath({
+    id: router.query.id as string,
+    userId: session.data?.user?.id,
+  });
+  const music = trpc.useQuery(path, {
+    onError: () => {
+      enqueueSnackbar("music.show error");
+    },
+  });
   const pull = trpc.useQuery(
     [
       "pull.findUniquePull",
@@ -57,7 +42,7 @@ const Code: NextPage = () => {
   const musicData = music.data as MusicLayoutProps["data"];
   const pullData = pull.data as PullLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} activeTab="pullrequests">
+    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
       <PullLayout data={pullData} activeTab="code">
         <ReactDiffViewer
           oldValue={pullData.score.original}

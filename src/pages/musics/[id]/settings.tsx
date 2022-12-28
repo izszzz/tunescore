@@ -14,12 +14,12 @@ import DangerAlert from "../../../components/elements/alert/delete";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
 import setLocale from "../../../helpers/setLocale";
-import { createPath } from "../../../helpers/createPath";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { Artist } from "@prisma/client";
 import type { NextPage } from "next";
+import { musicShowPath } from "../../../paths/musics/[id]";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
@@ -27,25 +27,7 @@ const SettingsMusic: NextPage = () => {
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const id = router.query.id as string;
-  const path = createPath([
-    "music.findUniqueMusic",
-    {
-      where: { id },
-      include: {
-        user: true,
-        band: true,
-        artists: true,
-        composers: true,
-        lyrists: true,
-        bookmarks: {
-          where: {
-            user: { id: session.data?.user?.id },
-            resourceType: "Music",
-          },
-        },
-      },
-    },
-  ]);
+  const path = musicShowPath({ id, userId: session.data?.user?.id });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const destroy = trpc.useMutation("music.deleteOneMusic", {
@@ -79,7 +61,7 @@ const SettingsMusic: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} activeTab="settings">
+    <MusicLayout data={musicData} path={path} activeTab="settings">
       <Typography variant="h4"> Info</Typography>
       <Divider />
       <SingleRowForm

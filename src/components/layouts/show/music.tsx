@@ -21,6 +21,7 @@ import type { Locales, Prisma } from "@prisma/client";
 import { createPath } from "../../../helpers/createPath";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import { musicShowPath } from "../../../paths/musics/[id]";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -69,37 +70,20 @@ export interface MusicLayoutProps
       };
       user: true;
       pulls: { include: { vote: true } };
+      tagMaps: { include: { tag: true } };
       bookmarks: true;
     };
   }>;
+  path: ReturnType<typeof musicShowPath>;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
-const MusicLayout = ({ data, activeTab, children }: MusicLayoutProps) => {
+const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
   const router = useRouter();
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const id = router.query.id as string;
-  const path = createPath([
-    "music.findUniqueMusic",
-    {
-      where: { id },
-      include: {
-        user: true,
-        band: true,
-        artists: true,
-        composers: true,
-        lyrists: true,
-        bookmarks: {
-          where: {
-            user: { id: session.data?.user?.id },
-            resourceType: "Music",
-          },
-        },
-      },
-    },
-  ]);
   const query = path[1];
   const update = trpc.useMutation(["music.updateOneMusic"], {
     onSuccess: (data) => {
@@ -171,6 +155,7 @@ const MusicLayout = ({ data, activeTab, children }: MusicLayoutProps) => {
           )}
         </>
       }
+      tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,

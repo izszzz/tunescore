@@ -8,22 +8,25 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import { createPath } from "../../../helpers/createPath";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import { bandShowPath } from "../../../paths/bands/[id]";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<{
     include: {
       bookmarks: true;
+      tagMaps: { include: { tag: true } };
     };
   }>;
+  path: ReturnType<typeof bandShowPath>;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
   data,
+  path,
   activeTab,
   children,
 }) => {
@@ -31,28 +34,6 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const path = createPath([
-    "band.findUniqueBand",
-    {
-      where: { id: router.query.id as string },
-      include: {
-        artists: true,
-        musics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-            bookmarks: {
-              where: {
-                user: { id: session.data?.user?.id },
-                resourceType: "Band",
-              },
-            },
-          },
-        },
-      },
-    },
-  ]);
   const query = path[1];
   const update = trpc.useMutation(["band.updateOneBand"], {
     onSuccess: (data) => {
@@ -86,6 +67,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       title={
         <Typography variant="h5">{setLocale(data.name, router)}</Typography>
       }
+      tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,

@@ -9,76 +9,23 @@ import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/createPath";
 import BandLists from "../../../components/elements/list/band";
 import ArtistLists from "../../../components/elements/list/artist";
 import Typography from "@mui/material/Typography";
+import { musicShowPath } from "../../../paths/musics/[id]";
 
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const path = createPath([
-    "music.findUniqueMusic",
-    {
-      where: { id: router.query.id as string },
-      include: {
-        user: true,
-        band: {
-          include: {
-            _count: {
-              select: {
-                bookmarks: true,
-                artists: true,
-                musics: true,
-              },
-            },
-          },
-        },
-        artists: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        composers: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        lyrists: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
-        bookmarks: {
-          where: {
-            user: { id: session.data?.user?.id },
-            resourceType: "Music",
-          },
-        },
-      },
-    },
-  ]);
+  const path = musicShowPath({
+    id: router.query.id as string,
+    userId: session.data?.user?.id,
+  });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} activeTab="info">
+    <MusicLayout data={musicData} path={path} activeTab="info">
       {data.link?.streaming?.itunes?.id && (
         <ItunesButton href={data.link?.streaming?.itunes.id} />
       )}

@@ -10,16 +10,55 @@ import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
-import { artistShowPath } from "../../../paths/artists/[id]";
-export interface ArtistLayoutProps
+import { albumShowPath } from "../../../paths/albums/[id]";
+export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.ArtistGetPayload<{
-    include: { bookmarks: true; tagMaps: { include: { tag: true } } };
+  data: Prisma.AlbumGetPayload<{
+    include: {
+      band: {
+        include: {
+          _count: {
+            select: {
+              bookmarks: true;
+              artists: true;
+              musics: true;
+            };
+          };
+        };
+      };
+      musics: {
+        include: {
+          user: true;
+          composers: true;
+          lyrists: true;
+          band: true;
+          artists: true;
+          bookmarks: true;
+          _count: {
+            select: {
+              bookmarks: true;
+            };
+          };
+        };
+      };
+      artists: {
+        include: {
+          bands: true;
+          _count: {
+            select: {
+              bookmarks: true;
+            };
+          };
+        };
+      };
+      bookmarks: true;
+      tagMaps: { include: { tag: true } };
+    };
   }>;
-  path: ReturnType<typeof artistShowPath>;
+  path: ReturnType<typeof albumShowPath>;
   activeTab: "info" | "settings";
 }
-const ArtistLayout: React.FC<ArtistLayoutProps> = ({
+const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   data,
   path,
   activeTab,
@@ -30,10 +69,10 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const query = path[1];
-  const update = trpc.useMutation(["artist.updateOneArtist"], {
+  const update = trpc.useMutation(["album.updateOneAlbum"], {
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
-      enqueueSnackbar("artist.update success");
+      enqueueSnackbar("album.update success");
     },
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
@@ -41,14 +80,14 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       {
         label: "info",
         href: {
-          pathname: "/artists/[id]",
+          pathname: "/albums/[id]",
           query: { id: router.query.id as string },
         },
       },
       {
         label: "settings",
         href: {
-          pathname: "/artists/[id]/settings",
+          pathname: "/albums/[id]/settings",
           query: { id: router.query.id as string },
         },
       },
@@ -60,7 +99,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       activeTab={activeTab}
       tabs={tabs}
       title={
-        <Typography variant="h5">{setLocale(data.name, router)}</Typography>
+        <Typography variant="h5">{setLocale(data.title, router)}</Typography>
       }
       tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{
@@ -72,7 +111,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
             data: {
               bookmarks: {
                 [value ? "delete" : "create"]: {
-                  resourceType: "Artist",
+                  resourceType: "Ablum",
                   user: { connect: session.data?.user?.id },
                 },
               },
@@ -84,4 +123,4 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
     </DefaultShowLayout>
   );
 };
-export default ArtistLayout;
+export default AlbumLayout;

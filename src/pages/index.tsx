@@ -63,6 +63,11 @@ const Home: NextPage = () => {
         </Link>
       </Typography>
       <Typography variant="h3">
+        <Link href="/albums">
+          <a>band</a>
+        </Link>
+      </Typography>
+      <Typography variant="h3">
         <Link href="/users">
           <a>user</a>
         </Link>

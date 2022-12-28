@@ -13,35 +13,18 @@ import ArtistLayout from "../../../components/layouts/show/artist";
 import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/createPath";
+import { artistShowPath } from "../../../paths/artists/[id]";
 
 const Artist: NextPage = () => {
   const router = useRouter();
-  const path = createPath([
-    "artist.findUniqueArtist",
-    {
-      where: { id: router.query.id as string },
-      include: {
-        bands: true,
-        composedMusics: {
-          include: { composers: true, lyrists: true, band: true },
-        },
-        writtenMusics: {
-          include: { composers: true, lyrists: true, band: true },
-        },
-        musics: {
-          include: { composers: true, lyrists: true, band: true },
-        },
-        bookmarks: true,
-      },
-    },
-  ]);
+  const path = artistShowPath({ id: router.query.id as string });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
-  const musicData = data as Prisma.ArtistGetPayload<{
+  const artistData = data as Prisma.ArtistGetPayload<{
     include: {
       bands: true;
       bookmarks: true;
+      tagMaps: { include: { tag: true } };
       composedMusics: {
         include: { composers: true; lyrists: true; band: true };
       };
@@ -54,7 +37,7 @@ const Artist: NextPage = () => {
     };
   }>;
   return (
-    <ArtistLayout data={musicData} activeTab="info">
+    <ArtistLayout data={artistData} path={path} activeTab="info">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -67,7 +50,7 @@ const Artist: NextPage = () => {
             <TableRow>
               <TableCell>band</TableCell>
               <TableCell>
-                {musicData.bands.map(({ id, name }) => (
+                {artistData.bands.map(({ id, name }) => (
                   <Chip
                     key={id}
                     label={setLocale(name, router)}
@@ -93,7 +76,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {musicData.composedMusics.map((music) => (
+            {artistData.composedMusics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link
@@ -168,7 +151,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {musicData.composedMusics.map((music) => (
+            {artistData.composedMusics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link
@@ -243,7 +226,7 @@ const Artist: NextPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {musicData.musics.map((music) => (
+            {artistData.musics.map((music) => (
               <TableRow key={music.id}>
                 <TableCell>
                   <Link

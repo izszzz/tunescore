@@ -15,6 +15,7 @@ import ArticleCard from "../../../../../components/elements/card/article";
 import { Prisma } from "@prisma/client";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
+import { musicShowPath } from "../../../../../paths/musics/[id]";
 
 const Pull: NextPage = () => {
   const router = useRouter();
@@ -22,27 +23,12 @@ const Pull: NextPage = () => {
   const session = useSession();
   const userId = session.data?.user?.id;
   const create = trpc.useMutation(["comment.createOneComment"]);
-  const music = trpc.useQuery(
-    [
-      "music.findUniqueMusic",
-      {
-        where: { id: router.query.id as string },
-        include: {
-          user: true,
-          band: true,
-          artists: true,
-          composers: true,
-          lyrists: true,
-          bookmarks: { where: { id: session.data?.user?.id } },
-        },
-      },
-    ],
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
-  );
+  const path = musicShowPath({ id: router.query.id as string, userId });
+  const music = trpc.useQuery(path, {
+    onError: () => {
+      enqueueSnackbar("music.show error");
+    },
+  });
   const pull = trpc.useQuery(
     [
       "pull.findUniquePull",
@@ -73,7 +59,7 @@ const Pull: NextPage = () => {
   }>;
   const { id, title, body, comments } = pullData;
   return (
-    <MusicLayout data={musicData} activeTab="pullrequests">
+    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
       <PullLayout data={pullData} activeTab="conversation">
         <ArticleCard title={title} body={body} />
         {comments.map((comment) => (
@@ -86,7 +72,7 @@ const Pull: NextPage = () => {
                 data: {
                   ...data,
                   resourceType: "Pull",
-                  issue: { connect: { id } },
+                  pull: { connect: { id } },
                   user: { connect: { id: userId } },
                 },
               }),

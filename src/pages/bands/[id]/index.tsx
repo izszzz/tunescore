@@ -13,38 +13,28 @@ import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/createPath";
+import { bandShowPath } from "../../../paths/bands/[id]";
+import { useSession } from "next-auth/react";
 
 const Band: NextPage = () => {
   const router = useRouter();
-  const path = createPath([
-    "band.findUniqueBand",
-    {
-      where: { id: router.query.id as string },
-      include: {
-        artists: true,
-        musics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-            bookmarks: true,
-          },
-        },
-      },
-    },
-  ]);
+  const session = useSession();
+  const path = bandShowPath({
+    id: router.query.id as string,
+    userId: session.data?.user?.id,
+  });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const bandData = data as Prisma.BandGetPayload<{
     include: {
       artists: true;
       musics: { include: { band: true; composers: true; lyrists: true } };
+      tagMaps: { include: { tag: true } };
       bookmarks: true;
     };
   }>;
   return (
-    <BandLayout data={bandData} activeTab="info">
+    <BandLayout data={bandData} path={path} activeTab="info">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>

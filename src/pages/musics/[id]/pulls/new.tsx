@@ -15,6 +15,7 @@ import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
+import { musicShowPath } from "../../../../paths/musics/[id]";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
@@ -22,27 +23,12 @@ const NewPull: NextPage = () => {
   const session = useSession();
   const id = router.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const music = trpc.useQuery(
-    [
-      "music.findUniqueMusic",
-      {
-        where: { id: router.query.id as string },
-        include: {
-          user: true,
-          band: true,
-          artists: true,
-          composers: true,
-          lyrists: true,
-          bookmarks: { where: { id: session.data?.user?.id } },
-        },
-      },
-    ],
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
-  );
+  const path = musicShowPath({ id, userId: session.data?.user?.id });
+  const music = trpc.useQuery(path, {
+    onError: () => {
+      enqueueSnackbar("music.show error");
+    },
+  });
   const create = trpc.useMutation(["pull.createOnePull"], {
     onSuccess: (data) =>
       router.push({
@@ -69,7 +55,7 @@ const NewPull: NextPage = () => {
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} activeTab="pullrequests">
+    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

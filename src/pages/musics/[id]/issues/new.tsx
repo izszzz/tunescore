@@ -17,6 +17,7 @@ import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import type { Issue } from "@prisma/client";
+import { musicShowPath } from "../../../../paths/musics/[id]";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
@@ -24,27 +25,15 @@ const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const session = useSession();
-  const { data } = trpc.useQuery(
-    [
-      "music.findUniqueMusic",
-      {
-        where: { id: router.query.id as string },
-        include: {
-          user: true,
-          band: true,
-          artists: true,
-          composers: true,
-          lyrists: true,
-          bookmarks: { where: { id: session.data?.user?.id } },
-        },
-      },
-    ],
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
-  );
+  const path = musicShowPath({
+    id: router.query.id as string,
+    userId: session.data?.user?.id,
+  });
+  const { data } = trpc.useQuery(path, {
+    onError: () => {
+      enqueueSnackbar("music.show error");
+    },
+  });
   const create = trpc.useMutation(["issue.createOneIssue"], {
     onSuccess: () =>
       router.push({
@@ -66,7 +55,7 @@ const Issues: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} activeTab="issues">
+    <MusicLayout data={musicData} path={path} activeTab="issues">
       <FormContainer onSuccess={handleSubmit} formContext={formContext}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

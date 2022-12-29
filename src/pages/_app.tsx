@@ -17,21 +17,29 @@ import "@fontsource/roboto/700.css";
 import type { Session } from "next-auth";
 import type { AppRouter } from "../server/router";
 import type { AppType } from "next/app";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDarkMode } from "usehooks-ts";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const { isDarkMode } = useDarkMode();
+  const theme = createTheme({
+    palette: { mode: isDarkMode ? "dark" : "light" },
+  });
   return (
     <RecoilRoot>
-      <SnackbarProvider maxSnack={3}>
-        <SessionProvider session={session}>
-          <CssBaseline />
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-          <AuthDialog />
-        </SessionProvider>
-      </SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider maxSnack={3}>
+          <SessionProvider session={session}>
+            <CssBaseline />
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+            <AuthDialog />
+          </SessionProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
     </RecoilRoot>
   );
 };

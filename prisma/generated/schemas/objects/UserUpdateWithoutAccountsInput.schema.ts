@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './NullableDateTimeFieldUpdateOperationsInput.schema';
+import { ThemeTypeSchema } from '../enums/ThemeType.schema';
+import { EnumThemeTypeFieldUpdateOperationsInputObjectSchema } from './EnumThemeTypeFieldUpdateOperationsInput.schema';
 import { SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { MusicUpdateManyWithoutUserNestedInputObjectSchema } from './MusicUpdateManyWithoutUserNestedInput.schema';
 import { IssueUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUpdateManyWithoutUserNestedInput.schema';
@@ -45,6 +47,12 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutAccountsInput> = z
       ])
       .optional()
       .nullable(),
+    theme: z
+      .union([
+        z.lazy(() => ThemeTypeSchema),
+        z.lazy(() => EnumThemeTypeFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
     sessions: z
       .lazy(() => SessionUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
@@ -66,7 +74,7 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutAccountsInput> = z
     notifications: z
       .lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
-    vote: z
+    votes: z
       .lazy(() => VoteUpdateManyWithoutUsersNestedInputObjectSchema)
       .optional(),
     voteIDs: z

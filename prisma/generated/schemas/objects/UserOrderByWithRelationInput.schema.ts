@@ -20,6 +20,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
     email: z.lazy(() => SortOrderSchema).optional(),
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    theme: z.lazy(() => SortOrderSchema).optional(),
     accounts: z
       .lazy(() => AccountOrderByRelationAggregateInputObjectSchema)
       .optional(),
@@ -44,7 +45,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
     notifications: z
       .lazy(() => NotificationOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    vote: z
+    votes: z
       .lazy(() => VoteOrderByRelationAggregateInputObjectSchema)
       .optional(),
     voteIDs: z.lazy(() => SortOrderSchema).optional(),

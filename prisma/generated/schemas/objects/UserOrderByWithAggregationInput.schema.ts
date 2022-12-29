@@ -13,6 +13,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithAggregationInput> = z
     email: z.lazy(() => SortOrderSchema).optional(),
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    theme: z.lazy(() => SortOrderSchema).optional(),
     voteIDs: z.lazy(() => SortOrderSchema).optional(),
     _count: z.lazy(() => UserCountOrderByAggregateInputObjectSchema).optional(),
     _max: z.lazy(() => UserMaxOrderByAggregateInputObjectSchema).optional(),

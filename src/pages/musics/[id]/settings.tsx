@@ -8,8 +8,6 @@ import { useSession } from "next-auth/react";
 import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
-import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
-import ResourceIcon from "../../../components/elements/icon/resource";
 import DangerAlert from "../../../components/elements/alert/delete";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
@@ -17,9 +15,10 @@ import setLocale from "../../../helpers/setLocale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import type { Artist, Tag, TagMap } from "@prisma/client";
 import type { NextPage } from "next";
 import { musicShowPath } from "../../../paths/musics/[id]";
+import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
+import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
@@ -48,17 +47,7 @@ const SettingsMusic: NextPage = () => {
       enqueueSnackbar("music.update error");
     },
   });
-  const searchBand = trpc.useMutation("search.band", {
-    onError: () => {
-      enqueueSnackbar("band.search error");
-    },
-  });
   const searchArtist = trpc.useMutation("search.artist", {
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
-  });
-  const searchTag = trpc.useMutation("search.tag", {
     onError: () => {
       enqueueSnackbar("artist.search error");
     },
@@ -83,8 +72,6 @@ const SettingsMusic: NextPage = () => {
       />
       <BandUpdateAutocomplete
         value={musicData.band}
-        options={searchBand.data || []}
-        getOptionLabel={(option) => setLocale(option.name, router) || ""}
         loading={update.isLoading}
         onChange={{
           onClear: () =>
@@ -98,37 +85,11 @@ const SettingsMusic: NextPage = () => {
               data: { band: { connect: { id: details?.option.id } } },
             }),
         }}
-        textFieldProps={{
-          onChange: (e) =>
-            searchBand.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
-              take: 10,
-            }),
-        }}
       />
-      <DefaultUpdateAutocomplete<Artist, true>
+      <ArtistUpdateAutocomplete
         value={musicData.composers}
-        options={searchArtist.data || []}
-        getOptionLabel={(option) => setLocale(option.name, router) || ""}
-        ChipProps={{ icon: <ResourceIcon resource="artist" /> }}
         loading={update.isLoading}
-        textFieldProps={{
-          label: "composers",
-          margin: "dense",
-          onChange: (e) =>
-            searchArtist.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
-              take: 10,
-            }),
-        }}
+        label="composers"
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
@@ -141,27 +102,11 @@ const SettingsMusic: NextPage = () => {
               data: { composers: { disconnect: { id: details?.option.id } } },
             }),
         }}
-        multiple
       />
-      <DefaultUpdateAutocomplete<Artist, true>
+      <ArtistUpdateAutocomplete
         value={musicData.lyrists}
-        options={searchArtist.data || []}
-        getOptionLabel={(option) => setLocale(option.name, router) || ""}
-        ChipProps={{ icon: <ResourceIcon resource="artist" /> }}
         loading={update.isLoading}
-        textFieldProps={{
-          label: "lyrists",
-          margin: "dense",
-          onChange: (e) =>
-            searchArtist.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
-              take: 10,
-            }),
-        }}
+        label="lyrists"
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
@@ -174,7 +119,6 @@ const SettingsMusic: NextPage = () => {
               data: { lyrists: { disconnect: { id: details?.option.id } } },
             }),
         }}
-        multiple
       />
       <ArtistsUpdateForm
         data={musicData.artists}
@@ -212,25 +156,9 @@ const SettingsMusic: NextPage = () => {
           })
         }
       />
-      <DefaultUpdateAutocomplete<Tag, true>
+      <TagUpdateAutocomplete
         value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
-        options={searchTag.data || []}
-        getOptionLabel={(option) => option.name || ""}
-        ChipProps={{ icon: <ResourceIcon resource="tag" /> }}
         loading={update.isLoading}
-        textFieldProps={{
-          label: "tags",
-          margin: "dense",
-          onChange: (e) =>
-            searchTag.mutate({
-              where: {
-                name: {
-                  contains: e.currentTarget.value,
-                },
-              },
-              take: 10,
-            }),
-        }}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             details &&
@@ -262,7 +190,6 @@ const SettingsMusic: NextPage = () => {
               },
             }),
         }}
-        multiple
       />
 
       <Typography variant="h4">iTunes</Typography>

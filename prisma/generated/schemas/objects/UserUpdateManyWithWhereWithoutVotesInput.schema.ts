@@ -5,7 +5,7 @@ import { UserUncheckedUpdateManyWithoutUsersInputObjectSchema } from './UserUnch
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.UserUpdateManyWithWhereWithoutVoteInput> = z
+const Schema: z.ZodType<Prisma.UserUpdateManyWithWhereWithoutVotesInput> = z
   .object({
     where: z.lazy(() => UserScalarWhereInputObjectSchema),
     data: z.union([
@@ -15,4 +15,4 @@ const Schema: z.ZodType<Prisma.UserUpdateManyWithWhereWithoutVoteInput> = z
   })
   .strict();
 
-export const UserUpdateManyWithWhereWithoutVoteInputObjectSchema = Schema;
+export const UserUpdateManyWithWhereWithoutVotesInputObjectSchema = Schema;

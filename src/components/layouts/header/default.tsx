@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
 import Header from ".";
+import ThemeToggleButton from "../../elements/button/toggle/theme";
 
 const DefaultHeader = () => {
   const { data: session } = useSession();
@@ -35,9 +36,12 @@ const DefaultHeader = () => {
           </Link>
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
-          <Grid item xs={10} />
+          <Grid item xs={9} />
           <Grid item xs={1}>
             <LocaleAutocomplete />
+          </Grid>
+          <Grid item xs={1} display="flex" alignItems="center">
+            <ThemeToggleButton />
           </Grid>
           <Grid item xs={1} display="flex" alignItems="stretch">
             {session ? (

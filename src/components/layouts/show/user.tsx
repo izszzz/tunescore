@@ -13,7 +13,7 @@ import type { ShowLayoutProps } from ".";
 import LoadingButton from "@mui/lab/LoadingButton";
 import DefaultHeader from "../header/default";
 
-interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
+export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{
     include: {
       _count: { select: { following: true; followers: true } };

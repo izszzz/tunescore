@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UserUncheckedCreateNestedManyWithoutVoteInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutVoteInput.schema';
+import { UserUncheckedCreateNestedManyWithoutVotesInputObjectSchema } from './UserUncheckedCreateNestedManyWithoutVotesInput.schema';
 import { VoteCreateuserIDsInputObjectSchema } from './VoteCreateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -12,7 +12,7 @@ const Schema: z.ZodType<Prisma.VoteUncheckedCreateWithoutPullInput> = z
     good: z.number().optional(),
     bad: z.number().optional(),
     users: z
-      .lazy(() => UserUncheckedCreateNestedManyWithoutVoteInputObjectSchema)
+      .lazy(() => UserUncheckedCreateNestedManyWithoutVotesInputObjectSchema)
       .optional(),
     userIDs: z
       .union([

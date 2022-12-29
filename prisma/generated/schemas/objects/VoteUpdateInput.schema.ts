@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { IntFieldUpdateOperationsInputObjectSchema } from './IntFieldUpdateOperationsInput.schema';
 import { PullUpdateOneRequiredWithoutVoteNestedInputObjectSchema } from './PullUpdateOneRequiredWithoutVoteNestedInput.schema';
-import { UserUpdateManyWithoutVoteNestedInputObjectSchema } from './UserUpdateManyWithoutVoteNestedInput.schema';
+import { UserUpdateManyWithoutVotesNestedInputObjectSchema } from './UserUpdateManyWithoutVotesNestedInput.schema';
 import { VoteUpdateuserIDsInputObjectSchema } from './VoteUpdateuserIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -37,7 +37,7 @@ const Schema: z.ZodType<Prisma.VoteUpdateInput> = z
       .lazy(() => PullUpdateOneRequiredWithoutVoteNestedInputObjectSchema)
       .optional(),
     users: z
-      .lazy(() => UserUpdateManyWithoutVoteNestedInputObjectSchema)
+      .lazy(() => UserUpdateManyWithoutVotesNestedInputObjectSchema)
       .optional(),
     userIDs: z
       .union([

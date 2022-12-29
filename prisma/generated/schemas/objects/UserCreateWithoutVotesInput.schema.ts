@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ThemeTypeSchema } from '../enums/ThemeType.schema';
 import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCreateNestedManyWithoutUserInput.schema';
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { MusicCreateNestedManyWithoutUserInputObjectSchema } from './MusicCreateNestedManyWithoutUserInput.schema';
@@ -13,13 +14,14 @@ import { FollowCreateNestedManyWithoutFollowingInputObjectSchema } from './Follo
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.UserCreateWithoutVoteInput> = z
+const Schema: z.ZodType<Prisma.UserCreateWithoutVotesInput> = z
   .object({
     id: z.string().optional(),
     name: z.string().optional().nullable(),
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    theme: z.lazy(() => ThemeTypeSchema).optional(),
     accounts: z
       .lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
@@ -59,4 +61,4 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutVoteInput> = z
   })
   .strict();
 
-export const UserCreateWithoutVoteInputObjectSchema = Schema;
+export const UserCreateWithoutVotesInputObjectSchema = Schema;

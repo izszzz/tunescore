@@ -1,71 +1,61 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Button from "@mui/material/Button";
-import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui";
-import { PrismaClient } from "@prisma/client";
 import { trpc } from "../../../utils/trpc";
-import UserLayout from "../../../components/layouts/show/user";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import type { Prisma} from "@prisma/client";
-import type { User } from "next-auth";
-import type { GetServerSideProps, NextPage } from "next";
-interface UserProps {
-  data: Prisma.UserGetPayload<{
-    include: { _count: { select: { followedBy: true; following: true } } };
-  }>;
-  followed: boolean;
-}
-const SettingsUser: NextPage<UserProps> = ({ data, followed }) => {
+import UserLayout, {
+  UserLayoutProps,
+} from "../../../components/layouts/show/user";
+import type { NextPage } from "next";
+import { createPath } from "../../../helpers/createPath";
+import SingleRowForm from "../../../components/elements/form/single_row";
+import DeleteAlert from "../../../components/elements/alert/delete";
+
+const SettingsUser: NextPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const formContext = useForm<User>();
-  const update = trpc.useMutation("user.update");
-  const destroy = trpc.useMutation("user.destroy", {
+  const id = router.query.id as string;
+  const userId = session?.user?.id;
+  const update = trpc.useMutation("user.updateOneUser");
+  const path = createPath([
+    "user.findUniqueUser",
+    {
+      where: { id },
+      include: {
+        _count: { select: { following: true, followers: true } },
+        followers: {
+          where: { followerId: id, followingId: userId },
+        },
+        bookmarks: true,
+      },
+    },
+  ]);
+  const query = path[1];
+  const { data } = trpc.useQuery(path);
+  const destroy = trpc.useMutation("user.deleteOneUser", {
     onSuccess: () => router.push("/"),
     onError: (error) => console.log(error),
   });
-  const handleSubmit = (data: User) => update.mutate(data);
-  const handleDestroy = () => session?.user && destroy.mutate(session.user);
-
-  useEffect(() => {
-    formContext.reset(session?.user);
-  }, [formContext, session]);
+  const userData = data as UserLayoutProps["data"];
   return (
-    <UserLayout data={data} followed={followed} activeTab="settings">
-      <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-        <TextFieldElement name="name" label="Name" required />
-        <br />
-        <Button type="submit">submit</Button>
-        <br />
-        <Button type="button" onClick={handleDestroy}>
-          Delete Account
-        </Button>
-      </FormContainer>
+    <UserLayout data={userData} activeTab="settings">
+      <SingleRowForm
+        data={userData}
+        loading={update.isLoading}
+        formContainerProps={{
+          onSuccess: ({ name }) => update.mutate({ ...query, data: { name } }),
+        }}
+        textFieldElementProps={{
+          name: "name",
+        }}
+      />
+      <DeleteAlert
+        loadingButtonProps={{
+          onClick: () => destroy.mutate({ ...query }),
+          loading: destroy.isLoading,
+        }}
+      />
     </UserLayout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<UserProps> = async (
-  ctx
-) => {
-  const prisma = new PrismaClient();
-  const data = await prisma.user.findUnique({
-    where: { id: ctx.query.id as string },
-    include: { _count: { select: { followedBy: true, following: true } } },
-  });
-  if (!data) return { notFound: true };
-  const session = await getServerAuthSession(ctx);
-  const followed = await prisma.user.findFirst({
-    where: {
-      id: ctx.query.id as string,
-    },
-    include: {
-      following: { where: { id: session?.user?.id } },
-    },
-  });
-  return {
-    props: { data, followed: !!followed?.following.length },
-  };
-};
 export default SettingsUser;

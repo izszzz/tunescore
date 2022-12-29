@@ -6,7 +6,7 @@ import { VoteUpdateuserIDsInputObjectSchema } from './VoteUpdateuserIDsInput.sch
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.VoteUncheckedUpdateManyWithoutVoteInput> = z
+const Schema: z.ZodType<Prisma.VoteUncheckedUpdateManyWithoutVotesInput> = z
   .object({
     start: z
       .union([
@@ -47,4 +47,4 @@ const Schema: z.ZodType<Prisma.VoteUncheckedUpdateManyWithoutVoteInput> = z
   })
   .strict();
 
-export const VoteUncheckedUpdateManyWithoutVoteInputObjectSchema = Schema;
+export const VoteUncheckedUpdateManyWithoutVotesInputObjectSchema = Schema;

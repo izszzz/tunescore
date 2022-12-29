@@ -10,6 +10,7 @@ const Schema: z.ZodType<Prisma.UserMaxOrderByAggregateInput> = z
     email: z.lazy(() => SortOrderSchema).optional(),
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    theme: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

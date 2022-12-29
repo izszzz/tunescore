@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './NullableDateTimeFieldUpdateOperationsInput.schema';
+import { ThemeTypeSchema } from '../enums/ThemeType.schema';
+import { EnumThemeTypeFieldUpdateOperationsInputObjectSchema } from './EnumThemeTypeFieldUpdateOperationsInput.schema';
 import { AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './AccountUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { MusicUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutUserNestedInput.schema';
@@ -15,7 +17,7 @@ import { FollowUncheckedUpdateManyWithoutFollowingNestedInputObjectSchema } from
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutVoteInput> = z
+const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutVotesInput> = z
   .object({
     name: z
       .union([
@@ -45,6 +47,12 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutVoteInput> = z
       ])
       .optional()
       .nullable(),
+    theme: z
+      .union([
+        z.lazy(() => ThemeTypeSchema),
+        z.lazy(() => EnumThemeTypeFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
     accounts: z
       .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
@@ -90,4 +98,4 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutVoteInput> = z
   })
   .strict();
 
-export const UserUncheckedUpdateWithoutVoteInputObjectSchema = Schema;
+export const UserUncheckedUpdateWithoutVotesInputObjectSchema = Schema;

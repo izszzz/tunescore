@@ -4,13 +4,12 @@ import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
-import DefaultUpdateAutocomplete from "../../../components/elements/autocomplete/update/default";
-import ResourceIcon from "../../../components/elements/icon/resource";
-import setLocale from "../../../helpers/setLocale";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import { createPath } from "../../../helpers/createPath";
-import type { Band, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
+import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
+import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();
@@ -44,16 +43,12 @@ const EditArtist: NextPage = () => {
           },
         },
         bookmarks: true,
+        tagMaps: { include: { tag: true } },
       },
     },
   ]);
   const query = path[1];
   const { data } = trpc.useQuery(path);
-  const searchBand = trpc.useMutation("search.band", {
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
-  });
   const update = trpc.useMutation("artist.updateOneArtist");
   const destroy = trpc.useMutation("artist.deleteOneArtist");
   const handleDestroy = () =>
@@ -75,10 +70,11 @@ const EditArtist: NextPage = () => {
         include: { composers: true; lyrists: true; band: true };
       };
       bookmarks: true;
+      tagMaps: { include: { tag: true } };
     };
   }>;
   return (
-    <ArtistLayout data={artistData} activeTab="settings">
+    <ArtistLayout data={artistData} path={path} activeTab="settings">
       <SingleRowForm
         data={artistData}
         loading={update.isLoading}
@@ -89,25 +85,9 @@ const EditArtist: NextPage = () => {
           name: "name",
         }}
       />
-      <DefaultUpdateAutocomplete<Band, true>
+      <BandUpdateAutocomplete
         value={artistData.bands}
-        options={searchBand.data || []}
-        getOptionLabel={(option) => setLocale(option.name, router) || ""}
-        ChipProps={{ icon: <ResourceIcon resource="band" /> }}
         loading={update.isLoading}
-        textFieldProps={{
-          label: "bands",
-          margin: "dense",
-          onChange: (e) =>
-            searchBand.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
-              take: 10,
-            }),
-        }}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({

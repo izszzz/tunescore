@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ThemeTypeSchema } from '../enums/ThemeType.schema';
 import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCreateNestedManyWithoutUserInput.schema';
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { IssueCreateNestedManyWithoutUserInputObjectSchema } from './IssueCreateNestedManyWithoutUserInput.schema';
@@ -20,6 +21,7 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutMusicsInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    theme: z.lazy(() => ThemeTypeSchema).optional(),
     accounts: z
       .lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
@@ -41,7 +43,7 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutMusicsInput> = z
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
-    vote: z
+    votes: z
       .lazy(() => VoteCreateNestedManyWithoutUsersInputObjectSchema)
       .optional(),
     voteIDs: z

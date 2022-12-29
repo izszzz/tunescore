@@ -37,7 +37,7 @@ const Schema: z.ZodType<Prisma.UserInclude> = z
     notifications: z
       .union([z.boolean(), z.lazy(() => NotificationFindManySchema)])
       .optional(),
-    vote: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
+    votes: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
     followers: z
       .union([z.boolean(), z.lazy(() => FollowFindManySchema)])
       .optional(),

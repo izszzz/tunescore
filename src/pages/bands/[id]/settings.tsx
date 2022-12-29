@@ -8,13 +8,16 @@ import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { bandShowPath } from "../../../paths/bands/[id]";
 import { useSession } from "next-auth/react";
-const EditBand: NextPage = () => {
+import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
+import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
+const BandSettings: NextPage = () => {
   const router = useRouter();
+  const id = router.query.id as string;
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const path = bandShowPath({
-    id: router.query.id as string,
+    id,
     userId: session.data?.user?.id,
   });
   const query = path[1];
@@ -55,7 +58,59 @@ const EditBand: NextPage = () => {
           name: "name",
         }}
       />
+      <ArtistUpdateAutocomplete
+        value={bandData.artists}
+        loading={update.isLoading}
+        label="artists"
+        onChange={{
+          onSelect: (_e, _v, _r, details) =>
+            update.mutate({
+              ...query,
+              data: { artists: { connect: { id: details?.option.id } } },
+            }),
+          onRemove: (_e, _v, _r, details) =>
+            update.mutate({
+              ...query,
+              data: { artists: { disconnect: { id: details?.option.id } } },
+            }),
+        }}
+      />
+      <TagUpdateAutocomplete
+        value={bandData.tagMaps.map((tagMap) => tagMap.tag)}
+        loading={update.isLoading}
+        onChange={{
+          onSelect: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  create: {
+                    tag: { connect: { id: details.option.id } },
+                    resourceType: "Music",
+                  },
+                },
+              },
+            }),
+          onRemove: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  delete: {
+                    resourceId_tagId_resourceType: {
+                      resourceType: "Music",
+                      resourceId: id,
+                      tagId: details.option.id,
+                    },
+                  },
+                },
+              },
+            }),
+        }}
+      />
     </BandLayout>
   );
 };
-export default EditBand;
+export default BandSettings;

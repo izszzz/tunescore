@@ -6,6 +6,7 @@
 declare module "nextjs-routes" {
   export type Route =
     | { pathname: "/albums/[id]"; query: Query<{ "id": string }> }
+    | { pathname: "/albums/[id]/settings"; query: Query<{ "id": string }> }
     | { pathname: "/albums"; query?: Query | undefined }
     | { pathname: "/albums/new"; query?: Query | undefined }
     | { pathname: "/api/agenda"; query?: Query | undefined }
@@ -16,7 +17,6 @@ declare module "nextjs-routes" {
     | { pathname: "/artists/[id]/settings"; query: Query<{ "id": string }> }
     | { pathname: "/artists"; query?: Query | undefined }
     | { pathname: "/artists/new"; query?: Query | undefined }
-    | { pathname: "/auth/signin"; query?: Query | undefined }
     | { pathname: "/bands/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/bands/[id]/settings"; query: Query<{ "id": string }> }
     | { pathname: "/bands"; query?: Query | undefined }

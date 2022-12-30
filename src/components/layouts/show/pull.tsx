@@ -15,6 +15,7 @@ import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma, PullStatus } from "@prisma/client";
+import { getRouterId, getRouterPullId } from "../../../helpers/router";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{
@@ -33,8 +34,8 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
-  const id = router.query.id as string;
-  const pullId = router.query.pullId as string;
+  const id = getRouterId(router);
+  const pullId = getRouterPullId(router);
   const update = trpc.useMutation("pull.updateOnePull", {
     onSuccess: (data) => {
       queryClient.setQueryData<PullLayoutProps["data"]>(
@@ -185,8 +186,8 @@ const PullLayout: React.FC<PullLayoutProps> = ({
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score",
                 query: {
-                  id: router.query.id as string,
-                  pullId: router.query.pullId as string,
+                  id,
+                  pullId,
                 },
               },
               hidden: false,
@@ -195,8 +196,8 @@ const PullLayout: React.FC<PullLayoutProps> = ({
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score/edit",
                 query: {
-                  id: router.query.id as string,
-                  pullId: router.query.pullId as string,
+                  id,
+                  pullId,
                 },
               },
               hidden: false,

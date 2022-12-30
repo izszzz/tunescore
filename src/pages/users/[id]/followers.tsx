@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
 
 const UserFollowers: NextPage = () => {
   const { data: session } = useSession();

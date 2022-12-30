@@ -19,14 +19,15 @@ import type { NextPage } from "next";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
+import { getRouterId } from "../../../helpers/router";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const id = router.query.id as string;
-  const path = musicShowPath({ id, userId: session.data?.user?.id });
+  const id = getRouterId(router);
+  const path = musicShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const destroy = trpc.useMutation("music.deleteOneMusic", {

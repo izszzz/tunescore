@@ -19,6 +19,7 @@ import type { AppRouter } from "../server/router";
 import type { AppType } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
+import { useEffect } from "react";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -28,6 +29,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const theme = createTheme({
     palette: { mode: isDarkMode ? "dark" : "light" },
   });
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-color-mode",
+      isDarkMode ? "dark" : "light"
+    );
+  }, [isDarkMode]);
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>

@@ -11,6 +11,8 @@ import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { albumShowPath } from "../../../paths/albums/[id]";
+import { getAuthenticateUserId } from "../../../helpers/user";
+import { getRouterId } from "../../../helpers/router";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<{
@@ -65,6 +67,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
+  const id = getRouterId(router);
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -81,18 +84,18 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         label: "info",
         href: {
           pathname: "/albums/[id]",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "settings",
         href: {
           pathname: "/albums/[id]/settings",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
     ],
-    [router.query.id]
+    [id]
   );
   return (
     <DefaultShowLayout
@@ -112,7 +115,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
               bookmarks: {
                 [value ? "delete" : "create"]: {
                   resourceType: "Ablum",
-                  user: { connect: session.data?.user?.id },
+                  user: { connect: getAuthenticateUserId(session) },
                 },
               },
             },

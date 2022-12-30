@@ -1,16 +1,21 @@
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
+import { getRouterId, GetRouterArg } from "../../../helpers/router";
+import {
+  GetAuthenticateUserArg,
+  getAuthenticateUserId,
+} from "../../../helpers/user";
 
 export const albumShowPath = ({
-  id,
-  userId,
+  router,
+  session,
 }: {
-  id: string | undefined;
-  userId: string | undefined;
+  router: GetRouterArg;
+  session: GetAuthenticateUserArg;
 }) =>
   createPath([
     "album.findUniqueAlbum",
     {
-      where: { id },
+      where: { id: getRouterId(router) },
       include: {
         musics: {
           include: {
@@ -50,7 +55,7 @@ export const albumShowPath = ({
         },
         bookmarks: {
           where: {
-            user: { id: userId },
+            user: { id: getAuthenticateUserId(session) },
             resourceType: "Album",
           },
         },

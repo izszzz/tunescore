@@ -11,8 +11,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
-import musicOwner from "../../../../helpers/musicOwner";
-import { trpc } from "../../../../utils/trpc";
+import { getOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import type { Prisma } from "@prisma/client";
 
@@ -85,7 +84,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
 
 const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
-  const { type, owner } = musicOwner(data, router);
+  const { type, owner } = owner(data, router);
   if (type === "none" || owner === null) return <></>;
   return (
     <Box component="span" display="flex" alignItems="center">

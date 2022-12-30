@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/router";
 import Header from ".";
+import { getRouterId } from "../../../helpers/router";
 
 interface EditorHeaderProps {
   onSave: () => void;
@@ -19,7 +20,7 @@ const EditorHeader = ({ onSave }: EditorHeaderProps) => {
           onClick={() =>
             router.push({
               pathname: "/musics/[id]",
-              query: { id: router.query.id as string },
+              query: { id: getRouterId(router) },
             })
           }
         >

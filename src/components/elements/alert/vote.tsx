@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
 import type { Prisma } from "@prisma/client";
 import type { IconButtonProps } from "@mui/material/IconButton";
+import { getRouterId } from "../../../helpers/router";
 
 export interface VoteAlertProps {
   data: Prisma.PullGetPayload<{
@@ -30,6 +31,7 @@ const VoteAlert = ({
   const [duration, setDuration] = useState<Duration>();
   const [finished, setFinished] = useState(false);
   const router = useRouter();
+  const id = getRouterId(router);
   useEffect(() => {
     const intervalID = window.setInterval(() => {
       if (!data.vote) return;
@@ -57,7 +59,7 @@ const VoteAlert = ({
           onClick={() =>
             router.push({
               pathname: "/musics/[id]/pulls/[pullId]",
-              query: { id: router.query.id as string, pullId: data.id },
+              query: { id, pullId: data.id },
             })
           }
         >

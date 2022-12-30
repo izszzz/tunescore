@@ -6,14 +6,15 @@ import UserLayout, {
   UserLayoutProps,
 } from "../../../components/layouts/show/user";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import DeleteAlert from "../../../components/elements/alert/delete";
+import { getRouterId } from "../../../helpers/router";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const userId = session?.user?.id;
   const update = trpc.useMutation("user.updateOneUser");
   const path = createPath([

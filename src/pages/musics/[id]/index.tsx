@@ -13,14 +13,14 @@ import BandLists from "../../../components/elements/list/band";
 import ArtistLists from "../../../components/elements/list/artist";
 import Typography from "@mui/material/Typography";
 import { musicShowPath } from "../../../paths/musics/[id]";
+import { getRouterId } from "../../../helpers/router";
+import { getAuthenticateUserId } from "../../../helpers/user";
 
 const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const path = musicShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const id = getRouterId(router);
+  const path = musicShowPath({ router, session });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
@@ -40,17 +40,17 @@ const Music: NextPage = () => {
         watchButton={{
           route: {
             pathname: "/scores/[id]",
-            query: { id: router.query.id as string },
+            query: { id },
           },
         }}
         editButton={{
           route: {
             pathname: "/scores/[id]/edit",
-            query: { id: router.query.id as string },
+            query: { id },
           },
           hidden: !(
             data.type === "ORIGINAL" &&
-            musicData.user?.id === session.data?.user?.id
+            musicData.user?.id === getAuthenticateUserId(session)
           ),
         }}
       />

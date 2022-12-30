@@ -23,7 +23,7 @@ const Pull: NextPage = () => {
   const session = useSession();
   const userId = session.data?.user?.id;
   const create = trpc.useMutation(["comment.createOneComment"]);
-  const path = musicShowPath({ id: router.query.id as string, userId });
+  const path = musicShowPath({ router, session });
   const music = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");

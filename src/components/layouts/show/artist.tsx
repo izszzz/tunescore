@@ -11,6 +11,7 @@ import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { artistShowPath } from "../../../paths/artists/[id]";
+import { getRouterId } from "../../../helpers/router";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<{
@@ -26,6 +27,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
+  const id = getRouterId(router);
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -42,18 +44,18 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         label: "info",
         href: {
           pathname: "/artists/[id]",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "settings",
         href: {
           pathname: "/artists/[id]/settings",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
     ],
-    [router.query.id]
+    [id]
   );
   return (
     <DefaultShowLayout

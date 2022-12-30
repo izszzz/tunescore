@@ -11,17 +11,17 @@ import type { NextPage } from "next";
 import CommentForm from "../../../../../components/elements/form/comment";
 import { Prisma } from "@prisma/client";
 import { musicShowPath } from "../../../../../paths/musics/[id]";
+import { getRouterId, getRouterIssueId } from "../../../../../helpers/router";
 
 const Issue: NextPage = () => {
   const router = useRouter();
+  const id = getRouterId(router);
+  const issueId = getRouterIssueId(router);
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const userId = session.data?.user?.id;
   const create = trpc.useMutation(["comment.createOneComment"]);
-  const path = musicShowPath({
-    id: router.query.id as string,
-    userId,
-  });
+  const path = musicShowPath({ router, session });
   const music = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");
@@ -31,7 +31,7 @@ const Issue: NextPage = () => {
     [
       "issue.findUniqueIssue",
       {
-        where: { id: router.query.issueId as string },
+        where: { id: issueId },
         include: {
           comments: {
             where: { resourceType: "Issue" },
@@ -51,7 +51,7 @@ const Issue: NextPage = () => {
   const issueData = issue.data as Prisma.IssueGetPayload<{
     include: { comments: { include: { user: true } } };
   }>;
-  const { id, title, body, comments } = issueData;
+  const { title, body, comments } = issueData;
   return (
     <MusicLayout data={musicData} path={path} activeTab="issues">
       <ArticleCard title={title} body={body} />
@@ -65,7 +65,7 @@ const Issue: NextPage = () => {
               data: {
                 ...data,
                 resourceType: "Issue",
-                issue: { connect: { id } },
+                issue: { connect: { id: issueId } },
                 user: { connect: { id: userId } },
               },
             }),

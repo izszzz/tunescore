@@ -7,7 +7,7 @@ import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../helpers/createPath";
+import { createPath } from "../../helpers/path";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

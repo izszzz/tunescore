@@ -14,18 +14,20 @@ interface CommentFormProps {
   formContainerProps: FormContainerProps<Prisma.CommentCreateInput>;
   loading: boolean;
 }
-const CommentForm = ({ formContainerProps, loading }: CommentFormProps) => (
-  <FormContainer {...formContainerProps}>
-    <Controller name="body" render={({ field }) => <MDEditor {...field} />} />
-    <LoadingButton
-      type="submit"
-      loading={loading}
-      variant="contained"
-      fullWidth
-      disableElevation
-    >
-      Submit
-    </LoadingButton>
-  </FormContainer>
-);
+const CommentForm = ({ formContainerProps, loading }: CommentFormProps) => {
+  return (
+    <FormContainer {...formContainerProps}>
+      <Controller name="body" render={({ field }) => <MDEditor {...field} />} />
+      <LoadingButton
+        type="submit"
+        loading={loading}
+        variant="contained"
+        fullWidth
+        disableElevation
+      >
+        Submit
+      </LoadingButton>
+    </FormContainer>
+  );
+};
 export default CommentForm;

@@ -16,14 +16,15 @@ import type { MusicLayoutProps } from "../../../../components/layouts/show/music
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
 import { musicShowPath } from "../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../helpers/router";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
-  const path = musicShowPath({ id, userId: session.data?.user?.id });
+  const path = musicShowPath({ router, session });
   const music = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");

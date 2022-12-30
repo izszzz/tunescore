@@ -10,15 +10,14 @@ import type { PullLayoutProps } from "../../../../../components/layouts/show/pul
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import { musicShowPath } from "../../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../../helpers/router";
 
 const Code: NextPage = () => {
   const router = useRouter();
+  const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
-  const path = musicShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const path = musicShowPath({ router, session });
   const music = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");

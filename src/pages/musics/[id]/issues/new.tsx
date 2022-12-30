@@ -18,17 +18,16 @@ import type { MusicLayoutProps } from "../../../../components/layouts/show/music
 import type { NextPage } from "next";
 import type { Issue } from "@prisma/client";
 import { musicShowPath } from "../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../helpers/router";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
   const formContext = useForm<Issue>();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+  const id = getRouterId(router);
   const session = useSession();
-  const path = musicShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const path = musicShowPath({ router, session });
   const { data } = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");
@@ -38,7 +37,7 @@ const Issues: NextPage = () => {
     onSuccess: () =>
       router.push({
         pathname: "/musics/[id]/issues",
-        query: { id: router.query.id as string },
+        query: { id },
       }),
     onError: () => {
       enqueueSnackbar("issue.create error");
@@ -48,7 +47,7 @@ const Issues: NextPage = () => {
     create.mutate({
       data: {
         ...data,
-        music: { connect: { id: router.query.id as string } },
+        music: { connect: { id } },
         user: { connect: { id: session.data?.user?.id as string } },
       },
     });

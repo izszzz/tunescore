@@ -9,15 +9,14 @@ import type { MusicLayoutProps } from "../../../../components/layouts/show/music
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
 import { musicShowPath } from "../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../helpers/router";
 
 const Issues: NextPage = () => {
   const router = useRouter();
+  const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
-  const path = musicShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const path = musicShowPath({ router, session });
   const music = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.show error");
@@ -31,7 +30,7 @@ const Issues: NextPage = () => {
           include: { user: true },
           where: {
             title: { contains: (router.query.q as string) || "" },
-            music: { id: router.query.id as string },
+            music: { id },
           },
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
@@ -56,11 +55,11 @@ const Issues: NextPage = () => {
         meta={pullsData.meta}
         route={{
           pathname: "/musics/[id]/pulls",
-          query: { id: router.query.id as string },
+          query: { id },
         }}
         newRoute={{
           pathname: "/musics/[id]/pulls/new",
-          query: { id: router.query.id as string },
+          query: { id },
         }}
         searchAutocompleteProps={{
           options: search.data || [],
@@ -71,7 +70,7 @@ const Issues: NextPage = () => {
               search.mutate({
                 where: {
                   title: { contains: e.currentTarget.value },
-                  music: { id: router.query.id as string },
+                  music: { id },
                 },
                 take: 10,
               }),

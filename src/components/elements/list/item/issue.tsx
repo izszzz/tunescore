@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import type { Prisma } from "@prisma/client";
+import { getRouterId } from "../../../../helpers/router";
 
 export interface IssueListItemProps {
   data: Prisma.IssueGetPayload<{
@@ -23,7 +24,7 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
       onClick={() =>
         router.push({
           pathname: "/musics/[id]/issues/[issueId]",
-          query: { id: router.query.id as string, issueId: data.id },
+          query: { id: getRouterId(router), issueId: data.id },
         })
       }
     >

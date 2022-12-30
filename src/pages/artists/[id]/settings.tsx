@@ -1,52 +1,21 @@
 import React from "react";
-import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import SingleRowForm from "../../../components/elements/form/single_row";
-import { createPath } from "../../../helpers/createPath";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
+import { getRouterId } from "../../../helpers/router";
+import { useSession } from "next-auth/react";
+import { artistShowPath } from "../../../paths/artists/[id]";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const id = router.query.id as string;
-  const path = createPath([
-    "artist.findUniqueArtist",
-    {
-      where: { id: router.query.id as string },
-      include: {
-        bands: true,
-        writtenMusics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-          },
-        },
-        composedMusics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-          },
-        },
-        musics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-          },
-        },
-        bookmarks: true,
-        tagMaps: { include: { tag: true } },
-      },
-    },
-  ]);
+  const session = useSession();
+  const id = getRouterId(router);
+  const path = artistShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const update = trpc.useMutation("artist.updateOneArtist");

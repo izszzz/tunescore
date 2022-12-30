@@ -11,6 +11,7 @@ import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { bandShowPath } from "../../../paths/bands/[id]";
+import { getRouterId } from "../../../helpers/router";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -31,6 +32,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
+  const id = getRouterId(router);
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -47,18 +49,18 @@ const BandLayout: React.FC<BandLayoutProps> = ({
         label: "info",
         href: {
           pathname: "/bands/[id]",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "settings",
         href: {
           pathname: "/bands/[id]/settings",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
     ],
-    [router.query.id]
+    [id]
   );
   return (
     <DefaultShowLayout

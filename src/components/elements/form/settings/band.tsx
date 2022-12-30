@@ -8,6 +8,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 import { trpc } from "../../../../utils/trpc";
 import type { Band, Prisma } from "@prisma/client";
+import { getRouterId } from "../../../../helpers/router";
 
 interface BandSettingsFormProps {
   data:
@@ -23,15 +24,15 @@ interface BandSettingsFormProps {
 }
 const BandSettingsForm = ({ data, isLoading }: BandSettingsFormProps) => {
   const router = useRouter();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const formContext = useForm<Band>();
   const { enqueueSnackbar } = useSnackbar();
-  const destroy = trpc.useMutation("band.destroy", {
+  const destroy = trpc.useMutation("band.deleteOneBand", {
     onError: () => {
       router.push("/bands");
     },
   });
-  const update = trpc.useMutation("band.update", {
+  const update = trpc.useMutation("band.updateOneBand", {
     onSuccess: () => {
       enqueueSnackbar("update success");
     },

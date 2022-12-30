@@ -1,12 +1,6 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import YouTube from "react-youtube";
-import Box from "@mui/material/Box";
-import MusicLayout from "../../../components/layouts/show/music";
-import ItunesButton from "../../../components/elements/button/itunes";
 import { trpc } from "../../../utils/trpc";
-import ScoreButtonGroup from "../../../components/elements/button/group/score";
-import VoteAlert from "../../../components/elements/alert/vote";
 import type { NextPage } from "next";
 import BandLists from "../../../components/elements/list/band";
 import ArtistLists from "../../../components/elements/list/artist";
@@ -20,10 +14,7 @@ import MusicLists from "../../../components/elements/list/music";
 const Album: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const path = albumShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const path = albumShowPath({ router, session });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];

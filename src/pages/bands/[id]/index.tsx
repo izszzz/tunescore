@@ -15,14 +15,12 @@ import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { bandShowPath } from "../../../paths/bands/[id]";
 import { useSession } from "next-auth/react";
+import { getRouterId } from "../../../helpers/router";
 
 const Band: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const path = bandShowPath({
-    id: router.query.id as string,
-    userId: session.data?.user?.id,
-  });
+  const path = bandShowPath({ router, session });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const bandData = data as Prisma.BandGetPayload<{

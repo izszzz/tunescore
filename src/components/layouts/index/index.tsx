@@ -9,12 +9,11 @@ import { useSession } from "next-auth/react";
 import SingleColumnLayout from "../single_column";
 import { useModal } from "../../../hooks/useModal";
 import CustomAutocomplete from "../../../components/elements/autocomplete/search";
-import type {
-  CustomAutocompleteProps,
-} from "../../../components/elements/autocomplete/search";
+import type { CustomAutocompleteProps } from "../../../components/elements/autocomplete/search";
 import type { SingleColumnLayoutProps } from "../single_column";
 import type { Route } from "nextjs-routes";
 import type { PaginatedResult } from "prisma-pagination";
+import { getAuthenticateUser } from "../../../helpers/user";
 
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
@@ -51,7 +50,7 @@ function IndexLayout<T>({
       });
   };
   const handleClick = () => {
-    if (!session.data?.user) return handleOpen();
+    if (!getAuthenticateUser(session)) return handleOpen();
     router.push(newRoute);
   };
   return (

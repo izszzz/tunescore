@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PullStatusIcon from "../../icon/pull/status";
 import type { Prisma } from "@prisma/client";
+import { getRouterId } from "../../../../helpers/router";
 export interface PullListItemProps {
   data: Prisma.PullGetPayload<{
     include: {
@@ -24,7 +25,7 @@ const PullListItem = ({ data }: PullListItemProps) => {
       onClick={() =>
         router.push({
           pathname: "/musics/[id]/pulls/[pullId]",
-          query: { id: router.query.id as string, pullId: data.id },
+          query: { id: getRouterId(router), pullId: data.id },
         })
       }
     >

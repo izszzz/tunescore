@@ -14,10 +14,13 @@ import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { artistShowPath } from "../../../paths/artists/[id]";
+import { getRouterId } from "../../../helpers/router";
+import { useSession } from "next-auth/react";
 
 const Artist: NextPage = () => {
   const router = useRouter();
-  const path = artistShowPath({ id: router.query.id as string });
+  const session = useSession();
+  const path = artistShowPath({ router, session });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const artistData = data as Prisma.ArtistGetPayload<{

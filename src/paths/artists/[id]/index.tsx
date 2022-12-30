@@ -1,10 +1,21 @@
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
+import { getRouterId, GetRouterArg } from "../../../helpers/router";
+import {
+  GetAuthenticateUserArg,
+  getAuthenticateUserId,
+} from "../../../helpers/user";
 
-export const artistShowPath = ({ id }: { id: string }) =>
+export const artistShowPath = ({
+  router,
+  session,
+}: {
+  router: GetRouterArg;
+  session: GetAuthenticateUserArg;
+}) =>
   createPath([
     "artist.findUniqueArtist",
     {
-      where: { id },
+      where: { id: getRouterId(router) },
       include: {
         bands: true,
         composedMusics: {
@@ -16,7 +27,12 @@ export const artistShowPath = ({ id }: { id: string }) =>
         musics: {
           include: { composers: true, lyrists: true, band: true },
         },
-        bookmarks: true,
+        bookmarks: {
+          where: {
+            user: { id: getAuthenticateUserId(session) },
+            resourceType: "Artist",
+          },
+        },
         tagMaps: { include: { tag: true } },
       },
     },

@@ -10,16 +10,14 @@ import { bandShowPath } from "../../../paths/bands/[id]";
 import { useSession } from "next-auth/react";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
+import { getRouterId } from "../../../helpers/router";
 const BandSettings: NextPage = () => {
   const router = useRouter();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const path = bandShowPath({
-    id,
-    userId: session.data?.user?.id,
-  });
+  const path = bandShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const update = trpc.useMutation(`band.updateOneBand`, {

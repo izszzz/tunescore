@@ -5,12 +5,13 @@ import type { NextPage } from "next";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
+import { getRouterId } from "../../../helpers/router";
 
 const UserBookmarks: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const userId = session?.user?.id;
   const path = createPath([
     "user.findUniqueUser",

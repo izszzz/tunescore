@@ -12,16 +12,16 @@ import { IconButton } from "@mui/material";
 import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/setLocale";
-import musicOwner from "../../../helpers/musicOwner";
+import { getOwner } from "../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locales, Prisma } from "@prisma/client";
-import { createPath } from "../../../helpers/createPath";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { musicShowPath } from "../../../paths/musics/[id]";
+import { getRouterId } from "../../../helpers/router";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -83,7 +83,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const query = path[1];
   const update = trpc.useMutation(["music.updateOneMusic"], {
     onSuccess: (data) => {
@@ -97,32 +97,32 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
         label: "info",
         href: {
           pathname: "/musics/[id]",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "issues",
         href: {
           pathname: "/musics/[id]/issues",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "pullrequests",
         href: {
           pathname: "/musics/[id]/pulls",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
       {
         label: "settings",
         href: {
           pathname: "/musics/[id]/settings",
-          query: { id: router.query.id as string },
+          query: { id },
         },
       },
     ],
-    [router.query.id]
+    [id]
   );
 
   return (
@@ -206,7 +206,7 @@ const Owner = ({ data }: OwnerProps) => {
     "/users/[id]" | "/bands/[id]" | "/artists/[id]"
   >("/users/[id]");
   const router = useRouter();
-  const { type, owner } = musicOwner(data, router);
+  const { type, owner } = getOwner(data, router);
   useEffect(() => {
     switch (type) {
       case "user":

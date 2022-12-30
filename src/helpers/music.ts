@@ -10,7 +10,7 @@ type Data = Prisma.MusicGetPayload<{
     user: true;
   };
 }>;
-const musicOwner = (data: Data, router: NextRouter) => {
+export const getOwner = (data: Data, router: NextRouter) => {
   if (data.type === "ORIGINAL" && data.user)
     return {
       type: "user" as const,
@@ -51,5 +51,3 @@ const musicOwner = (data: Data, router: NextRouter) => {
     return { type: "none", owner: null };
   }
 };
-
-export default musicOwner;

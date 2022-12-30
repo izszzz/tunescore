@@ -12,6 +12,8 @@ import type { Prisma } from "@prisma/client";
 import type { ShowLayoutProps } from ".";
 import LoadingButton from "@mui/lab/LoadingButton";
 import DefaultHeader from "../header/default";
+import { getRouterId } from "../../../helpers/router";
+import { getAuthenticateUserId } from "../../../helpers/user";
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{
@@ -31,8 +33,8 @@ const UserLayout: React.FC<UserLayoutProps> = ({
 }) => {
   const router = useRouter();
   const session = useSession();
-  const id = router.query.id as string;
-  const userId = session.data?.user?.id;
+  const id = getRouterId(router);
+  const userId = getAuthenticateUserId(session);
   const update = trpc.useMutation("user.updateOneUser");
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -65,7 +67,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         },
       },
     ],
-    [router.query.id]
+    [id]
   );
   return (
     <ShowLayout
@@ -89,7 +91,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               variant={data.followers.length ? "outlined" : "contained"}
               onClick={() =>
                 update.mutate({
-                  where: { id: router.query.id as string },
+                  where: { id },
                   data: {
                     followers: data.followers.length
                       ? {
@@ -113,7 +115,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             onClick={() =>
               router.push({
                 pathname: "/users/[id]/following",
-                query: { id: router.query.id as string },
+                query: { id },
               })
             }
           >
@@ -123,7 +125,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             onClick={() =>
               router.push({
                 pathname: "/users/[id]/followers",
-                query: { id: router.query.id as string },
+                query: { id },
               })
             }
           >

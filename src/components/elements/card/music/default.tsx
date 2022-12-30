@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
-import musicOwner from "../../../../helpers/musicOwner";
+import { getOwner } from "../../../../helpers/music";
 import setLocale from "../../../../helpers/setLocale";
 import IndexChip from "../../chip";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
@@ -26,7 +26,7 @@ interface DefaultMusicCard {
 const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
   const router = useRouter();
   const session = useSession();
-  const { type, owner } = musicOwner(data, router);
+  const { type, owner } = owner(data, router);
   return (
     <MusicCard
       size="200px"

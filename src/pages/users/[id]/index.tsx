@@ -2,9 +2,10 @@ import { useSession } from "next-auth/react";
 import UserLayout from "../../../components/layouts/show/user";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/createPath";
+import { createPath } from "../../../helpers/path";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
+import { getRouterId } from "../../../helpers/router";
 interface UserProps {
   data: Prisma.UserGetPayload<{
     include: {
@@ -16,7 +17,7 @@ interface UserProps {
 const User: NextPage<UserProps> = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const id = router.query.id as string;
+  const id = getRouterId(router);
   const userId = session?.user?.id;
   const path = createPath([
     "user.findUniqueUser",

@@ -1,8 +1,6 @@
 import { z } from 'zod';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './NullableDateTimeFieldUpdateOperationsInput.schema';
-import { ThemeTypeSchema } from '../enums/ThemeType.schema';
-import { EnumThemeTypeFieldUpdateOperationsInputObjectSchema } from './EnumThemeTypeFieldUpdateOperationsInput.schema';
 import { AccountUpdateManyWithoutUserNestedInputObjectSchema } from './AccountUpdateManyWithoutUserNestedInput.schema';
 import { SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { MusicUpdateManyWithoutUserNestedInputObjectSchema } from './MusicUpdateManyWithoutUserNestedInput.schema';
@@ -48,12 +46,6 @@ const Schema: z.ZodType<Prisma.UserUpdateInput> = z
       ])
       .optional()
       .nullable(),
-    theme: z
-      .union([
-        z.lazy(() => ThemeTypeSchema),
-        z.lazy(() => EnumThemeTypeFieldUpdateOperationsInputObjectSchema),
-      ])
-      .optional(),
     accounts: z
       .lazy(() => AccountUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),

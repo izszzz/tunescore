@@ -84,7 +84,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
 
 const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
-  const { type, owner } = owner(data, router);
+  const { type, owner } = getOwner(data, router);
   if (type === "none" || owner === null) return <></>;
   return (
     <Box component="span" display="flex" alignItems="center">

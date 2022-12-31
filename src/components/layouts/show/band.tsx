@@ -12,6 +12,8 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { bandShowPath } from "../../../paths/bands/[id]";
 import { getRouterId } from "../../../helpers/router";
+import { getAuthenticateUserId } from "../../../helpers/user";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -73,16 +75,16 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (value) =>
+        onClick: (bookmarked) =>
           update.mutate({
             ...query,
             data: {
-              bookmarks: {
-                [value ? "delete" : "create"]: {
-                  resourceType: "Band",
-                  user: { connect: session.data?.user?.id },
-                },
-              },
+              bookmarks: bookmarkMutate({
+                type: "Band",
+                bookmarked,
+                bookmarks: data.bookmarks,
+                session,
+              }),
             },
           }),
       }}

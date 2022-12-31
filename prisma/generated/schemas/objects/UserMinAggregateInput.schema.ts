@@ -9,7 +9,6 @@ const Schema: z.ZodType<Prisma.UserMinAggregateInputType> = z
     email: z.literal(true).optional(),
     emailVerified: z.literal(true).optional(),
     image: z.literal(true).optional(),
-    theme: z.literal(true).optional(),
   })
   .strict();
 

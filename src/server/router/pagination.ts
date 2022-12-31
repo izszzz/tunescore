@@ -10,6 +10,7 @@ import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyA
 import { createRouter } from "./context";
 import type { Prisma } from "@prisma/client";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
+import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
 
 export const paginationRouter = createRouter()
   .query("music", {
@@ -133,33 +134,6 @@ export const paginationRouter = createRouter()
       >(ctx.prisma.user, args);
     },
   })
-  .query("follow", {
-    input: z.object({
-      options: PaginateOptionsSchema,
-      args: FollowFindManySchema,
-    }),
-    async resolve({ ctx, input }) {
-      const { args, options } = input;
-      const paginate = createPaginator(options);
-      return await paginate<
-        Prisma.FollowGetPayload<{
-          include: {
-            follower: {
-              include: {
-                _count: { select: { following: true; followers: true } };
-              };
-            };
-            following: {
-              include: {
-                _count: { select: { following: true; followers: true } };
-              };
-            };
-          };
-        }>,
-        Prisma.FollowFindManyArgs
-      >(ctx.prisma.follow, args);
-    },
-  })
   .query("issue", {
     input: z.object({
       options: PaginateOptionsSchema,
@@ -190,5 +164,53 @@ export const paginationRouter = createRouter()
         }>,
         Prisma.PullFindManyArgs
       >(ctx.prisma.pull, args);
+    },
+  })
+  .query("follow", {
+    input: z.object({
+      options: PaginateOptionsSchema,
+      args: FollowFindManySchema,
+    }),
+    async resolve({ ctx, input }) {
+      const { args, options } = input;
+      const paginate = createPaginator(options);
+      return await paginate<
+        Prisma.FollowGetPayload<{
+          include: {
+            follower: {
+              include: {
+                _count: { select: { following: true; followers: true } };
+              };
+            };
+            following: {
+              include: {
+                _count: { select: { following: true; followers: true } };
+              };
+            };
+          };
+        }>,
+        Prisma.FollowFindManyArgs
+      >(ctx.prisma.follow, args);
+    },
+  })
+  .query("bookmark", {
+    input: z.object({
+      options: PaginateOptionsSchema,
+      args: BookmarkFindManySchema,
+    }),
+    async resolve({ ctx, input }) {
+      const { args, options } = input;
+      const paginate = createPaginator(options);
+      return await paginate<
+        Prisma.BookmarkGetPayload<{
+          include: {
+            music: true;
+            band: true;
+            artist: true;
+            album: true;
+          };
+        }>,
+        Prisma.BookmarkFindManyArgs
+      >(ctx.prisma.bookmark, args);
     },
   });

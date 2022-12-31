@@ -59,6 +59,7 @@ export const albumShowPath = ({
             resourceType: "Album",
           },
         },
+        tagMaps: { include: { tag: true } },
       },
     },
   ]);

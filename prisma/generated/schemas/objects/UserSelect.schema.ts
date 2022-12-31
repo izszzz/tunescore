@@ -20,7 +20,6 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
     email: z.boolean().optional(),
     emailVerified: z.boolean().optional(),
     image: z.boolean().optional(),
-    theme: z.boolean().optional(),
     accounts: z
       .union([z.boolean(), z.lazy(() => AccountFindManySchema)])
       .optional(),

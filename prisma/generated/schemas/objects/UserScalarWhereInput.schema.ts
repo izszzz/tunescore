@@ -2,8 +2,6 @@ import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
-import { EnumThemeTypeFilterObjectSchema } from './EnumThemeTypeFilter.schema';
-import { ThemeTypeSchema } from '../enums/ThemeType.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -45,12 +43,6 @@ const Schema: z.ZodType<Prisma.UserScalarWhereInput> = z
       .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
       .optional()
       .nullable(),
-    theme: z
-      .union([
-        z.lazy(() => EnumThemeTypeFilterObjectSchema),
-        z.lazy(() => ThemeTypeSchema),
-      ])
-      .optional(),
     voteIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();

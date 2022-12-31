@@ -6,12 +6,16 @@ import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { userShowPath } from "../../../paths/users/[id]";
+import { bookmarkPath } from "../../../paths/users/[id]/bookmark";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();
   const router = useRouter();
   const path = userShowPath({ router, session });
   const { data } = trpc.useQuery(path);
+  const { data: bookmarkData } = trpc.useQuery(
+    bookmarkPath({ router, session })
+  );
   if (!data) return <></>;
   const userData = data as Prisma.UserGetPayload<{
     include: {

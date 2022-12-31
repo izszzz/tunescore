@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { ThemeTypeSchema } from '../enums/ThemeType.schema';
 import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCreateNestedManyWithoutUserInput.schema';
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { MusicCreateNestedManyWithoutUserInputObjectSchema } from './MusicCreateNestedManyWithoutUserInput.schema';
@@ -22,7 +21,6 @@ const Schema: z.ZodType<Prisma.UserCreateInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
-    theme: z.lazy(() => ThemeTypeSchema).optional(),
     accounts: z
       .lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),

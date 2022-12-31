@@ -12,6 +12,8 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { artistShowPath } from "../../../paths/artists/[id]";
 import { getRouterId } from "../../../helpers/router";
+import { getAuthenticateUserId } from "../../../helpers/user";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<{
@@ -68,16 +70,16 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (value) =>
+        onClick: (bookmarked) =>
           update.mutate({
             ...query,
             data: {
-              bookmarks: {
-                [value ? "delete" : "create"]: {
-                  resourceType: "Artist",
-                  user: { connect: session.data?.user?.id },
-                },
-              },
+              bookmarks: bookmarkMutate({
+                type: "Artist",
+                bookmarked,
+                bookmarks: data.bookmarks,
+                session,
+              }),
             },
           }),
       }}

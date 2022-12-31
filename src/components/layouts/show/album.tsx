@@ -11,8 +11,8 @@ import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { albumShowPath } from "../../../paths/albums/[id]";
-import { getAuthenticateUserId } from "../../../helpers/user";
 import { getRouterId } from "../../../helpers/router";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<{
@@ -108,16 +108,16 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (value) =>
+        onClick: (bookmarked) =>
           update.mutate({
             ...query,
             data: {
-              bookmarks: {
-                [value ? "delete" : "create"]: {
-                  resourceType: "Ablum",
-                  user: { connect: getAuthenticateUserId(session) },
-                },
-              },
+              bookmarks: bookmarkMutate({
+                type: "Album",
+                bookmarked,
+                bookmarks: data.bookmarks,
+                session,
+              }),
             },
           }),
       }}

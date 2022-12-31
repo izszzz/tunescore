@@ -22,6 +22,8 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
+import { getAuthenticateUserId } from "../../../helpers/user";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -159,16 +161,16 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (value) =>
+        onClick: (bookmarked) =>
           update.mutate({
             ...query,
             data: {
-              bookmarks: {
-                [value ? "delete" : "create"]: {
-                  resourceType: "Music",
-                  user: { connect: { id: session.data?.user?.id } },
-                },
-              },
+              bookmarks: bookmarkMutate({
+                type: "Music",
+                bookmarked,
+                bookmarks: data.bookmarks,
+                session,
+              }),
             },
           }),
       }}

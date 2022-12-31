@@ -14,7 +14,7 @@ const Albums: NextPage = () => {
     {
       args: {
         include: {
-          _count: { select: { artists: true, musics: true } },
+          _count: { select: { bookmarks: true,artists: true, musics: true } },
           band: true,
         },
         where: {

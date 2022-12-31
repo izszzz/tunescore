@@ -8,10 +8,15 @@ import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import type { Prisma } from "@prisma/client";
+import BookmarkChip from "../../chip/bookmark";
+import MusicChip from "../../chip/music";
 
 export interface AlbumListItemProps {
   data: Prisma.AlbumGetPayload<{
-    include: { band: true };
+    include: {
+      band: true;
+      _count: { select: { bookmarks: true; artists: true; musics: true } };
+    };
   }>;
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
@@ -37,11 +42,10 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
             </Typography>
           }
           secondary={
-            data.band && (
-              <Typography mr={1} variant="body2" color="text.subprimary">
-                {`joined by ${setLocale(data.band.name, router)}`}
-              </Typography>
-            )
+            <>
+              <BookmarkChip label={data._count.bookmarks} size="small" />
+              <MusicChip label={data._count.musics} size="small" />
+            </>
           }
         />
       </ListItemButton>

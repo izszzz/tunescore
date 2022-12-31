@@ -204,10 +204,43 @@ export const paginationRouter = createRouter()
       return await paginate<
         Prisma.BookmarkGetPayload<{
           include: {
-            music: true;
-            band: true;
-            artist: true;
-            album: true;
+            music: {
+              include: {
+                user: true;
+                composers: true;
+                lyrists: true;
+                band: true;
+                artists: true;
+                bookmarks: true;
+                _count: {
+                  select: {
+                    bookmarks: true;
+                  };
+                };
+              };
+            };
+            band: {
+              include: {
+                _count: {
+                  select: {
+                    bookmarks: true;
+                    artists: true;
+                    musics: true;
+                  };
+                };
+              };
+            };
+            artist: {
+              include: {
+                bands: true;
+                _count: {
+                  select: {
+                    bookmarks: true;
+                  };
+                };
+              };
+            };
+            album: { include: { band: true } };
           };
         }>,
         Prisma.BookmarkFindManyArgs

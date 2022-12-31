@@ -17,10 +17,43 @@ export const bookmarkPath = ({
       args: {
         where: { userId: getRouterId(router) },
         include: {
-          music: true,
-          album: true,
-          band: true,
-          artist: true,
+          music: {
+            include: {
+              user: true,
+              composers: true,
+              lyrists: true,
+              band: true,
+              artists: true,
+              bookmarks: true,
+              _count: {
+                select: {
+                  bookmarks: true,
+                },
+              },
+            },
+          },
+          album: { include: { band: true } },
+          band: {
+            include: {
+              _count: {
+                select: {
+                  bookmarks: true,
+                  artists: true,
+                  musics: true,
+                },
+              },
+            },
+          },
+          artist: {
+            include: {
+              bands: true,
+              _count: {
+                select: {
+                  bookmarks: true,
+                },
+              },
+            },
+          },
         },
       },
       options: { page: 0, perPage: 12 },

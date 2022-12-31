@@ -8,6 +8,7 @@ import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPu
 import { createRouter } from "./context";
 import { TagMapFindManySchema } from "../../../prisma/generated/schemas/findManyTagMap.schema";
 import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
+import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
 
 export const searchRouter = createRouter()
   .mutation("music", {
@@ -56,5 +57,11 @@ export const searchRouter = createRouter()
     input: TagFindManySchema,
     async resolve({ ctx, input }) {
       return ctx.prisma.tag.findMany(input);
+    },
+  })
+  .mutation("bookmark", {
+    input: BookmarkFindManySchema,
+    async resolve({ ctx, input }) {
+      return ctx.prisma.bookmark.findMany(input);
     },
   });

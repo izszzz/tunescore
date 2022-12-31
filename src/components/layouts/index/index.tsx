@@ -18,7 +18,7 @@ import { getAuthenticateUser } from "../../../helpers/user";
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
   route: Route;
-  newRoute: Route;
+  newRoute?: Route;
   meta: PaginatedResult<null>["meta"];
   searchAutocompleteProps: CustomAutocompleteProps<T, false, false, false>;
 }
@@ -51,13 +51,13 @@ function IndexLayout<T>({
   };
   const handleClick = () => {
     if (!getAuthenticateUser(session)) return handleOpen();
-    router.push(newRoute);
+    newRoute && router.push(newRoute);
   };
   return (
     <SingleColumnLayout contained header={header}>
       <Box my={3}>
         <Grid container spacing={1}>
-          <Grid item xs={11}>
+          <Grid item xs={newRoute ? 11 : 12}>
             <CustomAutocomplete
               {...searchAutocompleteProps}
               textFieldProps={{
@@ -67,14 +67,16 @@ function IndexLayout<T>({
             />
           </Grid>
           <Grid item xs={1} display="flex" alignItems="stretch">
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={handleClick}
-              fullWidth
-            >
-              New
-            </Button>
+            {newRoute && (
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={handleClick}
+                fullWidth
+              >
+                New
+              </Button>
+            )}
           </Grid>
         </Grid>
         {children}

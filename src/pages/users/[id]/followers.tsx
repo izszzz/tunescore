@@ -7,8 +7,6 @@ import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { userShowPath } from "../../../paths/users/[id]";
-import { createPath } from "../../../helpers/path";
-import { getRouterId } from "../../../helpers/router";
 import { followersPath } from "../../../paths/users/[id]/followers";
 
 const UserFollowers: NextPage = () => {

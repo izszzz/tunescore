@@ -18,7 +18,6 @@ const Musics: NextPage = () => {
       enqueueSnackbar("music.search error");
     },
   });
-
   const { data } = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.index error");

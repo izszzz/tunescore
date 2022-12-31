@@ -6,30 +6,15 @@ import UserLayout, {
   UserLayoutProps,
 } from "../../../components/layouts/show/user";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/path";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import DeleteAlert from "../../../components/elements/alert/delete";
-import { getRouterId } from "../../../helpers/router";
+import { userShowPath } from "../../../paths/users/[id]";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const id = getRouterId(router);
-  const userId = session?.user?.id;
+  const session = useSession();
   const update = trpc.useMutation("user.updateOneUser");
-  const path = createPath([
-    "user.findUniqueUser",
-    {
-      where: { id },
-      include: {
-        _count: { select: { following: true, followers: true } },
-        followers: {
-          where: { followerId: id, followingId: userId },
-        },
-        bookmarks: true,
-      },
-    },
-  ]);
+  const path = userShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const destroy = trpc.useMutation("user.deleteOneUser", {

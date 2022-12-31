@@ -2,10 +2,9 @@ import { useSession } from "next-auth/react";
 import UserLayout from "../../../components/layouts/show/user";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../../helpers/path";
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
-import { getRouterId } from "../../../helpers/router";
+import { userShowPath } from "../../../paths/users/[id]";
 interface UserProps {
   data: Prisma.UserGetPayload<{
     include: {
@@ -15,23 +14,9 @@ interface UserProps {
   followed: boolean;
 }
 const User: NextPage<UserProps> = () => {
-  const { data: session } = useSession();
+  const session = useSession();
   const router = useRouter();
-  const id = getRouterId(router);
-  const userId = session?.user?.id;
-  const path = createPath([
-    "user.findUniqueUser",
-    {
-      where: { id },
-      include: {
-        _count: { select: { following: true, followers: true } },
-        followers: {
-          where: { followerId: id, followingId: userId },
-        },
-        bookmarks: true,
-      },
-    },
-  ]);
+  const path = userShowPath({ router, session });
   const { data } = trpc.useQuery(path);
   if (!data) return <></>;
   const userData = data as Prisma.UserGetPayload<{
@@ -43,7 +28,7 @@ const User: NextPage<UserProps> = () => {
   }>;
   return (
     <UserLayout data={userData} activeTab="info">
-      {session?.user?.id === data.id && <p>aaa</p>}
+      {session.data?.user?.id === data.id && <p>aaa</p>}
     </UserLayout>
   );
 };

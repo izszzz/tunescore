@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 
-export type GetAuthenticateUserArg = ReturnType<typeof useSession>;
-export const getAuthenticateUser = (session: ReturnType<typeof useSession>) =>
+export type GetCurrentUserArg = ReturnType<typeof useSession>;
+export const getCurrentUser = (session: GetCurrentUserArg) =>
   session.data?.user;
-export const getAuthenticateUserId = (session: ReturnType<typeof useSession>) =>
-  getAuthenticateUser(session)?.id;
+export const getCurrentUserId = (session: GetCurrentUserArg) =>
+  getCurrentUser(session)?.id;

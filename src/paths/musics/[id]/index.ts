@@ -1,16 +1,13 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import {
-  GetAuthenticateUserArg,
-  getAuthenticateUserId,
-} from "../../../helpers/user";
+import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
 
 export const musicShowPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   createPath([
     "music.findUniqueMusic",
@@ -62,7 +59,7 @@ export const musicShowPath = ({
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
         bookmarks: {
           where: {
-            user: { id: getAuthenticateUserId(session) },
+            user: { id: getCurrentUserId(session) },
             resourceType: "Music",
           },
         },

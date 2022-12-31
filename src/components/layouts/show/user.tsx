@@ -13,7 +13,7 @@ import type { ShowLayoutProps } from ".";
 import LoadingButton from "@mui/lab/LoadingButton";
 import DefaultHeader from "../header/default";
 import { getRouterId } from "../../../helpers/router";
-import { getAuthenticateUserId } from "../../../helpers/user";
+import { getCurrentUserId } from "../../../helpers/user";
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{
@@ -34,7 +34,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   const router = useRouter();
   const session = useSession();
   const id = getRouterId(router);
-  const userId = getAuthenticateUserId(session);
+  const userId = getCurrentUserId(session);
   const update = trpc.useMutation("user.updateOneUser");
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [

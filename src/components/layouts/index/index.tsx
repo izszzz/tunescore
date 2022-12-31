@@ -13,7 +13,7 @@ import type { CustomAutocompleteProps } from "../../../components/elements/autoc
 import type { SingleColumnLayoutProps } from "../single_column";
 import type { Route } from "nextjs-routes";
 import type { PaginatedResult } from "prisma-pagination";
-import { getAuthenticateUser } from "../../../helpers/user";
+import { getCurrentUser } from "../../../helpers/user";
 
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
@@ -50,7 +50,7 @@ function IndexLayout<T>({
       });
   };
   const handleClick = () => {
-    if (!getAuthenticateUser(session)) return handleOpen();
+    if (!getCurrentUser(session)) return handleOpen();
     newRoute && router.push(newRoute);
   };
   return (

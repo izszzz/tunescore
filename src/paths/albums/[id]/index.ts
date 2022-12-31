@@ -1,16 +1,13 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import {
-  GetAuthenticateUserArg,
-  getAuthenticateUserId,
-} from "../../../helpers/user";
+import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
 
 export const albumShowPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   createPath([
     "album.findUniqueAlbum",
@@ -55,7 +52,7 @@ export const albumShowPath = ({
         },
         bookmarks: {
           where: {
-            user: { id: getAuthenticateUserId(session) },
+            user: { id: getCurrentUserId(session) },
             resourceType: "Album",
           },
         },

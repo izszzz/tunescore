@@ -1,5 +1,5 @@
 import { Bookmark, BookmarkType } from "@prisma/client";
-import { GetAuthenticateUserArg, getAuthenticateUserId } from "./user";
+import { GetCurrentUserArg, getCurrentUserId } from "./user";
 
 export const bookmarkMutate = ({
   bookmarked,
@@ -10,7 +10,7 @@ export const bookmarkMutate = ({
   bookmarked: boolean;
   bookmarks: Bookmark[];
   type: BookmarkType;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   bookmarked
     ? {
@@ -21,6 +21,6 @@ export const bookmarkMutate = ({
     : {
         create: {
           resourceType: type,
-          user: { connect: { id: getAuthenticateUserId(session) } },
+          user: { connect: { id: getCurrentUserId(session) } },
         },
       };

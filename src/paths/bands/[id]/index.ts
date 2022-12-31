@@ -1,16 +1,13 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import {
-  GetAuthenticateUserArg,
-  getAuthenticateUserId,
-} from "../../../helpers/user";
+import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
 
 export const bandShowPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   createPath([
     "band.findUniqueBand",

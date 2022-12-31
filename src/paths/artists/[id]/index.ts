@@ -1,16 +1,13 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import {
-  GetAuthenticateUserArg,
-  getAuthenticateUserId,
-} from "../../../helpers/user";
+import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
 
 export const artistShowPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   createPath([
     "artist.findUniqueArtist",
@@ -29,7 +26,7 @@ export const artistShowPath = ({
         },
         bookmarks: {
           where: {
-            user: { id: getAuthenticateUserId(session) },
+            user: { id: getCurrentUserId(session) },
             resourceType: "Artist",
           },
         },

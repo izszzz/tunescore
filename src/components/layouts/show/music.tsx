@@ -22,7 +22,7 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
-import { getAuthenticateUserId } from "../../../helpers/user";
+import { getCurrentUserId } from "../../../helpers/user";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 
 export interface MusicLayoutProps

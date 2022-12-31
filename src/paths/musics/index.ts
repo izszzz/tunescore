@@ -1,16 +1,13 @@
 import { createPath } from "../../helpers/path";
 import { GetRouterArg } from "../../helpers/router";
-import {
-  GetAuthenticateUserArg,
-  getAuthenticateUserId,
-} from "../../helpers/user";
+import { GetCurrentUserArg, getCurrentUserId } from "../../helpers/user";
 
 export const musicPaginationPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetAuthenticateUserArg;
+  session: GetCurrentUserArg;
 }) =>
   createPath([
     "pagination.music",
@@ -24,7 +21,7 @@ export const musicPaginationPath = ({
           artists: true,
           bookmarks: {
             where: {
-              user: { id: getAuthenticateUserId(session) },
+              user: { id: getCurrentUserId(session) },
               resourceType: "Music",
             },
           },

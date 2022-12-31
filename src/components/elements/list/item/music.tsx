@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -8,12 +7,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import { getOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import type { Prisma } from "@prisma/client";
+import BookmarkChip from "../../chip/bookmark";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -57,10 +56,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           secondary={
             <Box display="flex" alignItems="center">
               <Owner data={data} />
-              <Box display="flex" alignItems="center">
-                <BookmarkBorderIcon fontSize="small" />
-                {data._count.bookmarks}
-              </Box>
+              <BookmarkChip count={data._count.bookmarks} />
             </Box>
           }
         />

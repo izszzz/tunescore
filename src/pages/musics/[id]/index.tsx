@@ -14,7 +14,7 @@ import ArtistLists from "../../../components/elements/list/artist";
 import Typography from "@mui/material/Typography";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
-import { getAuthenticateUserId } from "../../../helpers/user";
+import { getCurrentUserId } from "../../../helpers/user";
 
 const Music: NextPage = () => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const Music: NextPage = () => {
           },
           hidden: !(
             data.type === "ORIGINAL" &&
-            musicData.user?.id === getAuthenticateUserId(session)
+            musicData.user?.id === getCurrentUserId(session)
           ),
         }}
       />

@@ -6,7 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import { useSession } from "next-auth/react";
 import { useModal } from "../../../hooks/useModal";
 import type { Route } from "nextjs-routes";
-import { getAuthenticateUser } from "../../../helpers/user";
+import { getCurrentUser } from "../../../helpers/user";
 
 export interface DefaultTabsProps {
   value: string;
@@ -25,7 +25,7 @@ const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
             {...tab}
             value={tab.label}
             onClick={() => {
-              if (tab.label === "settings" && !getAuthenticateUser(session))
+              if (tab.label === "settings" && !getCurrentUser(session))
                 return handleOpen();
               router.push(href);
             }}

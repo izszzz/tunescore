@@ -12,7 +12,7 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { bandShowPath } from "../../../paths/bands/[id]";
 import { getRouterId } from "../../../helpers/router";
-import { getAuthenticateUserId } from "../../../helpers/user";
+import { getCurrentUserId } from "../../../helpers/user";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 
 export interface BandLayoutProps

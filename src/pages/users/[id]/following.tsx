@@ -8,14 +8,18 @@ import { trpc } from "../../../utils/trpc";
 import { Prisma } from "@prisma/client";
 import { followingPath } from "../../../paths/users/[id]/following";
 import { userShowPath } from "../../../paths/users/[id]";
+import IndexLayout from "../../../components/layouts/index";
+import { getRouterId } from "../../../helpers/router";
 
 const UserFollowers: NextPage = () => {
   const session = useSession();
   const router = useRouter();
+  const id = getRouterId(router);
   const path = userShowPath({ router, session });
   const followPath = followingPath({ router, session });
   const { data } = trpc.useQuery(path);
   const { data: followData } = trpc.useQuery(followPath);
+  const search = trpc.useMutation("search.follow");
   const userData = data as Prisma.UserGetPayload<{
     include: {
       _count: { select: { following: true; followers: true } };
@@ -35,7 +39,27 @@ const UserFollowers: NextPage = () => {
   if (!data || !followData) return <></>;
   return (
     <UserLayout data={userData} activeTab="">
-      <UserLists data={followData.data.map((follow) => follow.follower)} />
+      <IndexLayout
+        route={{ pathname: "/users/[id]/following", query: { id } }}
+        meta={followData.meta}
+        searchAutocompleteProps={{
+          options: search.data?.map((follow) => follow.follower) || [],
+          loading: search.isLoading,
+          getOptionLabel: (option) => option.name || "",
+          textFieldProps: {
+            onChange: (e) =>
+              search.mutate({
+                where: {
+                  followingId: id,
+                  follower: { name: { contains: e.currentTarget.value } },
+                },
+                take: 10,
+              }),
+          },
+        }}
+      >
+        <UserLists data={followData.data.map((follow) => follow.follower)} />
+      </IndexLayout>
     </UserLayout>
   );
 };

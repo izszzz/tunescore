@@ -6,9 +6,9 @@ import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUs
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
 import { createRouter } from "./context";
-import { TagMapFindManySchema } from "../../../prisma/generated/schemas/findManyTagMap.schema";
 import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
+import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
 
 export const searchRouter = createRouter()
   .mutation("music", {
@@ -63,5 +63,14 @@ export const searchRouter = createRouter()
     input: BookmarkFindManySchema,
     async resolve({ ctx, input }) {
       return ctx.prisma.bookmark.findMany(input);
+    },
+  })
+  .mutation("follow", {
+    input: FollowFindManySchema,
+    async resolve({ ctx, input }) {
+      return ctx.prisma.follow.findMany({
+        ...input,
+        include: { follower: true, following: true },
+      });
     },
   });

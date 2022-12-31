@@ -25,8 +25,7 @@ interface DefaultMusicCard {
 }
 const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
   const router = useRouter();
-  const session = useSession();
-  const { type, owner } = owner(data, router);
+  const { type, owner } = getOwner(data, router);
   return (
     <MusicCard
       size="200px"

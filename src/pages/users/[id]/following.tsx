@@ -8,12 +8,13 @@ import { createPath } from "../../../helpers/path";
 import { trpc } from "../../../utils/trpc";
 import { Prisma } from "@prisma/client";
 import { getRouterId } from "../../../helpers/router";
+import { followingPath } from "../../../paths/users/[id]/following";
 
 const UserFollowers: NextPage = () => {
-  const { data: session } = useSession();
+  const session = useSession();
   const router = useRouter();
   const id = getRouterId(router);
-  const userId = session?.user?.id;
+  const userId = session.data?.user?.id;
   const path = createPath([
     "user.findUniqueUser",
     {
@@ -36,8 +37,10 @@ const UserFollowers: NextPage = () => {
       },
     },
   ]);
+  const followPath = followingPath({ router, session });
+
   const { data } = trpc.useQuery(path);
-  if (!data) return <></>;
+  const { data: followData } = trpc.useQuery(followPath);
   const userData = data as Prisma.UserGetPayload<{
     include: {
       _count: { select: { following: true; followers: true } };
@@ -54,11 +57,10 @@ const UserFollowers: NextPage = () => {
       bookmarks: true;
     };
   }>;
+  if (!data || !followData) return <></>;
   return (
     <UserLayout data={userData} activeTab="">
-      <UserLists
-        data={userData.following.map((following) => following.follower)}
-      />
+      <UserLists data={followData.data.map((follow) => follow.follower)} />
     </UserLayout>
   );
 };

@@ -6,26 +6,24 @@ import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 interface DeleteAlertProps {
   loadingButtonProps: LoadingButtonProps;
 }
-const DeleteAlert = ({ loadingButtonProps }: DeleteAlertProps) => {
-  return (
-    <Alert
-      variant="outlined"
-      severity="error"
-      action={
-        <LoadingButton
-          {...loadingButtonProps}
-          type="button"
-          variant="contained"
-          color="error"
-          disableElevation
-        >
-          Delete
-        </LoadingButton>
-      }
-    >
-      This is a warning alert
-    </Alert>
-  );
-};
+const DeleteAlert = ({ loadingButtonProps }: DeleteAlertProps) => (
+  <Alert
+    variant="outlined"
+    severity="error"
+    action={
+      <LoadingButton
+        {...loadingButtonProps}
+        type="button"
+        variant="contained"
+        color="error"
+        disableElevation
+      >
+        Delete
+      </LoadingButton>
+    }
+  >
+    This is a warning alert
+  </Alert>
+);
 
 export default DeleteAlert;

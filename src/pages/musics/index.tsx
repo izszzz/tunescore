@@ -7,53 +7,18 @@ import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
-import { createPath } from "../../helpers/path";
+import { musicPaginationPath } from "../../paths/musics";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
+  const path = musicPaginationPath({ router, session });
   const search = trpc.useMutation(["search.music"], {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const path = createPath([
-    "pagination.music",
-    {
-      args: {
-        include: {
-          composers: true,
-          lyrists: true,
-          band: true,
-          user: true,
-          artists: true,
-          bookmarks: {
-            where: {
-              user: { id: session.data?.user?.id },
-              resourceType: "Music",
-            },
-          },
-          _count: {
-            select: {
-              bookmarks: true,
-            },
-          },
-        },
-        where: (router.query.q as string)
-          ? {
-              title: {
-                is: {
-                  [router.locale]: {
-                    contains: (router.query.q as string) || "",
-                  },
-                },
-              },
-            }
-          : {},
-      },
-      options: { page: (router.query.page as string) || 0, perPage: 12 },
-    },
-  ]);
+
   const { data } = trpc.useQuery(path, {
     onError: () => {
       enqueueSnackbar("music.index error");

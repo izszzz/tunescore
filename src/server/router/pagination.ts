@@ -9,6 +9,7 @@ import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUs
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { createRouter } from "./context";
 import type { Prisma } from "@prisma/client";
+import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
 
 export const paginationRouter = createRouter()
   .query("music", {
@@ -130,6 +131,33 @@ export const paginationRouter = createRouter()
         }>,
         Prisma.UserFindManyArgs
       >(ctx.prisma.user, args);
+    },
+  })
+  .query("follow", {
+    input: z.object({
+      options: PaginateOptionsSchema,
+      args: FollowFindManySchema,
+    }),
+    async resolve({ ctx, input }) {
+      const { args, options } = input;
+      const paginate = createPaginator(options);
+      return await paginate<
+        Prisma.FollowGetPayload<{
+          include: {
+            follower: {
+              include: {
+                _count: { select: { following: true; followers: true } };
+              };
+            };
+            following: {
+              include: {
+                _count: { select: { following: true; followers: true } };
+              };
+            };
+          };
+        }>,
+        Prisma.FollowFindManyArgs
+      >(ctx.prisma.follow, args);
     },
   })
   .query("issue", {

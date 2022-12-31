@@ -56,7 +56,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           secondary={
             <Box display="flex" alignItems="center">
               <Owner data={data} />
-              <BookmarkChip count={data._count.bookmarks} />
+              <BookmarkChip label={data._count.bookmarks} />
             </Box>
           }
         />

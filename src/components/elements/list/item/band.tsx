@@ -9,6 +9,10 @@ import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/setLocale";
 import ResourceIcon from "../../icon/resource";
 import type { Prisma } from "@prisma/client";
+import MusicChip from "../../chip/music";
+import ArtistChip from "../../chip/artist";
+import AlbumChip from "../../chip/album";
+import BookmarkChip from "../../chip/bookmark";
 export interface BandListItemProps {
   data: Prisma.BandGetPayload<{
     include: {
@@ -17,6 +21,7 @@ export interface BandListItemProps {
           bookmarks: true;
           artists: true;
           musics: true;
+          albums: true;
         };
       };
     };
@@ -52,7 +57,10 @@ const BandListItem = ({ data }: BandListItemProps) => {
                 variant="body2"
                 color="text.subprimary"
               >
-                musics count albums count artists count
+                <MusicChip label={data._count.musics} size="small" />
+                <AlbumChip label={data._count.albums} size="small" />
+                <ArtistChip label={data._count.artists} size="small" />
+                <BookmarkChip label={data._count.bookmarks} size="small" />
               </Typography>
             </Box>
           }

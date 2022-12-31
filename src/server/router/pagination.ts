@@ -82,6 +82,7 @@ export const paginationRouter = createRouter()
                 bookmarks: true;
                 artists: true;
                 musics: true;
+                albums: true;
               };
             };
           };

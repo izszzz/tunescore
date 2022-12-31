@@ -13,7 +13,16 @@ const Bands: NextPage = () => {
     "pagination.band",
     {
       args: {
-        include: { _count: { select: { artists: true, musics: true } } },
+        include: {
+          _count: {
+            select: {
+              bookmarks: true,
+              artists: true,
+              musics: true,
+              albums: true,
+            },
+          },
+        },
         where: {
           name: {
             is: { [router.locale]: { contains: router.query.q as string } },

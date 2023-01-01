@@ -5,27 +5,14 @@ import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { albumPaginationPath } from "../../paths/albums";
 
 const Albums: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery([
-    "pagination.album",
-    {
-      args: {
-        include: {
-          _count: { select: { bookmarks: true,artists: true, musics: true } },
-          band: true,
-        },
-        where: {
-          title: {
-            is: { [router.locale]: { contains: router.query.q as string } },
-          },
-        },
-      },
-      options: { page: (router.query.page as string) || 0, perPage: 12 },
-    },
-  ]);
+  const { data } = trpc.useQuery(albumPaginationPath({ router, session }));
   const search = trpc.useMutation(["search.album"], {
     onError: () => {
       enqueueSnackbar("music.search error");

@@ -1,6 +1,8 @@
 import setLocale from "./setLocale";
 import type { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
+import { bookmarkQuery } from "./bookmark";
+import { GetCurrentUserArg } from "./user";
 type Data = Prisma.MusicGetPayload<{
   include: {
     artists: true;
@@ -51,3 +53,19 @@ export const getOwner = (data: Data, router: NextRouter) => {
     return { type: "none", owner: null };
   }
 };
+
+export const musicListQuery = (session: GetCurrentUserArg) => ({
+  include: {
+    composers: true,
+    lyrists: true,
+    band: true,
+    user: true,
+    artists: true,
+    bookmarks: bookmarkQuery({ type: "Music", session }),
+    _count: {
+      select: {
+        bookmarks: true,
+      },
+    },
+  },
+});

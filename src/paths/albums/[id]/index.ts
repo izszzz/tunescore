@@ -1,6 +1,9 @@
+import { bandListQuery } from "../../../helpers/band";
+import { bookmarkQuery } from "../../../helpers/bookmark";
+import { musicListQuery } from "../../../helpers/music";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
+import { GetCurrentUserArg } from "../../../helpers/user";
 
 export const albumShowPath = ({
   router,
@@ -14,32 +17,8 @@ export const albumShowPath = ({
     {
       where: { id: getRouterId(router) },
       include: {
-        musics: {
-          include: {
-            user: true,
-            composers: true,
-            lyrists: true,
-            band: true,
-            artists: true,
-            bookmarks: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        band: {
-          include: {
-            _count: {
-              select: {
-                bookmarks: true,
-                artists: true,
-                musics: true,
-              },
-            },
-          },
-        },
+        musics: musicListQuery(session),
+        band: bandListQuery,
         artists: {
           include: {
             bands: true,
@@ -50,12 +29,7 @@ export const albumShowPath = ({
             },
           },
         },
-        bookmarks: {
-          where: {
-            user: { id: getCurrentUserId(session) },
-            resourceType: "Album",
-          },
-        },
+        bookmarks: bookmarkQuery({ type: "Album", session }),
         tagMaps: { include: { tag: true } },
       },
     },

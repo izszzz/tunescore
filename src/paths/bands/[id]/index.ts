@@ -1,6 +1,9 @@
+import { artistListQuery } from "../../../helpers/artist";
+import { bookmarkQuery } from "../../../helpers/bookmark";
+import { musicListQuery } from "../../../helpers/music";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
+import { GetCurrentUserArg } from "../../../helpers/user";
 
 export const bandShowPath = ({
   router,
@@ -12,23 +15,12 @@ export const bandShowPath = ({
   createPath([
     "band.findUniqueBand",
     {
-      where: { id },
+      where: { id: getRouterId(router) },
       include: {
-        artists: true,
-        musics: {
-          include: {
-            band: true,
-            composers: true,
-            lyrists: true,
-            tagMaps: { include: { tag: true } },
-            bookmarks: {
-              where: {
-                user: { id: userId },
-                resourceType: "Band",
-              },
-            },
-          },
-        },
+        artists: artistListQuery,
+        musics: musicListQuery(session),
+        bookmarks: bookmarkQuery({ type: "Band", session }),
+        tagMaps: { include: { tag: true } },
       },
     },
   ]);

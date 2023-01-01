@@ -24,6 +24,7 @@ export interface AlbumLayoutProps
               bookmarks: true;
               artists: true;
               musics: true;
+              albums: true;
             };
           };
         };

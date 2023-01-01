@@ -23,7 +23,7 @@ generator trpc {
 generator trpc_shield {
   provider     = "prisma-trpc-shield-generator"
   output       = "./shield"
-  contextPath  = "../../src/server/router/context"
+  contextPath  = "../src/server/router/context"
 }
 
 datasource db {

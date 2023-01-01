@@ -1,6 +1,7 @@
+import { musicListQuery } from "../../helpers/music";
 import { createPath } from "../../helpers/path";
 import { GetRouterArg } from "../../helpers/router";
-import { GetCurrentUserArg, getCurrentUserId } from "../../helpers/user";
+import { GetCurrentUserArg } from "../../helpers/user";
 
 export const musicPaginationPath = ({
   router,
@@ -13,24 +14,7 @@ export const musicPaginationPath = ({
     "pagination.music",
     {
       args: {
-        include: {
-          composers: true,
-          lyrists: true,
-          band: true,
-          user: true,
-          artists: true,
-          bookmarks: {
-            where: {
-              user: { id: getCurrentUserId(session) },
-              resourceType: "Music",
-            },
-          },
-          _count: {
-            select: {
-              bookmarks: true,
-            },
-          },
-        },
+        ...musicListQuery(session),
         where: (router.query.q as string)
           ? {
               title: {

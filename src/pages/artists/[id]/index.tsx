@@ -14,7 +14,6 @@ import { trpc } from "../../../utils/trpc";
 import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { artistShowPath } from "../../../paths/artists/[id]";
-import { getRouterId } from "../../../helpers/router";
 import { useSession } from "next-auth/react";
 
 const Artist: NextPage = () => {

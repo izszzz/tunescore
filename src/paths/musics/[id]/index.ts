@@ -1,6 +1,9 @@
+import { artistListQuery } from "../../../helpers/artist";
+import { bandListQuery } from "../../../helpers/band";
+import { bookmarkQuery } from "../../../helpers/bookmark";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
+import { GetCurrentUserArg } from "../../../helpers/user";
 
 export const musicShowPath = ({
   router,
@@ -15,54 +18,12 @@ export const musicShowPath = ({
       where: { id: getRouterId(router) },
       include: {
         user: true,
-        band: {
-          include: {
-            _count: {
-              select: {
-                bookmarks: true,
-                artists: true,
-                musics: true,
-              },
-            },
-          },
-        },
-        artists: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        composers: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
-        lyrists: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
+        band: bandListQuery,
+        artists: artistListQuery,
+        composers: artistListQuery,
+        lyrists: artistListQuery,
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
-        bookmarks: {
-          where: {
-            user: { id: getCurrentUserId(session) },
-            resourceType: "Music",
-          },
-        },
+        bookmarks: bookmarkQuery({ type: "Music", session }),
         tagMaps: { include: { tag: true } },
       },
     },

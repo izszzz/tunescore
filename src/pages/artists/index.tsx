@@ -5,28 +5,19 @@ import ArtistLists from "../../components/elements/list/artist";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/setLocale";
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { artistPaginationPath } from "../../paths/artists";
+
 const Artists: NextPage = () => {
   const router = useRouter();
+  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation(["search.artist"], {
+  const search = trpc.useMutation("search.artist", {
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const { data } = trpc.useQuery([
-    "pagination.artist",
-    {
-      args: {
-        include: { bands: true },
-        where: {
-          name: {
-            is: { [router.locale]: { contains: router.query.q as string } },
-          },
-        },
-      },
-      options: { page: (router.query.page as string) || 0, perPage: 12 },
-    },
-  ]);
+  const { data } = trpc.useQuery(artistPaginationPath({ router, session }));
   if (!data) return <></>;
   return (
     <IndexLayout

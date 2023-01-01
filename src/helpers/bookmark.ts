@@ -1,6 +1,19 @@
 import { Bookmark, BookmarkType } from "@prisma/client";
 import { GetCurrentUserArg, getCurrentUserId } from "./user";
 
+export const bookmarkQuery = ({
+  type,
+  session,
+}: {
+  type: BookmarkType;
+  session: GetCurrentUserArg;
+}) => ({
+  where: {
+    user: { id: getCurrentUserId(session) },
+    resourceType: type,
+  },
+});
+
 export const bookmarkMutate = ({
   bookmarked,
   bookmarks,

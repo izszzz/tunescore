@@ -13,6 +13,7 @@ import { getOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
+import IndexChip from "../../chip";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
@@ -82,19 +83,7 @@ const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
   const { type, owner } = getOwner(data, router);
   if (type === "none" || owner === null) return <></>;
-  return (
-    <Box component="span" display="flex" alignItems="center">
-      <ResourceIcon resource={type} />
-      <Typography
-        mr={1}
-        variant="body2"
-        color="text.subprimary"
-        component="span"
-      >
-        {owner.name}
-      </Typography>
-    </Box>
-  );
+  return <IndexChip resource={type} label={owner.name} size="small" />;
 };
 
 export default MusicListItem;

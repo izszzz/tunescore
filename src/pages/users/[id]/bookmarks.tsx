@@ -14,6 +14,7 @@ import BandListItem from "../../../components/elements/list/item/band";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import { useSnackbar } from "notistack";
 import { getRouterId } from "../../../helpers/router";
+import setLocale from "../../../helpers/setLocale";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();
@@ -39,7 +40,7 @@ const UserBookmarks: NextPage = () => {
     };
   }>;
   return (
-    <UserLayout data={userData} activeTab="">
+    <UserLayout data={userData} activeTab="bookmarks">
       <IndexLayout
         meta={bookmarkData.meta}
         route={{
@@ -49,17 +50,70 @@ const UserBookmarks: NextPage = () => {
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
-          // getOptionLabel: (option) => option.title,
+          getOptionLabel: (option) => {
+            switch (option.resourceType) {
+              case "Music":
+                return (
+                  (option.music && setLocale(option.music?.title, router)) || ""
+                );
+              case "Album":
+                return (
+                  (option.album && setLocale(option.album?.title, router)) || ""
+                );
+              case "Band":
+                return (
+                  (option.band && setLocale(option.band?.name, router)) || ""
+                );
+              case "Artist":
+                return (
+                  (option.artist && setLocale(option.artist?.name, router)) ||
+                  ""
+                );
+            }
+          },
           textFieldProps: {
             onChange: (e) =>
-              // search.mutate({
-              //   where: {
-              //     title: { contains: e.currentTarget.value },
-              //     music: { id },
-              //   },
-              //   take: 10,
-              // }),
-              console.log("a"),
+              search.mutate({
+                where: {
+                  music: {
+                    title: {
+                      is: {
+                        [router.locale as string]: {
+                          contains: e.currentTarget.value,
+                        },
+                      },
+                    },
+                  },
+                  album: {
+                    title: {
+                      is: {
+                        [router.locale as string]: {
+                          contains: e.currentTarget.value,
+                        },
+                      },
+                    },
+                  },
+                  artist: {
+                    name: {
+                      is: {
+                        [router.locale as string]: {
+                          contains: e.currentTarget.value,
+                        },
+                      },
+                    },
+                  },
+                  band: {
+                    name: {
+                      is: {
+                        [router.locale as string]: {
+                          contains: e.currentTarget.value,
+                        },
+                      },
+                    },
+                  },
+                },
+                take: 10,
+              }),
           },
         }}
       >

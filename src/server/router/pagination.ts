@@ -227,6 +227,7 @@ export const paginationRouter = createRouter()
                     bookmarks: true;
                     artists: true;
                     musics: true;
+                    albums: true;
                   };
                 };
               };
@@ -241,7 +242,18 @@ export const paginationRouter = createRouter()
                 };
               };
             };
-            album: { include: { band: true } };
+            album: {
+              include: {
+                _count: {
+                  select: {
+                    musics: true;
+                    bookmarks: true;
+                    artists: true;
+                  };
+                };
+                band: true;
+              };
+            };
           };
         }>,
         Prisma.BookmarkFindManyArgs

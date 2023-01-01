@@ -62,7 +62,60 @@ export const searchRouter = createRouter()
   .mutation("bookmark", {
     input: BookmarkFindManySchema,
     async resolve({ ctx, input }) {
-      return ctx.prisma.bookmark.findMany(input);
+      return ctx.prisma.bookmark.findMany({
+        ...input,
+        include: {
+          music: {
+            include: {
+              user: true,
+              composers: true,
+              lyrists: true,
+              band: true,
+              artists: true,
+              bookmarks: true,
+              _count: {
+                select: {
+                  bookmarks: true,
+                },
+              },
+            },
+          },
+          album: {
+            include: {
+              band: true,
+              _count: {
+                select: {
+                  musics: true,
+                  bookmarks: true,
+                  artists: true,
+                },
+              },
+            },
+          },
+          band: {
+            include: {
+              _count: {
+                select: {
+                  bookmarks: true,
+                  artists: true,
+                  musics: true,
+                  albums: true,
+                },
+              },
+            },
+          },
+          artist: {
+            include: {
+              bands: true,
+              _count: {
+                select: {
+                  bookmarks: true,
+                },
+              },
+            },
+          },
+        },
+      });
     },
   })
   .mutation("follow", {

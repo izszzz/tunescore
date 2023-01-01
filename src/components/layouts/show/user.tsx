@@ -23,7 +23,7 @@ export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
       bookmarks: true;
     };
   }>;
-  activeTab: "info" | "settings" | "";
+  activeTab: "info" | "settings" | "bookmarks" | "";
 }
 
 const UserLayout: React.FC<UserLayoutProps> = ({

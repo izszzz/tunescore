@@ -29,7 +29,6 @@ export const bookmarkPath = ({
               },
             },
           },
-          album: { include: { band: true } },
           band: {
             include: {
               _count: {
@@ -37,6 +36,7 @@ export const bookmarkPath = ({
                   bookmarks: true,
                   artists: true,
                   musics: true,
+                  albums: true,
                 },
               },
             },
@@ -49,6 +49,18 @@ export const bookmarkPath = ({
                   bookmarks: true,
                 },
               },
+            },
+          },
+          album: {
+            include: {
+              _count: {
+                select: {
+                  musics: true,
+                  bookmarks: true,
+                  artists: true,
+                },
+              },
+              band: true,
             },
           },
         },

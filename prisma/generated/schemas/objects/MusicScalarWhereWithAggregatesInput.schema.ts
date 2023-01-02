@@ -72,9 +72,6 @@ const Schema: z.ZodType<Prisma.MusicScalarWhereWithAggregatesInput> = z
       .optional()
       .nullable(),
     albumIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    composerIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    lyristIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    artistIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();
 

@@ -13,6 +13,9 @@ import { pullsRouter } from "./Pull.router";
 import { votesRouter } from "./Vote.router";
 import { commentsRouter } from "./Comment.router";
 import { bookmarksRouter } from "./Bookmark.router";
+import { participationsRouter } from "./Participation.router";
+import { rolesRouter } from "./Role.router";
+import { rolemapsRouter } from "./RoleMap.router";
 import { tagsRouter } from "./Tag.router";
 import { tagmapsRouter } from "./TagMap.router";
 import { notificationsRouter } from "./Notification.router";
@@ -46,6 +49,12 @@ export const appRouter = createRouter()
   .merge('comment.', commentsRouter)
 
   .merge('bookmark.', bookmarksRouter)
+
+  .merge('participation.', participationsRouter)
+
+  .merge('role.', rolesRouter)
+
+  .merge('rolemap.', rolemapsRouter)
 
   .merge('tag.', tagsRouter)
 

@@ -6,9 +6,6 @@ import { VisibilitySchema } from '../enums/Visibility.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput.schema';
-import { MusicCreatecomposerIDsInputObjectSchema } from './MusicCreatecomposerIDsInput.schema';
-import { MusicCreatelyristIDsInputObjectSchema } from './MusicCreatelyristIDsInput.schema';
-import { MusicCreateartistIDsInputObjectSchema } from './MusicCreateartistIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -34,24 +31,6 @@ const Schema: z.ZodType<Prisma.MusicCreateManyUserInput> = z
     albumIDs: z
       .union([
         z.lazy(() => MusicCreatealbumIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    composerIDs: z
-      .union([
-        z.lazy(() => MusicCreatecomposerIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    lyristIDs: z
-      .union([
-        z.lazy(() => MusicCreatelyristIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    artistIDs: z
-      .union([
-        z.lazy(() => MusicCreateartistIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

@@ -5,7 +5,7 @@ import { LinkListOrderByInputObjectSchema } from './LinkListOrderByInput.schema'
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './BandOrderByWithRelationInput.schema';
 import { AlbumOrderByRelationAggregateInputObjectSchema } from './AlbumOrderByRelationAggregateInput.schema';
-import { ArtistOrderByRelationAggregateInputObjectSchema } from './ArtistOrderByRelationAggregateInput.schema';
+import { ParticipationOrderByRelationAggregateInputObjectSchema } from './ParticipationOrderByRelationAggregateInput.schema';
 import { IssueOrderByRelationAggregateInputObjectSchema } from './IssueOrderByRelationAggregateInput.schema';
 import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRelationAggregateInput.schema';
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
@@ -30,18 +30,9 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
       .lazy(() => AlbumOrderByRelationAggregateInputObjectSchema)
       .optional(),
     albumIDs: z.lazy(() => SortOrderSchema).optional(),
-    composers: z
-      .lazy(() => ArtistOrderByRelationAggregateInputObjectSchema)
+    participations: z
+      .lazy(() => ParticipationOrderByRelationAggregateInputObjectSchema)
       .optional(),
-    composerIDs: z.lazy(() => SortOrderSchema).optional(),
-    lyrists: z
-      .lazy(() => ArtistOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    lyristIDs: z.lazy(() => SortOrderSchema).optional(),
-    artists: z
-      .lazy(() => ArtistOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    artistIDs: z.lazy(() => SortOrderSchema).optional(),
     issues: z
       .lazy(() => IssueOrderByRelationAggregateInputObjectSchema)
       .optional(),

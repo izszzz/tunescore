@@ -4,9 +4,9 @@ import { LocalesCompositeFilterObjectSchema } from './LocalesCompositeFilter.sch
 import { LocalesObjectEqualityInputObjectSchema } from './LocalesObjectEqualityInput.schema';
 import { LinkListNullableCompositeFilterObjectSchema } from './LinkListNullableCompositeFilter.schema';
 import { LinkListObjectEqualityInputObjectSchema } from './LinkListObjectEqualityInput.schema';
-import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.schema';
-import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
+import { ParticipationListRelationFilterObjectSchema } from './ParticipationListRelationFilter.schema';
 import { BandListRelationFilterObjectSchema } from './BandListRelationFilter.schema';
+import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 import { TagMapListRelationFilterObjectSchema } from './TagMapListRelationFilter.schema';
@@ -47,18 +47,9 @@ const Schema: z.ZodType<Prisma.ArtistWhereInput> = z
       ])
       .optional()
       .nullable(),
-    writtenMusics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),
-    writtenMusicsIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
+    participations: z
+      .lazy(() => ParticipationListRelationFilterObjectSchema)
       .optional(),
-    composedMusics: z
-      .lazy(() => MusicListRelationFilterObjectSchema)
-      .optional(),
-    composedMusicsIDs: z
-      .lazy(() => StringNullableListFilterObjectSchema)
-      .optional(),
-    musics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),
-    musicIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
     bands: z.lazy(() => BandListRelationFilterObjectSchema).optional(),
     bandIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
     albums: z.lazy(() => AlbumListRelationFilterObjectSchema).optional(),

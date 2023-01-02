@@ -3,12 +3,7 @@ import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeI
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { MusicUncheckedUpdateManyWithoutLyristsNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutLyristsNestedInput.schema';
-import { ArtistUpdatewrittenMusicsIDsInputObjectSchema } from './ArtistUpdatewrittenMusicsIDsInput.schema';
-import { MusicUncheckedUpdateManyWithoutComposersNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutComposersNestedInput.schema';
-import { ArtistUpdatecomposedMusicsIDsInputObjectSchema } from './ArtistUpdatecomposedMusicsIDsInput.schema';
-import { MusicUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutArtistsNestedInput.schema';
-import { ArtistUpdatemusicIDsInputObjectSchema } from './ArtistUpdatemusicIDsInput.schema';
+import { ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { BandUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './BandUncheckedUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { AlbumUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutArtistsNestedInput.schema';
@@ -33,34 +28,11 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateInput> = z
       ])
       .optional()
       .nullable(),
-    writtenMusics: z
-      .lazy(() => MusicUncheckedUpdateManyWithoutLyristsNestedInputObjectSchema)
-      .optional(),
-    writtenMusicsIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatewrittenMusicsIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    composedMusics: z
+    participations: z
       .lazy(
-        () => MusicUncheckedUpdateManyWithoutComposersNestedInputObjectSchema,
+        () =>
+          ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
       )
-      .optional(),
-    composedMusicsIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatecomposedMusicsIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    musics: z
-      .lazy(() => MusicUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema)
-      .optional(),
-    musicIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatemusicIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
     bands: z
       .lazy(() => BandUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema)

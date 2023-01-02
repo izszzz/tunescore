@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { UserArgsObjectSchema } from './UserArgs.schema';
 import { BandArgsObjectSchema } from './BandArgs.schema';
 import { AlbumFindManySchema } from '../findManyAlbum.schema';
-import { ArtistFindManySchema } from '../findManyArtist.schema';
+import { ParticipationFindManySchema } from '../findManyParticipation.schema';
 import { IssueFindManySchema } from '../findManyIssue.schema';
 import { PullFindManySchema } from '../findManyPull.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
@@ -18,14 +18,8 @@ const Schema: z.ZodType<Prisma.MusicInclude> = z
     albums: z
       .union([z.boolean(), z.lazy(() => AlbumFindManySchema)])
       .optional(),
-    composers: z
-      .union([z.boolean(), z.lazy(() => ArtistFindManySchema)])
-      .optional(),
-    lyrists: z
-      .union([z.boolean(), z.lazy(() => ArtistFindManySchema)])
-      .optional(),
-    artists: z
-      .union([z.boolean(), z.lazy(() => ArtistFindManySchema)])
+    participations: z
+      .union([z.boolean(), z.lazy(() => ParticipationFindManySchema)])
       .optional(),
     issues: z
       .union([z.boolean(), z.lazy(() => IssueFindManySchema)])

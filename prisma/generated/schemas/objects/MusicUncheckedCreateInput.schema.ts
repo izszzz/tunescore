@@ -7,12 +7,7 @@ import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNulla
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { AlbumUncheckedCreateNestedManyWithoutMusicsInputObjectSchema } from './AlbumUncheckedCreateNestedManyWithoutMusicsInput.schema';
 import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput.schema';
-import { ArtistUncheckedCreateNestedManyWithoutComposedMusicsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutComposedMusicsInput.schema';
-import { MusicCreatecomposerIDsInputObjectSchema } from './MusicCreatecomposerIDsInput.schema';
-import { ArtistUncheckedCreateNestedManyWithoutWrittenMusicsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutWrittenMusicsInput.schema';
-import { MusicCreatelyristIDsInputObjectSchema } from './MusicCreatelyristIDsInput.schema';
-import { ArtistUncheckedCreateNestedManyWithoutMusicsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutMusicsInput.schema';
-import { MusicCreateartistIDsInputObjectSchema } from './MusicCreateartistIDsInput.schema';
+import { ParticipationUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { IssueUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './IssueUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { PullUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './PullUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { BookmarkUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutMusicInput.schema';
@@ -49,38 +44,11 @@ const Schema: z.ZodType<Prisma.MusicUncheckedCreateInput> = z
         z.string().array(),
       ])
       .optional(),
-    composers: z
+    participations: z
       .lazy(
         () =>
-          ArtistUncheckedCreateNestedManyWithoutComposedMusicsInputObjectSchema,
+          ParticipationUncheckedCreateNestedManyWithoutMusicInputObjectSchema,
       )
-      .optional(),
-    composerIDs: z
-      .union([
-        z.lazy(() => MusicCreatecomposerIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    lyrists: z
-      .lazy(
-        () =>
-          ArtistUncheckedCreateNestedManyWithoutWrittenMusicsInputObjectSchema,
-      )
-      .optional(),
-    lyristIDs: z
-      .union([
-        z.lazy(() => MusicCreatelyristIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    artists: z
-      .lazy(() => ArtistUncheckedCreateNestedManyWithoutMusicsInputObjectSchema)
-      .optional(),
-    artistIDs: z
-      .union([
-        z.lazy(() => MusicCreateartistIDsInputObjectSchema),
-        z.string().array(),
-      ])
       .optional(),
     issues: z
       .lazy(() => IssueUncheckedCreateNestedManyWithoutMusicInputObjectSchema)

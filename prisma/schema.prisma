@@ -5,12 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-//   output="../erd.png"
-// }
-
-
 generator trpc {
   provider       = "prisma-trpc-generator"
   withMiddleware = false
@@ -24,6 +18,16 @@ generator trpc_shield {
   provider     = "prisma-trpc-shield-generator"
   output       = "./shield"
   contextPath  = "../src/server/router/context"
+}
+
+generator fabbrica {
+  provider = "prisma-fabbrica"
+  output   = "./generated/fabbrica"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output="../erd.md"
 }
 
 datasource db {
@@ -124,15 +128,7 @@ model Music {
   albums Album[] @relation("AlbumMusics", fields: [albumIDs], references: [id])
   albumIDs String[] @db.ObjectId
 
-  composers   Artist[] @relation("composers", fields: [composerIDs], references: [id])
-  composerIDs String[] @db.ObjectId
-
-  lyrists   Artist[] @relation("lyrists", fields: [lyristIDs], references: [id])
-  lyristIDs String[] @db.ObjectId
-
-  artists   Artist[] @relation("artists", fields: [artistIDs], references: [id])
-  artistIDs String[] @db.ObjectId
-
+  participations Participation[]
   issues Issue[]
   pulls Pull[]
 
@@ -162,14 +158,7 @@ model Artist {
   name Locales
   link LinkList?
 
-  writtenMusics   Music[]  @relation("lyrists", fields: [writtenMusicsIDs], references: [id])
-  writtenMusicsIDs String[] @db.ObjectId
-
-  composedMusics Music[]  @relation("composers", fields: [composedMusicsIDs], references: [id])
-  composedMusicsIDs String[] @db.ObjectId
-
-  musics Music[]  @relation("artists", fields: [musicIDs], references: [id])
-  musicIDs          String[] @db.ObjectId
+  participations Participation[]
 
   bands  Band[] @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
@@ -277,6 +266,35 @@ model Bookmark{
   @@unique([resourceId, resourceType, userId])
 }
 
+model Participation{
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  artist Artist @relation(fields: [artistId], references: [id])
+  artistId String @db.ObjectId
+
+  music Music @relation(fields: [musicId], references:[id])
+  musicId String @db.ObjectId
+
+  roleMap RoleMap[]
+}
+
+model Role{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+
+  roleMap RoleMap[]
+}
+
+model RoleMap{
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+
+  role Role @relation(fields:[roleId], references: [id])
+  roleId String @db.ObjectId
+
+  participation Participation @relation(fields: [participationId], references: [id])
+  participationId String @db.ObjectId
+}
+
 model Tag{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   
@@ -301,6 +319,7 @@ model TagMap{
   @@unique([resourceId, tagId, resourceType])
 }
 
+
 // https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
 model Notification{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -318,35 +337,42 @@ model Notification{
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
 }
+
 enum TagType{
   Music
   Band
   Artist
   Album
 }
+
 enum BookmarkType{
   Music
   Band
   Artist
   Album
 }
+
 enum CommentType{
   Pull
   Issue
 }
+
 enum NotificationType{
   Follow
   Bookmark
   Comment
 }
+
 enum Visibility{
   PUBLIC
   PRIVATE
 }
+
 enum MusicType{
   ORIGINAL
   COPY
 }
+
 enum PullStatus{
   DRAFT
   OPEN

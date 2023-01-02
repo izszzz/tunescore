@@ -10,9 +10,6 @@ import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableInt
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { MusicUpdatealbumIDsInputObjectSchema } from './MusicUpdatealbumIDsInput.schema';
-import { MusicUpdatecomposerIDsInputObjectSchema } from './MusicUpdatecomposerIDsInput.schema';
-import { MusicUpdatelyristIDsInputObjectSchema } from './MusicUpdatelyristIDsInput.schema';
-import { MusicUpdateartistIDsInputObjectSchema } from './MusicUpdateartistIDsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -74,24 +71,6 @@ const Schema: z.ZodType<Prisma.MusicUncheckedUpdateManyInput> = z
     albumIDs: z
       .union([
         z.lazy(() => MusicUpdatealbumIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    composerIDs: z
-      .union([
-        z.lazy(() => MusicUpdatecomposerIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    lyristIDs: z
-      .union([
-        z.lazy(() => MusicUpdatelyristIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    artistIDs: z
-      .union([
-        z.lazy(() => MusicUpdateartistIDsInputObjectSchema),
         z.string().array(),
       ])
       .optional(),

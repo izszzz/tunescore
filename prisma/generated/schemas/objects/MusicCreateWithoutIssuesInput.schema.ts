@@ -9,12 +9,7 @@ import { UserCreateNestedOneWithoutMusicsInputObjectSchema } from './UserCreateN
 import { BandCreateNestedOneWithoutMusicsInputObjectSchema } from './BandCreateNestedOneWithoutMusicsInput.schema';
 import { AlbumCreateNestedManyWithoutMusicsInputObjectSchema } from './AlbumCreateNestedManyWithoutMusicsInput.schema';
 import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput.schema';
-import { ArtistCreateNestedManyWithoutComposedMusicsInputObjectSchema } from './ArtistCreateNestedManyWithoutComposedMusicsInput.schema';
-import { MusicCreatecomposerIDsInputObjectSchema } from './MusicCreatecomposerIDsInput.schema';
-import { ArtistCreateNestedManyWithoutWrittenMusicsInputObjectSchema } from './ArtistCreateNestedManyWithoutWrittenMusicsInput.schema';
-import { MusicCreatelyristIDsInputObjectSchema } from './MusicCreatelyristIDsInput.schema';
-import { ArtistCreateNestedManyWithoutMusicsInputObjectSchema } from './ArtistCreateNestedManyWithoutMusicsInput.schema';
-import { MusicCreateartistIDsInputObjectSchema } from './MusicCreateartistIDsInput.schema';
+import { ParticipationCreateNestedManyWithoutMusicInputObjectSchema } from './ParticipationCreateNestedManyWithoutMusicInput.schema';
 import { PullCreateNestedManyWithoutMusicInputObjectSchema } from './PullCreateNestedManyWithoutMusicInput.schema';
 import { BookmarkCreateNestedManyWithoutMusicInputObjectSchema } from './BookmarkCreateNestedManyWithoutMusicInput.schema';
 import { TagMapCreateNestedManyWithoutMusicInputObjectSchema } from './TagMapCreateNestedManyWithoutMusicInput.schema';
@@ -54,32 +49,8 @@ const Schema: z.ZodType<Prisma.MusicCreateWithoutIssuesInput> = z
         z.string().array(),
       ])
       .optional(),
-    composers: z
-      .lazy(() => ArtistCreateNestedManyWithoutComposedMusicsInputObjectSchema)
-      .optional(),
-    composerIDs: z
-      .union([
-        z.lazy(() => MusicCreatecomposerIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    lyrists: z
-      .lazy(() => ArtistCreateNestedManyWithoutWrittenMusicsInputObjectSchema)
-      .optional(),
-    lyristIDs: z
-      .union([
-        z.lazy(() => MusicCreatelyristIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    artists: z
-      .lazy(() => ArtistCreateNestedManyWithoutMusicsInputObjectSchema)
-      .optional(),
-    artistIDs: z
-      .union([
-        z.lazy(() => MusicCreateartistIDsInputObjectSchema),
-        z.string().array(),
-      ])
+    participations: z
+      .lazy(() => ParticipationCreateNestedManyWithoutMusicInputObjectSchema)
       .optional(),
     pulls: z
       .lazy(() => PullCreateNestedManyWithoutMusicInputObjectSchema)

@@ -9,9 +9,6 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.ArtistOrderByWithAggregationInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
-    writtenMusicsIDs: z.lazy(() => SortOrderSchema).optional(),
-    composedMusicsIDs: z.lazy(() => SortOrderSchema).optional(),
-    musicIDs: z.lazy(() => SortOrderSchema).optional(),
     bandIDs: z.lazy(() => SortOrderSchema).optional(),
     albumIDs: z.lazy(() => SortOrderSchema).optional(),
     _count: z

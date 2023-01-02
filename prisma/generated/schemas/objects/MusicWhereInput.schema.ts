@@ -16,7 +16,7 @@ import { BandRelationFilterObjectSchema } from './BandRelationFilter.schema';
 import { BandWhereInputObjectSchema } from './BandWhereInput.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
-import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter.schema';
+import { ParticipationListRelationFilterObjectSchema } from './ParticipationListRelationFilter.schema';
 import { IssueListRelationFilterObjectSchema } from './IssueListRelationFilter.schema';
 import { PullListRelationFilterObjectSchema } from './PullListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
@@ -102,12 +102,9 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
       .nullable(),
     albums: z.lazy(() => AlbumListRelationFilterObjectSchema).optional(),
     albumIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    composers: z.lazy(() => ArtistListRelationFilterObjectSchema).optional(),
-    composerIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    lyrists: z.lazy(() => ArtistListRelationFilterObjectSchema).optional(),
-    lyristIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
-    artists: z.lazy(() => ArtistListRelationFilterObjectSchema).optional(),
-    artistIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    participations: z
+      .lazy(() => ParticipationListRelationFilterObjectSchema)
+      .optional(),
     issues: z.lazy(() => IssueListRelationFilterObjectSchema).optional(),
     pulls: z.lazy(() => PullListRelationFilterObjectSchema).optional(),
     bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),

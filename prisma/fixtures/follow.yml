@@ -1,6 +1,0 @@
-entity: follow
-connectedFields: ["following", "follower"]
-items:
-  follow:
-    following: "@following_user"
-    follower: "@followed_user"

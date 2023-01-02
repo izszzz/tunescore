@@ -3,9 +3,6 @@ import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeI
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ArtistUpdatewrittenMusicsIDsInputObjectSchema } from './ArtistUpdatewrittenMusicsIDsInput.schema';
-import { ArtistUpdatecomposedMusicsIDsInputObjectSchema } from './ArtistUpdatecomposedMusicsIDsInput.schema';
-import { ArtistUpdatemusicIDsInputObjectSchema } from './ArtistUpdatemusicIDsInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
 
@@ -26,24 +23,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateManyWithoutArtistsInput> = z
       ])
       .optional()
       .nullable(),
-    writtenMusicsIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatewrittenMusicsIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    composedMusicsIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatecomposedMusicsIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
-    musicIDs: z
-      .union([
-        z.lazy(() => ArtistUpdatemusicIDsInputObjectSchema),
-        z.string().array(),
-      ])
-      .optional(),
     bandIDs: z
       .union([
         z.lazy(() => ArtistUpdatebandIDsInputObjectSchema),

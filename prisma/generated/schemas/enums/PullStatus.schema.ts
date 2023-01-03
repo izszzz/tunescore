@@ -4,6 +4,6 @@ export const PullStatusSchema = z.enum([
   'DRAFT',
   'OPEN',
   'VOTE',
-  'CLOSED',
-  'MERGED',
+  'CLOSE',
+  'MERGE',
 ]);

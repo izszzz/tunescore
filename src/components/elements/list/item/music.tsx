@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import { getOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
@@ -19,10 +19,10 @@ export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<{
     include: {
       user: true;
-      composers: true;
-      lyrists: true;
       band: true;
-      artists: true;
+      participations: {
+        include: { artist: true; roleMap: { include: { role: true } } };
+      };
       bookmarks: true;
       _count: {
         select: {
@@ -43,7 +43,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
     >
       <ListItemButton>
         <ListItemIcon>
-          <ResourceIcon resource="music" />
+          <ResourceIcon resource="MUSIC" />
         </ListItemIcon>
         <ListItemText
           primary={

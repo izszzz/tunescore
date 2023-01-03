@@ -11,6 +11,7 @@ const Schema: z.ZodType<Prisma.IssueOrderByWithRelationInput> = z
     id: z.lazy(() => SortOrderSchema).optional(),
     title: z.lazy(() => SortOrderSchema).optional(),
     body: z.lazy(() => SortOrderSchema).optional(),
+    status: z.lazy(() => SortOrderSchema).optional(),
     comments: z
       .lazy(() => CommentOrderByRelationAggregateInputObjectSchema)
       .optional(),

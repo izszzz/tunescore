@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
+import { EnumIssueStatusFilterObjectSchema } from './EnumIssueStatusFilter.schema';
+import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -29,6 +31,12 @@ const Schema: z.ZodType<Prisma.IssueScalarWhereInput> = z
       .optional(),
     body: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
+    status: z
+      .union([
+        z.lazy(() => EnumIssueStatusFilterObjectSchema),
+        z.lazy(() => IssueStatusSchema),
+      ])
       .optional(),
     musicId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])

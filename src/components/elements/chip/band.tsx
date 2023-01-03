@@ -3,7 +3,7 @@ import IndexChip from "./";
 import type { IndexChipProps } from "./";
 
 const BandChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="band" />
+  <IndexChip {...props} resource="BAND" />
 );
 
 export default BandChip;

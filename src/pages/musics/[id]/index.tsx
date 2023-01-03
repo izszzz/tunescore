@@ -10,11 +10,11 @@ import VoteAlert from "../../../components/elements/alert/vote";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import BandLists from "../../../components/elements/list/band";
-import ArtistLists from "../../../components/elements/list/artist";
-import Typography from "@mui/material/Typography";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
+import ParticipationLists from "../../../components/elements/list/participation";
+import ArtistListItem from "../../../components/elements/list/item/artist";
 
 const Music: NextPage = () => {
   const router = useRouter();
@@ -65,17 +65,10 @@ const Music: NextPage = () => {
         </Box>
       ))}
 
-      <Typography variant="h6">Band</Typography>
       {musicData.band && <BandLists data={[musicData.band]} />}
-
-      <Typography variant="h6">Composers</Typography>
-      <ArtistLists data={musicData.composers} />
-
-      <Typography variant="h6">Lyrists</Typography>
-      <ArtistLists data={musicData.lyrists} />
-
-      <Typography variant="h6">Artists</Typography>
-      <ArtistLists data={musicData.artists} />
+      <ParticipationLists data={musicData.participations}>
+        {(data) => <ArtistListItem data={data.artist} />}
+      </ParticipationLists>
     </MusicLayout>
   );
 };

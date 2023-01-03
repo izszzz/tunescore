@@ -14,7 +14,7 @@ import BandListItem from "../../../components/elements/list/item/band";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import { useSnackbar } from "notistack";
 import { getRouterId } from "../../../helpers/router";
-import setLocale from "../../../helpers/setLocale";
+import setLocale from "../../../helpers/locale";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();

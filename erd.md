@@ -52,8 +52,15 @@ COPY COPY
             DRAFT DRAFT
 OPEN OPEN
 VOTE VOTE
-CLOSED CLOSED
-MERGED MERGED
+CLOSE CLOSE
+MERGE MERGE
+        }
+    
+
+
+        IssueStatus {
+            OPEN OPEN
+CLOSE CLOSE
         }
     
   Account {
@@ -128,6 +135,7 @@ MERGED MERGED
     String id PK 
     String title  
     String body  
+    IssueStatus status  
     }
   
 
@@ -264,6 +272,7 @@ MERGED MERGED
     Band o|--|| Locales : "name"
     Band o|--|o LinkList : "link"
     Band o{--}o Artist : "artists"
+    Issue o|--|| IssueStatus : "enum:status"
     Issue o{--|| Music : "music"
     Issue o{--|| User : "user"
     Pull ||--|| PullScore : "score"

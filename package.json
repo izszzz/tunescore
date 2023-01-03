@@ -69,6 +69,7 @@
     "superjson": "^1.10.0",
     "trpc-shield": "^0.3.0",
     "ts-node": "^10.9.1",
+    "ts-pattern": "^4.0.6",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.9.1",
     "youtubei": "^1.0.0-rc.6",

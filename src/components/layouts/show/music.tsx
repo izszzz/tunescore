@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
 import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
-import setLocale from "../../../helpers/setLocale";
+import setLocale from "../../../helpers/locale";
 import { getOwner } from "../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
 import DefaultShowLayout from "./default";
@@ -40,34 +40,17 @@ export interface MusicLayoutProps
           };
         };
       };
-      artists: {
+      participations: {
         include: {
-          bands: true;
-          _count: {
-            select: {
-              bookmarks: true;
+          artist: {
+            include: {
+              bands: true;
+              _count: {
+                select: { bookmarks: true };
+              };
             };
           };
-        };
-      };
-      composers: {
-        include: {
-          bands: true;
-          _count: {
-            select: {
-              bookmarks: true;
-            };
-          };
-        };
-      };
-      lyrists: {
-        include: {
-          bands: true;
-          _count: {
-            select: {
-              bookmarks: true;
-            };
-          };
+          roleMap: { include: { role: true } };
         };
       };
       user: true;
@@ -134,7 +117,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
       title={
         <>
           <IconButton onClick={() => router.push("/musics")}>
-            <ResourceIcon resource="music" />
+            <ResourceIcon resource="MUSIC" />
           </IconButton>
           <MusicTitle data={data} />
           <Box ml={3}>
@@ -211,14 +194,13 @@ const Owner = ({ data }: OwnerProps) => {
   const { type, owner } = getOwner(data, router);
   useEffect(() => {
     switch (type) {
-      case "user":
+      case "USER":
         setPathname("/users/[id]");
         break;
-      case "band":
+      case "BAND":
         setPathname("/bands/[id]");
         break;
-      case "composer":
-      case "lyrist":
+      case "ARTIST":
         setPathname("/artists/[id]");
         break;
     }

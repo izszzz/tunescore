@@ -28,7 +28,7 @@ function MusicYoutubeCard<
           <>
             <Typography variant="subtitle1">{data?.snippet?.title}</Typography>
             <Typography variant="caption">
-              <ResourceIcon resource="band" fontSize="inherit" />{" "}
+              <ResourceIcon resource="BAND" fontSize="inherit" />{" "}
               {data?.snippet?.channelTitle}
             </Typography>
           </>

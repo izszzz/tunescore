@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
-import setLocale from "../../../helpers/setLocale";
+import setLocale from "../../../helpers/locale";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";

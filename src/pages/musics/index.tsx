@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../helpers/setLocale";
+import setLocale from "../../helpers/locale";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
 import { musicPaginationPath } from "../../paths/musics";

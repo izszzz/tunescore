@@ -20,11 +20,6 @@ generator trpc_shield {
   contextPath  = "../src/server/router/context"
 }
 
-generator fabbrica {
-  provider = "prisma-fabbrica"
-  output   = "./generated/fabbrica"
-}
-
 generator erd {
   provider = "prisma-erd-generator"
   output="../erd.md"
@@ -190,6 +185,7 @@ model Issue{
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   body String
+  status IssueStatus @default(OPEN)
 
   comments Comment[] @relation("IssueComment")
 
@@ -205,7 +201,7 @@ model Pull{
   title String
   body String
   score PullScore
-  status PullStatus
+  status PullStatus @default(DRAFT)
   vote Vote?
 
   comments Comment[] @relation("PullComment")
@@ -377,8 +373,12 @@ enum PullStatus{
   DRAFT
   OPEN
   VOTE
-  CLOSED
-  MERGED
+  CLOSE
+  MERGE
+}
+enum IssueStatus{
+  OPEN
+  CLOSE
 }
 
 type PullScore{

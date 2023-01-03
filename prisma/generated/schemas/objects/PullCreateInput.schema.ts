@@ -18,7 +18,7 @@ const Schema: z.ZodType<Prisma.PullCreateInput> = z
       z.lazy(() => PullScoreCreateEnvelopeInputObjectSchema),
       z.lazy(() => PullScoreCreateInputObjectSchema),
     ]),
-    status: z.lazy(() => PullStatusSchema),
+    status: z.lazy(() => PullStatusSchema).optional(),
     vote: z
       .lazy(() => VoteCreateNestedOneWithoutPullInputObjectSchema)
       .optional(),

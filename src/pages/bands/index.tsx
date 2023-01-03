@@ -3,7 +3,7 @@ import { useSnackbar } from "notistack";
 import BandLists from "../../components/elements/list/band";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../helpers/setLocale";
+import setLocale from "../../helpers/locale";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { bandPaginationPath } from "../../paths/bands";

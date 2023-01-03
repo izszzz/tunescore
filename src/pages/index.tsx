@@ -6,6 +6,7 @@ import { trpc } from "../utils/trpc";
 import type { NextPage } from "next";
 import { Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
+import { participatedArtistQuery } from "../helpers/participation";
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -14,15 +15,28 @@ const Home: NextPage = () => {
     {
       args: {
         include: {
-          composers: true,
-          lyrists: true,
+          participations: {
+            where: {
+              roleMap: {
+                some: {
+                  role: { name: { in: ["Composer", "Lyrist", "Arranger"] } },
+                },
+              },
+            },
+            ...participatedArtistQuery(session),
+            take: 1,
+          },
           band: true,
           user: true,
-          artists: true,
           bookmarks: {
             where: {
               user: { id: session.data?.user?.id },
               resourceType: "Music",
+            },
+          },
+          _count: {
+            select: {
+              bookmarks: true,
             },
           },
         },

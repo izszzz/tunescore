@@ -11,6 +11,7 @@ const Schema: z.ZodType<Prisma.IssueSelect> = z
     id: z.boolean().optional(),
     title: z.boolean().optional(),
     body: z.boolean().optional(),
+    status: z.boolean().optional(),
     comments: z
       .union([z.boolean(), z.lazy(() => CommentFindManySchema)])
       .optional(),

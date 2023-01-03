@@ -3,7 +3,7 @@ import IndexChip from "./";
 import type { IndexChipProps } from "./";
 
 const AlbumChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="album" />
+  <IndexChip {...props} resource="ALBUM" />
 );
 
 export default AlbumChip;

@@ -4,7 +4,7 @@ import type { Band } from "@prisma/client";
 import type { DefaultUpdateAutocompleteProps } from "./default";
 import { trpc } from "../../../../utils/trpc";
 import { useSnackbar } from "notistack";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import { useRouter } from "next/router";
 
 type BandUpdateAutocomplete<T extends boolean | undefined = false> = Pick<

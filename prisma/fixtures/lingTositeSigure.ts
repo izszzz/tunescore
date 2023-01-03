@@ -28,7 +28,7 @@ export const LingTositeSigure = async () =>
 const abnormalize = async () =>
   await prisma.music.create({
     data: {
-      title: { ja: "Beautiful Circus", en: "Beautiful Circus" },
+      title: { ja: "abnormalize", en: "abnormalize" },
       visibility: "PUBLIC",
       type: "COPY",
       participations: await participations(),

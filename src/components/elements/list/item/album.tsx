@@ -5,11 +5,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
+import StatusIcon from "../../icon/status";
 
 export interface AlbumListItemProps {
   data: Prisma.AlbumGetPayload<{
@@ -33,7 +34,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
     >
       <ListItemButton>
         <ListItemIcon>
-          <ResourceIcon resource="album" />
+          <StatusIcon resource="OPEN" />
         </ListItemIcon>
         <ListItemText
           primary={

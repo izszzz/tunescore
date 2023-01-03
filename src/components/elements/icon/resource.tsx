@@ -6,26 +6,19 @@ import AlbumIcon from "@mui/icons-material/Album";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { match } from "ts-pattern";
 
 export interface ResourceIconProps extends SvgIconProps {
-  resource:
-    | "artist"
-    | "composer"
-    | "lyrist"
-    | "band"
-    | "music"
-    | "album"
-    | "user"
-    | "tag";
+  resource: "ARTIST" | "BAND" | "MUSIC" | "ALBUM" | "USER" | "TAG";
 }
-const ResourceIcon = ({ resource, ...props }: ResourceIconProps) => {
-  if (resource === "artist" || resource === "composer" || resource === "lyrist")
-    return <PersonIcon {...props} />;
-  if (resource === "band") return <GroupIcon {...props} />;
-  if (resource === "music") return <MusicNoteIcon {...props} />;
-  if (resource === "album") return <AlbumIcon {...props} />;
-  if (resource === "user") return <AccountCircleIcon {...props} />;
-  if (resource === "tag") return <LocalOfferIcon {...props} />;
-  return <>no icon</>;
-};
+const ResourceIcon = ({ resource, ...props }: ResourceIconProps) =>
+  match(resource)
+    .with("ARTIST", () => <PersonIcon {...props} />)
+    .with("BAND", () => <GroupIcon {...props} />)
+    .with("MUSIC", () => <MusicNoteIcon {...props} />)
+    .with("ALBUM", () => <AlbumIcon {...props} />)
+    .with("USER", () => <AccountCircleIcon {...props} />)
+    .with("TAG", () => <LocalOfferIcon {...props} />)
+    .exhaustive();
+
 export default ResourceIcon;

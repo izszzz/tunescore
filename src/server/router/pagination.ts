@@ -25,10 +25,10 @@ export const paginationRouter = createRouter()
         Prisma.MusicGetPayload<{
           include: {
             user: true;
-            composers: true;
-            lyrists: true;
+            participations: {
+              include: { artist: true; roleMap: { include: { role: true } } };
+            };
             band: true;
-            artists: true;
             bookmarks: true;
             _count: {
               select: {

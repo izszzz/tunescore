@@ -37,7 +37,7 @@ const DefaultShowLayout = ({
           </Box>
           {tagMaps.map((tagMap) => (
             <Chip
-              icon={<ResourceIcon resource="tag" />}
+              icon={<ResourceIcon resource="TAG" />}
               label={tagMap.tag.name}
               variant="outlined"
             />

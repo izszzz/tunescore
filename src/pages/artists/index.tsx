@@ -3,7 +3,7 @@ import { useSnackbar } from "notistack";
 import IndexLayout from "../../components/layouts/index/default";
 import ArtistLists from "../../components/elements/list/artist";
 import { trpc } from "../../utils/trpc";
-import setLocale from "../../helpers/setLocale";
+import setLocale from "../../helpers/locale";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { artistPaginationPath } from "../../paths/artists";

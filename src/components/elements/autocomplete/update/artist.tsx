@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import DefaultUpdateAutocomplete, {
   DefaultUpdateAutocompleteProps,
 } from "./default";
@@ -31,7 +31,7 @@ const ArtistUpdateAutocomplete = ({
     <DefaultUpdateAutocomplete<Artist, true>
       options={searchArtist.data || []}
       getOptionLabel={(option) => setLocale(option.name, router) || ""}
-      ChipProps={{ icon: <ResourceIcon resource="artist" /> }}
+      ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
       textFieldProps={{
         label,
         margin: "dense",

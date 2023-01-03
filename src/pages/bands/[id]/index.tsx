@@ -28,11 +28,11 @@ const Band: NextPage = () => {
       };
       musics: {
         include: {
-          composers: true;
-          lyrists: true;
           band: true;
           user: true;
-          artists: true;
+          participations: {
+            include: { artist: true; roleMap: { include: { role: true } } };
+          };
           bookmarks: true;
           _count: {
             select: {

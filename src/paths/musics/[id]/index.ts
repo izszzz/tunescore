@@ -1,6 +1,6 @@
-import { artistListQuery } from "../../../helpers/artist";
 import { bandListQuery } from "../../../helpers/band";
 import { bookmarkQuery } from "../../../helpers/bookmark";
+import { participatedArtistQuery } from "../../../helpers/participation";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
 import { GetCurrentUserArg } from "../../../helpers/user";
@@ -19,9 +19,7 @@ export const musicShowPath = ({
       include: {
         user: true,
         band: bandListQuery,
-        artists: artistListQuery,
-        composers: artistListQuery,
-        lyrists: artistListQuery,
+        participations: participatedArtistQuery(session),
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
         bookmarks: bookmarkQuery({ type: "Music", session }),
         tagMaps: { include: { tag: true } },

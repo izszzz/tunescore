@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { useRouter } from "next/router";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import type { Prisma } from "@prisma/client";
 import MusicChip from "../../chip/music";
@@ -39,7 +39,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
     >
       <ListItemButton>
         <ListItemIcon>
-          <ResourceIcon resource="band" />
+          <ResourceIcon resource="BAND" />
         </ListItemIcon>
         <ListItemText
           primary={

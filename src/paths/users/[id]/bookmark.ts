@@ -1,3 +1,4 @@
+import { participationsQuery } from "../../../helpers/participation";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
 import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
@@ -17,10 +18,8 @@ export const bookmarkPath = ({
           music: {
             include: {
               user: true,
-              composers: true,
-              lyrists: true,
+              participations: participationsQuery,
               band: true,
-              artists: true,
               bookmarks: true,
               _count: {
                 select: {

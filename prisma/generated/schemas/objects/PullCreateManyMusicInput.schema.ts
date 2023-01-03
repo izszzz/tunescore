@@ -14,7 +14,7 @@ const Schema: z.ZodType<Prisma.PullCreateManyMusicInput> = z
       z.lazy(() => PullScoreCreateEnvelopeInputObjectSchema),
       z.lazy(() => PullScoreCreateInputObjectSchema),
     ]),
-    status: z.lazy(() => PullStatusSchema),
+    status: z.lazy(() => PullStatusSchema).optional(),
     userId: z.string(),
   })
   .strict();

@@ -8,6 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import type { Prisma } from "@prisma/client";
 import { getRouterId } from "../../../../helpers/router";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import StatusIcon from "../../icon/status";
 
 export interface IssueListItemProps {
   data: Prisma.IssueGetPayload<{
@@ -29,6 +31,9 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
       }
     >
       <ListItemButton>
+        <ListItemIcon>
+          <StatusIcon resource={data.status} />
+        </ListItemIcon>
         <ListItemText
           primary={data.title}
           secondary={

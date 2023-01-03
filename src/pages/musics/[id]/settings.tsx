@@ -11,7 +11,7 @@ import ArtistsUpdateForm from "../../../components/elements/form/settings/artist
 import DangerAlert from "../../../components/elements/alert/delete";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
-import setLocale from "../../../helpers/setLocale";
+import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 import { CommentCreateNestedManyWithoutIssueInputObjectSchema } from './CommentCreateNestedManyWithoutIssueInput.schema';
 import { UserCreateNestedOneWithoutIssuesInputObjectSchema } from './UserCreateNestedOneWithoutIssuesInput.schema';
 
@@ -9,6 +10,7 @@ const Schema: z.ZodType<Prisma.IssueCreateWithoutMusicInput> = z
     id: z.string().optional(),
     title: z.string(),
     body: z.string(),
+    status: z.lazy(() => IssueStatusSchema).optional(),
     comments: z
       .lazy(() => CommentCreateNestedManyWithoutIssueInputObjectSchema)
       .optional(),

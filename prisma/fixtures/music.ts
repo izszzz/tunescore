@@ -1,11 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { initialize } from "../generated/fabbrica";
 import { ArtistFactory } from "./artist";
 import { BandFactory } from "./band";
 import { UserFactory } from "./user";
 
 const prisma = new PrismaClient();
-initialize({ prisma });
 
 export const MusicFactory = prisma.music.create({
   data: {
@@ -102,7 +100,7 @@ export const MusicOwendByComposer = async () =>
         ja: "作曲者の曲",
         en: "Owned by Compsoer",
       },
-      type: "ORIGINAL",
+      type: "COPY",
       visibility: "PUBLIC",
       participations: {
         create: {
@@ -135,7 +133,7 @@ export const MusicOwendByLyrist = async () =>
         ja: "作詞者の曲",
         en: "Owned by Lyrist",
       },
-      type: "ORIGINAL",
+      type: "COPY",
       visibility: "PUBLIC",
       participations: {
         create: {
@@ -167,7 +165,7 @@ export const MusicOwendByBand = async () =>
         ja: "バンドの曲",
         en: "Owned by Band",
       },
-      type: "ORIGINAL",
+      type: "COPY",
       visibility: "PUBLIC",
       band: {
         connect: { id: (await BandFactory).id },

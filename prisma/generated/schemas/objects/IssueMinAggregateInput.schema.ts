@@ -7,6 +7,7 @@ const Schema: z.ZodType<Prisma.IssueMinAggregateInputType> = z
     id: z.literal(true).optional(),
     title: z.literal(true).optional(),
     body: z.literal(true).optional(),
+    status: z.literal(true).optional(),
     musicId: z.literal(true).optional(),
     userId: z.literal(true).optional(),
   })

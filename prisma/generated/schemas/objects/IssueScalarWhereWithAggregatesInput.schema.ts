@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
+import { EnumIssueStatusWithAggregatesFilterObjectSchema } from './EnumIssueStatusWithAggregatesFilter.schema';
+import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -29,6 +31,12 @@ const Schema: z.ZodType<Prisma.IssueScalarWhereWithAggregatesInput> = z
       .optional(),
     body: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
+      .optional(),
+    status: z
+      .union([
+        z.lazy(() => EnumIssueStatusWithAggregatesFilterObjectSchema),
+        z.lazy(() => IssueStatusSchema),
+      ])
       .optional(),
     musicId: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])

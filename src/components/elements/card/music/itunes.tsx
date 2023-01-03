@@ -26,12 +26,12 @@ const MusicItunesCard = ({ size, data, onClick }: MusicItunesCardProps) => {
               {data.trackCensoredName}
             </Typography>
             <Typography variant="caption">
-              <ResourceIcon resource="album" fontSize="inherit" />{" "}
+              <ResourceIcon resource="ALBUM" fontSize="inherit" />{" "}
               {data.collectionCensoredName}
             </Typography>
             <br />
             <Typography variant="caption">
-              <ResourceIcon resource="band" fontSize="inherit" />{" "}
+              <ResourceIcon resource="BAND" fontSize="inherit" />{" "}
               {data.artistName}
             </Typography>
           </>

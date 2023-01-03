@@ -15,7 +15,7 @@ const Schema: z.ZodType<Prisma.PullUncheckedCreateWithoutVoteInput> = z
       z.lazy(() => PullScoreCreateEnvelopeInputObjectSchema),
       z.lazy(() => PullScoreCreateInputObjectSchema),
     ]),
-    status: z.lazy(() => PullStatusSchema),
+    status: z.lazy(() => PullStatusSchema).optional(),
     comments: z
       .lazy(() => CommentUncheckedCreateNestedManyWithoutPullInputObjectSchema)
       .optional(),

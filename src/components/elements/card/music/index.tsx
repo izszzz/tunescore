@@ -35,7 +35,7 @@ const MusicCard = ({ title, image, size, onClick }: MusicCardProps) => {
             borderRadius="5px"
           >
             <ResourceIcon
-              resource="music"
+              resource="MUSIC"
               sx={{ fontSize: "60px", color: "grey" }}
             />
           </Box>

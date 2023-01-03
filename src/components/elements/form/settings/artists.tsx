@@ -13,7 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
-import setLocale from "../../../../helpers/setLocale";
+import setLocale from "../../../../helpers/locale";
 import { handleChangeAutocomplete } from "../../autocomplete/update/default";
 import CustomAutocomplete from "../../autocomplete/search";
 import type { Artist } from "@prisma/client";

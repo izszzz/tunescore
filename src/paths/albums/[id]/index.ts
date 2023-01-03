@@ -3,6 +3,7 @@ import { bookmarkQuery } from "../../../helpers/bookmark";
 import { musicListQuery } from "../../../helpers/music";
 import { createPath } from "../../../helpers/path";
 import { getRouterId } from "../../../helpers/router";
+import { artistListQuery } from "../../../helpers/artist";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { GetCurrentUserArg } from "../../../helpers/user";
 
@@ -20,16 +21,7 @@ export const albumShowPath = ({
       include: {
         musics: musicListQuery(session),
         band: bandListQuery(session),
-        artists: {
-          include: {
-            bands: true,
-            _count: {
-              select: {
-                bookmarks: true,
-              },
-            },
-          },
-        },
+        artists: artistListQuery(session),
         bookmarks: bookmarkQuery({ type: "Album", session }),
         tagMaps: { include: { tag: true } },
       },

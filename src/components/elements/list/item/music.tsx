@@ -73,7 +73,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
 const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
   const { type, owner } = getOwner(data, router);
-  if (type === "none" || owner === null) return <></>;
+  if (type === "NONE" || owner === null) return <></>;
   return <IndexChip resource={type} label={owner.name} size="small" />;
 };
 

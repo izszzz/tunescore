@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import { match } from "ts-pattern";
 import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
@@ -30,7 +31,7 @@ export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<{
     include: {
-      band:BandListQueryType 
+      band: BandListQueryType;
       participations: {
         include: {
           artist: ArtistListQueryType;
@@ -177,19 +178,16 @@ const Owner = ({ data }: OwnerProps) => {
   const router = useRouter();
   const { type, owner } = getOwner(data, router);
   useEffect(() => {
-    switch (type) {
-      case "USER":
-        setPathname("/users/[id]");
-        break;
-      case "BAND":
-        setPathname("/bands/[id]");
-        break;
-      case "ARTIST":
-        setPathname("/artists/[id]");
-        break;
-    }
+    setPathname(
+      match(type)
+        .with("USER", () => "/users/[id]" as const)
+        .with("BAND", () => "/bands/[id]" as const)
+        .with("ARTIST", () => "/artists/[id]" as const)
+        .with("NONE", () => "/users/[id]" as const)
+        .exhaustive()
+    );
   }, [type]);
-  if (type === "none" || owner === null) return <></>;
+  if (type === "NONE" || owner === null) return <></>;
   return (
     <>
       <Link href={{ pathname, query: { id: owner.id } }}>

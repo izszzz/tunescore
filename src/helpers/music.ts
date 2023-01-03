@@ -52,7 +52,7 @@ export const getOwner = (data: Data, router: NextRouter) =>
           : { type: "ARTIST" as const, owner: null }
     )
     .otherwise(() => ({
-      type: "none",
+      type: "NONE" as const,
       owner: null,
     }));
 

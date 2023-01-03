@@ -51,11 +51,11 @@ const PullButton = ({
           </ButtonGroup>
         );
       }
-      case "MERGED":
+      case "MERGE":
         return <>revert</>;
       case "VOTE":
         return <>vote</>;
-      case "CLOSED":
+      case "CLOSE":
         return <PullDraftButton loading={loading} onClick={onDraft} />;
     }
   else if (type === "COPY")
@@ -82,9 +82,9 @@ const PullButton = ({
             badIconButtonProps={{ onClick: () => console.log("good") }}
           />
         );
-      case "MERGED":
+      case "MERGE":
         return <>revert</>;
-      case "CLOSED":
+      case "CLOSE":
         return <PullDraftButton loading={loading} onClick={onDraft} />;
     }
   else return <>no buttons</>;
@@ -106,7 +106,7 @@ const PullMergeButton = (props: LoadingButtonProps) => (
   <LoadingButton
     variant="outlined"
     color="success"
-    startIcon={<PullStatusIcon status="MERGED" />}
+    startIcon={<PullStatusIcon status="MERGE" />}
     {...props}
   >
     Merge
@@ -117,7 +117,7 @@ const PullCloseButton = (props: LoadingButtonProps) => (
   <LoadingButton
     variant="outlined"
     color="error"
-    startIcon={<PullStatusIcon status="CLOSED" />}
+    startIcon={<PullStatusIcon status="CLOSE" />}
     {...props}
   >
     Close

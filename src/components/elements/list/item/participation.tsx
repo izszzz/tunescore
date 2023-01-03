@@ -1,37 +1,16 @@
 import { Box, Chip } from "@mui/material";
+import type { MusicListQueryType } from "../../../../helpers/music";
+import type { ArtistListQueryType } from "../../../../helpers/artist";
 import type { Prisma } from "@prisma/client";
 export type ParticipatedArtist = Prisma.ParticipationGetPayload<{
   include: {
-    artist: {
-      include: {
-        bands: true;
-        _count: {
-          select: {
-            bookmarks: true;
-          };
-        };
-      };
-    };
+    artist: ArtistListQueryType;
     roleMap: { include: { role: true } };
   };
 }>;
 export type ParticipatedMusic = Prisma.ParticipationGetPayload<{
   include: {
-    music: {
-      include: {
-        user: true;
-        band: true;
-        participations: {
-          include: { artist: true; roleMap: { include: { role: true } } };
-        };
-        bookmarks: true;
-        _count: {
-          select: {
-            bookmarks: true;
-          };
-        };
-      };
-    };
+    music: MusicListQueryType;
     roleMap: { include: { role: true } };
   };
 }>;

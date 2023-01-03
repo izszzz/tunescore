@@ -118,14 +118,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   };
   const handleOpen = () => handleUpdateStatus("OPEN");
   const handleDraft = () => handleUpdateStatus("DRAFT");
-  const handleClose = () => handleUpdateStatus("CLOSED");
+  const handleClose = () => handleUpdateStatus("CLOSE");
   const handleMerge = () => {
     update.mutate({
       where: {
         id: pullId,
       },
       data: {
-        status: "MERGED",
+        status: "MERGE",
         music: { update: { score: data.score.changed } },
       },
     });

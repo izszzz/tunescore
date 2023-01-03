@@ -1,5 +1,4 @@
-import { bandListQuery } from "../../helpers/band";
-import { bookmarkQuery } from "../../helpers/bookmark";
+import { albumListQuery } from "../../helpers/album";
 import { createPath } from "../../helpers/path";
 import type { GetRouterArg } from "../../helpers/router";
 import type { GetCurrentUserArg } from "../../helpers/user";
@@ -15,11 +14,7 @@ export const albumPaginationPath = ({
     "pagination.album",
     {
       args: {
-        include: {
-          _count: { select: { bookmarks: true, artists: true, musics: true } },
-          band: bandListQuery(session),
-          bookmarks: bookmarkQuery({ type: "Album", session }),
-        },
+        ...albumListQuery(session),
         where: {
           title: {
             is: {

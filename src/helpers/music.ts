@@ -56,6 +56,22 @@ export const getOwner = (data: Data, router: NextRouter) =>
       owner: null,
     }));
 
+export type MusicListQueryType = {
+  include: {
+    user: true;
+    band: true;
+    participations: {
+      include: { artist: true; roleMap: { include: { role: true } } };
+    };
+    bookmarks: true;
+    _count: {
+      select: {
+        bookmarks: true;
+      };
+    };
+  };
+};
+
 export const musicListQuery = (session: GetCurrentUserArg) => ({
   include: {
     band: true,

@@ -29,13 +29,6 @@ const Music: NextPage = () => {
       {data.link?.streaming?.itunes?.id && (
         <ItunesButton href={data.link?.streaming?.itunes.id} />
       )}
-      {data.link?.streaming?.youtube?.id && (
-        <YouTube
-          className="youtubeContainer"
-          videoId={data.link?.streaming?.youtube.id}
-          opts={{ width: "100%", height: "100%" }}
-        />
-      )}
       <ScoreButtonGroup
         watchButton={{
           route: {
@@ -54,6 +47,14 @@ const Music: NextPage = () => {
           ),
         }}
       />
+
+      {data.link?.streaming?.youtube?.id && (
+        <YouTube
+          className="youtubeContainer"
+          videoId={data.link?.streaming?.youtube.id}
+          opts={{ width: "100%", height: "100%" }}
+        />
+      )}
 
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>

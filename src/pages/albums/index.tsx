@@ -27,7 +27,7 @@ const Albums: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
-        getOptionLabel: (option) => setLocale(option.title, router) || "",
+        getOptionLabel: (option) => setLocale(option.title, router),
         textFieldProps: {
           onChange: (e) =>
             search.mutate({

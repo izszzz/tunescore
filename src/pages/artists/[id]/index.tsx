@@ -20,15 +20,10 @@ const Artist: NextPage = () => {
   const artistData = data as ArtistLayoutProps["data"];
   return (
     <ArtistLayout data={artistData} path={path} activeTab="info">
-      <MusicLists
-        data={artistData.participations.map(
-          (participation) => participation.music
-        )}
-      />
+      <BandLists data={artistData.bands} />
       <ParticipationLists data={artistData.participations}>
         {(data) => <MusicListItem data={data.music} />}
       </ParticipationLists>
-      <BandLists data={artistData.bands} />
     </ArtistLayout>
   );
 };

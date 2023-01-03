@@ -11,18 +11,10 @@ import type { Prisma } from "@prisma/client";
 import Box from "@mui/material/Box";
 import BookmarkChip from "../../chip/bookmark";
 import BandChip from "../../chip/band";
+import { ArtistListQueryType } from "../../../../helpers/artist";
 
 export interface ArtistListItemProps {
-  data: Prisma.ArtistGetPayload<{
-    include: {
-      bands: true;
-      _count: {
-        select: {
-          bookmarks: true;
-        };
-      };
-    };
-  }>;
+  data: Prisma.ArtistGetPayload<ArtistListQueryType>;
 }
 const ArtistListItem = ({ data }: ArtistListItemProps) => {
   const router = useRouter();
@@ -42,7 +34,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
         </ListItemIcon>
         <ListItemText
           primary={
-            <Typography variant="h6" mr={3}>
+            <Typography variant="h6" noWrap>
               {setLocale(data.name, router)}
             </Typography>
           }
@@ -54,7 +46,11 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
                   size="small"
                 />
               )}
-              <BookmarkChip label={data._count.bookmarks} size="small" />
+              <BookmarkChip
+                label={data._count.bookmarks}
+                size="small"
+                bookmarked={!!data.bookmarks.length}
+              />
             </Box>
           }
         />

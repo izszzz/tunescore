@@ -130,7 +130,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
                 style={{ borderRadius: 5 }}
                 height="80"
                 width="80"
-                alt={setLocale(data.title, router) || ""}
+                alt={setLocale(data.title, router)}
                 src={
                   selectSuitableStreamingImage(data.link.streaming)?.image?.size
                     ?.medium || ""

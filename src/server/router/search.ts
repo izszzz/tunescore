@@ -68,10 +68,7 @@ export const searchRouter = createRouter()
           music: {
             include: {
               user: true,
-              composers: true,
-              lyrists: true,
               band: true,
-              artists: true,
               bookmarks: true,
               _count: {
                 select: {

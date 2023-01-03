@@ -25,7 +25,7 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
     <DefaultUpdateAutocomplete<Band, T>
       {...props}
       options={searchBand.data || []}
-      getOptionLabel={(option) => setLocale(option.name, router) || ""}
+      getOptionLabel={(option) => setLocale(option.name, router)}
       textFieldProps={{
         label: "band",
         margin: "dense",

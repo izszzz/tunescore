@@ -29,19 +29,21 @@ const UserListItem = ({ data }: UserListItemProps) => {
       </ListItemAvatar>
       <ListItemButton>
         <ListItemText
-          primary={data.name}
+          primary={
+            <Typography variant="h6" noWrap>
+              {data.name}
+            </Typography>
+          }
           secondary={
-            <>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                following : {data._count.following} / followers :{" "}
-                {data._count.followers}
-              </Typography>
-            </>
+            <Typography
+              sx={{ display: "inline" }}
+              component="span"
+              variant="body2"
+              color="text.primary"
+            >
+              following : {data._count.following} / followers :{" "}
+              {data._count.followers}
+            </Typography>
           }
         />
       </ListItemButton>

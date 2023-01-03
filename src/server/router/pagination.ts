@@ -11,6 +11,10 @@ import { createRouter } from "./context";
 import type { Prisma } from "@prisma/client";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
+import { MusicListQueryType } from "../../helpers/music";
+import { BandListQueryType } from "../../helpers/band";
+import { ArtistListQueryType } from "../../helpers/artist";
+import { AlbumListQueryType } from "../../helpers/album";
 
 export const paginationRouter = createRouter()
   .query("music", {
@@ -205,55 +209,10 @@ export const paginationRouter = createRouter()
       return await paginate<
         Prisma.BookmarkGetPayload<{
           include: {
-            music: {
-              include: {
-                user: true;
-                composers: true;
-                lyrists: true;
-                band: true;
-                artists: true;
-                bookmarks: true;
-                _count: {
-                  select: {
-                    bookmarks: true;
-                  };
-                };
-              };
-            };
-            band: {
-              include: {
-                _count: {
-                  select: {
-                    bookmarks: true;
-                    artists: true;
-                    musics: true;
-                    albums: true;
-                  };
-                };
-              };
-            };
-            artist: {
-              include: {
-                bands: true;
-                _count: {
-                  select: {
-                    bookmarks: true;
-                  };
-                };
-              };
-            };
-            album: {
-              include: {
-                _count: {
-                  select: {
-                    musics: true;
-                    bookmarks: true;
-                    artists: true;
-                  };
-                };
-                band: true;
-              };
-            };
+            music: MusicListQueryType;
+            band: BandListQueryType;
+            artist: ArtistListQueryType;
+            album: AlbumListQueryType;
           };
         }>,
         Prisma.BookmarkFindManyArgs

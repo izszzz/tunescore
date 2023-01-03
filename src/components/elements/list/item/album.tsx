@@ -10,15 +10,10 @@ import ResourceIcon from "../../icon/resource";
 import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import StatusIcon from "../../icon/status";
+import { AlbumListQueryType } from "../../../../helpers/album";
 
 export interface AlbumListItemProps {
-  data: Prisma.AlbumGetPayload<{
-    include: {
-      band: true;
-      _count: { select: { bookmarks: true; artists: true; musics: true } };
-    };
-  }>;
+  data: Prisma.AlbumGetPayload<AlbumListQueryType>;
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const router = useRouter();
@@ -34,17 +29,21 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
     >
       <ListItemButton>
         <ListItemIcon>
-          <StatusIcon resource="OPEN" />
+          <ResourceIcon resource="ALBUM" />
         </ListItemIcon>
         <ListItemText
           primary={
-            <Typography variant="h6" mr={3}>
+            <Typography variant="h6" noWrap>
               {setLocale(data.title, router)}
             </Typography>
           }
           secondary={
             <>
-              <BookmarkChip label={data._count.bookmarks} size="small" />
+              <BookmarkChip
+                label={data._count.bookmarks}
+                size="small"
+                bookmarked={!!data.bookmarks.length}
+              />
               <MusicChip label={data._count.musics} size="small" />
             </>
           }

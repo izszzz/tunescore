@@ -17,7 +17,7 @@ export const bandShowPath = ({
     {
       where: { id: getRouterId(router) },
       include: {
-        artists: artistListQuery,
+        artists: artistListQuery(session),
         musics: musicListQuery(session),
         bookmarks: bookmarkQuery({ type: "Band", session }),
         tagMaps: { include: { tag: true } },

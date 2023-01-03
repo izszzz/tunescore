@@ -87,76 +87,6 @@ const SettingsMusic: NextPage = () => {
             }),
         }}
       />
-      <ArtistUpdateAutocomplete
-        value={musicData.composers}
-        loading={update.isLoading}
-        label="composers"
-        onChange={{
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { composers: { connect: { id: details?.option.id } } },
-            }),
-          onRemove: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { composers: { disconnect: { id: details?.option.id } } },
-            }),
-        }}
-      />
-      <ArtistUpdateAutocomplete
-        value={musicData.lyrists}
-        loading={update.isLoading}
-        label="lyrists"
-        onChange={{
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { lyrists: { connect: { id: details?.option.id } } },
-            }),
-          onRemove: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { lyrists: { disconnect: { id: details?.option.id } } },
-            }),
-        }}
-      />
-      <ArtistsUpdateForm
-        data={musicData.artists}
-        autocompleteProps={{
-          options: searchArtist.data || [],
-          loading: searchArtist.isLoading,
-          getOptionLabel: (option) => setLocale(option.name, router) || "",
-          textFieldProps: {
-            label: "Artist",
-            onChange: (e) =>
-              searchArtist.mutate({
-                where: {
-                  name: {
-                    is: {
-                      [router.locale]: { contains: e.currentTarget.value },
-                    },
-                  },
-                },
-                take: 10,
-              }),
-          },
-        }}
-        loadingButtonProps={{
-          loading: update.isLoading,
-          onClick: (artist) =>
-            update.mutate({
-              ...query,
-              data: { artists: { connect: { id: artist?.id } } },
-            }),
-        }}
-        onDestroy={(artist) =>
-          update.mutate({
-            ...query,
-            data: { artists: { disconnect: { id: artist.id } } },
-          })
-        }
-      />
       <TagUpdateAutocomplete
         value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
         loading={update.isLoading}
@@ -197,7 +127,7 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicItunesSelectForm
-        term={setLocale(data.title, router) || ""}
+        term={setLocale(data.title, router)}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
           update.mutate({
@@ -237,7 +167,7 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        term={setLocale(data.title, router) || ""}
+        term={setLocale(data.title, router)}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
           value?.id &&

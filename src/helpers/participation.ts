@@ -4,7 +4,7 @@ import { GetCurrentUserArg } from "./user";
 
 export const participatedArtistQuery = (session: GetCurrentUserArg) => ({
   include: {
-    artist: artistListQuery,
+    artist: artistListQuery(session),
     roleMap: { include: { role: true } },
   },
 });

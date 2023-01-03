@@ -27,7 +27,7 @@ const Bands: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
-        getOptionLabel: (option) => setLocale(option.name, router) || "",
+        getOptionLabel: (option) => setLocale(option.name, router),
         textFieldProps: {
           onChange: (e) =>
             search.mutate({

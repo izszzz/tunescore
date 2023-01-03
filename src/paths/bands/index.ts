@@ -14,7 +14,7 @@ export const bandPaginationPath = ({
     "pagination.band",
     {
       args: {
-        ...bandListQuery,
+        ...bandListQuery(session),
         where: {
           name: {
             is: {

@@ -18,7 +18,7 @@ export const albumShowPath = ({
       where: { id: getRouterId(router) },
       include: {
         musics: musicListQuery(session),
-        band: bandListQuery,
+        band: bandListQuery(session),
         artists: {
           include: {
             bands: true,

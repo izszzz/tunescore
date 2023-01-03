@@ -1,3 +1,4 @@
+import { bandListQuery } from "../../helpers/band";
 import { bookmarkQuery } from "../../helpers/bookmark";
 import { createPath } from "../../helpers/path";
 import { GetRouterArg } from "../../helpers/router";
@@ -16,7 +17,8 @@ export const albumPaginationPath = ({
       args: {
         include: {
           _count: { select: { bookmarks: true, artists: true, musics: true } },
-          band: true,
+          band: bandListQuery(session),
+          bookmarks: bookmarkQuery({ type: "Album", session }),
         },
         where: {
           title: {

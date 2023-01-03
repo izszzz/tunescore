@@ -1,4 +1,7 @@
-import { participationsQuery } from "../../../helpers/participation";
+import { albumListQuery } from "../../../helpers/album";
+import { artistListQuery } from "../../../helpers/artist";
+import { bandListQuery } from "../../../helpers/band";
+import { musicListQuery } from "../../../helpers/music";
 import { createPath } from "../../../helpers/path";
 import { getRouterId, GetRouterArg } from "../../../helpers/router";
 import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
@@ -15,53 +18,10 @@ export const bookmarkPath = ({
       args: {
         where: { userId: getRouterId(router) },
         include: {
-          music: {
-            include: {
-              user: true,
-              participations: participationsQuery,
-              band: true,
-              bookmarks: true,
-              _count: {
-                select: {
-                  bookmarks: true,
-                },
-              },
-            },
-          },
-          band: {
-            include: {
-              _count: {
-                select: {
-                  bookmarks: true,
-                  artists: true,
-                  musics: true,
-                  albums: true,
-                },
-              },
-            },
-          },
-          artist: {
-            include: {
-              bands: true,
-              _count: {
-                select: {
-                  bookmarks: true,
-                },
-              },
-            },
-          },
-          album: {
-            include: {
-              _count: {
-                select: {
-                  musics: true,
-                  bookmarks: true,
-                  artists: true,
-                },
-              },
-              band: true,
-            },
-          },
+          music: musicListQuery(session),
+          band: bandListQuery(session),
+          artist: artistListQuery(session),
+          album: albumListQuery(session),
         },
       },
       options: { page: 0, perPage: 12 },

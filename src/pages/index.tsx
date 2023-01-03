@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { participatedArtistQuery } from "../helpers/participation";
+import { bookmarkQuery } from "../helpers/bookmark";
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -28,12 +29,7 @@ const Home: NextPage = () => {
           },
           band: true,
           user: true,
-          bookmarks: {
-            where: {
-              user: { id: session.data?.user?.id },
-              resourceType: "Music",
-            },
-          },
+          bookmarks: bookmarkQuery({ type: "Music", session }),
           _count: {
             select: {
               bookmarks: true,

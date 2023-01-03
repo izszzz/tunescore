@@ -14,7 +14,7 @@ export const artistPaginationPath = ({
     "pagination.artist",
     {
       args: {
-        ...artistListQuery,
+        ...artistListQuery(session),
         where: {
           name: {
             is: {

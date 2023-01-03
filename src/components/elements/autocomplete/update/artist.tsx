@@ -30,7 +30,7 @@ const ArtistUpdateAutocomplete = ({
   return (
     <DefaultUpdateAutocomplete<Artist, true>
       options={searchArtist.data || []}
-      getOptionLabel={(option) => setLocale(option.name, router) || ""}
+      getOptionLabel={(option) => setLocale(option.name, router)}
       ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
       textFieldProps={{
         label,

@@ -13,19 +13,9 @@ import MusicChip from "../../chip/music";
 import ArtistChip from "../../chip/artist";
 import AlbumChip from "../../chip/album";
 import BookmarkChip from "../../chip/bookmark";
+import { BandListQueryType } from "../../../../helpers/band";
 export interface BandListItemProps {
-  data: Prisma.BandGetPayload<{
-    include: {
-      _count: {
-        select: {
-          bookmarks: true;
-          artists: true;
-          musics: true;
-          albums: true;
-        };
-      };
-    };
-  }>;
+  data: Prisma.BandGetPayload<BandListQueryType>;
 }
 
 const BandListItem = ({ data }: BandListItemProps) => {
@@ -43,11 +33,9 @@ const BandListItem = ({ data }: BandListItemProps) => {
         </ListItemIcon>
         <ListItemText
           primary={
-            <Box component="span" display="flex" alignItems="center">
-              <Typography component="span" variant="h6" mr={3}>
-                {setLocale(data.name, router)}
-              </Typography>
-            </Box>
+            <Typography variant="h6" noWrap>
+              {setLocale(data.name, router)}
+            </Typography>
           }
           secondary={
             <Box component="span" display="flex" alignItems="center">
@@ -60,7 +48,11 @@ const BandListItem = ({ data }: BandListItemProps) => {
                 <MusicChip label={data._count.musics} size="small" />
                 <AlbumChip label={data._count.albums} size="small" />
                 <ArtistChip label={data._count.artists} size="small" />
-                <BookmarkChip label={data._count.bookmarks} size="small" />
+                <BookmarkChip
+                  label={data._count.bookmarks}
+                  size="small"
+                  bookmarked={!!data.bookmarks.length}
+                />
               </Typography>
             </Box>
           }

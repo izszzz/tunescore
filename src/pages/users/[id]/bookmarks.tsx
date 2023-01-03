@@ -11,10 +11,11 @@ import MusicListItem from "../../../components/elements/list/item/music";
 import IndexLayout from "../../../components/layouts/index";
 import AlbumListItem from "../../../components/elements/list/item/album";
 import BandListItem from "../../../components/elements/list/item/band";
-import ArtistListItem from "../../../components/elements/list/item/artist";
 import { useSnackbar } from "notistack";
 import { getRouterId } from "../../../helpers/router";
 import setLocale from "../../../helpers/locale";
+import { match } from "ts-pattern";
+import ArtistListItem from "../../../components/elements/list/item/artist";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();
@@ -50,27 +51,25 @@ const UserBookmarks: NextPage = () => {
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
-          getOptionLabel: (option) => {
-            switch (option.resourceType) {
-              case "Music":
-                return (
-                  (option.music && setLocale(option.music?.title, router)) || ""
-                );
-              case "Album":
-                return (
-                  (option.album && setLocale(option.album?.title, router)) || ""
-                );
-              case "Band":
-                return (
-                  (option.band && setLocale(option.band?.name, router)) || ""
-                );
-              case "Artist":
-                return (
-                  (option.artist && setLocale(option.artist?.name, router)) ||
-                  ""
-                );
-            }
-          },
+          getOptionLabel: (option) =>
+            match(option.resourceType)
+              .with(
+                "Music",
+                () => option.music && setLocale(option.music.title, router)
+              )
+              .with(
+                "Album",
+                () => option.album && setLocale(option.album.title, router)
+              )
+              .with(
+                "Band",
+                () => option.band && setLocale(option.band.name, router)
+              )
+              .with(
+                "Artist",
+                () => option.artist && setLocale(option.artist.name, router)
+              )
+              .exhaustive() || "",
           textFieldProps: {
             onChange: (e) =>
               search.mutate({
@@ -117,20 +116,26 @@ const UserBookmarks: NextPage = () => {
           },
         }}
       >
-        {bookmarkData.data.map((bookmark) => {
-          switch (bookmark.resourceType) {
-            case "Music":
-              return bookmark.music && <MusicListItem data={bookmark.music} />;
-            case "Album":
-              return bookmark.album && <AlbumListItem data={bookmark.album} />;
-            case "Band":
-              return bookmark.band && <BandListItem data={bookmark.band} />;
-            case "Artist":
-              return (
-                bookmark.artist && <ArtistListItem data={bookmark.artist} />
-              );
-          }
-        })}
+        {bookmarkData.data.map((bookmark) =>
+          match(bookmark.resourceType)
+            .with(
+              "Music",
+              () => bookmark.music && <MusicListItem data={bookmark.music} />
+            )
+            .with(
+              "Album",
+              () => bookmark.album && <AlbumListItem data={bookmark.album} />
+            )
+            .with(
+              "Band",
+              () => bookmark.band && <BandListItem data={bookmark.band} />
+            )
+            .with(
+              "Artist",
+              () => bookmark.artist && <ArtistListItem data={bookmark.artist} />
+            )
+            .exhaustive()
+        )}
       </IndexLayout>
     </UserLayout>
   );

@@ -9,28 +9,14 @@ import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
-import { getOwner } from "../../../../helpers/music";
+import { getOwner, MusicListQueryType } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
 
 export interface MusicListItemProps {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      user: true;
-      band: true;
-      participations: {
-        include: { artist: true; roleMap: { include: { role: true } } };
-      };
-      bookmarks: true;
-      _count: {
-        select: {
-          bookmarks: true;
-        };
-      };
-    };
-  }>;
+  data: Prisma.MusicGetPayload<MusicListQueryType>;
 }
 const MusicListItem = ({ data }: MusicListItemProps) => {
   const router = useRouter();
@@ -48,7 +34,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
         <ListItemText
           primary={
             <Box component="span" display="flex" alignItems="center">
-              <Typography variant="h6" mr={3}>
+              <Typography variant="h6" mr={3} noWrap>
                 {setLocale(data.title, router)}
               </Typography>
               <Chip component="span" label={data.type} size="small" />
@@ -57,7 +43,11 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           secondary={
             <Box display="flex" alignItems="center">
               <Owner data={data} />
-              <BookmarkChip label={data._count.bookmarks} size="small" />
+              <BookmarkChip
+                label={data._count.bookmarks}
+                size="small"
+                bookmarked={!!data.bookmarks.length}
+              />
             </Box>
           }
         />
@@ -66,7 +56,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           <img
             width="60"
             height="60"
-            alt={setLocale(data.title, router) || ""}
+            alt={setLocale(data.title, router)}
             src={
               selectSuitableStreamingImage(data.link.streaming)?.image?.size
                 ?.medium || ""

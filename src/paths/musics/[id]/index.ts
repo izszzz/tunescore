@@ -18,7 +18,7 @@ export const musicShowPath = ({
       where: { id: getRouterId(router) },
       include: {
         user: true,
-        band: bandListQuery,
+        band: bandListQuery(session),
         participations: participatedArtistQuery(session),
         pulls: { where: { status: "VOTE" }, include: { vote: true }, take: 3 },
         bookmarks: bookmarkQuery({ type: "Music", session }),

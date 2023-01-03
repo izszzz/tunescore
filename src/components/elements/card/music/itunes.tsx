@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import ResourceIcon from "../../icon/resource";
 import MusicCard from ".";
-import type { ItunesMusic } from "../../../../utils/itunes";
+import type { ItunesMusic } from "../../../../helpers/itunes";
 
 interface MusicItunesCardProps {
   data: ItunesMusic;

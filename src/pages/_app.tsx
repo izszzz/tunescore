@@ -8,6 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { SnackbarProvider } from "notistack";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot } from "recoil";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
@@ -17,7 +18,6 @@ import "@fontsource/roboto/700.css";
 import type { Session } from "next-auth";
 import type { AppRouter } from "../server/router";
 import type { AppType } from "next/app";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
 import { useEffect } from "react";
 

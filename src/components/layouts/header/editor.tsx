@@ -5,8 +5,8 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/router";
-import Header from ".";
 import { getRouterId } from "../../../helpers/router";
+import Header from ".";
 
 interface EditorHeaderProps {
   onSave: () => void;

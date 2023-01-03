@@ -9,11 +9,12 @@ import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
-import { getOwner, MusicListQueryType } from "../../../../helpers/music";
+import { getOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
-import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
+import type { MusicListQueryType } from "../../../../helpers/music";
+import type { Prisma } from "@prisma/client";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<MusicListQueryType>;

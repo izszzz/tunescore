@@ -2,8 +2,9 @@ import { bandListQuery } from "../../../helpers/band";
 import { bookmarkQuery } from "../../../helpers/bookmark";
 import { musicListQuery } from "../../../helpers/music";
 import { createPath } from "../../../helpers/path";
-import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import { GetCurrentUserArg } from "../../../helpers/user";
+import { getRouterId } from "../../../helpers/router";
+import type { GetRouterArg } from "../../../helpers/router";
+import type { GetCurrentUserArg } from "../../../helpers/user";
 
 export const albumShowPath = ({
   router,

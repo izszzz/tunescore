@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
 import AlbumLists from "../../components/elements/list/album";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
-import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { albumPaginationPath } from "../../paths/albums";
+import type { NextPage } from "next";
 
 const Albums: NextPage = () => {
   const router = useRouter();

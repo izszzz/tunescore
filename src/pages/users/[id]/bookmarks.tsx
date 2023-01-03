@@ -1,21 +1,21 @@
 import React from "react";
-import UserLayout from "../../../components/layouts/show/user";
-import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
-import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import { match } from "ts-pattern";
+import { trpc } from "../../../utils/trpc";
 import { userShowPath } from "../../../paths/users/[id]";
 import { bookmarkPath } from "../../../paths/users/[id]/bookmark";
 import MusicListItem from "../../../components/elements/list/item/music";
 import IndexLayout from "../../../components/layouts/index";
 import AlbumListItem from "../../../components/elements/list/item/album";
 import BandListItem from "../../../components/elements/list/item/band";
-import { useSnackbar } from "notistack";
 import { getRouterId } from "../../../helpers/router";
 import setLocale from "../../../helpers/locale";
-import { match } from "ts-pattern";
+import UserLayout from "../../../components/layouts/show/user";
 import ArtistListItem from "../../../components/elements/list/item/artist";
+import type { NextPage } from "next";
+import type { Prisma } from "@prisma/client";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();

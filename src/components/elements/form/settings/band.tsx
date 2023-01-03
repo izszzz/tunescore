@@ -7,8 +7,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import Button from "@mui/material/Button";
 import { trpc } from "../../../../utils/trpc";
-import type { Band, Prisma } from "@prisma/client";
 import { getRouterId } from "../../../../helpers/router";
+import type { Band, Prisma } from "@prisma/client";
 
 interface BandSettingsFormProps {
   data:

@@ -49,7 +49,7 @@ function ParticipationListItem<
       {children(data)}
       <Box display="flex" alignItems="center">
         {data.roleMap.map((roleMap) => (
-          <Chip label={roleMap.role.name} />
+          <Chip key={roleMap.id} label={roleMap.role.name} />
         ))}
       </Box>
     </Box>

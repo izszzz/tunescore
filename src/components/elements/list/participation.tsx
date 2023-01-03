@@ -1,6 +1,7 @@
 import React from "react";
+import ParticipationListItem from "./item/participation";
 import Lists from ".";
-import ParticipationListItem, {
+import type {
   ParticipatedArtist,
   ParticipatedMusic,
   ParticipationListItemProps,

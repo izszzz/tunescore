@@ -7,10 +7,10 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
-import type { Prisma } from "@prisma/client";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import { AlbumListQueryType } from "../../../../helpers/album";
+import type { AlbumListQueryType } from "../../../../helpers/album";
+import type { Prisma } from "@prisma/client";
 
 export interface AlbumListItemProps {
   data: Prisma.AlbumGetPayload<AlbumListQueryType>;

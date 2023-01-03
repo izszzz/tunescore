@@ -1,17 +1,18 @@
-import { Prisma, Tag } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
-import DefaultUpdateAutocomplete, {
+import DefaultUpdateAutocomplete from "./default";
+import type {
   DefaultUpdateAutocompleteProps,
 } from "./default";
+import type { Tag } from "@prisma/client";
 
-interface TagUpdateAutocomplete
-  extends Pick<
+type TagUpdateAutocomplete = Pick<
     DefaultUpdateAutocompleteProps<Tag, true, undefined, undefined>,
     "onChange" | "loading" | "value"
-  > {}
+  >
 const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   const { enqueueSnackbar } = useSnackbar();
   const searchTag = trpc.useMutation("search.tag", {

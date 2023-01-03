@@ -6,11 +6,11 @@ import ReactDiffViewer from "react-diff-viewer";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import PullLayout from "../../../../../components/layouts/show/pull";
 import { trpc } from "../../../../../utils/trpc";
+import { musicShowPath } from "../../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../../helpers/router";
 import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import type { NextPage } from "next";
-import { musicShowPath } from "../../../../../paths/musics/[id]";
-import { getRouterId } from "../../../../../helpers/router";
 
 const Code: NextPage = () => {
   const router = useRouter();

@@ -9,11 +9,11 @@ import { musicRouter } from "../../../prisma/generated/routers/Music.router";
 import { artistsRouter } from "../../../prisma/generated/routers/Artist.router";
 import { bandsRouter } from "../../../prisma/generated/routers/Band.router";
 import { votesRouter } from "../../../prisma/generated/routers/Vote.router";
+import { commentsRouter } from "../../../prisma/generated/routers/Comment.router";
 import { protectedExampleRouter } from "./protected-example-router";
 import { createRouter } from "./context";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
-import { commentsRouter } from "../../../prisma/generated/routers/Comment.router";
 
 export const appRouter = createRouter()
   .transformer(superjson)

@@ -1,5 +1,6 @@
-import { Bookmark, BookmarkType } from "@prisma/client";
-import { GetCurrentUserArg, getCurrentUserId } from "./user";
+import { getCurrentUserId } from "./user";
+import type { Bookmark, BookmarkType } from "@prisma/client";
+import type { GetCurrentUserArg} from "./user";
 
 export const bookmarkQuery = ({
   type,

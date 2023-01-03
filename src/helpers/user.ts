@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import type { useSession } from "next-auth/react";
 
 export type GetCurrentUserArg = ReturnType<typeof useSession>;
 export const getCurrentUser = (session: GetCurrentUserArg) =>

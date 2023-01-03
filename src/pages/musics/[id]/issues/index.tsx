@@ -5,10 +5,10 @@ import IndexLayout from "../../../../components/layouts/index";
 import IssueLists from "../../../../components/elements/list/issue";
 import MusicLayout from "../../../../components/layouts/show/music";
 import { trpc } from "../../../../utils/trpc";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import type { NextPage } from "next";
 import { musicShowPath } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
+import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import type { NextPage } from "next";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();

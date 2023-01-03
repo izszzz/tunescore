@@ -6,16 +6,15 @@ import { trpc } from "../../../../../utils/trpc";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import CommentCard from "../../../../../components/elements/card/comment";
 import ArticleCard from "../../../../../components/elements/card/article";
-import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
-import type { NextPage } from "next";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { Prisma } from "@prisma/client";
 import { musicShowPath } from "../../../../../paths/musics/[id]";
-import { getRouterId, getRouterIssueId } from "../../../../../helpers/router";
+import { getRouterIssueId } from "../../../../../helpers/router";
+import type { NextPage } from "next";
+import type { Prisma } from "@prisma/client";
+import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 
 const Issue: NextPage = () => {
   const router = useRouter();
-  const id = getRouterId(router);
   const issueId = getRouterIssueId(router);
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
@@ -56,7 +55,7 @@ const Issue: NextPage = () => {
     <MusicLayout data={musicData} path={path} activeTab="issues">
       <ArticleCard title={title} body={body} />
       {comments.map((comment) => (
-        <CommentCard data={comment} />
+        <CommentCard key={comment.id} data={comment} />
       ))}
       <CommentForm
         formContainerProps={{

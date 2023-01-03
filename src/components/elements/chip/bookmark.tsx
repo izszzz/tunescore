@@ -1,7 +1,8 @@
-import Chip, { ChipProps } from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import React from "react";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
+import type { ChipProps } from "@mui/material/Chip";
 
 interface BookmarkChip extends Omit<ChipProps, "icon"> {
   bookmarked: boolean;

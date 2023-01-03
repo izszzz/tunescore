@@ -1,15 +1,15 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
+import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import SingleRowForm from "../../../components/elements/form/single_row";
-import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import { getRouterId } from "../../../helpers/router";
-import { useSession } from "next-auth/react";
 import { artistShowPath } from "../../../paths/artists/[id]";
+import type { NextPage } from "next";
+import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();
@@ -26,22 +26,7 @@ const EditArtist: NextPage = () => {
       { onSuccess: () => router.push("/artists") }
     );
   if (!data) return <></>;
-  const artistData = data as Prisma.ArtistGetPayload<{
-    include: {
-      bands: true;
-      composedMusics: {
-        include: { composers: true; lyrists: true; band: true };
-      };
-      writtenMusics: {
-        include: { composers: true; lyrists: true; band: true };
-      };
-      musics: {
-        include: { composers: true; lyrists: true; band: true };
-      };
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
+  const artistData = data as ArtistLayoutProps["data"];
   return (
     <ArtistLayout data={artistData} path={path} activeTab="settings">
       <SingleRowForm

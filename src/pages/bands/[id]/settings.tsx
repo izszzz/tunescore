@@ -1,16 +1,16 @@
 import { useRouter } from "next/router";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandLayout from "../../../components/layouts/show/band";
-import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
 import { bandShowPath } from "../../../paths/bands/[id]";
-import { useSession } from "next-auth/react";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import { getRouterId } from "../../../helpers/router";
+import type { NextPage } from "next";
+import type { BandLayoutProps } from "../../../components/layouts/show/band";
 const BandSettings: NextPage = () => {
   const router = useRouter();
   const id = getRouterId(router);
@@ -30,20 +30,7 @@ const BandSettings: NextPage = () => {
     },
   });
   if (!data) return <></>;
-  const bandData = data as Prisma.BandGetPayload<{
-    include: {
-      artists: true;
-      musics: {
-        include: {
-          band: true;
-          composers: true;
-          lyrists: true;
-        };
-      };
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
+  const bandData = data as BandLayoutProps["data"];
   return (
     <BandLayout data={bandData} path={path} activeTab="settings">
       <SingleRowForm

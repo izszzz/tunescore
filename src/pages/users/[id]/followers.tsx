@@ -1,15 +1,15 @@
 import React from "react";
-import UserLayout from "../../../components/layouts/show/user";
-import UserLists from "../../../components/elements/list/user";
-import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
-import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { trpc } from "../../../utils/trpc";
+import UserLists from "../../../components/elements/list/user";
+import UserLayout from "../../../components/layouts/show/user";
 import { userShowPath } from "../../../paths/users/[id]";
 import { followersPath } from "../../../paths/users/[id]/followers";
 import IndexLayout from "../../../components/layouts/index";
 import { getRouterId } from "../../../helpers/router";
+import type { NextPage } from "next";
+import type { Prisma } from "@prisma/client";
 
 const UserFollowers: NextPage = () => {
   const session = useSession();

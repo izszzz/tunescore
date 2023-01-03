@@ -6,10 +6,10 @@ import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import type { Prisma } from "@prisma/client";
-import { getRouterId } from "../../../../helpers/router";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { getRouterId } from "../../../../helpers/router";
 import StatusIcon from "../../icon/status";
+import type { Prisma } from "@prisma/client";
 
 export interface IssueListItemProps {
   data: Prisma.IssueGetPayload<{

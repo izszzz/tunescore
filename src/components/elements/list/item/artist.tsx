@@ -5,13 +5,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
-import setLocale from "../../../../helpers/locale";
-import ResourceIcon from "../../icon/resource";
-import type { Prisma } from "@prisma/client";
 import Box from "@mui/material/Box";
+import ResourceIcon from "../../icon/resource";
+import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import BandChip from "../../chip/band";
-import { ArtistListQueryType } from "../../../../helpers/artist";
+import type { Prisma } from "@prisma/client";
+import type { ArtistListQueryType } from "../../../../helpers/artist";
 
 export interface ArtistListItemProps {
   data: Prisma.ArtistGetPayload<ArtistListQueryType>;

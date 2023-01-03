@@ -1,10 +1,10 @@
-import type { Prisma } from "@prisma/client";
-import type { NextRouter } from "next/router";
-import { bookmarkQuery } from "./bookmark";
-import { GetCurrentUserArg } from "./user";
 import { match, P } from "ts-pattern";
+import { bookmarkQuery } from "./bookmark";
 import { participatedArtistQuery } from "./participation";
 import setLocale from "./locale";
+import type { GetCurrentUserArg } from "./user";
+import type { NextRouter } from "next/router";
+import type { Prisma } from "@prisma/client";
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;

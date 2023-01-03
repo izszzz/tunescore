@@ -7,19 +7,17 @@ import { useQueryClient } from "react-query";
 import { useSession } from "next-auth/react";
 import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import DangerAlert from "../../../components/elements/alert/delete";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
-import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import type { NextPage } from "next";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
-import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import { getRouterId } from "../../../helpers/router";
+import type { NextPage } from "next";
+import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient();

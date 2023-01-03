@@ -9,47 +9,31 @@ import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import { IconButton } from "@mui/material";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { getOwner } from "../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
+import { getRouterId } from "../../../helpers/router";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locales, Prisma } from "@prisma/client";
-import { useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import { musicShowPath } from "../../../paths/musics/[id]";
-import { getRouterId } from "../../../helpers/router";
-import { bookmarkMutate } from "../../../helpers/bookmark";
+import type { musicShowPath } from "../../../paths/musics/[id]";
+import type { BandListQueryType } from "../../../helpers/band";
+import type { ArtistListQueryType } from "../../../helpers/artist";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<{
     include: {
-      band: {
-        include: {
-          _count: {
-            select: {
-              bookmarks: true;
-              artists: true;
-              musics: true;
-              albums: true;
-            };
-          };
-        };
-      };
+      band:BandListQueryType 
       participations: {
         include: {
-          artist: {
-            include: {
-              bands: true;
-              _count: {
-                select: { bookmarks: true };
-              };
-            };
-          };
+          artist: ArtistListQueryType;
           roleMap: { include: { role: true } };
         };
       };

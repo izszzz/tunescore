@@ -3,8 +3,8 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import LockIcon from "@mui/icons-material/Lock";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
-import type { PullStatus } from "@prisma/client";
 import { match } from "ts-pattern";
+import type { PullStatus } from "@prisma/client";
 interface PullStatusIconProps {
   status: PullStatus;
 }

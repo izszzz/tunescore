@@ -5,8 +5,8 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import { useSession } from "next-auth/react";
 import { useModal } from "../../../hooks/useModal";
-import type { Route } from "nextjs-routes";
 import { getCurrentUser } from "../../../helpers/user";
+import type { Route } from "nextjs-routes";
 
 export interface DefaultTabsProps {
   value: string;

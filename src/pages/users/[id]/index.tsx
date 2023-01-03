@@ -1,10 +1,10 @@
 import { useSession } from "next-auth/react";
-import UserLayout from "../../../components/layouts/show/user";
-import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import UserLayout from "../../../components/layouts/show/user";
 import { trpc } from "../../../utils/trpc";
 import { userShowPath } from "../../../paths/users/[id]";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 interface UserProps {
   data: Prisma.UserGetPayload<{
     include: {

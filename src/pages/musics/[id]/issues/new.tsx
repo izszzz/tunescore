@@ -14,11 +14,11 @@ import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../../utils/trpc";
 import MusicLayout from "../../../../components/layouts/show/music";
+import { musicShowPath } from "../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import type { Issue } from "@prisma/client";
-import { musicShowPath } from "../../../../paths/musics/[id]";
-import { getRouterId } from "../../../../helpers/router";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {

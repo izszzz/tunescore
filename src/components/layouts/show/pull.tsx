@@ -11,11 +11,11 @@ import Box from "@mui/material/Box";
 import { trpc } from "../../../utils/trpc";
 import PullButton from "../../elements/button/group/pull";
 import ScoreButtonGroup from "../../elements/button/group/score";
+import { getRouterId, getRouterPullId } from "../../../helpers/router";
 import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma, PullStatus } from "@prisma/client";
-import { getRouterId, getRouterPullId } from "../../../helpers/router";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{

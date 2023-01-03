@@ -5,11 +5,11 @@ import MusicLayout from "../../../../components/layouts/show/music";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import { trpc } from "../../../../utils/trpc";
+import { musicShowPath } from "../../../../paths/musics/[id]";
+import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
-import { musicShowPath } from "../../../../paths/musics/[id]";
-import { getRouterId } from "../../../../helpers/router";
 
 const Issues: NextPage = () => {
   const router = useRouter();

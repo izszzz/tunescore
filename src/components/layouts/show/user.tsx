@@ -5,15 +5,15 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { trpc } from "../../../utils/trpc";
+import DefaultHeader from "../header/default";
+import { getRouterId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
 import ShowLayout from "./index";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma } from "@prisma/client";
 import type { ShowLayoutProps } from ".";
-import LoadingButton from "@mui/lab/LoadingButton";
-import DefaultHeader from "../header/default";
-import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<{

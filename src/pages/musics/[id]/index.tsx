@@ -7,14 +7,14 @@ import ItunesButton from "../../../components/elements/button/itunes";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
-import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import type { NextPage } from "next";
 import BandLists from "../../../components/elements/list/band";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import ParticipationLists from "../../../components/elements/list/participation";
 import ArtistListItem from "../../../components/elements/list/item/artist";
+import type { NextPage } from "next";
+import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
 const Music: NextPage = () => {
   const router = useRouter();

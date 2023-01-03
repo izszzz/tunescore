@@ -2,23 +2,26 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
+import { trpc } from "../../../utils/trpc";
+import { getRouterId } from "../../../helpers/router";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import { useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import { bandShowPath } from "../../../paths/bands/[id]";
-import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
-import { bookmarkMutate } from "../../../helpers/bookmark";
+import type { bandShowPath } from "../../../paths/bands/[id]";
+import type { ArtistListQueryType } from "../../../helpers/artist";
+import type { MusicListQueryType } from "../../../helpers/music";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<{
     include: {
+      artists: ArtistListQueryType;
+      musics: MusicListQueryType;
       bookmarks: true;
       tagMaps: { include: { tag: true } };
     };

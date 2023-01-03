@@ -2,50 +2,27 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
+import { trpc } from "../../../utils/trpc";
+import { getRouterId } from "../../../helpers/router";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import { useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import { artistShowPath } from "../../../paths/artists/[id]";
-import { getRouterId } from "../../../helpers/router";
-import { bookmarkMutate } from "../../../helpers/bookmark";
+import type { artistShowPath } from "../../../paths/artists/[id]";
+import type { BandListQueryType } from "../../../helpers/band";
+import type { MusicListQueryType } from "../../../helpers/music";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<{
     include: {
-      bands: {
-        include: {
-          _count: {
-            select: {
-              bookmarks: true;
-              artists: true;
-              musics: true;
-              albums: true;
-            };
-          };
-        };
-      };
+      bands: BandListQueryType;
       participations: {
         include: {
-          music: {
-            include: {
-              user: true;
-              band: true;
-              participations: {
-                include: { artist: true; roleMap: { include: { role: true } } };
-              };
-              bookmarks: true;
-              _count: {
-                select: {
-                  bookmarks: true;
-                };
-              };
-            };
-          };
+          music: MusicListQueryType;
           roleMap: { include: { role: true } };
         };
       };

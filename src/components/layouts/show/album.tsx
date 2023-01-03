@@ -2,58 +2,27 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
+import { useQueryClient } from "react-query";
+import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
+import { trpc } from "../../../utils/trpc";
+import { getRouterId } from "../../../helpers/router";
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import { useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import { albumShowPath } from "../../../paths/albums/[id]";
-import { getRouterId } from "../../../helpers/router";
-import { bookmarkMutate } from "../../../helpers/bookmark";
+import type { albumShowPath } from "../../../paths/albums/[id]";
+import type { BandListQueryType } from "../../../helpers/band";
+import type { ArtistListQueryType } from "../../../helpers/artist";
+import type { MusicListQueryType } from "../../../helpers/music";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<{
     include: {
-      band: {
-        include: {
-          _count: {
-            select: {
-              bookmarks: true;
-              artists: true;
-              musics: true;
-              albums: true;
-            };
-          };
-        };
-      };
-      musics: {
-        include: {
-          user: true;
-          composers: true;
-          lyrists: true;
-          band: true;
-          artists: true;
-          bookmarks: true;
-          _count: {
-            select: {
-              bookmarks: true;
-            };
-          };
-        };
-      };
-      artists: {
-        include: {
-          bands: true;
-          _count: {
-            select: {
-              bookmarks: true;
-            };
-          };
-        };
-      };
+      band: BandListQueryType;
+      musics: MusicListQueryType;
+      artists: ArtistListQueryType;
       bookmarks: true;
       tagMaps: { include: { tag: true } };
     };

@@ -8,12 +8,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { useRouter } from "next/router";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
-import type { Prisma } from "@prisma/client";
 import MusicChip from "../../chip/music";
 import ArtistChip from "../../chip/artist";
 import AlbumChip from "../../chip/album";
 import BookmarkChip from "../../chip/bookmark";
-import { BandListQueryType } from "../../../../helpers/band";
+import type { BandListQueryType } from "../../../../helpers/band";
+import type { Prisma } from "@prisma/client";
 export interface BandListItemProps {
   data: Prisma.BandGetPayload<BandListQueryType>;
 }

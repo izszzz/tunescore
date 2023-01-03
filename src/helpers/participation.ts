@@ -1,6 +1,6 @@
 import { artistListQuery } from "./artist";
 import { musicListQuery } from "./music";
-import { GetCurrentUserArg } from "./user";
+import type { GetCurrentUserArg } from "./user";
 
 export const participatedArtistQuery = (session: GetCurrentUserArg) => ({
   include: {

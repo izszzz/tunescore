@@ -12,8 +12,8 @@ import Menu from "@mui/material/Menu";
 import Grid from "@mui/material/Grid";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
-import Header from ".";
 import ThemeToggleButton from "../../elements/button/toggle/theme";
+import Header from ".";
 
 const DefaultHeader = () => {
   const { data: session } = useSession();

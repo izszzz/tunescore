@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { trpc } from "../../utils/trpc";
-import type { NextPage } from "next";
 import UserLists from "../../components/elements/list/user";
+import type { NextPage } from "next";
 
 const Users: NextPage = () => {
   const router = useRouter();

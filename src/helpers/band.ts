@@ -1,5 +1,5 @@
 import { bookmarkQuery } from "./bookmark";
-import { GetCurrentUserArg } from "./user";
+import type { GetCurrentUserArg } from "./user";
 
 export type BandListQueryType = {
   include: {

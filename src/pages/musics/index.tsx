@@ -5,9 +5,9 @@ import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
+import { musicPaginationPath } from "../../paths/musics";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
-import { musicPaginationPath } from "../../paths/musics";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

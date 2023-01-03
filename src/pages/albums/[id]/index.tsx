@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
-import type { NextPage } from "next";
-import BandLists from "../../../components/elements/list/band";
-import ArtistLists from "../../../components/elements/list/artist";
 import Typography from "@mui/material/Typography";
-import AlbumLayout, {
-  AlbumLayoutProps,
-} from "../../../components/layouts/show/album";
+import ArtistLists from "../../../components/elements/list/artist";
+import BandLists from "../../../components/elements/list/band";
+import { trpc } from "../../../utils/trpc";
+import AlbumLayout from "../../../components/layouts/show/album";
 import { albumShowPath } from "../../../paths/albums/[id]";
 import MusicLists from "../../../components/elements/list/music";
+import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
+import type { NextPage } from "next";
 
 const Album: NextPage = () => {
   const router = useRouter();

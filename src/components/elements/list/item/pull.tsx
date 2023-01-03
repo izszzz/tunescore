@@ -8,8 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PullStatusIcon from "../../icon/pull/status";
-import type { Prisma } from "@prisma/client";
 import { getRouterId } from "../../../../helpers/router";
+import type { Prisma } from "@prisma/client";
 export interface PullListItemProps {
   data: Prisma.PullGetPayload<{
     include: {

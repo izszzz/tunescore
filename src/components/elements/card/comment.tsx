@@ -1,10 +1,10 @@
 import React from "react";
-import type { Comment, Prisma } from "@prisma/client";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import dynamic from "next/dynamic";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
+import type { Prisma } from "@prisma/client";
 const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
 });

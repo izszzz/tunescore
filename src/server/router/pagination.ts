@@ -7,14 +7,14 @@ import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findMany
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
-import { createRouter } from "./context";
-import type { Prisma } from "@prisma/client";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
-import { MusicListQueryType } from "../../helpers/music";
-import { BandListQueryType } from "../../helpers/band";
-import { ArtistListQueryType } from "../../helpers/artist";
-import { AlbumListQueryType } from "../../helpers/album";
+import { createRouter } from "./context";
+import type { MusicListQueryType } from "../../helpers/music";
+import type { BandListQueryType } from "../../helpers/band";
+import type { ArtistListQueryType } from "../../helpers/artist";
+import type { AlbumListQueryType } from "../../helpers/album";
+import type { Prisma } from "@prisma/client";
 
 export const paginationRouter = createRouter()
   .query("music", {
@@ -26,21 +26,7 @@ export const paginationRouter = createRouter()
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
-        Prisma.MusicGetPayload<{
-          include: {
-            user: true;
-            participations: {
-              include: { artist: true; roleMap: { include: { role: true } } };
-            };
-            band: true;
-            bookmarks: true;
-            _count: {
-              select: {
-                bookmarks: true;
-              };
-            };
-          };
-        }>,
+        Prisma.MusicGetPayload<MusicListQueryType>,
         Prisma.MusicFindManyArgs
       >(ctx.prisma.music, args);
     },
@@ -54,17 +40,7 @@ export const paginationRouter = createRouter()
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
-        Prisma.ArtistGetPayload<{
-          include: {
-            bands: true;
-            bookmarks: true;
-            _count: {
-              select: {
-                bookmarks: true;
-              };
-            };
-          };
-        }>,
+        Prisma.ArtistGetPayload<ArtistListQueryType>,
         Prisma.ArtistFindManyArgs
       >(ctx.prisma.artist, args);
     },
@@ -78,19 +54,7 @@ export const paginationRouter = createRouter()
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
-        Prisma.BandGetPayload<{
-          include: {
-            bookmarks: true;
-            _count: {
-              select: {
-                bookmarks: true;
-                artists: true;
-                musics: true;
-                albums: true;
-              };
-            };
-          };
-        }>,
+        Prisma.BandGetPayload<BandListQueryType>,
         Prisma.BandFindManyArgs
       >(ctx.prisma.band, args);
     },
@@ -104,19 +68,7 @@ export const paginationRouter = createRouter()
       const { args, options } = input;
       const paginate = createPaginator(options);
       return await paginate<
-        Prisma.AlbumGetPayload<{
-          include: {
-            bookmarks: true;
-            band: true;
-            _count: {
-              select: {
-                bookmarks: true;
-                artists: true;
-                musics: true;
-              };
-            };
-          };
-        }>,
+        Prisma.AlbumGetPayload<AlbumListQueryType>,
         Prisma.AlbumFindManyArgs
       >(ctx.prisma.album, args);
     },

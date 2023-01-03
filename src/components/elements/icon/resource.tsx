@@ -5,8 +5,8 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AlbumIcon from "@mui/icons-material/Album";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import type { SvgIconProps } from "@mui/material/SvgIcon";
 import { match } from "ts-pattern";
+import type { SvgIconProps } from "@mui/material/SvgIcon";
 
 export interface ResourceIconProps extends SvgIconProps {
   resource: "ARTIST" | "BAND" | "MUSIC" | "ALBUM" | "USER" | "TAG";

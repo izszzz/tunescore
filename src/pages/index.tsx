@@ -1,13 +1,13 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import Link from "next/link";
+import { Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 import DefaultMusicCard from "../components/elements/card/music/default";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
-import type { NextPage } from "next";
-import { Typography } from "@mui/material";
-import { useSession } from "next-auth/react";
 import { participatedArtistQuery } from "../helpers/participation";
 import { bookmarkQuery } from "../helpers/bookmark";
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const session = useSession();

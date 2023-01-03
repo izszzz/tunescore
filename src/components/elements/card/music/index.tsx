@@ -1,8 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
-import ResourceIcon from "../../icon/resource";
 import { useDarkMode } from "usehooks-ts";
+import ResourceIcon from "../../icon/resource";
 
 export interface MusicCardProps {
   title: string | React.ReactNode;

@@ -1,6 +1,8 @@
 import { createPath } from "../../../helpers/path";
-import { getRouterId, GetRouterArg } from "../../../helpers/router";
-import { GetCurrentUserArg, getCurrentUserId } from "../../../helpers/user";
+import { getRouterId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
+import type { GetRouterArg } from "../../../helpers/router";
+import type { GetCurrentUserArg} from "../../../helpers/user";
 export const followersPath = ({
   router,
   session,

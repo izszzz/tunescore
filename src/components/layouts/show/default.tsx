@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 import React from "react";
+import Chip from "@mui/material/Chip";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import DefaultHeader from "../header/default";
+import ResourceIcon from "../../elements/icon/resource";
 import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
 import type { BookmarkToggleButtonProps } from "../../elements/button/toggle/bookmark";
-import { Prisma } from "@prisma/client";
-import Chip from "@mui/material/Chip";
-import ResourceIcon from "../../elements/icon/resource";
+import type { Prisma } from "@prisma/client";
 
 export interface DefaultShowLayoutProps extends ShowLayoutProps {
   bookmarkToggleButtonProps: BookmarkToggleButtonProps;

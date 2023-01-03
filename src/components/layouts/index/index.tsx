@@ -9,11 +9,11 @@ import { useSession } from "next-auth/react";
 import SingleColumnLayout from "../single_column";
 import { useModal } from "../../../hooks/useModal";
 import CustomAutocomplete from "../../../components/elements/autocomplete/search";
+import { getCurrentUser } from "../../../helpers/user";
 import type { CustomAutocompleteProps } from "../../../components/elements/autocomplete/search";
 import type { SingleColumnLayoutProps } from "../single_column";
 import type { Route } from "nextjs-routes";
 import type { PaginatedResult } from "prisma-pagination";
-import { getCurrentUser } from "../../../helpers/user";
 
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {

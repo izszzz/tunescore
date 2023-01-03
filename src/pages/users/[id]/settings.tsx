@@ -1,14 +1,12 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
-import UserLayout, {
-  UserLayoutProps,
-} from "../../../components/layouts/show/user";
-import type { NextPage } from "next";
+import UserLayout from "../../../components/layouts/show/user";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import DeleteAlert from "../../../components/elements/alert/delete";
 import { userShowPath } from "../../../paths/users/[id]";
+import type { UserLayoutProps } from "../../../components/layouts/show/user";
+import type { NextPage } from "next";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter();

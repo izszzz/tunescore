@@ -1,7 +1,7 @@
 import { bandListQuery } from "../../helpers/band";
 import { createPath } from "../../helpers/path";
-import { GetRouterArg } from "../../helpers/router";
-import { GetCurrentUserArg } from "../../helpers/user";
+import type { GetRouterArg } from "../../helpers/router";
+import type { GetCurrentUserArg } from "../../helpers/user";
 
 export const bandPaginationPath = ({
   router,

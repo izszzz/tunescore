@@ -10,9 +10,9 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/router";
+import { getRouterId } from "../../../helpers/router";
 import type { Prisma } from "@prisma/client";
 import type { IconButtonProps } from "@mui/material/IconButton";
-import { getRouterId } from "../../../helpers/router";
 
 export interface VoteAlertProps {
   data: Prisma.PullGetPayload<{

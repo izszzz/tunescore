@@ -5,10 +5,10 @@ import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBa
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
-import { createRouter } from "./context";
 import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
+import { createRouter } from "./context";
 
 export const searchRouter = createRouter()
   .mutation("music", {

@@ -4,27 +4,27 @@ import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
 import DefaultUpdateAutocomplete from "./default";
 import type { DefaultUpdateAutocompleteProps } from "./default";
-import type { Tag } from "@prisma/client";
+import type { Role } from "@prisma/client";
 
-type TagUpdateAutocomplete = Pick<
-  DefaultUpdateAutocompleteProps<Tag, true, undefined, undefined>,
+export type RoleUpdateAutocompleteProps = Pick<
+  DefaultUpdateAutocompleteProps<Role, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
-const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
+const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.useMutation("search.tag", {
     onError: () => {
-      enqueueSnackbar("artist.search error");
+      enqueueSnackbar("tag.search error");
     },
   });
   return (
-    <DefaultUpdateAutocomplete<Tag, true>
+    <DefaultUpdateAutocomplete<Role, true>
       {...props}
       options={search.data || []}
       getOptionLabel={(option) => option.name || ""}
       ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
       textFieldProps={{
-        label: "tags",
+        label: "tag",
         margin: "dense",
         onChange: (e) =>
           search.mutate({
@@ -41,4 +41,4 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   );
 };
 
-export default TagUpdateAutocomplete;
+export default RoleUpdateAutocomplete;

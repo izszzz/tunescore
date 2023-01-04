@@ -3,9 +3,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { useRouter } from "next/router";
+import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import MusicChip from "../../chip/music";
@@ -38,23 +38,16 @@ const BandListItem = ({ data }: BandListItemProps) => {
             </Typography>
           }
           secondary={
-            <Box component="span" display="flex" alignItems="center">
-              <Typography
-                component="span"
-                mr={1}
-                variant="body2"
-                color="text.subprimary"
-              >
-                <MusicChip label={data._count.musics} size="small" />
-                <AlbumChip label={data._count.albums} size="small" />
-                <ArtistChip label={data._count.artists} size="small" />
-                <BookmarkChip
-                  label={data._count.bookmarks}
-                  size="small"
-                  bookmarked={!!data.bookmarks.length}
-                />
-              </Typography>
-            </Box>
+            <Stack direction="row" spacing={1}>
+              <MusicChip label={data._count.musics} size="small" />
+              <AlbumChip label={data._count.albums} size="small" />
+              <ArtistChip label={data._count.artists} size="small" />
+              <BookmarkChip
+                label={data._count.bookmarks}
+                size="small"
+                bookmarked={!!data.bookmarks.length}
+              />
+            </Stack>
           }
         />
       </ListItemButton>

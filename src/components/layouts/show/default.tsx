@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
 import DefaultHeader from "../header/default";
 import ResourceIcon from "../../elements/icon/resource";
@@ -35,14 +36,17 @@ const DefaultShowLayout = ({
             </Box>
             <BookmarkToggleButton {...bookmarkToggleButtonProps} />
           </Box>
-          {tagMaps.map((tagMap) => (
-            <Chip
-              key={tagMap.id}
-              icon={<ResourceIcon resource="TAG" />}
-              label={tagMap.tag.name}
-              variant="outlined"
-            />
-          ))}
+          <Stack direction="row" spacing={1}>
+            {tagMaps.map((tagMap) => (
+              <Chip
+                key={tagMap.id}
+                icon={<ResourceIcon resource="TAG" />}
+                label={tagMap.tag.name}
+                variant="outlined"
+                size="small"
+              />
+            ))}
+          </Stack>
         </Box>
       }
     />

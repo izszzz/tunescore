@@ -5,7 +5,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import ResourceIcon from "../../icon/resource";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
@@ -39,7 +39,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
             </Typography>
           }
           secondary={
-            <Box display="flex">
+            <Stack direction="row" spacing={1}>
               {data.bands[0] && (
                 <BandChip
                   label={setLocale(data.bands[0].name, router)}
@@ -51,7 +51,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
                 size="small"
                 bookmarked={!!data.bookmarks.length}
               />
-            </Box>
+            </Stack>
           }
         />
       </ListItemButton>

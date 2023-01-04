@@ -5,6 +5,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
+import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import BookmarkChip from "../../chip/bookmark";
@@ -38,14 +39,14 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
             </Typography>
           }
           secondary={
-            <>
+            <Stack direction="row" spacing={1}>
               <BookmarkChip
                 label={data._count.bookmarks}
                 size="small"
                 bookmarked={!!data.bookmarks.length}
               />
               <MusicChip label={data._count.musics} size="small" />
-            </>
+            </Stack>
           }
         />
       </ListItemButton>

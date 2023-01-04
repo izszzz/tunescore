@@ -272,6 +272,7 @@ model Participation{
   musicId String @db.ObjectId
 
   roleMap RoleMap[]
+  @@unique([artistId, musicId])
 }
 
 model Role{

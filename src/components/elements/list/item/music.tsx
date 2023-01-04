@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import { getOwner } from "../../../../helpers/music";
@@ -42,14 +43,14 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
             </Box>
           }
           secondary={
-            <Box display="flex" alignItems="center">
+            <Stack direction="row" spacing={1}>
               <Owner data={data} />
               <BookmarkChip
                 label={data._count.bookmarks}
                 size="small"
                 bookmarked={!!data.bookmarks.length}
               />
-            </Box>
+            </Stack>
           }
         />
         {data.link?.streaming && (

@@ -3,75 +3,83 @@ import { useRouter } from "next/router";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
+import { useSnackbar } from "notistack";
 import setLocale from "../../../../helpers/locale";
 import { handleChangeAutocomplete } from "../../autocomplete/update/default";
 import CustomAutocomplete from "../../autocomplete/search";
+import { trpc } from "../../../../utils/trpc";
+import ResourceIcon from "../../icon/resource";
+import ArtistListItem from "../../list/item/artist";
+import CloseIconButton from "../../button/icon/close";
+import RoleUpdateAutocomplete from "../../autocomplete/update/role";
+import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
+import type { ParticipatedArtist } from "../../../../helpers/participation";
 import type { Artist } from "@prisma/client";
-import type { TextFieldProps } from "@mui/material/TextField";
-import type { AutocompleteProps } from "@mui/material/Autocomplete";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 
 interface ArtistsUpdateFormProps<T> {
   data: T[];
-  autocompleteProps: Omit<
-    AutocompleteProps<T, false, false, false>,
-    "renderInput"
-  > & { textFieldProps: TextFieldProps };
+  loading: boolean;
   loadingButtonProps: Omit<LoadingButtonProps, "onClick"> & {
-    onClick: (value: T | undefined) => void;
+    onClick: (value: Artist | undefined) => void;
   };
-  onDestroy: (value: T) => void;
+  roleUpdateAutocompleteProps: RoleUpdateAutocompleteProps;
+  onDestroy: (value: ParticipatedArtist) => void;
 }
 function ArtistsUpdateForm({
   data,
-  autocompleteProps,
+  loading,
   loadingButtonProps,
+  roleUpdateAutocompleteProps,
   onDestroy,
-}: ArtistsUpdateFormProps<Artist>) {
-  const [artist, setArtist] = useState<Artist>();
-  const router = useRouter();
+}: ArtistsUpdateFormProps<ParticipatedArtist>) {
+  const { enqueueSnackbar } = useSnackbar(),
+    [artist, setArtist] = useState<Artist>(),
+    router = useRouter(),
+    search = trpc.useMutation("search.artist", {
+      onError: () => {
+        enqueueSnackbar("artist.search error");
+      },
+    });
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((artist) => (
-              <TableRow key={artist.id}>
-                <TableCell>
-                  <IconButton onClick={() => onDestroy(artist)}>
-                    <CloseIcon />
-                  </IconButton>
-                </TableCell>
-                <TableCell />
-                <TableCell>{setLocale(artist.name, router)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {data.map((participation) => (
+        <Grid container key={participation.id}>
+          <Grid item xs={8}>
+            <ArtistListItem data={participation.artist} />
+          </Grid>
+          <Grid item xs={3}>
+            <RoleUpdateAutocomplete
+              {...roleUpdateAutocompleteProps}
+              loading={loading}
+              value={participation.roleMap.map((roleMap) => roleMap.role)}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <CloseIconButton
+              disabled={loading}
+              onClick={() => onDestroy(participation)}
+            />
+          </Grid>
+        </Grid>
+      ))}
       <Box>
         <Grid container spacing={1} my={1}>
           <Grid item xs={10}>
             <CustomAutocomplete
-              {...autocompleteProps}
+              options={search.data || []}
+              loading={loading}
+              textFieldProps={{ label: "artist" }}
+              getOptionLabel={(option) => setLocale(option.name, router)}
+              ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),
               })}
@@ -80,6 +88,7 @@ function ArtistsUpdateForm({
           <Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
             <LoadingButton
               {...loadingButtonProps}
+              loading={search.isLoading || loading}
               type="button"
               variant="outlined"
               disabled={!artist}

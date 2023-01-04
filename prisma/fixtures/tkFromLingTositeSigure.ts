@@ -6,8 +6,8 @@ export const TkFromLingTositeSigure = async () =>
   await prisma.band.create({
     data: {
       name: {
-        ja: "凛として時雨",
-        en: "Ling tosite Sigure",
+        ja: "TK from 凛として時雨",
+        en: "TK Ling tosite Sigure",
       },
       musics: {
         connect: [{ id: (await firstDeath()).id }],

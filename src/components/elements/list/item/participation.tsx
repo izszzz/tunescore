@@ -1,19 +1,9 @@
-import { Box, Chip } from "@mui/material";
-import type { MusicListQueryType } from "../../../../helpers/music";
-import type { ArtistListQueryType } from "../../../../helpers/artist";
-import type { Prisma } from "@prisma/client";
-export type ParticipatedArtist = Prisma.ParticipationGetPayload<{
-  include: {
-    artist: ArtistListQueryType;
-    roleMap: { include: { role: true } };
-  };
-}>;
-export type ParticipatedMusic = Prisma.ParticipationGetPayload<{
-  include: {
-    music: MusicListQueryType;
-    roleMap: { include: { role: true } };
-  };
-}>;
+import { Box, Chip, Stack } from "@mui/material";
+import type {
+  ParticipatedArtist,
+  ParticipatedMusic,
+} from "../../../../helpers/participation";
+
 export interface ParticipationListItemProps<
   T extends ParticipatedArtist | ParticipatedMusic
 > {
@@ -26,11 +16,11 @@ function ParticipationListItem<
   return (
     <Box display="flex">
       {children(data)}
-      <Box display="flex" alignItems="center">
+      <Stack direction="row" spacing={1}>
         {data.roleMap.map((roleMap) => (
           <Chip key={roleMap.id} label={roleMap.role.name} />
         ))}
-      </Box>
+      </Stack>
     </Box>
   );
 }

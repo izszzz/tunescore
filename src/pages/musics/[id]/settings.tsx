@@ -17,41 +17,37 @@ import { musicShowPath } from "../../../paths/musics/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import { getRouterId } from "../../../helpers/router";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
 const SettingsMusic: NextPage = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const session = useSession();
-  const { enqueueSnackbar } = useSnackbar();
-  const id = getRouterId(router);
-  const path = musicShowPath({ router, session });
-  const query = path[1];
-  const { data } = trpc.useQuery(path);
-  const destroy = trpc.useMutation("music.deleteOneMusic", {
-    onSuccess: () => {
-      enqueueSnackbar("music.destroy success");
-      router.push("/musics");
-    },
-    onError: () => {
-      enqueueSnackbar("music.destroy error");
-    },
-  });
-  const update = trpc.useMutation(`music.updateOneMusic`, {
-    onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
-      enqueueSnackbar("music.update success");
-    },
-    onError: () => {
-      enqueueSnackbar("music.update error");
-    },
-  });
-  const searchArtist = trpc.useMutation("search.artist", {
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
-  });
+  const queryClient = useQueryClient(),
+    router = useRouter(),
+    session = useSession(),
+    { enqueueSnackbar } = useSnackbar(),
+    id = getRouterId(router),
+    path = musicShowPath({ router, session }),
+    query = path[1],
+    { data } = trpc.useQuery(path),
+    destroy = trpc.useMutation("music.deleteOneMusic", {
+      onSuccess: () => {
+        enqueueSnackbar("music.destroy success");
+        router.push("/musics");
+      },
+      onError: () => {
+        enqueueSnackbar("music.destroy error");
+      },
+    }),
+    update = trpc.useMutation(`music.updateOneMusic`, {
+      onSuccess: (data) => {
+        queryClient.setQueryData<typeof data>(path, data);
+        enqueueSnackbar("music.update success");
+      },
+      onError: () => {
+        enqueueSnackbar("music.update error");
+      },
+    });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
@@ -84,6 +80,61 @@ const SettingsMusic: NextPage = () => {
               ...query,
               data: { band: { connect: { id: details?.option.id } } },
             }),
+        }}
+      />
+      <ArtistsUpdateForm
+        data={musicData.participations}
+        loading={update.isLoading}
+        onDestroy={({ id }) =>
+          update.mutate({
+            ...query,
+            data: { participations: { delete: { id } } },
+          })
+        }
+        loadingButtonProps={{
+          onClick: (data) =>
+            data &&
+            update.mutate({
+              ...query,
+              data: {
+                participations: {
+                  create: { artist: { connect: { id: data.id } } },
+                },
+              },
+            }),
+        }}
+        roleUpdateAutocompleteProps={{
+          onChange: {
+            onSelect: (_e, _v, _r, details) =>
+              details &&
+              update.mutate({
+                ...query,
+                data: {
+                  tagMaps: {
+                    create: {
+                      tag: { connect: { id: details.option.id } },
+                      resourceType: "Music",
+                    },
+                  },
+                },
+              }),
+            onRemove: (_e, _v, _r, details) =>
+              details &&
+              update.mutate({
+                ...query,
+                data: {
+                  tagMaps: {
+                    delete: {
+                      resourceId_tagId_resourceType: {
+                        resourceType: "Music",
+                        resourceId: id,
+                        tagId: details.option.id,
+                      },
+                    },
+                  },
+                },
+              }),
+          },
         }}
       />
       <TagUpdateAutocomplete

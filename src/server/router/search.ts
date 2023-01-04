@@ -8,6 +8,7 @@ import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPu
 import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
+import { RoleFindManySchema } from "../../../prisma/generated/schemas/findManyRole.schema";
 import { createRouter } from "./context";
 
 export const searchRouter = createRouter()
@@ -57,6 +58,12 @@ export const searchRouter = createRouter()
     input: TagFindManySchema,
     async resolve({ ctx, input }) {
       return ctx.prisma.tag.findMany(input);
+    },
+  })
+  .mutation("role", {
+    input: RoleFindManySchema,
+    async resolve({ ctx, input }) {
+      return ctx.prisma.role.findMany(input);
     },
   })
   .mutation("bookmark", {

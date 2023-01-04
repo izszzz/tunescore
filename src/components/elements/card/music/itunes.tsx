@@ -5,9 +5,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Close from "@mui/icons-material/Close";
 import ResourceIcon from "../../icon/resource";
+import CloseIconButton from "../../button/icon/close";
 import MusicCard from ".";
 import type { ItunesMusic } from "../../../../helpers/itunes";
 
@@ -70,9 +69,7 @@ const MusicItunesCard = ({ size, data, onClick }: MusicItunesCardProps) => {
             <Typography variant="caption">{data.artistName}</Typography>
           </Box>
           <Box display="flex" alignItems="center">
-            <IconButton onClick={() => onClick && onClick(data)}>
-              <Close />
-            </IconButton>
+            <CloseIconButton onClick={() => onClick && onClick(data)} />
           </Box>
         </CardContent>
       </Card>

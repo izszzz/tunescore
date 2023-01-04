@@ -16,6 +16,7 @@ import SingleRowForm from "../../../components/elements/form/single_row";
 import { musicShowPath } from "../../../paths/musics/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import { getRouterId } from "../../../helpers/router";
+import { convertAffiliateLink } from "../../../helpers/itunes";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -128,6 +129,7 @@ const SettingsMusic: NextPage = () => {
         term={setLocale(data.title, router)}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
+          value &&
           update.mutate({
             ...query,
             data: {
@@ -135,12 +137,12 @@ const SettingsMusic: NextPage = () => {
                 streaming: {
                   ...data.link?.streaming,
                   itunes: {
-                    id: value?.trackViewUrl,
+                    id: convertAffiliateLink(value.trackViewUrl).toString(),
                     image: {
                       size: {
-                        small: value?.artworkUrl30,
-                        medium: value?.artworkUrl60,
-                        large: value?.artworkUrl100,
+                        small: value.artworkUrl30,
+                        medium: value.artworkUrl60,
+                        large: value.artworkUrl100,
                       },
                     },
                   },

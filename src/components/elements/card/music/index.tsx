@@ -19,7 +19,6 @@ const MusicCard = ({ title, image, size, onClick }: MusicCardProps) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             width={size}
-            height={size}
             alt="image"
             src={image}
             style={{ borderRadius: "5px" }}

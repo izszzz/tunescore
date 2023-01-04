@@ -37,7 +37,7 @@ function MusicYoutubeCard<
         <Box>
           <MusicCard
             title={
-              <Typography variant="caption" noWrap>
+              <Typography variant="caption" display="block" noWrap>
                 {data?.snippet?.title}
               </Typography>
             }

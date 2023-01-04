@@ -37,18 +37,16 @@ const MusicItunesCard = ({ size, data, onClick }: MusicItunesCardProps) => {
           </>
         }
       >
-        <Box>
-          <MusicCard
-            title={
-              <Typography variant="caption" noWrap>
-                {data.trackCensoredName}
-              </Typography>
-            }
-            image={data.artworkUrl100}
-            size="100px"
-            onClick={() => onClick && onClick(data)}
-          />
-        </Box>
+        <MusicCard
+          title={
+            <Typography variant="caption" display="block" noWrap>
+              {data.trackCensoredName}
+            </Typography>
+          }
+          image={data.artworkUrl100}
+          size="100px"
+          onClick={() => onClick && onClick(data)}
+        />
       </Tooltip>
     );
   if (size === "large")

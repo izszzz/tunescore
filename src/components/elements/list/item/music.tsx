@@ -55,7 +55,6 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
         {data.link?.streaming && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            width="60"
             height="60"
             alt={setLocale(data.title, router)}
             src={

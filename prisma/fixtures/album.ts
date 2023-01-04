@@ -48,8 +48,8 @@ export const AlbumHasMusics = async () =>
   prisma.album.create({
     data: {
       title: {
-        ja: "アーティストのアルバム",
-        en: "artist owned by band",
+        ja: "曲をもつアルバム",
+        en: "album has musics",
       },
       musics: {
         connect: [

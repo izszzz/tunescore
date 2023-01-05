@@ -1,47 +1,65 @@
 import React from "react";
+import { useRouter } from "next/router";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import CardActionArea from "@mui/material/CardActionArea";
-import { useDarkMode } from "usehooks-ts";
-import ResourceIcon from "../../icon/resource";
+import { getMusicOwner } from "../../../../helpers/music";
+import setLocale from "../../../../helpers/locale";
+import IndexChip from "../../chip";
+import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
+import BookmarkChip from "../../chip/bookmark";
+import SquareMusicCard from "./square";
+import type { Prisma } from "@prisma/client";
 
-export interface MusicCardProps {
-  title: string | React.ReactNode;
-  image: string | null | undefined;
-  size: string;
-  onClick?: () => void;
+interface MusicCard {
+  data: Prisma.MusicGetPayload<{
+    include: {
+      user: true;
+      band: true;
+      participations: {
+        include: { artist: true; roleMap: { include: { role: true } } };
+      };
+      bookmarks: true;
+      _count: {
+        select: {
+          bookmarks: true;
+        };
+      };
+    };
+  }>;
 }
-const MusicCard = ({ title, image, size, onClick }: MusicCardProps) => {
-  const { isDarkMode } = useDarkMode();
+const MusicCard = ({ data }: MusicCard) => {
+  const router = useRouter();
+  const { type, owner } = getMusicOwner(data, router);
   return (
-    <Box width={size} onClick={() => onClick && onClick()}>
-      <CardActionArea sx={{ borderRadius: "5px" }}>
-        {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            width={size}
-            alt="image"
-            src={image}
-            style={{ borderRadius: "5px" }}
-          />
-        ) : (
-          <Box
-            width={size}
-            height={size}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            bgcolor={isDarkMode ? "grey.800" : "grey.300"}
-            borderRadius="5px"
-          >
-            <ResourceIcon
-              resource="MUSIC"
-              sx={{ fontSize: "60px", color: "grey" }}
-            />
+    <SquareMusicCard
+      size="200px"
+      title={
+        <>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="h6" noWrap>
+              {setLocale(data.title, router)}
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <BookmarkChip
+                label={data._count.bookmarks}
+                size="small"
+                bookmarked={!!data.bookmarks.length}
+              />
+            </Box>
           </Box>
-        )}
-      </CardActionArea>
-      {title}
-    </Box>
+          {owner && <IndexChip label={owner.name} resource={type} />}
+        </>
+      }
+      image={
+        data.link?.streaming
+          ? selectSuitableStreamingImage(data.link.streaming)?.image?.size
+              ?.large
+          : null
+      }
+      onClick={() =>
+        router.push({ pathname: "/musics/[id]", query: { id: data.id } })
+      }
+    />
   );
 };
 

@@ -4,10 +4,12 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import IconButton from "@mui/material/IconButton";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
+import ResourceIcon from "../../elements/icon/resource";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -72,7 +74,12 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       activeTab={activeTab}
       tabs={tabs}
       title={
-        <Typography variant="h5">{setLocale(data.title, router)}</Typography>
+        <>
+          <IconButton onClick={() => router.push("/albums")}>
+            <ResourceIcon resource="ALBUM" />
+          </IconButton>
+          <Typography variant="h5">{setLocale(data.title, router)}</Typography>
+        </>
       }
       tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{

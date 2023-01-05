@@ -148,3 +148,12 @@ const nakano = prisma.artist.create({
     },
   },
 });
+
+const imperfect = prisma.album.create({
+  data: {
+    title: {
+      ja: "i'mperfect",
+      en: "i'mperfect",
+    },
+  },
+});

@@ -10,7 +10,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
-import { getOwner } from "../../../../helpers/music";
+import { getMusicOwner } from "../../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
@@ -72,7 +72,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
 
 const Owner = ({ data }: MusicListItemProps) => {
   const router = useRouter();
-  const { type, owner } = getOwner(data, router);
+  const { type, owner } = getMusicOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;
   return <IndexChip resource={type} label={owner.name} size="small" />;
 };

@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import {
   searchItunesMusics,
   lookupItunesMusic,
-} from "../../../../../../helpers/itunes";
-import MusicItunesCard from "../../../../card/music/itunes";
-import CardSelectForm from "./";
+} from "../../../../../../../helpers/itunes";
+import MusicItunesCard from "../../../../../card/music/itunes";
+import CardSelectForm from "..";
 import type {
   ItunesMusic,
   ItunesResponse,
-} from "../../../../../../helpers/itunes";
+} from "../../../../../../../helpers/itunes";
 import type { StreamingLink } from "@prisma/client";
 
 interface MusicItunesSelectFormProps {

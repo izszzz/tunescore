@@ -2,10 +2,13 @@ import React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useRouter } from "next/router";
+import type { ButtonProps } from "@mui/material";
 import type { Route } from "nextjs-routes";
+
 interface ScoreButtonProps {
   route: Route;
   hidden?: boolean;
+  buttonProps?: ButtonProps;
 }
 interface ScoreButtonGroupProps {
   watchButton: ScoreButtonProps;
@@ -22,6 +25,7 @@ const ScoreButtonGroup = ({
     <ButtonGroup fullWidth disableElevation>
       {watchButton.hidden || (
         <LoadingButton
+          {...watchButton.buttonProps}
           variant="outlined"
           loading={loading}
           onClick={() => router.push(watchButton.route)}

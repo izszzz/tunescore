@@ -12,6 +12,7 @@ const Schema: z.ZodType<Prisma.AlbumSelect> = z
   .object({
     id: z.boolean().optional(),
     title: z.boolean().optional(),
+    link: z.boolean().optional(),
     band: z.union([z.boolean(), z.lazy(() => BandArgsObjectSchema)]).optional(),
     bandId: z.boolean().optional(),
     musics: z

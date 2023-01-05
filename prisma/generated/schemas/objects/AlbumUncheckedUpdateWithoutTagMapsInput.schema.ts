@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeInput.schema';
 import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
+import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
+import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { MusicUncheckedUpdateManyWithoutAlbumsNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutAlbumsNestedInput.schema';
 import { AlbumUpdatemusicIDsInputObjectSchema } from './AlbumUpdatemusicIDsInput.schema';
@@ -18,6 +20,13 @@ const Schema: z.ZodType<Prisma.AlbumUncheckedUpdateWithoutTagMapsInput> = z
         z.lazy(() => LocalesCreateInputObjectSchema),
       ])
       .optional(),
+    link: z
+      .union([
+        z.lazy(() => LinkListNullableUpdateEnvelopeInputObjectSchema),
+        z.lazy(() => LinkListCreateInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     bandId: z
       .union([
         z.string(),

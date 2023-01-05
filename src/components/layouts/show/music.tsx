@@ -15,11 +15,12 @@ import { match } from "ts-pattern";
 import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
-import { getOwner } from "../../../helpers/music";
+import { getMusicOwner } from "../../../helpers/music";
 import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import DefaultShowLayout from "./default";
+import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locales, Prisma } from "@prisma/client";
@@ -38,6 +39,7 @@ export interface MusicLayoutProps
           roleMap: { include: { role: true } };
         };
       };
+      albums: AlbumListQueryType;
       user: true;
       pulls: { include: { vote: true } };
       tagMaps: { include: { tag: true } };
@@ -175,7 +177,7 @@ const Owner = ({ data }: OwnerProps) => {
     "/users/[id]" | "/bands/[id]" | "/artists/[id]"
   >("/users/[id]");
   const router = useRouter();
-  const { type, owner } = getOwner(data, router);
+  const { type, owner } = getMusicOwner(data, router);
   useEffect(() => {
     setPathname(
       match(type)

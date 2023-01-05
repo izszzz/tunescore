@@ -8,8 +8,8 @@ import { useSession } from "next-auth/react";
 import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import DangerAlert from "../../../components/elements/alert/delete";
-import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/itunes";
-import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/youtube";
+import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/music/itunes";
+import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
@@ -18,6 +18,7 @@ import TagUpdateAutocomplete from "../../../components/elements/autocomplete/upd
 import { getRouterId } from "../../../helpers/router";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
+import AlbumUpdateAutocomplete from "../../../components/elements/autocomplete/update/album";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -82,6 +83,57 @@ const SettingsMusic: NextPage = () => {
             }),
         }}
       />
+      <AlbumUpdateAutocomplete
+        value={musicData.albums}
+        loading={update.isLoading}
+        onChange={{
+          onRemove: (_e, _v, _r, details) =>
+            update.mutate({
+              ...query,
+              data: { albums: { disconnect: { id: details?.option.id } } },
+            }),
+          onSelect: (_e, _v, _r, details) =>
+            update.mutate({
+              ...query,
+              data: { albums: { connect: { id: details?.option.id } } },
+            }),
+        }}
+      />
+      <TagUpdateAutocomplete
+        value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
+        loading={update.isLoading}
+        onChange={{
+          onSelect: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  create: {
+                    tag: { connect: { id: details.option.id } },
+                    resourceType: "Music",
+                  },
+                },
+              },
+            }),
+          onRemove: (_e, _v, _r, details) =>
+            details &&
+            update.mutate({
+              ...query,
+              data: {
+                tagMaps: {
+                  delete: {
+                    resourceId_tagId_resourceType: {
+                      resourceType: "Music",
+                      resourceId: id,
+                      tagId: details.option.id,
+                    },
+                  },
+                },
+              },
+            }),
+        }}
+      />
       <ArtistsUpdateForm
         data={musicData.participations}
         loading={update.isLoading}
@@ -135,41 +187,6 @@ const SettingsMusic: NextPage = () => {
                 },
               }),
           },
-        }}
-      />
-      <TagUpdateAutocomplete
-        value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
-        loading={update.isLoading}
-        onChange={{
-          onSelect: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  create: {
-                    tag: { connect: { id: details.option.id } },
-                    resourceType: "Music",
-                  },
-                },
-              },
-            }),
-          onRemove: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  delete: {
-                    resourceId_tagId_resourceType: {
-                      resourceType: "Music",
-                      resourceId: id,
-                      tagId: details.option.id,
-                    },
-                  },
-                },
-              },
-            }),
         }}
       />
 

@@ -8,7 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import ResourceIcon from "../../icon/resource";
-import MusicCard from ".";
+import SquareMusicCard from "./square";
 
 interface MusicYoutubeCardProps<T> {
   data: T;
@@ -35,7 +35,7 @@ function MusicYoutubeCard<
         }
       >
         <Box>
-          <MusicCard
+          <SquareMusicCard
             title={
               <Typography variant="caption" display="block" noWrap>
                 {data?.snippet?.title}

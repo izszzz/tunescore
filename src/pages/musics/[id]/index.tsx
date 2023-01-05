@@ -13,6 +13,7 @@ import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import ParticipationLists from "../../../components/elements/list/participation";
 import ArtistListItem from "../../../components/elements/list/item/artist";
+import AlbumLists from "../../../components/elements/list/album";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -34,6 +35,9 @@ const Music: NextPage = () => {
           route: {
             pathname: "/scores/[id]",
             query: { id },
+          },
+          buttonProps: {
+            disabled: !musicData.score,
           },
         }}
         editButton={{
@@ -70,6 +74,7 @@ const Music: NextPage = () => {
       <ParticipationLists data={musicData.participations}>
         {(data) => <ArtistListItem data={data.artist} />}
       </ParticipationLists>
+      <AlbumLists data={musicData.albums} />
     </MusicLayout>
   );
 };

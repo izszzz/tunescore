@@ -1,30 +1,30 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Button from "@mui/material/Button";
 import { useSession } from "next-auth/react";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import { getRouterId } from "../../../helpers/router";
 import { artistShowPath } from "../../../paths/artists/[id]";
+import DeleteAlert from "../../../components/elements/alert/delete";
+import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import { convertAffiliateLink } from "../../../helpers/itunes";
+import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
 import type { NextPage } from "next";
 import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 
 const EditArtist: NextPage = () => {
   const router = useRouter();
   const session = useSession();
-  const id = getRouterId(router);
   const path = artistShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
   const update = trpc.useMutation("artist.updateOneArtist");
   const destroy = trpc.useMutation("artist.deleteOneArtist");
-  const handleDestroy = () =>
-    destroy.mutate(
-      { where: { id } },
-      { onSuccess: () => router.push("/artists") }
-    );
+
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];
   return (
@@ -56,10 +56,85 @@ const EditArtist: NextPage = () => {
         }}
         multiple
       />
-      <br />
-      <Button type="button" onClick={handleDestroy}>
-        Delete Artist
-      </Button>
+      <ItunesArtistSelectForm
+        term={setLocale(data.name, router)}
+        streamingLink={data.link?.streaming}
+        onSelect={(value) =>
+          value &&
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: {
+                  ...data.link?.streaming,
+                  itunes: {
+                    id: convertAffiliateLink(value.artistLinkUrl).toString(),
+                  },
+                },
+              },
+            },
+          })
+        }
+        onRemove={() =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: { ...data.link?.streaming, itunes: undefined },
+              },
+            },
+          })
+        }
+      />
+
+      <Typography variant="h4">Youtube</Typography>
+      <Divider />
+
+      <ChannelYoutubeSelectForm
+        term={setLocale(data.name, router)}
+        streamingLink={data.link?.streaming}
+        onSelect={(value) =>
+          value?.id &&
+          data.link &&
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: {
+                  ...data.link.streaming,
+                  youtube: {
+                    id: value.id.channelId,
+                    image: {
+                      size: {
+                        small: value.snippet?.thumbnails?.standard?.url,
+                        medium: value.snippet?.thumbnails?.medium?.url,
+                        large: value.snippet?.thumbnails?.high?.url,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          })
+        }
+        onRemove={() =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: { ...data.link?.streaming, youtube: undefined },
+              },
+            },
+          })
+        }
+      />
+
+      <DeleteAlert
+        loadingButtonProps={{
+          onClick: () => destroy.mutate({ ...query }),
+          loading: destroy.isLoading,
+        }}
+      />
     </ArtistLayout>
   );
 };

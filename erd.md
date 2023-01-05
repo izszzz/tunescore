@@ -262,6 +262,7 @@ CLOSE CLOSE
     Music o{--|o Band : "band"
     Music o{--}o Album : "albums"
     Album o|--|| Locales : "title"
+    Album o|--|o LinkList : "link"
     Album o{--|o Band : "band"
     Album o{--}o Music : "musics"
     Album o{--}o Artist : "artists"

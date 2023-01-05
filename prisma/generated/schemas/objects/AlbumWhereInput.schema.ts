@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { LocalesCompositeFilterObjectSchema } from './LocalesCompositeFilter.schema';
 import { LocalesObjectEqualityInputObjectSchema } from './LocalesObjectEqualityInput.schema';
+import { LinkListNullableCompositeFilterObjectSchema } from './LinkListNullableCompositeFilter.schema';
+import { LinkListObjectEqualityInputObjectSchema } from './LinkListObjectEqualityInput.schema';
 import { BandRelationFilterObjectSchema } from './BandRelationFilter.schema';
 import { BandWhereInputObjectSchema } from './BandWhereInput.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
@@ -40,6 +42,13 @@ const Schema: z.ZodType<Prisma.AlbumWhereInput> = z
         z.lazy(() => LocalesObjectEqualityInputObjectSchema),
       ])
       .optional(),
+    link: z
+      .union([
+        z.lazy(() => LinkListNullableCompositeFilterObjectSchema),
+        z.lazy(() => LinkListObjectEqualityInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     band: z
       .union([
         z.lazy(() => BandRelationFilterObjectSchema),

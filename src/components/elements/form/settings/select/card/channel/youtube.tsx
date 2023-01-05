@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Script from "next/script";
-import MusicYoutubeCard from "../../../../card/music/youtube";
-import CardSelectForm from ".";
+import CardSelectForm from "..";
+import ChannelYoutubeCard from "../../../../../card/channel/youtube";
 import type { StreamingLink } from "@prisma/client";
 
 interface MusicYoutubeSelectFormProps {
@@ -11,7 +11,7 @@ interface MusicYoutubeSelectFormProps {
   onRemove: () => void;
 }
 
-const MusicYoutubeSelectForm = ({
+const ChannelYoutubeSelectForm = ({
   streamingLink,
   term,
   onSelect,
@@ -20,7 +20,7 @@ const MusicYoutubeSelectForm = ({
   const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>(
     []
   );
-  const [value, setValue] = useState<gapi.client.youtube.Video>();
+  const [value, setValue] = useState<gapi.client.youtube.Channel>();
   const [loading, setLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -32,7 +32,7 @@ const MusicYoutubeSelectForm = ({
   useEffect(() => {
     if (!loading)
       if (streamingLink?.youtube?.id)
-        gapi.client.youtube.videos
+        gapi.client.youtube.channels
           .list({ id: streamingLink?.youtube.id, part: "snippet" })
           .then((data) => data.result.items && setValue(data.result.items[0]));
       else
@@ -40,8 +40,7 @@ const MusicYoutubeSelectForm = ({
           .list({
             q: term,
             part: "snippet",
-            type: "video",
-            videoCategoryId: "10",
+            type: "channel",
             maxResults: 6,
             pageToken: current,
           })
@@ -78,12 +77,12 @@ const MusicYoutubeSelectForm = ({
         options={options}
         largeCard={(value) =>
           value && (
-            <MusicYoutubeCard size="large" data={value} onClick={onRemove} />
+            <ChannelYoutubeCard size="large" data={value} onClick={onRemove} />
           )
         }
         smallCard={(value) =>
           value && (
-            <MusicYoutubeCard size="small" data={value} onClick={onSelect} />
+            <ChannelYoutubeCard size="small" data={value} onClick={onSelect} />
           )
         }
         gridProps={{
@@ -115,4 +114,4 @@ const MusicYoutubeSelectForm = ({
   );
 };
 
-export default MusicYoutubeSelectForm;
+export default ChannelYoutubeSelectForm;

@@ -2,36 +2,23 @@ import React from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { getOwner } from "../../../../helpers/music";
+import { getAlbumOwner } from "../../../../helpers/album";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
 import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
-import MusicCard from ".";
+import SquareAlbumCard from "./square";
+import type { AlbumListQueryType } from "../../../../helpers/album";
 import type { Prisma } from "@prisma/client";
 
-interface DefaultMusicCard {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      user: true;
-      band: true;
-      participations: {
-        include: { artist: true; roleMap: { include: { role: true } } };
-      };
-      bookmarks: true;
-      _count: {
-        select: {
-          bookmarks: true;
-        };
-      };
-    };
-  }>;
+interface AlbumCard {
+  data: Prisma.AlbumGetPayload<AlbumListQueryType>;
 }
-const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
+const AlbumCard = ({ data }: AlbumCard) => {
   const router = useRouter();
-  const { type, owner } = getOwner(data, router);
+  const { type, owner } = getAlbumOwner(data, router);
   return (
-    <MusicCard
+    <SquareAlbumCard
       size="200px"
       title={
         <>
@@ -57,10 +44,10 @@ const DefaultMusicCard = ({ data }: DefaultMusicCard) => {
           : null
       }
       onClick={() =>
-        router.push({ pathname: "/musics/[id]", query: { id: data.id } })
+        router.push({ pathname: "/albums/[id]", query: { id: data.id } })
       }
     />
   );
 };
 
-export default DefaultMusicCard;
+export default AlbumCard;

@@ -14,7 +14,7 @@ function ParticipationListItem<
   T extends ParticipatedArtist | ParticipatedMusic
 >({ data, children }: ParticipationListItemProps<T>) {
   return (
-    <Box display="flex">
+    <Box display="flex" alignItems="center">
       {children(data)}
       <Stack direction="row" spacing={1}>
         {data.roleMap.map((roleMap) => (

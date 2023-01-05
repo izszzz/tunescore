@@ -12,6 +12,7 @@ import MusicChip from "../../chip/music";
 import ArtistChip from "../../chip/artist";
 import AlbumChip from "../../chip/album";
 import BookmarkChip from "../../chip/bookmark";
+import { getContentImage } from "../../../../helpers/image";
 import type { BandListQueryType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
 export interface BandListItemProps {
@@ -20,6 +21,7 @@ export interface BandListItemProps {
 
 const BandListItem = ({ data }: BandListItemProps) => {
   const router = useRouter();
+  const name = setLocale(data.name, router);
   return (
     <ListItem
       disablePadding
@@ -34,7 +36,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
         <ListItemText
           primary={
             <Typography variant="h6" noWrap>
-              {setLocale(data.name, router)}
+              {name}
             </Typography>
           }
           secondary={
@@ -50,6 +52,17 @@ const BandListItem = ({ data }: BandListItemProps) => {
             </Stack>
           }
         />
+        {data.link?.streaming && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            height="60"
+            alt={name}
+            src={
+              getContentImage(data.link.streaming)?.image?.size?.medium || ""
+            }
+            style={{ borderRadius: 3 }}
+          />
+        )}
       </ListItemButton>
     </ListItem>
   );

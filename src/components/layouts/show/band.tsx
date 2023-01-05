@@ -4,10 +4,14 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
+import ResourceIcon from "../../elements/icon/resource";
+import { getChannelImage } from "../../../helpers/image";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -42,6 +46,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const query = path[1];
+  const name = setLocale(data.name, router);
   const update = trpc.useMutation(["band.updateOneBand"], {
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
@@ -67,12 +72,32 @@ const BandLayout: React.FC<BandLayoutProps> = ({
     ],
     [id]
   );
+  console.log(data.link);
   return (
     <DefaultShowLayout
       tabs={tabs}
       activeTab={activeTab}
       title={
-        <Typography variant="h5">{setLocale(data.name, router)}</Typography>
+        <>
+          <IconButton onClick={() => router.push("/bands")}>
+            <ResourceIcon resource="BAND" />
+          </IconButton>
+          <Typography variant="h5">{name}</Typography>
+          {data.link?.streaming && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                style={{ borderRadius: 5 }}
+                height="80"
+                alt={name}
+                src={
+                  getChannelImage(data.link.streaming)?.image?.size?.medium ||
+                  ""
+                }
+              />
+            </Box>
+          )}
+        </>
       }
       tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{

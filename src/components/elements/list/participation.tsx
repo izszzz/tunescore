@@ -4,8 +4,8 @@ import Lists from ".";
 import type {
   ParticipatedArtist,
   ParticipatedMusic,
-  ParticipationListItemProps,
-} from "./item/participation";
+} from "../../../helpers/participation";
+import type { ParticipationListItemProps } from "./item/participation";
 interface ParticipationListProps<
   T extends ParticipatedArtist | ParticipatedMusic
 > {
@@ -20,9 +20,7 @@ function ParticipationLists<T extends ParticipatedMusic | ParticipatedArtist>({
     <Lists
       data={data}
       listItem={(props) => (
-        <ParticipationListItem data={props}>
-          {(data) => children(data)}
-        </ParticipationListItem>
+        <ParticipationListItem data={props}>{children}</ParticipationListItem>
       )}
     />
   );

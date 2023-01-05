@@ -38,6 +38,7 @@ declare module "nextjs-routes" {
     | { pathname: "/scores/[id]/edit"; query: Query<{ "id": string }> }
     | { pathname: "/scores/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/scores"; query?: Query | undefined }
+    | { pathname: "/search"; query?: Query | undefined }
     | { pathname: "/users/[id]/bookmarks"; query: Query<{ "id": string }> }
     | { pathname: "/users/[id]/followers"; query: Query<{ "id": string }> }
     | { pathname: "/users/[id]/following"; query: Query<{ "id": string }> }

@@ -16,9 +16,9 @@ import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
-import { selectSuitableStreamingImage } from "../../../helpers/selectSuitableImage";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
+import { getContentImage } from "../../../helpers/image";
 import DefaultShowLayout from "./default";
 import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
@@ -118,8 +118,8 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
                 height="80"
                 alt={setLocale(data.title, router)}
                 src={
-                  selectSuitableStreamingImage(data.link.streaming)?.image?.size
-                    ?.medium || ""
+                  getContentImage(data.link.streaming)?.image?.size?.medium ||
+                  ""
                 }
               />
             </Box>

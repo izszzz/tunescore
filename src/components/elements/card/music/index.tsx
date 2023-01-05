@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import { getMusicOwner } from "../../../../helpers/music";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
-import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
+import { getContentImage } from "../../../../helpers/image";
 import SquareMusicCard from "./square";
 import type { Prisma } from "@prisma/client";
 
@@ -52,8 +52,7 @@ const MusicCard = ({ data }: MusicCard) => {
       }
       image={
         data.link?.streaming
-          ? selectSuitableStreamingImage(data.link.streaming)?.image?.size
-              ?.large
+          ? getContentImage(data.link.streaming)?.image?.size?.large
           : null
       }
       onClick={() =>

@@ -5,7 +5,7 @@ import TablePagination, {
   type TablePaginationProps,
 } from "@mui/material/TablePagination";
 
-interface CardSelectFormProps<T> {
+export interface CardSelectFormProps<T> {
   value: T;
   options: T[];
   smallCard: (value: T) => React.ReactNode;

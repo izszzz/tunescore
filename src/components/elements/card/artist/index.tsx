@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
-import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
+import { getChannelImage } from "../../../../helpers/image";
 import SquareArtistCard from "./square";
 import type { ArtistListQueryType } from "../../../../helpers/artist";
 import type { Prisma } from "@prisma/client";
@@ -42,8 +42,7 @@ const ArtistCard = ({ data }: ArtistCardProps) => {
       }
       image={
         data.link?.streaming
-          ? selectSuitableStreamingImage(data.link.streaming)?.image?.size
-              ?.large
+          ? getChannelImage(data.link.streaming)?.image?.size?.large
           : null
       }
       onClick={() =>

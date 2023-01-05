@@ -11,9 +11,9 @@ import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
 import { getMusicOwner } from "../../../../helpers/music";
-import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
+import { getContentImage } from "../../../../helpers/image";
 import type { MusicListQueryType } from "../../../../helpers/music";
 import type { Prisma } from "@prisma/client";
 
@@ -22,6 +22,7 @@ export interface MusicListItemProps {
 }
 const MusicListItem = ({ data }: MusicListItemProps) => {
   const router = useRouter();
+  const title = setLocale(data.title, router);
   return (
     <ListItem
       disablePadding
@@ -37,7 +38,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           primary={
             <Box component="span" display="flex" alignItems="center">
               <Typography variant="h6" mr={3} noWrap>
-                {setLocale(data.title, router)}
+                {title}
               </Typography>
               <Chip component="span" label={data.type} size="small" />
             </Box>
@@ -57,10 +58,9 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             height="60"
-            alt={setLocale(data.title, router)}
+            alt={title}
             src={
-              selectSuitableStreamingImage(data.link.streaming)?.image?.size
-                ?.medium || ""
+              getContentImage(data.link.streaming)?.image?.size?.medium || ""
             }
             style={{ borderRadius: 3 }}
           />

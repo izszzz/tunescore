@@ -8,7 +8,8 @@ import {
 import type { Locales } from "@prisma/client";
 import type {
   AutocompleteElementProps,
-  FieldValues} from "react-hook-form-mui";
+  FieldValues,
+} from "react-hook-form-mui";
 const LocaleAutocomplete = (
   props: Omit<
     AutocompleteElementProps<
@@ -40,6 +41,7 @@ const LocaleAutocomplete = (
           ...props,
           fullWidth: true,
           disableClearable: true,
+          size: "small",
           onChange: (_e, _value, _reason, details) =>
             handleChange(details?.option),
           isOptionEqualToValue: (option, value) => option === value,

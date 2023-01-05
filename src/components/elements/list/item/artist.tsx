@@ -10,6 +10,7 @@ import ResourceIcon from "../../icon/resource";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import BandChip from "../../chip/band";
+import { getChannelImage } from "../../../../helpers/image";
 import type { Prisma } from "@prisma/client";
 import type { ArtistListQueryType } from "../../../../helpers/artist";
 
@@ -18,6 +19,7 @@ export interface ArtistListItemProps {
 }
 const ArtistListItem = ({ data }: ArtistListItemProps) => {
   const router = useRouter();
+  const name = setLocale(data.name, router);
   return (
     <ListItem
       disablePadding
@@ -35,7 +37,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
         <ListItemText
           primary={
             <Typography variant="h6" noWrap>
-              {setLocale(data.name, router)}
+              {name}
             </Typography>
           }
           secondary={
@@ -54,6 +56,17 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
             </Stack>
           }
         />
+        {data.link?.streaming && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            height="60"
+            alt={name}
+            src={
+              getChannelImage(data.link.streaming)?.image?.size?.medium || ""
+            }
+            style={{ borderRadius: 3 }}
+          />
+        )}
       </ListItemButton>
     </ListItem>
   );

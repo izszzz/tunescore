@@ -23,6 +23,7 @@ const Album: NextPage = () => {
   const update = trpc.useMutation("album.updateOneAlbum");
   const destroy = trpc.useMutation("album.deleteOneAlbum");
   if (!data) return <></>;
+  const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];
   return (
     <AlbumLayout data={albumData} path={path} activeTab="info">
@@ -38,7 +39,7 @@ const Album: NextPage = () => {
         }}
       />
       <ItunesAlbumSelectForm
-        term={setLocale(data.title, router)}
+        term={title}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
           value &&
@@ -81,7 +82,7 @@ const Album: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        term={setLocale(data.title, router)}
+        term={title}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
           value?.id &&

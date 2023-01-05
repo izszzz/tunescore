@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import setLocale from "../../../../helpers/locale";
-import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
+import { getChannelImage } from "../../../../helpers/image";
 import SquareBandCard from "./square";
 import type { BandListQueryType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
@@ -33,12 +33,11 @@ const BandCard = ({ data }: BandCardProps) => {
       }
       image={
         data.link?.streaming
-          ? selectSuitableStreamingImage(data.link.streaming)?.image?.size
-              ?.large
+          ? getChannelImage(data.link.streaming)?.image?.size?.large
           : null
       }
       onClick={() =>
-        router.push({ pathname: "/albums/[id]", query: { id: data.id } })
+        router.push({ pathname: "/bands/[id]", query: { id: data.id } })
       }
     />
   );

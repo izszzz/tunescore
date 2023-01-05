@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import { getAlbumOwner } from "../../../../helpers/album";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
-import { selectSuitableStreamingImage } from "../../../../helpers/selectSuitableImage";
 import BookmarkChip from "../../chip/bookmark";
+import { getContentImage } from "../../../../helpers/image";
 import SquareAlbumCard from "./square";
 import type { AlbumListQueryType } from "../../../../helpers/album";
 import type { Prisma } from "@prisma/client";
@@ -39,8 +39,7 @@ const AlbumCard = ({ data }: AlbumCard) => {
       }
       image={
         data.link?.streaming
-          ? selectSuitableStreamingImage(data.link.streaming)?.image?.size
-              ?.large
+          ? getContentImage(data.link.streaming)?.image?.size?.large
           : null
       }
       onClick={() =>

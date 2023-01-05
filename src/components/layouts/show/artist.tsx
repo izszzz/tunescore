@@ -1,13 +1,17 @@
 import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
+import IconButton from "@mui/material/IconButton";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
+import ResourceIcon from "../../elements/icon/resource";
+import { getChannelImage } from "../../../helpers/image";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -41,6 +45,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
 }) => {
   const router = useRouter();
   const id = getRouterId(router);
+  const name = setLocale(data.name, router);
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
@@ -75,7 +80,26 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       activeTab={activeTab}
       tabs={tabs}
       title={
-        <Typography variant="h5">{setLocale(data.name, router)}</Typography>
+        <>
+          <IconButton onClick={() => router.push("/artists")}>
+            <ResourceIcon resource="ARTIST" />
+          </IconButton>
+          <Typography variant="h5">{name}</Typography>
+          {data.link?.streaming && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                style={{ borderRadius: 5 }}
+                height="80"
+                alt={name}
+                src={
+                  getChannelImage(data.link.streaming)?.image?.size?.medium ||
+                  ""
+                }
+              />
+            </Box>
+          )}
+        </>
       }
       tagMaps={data.tagMaps}
       bookmarkToggleButtonProps={{

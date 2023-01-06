@@ -6,8 +6,8 @@ import Grid from "@mui/material/Grid";
 import SendIcon from "@mui/icons-material/Send";
 import { useSnackbar } from "notistack";
 import setLocale from "../../../../helpers/locale";
-import { handleChangeAutocomplete } from "../../autocomplete/update/default";
-import CustomAutocomplete from "../../autocomplete/search";
+import { handleChangeAutocomplete } from "../../autocomplete/update";
+import SearchAutocomplete from "../../autocomplete/search";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
 import ArtistListItem from "../../list/item/artist";
@@ -74,7 +74,7 @@ function ArtistsUpdateForm({
       <Box>
         <Grid container spacing={1} my={1}>
           <Grid item xs={10}>
-            <CustomAutocomplete
+            <SearchAutocomplete
               options={search.data || []}
               loading={loading}
               textFieldProps={{ label: "artist" }}

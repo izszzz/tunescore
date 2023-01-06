@@ -2,12 +2,12 @@ import { useSnackbar } from "notistack";
 import React from "react";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
-import DefaultUpdateAutocomplete from "./default";
-import type { DefaultUpdateAutocompleteProps } from "./default";
+import UpdateAutocomplete from ".";
+import type { UpdateAutocompleteProps } from ".";
 import type { Tag } from "@prisma/client";
 
 type TagUpdateAutocomplete = Pick<
-  DefaultUpdateAutocompleteProps<Tag, true, undefined, undefined>,
+  UpdateAutocompleteProps<Tag, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
 const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
@@ -18,7 +18,7 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
     },
   });
   return (
-    <DefaultUpdateAutocomplete<Tag, true>
+    <UpdateAutocomplete<Tag, true>
       {...props}
       options={search.data || []}
       getOptionLabel={(option) => option.name || ""}

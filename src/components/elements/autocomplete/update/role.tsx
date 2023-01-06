@@ -2,12 +2,12 @@ import { useSnackbar } from "notistack";
 import React from "react";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
-import DefaultUpdateAutocomplete from "./default";
-import type { DefaultUpdateAutocompleteProps } from "./default";
+import UpdateAutocomplete from ".";
+import type { UpdateAutocompleteProps } from ".";
 import type { Role } from "@prisma/client";
 
 export type RoleUpdateAutocompleteProps = Pick<
-  DefaultUpdateAutocompleteProps<Role, true, undefined, undefined>,
+  UpdateAutocompleteProps<Role, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
 const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
@@ -18,7 +18,7 @@ const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
     },
   });
   return (
-    <DefaultUpdateAutocomplete<Role, true>
+    <UpdateAutocomplete<Role, true>
       {...props}
       options={search.data || []}
       getOptionLabel={(option) => option.name || ""}

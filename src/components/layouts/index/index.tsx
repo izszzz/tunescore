@@ -8,9 +8,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { useSession } from "next-auth/react";
 import SingleColumnLayout from "../single_column";
 import { useModal } from "../../../hooks/useModal";
-import CustomAutocomplete from "../../../components/elements/autocomplete/search";
+import SearchAutocomplete from "../../../components/elements/autocomplete/search";
 import { getCurrentUser } from "../../../helpers/user";
-import type { CustomAutocompleteProps } from "../../../components/elements/autocomplete/search";
+import type { SearchAutocompleteProps } from "../../../components/elements/autocomplete/search";
 import type { SingleColumnLayoutProps } from "../single_column";
 import type { Route } from "nextjs-routes";
 import type { PaginatedResult } from "prisma-pagination";
@@ -20,7 +20,7 @@ export interface IndexLayoutProps<T>
   route: Route;
   newRoute?: Route;
   meta: PaginatedResult<null>["meta"];
-  searchAutocompleteProps: CustomAutocompleteProps<T, false, false, false>;
+  searchAutocompleteProps: SearchAutocompleteProps<T, false, false, false>;
 }
 function IndexLayout<T>({
   header,
@@ -58,7 +58,7 @@ function IndexLayout<T>({
       <Box my={3}>
         <Grid container spacing={1}>
           <Grid item xs={newRoute ? 11 : 12}>
-            <CustomAutocomplete
+            <SearchAutocomplete
               {...searchAutocompleteProps}
               textFieldProps={{
                 ...searchAutocompleteProps.textFieldProps,

@@ -4,12 +4,12 @@ import { useSnackbar } from "notistack";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
 import setLocale from "../../../../helpers/locale";
-import DefaultUpdateAutocomplete from "./default";
-import type { DefaultUpdateAutocompleteProps } from "./default";
+import UpdateAutocomplete from ".";
+import type { UpdateAutocompleteProps } from ".";
 import type { Album } from "@prisma/client";
 
 type AlbumUpdateAutocompleteProps = Pick<
-  DefaultUpdateAutocompleteProps<Album, true, undefined, undefined>,
+  UpdateAutocompleteProps<Album, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
 const AlbumUpdateAutocomplete = ({
@@ -23,7 +23,7 @@ const AlbumUpdateAutocomplete = ({
     },
   });
   return (
-    <DefaultUpdateAutocomplete<Album, true>
+    <UpdateAutocomplete<Album, true>
       options={search.data || []}
       getOptionLabel={(option) => setLocale(option.title, router)}
       ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}

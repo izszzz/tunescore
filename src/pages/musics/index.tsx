@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
+import React from "react";
 import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
@@ -32,16 +33,17 @@ const Musics: NextPage = () => {
         options: search.data || [],
         loading: search.isLoading,
         getOptionLabel: (option) => setLocale(option.title, router),
-        textFieldProps: {
-          onChange: (e) =>
-            search.mutate({
-              where: {
-                title: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
+        onInputChange: (_e, inputValue) => {
+          search.mutate({
+            where: {
+              title: {
+                is: {
+                  [router.locale as string]: { contains: inputValue },
                 },
               },
-              take: 10,
-            }),
+            },
+            take: 10,
+          });
         },
       }}
     >

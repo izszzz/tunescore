@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Autocomplete, {
   type AutocompleteProps,
 } from "@mui/material/Autocomplete";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { useRouter } from "next/router";
 
-export type CustomAutocompleteProps<
+export type SearchAutocompleteProps<
   T,
   Multiple extends boolean | undefined,
   DisableClearable extends boolean | undefined,
@@ -15,7 +16,7 @@ export type CustomAutocompleteProps<
 > & {
   textFieldProps?: TextFieldProps;
 };
-function CustomAutocomplete<
+function SearchAutocomplete<
   T,
   Multiple extends boolean | undefined = undefined,
   DisableClearable extends boolean | undefined = undefined,
@@ -23,10 +24,22 @@ function CustomAutocomplete<
 >({
   textFieldProps,
   ...props
-}: CustomAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
+}: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
+  const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
+  useEffect(() => {
+    setInputValue(router.query.q as string);
+  }, [router.query.q]);
   return (
     <Autocomplete
       {...props}
+      inputValue={inputValue}
+      onInputChange={(_event, newInputValue, reason) => {
+        console.log(reason);
+        setInputValue(newInputValue);
+        props.onInputChange &&
+          props.onInputChange(_event, newInputValue, reason);
+      }}
       renderInput={(params) => (
         <TextField {...params} {...textFieldProps} variant="outlined" />
       )}
@@ -34,4 +47,4 @@ function CustomAutocomplete<
     />
   );
 }
-export default CustomAutocomplete;
+export default SearchAutocomplete;

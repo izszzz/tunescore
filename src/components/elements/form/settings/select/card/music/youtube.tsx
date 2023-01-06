@@ -15,16 +15,28 @@ const MusicYoutubeSelectForm = ({
   onRemove,
   ...props
 }: MusicYoutubeSelectFormProps) => {
-  <YoutubeSelectForm<Omit<gapi.client.youtube.Video, "id">>
+  <YoutubeSelectForm
     {...props}
     type="video"
     search={gapi.client.youtube.search.list}
     lookup={gapi.client.youtube.videos.list}
     largeCard={(value) =>
-      value && <MusicYoutubeCard size="large" data={value} onClick={onRemove} />
+      value && (
+        <MusicYoutubeCard
+          size="large"
+          data={value as gapi.client.youtube.Video}
+          onClick={onRemove}
+        />
+      )
     }
     smallCard={(value) =>
-      value && <MusicYoutubeCard size="small" data={value} onClick={onSelect} />
+      value && (
+        <MusicYoutubeCard
+          size="small"
+          data={value as gapi.client.youtube.SearchResult}
+          onClick={onSelect}
+        />
+      )
     }
   />;
 };

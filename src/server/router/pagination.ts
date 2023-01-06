@@ -25,10 +25,11 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
-      return await paginate<
+      const data = await paginate<
         Prisma.MusicGetPayload<MusicListQueryType>,
         Prisma.MusicFindManyArgs
       >(ctx.prisma.music, args);
+      return { type: "music" as const, ...data };
     },
   })
   .query("artist", {
@@ -39,10 +40,11 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
-      return await paginate<
+      const data = await paginate<
         Prisma.ArtistGetPayload<ArtistListQueryType>,
         Prisma.ArtistFindManyArgs
       >(ctx.prisma.artist, args);
+      return { type: "artist" as const, ...data };
     },
   })
   .query("band", {
@@ -53,10 +55,11 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
-      return await paginate<
+      const data = await paginate<
         Prisma.BandGetPayload<BandListQueryType>,
         Prisma.BandFindManyArgs
       >(ctx.prisma.band, args);
+      return { type: "band" as const, ...data };
     },
   })
   .query("album", {
@@ -67,10 +70,11 @@ export const paginationRouter = createRouter()
     async resolve({ ctx, input }) {
       const { args, options } = input;
       const paginate = createPaginator(options);
-      return await paginate<
+      const data = await paginate<
         Prisma.AlbumGetPayload<AlbumListQueryType>,
         Prisma.AlbumFindManyArgs
       >(ctx.prisma.album, args);
+      return { type: "album" as const, ...data };
     },
   })
   .query("user", {

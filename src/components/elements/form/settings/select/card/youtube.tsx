@@ -4,10 +4,14 @@ import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
 import type { StreamingLink } from "@prisma/client";
 
-interface YoutubeSelectFormProps<
-  T extends gapi.client.youtube.Video | gapi.client.youtube.Channel
-> extends Pick<
-    CardSelectFormProps<gapi.client.youtube.SearchResult | T | undefined>,
+interface YoutubeSelectFormProps
+  extends Pick<
+    CardSelectFormProps<
+      | gapi.client.youtube.Video
+      | gapi.client.youtube.Channel
+      | gapi.client.youtube.SearchResult
+      | undefined
+    >,
     "largeCard" | "smallCard"
   > {
   streamingLink: StreamingLink | null | undefined;
@@ -19,9 +23,7 @@ interface YoutubeSelectFormProps<
     | typeof gapi.client.youtube.channels.list;
 }
 
-function YoutubeSelectForm<
-  T extends gapi.client.youtube.Video & gapi.client.youtube.Channel
->({
+function YoutubeSelectForm({
   streamingLink,
   term,
   type,
@@ -29,11 +31,13 @@ function YoutubeSelectForm<
   smallCard,
   search,
   lookup,
-}: YoutubeSelectFormProps<T>) {
+}: YoutubeSelectFormProps) {
   const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>(
     []
   );
-  const [value, setValue] = useState<T>();
+  const [value, setValue] = useState<
+    gapi.client.youtube.Video | gapi.client.youtube.Channel | undefined
+  >();
   const [loading, setLoading] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -44,10 +48,11 @@ function YoutubeSelectForm<
     if (!loading)
       if (streamingLink?.youtube?.id)
         lookup({ id: streamingLink?.youtube.id, part: "snippet" }).then(
-          (data) =>
-            data.result.items &&
-            data.result.items[0] &&
-            setValue(data.result.items[0])
+          (data) => {
+            if (!data.result.items) return;
+            if (!data.result.items[0]) return;
+            data.result.items[0] && setValue(data.result.items[0]);
+          }
         );
       else
         search({
@@ -84,7 +89,12 @@ function YoutubeSelectForm<
   return (
     <>
       <Script src="https://apis.google.com/js/api.js" onReady={handleLoad} />
-      <CardSelectForm<gapi.client.youtube.SearchResult | T | undefined>
+      <CardSelectForm<
+        | gapi.client.youtube.Video
+        | gapi.client.youtube.Channel
+        | gapi.client.youtube.SearchResult
+        | undefined
+      >
         value={value}
         options={options}
         largeCard={largeCard}

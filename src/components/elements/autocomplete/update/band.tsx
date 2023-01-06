@@ -3,12 +3,12 @@ import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import { trpc } from "../../../../utils/trpc";
 import setLocale from "../../../../helpers/locale";
-import DefaultUpdateAutocomplete from "./default";
+import UpdateAutocomplete from ".";
 import type { Band } from "@prisma/client";
-import type { DefaultUpdateAutocompleteProps } from "./default";
+import type { UpdateAutocompleteProps } from ".";
 
 type BandUpdateAutocomplete<T extends boolean | undefined = false> = Pick<
-  DefaultUpdateAutocompleteProps<Band, T, undefined, undefined>,
+  UpdateAutocompleteProps<Band, T, undefined, undefined>,
   "onChange" | "loading" | "value" | "multiple"
 >;
 function BandUpdateAutocomplete<T extends boolean | undefined = false>({
@@ -22,7 +22,7 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
     },
   });
   return (
-    <DefaultUpdateAutocomplete<Band, T>
+    <UpdateAutocomplete<Band, T>
       {...props}
       options={searchBand.data || []}
       getOptionLabel={(option) => setLocale(option.name, router)}

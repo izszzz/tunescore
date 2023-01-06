@@ -1,11 +1,11 @@
 import React from "react";
-import CustomAutocomplete from "../search";
+import SearchAutocomplete from "../search";
 import type {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
 } from "@mui/material/Autocomplete";
 import type { AutocompleteValue } from "@mui/material/useAutocomplete";
-import type { CustomAutocompleteProps } from "../search";
+import type { SearchAutocompleteProps } from "../search";
 
 export type HandleChangeReasonFunction<
   T,
@@ -19,13 +19,13 @@ export type HandleChangeReasonFunction<
   details?: AutocompleteChangeDetails<T>
 ) => void;
 
-export type DefaultUpdateAutocompleteProps<
+export type UpdateAutocompleteProps<
   T,
   Multiple extends boolean | undefined,
   DisableClearable extends boolean | undefined,
   FreeSolo extends boolean | undefined
 > = Omit<
-  CustomAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>,
+  SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>,
   "onChange"
 > & {
   onChange: {
@@ -45,7 +45,7 @@ export type DefaultUpdateAutocompleteProps<
   };
 };
 
-function DefaultUpdateAutocomplete<
+function UpdateAutocomplete<
   T,
   Multiple extends boolean | undefined = undefined,
   DisableClearable extends boolean | undefined = undefined,
@@ -53,9 +53,9 @@ function DefaultUpdateAutocomplete<
 >({
   onChange: { onClear, onSelect, onRemove },
   ...props
-}: DefaultUpdateAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
+}: UpdateAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
   return (
-    <CustomAutocomplete<T, Multiple, DisableClearable, FreeSolo>
+    <SearchAutocomplete<T, Multiple, DisableClearable, FreeSolo>
       {...props}
       onChange={handleChangeAutocomplete<
         T,
@@ -116,4 +116,4 @@ export function handleChangeAutocomplete<
   };
 }
 
-export default DefaultUpdateAutocomplete;
+export default UpdateAutocomplete;

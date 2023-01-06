@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useDarkMode } from "usehooks-ts";
 import ResourceIcon from "../icon/resource";
+import Image from "../image";
 import type { ResourceIconProps } from "../icon/resource";
 
 export interface SquareCardProps {
@@ -24,8 +25,7 @@ const SquareCard = ({
     <Box width={size} onClick={() => onClick && onClick()}>
       <CardActionArea sx={{ borderRadius: "5px" }}>
         {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             width={size}
             alt="image"
             src={image}

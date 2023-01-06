@@ -38,14 +38,14 @@ function ItunesSelectForm<T>({
     });
   useEffect(() => {
     if (streamingLink?.itunes?.id) {
-      const id = new URL(streamingLink.itunes.id).searchParams.get("i");
+      const id = new URL(streamingLink.itunes.id).pathname.split("/")[4];
       if (id) lookup({ id }).then((res) => setValue(res.results[0]));
     } else
       search({ term, offset: 0, limit: 12 }).then((res) => {
         setValue(undefined);
         setOptions(res);
       });
-  }, [lookup, search, streamingLink, term]);
+  }, [lookup, search, streamingLink, term, value]);
   return (
     <CardSelectForm
       value={value}

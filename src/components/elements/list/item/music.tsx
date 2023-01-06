@@ -14,6 +14,7 @@ import { getMusicOwner } from "../../../../helpers/music";
 import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
 import { getContentImage } from "../../../../helpers/image";
+import Image from "../../image";
 import type { MusicListQueryType } from "../../../../helpers/music";
 import type { Prisma } from "@prisma/client";
 
@@ -55,8 +56,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           }
         />
         {data.link?.streaming && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             height="60"
             alt={title}
             src={

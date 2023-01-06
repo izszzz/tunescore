@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Typography from "@mui/material/Typography";
 import ArtistLists from "../../../components/elements/list/artist";
 import BandLists from "../../../components/elements/list/band";
 import { trpc } from "../../../utils/trpc";
@@ -19,13 +18,10 @@ const Album: NextPage = () => {
   const albumData = data as AlbumLayoutProps["data"];
   return (
     <AlbumLayout data={albumData} path={path} activeTab="info">
-      <Typography variant="h6">Band</Typography>
       {albumData.band && <BandLists data={[albumData.band]} />}
 
-      <Typography variant="h6">Musics</Typography>
       <MusicLists data={albumData.musics} />
 
-      <Typography variant="h6">Artists</Typography>
       <ArtistLists data={albumData.artists} />
     </AlbumLayout>
   );

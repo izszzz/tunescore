@@ -9,6 +9,7 @@ import { SnackbarProvider } from "notistack";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot } from "recoil";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDarkMode } from "usehooks-ts";
 import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
@@ -18,8 +19,6 @@ import "@fontsource/roboto/700.css";
 import type { Session } from "next-auth";
 import type { AppRouter } from "../server/router";
 import type { AppType } from "next/app";
-import { useDarkMode } from "usehooks-ts";
-import { useEffect } from "react";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -29,12 +28,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const theme = createTheme({
     palette: { mode: isDarkMode ? "dark" : "light" },
   });
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-color-mode",
-      isDarkMode ? "dark" : "light"
-    );
-  }, [isDarkMode]);
+
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>

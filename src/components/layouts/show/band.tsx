@@ -6,6 +6,7 @@ import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
+import Image from "../../elements/image";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
@@ -72,7 +73,6 @@ const BandLayout: React.FC<BandLayoutProps> = ({
     ],
     [id]
   );
-  console.log(data.link);
   return (
     <DefaultShowLayout
       tabs={tabs}
@@ -85,8 +85,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
           <Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={name}

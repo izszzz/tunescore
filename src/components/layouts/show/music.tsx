@@ -19,6 +19,7 @@ import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getContentImage } from "../../../helpers/image";
+import Image from "../../elements/image";
 import DefaultShowLayout from "./default";
 import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
@@ -112,8 +113,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
           </Box>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={setLocale(data.title, router)}

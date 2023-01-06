@@ -19,7 +19,6 @@ function ChannelYoutubeCard<
     | gapi.client.youtube.Channel
     | undefined
 >({ data, size, onClick }: ChannelYoutubeCardProps<T>) {
-  console.log(data?.snippet?.thumbnails?.medium?.url);
   if (size === "small")
     return (
       <SquareArtistCard

@@ -17,8 +17,9 @@ interface YoutubeSelectFormProps
   streamingLink: StreamingLink | null | undefined;
   term: string;
   type: "video" | "channel";
-  search: typeof gapi.client.youtube.search.list;
-  lookup:
+  lookup: (
+    api: typeof gapi.client.youtube
+  ) =>
     | typeof gapi.client.youtube.videos.list
     | typeof gapi.client.youtube.channels.list;
 }
@@ -29,7 +30,6 @@ function YoutubeSelectForm({
   type,
   largeCard,
   smallCard,
-  search,
   lookup,
 }: YoutubeSelectFormProps) {
   const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>(
@@ -47,22 +47,24 @@ function YoutubeSelectForm({
   useEffect(() => {
     if (!loading)
       if (streamingLink?.youtube?.id)
-        lookup({ id: streamingLink?.youtube.id, part: "snippet" }).then(
-          (data) => {
-            if (!data.result.items) return;
-            if (!data.result.items[0]) return;
-            data.result.items[0] && setValue(data.result.items[0]);
-          }
-        );
-      else
-        search({
-          q: term,
+        lookup(gapi.client.youtube)({
+          id: streamingLink?.youtube.id,
           part: "snippet",
-          type,
-          videoCategoryId: "10",
-          maxResults: 6,
-          pageToken: current,
-        })
+        }).then((data) => {
+          if (!data.result.items) return;
+          if (!data.result.items[0]) return;
+          data.result.items[0] && setValue(data.result.items[0]);
+        });
+      else
+        gapi.client.youtube.search
+          .list({
+            q: term,
+            part: "snippet",
+            type,
+            videoCategoryId: "10",
+            maxResults: 6,
+            pageToken: current,
+          })
           .then((data) => {
             data.result.items && setOptions(data.result.items);
             setRowsPerPage(data.result.pageInfo?.resultsPerPage || 0);
@@ -72,7 +74,7 @@ function YoutubeSelectForm({
           .catch((error) => {
             console.log(error);
           });
-  }, [term, loading, current, streamingLink?.youtube, lookup, search, type]);
+  }, [term, loading, current, streamingLink?.youtube, lookup, type]);
 
   const handleLoad = () => {
     gapi.load("client", () =>

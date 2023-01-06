@@ -12,17 +12,15 @@ interface ArticleCardProps {
   title: string;
   body: string;
 }
-const ArticleCard = ({ title, body }: ArticleCardProps) => {
-  return (
-    <Box>
-      <Typography variant="h4">{title}</Typography>
-      <Card variant="outlined">
-        <CardContent>
-          <Markdown source={body} />
-        </CardContent>
-      </Card>
-    </Box>
-  );
-};
+const ArticleCard = ({ title, body }: ArticleCardProps) => (
+  <Box>
+    <Typography variant="h4">{title}</Typography>
+    <Card variant="outlined">
+      <CardContent>
+        <Markdown source={body} />
+      </CardContent>
+    </Card>
+  </Box>
+);
 
 export default ArticleCard;

@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Menu from "@mui/material/Menu";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
 import ThemeToggleButton from "../../elements/button/toggle/theme";
@@ -77,51 +78,53 @@ const DefaultHeader = () => {
             />
           </Grid>
           <Grid item xs={3} />
-          <Grid item xs={1} display="flex" alignItems="center">
-            <LocaleAutocomplete />
-          </Grid>
-          <Grid item xs={1} display="flex" alignItems="center">
-            <ThemeToggleButton />
-          </Grid>
-          <Grid item xs={1} display="flex" alignItems="stretch">
-            {session ? (
-              <>
-                <IconButton onClick={handleClick}>
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={session.data?.user?.image || ""}
-                  />
-                </IconButton>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      if (!session.data?.user) return;
-                      router.push({
-                        pathname: `/users/[id]`,
-                        query: { id: session.data?.user?.id },
-                      });
+          <Grid item xs={3}>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <LocaleAutocomplete />
+              <ThemeToggleButton />
+              {session ? (
+                <>
+                  <IconButton onClick={handleClick}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={session.data?.user?.image || ""}
+                    />
+                  </IconButton>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
                     }}
                   >
-                    Profile
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>Settings</MenuItem>
-                  <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <Button variant="contained" onClick={handleOpen} disableElevation>
-                SignIn
-              </Button>
-            )}
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        if (!session.data?.user) return;
+                        router.push({
+                          pathname: `/users/[id]`,
+                          query: { id: session.data?.user?.id },
+                        });
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>Settings</MenuItem>
+                    <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleOpen}
+                  disableElevation
+                >
+                  SignIn
+                </Button>
+              )}
+            </Stack>
           </Grid>
         </Grid>
       </Header>

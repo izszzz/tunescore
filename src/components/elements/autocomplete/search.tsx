@@ -35,7 +35,6 @@ function SearchAutocomplete<
       {...props}
       inputValue={inputValue}
       onInputChange={(_event, newInputValue, reason) => {
-        console.log(reason);
         setInputValue(newInputValue);
         props.onInputChange &&
           props.onInputChange(_event, newInputValue, reason);

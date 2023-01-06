@@ -2,7 +2,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { trpc } from "../../../utils/trpc";
 import { userShowPath } from "../../../paths/users/[id]";
 import { bookmarkPath } from "../../../paths/users/[id]/bookmark";
@@ -52,24 +52,24 @@ const UserBookmarks: NextPage = () => {
           options: search.data || [],
           loading: search.isLoading,
           getOptionLabel: (option) =>
-            match(option.resourceType)
+            match(option)
               .with(
-                "Music",
-                () => option.music && setLocale(option.music.title, router)
+                { resourceType: "Music", music: P.select(P.not(P.nullish)) },
+                (music) => setLocale(music.title, router)
               )
               .with(
-                "Album",
-                () => option.album && setLocale(option.album.title, router)
+                { resourceType: "Album", album: P.select(P.not(P.nullish)) },
+                (album) => setLocale(album.title, router)
               )
               .with(
-                "Band",
-                () => option.band && setLocale(option.band.name, router)
+                { resourceType: "Band", band: P.select(P.not(P.nullish)) },
+                (band) => setLocale(band.name, router)
               )
               .with(
-                "Artist",
-                () => option.artist && setLocale(option.artist.name, router)
+                { resourceType: "Artist", artist: P.select(P.not(P.nullish)) },
+                (artist) => setLocale(artist.name, router)
               )
-              .exhaustive() || "",
+              .otherwise(() => ""),
           textFieldProps: {
             onChange: (e) =>
               search.mutate({
@@ -117,24 +117,24 @@ const UserBookmarks: NextPage = () => {
         }}
       >
         {bookmarkData.data.map((bookmark) =>
-          match(bookmark.resourceType)
+          match(bookmark)
             .with(
-              "Music",
-              () => bookmark.music && <MusicListItem data={bookmark.music} />
+              { resourceType: "Music", music: P.select(P.not(P.nullish)) },
+              (music) => <MusicListItem data={music} />
             )
             .with(
-              "Album",
-              () => bookmark.album && <AlbumListItem data={bookmark.album} />
+              { resourceType: "Album", album: P.select(P.not(P.nullish)) },
+              (album) => <AlbumListItem data={album} />
             )
             .with(
-              "Band",
-              () => bookmark.band && <BandListItem data={bookmark.band} />
+              { resourceType: "Band", band: P.select(P.not(P.nullish)) },
+              (band) => <BandListItem data={band} />
             )
             .with(
-              "Artist",
-              () => bookmark.artist && <ArtistListItem data={bookmark.artist} />
+              { resourceType: "Artist", artist: P.select(P.not(P.nullish)) },
+              (artist) => <ArtistListItem data={artist} />
             )
-            .exhaustive()
+            .otherwise(() => <></>)
         )}
       </IndexLayout>
     </UserLayout>

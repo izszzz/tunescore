@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";

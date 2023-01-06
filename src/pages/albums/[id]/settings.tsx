@@ -11,6 +11,7 @@ import SingleRowForm from "../../../components/elements/form/single_row";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
 import DeleteAlert from "../../../components/elements/alert/delete";
+import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import type { NextPage } from "next";
 
@@ -26,7 +27,7 @@ const Album: NextPage = () => {
   const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];
   return (
-    <AlbumLayout data={albumData} path={path} activeTab="info">
+    <AlbumLayout data={albumData} path={path} activeTab="settings">
       <SingleRowForm
         data={albumData}
         loading={update.isLoading}
@@ -36,6 +37,22 @@ const Album: NextPage = () => {
         }}
         textFieldElementProps={{
           name: "title",
+        }}
+      />
+      <BandUpdateAutocomplete
+        value={albumData.band}
+        loading={update.isLoading}
+        onChange={{
+          onClear: () =>
+            update.mutate({
+              ...query,
+              data: { band: { disconnect: true } },
+            }),
+          onSelect: (_e, _v, _r, details) =>
+            update.mutate({
+              ...query,
+              data: { band: { connect: { id: details?.option.id } } },
+            }),
         }}
       />
       <ItunesAlbumSelectForm

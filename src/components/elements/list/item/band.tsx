@@ -12,7 +12,8 @@ import MusicChip from "../../chip/music";
 import ArtistChip from "../../chip/artist";
 import AlbumChip from "../../chip/album";
 import BookmarkChip from "../../chip/bookmark";
-import { getContentImage } from "../../../../helpers/image";
+import { getChannelImage } from "../../../../helpers/image";
+import Image from "../../image";
 import type { BandListQueryType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
 export interface BandListItemProps {
@@ -53,12 +54,11 @@ const BandListItem = ({ data }: BandListItemProps) => {
           }
         />
         {data.link?.streaming && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             height="60"
             alt={name}
             src={
-              getContentImage(data.link.streaming)?.image?.size?.medium || ""
+              getChannelImage(data.link.streaming)?.image?.size?.medium || ""
             }
             style={{ borderRadius: 3 }}
           />

@@ -11,6 +11,7 @@ import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import ResourceIcon from "../../elements/icon/resource";
+import Image from "../../elements/image";
 import { getChannelImage } from "../../../helpers/image";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
@@ -87,8 +88,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
           <Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={name}

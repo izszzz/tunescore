@@ -11,6 +11,7 @@ import ResourceIcon from "../../icon/resource";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
 import { getContentImage } from "../../../../helpers/image";
+import Image from "../../image";
 import type { AlbumListQueryType } from "../../../../helpers/album";
 import type { Prisma } from "@prisma/client";
 
@@ -52,8 +53,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
           }
         />
         {data.link?.streaming && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             height="60"
             alt={title}
             src={

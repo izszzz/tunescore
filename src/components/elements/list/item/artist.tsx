@@ -11,6 +11,7 @@ import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import BandChip from "../../chip/band";
 import { getChannelImage } from "../../../../helpers/image";
+import Image from "../../image";
 import type { Prisma } from "@prisma/client";
 import type { ArtistListQueryType } from "../../../../helpers/artist";
 
@@ -57,8 +58,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
           }
         />
         {data.link?.streaming && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             height="60"
             alt={name}
             src={

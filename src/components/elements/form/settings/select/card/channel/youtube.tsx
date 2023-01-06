@@ -14,12 +14,11 @@ const ChannelYoutubeSelectForm = ({
   onSelect,
   onRemove,
   ...props
-}: ChannelYoutubeSelectFormProps) => {
+}: ChannelYoutubeSelectFormProps) => (
   <YoutubeSelectForm
     {...props}
     type="channel"
-    search={gapi.client.youtube.search.list}
-    lookup={gapi.client.youtube.videos.list}
+    lookup={(api) => api.channels.list}
     largeCard={(value) =>
       value && (
         <ChannelYoutubeCard
@@ -38,7 +37,7 @@ const ChannelYoutubeSelectForm = ({
         />
       )
     }
-  />;
-};
+  />
+);
 
 export default ChannelYoutubeSelectForm;

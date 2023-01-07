@@ -29,7 +29,7 @@ jobs:
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          workload_identity_provider: projects/101580936050/locations/global/workloadIdentityPools/github-actions-pool/attribute.repository/izszzz/tunescore
+          workload_identity_provider: projects/101580936050/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
           service_account: github-actions@tunescore.iam.gserviceaccount.com
 
       - name: Deploy

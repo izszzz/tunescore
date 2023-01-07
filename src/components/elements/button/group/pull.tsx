@@ -31,7 +31,7 @@ const PullButton = ({
   onClose,
   onDraft,
   onVote,
-}: PullButtonProps) => {
+}: PullButtonProps) =>
   match(data)
     .with({ status: "DRAFT" }, () => (
       <PullOpenButton loading={loading} onClick={onOpen} />
@@ -71,8 +71,6 @@ const PullButton = ({
       <PullDraftButton loading={loading} onClick={onDraft} />
     ))
     .exhaustive();
-};
-
 const PullOpenButton = (props: LoadingButtonProps) => (
   <LoadingButton
     variant="outlined"

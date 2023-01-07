@@ -15,6 +15,7 @@ import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
 import ThemeToggleButton from "../../elements/button/toggle/theme";
 import SearchAutocomplete from "../../elements/autocomplete/search";
+import { getCurrentUserId } from "../../../helpers/user";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import Header from ".";
@@ -25,6 +26,7 @@ const DefaultHeader = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const search = trpc.useMutation(["search.music"]);
+  const id = getCurrentUserId(session);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
@@ -77,8 +79,8 @@ const DefaultHeader = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={3} />
-          <Grid item xs={3}>
+          <Grid item xs={4} />
+          <Grid item xs={2}>
             <Stack direction="row" spacing={2} alignItems="center">
               <LocaleAutocomplete />
               <ThemeToggleButton />
@@ -102,10 +104,10 @@ const DefaultHeader = () => {
                     <MenuItem
                       onClick={() => {
                         handleClose();
-                        if (!session.data?.user) return;
+                        if (!id) return;
                         router.push({
                           pathname: `/users/[id]`,
-                          query: { id: session.data?.user?.id },
+                          query: { id },
                         });
                       }}
                     >

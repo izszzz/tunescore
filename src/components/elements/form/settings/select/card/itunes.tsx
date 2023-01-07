@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CardSelectForm from "./";
-import type { CardSelectFormProps } from "./";
+import CardSelectForm from ".";
+import type { CardSelectFormProps } from ".";
 import type {
   ItunesResponse,
   searchItunes,

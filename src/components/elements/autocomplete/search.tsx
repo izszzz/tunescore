@@ -33,6 +33,7 @@ function SearchAutocomplete<
   return (
     <Autocomplete
       {...props}
+      loading={props.loading}
       inputValue={inputValue}
       onInputChange={(_event, newInputValue, reason) => {
         setInputValue(newInputValue);

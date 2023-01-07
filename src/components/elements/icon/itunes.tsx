@@ -1,12 +1,12 @@
 import React from "react";
-import { SiItunes } from "react-icons/si";
 import SvgIcon from "@mui/material/SvgIcon";
+import { AiFillApple } from "react-icons/ai";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 
-const Google = (props: SvgIconProps) => (
+const AppleIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
-    <SiItunes />
+    <AiFillApple />
   </SvgIcon>
 );
 
-export default Google;
+export default AppleIcon;

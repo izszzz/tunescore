@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import YouTube from "react-youtube";
 import Box from "@mui/material/Box";
 import MusicLayout from "../../../components/layouts/show/music";
-import ItunesButton from "../../../components/elements/button/itunes";
+import AppleButton from "../../../components/elements/button/link/itunes";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
@@ -28,7 +28,7 @@ const Music: NextPage = () => {
   return (
     <MusicLayout data={musicData} path={path} activeTab="info">
       {data.link?.streaming?.itunes?.id && (
-        <ItunesButton href={data.link?.streaming?.itunes.id} />
+        <AppleButton href={data.link?.streaming?.itunes.id} />
       )}
       <ScoreButtonGroup
         watchButton={{

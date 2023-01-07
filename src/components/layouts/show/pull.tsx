@@ -166,8 +166,6 @@ const PullLayout: React.FC<PullLayoutProps> = ({
           <Box my={3}>
             {session.data?.user?.id === data.userId && (
               <PullButton
-                // type={data.music.type}
-                // status={data.status}
                 data={data}
                 conflict={conflict}
                 diff={diff}

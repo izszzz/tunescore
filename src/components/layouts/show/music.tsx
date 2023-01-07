@@ -2,9 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
@@ -20,6 +17,7 @@ import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getContentImage } from "../../../helpers/image";
 import Image from "../../elements/image";
+import LocaleAlert from "../../elements/alert/locale";
 import DefaultShowLayout from "./default";
 import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
@@ -144,14 +142,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
           }),
       }}
     >
-      {data.title[router.locale as keyof Locales] === null && (
-        <Stack sx={{ width: "100%" }} spacing={2}>
-          <Alert severity="warning">
-            <AlertTitle>指定された言語の曲タイトルが登録されてねえ</AlertTitle>
-            登録しろ
-          </Alert>
-        </Stack>
-      )}
+      {data.title[router.locale as keyof Locales] === null && <LocaleAlert />}
       {children}
     </DefaultShowLayout>
   );

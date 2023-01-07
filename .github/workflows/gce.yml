@@ -32,10 +32,14 @@ jobs:
           workload_identity_provider: projects/101580936050/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
           service_account: github-actions@tunescore.iam.gserviceaccount.com
 
+      - name: DEBUG
+        run: ls
+        run: pwd
+
       - name: Deploy
         run: |-
-          gcloud compute copy-files "$GCE_INSTANCE":~/tunescore ./tunescore \
-            --zone "$GCE_INSTANCE_ZONE" \
+          gcloud compute copy-files "$GCE_INSTANCE":../tunescore ./tunescore \
+          --zone "$GCE_INSTANCE_ZONE" \
 
       - name: Compose Up
         run: |-

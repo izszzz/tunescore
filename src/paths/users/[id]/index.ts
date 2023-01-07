@@ -1,8 +1,9 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { musicListQuery } from "../../../helpers/music";
+import { checkCurrentUserFollowingQuery } from "../../../helpers/follow";
+import type { GetCurrentUserArg } from "../../../helpers/user";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { GetCurrentUserArg} from "../../../helpers/user";
 
 export const userShowPath = ({
   router,
@@ -16,17 +17,27 @@ export const userShowPath = ({
     {
       where: { id: getRouterId(router) },
       include: {
+        followers: checkCurrentUserFollowingQuery(session),
         _count: { select: { following: true, followers: true } },
-        followers: {
-          include: {
-            following: {
-              include: {
-                _count: { select: { following: true, followers: true } },
-              },
-            },
-          },
-        },
-        bookmarks: true,
+      },
+    },
+  ]);
+
+export const userRepositoriesPath = ({
+  router,
+  session,
+}: {
+  router: GetRouterArg;
+  session: GetCurrentUserArg;
+}) =>
+  createPath([
+    "user.findUniqueUser",
+    {
+      where: { id: getRouterId(router) },
+      include: {
+        followers: checkCurrentUserFollowingQuery(session),
+        _count: { select: { following: true, followers: true } },
+        musics: musicListQuery(session),
       },
     },
   ]);

@@ -20,10 +20,9 @@ export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
     include: {
       _count: { select: { following: true; followers: true } };
       followers: true;
-      bookmarks: true;
     };
   }>;
-  activeTab: "info" | "settings" | "bookmarks" | "";
+  activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
 }
 
 const UserLayout: React.FC<UserLayoutProps> = ({
@@ -46,13 +45,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         },
       },
       {
-        label: "settings",
-        href: {
-          pathname: "/users/[id]/settings",
-          query: { id },
-        },
-      },
-      {
         label: "bookmarks",
         href: {
           pathname: "/users/[id]/bookmarks",
@@ -63,6 +55,13 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         label: "repositories",
         href: {
           pathname: "/users/[id]/repositories",
+          query: { id },
+        },
+      },
+      {
+        label: "settings",
+        href: {
+          pathname: "/users/[id]/settings",
           query: { id },
         },
       },

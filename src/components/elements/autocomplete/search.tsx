@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Autocomplete, {
   type AutocompleteProps,
 } from "@mui/material/Autocomplete";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
-import { useRouter } from "next/router";
+import { useDebouncedCallback } from "use-debounce";
 
 export type SearchAutocompleteProps<
   T,
@@ -23,23 +23,22 @@ function SearchAutocomplete<
   FreeSolo extends boolean | undefined = undefined
 >({
   textFieldProps,
+  loading,
+  onInputChange,
   ...props
 }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
-  const [inputValue, setInputValue] = useState("");
-  const router = useRouter();
-  useEffect(() => {
-    setInputValue(router.query.q as string);
-  }, [router.query.q]);
+  type InputChangeParamters = Parameters<NonNullable<typeof onInputChange>>;
+  const handleInputChange = (
+    e: InputChangeParamters[0],
+    value: InputChangeParamters[1],
+    reason: InputChangeParamters[2]
+  ) => onInputChange && onInputChange(e, value, reason);
+  const debounced = useDebouncedCallback(handleInputChange, 500);
   return (
     <Autocomplete
       {...props}
-      loading={props.loading}
-      inputValue={inputValue}
-      onInputChange={(_event, newInputValue, reason) => {
-        setInputValue(newInputValue);
-        props.onInputChange &&
-          props.onInputChange(_event, newInputValue, reason);
-      }}
+      loading={loading || debounced.isPending()}
+      onInputChange={debounced}
       renderInput={(params) => (
         <TextField {...params} {...textFieldProps} variant="outlined" />
       )}

@@ -16,7 +16,7 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
 }: BandUpdateAutocomplete<T>) {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const searchBand = trpc.useMutation("search.band", {
+  const search = trpc.useMutation("search.band", {
     onError: () => {
       enqueueSnackbar("band.search error");
     },
@@ -24,20 +24,21 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
   return (
     <UpdateAutocomplete<Band, T>
       {...props}
-      options={searchBand.data || []}
+      options={search.data || []}
       getOptionLabel={(option) => setLocale(option.name, router)}
+      onInputChange={(_e, value) =>
+        search.mutate({
+          where: {
+            name: {
+              is: { [router.locale]: { contains: value } },
+            },
+          },
+          take: 10,
+        })
+      }
       textFieldProps={{
         label: "band",
         margin: "dense",
-        onChange: (e) =>
-          searchBand.mutate({
-            where: {
-              name: {
-                is: { [router.locale]: { contains: e.currentTarget.value } },
-              },
-            },
-            take: 10,
-          }),
       }}
     />
   );

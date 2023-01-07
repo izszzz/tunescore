@@ -25,20 +25,22 @@ const AlbumUpdateAutocomplete = ({
   return (
     <UpdateAutocomplete<Album, true>
       options={search.data || []}
+      loading={search.isLoading}
       getOptionLabel={(option) => setLocale(option.title, router)}
       ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}
+      onInputChange={(_e, value) =>
+        search.mutate({
+          where: {
+            title: {
+              is: { [router.locale]: { contains: value } },
+            },
+          },
+          take: 10,
+        })
+      }
       textFieldProps={{
         label: "albums",
         margin: "dense",
-        onChange: (e) =>
-          search.mutate({
-            where: {
-              title: {
-                is: { [router.locale]: { contains: e.currentTarget.value } },
-              },
-            },
-            take: 10,
-          }),
       }}
       multiple
       {...props}

@@ -23,18 +23,19 @@ const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
       options={search.data || []}
       getOptionLabel={(option) => option.name}
       ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
+      onInputChange={(_e, value) =>
+        search.mutate({
+          where: {
+            name: {
+              contains: value,
+            },
+          },
+          take: 10,
+        })
+      }
       textFieldProps={{
         label: "tag",
         margin: "dense",
-        onChange: (e) =>
-          search.mutate({
-            where: {
-              name: {
-                contains: e.currentTarget.value,
-              },
-            },
-            take: 10,
-          }),
       }}
       multiple
     />

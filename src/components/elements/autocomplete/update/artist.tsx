@@ -21,28 +21,30 @@ const ArtistUpdateAutocomplete = ({
 }: ArtistUpdateAutocomplete) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const searchArtist = trpc.useMutation("search.artist", {
+  const search = trpc.useMutation("search.artist", {
     onError: () => {
       enqueueSnackbar("artist.search error");
     },
   });
   return (
     <UpdateAutocomplete<Artist, true>
-      options={searchArtist.data || []}
+      options={search.data || []}
+      loading={search.isLoading}
       getOptionLabel={(option) => setLocale(option.name, router)}
       ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
+      onInputChange={(_e, value) =>
+        search.mutate({
+          where: {
+            name: {
+              is: { [router.locale]: { contains: value } },
+            },
+          },
+          take: 10,
+        })
+      }
       textFieldProps={{
         label,
         margin: "dense",
-        onChange: (e) =>
-          searchArtist.mutate({
-            where: {
-              name: {
-                is: { [router.locale]: { contains: e.currentTarget.value } },
-              },
-            },
-            take: 10,
-          }),
       }}
       multiple
       {...props}

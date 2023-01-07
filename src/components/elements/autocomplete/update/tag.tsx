@@ -21,6 +21,7 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
     <UpdateAutocomplete<Tag, true>
       {...props}
       options={search.data || []}
+      loading={search.isLoading}
       getOptionLabel={(option) => option.name}
       ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
       textFieldProps={{

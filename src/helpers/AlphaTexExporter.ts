@@ -34,6 +34,7 @@ export default class AlphaTexExporter {
   }
   TrackMetaData(track: Model.Track) {
     this._builder += "" + "\r\n";
+    // eslint-disable-next-line no-useless-escape
     this._builder += `\\track \"${track.name}\" \"${track.shortName}\"`;
     this._builder += "" + "\r\n";
   }

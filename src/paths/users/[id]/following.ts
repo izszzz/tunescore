@@ -1,15 +1,7 @@
 import { createPath } from "../../../helpers/path";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { GetCurrentUserArg} from "../../../helpers/user";
-export const followingPath = ({
-  router,
-  session,
-}: {
-  router: GetRouterArg;
-  session: GetCurrentUserArg;
-}) =>
+export const followingPath = ({ router }: { router: GetRouterArg }) =>
   createPath([
     "pagination.follow",
     {

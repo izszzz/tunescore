@@ -9,6 +9,7 @@ import type { AppRouter } from "../server/router";
 type TRouter = AppRouter;
 type TQueries = TRouter["_def"]["queries"];
 type inferProcedures<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TObj extends ProcedureRecord<any, any, any, any, any, any>
 > = {
   [TPath in keyof TObj]: {

@@ -19,6 +19,7 @@ const SettingsUser: NextPage = () => {
     onSuccess: () => router.push("/"),
     onError: (error) => console.log(error),
   });
+  if (!data) return <></>;
   const userData = data as UserLayoutProps["data"];
   return (
     <UserLayout data={userData} activeTab="settings">

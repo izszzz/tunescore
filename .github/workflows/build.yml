@@ -19,8 +19,8 @@ jobs:
         run: mkdir build
       
       - name: Move
-        run: mv prisma \
-        .next \
+        run: mv .next \
+        prisma \
         package.json \
         package-lock.json \
         Dockerfile

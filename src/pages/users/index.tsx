@@ -8,11 +8,6 @@ import type { NextPage } from "next";
 const Users: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation(["search.user"], {
-    onError: () => {
-      enqueueSnackbar("user.search error");
-    },
-  });
   const { data } = trpc.useQuery(
     [
       "pagination.user",

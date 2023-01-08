@@ -16,7 +16,7 @@ const UserFollowers: NextPage = () => {
   const router = useRouter();
   const id = getRouterId(router);
   const path = userShowPath({ router, session });
-  const followPath = followingPath({ router, session });
+  const followPath = followingPath({ router });
   const { data } = trpc.useQuery(path);
   const { data: followData } = trpc.useQuery(followPath);
   const search = trpc.useMutation("search.follow");

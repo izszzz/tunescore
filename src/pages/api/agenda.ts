@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await prisma.pull.update({
       where: { id: pullId as string },
       data: {
-        status: "MERGED",
+        status: "MERGE",
         music: { update: { score: pull?.score.changed } },
       },
     });

@@ -17,16 +17,9 @@ jobs:
 
       - name: Create Build Folder
         run: mkdir build
-      
+
       - name: Move
-        run: mv .next \
-        prisma \
-        package.json \
-        package-lock.json \
-        Dockerfile
-        docker-compose.yml \
-        docker-compose.prod.yml \
-        build \
+        run: mv .next prisma package.json package-lock.json Dockerfile docker-compose.yml docker-compose.prod.yml build
 
       - name: Push
         env:

@@ -32,6 +32,9 @@ jobs:
           workload_identity_provider: projects/101580936050/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider
           service_account: github-actions@tunescore.iam.gserviceaccount.com
 
+      - name: Set up Cloud SDK
+            uses: google-github-actions/setup-gcloud@v1
+
       - name: Deploy
         run: |-
           gcloud compute copy-files "$GCE_INSTANCE":./ ./tunescore \

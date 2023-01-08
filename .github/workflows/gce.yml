@@ -43,4 +43,4 @@ jobs:
 
       - name: Compose Up
         run: |-
-          gcloud compute ssh $GCE_INSTANCE --zone=$GCE_INSTANCE_ZONE --command="( bash -ci 'docker-compose build' && bash -ci 'docker-compose down' && bash -ci 'docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d') &)"
+          gcloud compute ssh $GCE_INSTANCE --zone=$GCE_INSTANCE_ZONE --command="(bash -ci 'docker-compose build' && bash -ci 'docker-compose down' && bash -ci 'docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d')"

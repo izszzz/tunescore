@@ -3,12 +3,12 @@ name: Build and Deploy to Google Compute Engine
 on:
   push:
     branches:
-      - "main"
+      - "build"
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: tunescore # TODO: update to instance name
-  GCE_INSTANCE_ZONE: us-west1-a # TODO: update to instance zone
+  GCE_INSTANCE: tunescore
+  GCE_INSTANCE_ZONE: us-west1-a
   GCE_USER: hakeiprod
 
 jobs:

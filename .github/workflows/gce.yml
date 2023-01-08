@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud compute scp ./tunescore "$GCE_INSTANCE":./ \
+          gcloud compute scp ./ "$GCE_INSTANCE":./ \
           --zone "$GCE_INSTANCE_ZONE" \
 
       - name: Compose Up

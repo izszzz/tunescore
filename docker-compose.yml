@@ -21,7 +21,6 @@ services:
       - nextjs-node-modules:/app/node_modules
     ports:
       - 3000:3000
-      - 6006:6006
     depends_on:
       - db
     tty: true

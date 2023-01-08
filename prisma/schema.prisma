@@ -8,16 +8,10 @@ generator client {
 generator trpc {
   provider       = "prisma-trpc-generator"
   withMiddleware = false
-  withShield     = true
+  withShield     = false
   contextPath    = "../../../../src/server/router/context"
   isGenerateSelect   = true
   isGenerateInclude  = true
-}
-
-generator trpc_shield {
-  provider     = "prisma-trpc-shield-generator"
-  output       = "./shield"
-  contextPath  = "../src/server/router/context"
 }
 
 generator erd {

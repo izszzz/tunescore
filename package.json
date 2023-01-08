@@ -14,7 +14,10 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "release": {
-    "branches": ["master", "next"]
+    "branches": [
+      "master",
+      "next"
+    ]
   },
   "dependencies": {
     "@coderline/alphatab": "^1.2.3",

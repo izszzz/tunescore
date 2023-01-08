@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud compute scp ./ "$GCE_INSTANCE":./ \
+          gcloud compute scp $(pwd) "$GCE_INSTANCE":./ \
           --recurse \
           --zone "$GCE_INSTANCE_ZONE" \
 

@@ -3,7 +3,7 @@ name: Build and Deploy to Google Compute Engine
 on:
   push:
     branches:
-      - "build"
+      - "main"
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
@@ -15,6 +15,16 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    environment: production
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL}}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+      DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+      DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
 
     # Add "id-token" with the intended permissions.
     permissions:
@@ -24,6 +34,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: 16.x
+
+      - name: npm install and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Create Build Folder
+        run: mkdir build
+
+      - name: Move
+        run: mv .next prisma package.json package-lock.json Dockerfile docker-compose.yml docker-compose.prod.yml build
 
       # Configure Workload Identity Federation and generate an access token.
       - id: "auth"
@@ -38,7 +64,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud compute scp $(pwd) "$GCE_USER"@"$GCE_INSTANCE":./ \
+          gcloud compute scp ./build "$GCE_USER"@"$GCE_INSTANCE":./ \
           --recurse \
           --zone "$GCE_INSTANCE_ZONE" \
 

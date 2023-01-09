@@ -4,12 +4,11 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
-import IconButton from "@mui/material/IconButton";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import ResourceIcon from "../../elements/icon/resource";
+import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -75,9 +74,10 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <IconButton onClick={() => router.push("/albums")}>
-            <ResourceIcon resource="ALBUM" />
-          </IconButton>
+          <ResourceIconButton
+            resource="ALBUM"
+            onClick={() => router.push("/albums")}
+          />
           <Typography variant="h5">{setLocale(data.title, router)}</Typography>
         </>
       }

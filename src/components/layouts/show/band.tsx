@@ -4,15 +4,14 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
-import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Image from "../../elements/image";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import ResourceIcon from "../../elements/icon/resource";
 import { getChannelImage } from "../../../helpers/image";
+import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -79,10 +78,11 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       activeTab={activeTab}
       title={
         <>
-          <IconButton onClick={() => router.push("/bands")}>
-            <ResourceIcon resource="BAND" />
-          </IconButton>
-          <Typography variant="h5">{name}</Typography>
+          <ResourceIconButton
+            resource="BAND"
+            onClick={() => router.push("/bands")}
+          />
+          s<Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image

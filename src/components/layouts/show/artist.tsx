@@ -5,14 +5,13 @@ import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
-import IconButton from "@mui/material/IconButton";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import ResourceIcon from "../../elements/icon/resource";
 import Image from "../../elements/image";
 import { getChannelImage } from "../../../helpers/image";
+import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
@@ -82,9 +81,10 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <IconButton onClick={() => router.push("/artists")}>
-            <ResourceIcon resource="ARTIST" />
-          </IconButton>
+          <ResourceIconButton
+            resource="ARTIST"
+            onClick={() => router.push("/artists")}
+          />
           <Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>

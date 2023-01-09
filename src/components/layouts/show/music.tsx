@@ -5,11 +5,9 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
-import { IconButton } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
-import ResourceIcon from "../../elements/icon/resource";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
@@ -18,6 +16,7 @@ import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getContentImage } from "../../../helpers/image";
 import Image from "../../elements/image";
 import LocaleAlert from "../../elements/alert/locale";
+import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
 import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
@@ -102,9 +101,10 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
       tabs={tabs}
       title={
         <>
-          <IconButton onClick={() => router.push("/musics")}>
-            <ResourceIcon resource="MUSIC" />
-          </IconButton>
+          <ResourceIconButton
+            resource="MUSIC"
+            onClick={() => router.push("/musics")}
+          />
           <MusicTitle data={data} />
           <Box ml={3}>
             <Chip label={data?.type} size="small" />

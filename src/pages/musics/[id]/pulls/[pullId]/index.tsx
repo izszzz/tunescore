@@ -72,6 +72,14 @@ const Pull: NextPage = () => {
                   resourceType: "Pull",
                   pull: { connect: { id } },
                   user: { connect: { id: userId } },
+                  notifications: {
+                    create: {
+                      resourceType: "Comment",
+                      user: {
+                        connect: { id: userId },
+                      },
+                    },
+                  },
                 },
               }),
           }}

@@ -11,7 +11,7 @@ const ThemeToggleButton = () => {
   const handleClick = () => toggle();
 
   return (
-    <IconButton sx={{ ml: 1 }} onClick={handleClick} color="inherit">
+    <IconButton sx={{ ml: 1 }} onClick={handleClick}>
       {theme.palette.mode === "dark" ? (
         <Brightness7Icon />
       ) : (

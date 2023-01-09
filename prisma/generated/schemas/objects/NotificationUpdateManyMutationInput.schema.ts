@@ -7,7 +7,7 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.NotificationUpdateManyMutationInput> = z
   .object({
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => NotificationTypeSchema),
         z.lazy(

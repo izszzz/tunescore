@@ -4,7 +4,7 @@ export const NotificationScalarFieldEnumSchema = z.enum([
   'id',
   'userId',
   'resourceId',
-  'resurceType',
+  'resourceType',
   'createdAt',
   'readAt',
 ]);

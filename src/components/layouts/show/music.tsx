@@ -128,14 +128,13 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (bookmarked) =>
+        onClick: () =>
           update.mutate({
             ...query,
             data: {
               bookmarks: bookmarkMutate({
                 type: "Music",
-                bookmarked,
-                bookmarks: data.bookmarks,
+                data,
                 session,
               }),
             },

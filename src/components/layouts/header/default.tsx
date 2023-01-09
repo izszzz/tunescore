@@ -1,39 +1,28 @@
-import React, { useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import React from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import Menu from "@mui/material/Menu";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import { match } from "ts-pattern";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
 import ThemeToggleButton from "../../elements/button/toggle/theme";
 import SearchAutocomplete from "../../elements/autocomplete/search";
-import { getCurrentUserId } from "../../../helpers/user";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
+import AvatarMenuManager from "../../elements/menu/avatar";
+import NotificationsMenuManager from "../../elements/menu/notifications";
 import Header from ".";
 
 const DefaultHeader = () => {
   const session = useSession();
   const { handleOpen } = useModal();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
-  const search = trpc.useMutation(["search.music"]);
-  const id = getCurrentUserId(session);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
-    setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-  const handleSignOut = () => {
-    signOut();
-    handleClose();
-  };
+  const search = trpc.useMutation("search.music");
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter")
       router.replace({
@@ -84,48 +73,24 @@ const DefaultHeader = () => {
             <Stack direction="row" spacing={2} alignItems="center">
               <LocaleAutocomplete />
               <ThemeToggleButton />
-              {session ? (
-                <>
-                  <IconButton onClick={handleClick}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={session.data?.user?.image || ""}
-                    />
-                  </IconButton>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
+              {match(session)
+                .with({ status: "loading" }, () => <>loading</>)
+                .with({ status: "unauthenticated" }, () => (
+                  <Button
+                    variant="contained"
+                    onClick={handleOpen}
+                    disableElevation
                   >
-                    <MenuItem
-                      onClick={() => {
-                        handleClose();
-                        if (!id) return;
-                        router.push({
-                          pathname: `/users/[id]`,
-                          query: { id },
-                        });
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>Settings</MenuItem>
-                    <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={handleOpen}
-                  disableElevation
-                >
-                  SignIn
-                </Button>
-              )}
+                    SignIn
+                  </Button>
+                ))
+                .with({ status: "authenticated" }, () => (
+                  <>
+                    <NotificationsMenuManager />
+                    <AvatarMenuManager />
+                  </>
+                ))
+                .exhaustive()}
             </Stack>
           </Grid>
         </Grid>

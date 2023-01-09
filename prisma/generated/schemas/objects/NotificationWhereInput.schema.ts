@@ -68,7 +68,7 @@ const Schema: z.ZodType<Prisma.NotificationWhereInput> = z
     resourceId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => EnumNotificationTypeFilterObjectSchema),
         z.lazy(() => NotificationTypeSchema),

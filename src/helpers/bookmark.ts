@@ -1,6 +1,6 @@
 import { getCurrentUserId } from "./user";
-import type { Bookmark, BookmarkType } from "@prisma/client";
-import type { GetCurrentUserArg} from "./user";
+import type { BookmarkType, Prisma } from "@prisma/client";
+import type { GetCurrentUserArg } from "./user";
 
 export const bookmarkQuery = ({
   type,
@@ -16,25 +16,37 @@ export const bookmarkQuery = ({
 });
 
 export const bookmarkMutate = ({
-  bookmarked,
-  bookmarks,
+  data,
   type,
   session,
 }: {
-  bookmarked: boolean;
-  bookmarks: Bookmark[];
+  data: Prisma.MusicGetPayload<{
+    include: {
+      user: true;
+      bookmarks: true;
+    };
+  }>;
   type: BookmarkType;
   session: GetCurrentUserArg;
-}) =>
-  bookmarked
+}): Prisma.BookmarkUpdateManyWithoutMusicNestedInput =>
+  data.bookmarks[0]
     ? {
         delete: {
-          id: bookmarks[0]?.id,
+          id: data.bookmarks[0]?.id,
         },
       }
     : {
         create: {
           resourceType: type,
           user: { connect: { id: getCurrentUserId(session) } },
+          notifications:
+            type === "Music" && data.type === "ORIGINAL" && data.user
+              ? {
+                  create: {
+                    resourceType: "Bookmark",
+                    user: { connect: { id: session.data?.user?.id } },
+                  },
+                }
+              : undefined,
         },
       };

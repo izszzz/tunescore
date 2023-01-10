@@ -10,6 +10,7 @@ import { trpc } from "../../../utils/trpc";
 import DefaultHeader from "../header/default";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
+import { followMutate } from "../../../helpers/follow";
 import ShowLayout from "./index";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma } from "@prisma/client";
@@ -92,17 +93,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
                 update.mutate({
                   where: { id },
                   data: {
-                    followers: data.followers.length
-                      ? {
-                          delete: {
-                            id: data.followers[0]?.id,
-                          },
-                        }
-                      : {
-                          create: {
-                            following: { connect: { id: userId } },
-                          },
-                        },
+                    followers: followMutate({ data, session }),
                   },
                 })
               }

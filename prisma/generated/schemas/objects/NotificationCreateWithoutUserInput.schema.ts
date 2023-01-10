@@ -18,7 +18,7 @@ const Schema: z.ZodType<Prisma.NotificationCreateWithoutUserInput> = z
     commented: z
       .lazy(() => CommentCreateNestedOneWithoutNotificationsInputObjectSchema)
       .optional(),
-    resurceType: z.lazy(() => NotificationTypeSchema),
+    resourceType: z.lazy(() => NotificationTypeSchema),
     createdAt: z.date().optional(),
     readAt: z.date().optional(),
   })

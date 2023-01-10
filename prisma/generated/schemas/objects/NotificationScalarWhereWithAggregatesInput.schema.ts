@@ -37,7 +37,7 @@ const Schema: z.ZodType<Prisma.NotificationScalarWhereWithAggregatesInput> = z
     resourceId: z
       .union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()])
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => EnumNotificationTypeWithAggregatesFilterObjectSchema),
         z.lazy(() => NotificationTypeSchema),

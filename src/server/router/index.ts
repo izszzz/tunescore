@@ -10,6 +10,7 @@ import { artistsRouter } from "../../../prisma/generated/routers/Artist.router";
 import { bandsRouter } from "../../../prisma/generated/routers/Band.router";
 import { votesRouter } from "../../../prisma/generated/routers/Vote.router";
 import { commentsRouter } from "../../../prisma/generated/routers/Comment.router";
+import { notificationsRouter } from "../../../prisma/generated/routers/Notification.router";
 import { protectedExampleRouter } from "./protected-example-router";
 import { createRouter } from "./context";
 import { paginationRouter } from "./pagination";
@@ -28,6 +29,7 @@ export const appRouter = createRouter()
   .merge("vote.", votesRouter)
   .merge("pagination.", paginationRouter)
   .merge("search.", searchRouter)
+  .merge("notification.", notificationsRouter)
   .merge("auth.", protectedExampleRouter);
 
 // export type definition of API

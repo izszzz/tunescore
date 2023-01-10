@@ -21,7 +21,7 @@ const Schema: z.ZodType<Prisma.NotificationSelect> = z
     user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
     userId: z.boolean().optional(),
     resourceId: z.boolean().optional(),
-    resurceType: z.boolean().optional(),
+    resourceType: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     readAt: z.boolean().optional(),
   })

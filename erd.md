@@ -199,7 +199,7 @@ CLOSE CLOSE
 
   Notification {
     String id PK 
-    NotificationType resurceType  
+    NotificationType resourceType  
     DateTime createdAt  
     DateTime readAt  
     }
@@ -306,7 +306,7 @@ CLOSE CLOSE
     Notification o{--|o Follow : "followed"
     Notification o{--|o Comment : "commented"
     Notification o{--|| User : "user"
-    Notification o|--|| NotificationType : "enum:resurceType"
+    Notification o|--|| NotificationType : "enum:resourceType"
     LinkList o|--|o StreamingLink : "streaming"
     LinkList o|--|o AccountLink : "account"
     StreamingLink o|--|o Link : "youtube"

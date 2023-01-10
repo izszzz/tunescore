@@ -21,7 +21,7 @@ const Schema: z.ZodType<Prisma.NotificationUpdateWithoutBookmarkedInput> = z
         () => UserUpdateOneRequiredWithoutNotificationsNestedInputObjectSchema,
       )
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => NotificationTypeSchema),
         z.lazy(

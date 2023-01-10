@@ -16,6 +16,7 @@ import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import AvatarMenuManager from "../../elements/menu/avatar";
 import NotificationsMenuManager from "../../elements/menu/notifications";
+import PlusMenuManager from "../../elements/menu/plus";
 import Header from ".";
 
 const DefaultHeader = () => {
@@ -68,9 +69,14 @@ const DefaultHeader = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={4} />
-          <Grid item xs={2}>
-            <Stack direction="row" spacing={2} alignItems="center">
+          <Grid item xs={3} />
+          <Grid item xs={3}>
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              justifyContent="right"
+            >
               <LocaleAutocomplete />
               <ThemeToggleButton />
               {match(session)
@@ -86,6 +92,7 @@ const DefaultHeader = () => {
                 ))
                 .with({ status: "authenticated" }, () => (
                   <>
+                    <PlusMenuManager />
                     <NotificationsMenuManager />
                     <AvatarMenuManager />
                   </>

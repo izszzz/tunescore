@@ -13,12 +13,13 @@ const NewBand: NextPage = () => {
   });
   const handleSubmit = (data: Band) => create.mutate({ data });
   return (
-    <DefaultSingleColumnLayout>
+    <DefaultSingleColumnLayout contained>
       <p>new band</p>
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement
           name={"name." + router.locale}
           label="Name"
+          fullWidth
           required
         />
         <br />

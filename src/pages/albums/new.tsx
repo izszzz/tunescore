@@ -19,6 +19,7 @@ const NewBand: NextPage = () => {
         <TextFieldElement
           name={"title." + router.locale}
           label="Title"
+          fullWidth
           required
         />
         <br />

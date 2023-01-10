@@ -12,6 +12,7 @@ import Box from "@mui/system/Box";
 import Script from "next/script";
 import { importer } from "@coderline/alphatab";
 import { useSession } from "next-auth/react";
+import Divider from "@mui/material/Divider";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { trpc } from "../../utils/trpc";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
@@ -64,20 +65,20 @@ const NewMusic: NextPage = () => {
     }
   };
   return (
-    <DefaultSingleColumnLayout>
+    <DefaultSingleColumnLayout contained>
       <Script
         src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
         onError={(e) => console.log(e)}
       />
-      <Box borderBottom={1} mb={3}>
-        <Typography variant="h3">Create a New Music</Typography>
-      </Box>
+      <Typography variant="h4">Create a New Music</Typography>
+      <Divider />
+
       <FormContainer formContext={formContext} onSuccess={handleSubmit}>
         <Button variant="contained" component="label" disableElevation>
           Guitar Pro
           <input type="file" hidden onChange={handleChange} />
         </Button>
-        <Box borderBottom={1} mb={3}>
+        <Box mb={3}>
           <RadioButtonGroup
             label="type"
             name="type"
@@ -85,10 +86,11 @@ const NewMusic: NextPage = () => {
               { id: "ORIGINAL", label: "original" },
               { id: "COPY", label: "copy" },
             ]}
+            row
             required
           />
         </Box>
-        <Box borderBottom={1} mb={3}>
+        <Box mb={3}>
           <RadioButtonGroup
             label="visibillity"
             name="visibility"
@@ -96,6 +98,7 @@ const NewMusic: NextPage = () => {
               { id: "PUBLIC", label: "public" },
               { id: "PRIVATE", label: "private" },
             ]}
+            row
             required
           />
         </Box>
@@ -103,6 +106,7 @@ const NewMusic: NextPage = () => {
           name={"title." + router.locale}
           label="Title"
           required
+          fullWidth
         />
         <br />
         <TextFieldElement
@@ -113,7 +117,9 @@ const NewMusic: NextPage = () => {
           type="number"
         />
         <br />
-        <Button type="submit">submit</Button>
+        <Button type="submit" variant="contained" fullWidth disableElevation>
+          submit
+        </Button>
       </FormContainer>
     </DefaultSingleColumnLayout>
   );

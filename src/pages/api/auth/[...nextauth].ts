@@ -1,5 +1,6 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import SpotifyProvider from "next-auth/providers/spotify";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -16,6 +17,12 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.refresh_token;
+      }
+      return token;
+    },
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
@@ -27,6 +34,12 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    SpotifyProvider({
+      authorize:
+        "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private",
+      clientId: env.SPOTIFY_CLIENT_ID,
+      clientSecret: env.SPOTIFY_CLIENT_SECRET,
     }),
     // ...add more providers here
   ],

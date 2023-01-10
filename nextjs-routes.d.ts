@@ -12,6 +12,10 @@ declare module "nextjs-routes" {
     | { pathname: "/api/agenda"; query?: Query | undefined }
     | { pathname: "/api/auth/[...nextauth]"; query: Query<{ "nextauth": string[] }> }
     | { pathname: "/api/restricted"; query?: Query | undefined }
+    | { pathname: "/api/spotify/albums"; query?: Query | undefined }
+    | { pathname: "/api/spotify/artists"; query?: Query | undefined }
+    | { pathname: "/api/spotify/musics"; query?: Query | undefined }
+    | { pathname: "/api/spotify/playlists"; query?: Query | undefined }
     | { pathname: "/api/trpc/[trpc]"; query: Query<{ "trpc": string }> }
     | { pathname: "/artists/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/artists/[id]/settings"; query: Query<{ "id": string }> }

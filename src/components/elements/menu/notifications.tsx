@@ -1,17 +1,14 @@
 import { useSession } from "next-auth/react";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Error from "@mui/icons-material/Error";
-import Bookmark from "@mui/icons-material/Bookmark";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import QuestionAnswer from "@mui/icons-material/QuestionAnswer";
 import { match, P } from "ts-pattern";
 import { useRouter } from "next/router";
 import NotificationsIconButton from "../button/icon/notification";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { getCurrentUserId } from "../../../helpers/user";
+import NoneMenuListItem from "./item/none";
+import BookmarkMenuListItem from "./item/bookmark";
+import FollowMenuListItem from "./item/follow";
+import CommentMenuListItem from "./item/comment";
 import MenuManager from ".";
 import type { Prisma } from "@prisma/client";
 
@@ -84,74 +81,46 @@ const NotificationsMenuManager = () => {
       {(handleClose) =>
         notificationsData.length
           ? notificationsData.map((notification) => [
-              <MenuItem key={notification.id} onClick={handleClose}>
-                {match(notification)
-                  .with(
-                    {
-                      resourceType: "Bookmark",
-                      bookmarked: {
-                        music: P.select("music", P.not(P.nullish)),
-                      },
-                      user: P.select("user", P.not(P.nullish)),
+              match(notification)
+                .with(
+                  {
+                    resourceType: "Bookmark",
+                    bookmarked: {
+                      music: P.select("music", P.not(P.nullish)),
                     },
-                    ({ music, user }) => (
-                      <>
-                        <ListItemIcon>
-                          <Bookmark />
-                        </ListItemIcon>
-                        <ListItemText>
-                          {setLocale(music.title, router)} bookmarked by{" "}
-                          {user.name}
-                        </ListItemText>
-                      </>
-                    )
+                    user: P.select("user", P.not(P.nullish)),
+                  },
+                  ({ music, user }) => (
+                    <BookmarkMenuListItem onClick={handleClose}>
+                      {setLocale(music.title, router)} bookmarked by {user.name}
+                    </BookmarkMenuListItem>
                   )
-                  .with(
-                    {
-                      resourceType: "Follow",
-                      user: P.select("user", P.not(P.nullish)),
-                    },
-                    ({ user }) => (
-                      <>
-                        <ListItemIcon>
-                          <PersonAdd />
-                        </ListItemIcon>
-                        <ListItemText>followed by {user.name}</ListItemText>
-                      </>
-                    )
+                )
+                .with(
+                  {
+                    resourceType: "Follow",
+                    user: P.select("user", P.not(P.nullish)),
+                  },
+                  ({ user }) => (
+                    <FollowMenuListItem onClick={handleClose}>
+                      followed by {user.name}
+                    </FollowMenuListItem>
                   )
-                  .with(
-                    {
-                      resourceType: "Comment",
-                      user: P.select("user", P.not(P.nullish)),
-                    },
-                    ({ user }) => (
-                      <>
-                        <ListItemIcon>
-                          <QuestionAnswer />
-                        </ListItemIcon>
-                        <ListItemText>commented by {user.name}</ListItemText>
-                      </>
-                    )
+                )
+                .with(
+                  {
+                    resourceType: "Comment",
+                    user: P.select("user", P.not(P.nullish)),
+                  },
+                  ({ user }) => (
+                    <CommentMenuListItem onClick={handleClose}>
+                      commented by {user.name}
+                    </CommentMenuListItem>
                   )
-                  .otherwise(() => (
-                    <MenuItem key="none">
-                      <ListItemIcon>
-                        <Error fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>No data</ListItemText>
-                    </MenuItem>
-                  ))}
-              </MenuItem>,
+                )
+                .otherwise(() => <NoneMenuListItem onClick={handleClose} />),
             ])
-          : [
-              <MenuItem key="none">
-                <ListItemIcon>
-                  <Error fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>No data</ListItemText>
-              </MenuItem>,
-            ]
+          : [<NoneMenuListItem key="none" onClick={handleClose} />]
       }
     </MenuManager>
   );

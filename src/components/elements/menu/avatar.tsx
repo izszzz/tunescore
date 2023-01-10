@@ -6,8 +6,8 @@ import Settings from "@mui/icons-material/Settings";
 import AccountBox from "@mui/icons-material/AccountBox";
 import { signOut, useSession } from "next-auth/react";
 import router from "next/router";
-import { ListItemIcon, ListItemText } from "@mui/material";
 import { getCurrentUserId } from "../../../helpers/user";
+import MenuListItem from "./item";
 import MenuManager from ".";
 
 const AvatarMenuManager = () => {
@@ -33,16 +33,10 @@ const AvatarMenuManager = () => {
               });
           }}
         >
-          <ListItemIcon>
-            <AccountBox />
-          </ListItemIcon>
-          <ListItemText>Profile</ListItemText>
+          <MenuListItem icon={<AccountBox />}>Profile</MenuListItem>
         </MenuItem>,
         <MenuItem key="settings" onClick={handleClose}>
-          <ListItemIcon>
-            <Settings />
-          </ListItemIcon>
-          <ListItemText>Settings</ListItemText>
+          <MenuListItem icon={<Settings />}>Settings</MenuListItem>
         </MenuItem>,
         <MenuItem
           key="logout"
@@ -51,10 +45,7 @@ const AvatarMenuManager = () => {
             signOut();
           }}
         >
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
+          <MenuListItem icon={<Logout />}>Logout</MenuListItem>
         </MenuItem>,
       ]}
     </MenuManager>

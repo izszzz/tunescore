@@ -2,9 +2,9 @@ import Error from "@mui/icons-material/Error";
 import MenuListItem from ".";
 import type { MenuItemProps } from "@mui/material/MenuItem";
 
-const BookmarkMenuListItem = ({ children, ...props }: MenuItemProps) => (
+const NoneMenuListItem = (props: MenuItemProps) => (
   <MenuListItem {...props} icon={<Error />}>
-    {children}
+    No Data
   </MenuListItem>
 );
-export default BookmarkMenuListItem;
+export default NoneMenuListItem;

@@ -105,14 +105,13 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (bookmarked) =>
+        onClick: () =>
           update.mutate({
             ...query,
             data: {
               bookmarks: bookmarkMutate({
                 type: "Artist",
-                bookmarked,
-                bookmarks: data.bookmarks,
+                data,
                 session,
               }),
             },

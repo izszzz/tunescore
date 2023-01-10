@@ -1,3 +1,4 @@
+import { match, P } from "ts-pattern";
 import { getCurrentUserId } from "./user";
 import type { BookmarkType, Prisma } from "@prisma/client";
 import type { GetCurrentUserArg } from "./user";
@@ -15,17 +16,18 @@ export const bookmarkQuery = ({
   },
 });
 
+type Include = { include: { bookmarks: true } };
+type Data =
+  | Prisma.ArtistGetPayload<Include>
+  | Prisma.MusicGetPayload<{ include: { bookmarks: true; user: true } }>
+  | Prisma.AlbumGetPayload<Include>
+  | Prisma.BandGetPayload<Include>;
 export const bookmarkMutate = ({
   data,
   type,
   session,
 }: {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      user: true;
-      bookmarks: true;
-    };
-  }>;
+  data: Data;
   type: BookmarkType;
   session: GetCurrentUserArg;
 }): Prisma.BookmarkUpdateManyWithoutMusicNestedInput =>
@@ -35,18 +37,22 @@ export const bookmarkMutate = ({
           id: data.bookmarks[0]?.id,
         },
       }
-    : {
-        create: {
-          resourceType: type,
-          user: { connect: { id: getCurrentUserId(session) } },
-          notifications:
-            type === "Music" && data.type === "ORIGINAL" && data.user
-              ? {
-                  create: {
-                    resourceType: "Bookmark",
-                    user: { connect: { id: session.data?.user?.id } },
-                  },
-                }
-              : undefined,
-        },
-      };
+    : match(data)
+        .with({ type: "ORIGINAL", user: P.not(P.nullish) }, () => ({
+          create: {
+            resourceType: type,
+            user: { connect: { id: getCurrentUserId(session) } },
+            notifications: {
+              create: {
+                resourceType: "Bookmark",
+                user: { connect: { id: session.data?.user?.id } },
+              },
+            },
+          },
+        }))
+        .otherwise(() => ({
+          create: {
+            resourceType: type,
+            user: { connect: { id: getCurrentUserId(session) } },
+          },
+        }));

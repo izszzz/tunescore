@@ -102,14 +102,13 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (bookmarked) =>
+        onClick: () =>
           update.mutate({
             ...query,
             data: {
               bookmarks: bookmarkMutate({
                 type: "Band",
-                bookmarked,
-                bookmarks: data.bookmarks,
+                data,
                 session,
               }),
             },

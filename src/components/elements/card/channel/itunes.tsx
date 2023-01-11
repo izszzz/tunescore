@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CloseIconButton from "../../button/icon/close";
-import SquareArtistCard from "../artist/square";
+import SquareArtistCard from "../square/artist";
 import type { ItunesArtist } from "../../../../helpers/itunes";
 
 interface ItunesChannelCardProps {

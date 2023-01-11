@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import ResourceIcon from "../../icon/resource";
 import CloseIconButton from "../../button/icon/close";
-import SquareMusicCard from "./square";
+import SquareMusicCard from "../square/album";
 import type { ItunesAlbum } from "../../../../helpers/itunes";
 
 interface ItunesAlbumCardProps {

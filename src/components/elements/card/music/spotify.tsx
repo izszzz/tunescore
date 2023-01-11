@@ -8,30 +8,27 @@ import Typography from "@mui/material/Typography";
 import ResourceIcon from "../../icon/resource";
 import CloseIconButton from "../../button/icon/close";
 import SquareCard from "../square";
-import type { ItunesMusic } from "../../../../helpers/itunes";
 
-interface ItunesMusicCardProps {
-  data: ItunesMusic;
+interface SpotifyMusicCardProps {
+  data: SpotifyApi.TrackObjectFull;
   size: "small" | "large";
-  onClick?: (value: ItunesMusic) => void;
+  onClick?: (value: SpotifyApi.TrackObjectFull) => void;
 }
-const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
+const MusicSpotifyCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
   if (size === "small")
     return (
       <Tooltip
         title={
           <>
-            <Typography variant="subtitle1">
-              {data.trackCensoredName}
-            </Typography>
+            <Typography variant="subtitle1">{data.name}</Typography>
             <Typography variant="caption">
               <ResourceIcon resource="ALBUM" fontSize="inherit" />{" "}
-              {data.collectionCensoredName}
+              {data.album.name}
             </Typography>
             <br />
             <Typography variant="caption">
               <ResourceIcon resource="BAND" fontSize="inherit" />{" "}
-              {data.artistName}
+              {data.artists[0]?.name}
             </Typography>
           </>
         }
@@ -40,10 +37,10 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
           resource="MUSIC"
           title={
             <Typography variant="caption" display="block" noWrap>
-              {data.trackCensoredName}
+              {data.name}
             </Typography>
           }
-          image={data.artworkUrl100}
+          image={data.album.images[1]?.url || ""}
           size="100px"
           onClick={() => onClick && onClick(data)}
         />
@@ -56,18 +53,16 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
           <CardMedia
             component="img"
             sx={{ width: 100, height: "auto", borderRadius: "3px" }}
-            image={data.artworkUrl100}
+            image={data.album.images[1]?.url || ""}
             alt="Live from space album cover"
           />
         </CardContent>
         <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
           <Box>
-            <Typography variant="h6">{data.trackCensoredName}</Typography>
-            <Typography variant="caption">
-              {data.collectionCensoredName}
-            </Typography>
+            <Typography variant="h6">{data.name}</Typography>
+            <Typography variant="caption">{data.album.name}</Typography>
             <br />
-            <Typography variant="caption">{data.artistName}</Typography>
+            <Typography variant="caption">{data.artists[0]?.name}</Typography>
           </Box>
           <Box display="flex" alignItems="center">
             <CloseIconButton onClick={() => onClick && onClick(data)} />
@@ -78,4 +73,4 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
   return <></>;
 };
 
-export default ItunesMusicCard;
+export default MusicSpotifyCard;

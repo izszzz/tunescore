@@ -17,12 +17,6 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, account }) {
-      if (account) {
-        token.accessToken = account.refresh_token;
-      }
-      return token;
-    },
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),

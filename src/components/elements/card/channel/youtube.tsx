@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
-import SquareArtistCard from "../square/artist";
+import SquareCard from "../square";
 
 interface ChannelYoutubeCardProps<T> {
   data: T;
@@ -21,7 +21,8 @@ function ChannelYoutubeCard<
 >({ data, size, onClick }: ChannelYoutubeCardProps<T>) {
   if (size === "small")
     return (
-      <SquareArtistCard
+      <SquareCard
+        resource="ARTIST"
         title={
           <Typography variant="caption" display="block" noWrap>
             {data?.snippet?.title}

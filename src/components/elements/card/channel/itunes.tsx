@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CloseIconButton from "../../button/icon/close";
-import SquareArtistCard from "../square/artist";
+import SquareCard from "../square";
 import type { ItunesArtist } from "../../../../helpers/itunes";
 
 interface ItunesChannelCardProps {
@@ -15,7 +15,8 @@ interface ItunesChannelCardProps {
 const ItunesChannelCard = ({ size, data, onClick }: ItunesChannelCardProps) => {
   if (size === "small")
     return (
-      <SquareArtistCard
+      <SquareCard
+        resource="ARTIST"
         title={
           <Typography variant="caption" display="block" noWrap>
             {data.artistName}

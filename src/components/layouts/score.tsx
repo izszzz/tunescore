@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Box from "@mui/material/Box";
 import { useToggle } from "react-use";
 import VolumeSliderInput from "../elements/input/slider/volume";
-import ScoreHeader from "./header/score";
+import ScoreHeader from "../elements/header/score";
 import type { AlphaTabApi, model } from "@coderline/alphatab";
 
 const drawerWidth = 240;

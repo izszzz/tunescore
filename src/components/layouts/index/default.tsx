@@ -1,5 +1,5 @@
 import React from "react";
-import DefaultHeader from "../header/default";
+import DefaultHeader from "../../elements/header/default";
 import IndexLayout from "./";
 import type { IndexLayoutProps } from "./";
 

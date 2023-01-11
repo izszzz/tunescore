@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { trpc } from "../../../utils/trpc";
-import DefaultHeader from "../header/default";
+import DefaultHeader from "../../elements/header/default";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import { followMutate } from "../../../helpers/follow";

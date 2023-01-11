@@ -9,15 +9,15 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { match } from "ts-pattern";
 import CircularProgress from "@mui/material/CircularProgress";
-import LocaleAutocomplete from "../../elements/autocomplete/locale";
+import LocaleAutocomplete from "../autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
-import ThemeToggleButton from "../../elements/button/toggle/theme";
-import SearchAutocomplete from "../../elements/autocomplete/search";
+import ThemeToggleButton from "../button/toggle/theme";
+import SearchAutocomplete from "../autocomplete/search";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
-import AvatarMenuManager from "../../elements/menu/avatar";
-import NotificationsMenuManager from "../../elements/menu/notifications";
-import PlusMenuManager from "../../elements/menu/plus";
+import AvatarMenuManager from "../menu/avatar";
+import NotificationsMenuManager from "../menu/notifications";
+import PlusMenuManager from "../menu/plus";
 import Header from ".";
 
 const DefaultHeader = () => {

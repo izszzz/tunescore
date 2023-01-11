@@ -1,4 +1,5 @@
-import React from "react";
+import { Readable } from "stream";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { useRouter } from "next/router";
@@ -49,6 +50,13 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update error");
       },
     });
+  useEffect(() => {
+    fetch("/api/spotify/tracks")
+      .then(async (res) => {
+        console.log(await res.json());
+      })
+      .catch((err) => console.log(err));
+  }, []);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (

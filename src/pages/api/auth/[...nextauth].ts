@@ -13,11 +13,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
       if (session.user) {
-        session.user.id = user.id;
+        session.user = user;
       }
       return session;
     },
-    jwt({ token, account }) {
+    async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.refresh_token;
       }
@@ -36,8 +36,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     SpotifyProvider({
-      authorize:
-        "https://accounts.spotify.com/authorize?scope=user-read-email,playlist-read-private",
       clientId: env.SPOTIFY_CLIENT_ID,
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
     }),

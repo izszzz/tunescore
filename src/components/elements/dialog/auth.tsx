@@ -8,14 +8,15 @@ import Stack from "@mui/material/Stack";
 import { useModal } from "../../../hooks/useModal";
 import GoogleButton from "../button/providers/google";
 import SpotifyButton from "../button/providers/spotify";
+import type { ClientSafeProvider } from "next-auth/react";
 
 const AuthDialog = () => {
   const { open, handleClose } = useModal();
-  const [providers, setProviders] =
-    useState<Awaited<ReturnType<typeof getProviders>>>();
+  const [providers, setProviders] = useState<ClientSafeProvider[]>([]);
   useEffect(() => {
     (async () => {
-      setProviders(await getProviders());
+      const providers = await getProviders();
+      if (providers) setProviders(Object.values(providers));
     })();
   }, []);
   return (
@@ -23,17 +24,16 @@ const AuthDialog = () => {
       <DialogTitle>Sign In</DialogTitle>
       <DialogActions>
         <Stack spacing={2}>
-          {providers &&
-            Object.values(providers).map((provider) =>
-              match(provider)
-                .with({ name: "Google" }, () => (
-                  <GoogleButton provider={provider} />
-                ))
-                .with({ name: "Spotify" }, () => (
-                  <SpotifyButton provider={provider} />
-                ))
-                .otherwise(() => <></>)
-            )}
+          {providers.map((provider) =>
+            match(provider)
+              .with({ id: "google" }, () => (
+                <GoogleButton key="google" provider={provider} />
+              ))
+              .with({ id: "spotify" }, () => (
+                <SpotifyButton key="spotify" provider={provider} />
+              ))
+              .otherwise(() => <></>)
+          )}
         </Stack>
       </DialogActions>
     </Dialog>

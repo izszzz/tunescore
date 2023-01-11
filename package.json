@@ -75,7 +75,7 @@
     "react-youtube": "^10.1.0",
     "recoil": "^0.7.6",
     "split.js": "^1.6.5",
-    "spotify-web-api-js": "^1.5.2",
+    "spotify-web-api-node": "^5.0.2",
     "superjson": "^1.10.0",
     "trpc-shield": "^0.3.0",
     "ts-node": "^10.9.1",

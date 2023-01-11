@@ -17,6 +17,7 @@ export const userShowPath = ({
     {
       where: { id: getRouterId(router) },
       include: {
+        accounts: true,
         followers: checkCurrentUserFollowingQuery(session),
         _count: { select: { following: true, followers: true } },
       },

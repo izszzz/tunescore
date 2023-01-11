@@ -21,6 +21,7 @@ export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
     include: {
       _count: { select: { following: true; followers: true } };
       followers: true;
+      accounts: true;
     };
   }>;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";

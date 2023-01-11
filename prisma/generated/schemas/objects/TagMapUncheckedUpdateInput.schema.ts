@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
-import { EnumTagTypeFieldUpdateOperationsInputObjectSchema } from './EnumTagTypeFieldUpdateOperationsInput.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
+import { EnumResourceTypeFieldUpdateOperationsInputObjectSchema } from './EnumResourceTypeFieldUpdateOperationsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -21,8 +21,8 @@ const Schema: z.ZodType<Prisma.TagMapUncheckedUpdateInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => TagTypeSchema),
-        z.lazy(() => EnumTagTypeFieldUpdateOperationsInputObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
+        z.lazy(() => EnumResourceTypeFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
   })

@@ -3,7 +3,7 @@ import { TagCreateNestedOneWithoutTagMapInputObjectSchema } from './TagCreateNes
 import { MusicCreateNestedOneWithoutTagMapsInputObjectSchema } from './MusicCreateNestedOneWithoutTagMapsInput.schema';
 import { BandCreateNestedOneWithoutTagMapsInputObjectSchema } from './BandCreateNestedOneWithoutTagMapsInput.schema';
 import { AlbumCreateNestedOneWithoutTagMapsInputObjectSchema } from './AlbumCreateNestedOneWithoutTagMapsInput.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -20,7 +20,7 @@ const Schema: z.ZodType<Prisma.TagMapCreateWithoutArtistInput> = z
     album: z
       .lazy(() => AlbumCreateNestedOneWithoutTagMapsInputObjectSchema)
       .optional(),
-    resourceType: z.lazy(() => TagTypeSchema),
+    resourceType: z.lazy(() => ResourceTypeSchema),
   })
   .strict();
 

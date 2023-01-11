@@ -11,8 +11,8 @@ import { ArtistRelationFilterObjectSchema } from './ArtistRelationFilter.schema'
 import { ArtistWhereInputObjectSchema } from './ArtistWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema';
-import { EnumBookmarkTypeFilterObjectSchema } from './EnumBookmarkTypeFilter.schema';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { EnumResourceTypeFilterObjectSchema } from './EnumResourceTypeFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -82,8 +82,8 @@ const Schema: z.ZodType<Prisma.BookmarkWhereInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumBookmarkTypeFilterObjectSchema),
-        z.lazy(() => BookmarkTypeSchema),
+        z.lazy(() => EnumResourceTypeFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

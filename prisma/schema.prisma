@@ -252,7 +252,7 @@ model Bookmark{
   userId String @db.ObjectId
 
   resourceId String @db.ObjectId
-  resourceType BookmarkType 
+  resourceType ResourceType 
 
   @@unique([resourceId, resourceType, userId])
 }
@@ -306,7 +306,7 @@ model TagMap{
   artist Artist? @relation("ArtistTagMap",fields: [resourceId], references: [id])
 
   resourceId String @db.ObjectId
-  resourceType TagType 
+  resourceType ResourceType 
 
   @@unique([resourceId, tagId, resourceType])
 }
@@ -330,14 +330,7 @@ model Notification{
   readAt DateTime @default(now())
 }
 
-enum TagType{
-  Music
-  Band
-  Artist
-  Album
-}
-
-enum BookmarkType{
+enum ResourceType{
   Music
   Band
   Artist

@@ -1,16 +1,7 @@
 ```mermaid
 erDiagram
 
-        TagType {
-            Music Music
-Band Band
-Artist Artist
-Album Album
-        }
-    
-
-
-        BookmarkType {
+        ResourceType {
             Music Music
 Band Band
 Artist Artist
@@ -165,7 +156,7 @@ CLOSE CLOSE
 
   Bookmark {
     String id PK 
-    BookmarkType resourceType  
+    ResourceType resourceType  
     }
   
 
@@ -193,7 +184,7 @@ CLOSE CLOSE
 
   TagMap {
     String id PK 
-    TagType resourceType  
+    ResourceType resourceType  
     }
   
 
@@ -291,7 +282,7 @@ CLOSE CLOSE
     Bookmark o{--|o Album : "album"
     Bookmark o{--|o Artist : "artist"
     Bookmark o{--|| User : "user"
-    Bookmark o|--|| BookmarkType : "enum:resourceType"
+    Bookmark o|--|| ResourceType : "enum:resourceType"
     Participation o{--|| Artist : "artist"
     Participation o{--|| Music : "music"
     RoleMap o{--|| Role : "role"
@@ -301,7 +292,7 @@ CLOSE CLOSE
     TagMap o{--|o Band : "band"
     TagMap o{--|o Album : "album"
     TagMap o{--|o Artist : "artist"
-    TagMap o|--|| TagType : "enum:resourceType"
+    TagMap o|--|| ResourceType : "enum:resourceType"
     Notification o{--|o Bookmark : "bookmarked"
     Notification o{--|o Follow : "followed"
     Notification o{--|o Comment : "commented"

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
-import { EnumTagTypeFilterObjectSchema } from './EnumTagTypeFilter.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
+import { EnumResourceTypeFilterObjectSchema } from './EnumResourceTypeFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -34,8 +34,8 @@ const Schema: z.ZodType<Prisma.TagMapScalarWhereInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumTagTypeFilterObjectSchema),
-        z.lazy(() => TagTypeSchema),
+        z.lazy(() => EnumResourceTypeFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

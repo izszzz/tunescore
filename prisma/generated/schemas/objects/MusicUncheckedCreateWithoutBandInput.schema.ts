@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { MusicTypeSchema } from '../enums/MusicType.schema';
-import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeInput.schema';
-import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
+import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInput.schema';
+import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
@@ -20,8 +20,8 @@ const Schema: z.ZodType<Prisma.MusicUncheckedCreateWithoutBandInput> = z
     id: z.string().optional(),
     type: z.lazy(() => MusicTypeSchema),
     title: z.union([
-      z.lazy(() => LocalesCreateEnvelopeInputObjectSchema),
-      z.lazy(() => LocalesCreateInputObjectSchema),
+      z.lazy(() => LocaleCreateEnvelopeInputObjectSchema),
+      z.lazy(() => LocaleCreateInputObjectSchema),
     ]),
     score: z.string().optional().nullable(),
     visibility: z.lazy(() => VisibilitySchema),

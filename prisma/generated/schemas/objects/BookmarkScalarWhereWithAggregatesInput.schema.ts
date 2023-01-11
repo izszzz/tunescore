@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
-import { EnumBookmarkTypeWithAggregatesFilterObjectSchema } from './EnumBookmarkTypeWithAggregatesFilter.schema';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { EnumResourceTypeWithAggregatesFilterObjectSchema } from './EnumResourceTypeWithAggregatesFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -38,8 +38,8 @@ const Schema: z.ZodType<Prisma.BookmarkScalarWhereWithAggregatesInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumBookmarkTypeWithAggregatesFilterObjectSchema),
-        z.lazy(() => BookmarkTypeSchema),
+        z.lazy(() => EnumResourceTypeWithAggregatesFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

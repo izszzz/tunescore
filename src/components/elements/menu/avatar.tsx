@@ -1,6 +1,5 @@
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
 import AccountBox from "@mui/icons-material/AccountBox";
@@ -22,8 +21,9 @@ const AvatarMenuManager = () => {
       )}
     >
       {(handleClose) => [
-        <MenuItem
+        <MenuListItem
           key="profile"
+          icon={<AccountBox />}
           onClick={() => {
             handleClose();
             id &&
@@ -33,20 +33,32 @@ const AvatarMenuManager = () => {
               });
           }}
         >
-          <MenuListItem icon={<AccountBox />}>Profile</MenuListItem>
-        </MenuItem>,
-        <MenuItem key="settings" onClick={handleClose}>
-          <MenuListItem icon={<Settings />}>Settings</MenuListItem>
-        </MenuItem>,
-        <MenuItem
+          Profile
+        </MenuListItem>,
+        <MenuListItem
+          icon={<Settings />}
+          key="settings"
+          onClick={() => {
+            handleClose();
+            id &&
+              router.push({
+                pathname: `/users/[id]/settings`,
+                query: { id },
+              });
+          }}
+        >
+          Settings
+        </MenuListItem>,
+        <MenuListItem
+          icon={<Logout />}
           key="logout"
           onClick={() => {
             handleClose();
             signOut();
           }}
         >
-          <MenuListItem icon={<Logout />}>Logout</MenuListItem>
-        </MenuItem>,
+          Logout
+        </MenuListItem>,
       ]}
     </MenuManager>
   );

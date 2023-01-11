@@ -3,22 +3,22 @@ import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema'
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.LocalesWhereInput> = z
+const Schema: z.ZodType<Prisma.LocaleWhereInput> = z
   .object({
     AND: z
       .union([
-        z.lazy(() => LocalesWhereInputObjectSchema),
-        z.lazy(() => LocalesWhereInputObjectSchema).array(),
+        z.lazy(() => LocaleWhereInputObjectSchema),
+        z.lazy(() => LocaleWhereInputObjectSchema).array(),
       ])
       .optional(),
     OR: z
-      .lazy(() => LocalesWhereInputObjectSchema)
+      .lazy(() => LocaleWhereInputObjectSchema)
       .array()
       .optional(),
     NOT: z
       .union([
-        z.lazy(() => LocalesWhereInputObjectSchema),
-        z.lazy(() => LocalesWhereInputObjectSchema).array(),
+        z.lazy(() => LocaleWhereInputObjectSchema),
+        z.lazy(() => LocaleWhereInputObjectSchema).array(),
       ])
       .optional(),
     ja: z
@@ -32,4 +32,4 @@ const Schema: z.ZodType<Prisma.LocalesWhereInput> = z
   })
   .strict();
 
-export const LocalesWhereInputObjectSchema = Schema;
+export const LocaleWhereInputObjectSchema = Schema;

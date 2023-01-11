@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
-import { EnumTagTypeWithAggregatesFilterObjectSchema } from './EnumTagTypeWithAggregatesFilter.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
+import { EnumResourceTypeWithAggregatesFilterObjectSchema } from './EnumResourceTypeWithAggregatesFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -34,8 +34,8 @@ const Schema: z.ZodType<Prisma.TagMapScalarWhereWithAggregatesInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumTagTypeWithAggregatesFilterObjectSchema),
-        z.lazy(() => TagTypeSchema),
+        z.lazy(() => EnumResourceTypeWithAggregatesFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

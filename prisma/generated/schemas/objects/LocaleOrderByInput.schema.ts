@@ -3,11 +3,11 @@ import { SortOrderSchema } from '../enums/SortOrder.schema';
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.LocalesOrderByInput> = z
+const Schema: z.ZodType<Prisma.LocaleOrderByInput> = z
   .object({
     ja: z.lazy(() => SortOrderSchema).optional(),
     en: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 
-export const LocalesOrderByInputObjectSchema = Schema;
+export const LocaleOrderByInputObjectSchema = Schema;

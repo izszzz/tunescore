@@ -3,7 +3,7 @@ import { NullableStringFieldUpdateOperationsInputObjectSchema } from './Nullable
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.LocalesUpdateInput> = z
+const Schema: z.ZodType<Prisma.LocaleUpdateInput> = z
   .object({
     ja: z
       .union([
@@ -22,4 +22,4 @@ const Schema: z.ZodType<Prisma.LocalesUpdateInput> = z
   })
   .strict();
 
-export const LocalesUpdateInputObjectSchema = Schema;
+export const LocaleUpdateInputObjectSchema = Schema;

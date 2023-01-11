@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { trpc } from "../../../utils/trpc";
-import DefaultHeader from "../header/default";
+import DefaultHeader from "../../elements/header/default";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import { followMutate } from "../../../helpers/follow";
@@ -77,14 +77,17 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       header={<DefaultHeader />}
       title={
         <>
-          <Box display="flex" justifyContent="center">
-            <Box>
-              <Avatar
-                sx={{ height: "70px", width: "70px" }}
-                src={data.image || ""}
-              />
-              <Typography variant="h5">{data.name}</Typography>
-            </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <Avatar
+              sx={{ height: "70px", width: "70px" }}
+              src={data.image || ""}
+            />
+            <Typography variant="h5">{data.name}</Typography>
           </Box>
           {id !== userId && (
             <LoadingButton

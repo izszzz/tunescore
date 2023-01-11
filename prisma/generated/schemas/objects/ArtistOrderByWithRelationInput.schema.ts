@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { LocalesOrderByInputObjectSchema } from './LocalesOrderByInput.schema';
+import { LocaleOrderByInputObjectSchema } from './LocaleOrderByInput.schema';
 import { LinkListOrderByInputObjectSchema } from './LinkListOrderByInput.schema';
 import { ParticipationOrderByRelationAggregateInputObjectSchema } from './ParticipationOrderByRelationAggregateInput.schema';
 import { BandOrderByRelationAggregateInputObjectSchema } from './BandOrderByRelationAggregateInput.schema';
@@ -13,7 +13,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.ArtistOrderByWithRelationInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
-    name: z.lazy(() => LocalesOrderByInputObjectSchema).optional(),
+    name: z.lazy(() => LocaleOrderByInputObjectSchema).optional(),
     link: z.lazy(() => LinkListOrderByInputObjectSchema).optional(),
     participations: z
       .lazy(() => ParticipationOrderByRelationAggregateInputObjectSchema)

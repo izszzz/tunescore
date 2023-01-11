@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
-import { EnumBookmarkTypeFilterObjectSchema } from './EnumBookmarkTypeFilter.schema';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { EnumResourceTypeFilterObjectSchema } from './EnumResourceTypeFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -34,8 +34,8 @@ const Schema: z.ZodType<Prisma.BookmarkScalarWhereInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumBookmarkTypeFilterObjectSchema),
-        z.lazy(() => BookmarkTypeSchema),
+        z.lazy(() => EnumResourceTypeFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

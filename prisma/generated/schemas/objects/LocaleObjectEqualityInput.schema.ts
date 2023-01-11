@@ -2,11 +2,11 @@ import { z } from 'zod';
 
 import type { Prisma } from '@prisma/client';
 
-const Schema: z.ZodType<Prisma.LocalesCreateInput> = z
+const Schema: z.ZodType<Prisma.LocaleObjectEqualityInput> = z
   .object({
     ja: z.string().optional().nullable(),
     en: z.string().optional().nullable(),
   })
   .strict();
 
-export const LocalesCreateInputObjectSchema = Schema;
+export const LocaleObjectEqualityInputObjectSchema = Schema;

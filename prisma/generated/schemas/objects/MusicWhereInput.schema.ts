@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { EnumMusicTypeFilterObjectSchema } from './EnumMusicTypeFilter.schema';
 import { MusicTypeSchema } from '../enums/MusicType.schema';
-import { LocalesCompositeFilterObjectSchema } from './LocalesCompositeFilter.schema';
-import { LocalesObjectEqualityInputObjectSchema } from './LocalesObjectEqualityInput.schema';
+import { LocaleCompositeFilterObjectSchema } from './LocaleCompositeFilter.schema';
+import { LocaleObjectEqualityInputObjectSchema } from './LocaleObjectEqualityInput.schema';
 import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { EnumVisibilityFilterObjectSchema } from './EnumVisibilityFilter.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
@@ -53,8 +53,8 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
       .optional(),
     title: z
       .union([
-        z.lazy(() => LocalesCompositeFilterObjectSchema),
-        z.lazy(() => LocalesObjectEqualityInputObjectSchema),
+        z.lazy(() => LocaleCompositeFilterObjectSchema),
+        z.lazy(() => LocaleObjectEqualityInputObjectSchema),
       ])
       .optional(),
     score: z

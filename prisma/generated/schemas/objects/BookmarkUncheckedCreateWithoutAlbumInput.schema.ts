@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { NotificationUncheckedCreateNestedManyWithoutBookmarkedInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutBookmarkedInput.schema';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -14,7 +14,7 @@ const Schema: z.ZodType<Prisma.BookmarkUncheckedCreateWithoutAlbumInput> = z
       )
       .optional(),
     userId: z.string(),
-    resourceType: z.lazy(() => BookmarkTypeSchema),
+    resourceType: z.lazy(() => ResourceTypeSchema),
   })
   .strict();
 

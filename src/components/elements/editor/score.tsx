@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import Split from "split.js";
 import Box from "@mui/material/Box";
 import Score from "../../layouts/score";
-import EditorHeader from "../../layouts/header/editor";
+import EditorHeader from "../header/editor";
 
 interface ScoreEditorProps {
   defaultValue: string;

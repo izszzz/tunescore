@@ -5,7 +5,7 @@ import { BandCreateNestedOneWithoutBookmarksInputObjectSchema } from './BandCrea
 import { AlbumCreateNestedOneWithoutBookmarksInputObjectSchema } from './AlbumCreateNestedOneWithoutBookmarksInput.schema';
 import { ArtistCreateNestedOneWithoutBookmarksInputObjectSchema } from './ArtistCreateNestedOneWithoutBookmarksInput.schema';
 import { UserCreateNestedOneWithoutBookmarksInputObjectSchema } from './UserCreateNestedOneWithoutBookmarksInput.schema';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -30,7 +30,7 @@ const Schema: z.ZodType<Prisma.BookmarkCreateInput> = z
       .lazy(() => ArtistCreateNestedOneWithoutBookmarksInputObjectSchema)
       .optional(),
     user: z.lazy(() => UserCreateNestedOneWithoutBookmarksInputObjectSchema),
-    resourceType: z.lazy(() => BookmarkTypeSchema),
+    resourceType: z.lazy(() => ResourceTypeSchema),
   })
   .strict();
 

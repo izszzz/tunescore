@@ -77,14 +77,17 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       header={<DefaultHeader />}
       title={
         <>
-          <Box display="flex" justifyContent="center">
-            <Box>
-              <Avatar
-                sx={{ height: "70px", width: "70px" }}
-                src={data.image || ""}
-              />
-              <Typography variant="h5">{data.name}</Typography>
-            </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <Avatar
+              sx={{ height: "70px", width: "70px" }}
+              src={data.image || ""}
+            />
+            <Typography variant="h5">{data.name}</Typography>
           </Box>
           {id !== userId && (
             <LoadingButton

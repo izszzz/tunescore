@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { LocalesOrderByInputObjectSchema } from './LocalesOrderByInput.schema';
+import { LocaleOrderByInputObjectSchema } from './LocaleOrderByInput.schema';
 import { LinkListOrderByInputObjectSchema } from './LinkListOrderByInput.schema';
 import { BandOrderByWithRelationInputObjectSchema } from './BandOrderByWithRelationInput.schema';
 import { MusicOrderByRelationAggregateInputObjectSchema } from './MusicOrderByRelationAggregateInput.schema';
@@ -13,7 +13,7 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.AlbumOrderByWithRelationInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
-    title: z.lazy(() => LocalesOrderByInputObjectSchema).optional(),
+    title: z.lazy(() => LocaleOrderByInputObjectSchema).optional(),
     link: z.lazy(() => LinkListOrderByInputObjectSchema).optional(),
     band: z.lazy(() => BandOrderByWithRelationInputObjectSchema).optional(),
     bandId: z.lazy(() => SortOrderSchema).optional(),

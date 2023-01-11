@@ -211,7 +211,7 @@ CLOSE CLOSE
     }
   
 
-  Locales {
+  Locale {
     String ja  "nullable"
     String en  "nullable"
     }
@@ -255,22 +255,22 @@ CLOSE CLOSE
     Follow o{--|| User : "follower"
     Follow o{--|| User : "following"
     Music o|--|| MusicType : "enum:type"
-    Music o|--|| Locales : "title"
+    Music o|--|| Locale : "title"
     Music o|--|| Visibility : "enum:visibility"
     Music o|--|o LinkList : "link"
     Music o{--|o User : "user"
     Music o{--|o Band : "band"
     Music o{--}o Album : "albums"
-    Album o|--|| Locales : "title"
+    Album o|--|| Locale : "title"
     Album o|--|o LinkList : "link"
     Album o{--|o Band : "band"
     Album o{--}o Music : "musics"
     Album o{--}o Artist : "artists"
-    Artist o|--|| Locales : "name"
+    Artist o|--|| Locale : "name"
     Artist o|--|o LinkList : "link"
     Artist o{--}o Band : "bands"
     Artist o{--}o Album : "albums"
-    Band o|--|| Locales : "name"
+    Band o|--|| Locale : "name"
     Band o|--|o LinkList : "link"
     Band o{--}o Artist : "artists"
     Issue o|--|| IssueStatus : "enum:status"

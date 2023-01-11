@@ -102,7 +102,7 @@ model VerificationToken {
 model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   type MusicType
-  title Locales
+  title Locale
   score String?
   visibility Visibility
   price Int?
@@ -127,7 +127,7 @@ model Music {
 
 model Album {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  title Locales
+  title Locale
   link LinkList?
 
   band Band? @relation(fields: [bandId], references: [id])
@@ -145,7 +145,7 @@ model Album {
 
 model Artist {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Locales
+  name Locale
   link LinkList?
 
   participations Participation[]
@@ -162,7 +162,7 @@ model Artist {
 
 model Band {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Locales
+  name Locale
   link LinkList?
 
   musics Music[]
@@ -382,7 +382,7 @@ type PullScore{
   changed String
 }
 
-type Locales {
+type Locale {
   ja String?
   en String?
 }

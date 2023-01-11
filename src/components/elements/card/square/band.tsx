@@ -5,17 +5,18 @@ import Box from "@mui/material/Box";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import { getChannelImage } from "../../../../helpers/image";
-import SquareBandCard from "./square";
+import SquareCard from ".";
 import type { BandListQueryType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
 
-interface BandCardProps {
+interface SquareBandCardProps {
   data: Prisma.BandGetPayload<BandListQueryType>;
 }
-const BandCard = ({ data }: BandCardProps) => {
+const SquareBandCard = ({ data }: SquareBandCardProps) => {
   const router = useRouter();
   return (
-    <SquareBandCard
+    <SquareCard
+      resource="BAND"
       size="200px"
       title={
         <Box display="flex" justifyContent="space-between">
@@ -43,4 +44,4 @@ const BandCard = ({ data }: BandCardProps) => {
   );
 };
 
-export default BandCard;
+export default SquareBandCard;

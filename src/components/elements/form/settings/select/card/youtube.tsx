@@ -72,7 +72,7 @@ function YoutubeSelectForm({
             setValue(undefined);
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
           });
   }, [term, loading, current, streamingLink?.youtube, lookup, type]);
 

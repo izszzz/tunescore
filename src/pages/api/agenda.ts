@@ -1,7 +1,5 @@
-// src/pages/api/examples.ts
-import { Agenda } from "@hokify/agenda";
-import { env } from "../../env/server.mjs";
 import { prisma } from "../../server/db/client";
+import { agenda } from "../../server/common/agenda";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -9,7 +7,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     body: { pullId },
   } = req;
   // init
-  const agenda = new Agenda({ db: { address: env.DATABASE_URL } });
   const pull = await prisma.pull.findUnique({
     where: {
       id: pullId as string,

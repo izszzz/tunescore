@@ -6,17 +6,18 @@ import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
 import { getChannelImage } from "../../../../helpers/image";
-import SquareArtistCard from "./square";
+import SquareCard from ".";
 import type { ArtistListQueryType } from "../../../../helpers/artist";
 import type { Prisma } from "@prisma/client";
 
-interface ArtistCardProps {
+interface SquareArtistCardProps {
   data: Prisma.ArtistGetPayload<ArtistListQueryType>;
 }
-const ArtistCard = ({ data }: ArtistCardProps) => {
+const SquareArtistCard = ({ data }: SquareArtistCardProps) => {
   const router = useRouter();
   return (
-    <SquareArtistCard
+    <SquareCard
+      resource="ARTIST"
       size="200px"
       title={
         <>
@@ -52,4 +53,4 @@ const ArtistCard = ({ data }: ArtistCardProps) => {
   );
 };
 
-export default ArtistCard;
+export default SquareArtistCard;

@@ -1,14 +1,14 @@
 import React from "react";
-import { FcGoogle } from "react-icons/fc";
+import { FaSpotify } from "react-icons/fa";
 import SvgIcon from "@mui/material/SvgIcon";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 
-const GoogleIcon = (props: SvgIconProps) => {
+const SpotifyIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
-      <FcGoogle />
+      <FaSpotify />
     </SvgIcon>
   );
 };
 
-export default GoogleIcon;
+export default SpotifyIcon;

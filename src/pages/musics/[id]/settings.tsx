@@ -19,6 +19,7 @@ import { getRouterId } from "../../../helpers/router";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import AlbumUpdateAutocomplete from "../../../components/elements/autocomplete/update/album";
+import SpotifyMusicSelectForm from "../../../components/elements/form/settings/select/card/music/spotify";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -49,6 +50,7 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update error");
       },
     });
+
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
@@ -188,6 +190,46 @@ const SettingsMusic: NextPage = () => {
               }),
           },
         }}
+      />
+      <Typography variant="h4">Spotify</Typography>
+      <Divider />
+
+      <SpotifyMusicSelectForm
+        term={setLocale(data.title, router)}
+        streamingLink={data.link?.streaming}
+        onSelect={(value) =>
+          value &&
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: {
+                  ...data.link?.streaming,
+                  spotify: {
+                    id: value.id,
+                    image: {
+                      size: {
+                        small: value.album.images[0]?.url,
+                        medium: value.album.images[1]?.url,
+                        large: value.album.images[2]?.url,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          })
+        }
+        onRemove={() =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: { ...data.link?.streaming, spotify: undefined },
+              },
+            },
+          })
+        }
       />
 
       <Typography variant="h4">iTunes</Typography>

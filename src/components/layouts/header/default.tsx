@@ -8,6 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { match } from "ts-pattern";
+import CircularProgress from "@mui/material/CircularProgress";
 import LocaleAutocomplete from "../../elements/autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
 import ThemeToggleButton from "../../elements/button/toggle/theme";
@@ -80,7 +81,7 @@ const DefaultHeader = () => {
               <LocaleAutocomplete />
               <ThemeToggleButton />
               {match(session)
-                .with({ status: "loading" }, () => <>loading</>)
+                .with({ status: "loading" }, () => <CircularProgress />)
                 .with({ status: "unauthenticated" }, () => (
                   <Button
                     variant="contained"

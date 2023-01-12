@@ -44,7 +44,7 @@ const SettingsMusic: NextPage = () => {
     }),
     update = trpc.useMutation(`music.updateOneMusic`, {
       onSuccess: (data) => {
-        queryClient.setQueryData<typeof data>(path, data);
+        queryClient.setQueryData(path, data);
         enqueueSnackbar("music.update success");
       },
       onError: () => {
@@ -219,9 +219,9 @@ const SettingsMusic: NextPage = () => {
                       id: value.id,
                       image: {
                         size: {
-                          small: value.album.images[0]?.url,
+                          small: value.album.images[2]?.url,
                           medium: value.album.images[1]?.url,
-                          large: value.album.images[2]?.url,
+                          large: value.album.images[0]?.url,
                         },
                       },
                     },

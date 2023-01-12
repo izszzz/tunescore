@@ -15,6 +15,7 @@ interface SpotifyMusicCardProps {
   onClick?: (value: SpotifyApi.TrackObjectFull) => void;
 }
 const MusicSpotifyCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
+  console.log(data);
   if (size === "small")
     return (
       <Tooltip

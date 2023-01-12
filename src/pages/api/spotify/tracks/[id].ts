@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // get tracks
   await spotify.getTrack(id as string).then(
-    (data) => res.status(200).json(data),
+    ({ body }) => res.status(200).json(body),
     (err) => {
       console.log(err);
       res.status(401).send("accesstoken expired");

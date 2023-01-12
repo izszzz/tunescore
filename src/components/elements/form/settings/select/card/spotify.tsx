@@ -48,7 +48,6 @@ function SpotifySelectForm<T>({
           paramsSerializer: { indexes: null },
         })
         .then(({ data }) => {
-          console.log(data);
           setValue(undefined);
           setOptions(data.items);
         });

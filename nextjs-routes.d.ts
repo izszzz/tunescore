@@ -15,6 +15,9 @@ declare module "nextjs-routes" {
     | { pathname: "/api/spotify/search"; query?: Query | undefined }
     | { pathname: "/api/spotify/tracks/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/api/trpc/[trpc]"; query: Query<{ "trpc": string }> }
+    | { pathname: "/api/youtube/channels/[id]"; query: Query<{ "id": string }> }
+    | { pathname: "/api/youtube/search"; query?: Query | undefined }
+    | { pathname: "/api/youtube/videos/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/artists/[id]"; query: Query<{ "id": string }> }
     | { pathname: "/artists/[id]/settings"; query: Query<{ "id": string }> }
     | { pathname: "/artists"; query?: Query | undefined }

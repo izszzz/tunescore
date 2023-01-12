@@ -1,12 +1,14 @@
 import React from "react";
+import axios from "axios";
 import MusicYoutubeCard from "../../../../../card/music/youtube";
 import YoutubeSelectForm from "../youtube";
+import type { SearchResult, Video, VideoList } from "../youtube";
 import type { StreamingLink } from "@prisma/client";
 
 interface MusicYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  onSelect: (data: gapi.client.youtube.SearchResult | undefined) => void;
+  onSelect: (data: SearchResult | undefined) => void;
   onRemove: () => void;
 }
 
@@ -19,12 +21,12 @@ const MusicYoutubeSelectForm = ({
     <YoutubeSelectForm
       {...props}
       type="video"
-      lookup={(api) => api.videos.list}
+      lookup={(id) => axios.get<VideoList>(`/api/youtube/videos/${id}`)}
       largeCard={(value) =>
         value && (
           <MusicYoutubeCard
             size="large"
-            data={value as gapi.client.youtube.Video}
+            data={value as Video}
             onClick={onRemove}
           />
         )
@@ -33,7 +35,7 @@ const MusicYoutubeSelectForm = ({
         value && (
           <MusicYoutubeCard
             size="small"
-            data={value as gapi.client.youtube.SearchResult}
+            data={value as SearchResult}
             onClick={onSelect}
           />
         )

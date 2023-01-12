@@ -36,17 +36,19 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
           </>
         }
       >
-        <SquareCard
-          resource="MUSIC"
-          title={
-            <Typography variant="caption" display="block" noWrap>
-              {data.trackCensoredName}
-            </Typography>
-          }
-          image={data.artworkUrl100}
-          size="100px"
-          onClick={() => onClick && onClick(data)}
-        />
+        <Box>
+          <SquareCard
+            resource="MUSIC"
+            title={
+              <Typography variant="caption" display="block" noWrap>
+                {data.trackCensoredName}
+              </Typography>
+            }
+            image={data.artworkUrl100}
+            size="100px"
+            onClick={() => onClick && onClick(data)}
+          />
+        </Box>
       </Tooltip>
     );
   if (size === "large")

@@ -34,17 +34,19 @@ const MusicSpotifyCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
           </>
         }
       >
-        <SquareCard
-          resource="MUSIC"
-          title={
-            <Typography variant="caption" display="block" noWrap>
-              {data.name}
-            </Typography>
-          }
-          image={data.album.images[1]?.url || ""}
-          size="100px"
-          onClick={() => onClick && onClick(data)}
-        />
+        <Box>
+          <SquareCard
+            resource="MUSIC"
+            title={
+              <Typography variant="caption" display="block" noWrap>
+                {data.name}
+              </Typography>
+            }
+            image={data.album.images[1]?.url || ""}
+            size="100px"
+            onClick={() => onClick && onClick(data)}
+          />
+        </Box>
       </Tooltip>
     );
   if (size === "large")

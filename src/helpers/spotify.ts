@@ -25,8 +25,26 @@ export const authorized = async (req: NextApiRequest, res: NextApiResponse) => {
   );
   if (!account) throw new Error("Not linked spotify account");
 
-  // set token
   account.access_token && spotify.setAccessToken(account.access_token);
   account.refresh_token && spotify.setRefreshToken(account.refresh_token);
+
+  if (account.expires_at && Date.now() > account.expires_at) {
+    spotify.refreshAccessToken().then(
+      async function (data) {
+        spotify.setAccessToken(data.body["access_token"]);
+        await prisma.account.update({
+          where: { id: account.id },
+          data: {
+            access_token: data.body.access_token,
+            refresh_token: data.body.refresh_token,
+          },
+        });
+      },
+      function (err) {
+        console.log("Could not refresh access token", err);
+      }
+    );
+  }
+
   return spotify;
 };

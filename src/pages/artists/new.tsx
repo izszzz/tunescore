@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 
 const NewArtist: NextPage = () => {
   const router = useRouter();
-  const create = trpc.useMutation(["artist.createOneArtist"], {
+  const create = trpc.artist.createOneArtist.useMutation({
     onSuccess: () => router.push("/artists"),
   });
   const handleSubmit = (data: Artist) => create.mutate({ data });

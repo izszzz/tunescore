@@ -6,11 +6,8 @@ import type { NextPage } from "next";
 
 const Pull: NextPage = () => {
   const router = useRouter();
-  const pullQuery = trpc.useQuery([
-    "pull.findUniquePull",
-    { where: { id: router.query.pullId as string } },
-  ]);
-  const update = trpc.useMutation(["pull.updateOnePull"]);
+  const pullQuery = trpc.pull.findUniquePull.useQuery({ where: { id: router.query.pullId as string } });
+  const update = trpc.pull.updateOnePull.useMutation();
   const handleSave = (value: string) => {
     update.mutate({
       where: {

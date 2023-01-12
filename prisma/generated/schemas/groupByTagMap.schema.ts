@@ -6,10 +6,12 @@ import { TagMapScalarFieldEnumSchema } from './enums/TagMapScalarFieldEnum.schem
 
 export const TagMapGroupBySchema = z.object({
   where: TagMapWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    TagMapOrderByWithAggregationInputObjectSchema,
-    TagMapOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      TagMapOrderByWithAggregationInputObjectSchema,
+      TagMapOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: TagMapScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

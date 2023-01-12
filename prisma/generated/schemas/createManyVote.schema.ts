@@ -2,5 +2,8 @@ import { z } from 'zod';
 import { VoteCreateManyInputObjectSchema } from './objects/VoteCreateManyInput.schema';
 
 export const VoteCreateManySchema = z.object({
-  data: VoteCreateManyInputObjectSchema,
+  data: z.union([
+    VoteCreateManyInputObjectSchema,
+    z.array(VoteCreateManyInputObjectSchema),
+  ]),
 });

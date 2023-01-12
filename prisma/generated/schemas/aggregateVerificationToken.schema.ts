@@ -1,19 +1,19 @@
 import { z } from 'zod';
-import { VerificationTokenWhereInputObjectSchema } from './objects/VerificationTokenWhereInput.schema';
 import { VerificationTokenOrderByWithRelationInputObjectSchema } from './objects/VerificationTokenOrderByWithRelationInput.schema';
+import { VerificationTokenWhereInputObjectSchema } from './objects/VerificationTokenWhereInput.schema';
 import { VerificationTokenWhereUniqueInputObjectSchema } from './objects/VerificationTokenWhereUniqueInput.schema';
 import { VerificationTokenCountAggregateInputObjectSchema } from './objects/VerificationTokenCountAggregateInput.schema';
 import { VerificationTokenMinAggregateInputObjectSchema } from './objects/VerificationTokenMinAggregateInput.schema';
 import { VerificationTokenMaxAggregateInputObjectSchema } from './objects/VerificationTokenMaxAggregateInput.schema';
 
 export const VerificationTokenAggregateSchema = z.object({
-  where: VerificationTokenWhereInputObjectSchema.optional(),
   orderBy: z
     .union([
       VerificationTokenOrderByWithRelationInputObjectSchema,
       VerificationTokenOrderByWithRelationInputObjectSchema.array(),
     ])
     .optional(),
+  where: VerificationTokenWhereInputObjectSchema.optional(),
   cursor: VerificationTokenWhereUniqueInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

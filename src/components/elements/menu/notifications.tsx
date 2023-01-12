@@ -16,53 +16,50 @@ const NotificationsMenuManager = () => {
   const session = useSession();
   const userId = getCurrentUserId(session);
   const router = useRouter();
-  const { data } = trpc.useQuery([
-    "notification.findManyNotification",
-    {
-      where: {
-        OR: [
-          {
-            bookmarked: {
-              music: {
-                user: {
-                  id: userId,
+  const { data } = trpc.notification.findManyNotification.useQuery({
+            where: {
+              OR: [
+                {
+                  bookmarked: {
+                    music: {
+                      user: {
+                        id: userId,
+                      },
+                    },
+                  },
+                },
+                {
+                  followed: {
+                    follower: {
+                      id: userId,
+                    },
+                  },
+                },
+                {
+                  commented: {
+                    issue: {
+                      id: userId,
+                    },
+                  },
+                },
+                {
+                  commented: {
+                    pull: {
+                      id: userId,
+                    },
+                  },
+                },
+              ],
+            },
+            include: {
+              bookmarked: {
+                include: {
+                  music: true,
                 },
               },
+              user: true,
             },
-          },
-          {
-            followed: {
-              follower: {
-                id: userId,
-              },
-            },
-          },
-          {
-            commented: {
-              issue: {
-                id: userId,
-              },
-            },
-          },
-          {
-            commented: {
-              pull: {
-                id: userId,
-              },
-            },
-          },
-        ],
-      },
-      include: {
-        bookmarked: {
-          include: {
-            music: true,
-          },
-        },
-        user: true,
-      },
-    },
-  ]);
+          });
   if (!data) return <></>;
   const notificationsData = data as Prisma.NotificationGetPayload<{
     include: {

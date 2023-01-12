@@ -16,7 +16,7 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
 }: BandUpdateAutocomplete<T>) {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const search = trpc.useMutation("search.band", {
+  const search = trpc.search.band.useMutation({
     onError: () => {
       enqueueSnackbar("band.search error");
     },

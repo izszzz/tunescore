@@ -6,10 +6,12 @@ import { CommentScalarFieldEnumSchema } from './enums/CommentScalarFieldEnum.sch
 
 export const CommentGroupBySchema = z.object({
   where: CommentWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    CommentOrderByWithAggregationInputObjectSchema,
-    CommentOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      CommentOrderByWithAggregationInputObjectSchema,
+      CommentOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: CommentScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

@@ -8,13 +8,13 @@ import type { NextPage } from "next";
 const Score: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(
-    ["music.findUniqueMusic", { where: { id: getRouterId(router) } }],
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
+  const { data } = trpc.music.findUniqueMusic.useQuery(
+    { where: { id: getRouterId(router) } },
+      {
+          onError: () => {
+              enqueueSnackbar("music.show error");
+          },
+      }
   );
   if (!data) return <></>;
   return <ScoreLayout value={data.score || ""} />;

@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { TagMapFindUniqueSchema } from "../schemas/findUniqueTagMap.schema";
 import { TagMapFindFirstSchema } from "../schemas/findFirstTagMap.schema";
 import { TagMapFindManySchema } from "../schemas/findManyTagMap.schema";
@@ -14,132 +14,102 @@ import { TagMapGroupBySchema } from "../schemas/groupByTagMap.schema";
 import { TagMapFindRawObjectSchema } from "../schemas/objects/TagMapFindRaw.schema";
 import { TagMapAggregateRawObjectSchema } from "../schemas/objects/TagMapAggregateRaw.schema";
 
-export const tagmapsRouter = createRouter()
-
-  .query("aggregateTagMap", {
-    input: TagMapAggregateSchema,
-    async resolve({ ctx, input }) {
+export const tagmapsRouter = t.router({
+  aggregateTagMap: publicProcedure
+    .input(TagMapAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateTagMap = await ctx.prisma.tagMap.aggregate(input);
       return aggregateTagMap;
-    },
-  })
-
-  .query("aggregateTagMapRaw", {
-    input: TagMapAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateTagMapRaw: publicProcedure
+    .input(TagMapAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateTagMapRaw = await ctx.prisma.tagMap.aggregateRaw(input);
       return aggregateTagMapRaw;
-    },
-  })
-
-  .mutation("createManyTagMap", {
-    input: TagMapCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyTagMap: publicProcedure
+    .input(TagMapCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyTagMap = await ctx.prisma.tagMap.createMany(input);
       return createManyTagMap;
-    },
-  })
-
-  .mutation("createOneTagMap", {
-    input: TagMapCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneTagMap: publicProcedure
+    .input(TagMapCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneTagMap = await ctx.prisma.tagMap.create(input);
       return createOneTagMap;
-    },
-  })
-
-  .mutation("deleteManyTagMap", {
-    input: TagMapDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyTagMap: publicProcedure
+    .input(TagMapDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyTagMap = await ctx.prisma.tagMap.deleteMany(input);
       return deleteManyTagMap;
-    },
-  })
-
-  .mutation("deleteOneTagMap", {
-    input: TagMapDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneTagMap: publicProcedure
+    .input(TagMapDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneTagMap = await ctx.prisma.tagMap.delete(input);
       return deleteOneTagMap;
-    },
-  })
-
-  .query("findFirstTagMap", {
-    input: TagMapFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstTagMap: publicProcedure
+    .input(TagMapFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstTagMap = await ctx.prisma.tagMap.findFirst(input);
       return findFirstTagMap;
-    },
-  })
-
-  .query("findFirstTagMapOrThrow", {
-    input: TagMapFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstTagMapOrThrow: publicProcedure
+    .input(TagMapFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstTagMapOrThrow = await ctx.prisma.tagMap.findFirstOrThrow(input);
       return findFirstTagMapOrThrow;
-    },
-  })
-
-  .query("findManyTagMap", {
-    input: TagMapFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyTagMap: publicProcedure
+    .input(TagMapFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyTagMap = await ctx.prisma.tagMap.findMany(input);
       return findManyTagMap;
-    },
-  })
-
-  .query("findTagMapRaw", {
-    input: TagMapFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findTagMapRaw: publicProcedure
+    .input(TagMapFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findTagMapRaw = await ctx.prisma.tagMap.findRaw(input);
       return findTagMapRaw;
-    },
-  })
-
-  .query("findUniqueTagMap", {
-    input: TagMapFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueTagMap: publicProcedure
+    .input(TagMapFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueTagMap = await ctx.prisma.tagMap.findUnique(input);
       return findUniqueTagMap;
-    },
-  })
-
-  .query("findUniqueTagMapOrThrow", {
-    input: TagMapFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueTagMapOrThrow: publicProcedure
+    .input(TagMapFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueTagMapOrThrow = await ctx.prisma.tagMap.findUniqueOrThrow(input);
       return findUniqueTagMapOrThrow;
-    },
-  })
-
-  .query("groupByTagMap", {
-    input: TagMapGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByTagMap = await ctx.prisma.tagMap.groupBy(input);
+    }),
+  groupByTagMap: publicProcedure
+    .input(TagMapGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByTagMap = await ctx.prisma.tagMap.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByTagMap;
-    },
-  })
-
-  .mutation("updateManyTagMap", {
-    input: TagMapUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyTagMap: publicProcedure
+    .input(TagMapUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyTagMap = await ctx.prisma.tagMap.updateMany(input);
       return updateManyTagMap;
-    },
-  })
-
-  .mutation("updateOneTagMap", {
-    input: TagMapUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneTagMap: publicProcedure
+    .input(TagMapUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneTagMap = await ctx.prisma.tagMap.update(input);
       return updateOneTagMap;
-    },
-  })
-
-  .mutation("upsertOneTagMap", {
-    input: TagMapUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneTagMap: publicProcedure
+    .input(TagMapUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneTagMap = await ctx.prisma.tagMap.upsert(input);
       return upsertOneTagMap;
-    },
-  })
+    }),
+
+})

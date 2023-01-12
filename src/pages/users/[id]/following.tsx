@@ -5,40 +5,25 @@ import { trpc } from "../../../utils/trpc";
 import UserLists from "../../../components/elements/list/user";
 import UserLayout from "../../../components/layouts/show/user";
 import { followingPath } from "../../../paths/users/[id]/following";
-import { userShowPath } from "../../../paths/users/[id]";
+import { userShowQuery } from "../../../paths/users/[id]";
 import IndexLayout from "../../../components/layouts/index";
 import { getRouterId } from "../../../helpers/router";
-import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 
 const UserFollowers: NextPage = () => {
   const session = useSession();
   const router = useRouter();
   const id = getRouterId(router);
-  const path = userShowPath({ router, session });
-  const followPath = followingPath({ router });
-  const { data } = trpc.useQuery(path);
-  const { data: followData } = trpc.useQuery(followPath);
-  const search = trpc.useMutation("search.follow");
-  const userData = data as Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { following: true; followers: true } };
-      followers: true;
-      following: {
-        include: {
-          follower: {
-            include: {
-              _count: { select: { following: true; followers: true } };
-            };
-          };
-        };
-      };
-      bookmarks: true;
-    };
-  }>;
+  const { data } = trpc.user.findUniqueUser.useQuery(
+    userShowQuery({ router, session })
+  );
+  const { data: followData } = trpc.pagination.follow.useQuery(
+    followingPath({ router })
+  );
+  const search = trpc.search.follow.useMutation();
   if (!data || !followData) return <></>;
   return (
-    <UserLayout data={userData} activeTab="">
+    <UserLayout data={data} activeTab="">
       <IndexLayout
         route={{ pathname: "/users/[id]/following", query: { id } }}
         meta={followData.meta}

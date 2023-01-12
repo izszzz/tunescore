@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
@@ -22,7 +22,7 @@ import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locale, Prisma } from "@prisma/client";
-import type { musicShowPath } from "../../../paths/musics/[id]";
+import type { musicShowQuery } from "../../../paths/musics/[id]";
 import type { BandListQueryType } from "../../../helpers/band";
 import type { ArtistListQueryType } from "../../../helpers/artist";
 
@@ -44,20 +44,24 @@ export interface MusicLayoutProps
       bookmarks: true;
     };
   }>;
-  path: ReturnType<typeof musicShowPath>;
+  query: ReturnType<typeof musicShowQuery>;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
-const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
+const MusicLayout = ({
+  data,
+  query,
+  activeTab,
+  children,
+}: MusicLayoutProps) => {
   const router = useRouter();
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const id = getRouterId(router);
-  const query = path[1];
-  const update = trpc.useMutation(["music.updateOneMusic"], {
+  const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
+      queryClient.setQueryData<typeof data>(query, data);
       enqueueSnackbar("music.update success");
     },
   });

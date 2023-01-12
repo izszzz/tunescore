@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { AccountFindUniqueSchema } from "../schemas/findUniqueAccount.schema";
 import { AccountFindFirstSchema } from "../schemas/findFirstAccount.schema";
 import { AccountFindManySchema } from "../schemas/findManyAccount.schema";
@@ -14,132 +14,102 @@ import { AccountGroupBySchema } from "../schemas/groupByAccount.schema";
 import { AccountFindRawObjectSchema } from "../schemas/objects/AccountFindRaw.schema";
 import { AccountAggregateRawObjectSchema } from "../schemas/objects/AccountAggregateRaw.schema";
 
-export const accountsRouter = createRouter()
-
-  .query("aggregateAccount", {
-    input: AccountAggregateSchema,
-    async resolve({ ctx, input }) {
+export const accountsRouter = t.router({
+  aggregateAccount: publicProcedure
+    .input(AccountAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateAccount = await ctx.prisma.account.aggregate(input);
       return aggregateAccount;
-    },
-  })
-
-  .query("aggregateAccountRaw", {
-    input: AccountAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateAccountRaw: publicProcedure
+    .input(AccountAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateAccountRaw = await ctx.prisma.account.aggregateRaw(input);
       return aggregateAccountRaw;
-    },
-  })
-
-  .mutation("createManyAccount", {
-    input: AccountCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyAccount: publicProcedure
+    .input(AccountCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyAccount = await ctx.prisma.account.createMany(input);
       return createManyAccount;
-    },
-  })
-
-  .mutation("createOneAccount", {
-    input: AccountCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneAccount: publicProcedure
+    .input(AccountCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneAccount = await ctx.prisma.account.create(input);
       return createOneAccount;
-    },
-  })
-
-  .mutation("deleteManyAccount", {
-    input: AccountDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyAccount: publicProcedure
+    .input(AccountDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyAccount = await ctx.prisma.account.deleteMany(input);
       return deleteManyAccount;
-    },
-  })
-
-  .mutation("deleteOneAccount", {
-    input: AccountDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneAccount: publicProcedure
+    .input(AccountDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneAccount = await ctx.prisma.account.delete(input);
       return deleteOneAccount;
-    },
-  })
-
-  .query("findFirstAccount", {
-    input: AccountFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstAccount: publicProcedure
+    .input(AccountFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstAccount = await ctx.prisma.account.findFirst(input);
       return findFirstAccount;
-    },
-  })
-
-  .query("findFirstAccountOrThrow", {
-    input: AccountFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstAccountOrThrow: publicProcedure
+    .input(AccountFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstAccountOrThrow = await ctx.prisma.account.findFirstOrThrow(input);
       return findFirstAccountOrThrow;
-    },
-  })
-
-  .query("findManyAccount", {
-    input: AccountFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyAccount: publicProcedure
+    .input(AccountFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyAccount = await ctx.prisma.account.findMany(input);
       return findManyAccount;
-    },
-  })
-
-  .query("findAccountRaw", {
-    input: AccountFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findAccountRaw: publicProcedure
+    .input(AccountFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findAccountRaw = await ctx.prisma.account.findRaw(input);
       return findAccountRaw;
-    },
-  })
-
-  .query("findUniqueAccount", {
-    input: AccountFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueAccount: publicProcedure
+    .input(AccountFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueAccount = await ctx.prisma.account.findUnique(input);
       return findUniqueAccount;
-    },
-  })
-
-  .query("findUniqueAccountOrThrow", {
-    input: AccountFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueAccountOrThrow: publicProcedure
+    .input(AccountFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueAccountOrThrow = await ctx.prisma.account.findUniqueOrThrow(input);
       return findUniqueAccountOrThrow;
-    },
-  })
-
-  .query("groupByAccount", {
-    input: AccountGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByAccount = await ctx.prisma.account.groupBy(input);
+    }),
+  groupByAccount: publicProcedure
+    .input(AccountGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByAccount = await ctx.prisma.account.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByAccount;
-    },
-  })
-
-  .mutation("updateManyAccount", {
-    input: AccountUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyAccount: publicProcedure
+    .input(AccountUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyAccount = await ctx.prisma.account.updateMany(input);
       return updateManyAccount;
-    },
-  })
-
-  .mutation("updateOneAccount", {
-    input: AccountUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneAccount: publicProcedure
+    .input(AccountUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneAccount = await ctx.prisma.account.update(input);
       return updateOneAccount;
-    },
-  })
-
-  .mutation("upsertOneAccount", {
-    input: AccountUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneAccount: publicProcedure
+    .input(AccountUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneAccount = await ctx.prisma.account.upsert(input);
       return upsertOneAccount;
-    },
-  })
+    }),
+
+})

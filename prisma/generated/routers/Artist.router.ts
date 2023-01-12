@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { ArtistFindUniqueSchema } from "../schemas/findUniqueArtist.schema";
 import { ArtistFindFirstSchema } from "../schemas/findFirstArtist.schema";
 import { ArtistFindManySchema } from "../schemas/findManyArtist.schema";
@@ -14,132 +14,102 @@ import { ArtistGroupBySchema } from "../schemas/groupByArtist.schema";
 import { ArtistFindRawObjectSchema } from "../schemas/objects/ArtistFindRaw.schema";
 import { ArtistAggregateRawObjectSchema } from "../schemas/objects/ArtistAggregateRaw.schema";
 
-export const artistsRouter = createRouter()
-
-  .query("aggregateArtist", {
-    input: ArtistAggregateSchema,
-    async resolve({ ctx, input }) {
+export const artistsRouter = t.router({
+  aggregateArtist: publicProcedure
+    .input(ArtistAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateArtist = await ctx.prisma.artist.aggregate(input);
       return aggregateArtist;
-    },
-  })
-
-  .query("aggregateArtistRaw", {
-    input: ArtistAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateArtistRaw: publicProcedure
+    .input(ArtistAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateArtistRaw = await ctx.prisma.artist.aggregateRaw(input);
       return aggregateArtistRaw;
-    },
-  })
-
-  .mutation("createManyArtist", {
-    input: ArtistCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyArtist: publicProcedure
+    .input(ArtistCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyArtist = await ctx.prisma.artist.createMany(input);
       return createManyArtist;
-    },
-  })
-
-  .mutation("createOneArtist", {
-    input: ArtistCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneArtist: publicProcedure
+    .input(ArtistCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneArtist = await ctx.prisma.artist.create(input);
       return createOneArtist;
-    },
-  })
-
-  .mutation("deleteManyArtist", {
-    input: ArtistDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyArtist: publicProcedure
+    .input(ArtistDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyArtist = await ctx.prisma.artist.deleteMany(input);
       return deleteManyArtist;
-    },
-  })
-
-  .mutation("deleteOneArtist", {
-    input: ArtistDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneArtist: publicProcedure
+    .input(ArtistDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneArtist = await ctx.prisma.artist.delete(input);
       return deleteOneArtist;
-    },
-  })
-
-  .query("findFirstArtist", {
-    input: ArtistFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstArtist: publicProcedure
+    .input(ArtistFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstArtist = await ctx.prisma.artist.findFirst(input);
       return findFirstArtist;
-    },
-  })
-
-  .query("findFirstArtistOrThrow", {
-    input: ArtistFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstArtistOrThrow: publicProcedure
+    .input(ArtistFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstArtistOrThrow = await ctx.prisma.artist.findFirstOrThrow(input);
       return findFirstArtistOrThrow;
-    },
-  })
-
-  .query("findManyArtist", {
-    input: ArtistFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyArtist: publicProcedure
+    .input(ArtistFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyArtist = await ctx.prisma.artist.findMany(input);
       return findManyArtist;
-    },
-  })
-
-  .query("findArtistRaw", {
-    input: ArtistFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findArtistRaw: publicProcedure
+    .input(ArtistFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findArtistRaw = await ctx.prisma.artist.findRaw(input);
       return findArtistRaw;
-    },
-  })
-
-  .query("findUniqueArtist", {
-    input: ArtistFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueArtist: publicProcedure
+    .input(ArtistFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueArtist = await ctx.prisma.artist.findUnique(input);
       return findUniqueArtist;
-    },
-  })
-
-  .query("findUniqueArtistOrThrow", {
-    input: ArtistFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueArtistOrThrow: publicProcedure
+    .input(ArtistFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueArtistOrThrow = await ctx.prisma.artist.findUniqueOrThrow(input);
       return findUniqueArtistOrThrow;
-    },
-  })
-
-  .query("groupByArtist", {
-    input: ArtistGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByArtist = await ctx.prisma.artist.groupBy(input);
+    }),
+  groupByArtist: publicProcedure
+    .input(ArtistGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByArtist = await ctx.prisma.artist.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByArtist;
-    },
-  })
-
-  .mutation("updateManyArtist", {
-    input: ArtistUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyArtist: publicProcedure
+    .input(ArtistUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyArtist = await ctx.prisma.artist.updateMany(input);
       return updateManyArtist;
-    },
-  })
-
-  .mutation("updateOneArtist", {
-    input: ArtistUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneArtist: publicProcedure
+    .input(ArtistUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneArtist = await ctx.prisma.artist.update(input);
       return updateOneArtist;
-    },
-  })
-
-  .mutation("upsertOneArtist", {
-    input: ArtistUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneArtist: publicProcedure
+    .input(ArtistUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneArtist = await ctx.prisma.artist.upsert(input);
       return upsertOneArtist;
-    },
-  })
+    }),
+
+})

@@ -8,21 +8,18 @@ import type { NextPage } from "next";
 const Users: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(
-    [
-      "pagination.user",
-      {
-        args: {
-          where: {
-            name: { contains: (router.query.q as string) || "" },
-          },
-          include: {
-            _count: { select: { following: true, followers: true } },
-          },
+  const { data } = trpc.pagination.user.useQuery(
+    {
+      args: {
+        where: {
+          name: { contains: (router.query.q as string) || "" },
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
+        include: {
+          _count: { select: { following: true, followers: true } },
+        },
       },
-    ],
+      options: { page: (router.query.page as string) || 0, perPage: 12 },
+    },
     {
       onError: () => {
         enqueueSnackbar("user.index error");

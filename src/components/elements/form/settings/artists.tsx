@@ -37,7 +37,7 @@ function ArtistsUpdateForm({
   const { enqueueSnackbar } = useSnackbar(),
     [artist, setArtist] = useState<Artist>(),
     router = useRouter(),
-    search = trpc.useMutation("search.artist", {
+    search = trpc.search.artist.useMutation({
       onError: () => {
         enqueueSnackbar("artist.search error");
       },

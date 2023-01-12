@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t } from "./helpers/createRouter";
 import { accountsRouter } from "./Account.router";
 import { sessionsRouter } from "./Session.router";
 import { usersRouter } from "./User.router";
@@ -20,44 +20,26 @@ import { tagsRouter } from "./Tag.router";
 import { tagmapsRouter } from "./TagMap.router";
 import { notificationsRouter } from "./Notification.router";
 
-export const appRouter = createRouter()
+export const appRouter = t.router({
+  account: accountsRouter,
+  session: sessionsRouter,
+  user: usersRouter,
+  follow: followsRouter,
+  verificationtoken: verificationtokensRouter,
+  music: musicRouter,
+  album: albumsRouter,
+  artist: artistsRouter,
+  band: bandsRouter,
+  issue: issuesRouter,
+  pull: pullsRouter,
+  vote: votesRouter,
+  comment: commentsRouter,
+  bookmark: bookmarksRouter,
+  participation: participationsRouter,
+  role: rolesRouter,
+  rolemap: rolemapsRouter,
+  tag: tagsRouter,
+  tagmap: tagmapsRouter,
+  notification: notificationsRouter
+})
 
-  .merge('account.', accountsRouter)
-
-  .merge('session.', sessionsRouter)
-
-  .merge('user.', usersRouter)
-
-  .merge('follow.', followsRouter)
-
-  .merge('verificationtoken.', verificationtokensRouter)
-
-  .merge('music.', musicRouter)
-
-  .merge('album.', albumsRouter)
-
-  .merge('artist.', artistsRouter)
-
-  .merge('band.', bandsRouter)
-
-  .merge('issue.', issuesRouter)
-
-  .merge('pull.', pullsRouter)
-
-  .merge('vote.', votesRouter)
-
-  .merge('comment.', commentsRouter)
-
-  .merge('bookmark.', bookmarksRouter)
-
-  .merge('participation.', participationsRouter)
-
-  .merge('role.', rolesRouter)
-
-  .merge('rolemap.', rolemapsRouter)
-
-  .merge('tag.', tagsRouter)
-
-  .merge('tagmap.', tagmapsRouter)
-
-  .merge('notification.', notificationsRouter)

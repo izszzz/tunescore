@@ -17,7 +17,7 @@ const AlbumUpdateAutocomplete = ({
 }: AlbumUpdateAutocompleteProps) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation("search.album", {
+  const search = trpc.search.album.useMutation({
     onError: () => {
       enqueueSnackbar("artist.search error");
     },

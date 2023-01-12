@@ -6,7 +6,7 @@ import DefaultIndexLayout from "../../components/layouts/index/default";
 import MusicLists from "../../components/elements/list/music";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
-import { musicPaginationPath } from "../../paths/musics";
+import { musicPaginationQuery } from "../../paths/musics";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
 const Musics: NextPage = () => {
@@ -18,11 +18,14 @@ const Musics: NextPage = () => {
       enqueueSnackbar("music.search error");
     },
   });
-    const { data } = trpc.useQuery(undefined, musicPaginationPath({ router, session }), {
-        onError: () => {
-            enqueueSnackbar("music.index error");
-        },
-    });
+  const { data } = trpc.pagination.music.useQuery(
+    musicPaginationQuery({ router, session }),
+    {
+      onError: () => {
+        enqueueSnackbar("music.index error");
+      },
+    }
+  );
   if (!data) return <></>;
   return (
     <DefaultIndexLayout<Music>

@@ -2,12 +2,12 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import AlbumLayout from "../../../components/layouts/show/album";
-import { albumShowPath } from "../../../paths/albums/[id]";
+import { albumShowQuery } from "../../../paths/albums/[id]";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
@@ -20,24 +20,19 @@ const Album: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
-  const path = albumShowPath({ router, session });
-  const query = path[1];
-  const { data } = trpc.useQuery(undefined, path);
+  const query = albumShowQuery({ router, session });
+  const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
+      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
     },
   });
-  const destroy = trpc.album.deleteOneAlbum.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
-    },
-  });
+  const destroy = trpc.album.deleteOneAlbum.useMutation();
   if (!data) return <></>;
   const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];
   return (
-    <AlbumLayout data={albumData} path={path} activeTab="settings">
+    <AlbumLayout data={albumData} query={query} activeTab="settings">
       <SingleRowForm
         data={albumData}
         loading={update.isLoading}

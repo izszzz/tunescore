@@ -17,7 +17,9 @@ const Artists: NextPage = () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const { data } = trpc.useQuery(undefined, artistPaginationPath({ router, session }));
+  const { data } = trpc.pagination.artist.useQuery(
+    artistPaginationPath({ router, session })
+  );
   if (!data) return <></>;
   return (
     <IndexLayout

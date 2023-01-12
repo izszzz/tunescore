@@ -14,54 +14,39 @@ import { publicProcedure, router } from "../trpc";
 export const searchRouter = router({
   music: publicProcedure
     .input(MusicFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.music.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.music.findMany(input)),
   artist: publicProcedure
     .input(ArtistFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.artist.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.artist.findMany(input)),
   band: publicProcedure
     .input(BandFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.band.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.band.findMany(input)),
   album: publicProcedure
     .input(AlbumFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.album.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.album.findMany(input)),
   user: publicProcedure
     .input(UserFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.user.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.user.findMany(input)),
   issue: publicProcedure
     .input(IssueFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.issue.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.issue.findMany(input)),
   pull: publicProcedure
     .input(PullFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.pull.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.pull.findMany(input)),
   tag: publicProcedure
     .input(TagFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.tag.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.tag.findMany(input)),
   role: publicProcedure
     .input(RoleFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.role.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) => ctx.prisma.role.findMany(input)),
   follow: publicProcedure
     .input(FollowFindManySchema)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.follow.findMany(input);
-    }),
+    .mutation(async ({ ctx, input }) =>
+      ctx.prisma.follow.findMany({
+        ...input,
+        include: { follower: true, following: true },
+      })
+    ),
   bookmark: publicProcedure
     .input(BookmarkFindManySchema)
     .mutation(async ({ ctx, input }) => {

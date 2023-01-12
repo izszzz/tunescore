@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import Box from "@mui/material/Box";
 import Image from "../../elements/image";
@@ -30,13 +30,13 @@ export interface BandLayoutProps
       tagMaps: { include: { tag: true } };
     };
   }>;
-  path: ReturnType<typeof bandShowPath>;
+  query: ReturnType<typeof bandShowPath>;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
   data,
-  path,
+  query,
   activeTab,
   children,
 }) => {
@@ -45,11 +45,10 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const query = path[1];
   const name = setLocale(data.name, router);
   const update = trpc.band.updateOneBand.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
+      queryClient.setQueryData([["band", "findUniqueBand"], query], data);
       enqueueSnackbar("band.update success");
     },
   });

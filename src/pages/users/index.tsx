@@ -10,21 +10,21 @@ const Users: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.pagination.user.useQuery(
     {
-              args: {
-                where: {
-                  name: { contains: (router.query.q as string) || "" },
-                },
-                include: {
-                  _count: { select: { following: true, followers: true } },
-                },
-              },
-              options: { page: (router.query.page as string) || 0, perPage: 12 },
-            },
-      {
-          onError: () => {
-              enqueueSnackbar("user.index error");
-          },
-      }
+      args: {
+        where: {
+          name: { contains: (router.query.q as string) || "" },
+        },
+        include: {
+          _count: { select: { following: true, followers: true } },
+        },
+      },
+      options: { page: (router.query.page as string) || 0, perPage: 12 },
+    },
+    {
+      onError: () => {
+        enqueueSnackbar("user.index error");
+      },
+    }
   );
   if (!data) return <></>;
   return (

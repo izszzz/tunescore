@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
@@ -16,7 +16,7 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import type { artistShowPath } from "../../../paths/artists/[id]";
+import type { artistShowQuery } from "../../../paths/artists/[id]";
 import type { BandListQueryType } from "../../../helpers/band";
 import type { MusicListQueryType } from "../../../helpers/music";
 export interface ArtistLayoutProps
@@ -34,12 +34,12 @@ export interface ArtistLayoutProps
       tagMaps: { include: { tag: true } };
     };
   }>;
-  path: ReturnType<typeof artistShowPath>;
+  query: ReturnType<typeof artistShowQuery>;
   activeTab: "info" | "settings";
 }
 const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   data,
-  path,
+  query,
   activeTab,
   children,
 }) => {
@@ -49,10 +49,9 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const query = path[1];
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
+      queryClient.setQueryData([["artist", "findUniqueArtist"], query], data);
       enqueueSnackbar("artist.update success");
     },
   });

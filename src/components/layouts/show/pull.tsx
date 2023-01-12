@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import * as Diff3 from "node-diff3";
 import { addWeeks } from "date-fns";
 import Typography from "@mui/material/Typography";
@@ -40,7 +40,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     onSuccess: (data) => {
       queryClient.setQueryData<PullLayoutProps["data"]>(
         [
-          "pull.findUniquePull",
+          ["pull", "findUniquePull"],
           {
             include: { music: true, user: true, vote: true },
             where: {

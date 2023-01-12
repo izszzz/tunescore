@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
 import Typography from "@mui/material/Typography";
@@ -25,12 +25,11 @@ const BandSettings: NextPage = () => {
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const path = bandShowPath({ router, session });
-  const query = path[1];
-  const { data } = trpc.useQuery(undefined, path);
-  const update = trpc.useMutation(`band.updateOneBand`, {
+  const query = bandShowPath({ router, session });
+  const { data } = trpc.band.findUniqueBand.useQuery(query);
+  const update = trpc.band.updateOneBand.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
+      queryClient.setQueryData([["band", "findUniqueBand"], query], data);
       enqueueSnackbar("music.update success");
     },
     onError: () => {
@@ -38,15 +37,14 @@ const BandSettings: NextPage = () => {
     },
   });
   const destroy = trpc.band.deleteOneBand.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
-      enqueueSnackbar("band.update success");
+    onSuccess: () => {
+      enqueueSnackbar("band.destroy success");
     },
   });
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (
-    <BandLayout data={bandData} path={path} activeTab="settings">
+    <BandLayout data={bandData} query={query} activeTab="settings">
       <SingleRowForm
         data={bandData}
         loading={update.isLoading}

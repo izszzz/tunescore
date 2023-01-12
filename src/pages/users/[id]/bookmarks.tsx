@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { match, P } from "ts-pattern";
 import { trpc } from "../../../utils/trpc";
-import { userShowPath } from "../../../paths/users/[id]";
-import { bookmarkPath } from "../../../paths/users/[id]/bookmark";
+import { userShowQuery } from "../../../paths/users/[id]";
+import { bookmarkQuery } from "../../../paths/users/[id]/bookmark";
 import MusicListItem from "../../../components/elements/list/item/music";
 import IndexLayout from "../../../components/layouts/index";
 import AlbumListItem from "../../../components/elements/list/item/album";
@@ -15,17 +15,17 @@ import setLocale from "../../../helpers/locale";
 import UserLayout from "../../../components/layouts/show/user";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import type { NextPage } from "next";
-import type { Prisma } from "@prisma/client";
 
 const UserBookmarks: NextPage = () => {
   const session = useSession();
   const router = useRouter();
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
-  const path = userShowPath({ router, session });
-  const { data } = trpc.useQuery(undefined, path);
-  const { data: bookmarkData } = trpc.useQuery(
-    undefined, bookmarkPath({ router, session })
+  const { data } = trpc.user.findUniqueUser.useQuery(
+    userShowQuery({ router, session })
+  );
+  const { data: bookmarkData } = trpc.pagination.bookmark.useQuery(
+    bookmarkQuery({ router, session })
   );
   const search = trpc.search.bookmark.useMutation({
     onError: () => {
@@ -33,15 +33,9 @@ const UserBookmarks: NextPage = () => {
     },
   });
   if (!data || !bookmarkData) return <></>;
-  const userData = data as Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { following: true; followers: true } };
-      followers: true;
-      bookmarks: true;
-    };
-  }>;
+
   return (
-    <UserLayout data={userData} activeTab="bookmarks">
+    <UserLayout data={data} activeTab="bookmarks">
       <IndexLayout
         meta={bookmarkData.meta}
         route={{

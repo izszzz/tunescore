@@ -3,13 +3,14 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import { artistShowPath } from "../../../paths/artists/[id]";
+import { artistShowQuery } from "../../../paths/artists/[id]";
 import DeleteAlert from "../../../components/elements/alert/delete";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
 import { convertAffiliateLink } from "../../../helpers/itunes";
@@ -21,24 +22,24 @@ const EditArtist: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
-  const path = artistShowPath({ router, session });
-  const query = path[1];
-  const { data } = trpc.useQuery(undefined, path);
+  const { enqueueSnackbar } = useSnackbar();
+  const query = artistShowQuery({ router, session });
+  const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
+      queryClient.setQueryData([["artist", "findUniqueArtist"], query], data);
     },
   });
   const destroy = trpc.artist.deleteOneArtist.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(path, data);
+    onSuccess: () => {
+      enqueueSnackbar("artist.destroy success");
     },
   });
 
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];
   return (
-    <ArtistLayout data={artistData} path={path} activeTab="settings">
+    <ArtistLayout data={artistData} query={query} activeTab="settings">
       <SingleRowForm
         data={artistData}
         loading={update.isLoading}

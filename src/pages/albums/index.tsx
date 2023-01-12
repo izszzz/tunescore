@@ -5,16 +5,15 @@ import AlbumLists from "../../components/elements/list/album";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
-import { albumPaginationPath } from "../../paths/albums";
+import { albumPaginationQuery } from "../../paths/albums";
 import type { NextPage } from "next";
 
 const Albums: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.album.useQuery(
-    undefined,
-    albumPaginationPath({ router, session })
+  const { data } = trpc.pagination.album.useQuery(
+    albumPaginationQuery({ router, session })
   );
   const search = trpc.search.album.useMutation({
     onError: () => {

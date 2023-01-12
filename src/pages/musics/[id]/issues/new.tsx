@@ -14,7 +14,7 @@ import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../../utils/trpc";
 import MusicLayout from "../../../../components/layouts/show/music";
-import { musicShowPath } from "../../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
@@ -27,12 +27,12 @@ const Issues: NextPage = () => {
   const router = useRouter();
   const id = getRouterId(router);
   const session = useSession();
-  const path = musicShowPath({ router, session });
-    const { data } = trpc.useQuery(undefined, path, {
-        onError: () => {
-            enqueueSnackbar("music.show error");
-        },
-    });
+  const query = musicShowQuery({ router, session });
+  const { data } = trpc.music.findUniqueMusic.useQuery(query, {
+    onError: () => {
+      enqueueSnackbar("music.show error");
+    },
+  });
   const create = trpc.issue.createOneIssue.useMutation({
     onSuccess: () =>
       router.push({
@@ -54,7 +54,7 @@ const Issues: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} path={path} activeTab="issues">
+    <MusicLayout data={musicData} query={query} activeTab="issues">
       <FormContainer onSuccess={handleSubmit} formContext={formContext}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

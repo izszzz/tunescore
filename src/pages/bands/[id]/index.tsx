@@ -14,11 +14,11 @@ const Band: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const path = bandShowPath({ router, session });
-  const { data } = trpc.useQuery(undefined, path);
+  const { data } = trpc.band.findUniqueBand.useQuery(path);
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (
-    <BandLayout data={bandData} path={path} activeTab="info">
+    <BandLayout data={bandData} query={path} activeTab="info">
       {data.link?.streaming?.itunes?.id && (
         <AppleButton href={data.link?.streaming?.itunes.id} />
       )}

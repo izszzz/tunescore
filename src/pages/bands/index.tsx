@@ -5,14 +5,16 @@ import BandLists from "../../components/elements/list/band";
 import IndexLayout from "../../components/layouts/index/default";
 import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
-import { bandPaginationPath } from "../../paths/bands";
+import { bandPaginationQuery } from "../../paths/bands";
 import type { NextPage } from "next";
 
 const Bands: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(undefined, bandPaginationPath({ router, session }));
+  const { data } = trpc.pagination.band.useQuery(
+    bandPaginationQuery({ router, session })
+  );
   const search = trpc.search.band.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");

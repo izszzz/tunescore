@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import MusicLayout from "../../../components/layouts/show/music";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
@@ -13,7 +13,7 @@ import MusicYoutubeSelectForm from "../../../components/elements/form/settings/s
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
-import { musicShowPath } from "../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../paths/musics/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import { getRouterId } from "../../../helpers/router";
 import { convertAffiliateLink } from "../../../helpers/itunes";
@@ -30,9 +30,8 @@ const SettingsMusic: NextPage = () => {
     session = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     id = getRouterId(router),
-    path = musicShowPath({ router, session }),
-    query = path[1],
-    { data } = trpc.useQuery(undefined, path),
+    query = musicShowQuery({ router, session }),
+    { data } = trpc.music.findUniqueMusic.useQuery(query),
     destroy = trpc.music.deleteOneMusic.useMutation({
       onSuccess: () => {
         enqueueSnackbar("music.destroy success");
@@ -42,9 +41,9 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.destroy error");
       },
     }),
-    update = trpc.useMutation(`music.updateOneMusic`, {
+    update = trpc.music.updateOneMusic.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData(path, data);
+        queryClient.setQueryData([["music", "findUniqueMusic"], query], data);
         enqueueSnackbar("music.update success");
       },
       onError: () => {
@@ -52,15 +51,15 @@ const SettingsMusic: NextPage = () => {
       },
     });
   const { data: userData } = trpc.user.findUniqueUser.useQuery({
-            where: { id: session.data?.user?.id },
-            include: { accounts: true },
-          });
+    where: { id: session.data?.user?.id },
+    include: { accounts: true },
+  });
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   const providers = userData.accounts.map((account) => account.provider);
   return (
-    <MusicLayout data={musicData} path={path} activeTab="settings">
+    <MusicLayout data={musicData} query={query} activeTab="settings">
       <Typography variant="h4"> Info</Typography>
       <Divider />
       <SingleRowForm

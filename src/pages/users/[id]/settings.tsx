@@ -5,7 +5,7 @@ import { trpc } from "../../../utils/trpc";
 import UserLayout from "../../../components/layouts/show/user";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import DeleteAlert from "../../../components/elements/alert/delete";
-import { userShowPath } from "../../../paths/users/[id]";
+import { userShowQuery } from "../../../paths/users/[id]";
 import GoogleButton from "../../../components/elements/button/providers/google";
 import SpotifyButton from "../../../components/elements/button/providers/spotify";
 import { useProviders } from "../../../hooks/useProvider";
@@ -17,9 +17,8 @@ const SettingsUser: NextPage = () => {
   const session = useSession();
   const providers = useProviders();
   const update = trpc.user.updateOneUser.useMutation();
-  const path = userShowPath({ router, session });
-  const query = path[1];
-  const { data } = trpc.useQuery(undefined, path);
+  const query = userShowQuery({ router, session });
+  const { data } = trpc.user.findUniqueUser.useQuery(query);
   const destroy = trpc.user.deleteOneUser.useMutation({
     onSuccess: () => router.push("/"),
     onError: (error) => console.log(error),

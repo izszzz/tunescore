@@ -7,9 +7,10 @@ import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
 
 export const appRouter = mergeRouters(
-  t.router({
-    })
-,
+  router({
+    pagination: paginationRouter,
+    search: searchRouter,
+  }),
   generatedRouter
 );
 

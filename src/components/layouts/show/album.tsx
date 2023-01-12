@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useRouter } from "next/router";
 import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
@@ -13,7 +13,7 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import type { albumShowPath } from "../../../paths/albums/[id]";
+import type { albumShowQuery } from "../../../paths/albums/[id]";
 import type { BandListQueryType } from "../../../helpers/band";
 import type { ArtistListQueryType } from "../../../helpers/artist";
 import type { MusicListQueryType } from "../../../helpers/music";
@@ -28,12 +28,12 @@ export interface AlbumLayoutProps
       tagMaps: { include: { tag: true } };
     };
   }>;
-  path: ReturnType<typeof albumShowPath>;
+  query: ReturnType<typeof albumShowQuery>;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   data,
-  path,
+  query,
   activeTab,
   children,
 }) => {
@@ -42,10 +42,9 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   const session = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const query = path[1];
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
+      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
       enqueueSnackbar("album.update success");
     },
   });

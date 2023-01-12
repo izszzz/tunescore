@@ -1,6 +1,8 @@
 import React from "react";
+import axios from "axios";
 import ChannelYoutubeCard from "../../../../../card/channel/youtube";
 import YoutubeSelectForm from "../youtube";
+import type { ChannelList } from "../youtube";
 import type { StreamingLink } from "@prisma/client";
 
 interface ChannelYoutubeSelectFormProps {
@@ -18,7 +20,7 @@ const ChannelYoutubeSelectForm = ({
   <YoutubeSelectForm
     {...props}
     type="channel"
-    lookup={(api) => api.channels.list}
+    lookup={(id) => axios.get<ChannelList>(`/api/youtube/channels/${id}`)}
     largeCard={(value) =>
       value && (
         <ChannelYoutubeCard

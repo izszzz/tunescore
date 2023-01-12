@@ -23,7 +23,7 @@ const SpotifySearchHandler = async (
       (data) => res.status(200).json(data),
       (err) => {
         console.log(err);
-        res.status(401).send("accesstoken expired");
+        res.status(500).send("これもうわかんねぇな");
       }
     );
 };

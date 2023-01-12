@@ -11,7 +11,7 @@ import { match } from "ts-pattern";
 import CircularProgress from "@mui/material/CircularProgress";
 import LocaleAutocomplete from "../autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
-import ThemeToggleButton from "../button/toggle/theme";
+import ThemeToggleButton from "../button/providers/toggle/theme";
 import SearchAutocomplete from "../autocomplete/search";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";

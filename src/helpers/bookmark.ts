@@ -1,13 +1,13 @@
 import { match, P } from "ts-pattern";
 import { getCurrentUserId } from "./user";
-import type { BookmarkType, Prisma } from "@prisma/client";
+import type { ResourceType, Prisma } from "@prisma/client";
 import type { GetCurrentUserArg } from "./user";
 
 export const bookmarkQuery = ({
   type,
   session,
 }: {
-  type: BookmarkType;
+  type: ResourceType;
   session: GetCurrentUserArg;
 }) => ({
   where: {
@@ -28,7 +28,7 @@ export const bookmarkMutate = ({
   session,
 }: {
   data: Data;
-  type: BookmarkType;
+  type: ResourceType;
   session: GetCurrentUserArg;
 }): Prisma.BookmarkUpdateManyWithoutMusicNestedInput =>
   data.bookmarks[0]

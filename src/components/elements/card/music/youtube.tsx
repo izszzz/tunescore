@@ -8,19 +8,22 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import ResourceIcon from "../../icon/resource";
-import SquareMusicCard from "../square/music";
+import SquareCard from "../square";
+import type {
+  SearchResult,
+  Video,
+} from "../../form/settings/select/card/youtube";
 
 interface MusicYoutubeCardProps<T> {
   data: T;
   size: "small" | "large";
   onClick: (value: T) => void;
 }
-function MusicYoutubeCard<
-  T extends
-    | gapi.client.youtube.SearchResult
-    | gapi.client.youtube.Video
-    | undefined
->({ data, size, onClick }: MusicYoutubeCardProps<T>) {
+function MusicYoutubeCard<T extends SearchResult | Video | undefined>({
+  data,
+  size,
+  onClick,
+}: MusicYoutubeCardProps<T>) {
   if (size === "small")
     return (
       <Tooltip
@@ -35,7 +38,8 @@ function MusicYoutubeCard<
         }
       >
         <Box>
-          <SquareMusicCard
+          <SquareCard
+            resource="MUSIC"
             title={
               <Typography variant="caption" display="block" noWrap>
                 {data?.snippet?.title}
@@ -59,7 +63,7 @@ function MusicYoutubeCard<
               height: "auto",
               borderRadius: "3px",
             }}
-            image={data?.snippet?.thumbnails?.medium?.url}
+            image={data?.snippet?.thumbnails?.medium?.url || ""}
             alt="Live from space album cover"
           />
         </CardContent>

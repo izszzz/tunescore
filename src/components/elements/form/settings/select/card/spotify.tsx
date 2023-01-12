@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { trpc } from "../../../../../../utils/trpc";
 import CardSelectForm from ".";
 import type { spotify } from "../../../../../../server/common/spotify";
 import type { CardSelectFormProps } from ".";

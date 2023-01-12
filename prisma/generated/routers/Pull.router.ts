@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { PullFindUniqueSchema } from "../schemas/findUniquePull.schema";
 import { PullFindFirstSchema } from "../schemas/findFirstPull.schema";
 import { PullFindManySchema } from "../schemas/findManyPull.schema";
@@ -14,132 +14,102 @@ import { PullGroupBySchema } from "../schemas/groupByPull.schema";
 import { PullFindRawObjectSchema } from "../schemas/objects/PullFindRaw.schema";
 import { PullAggregateRawObjectSchema } from "../schemas/objects/PullAggregateRaw.schema";
 
-export const pullsRouter = createRouter()
-
-  .query("aggregatePull", {
-    input: PullAggregateSchema,
-    async resolve({ ctx, input }) {
+export const pullsRouter = t.router({
+  aggregatePull: publicProcedure
+    .input(PullAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregatePull = await ctx.prisma.pull.aggregate(input);
       return aggregatePull;
-    },
-  })
-
-  .query("aggregatePullRaw", {
-    input: PullAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregatePullRaw: publicProcedure
+    .input(PullAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregatePullRaw = await ctx.prisma.pull.aggregateRaw(input);
       return aggregatePullRaw;
-    },
-  })
-
-  .mutation("createManyPull", {
-    input: PullCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyPull: publicProcedure
+    .input(PullCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyPull = await ctx.prisma.pull.createMany(input);
       return createManyPull;
-    },
-  })
-
-  .mutation("createOnePull", {
-    input: PullCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOnePull: publicProcedure
+    .input(PullCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOnePull = await ctx.prisma.pull.create(input);
       return createOnePull;
-    },
-  })
-
-  .mutation("deleteManyPull", {
-    input: PullDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyPull: publicProcedure
+    .input(PullDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyPull = await ctx.prisma.pull.deleteMany(input);
       return deleteManyPull;
-    },
-  })
-
-  .mutation("deleteOnePull", {
-    input: PullDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOnePull: publicProcedure
+    .input(PullDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOnePull = await ctx.prisma.pull.delete(input);
       return deleteOnePull;
-    },
-  })
-
-  .query("findFirstPull", {
-    input: PullFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstPull: publicProcedure
+    .input(PullFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstPull = await ctx.prisma.pull.findFirst(input);
       return findFirstPull;
-    },
-  })
-
-  .query("findFirstPullOrThrow", {
-    input: PullFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstPullOrThrow: publicProcedure
+    .input(PullFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstPullOrThrow = await ctx.prisma.pull.findFirstOrThrow(input);
       return findFirstPullOrThrow;
-    },
-  })
-
-  .query("findManyPull", {
-    input: PullFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyPull: publicProcedure
+    .input(PullFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyPull = await ctx.prisma.pull.findMany(input);
       return findManyPull;
-    },
-  })
-
-  .query("findPullRaw", {
-    input: PullFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findPullRaw: publicProcedure
+    .input(PullFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findPullRaw = await ctx.prisma.pull.findRaw(input);
       return findPullRaw;
-    },
-  })
-
-  .query("findUniquePull", {
-    input: PullFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniquePull: publicProcedure
+    .input(PullFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniquePull = await ctx.prisma.pull.findUnique(input);
       return findUniquePull;
-    },
-  })
-
-  .query("findUniquePullOrThrow", {
-    input: PullFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniquePullOrThrow: publicProcedure
+    .input(PullFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniquePullOrThrow = await ctx.prisma.pull.findUniqueOrThrow(input);
       return findUniquePullOrThrow;
-    },
-  })
-
-  .query("groupByPull", {
-    input: PullGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByPull = await ctx.prisma.pull.groupBy(input);
+    }),
+  groupByPull: publicProcedure
+    .input(PullGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByPull = await ctx.prisma.pull.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByPull;
-    },
-  })
-
-  .mutation("updateManyPull", {
-    input: PullUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyPull: publicProcedure
+    .input(PullUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyPull = await ctx.prisma.pull.updateMany(input);
       return updateManyPull;
-    },
-  })
-
-  .mutation("updateOnePull", {
-    input: PullUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOnePull: publicProcedure
+    .input(PullUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOnePull = await ctx.prisma.pull.update(input);
       return updateOnePull;
-    },
-  })
-
-  .mutation("upsertOnePull", {
-    input: PullUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOnePull: publicProcedure
+    .input(PullUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOnePull = await ctx.prisma.pull.upsert(input);
       return upsertOnePull;
-    },
-  })
+    }),
+
+})

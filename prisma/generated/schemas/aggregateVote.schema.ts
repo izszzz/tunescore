@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { VoteWhereInputObjectSchema } from './objects/VoteWhereInput.schema';
 import { VoteOrderByWithRelationInputObjectSchema } from './objects/VoteOrderByWithRelationInput.schema';
+import { VoteWhereInputObjectSchema } from './objects/VoteWhereInput.schema';
 import { VoteWhereUniqueInputObjectSchema } from './objects/VoteWhereUniqueInput.schema';
 import { VoteCountAggregateInputObjectSchema } from './objects/VoteCountAggregateInput.schema';
 import { VoteMinAggregateInputObjectSchema } from './objects/VoteMinAggregateInput.schema';
@@ -9,13 +9,13 @@ import { VoteAvgAggregateInputObjectSchema } from './objects/VoteAvgAggregateInp
 import { VoteSumAggregateInputObjectSchema } from './objects/VoteSumAggregateInput.schema';
 
 export const VoteAggregateSchema = z.object({
-  where: VoteWhereInputObjectSchema.optional(),
   orderBy: z
     .union([
       VoteOrderByWithRelationInputObjectSchema,
       VoteOrderByWithRelationInputObjectSchema.array(),
     ])
     .optional(),
+  where: VoteWhereInputObjectSchema.optional(),
   cursor: VoteWhereUniqueInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

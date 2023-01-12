@@ -27,17 +27,17 @@ const Search: NextPage = () => {
   const session = useSession();
   const router = useRouter();
   const { data } = trpc.useQuery(
-    match(type)
+    undefined, match(type)
       .with("music", () => musicPaginationPath({ router, session }))
       .with("album", () => albumPaginationPath({ router, session }))
       .with("band", () => bandPaginationPath({ router, session }))
       .with("artist", () => artistPaginationPath({ router, session }))
       .exhaustive(),
-    {
-      onError: () => {
-        enqueueSnackbar("music.index error");
-      },
-    }
+      {
+          onError: () => {
+              enqueueSnackbar("music.index error");
+          },
+      }
   );
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setType((event.target as HTMLInputElement).value as Type);

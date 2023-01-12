@@ -23,7 +23,7 @@ const Music: NextPage = () => {
   const session = useSession();
   const id = getRouterId(router);
   const path = musicShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (

@@ -16,11 +16,11 @@ const SettingsUser: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const providers = useProviders();
-  const update = trpc.useMutation("user.updateOneUser");
+  const update = trpc.user.updateOneUser.useMutation();
   const path = userShowPath({ router, session });
   const query = path[1];
-  const { data } = trpc.useQuery(path);
-  const destroy = trpc.useMutation("user.deleteOneUser", {
+  const { data } = trpc.useQuery(undefined, path);
+  const destroy = trpc.user.deleteOneUser.useMutation({
     onSuccess: () => router.push("/"),
     onError: (error) => console.log(error),
   });

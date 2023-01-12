@@ -2,5 +2,8 @@ import { z } from 'zod';
 import { FollowCreateManyInputObjectSchema } from './objects/FollowCreateManyInput.schema';
 
 export const FollowCreateManySchema = z.object({
-  data: FollowCreateManyInputObjectSchema,
+  data: z.union([
+    FollowCreateManyInputObjectSchema,
+    z.array(FollowCreateManyInputObjectSchema),
+  ]),
 });

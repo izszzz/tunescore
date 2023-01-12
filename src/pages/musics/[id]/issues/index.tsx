@@ -15,32 +15,29 @@ const Issues: NextPage = () => {
   const id = getRouterId(router);
   const session = useSession();
   const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const { data: issueData } = trpc.useQuery(
-    [
-      "pagination.issue",
-      {
-        args: {
-          include: { user: true },
-          where: {
-            title: { contains: (router.query.q as string) || "" },
-            music: { id },
-          },
+    const music = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
-      },
-    ],
+    });
+  const { data: issueData } = trpc.pagination.issue.useQuery(
     {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
+              args: {
+                include: { user: true },
+                where: {
+                  title: { contains: (router.query.q as string) || "" },
+                  music: { id },
+                },
+              },
+              options: { page: (router.query.page as string) || 0, perPage: 12 },
+            },
+      {
+          onError: () => {
+              enqueueSnackbar("music.show error");
+          },
+      }
   );
-  const search = trpc.useMutation(["search.issue"], {
+  const search = trpc.search.issue.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },

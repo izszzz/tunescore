@@ -50,7 +50,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const query = path[1];
-  const update = trpc.useMutation(["artist.updateOneArtist"], {
+  const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
       enqueueSnackbar("artist.update success");

@@ -24,7 +24,7 @@ const NewMusic: NextPage = () => {
   const session = useSession();
   const formContext = useForm<Music>();
   const { enqueueSnackbar } = useSnackbar();
-  const create = trpc.useMutation(["music.createOneMusic"], {
+  const create = trpc.music.createOneMusic.useMutation({
     onSuccess: () => router.push("/musics"),
     onError: (error) => {
       enqueueSnackbar(String(error));

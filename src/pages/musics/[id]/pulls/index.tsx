@@ -17,32 +17,29 @@ const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const { data: pullsData } = trpc.useQuery(
-    [
-      "pagination.pull",
-      {
-        args: {
-          include: { user: true },
-          where: {
-            title: { contains: (router.query.q as string) || "" },
-            music: { id },
-          },
+    const music = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
-      },
-    ],
+    });
+  const { data: pullsData } = trpc.pagination.pull.useQuery(
     {
-      onError: () => {
-        enqueueSnackbar("pull.index error");
-      },
-    }
+              args: {
+                include: { user: true },
+                where: {
+                  title: { contains: (router.query.q as string) || "" },
+                  music: { id },
+                },
+              },
+              options: { page: (router.query.page as string) || 0, perPage: 12 },
+            },
+      {
+          onError: () => {
+              enqueueSnackbar("pull.index error");
+          },
+      }
   );
-  const search = trpc.useMutation(["search.pull"], {
+  const search = trpc.search.pull.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },

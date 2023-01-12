@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { UserFindUniqueSchema } from "../schemas/findUniqueUser.schema";
 import { UserFindFirstSchema } from "../schemas/findFirstUser.schema";
 import { UserFindManySchema } from "../schemas/findManyUser.schema";
@@ -14,132 +14,102 @@ import { UserGroupBySchema } from "../schemas/groupByUser.schema";
 import { UserFindRawObjectSchema } from "../schemas/objects/UserFindRaw.schema";
 import { UserAggregateRawObjectSchema } from "../schemas/objects/UserAggregateRaw.schema";
 
-export const usersRouter = createRouter()
-
-  .query("aggregateUser", {
-    input: UserAggregateSchema,
-    async resolve({ ctx, input }) {
+export const usersRouter = t.router({
+  aggregateUser: publicProcedure
+    .input(UserAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateUser = await ctx.prisma.user.aggregate(input);
       return aggregateUser;
-    },
-  })
-
-  .query("aggregateUserRaw", {
-    input: UserAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateUserRaw: publicProcedure
+    .input(UserAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateUserRaw = await ctx.prisma.user.aggregateRaw(input);
       return aggregateUserRaw;
-    },
-  })
-
-  .mutation("createManyUser", {
-    input: UserCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyUser: publicProcedure
+    .input(UserCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyUser = await ctx.prisma.user.createMany(input);
       return createManyUser;
-    },
-  })
-
-  .mutation("createOneUser", {
-    input: UserCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneUser: publicProcedure
+    .input(UserCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneUser = await ctx.prisma.user.create(input);
       return createOneUser;
-    },
-  })
-
-  .mutation("deleteManyUser", {
-    input: UserDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyUser: publicProcedure
+    .input(UserDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyUser = await ctx.prisma.user.deleteMany(input);
       return deleteManyUser;
-    },
-  })
-
-  .mutation("deleteOneUser", {
-    input: UserDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneUser: publicProcedure
+    .input(UserDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneUser = await ctx.prisma.user.delete(input);
       return deleteOneUser;
-    },
-  })
-
-  .query("findFirstUser", {
-    input: UserFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstUser: publicProcedure
+    .input(UserFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstUser = await ctx.prisma.user.findFirst(input);
       return findFirstUser;
-    },
-  })
-
-  .query("findFirstUserOrThrow", {
-    input: UserFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstUserOrThrow: publicProcedure
+    .input(UserFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstUserOrThrow = await ctx.prisma.user.findFirstOrThrow(input);
       return findFirstUserOrThrow;
-    },
-  })
-
-  .query("findManyUser", {
-    input: UserFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyUser: publicProcedure
+    .input(UserFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyUser = await ctx.prisma.user.findMany(input);
       return findManyUser;
-    },
-  })
-
-  .query("findUserRaw", {
-    input: UserFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUserRaw: publicProcedure
+    .input(UserFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findUserRaw = await ctx.prisma.user.findRaw(input);
       return findUserRaw;
-    },
-  })
-
-  .query("findUniqueUser", {
-    input: UserFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueUser: publicProcedure
+    .input(UserFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueUser = await ctx.prisma.user.findUnique(input);
       return findUniqueUser;
-    },
-  })
-
-  .query("findUniqueUserOrThrow", {
-    input: UserFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueUserOrThrow: publicProcedure
+    .input(UserFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueUserOrThrow = await ctx.prisma.user.findUniqueOrThrow(input);
       return findUniqueUserOrThrow;
-    },
-  })
-
-  .query("groupByUser", {
-    input: UserGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByUser = await ctx.prisma.user.groupBy(input);
+    }),
+  groupByUser: publicProcedure
+    .input(UserGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByUser = await ctx.prisma.user.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByUser;
-    },
-  })
-
-  .mutation("updateManyUser", {
-    input: UserUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyUser: publicProcedure
+    .input(UserUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyUser = await ctx.prisma.user.updateMany(input);
       return updateManyUser;
-    },
-  })
-
-  .mutation("updateOneUser", {
-    input: UserUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneUser: publicProcedure
+    .input(UserUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneUser = await ctx.prisma.user.update(input);
       return updateOneUser;
-    },
-  })
-
-  .mutation("upsertOneUser", {
-    input: UserUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneUser: publicProcedure
+    .input(UserUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneUser = await ctx.prisma.user.upsert(input);
       return upsertOneUser;
-    },
-  })
+    }),
+
+})

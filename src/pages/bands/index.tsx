@@ -12,8 +12,8 @@ const Bands: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(bandPaginationPath({ router, session }));
-  const search = trpc.useMutation(["search.band"], {
+  const { data } = trpc.useQuery(undefined, bandPaginationPath({ router, session }));
+  const search = trpc.search.band.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },

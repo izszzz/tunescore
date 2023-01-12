@@ -15,62 +15,50 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const session = useSession();
-  const musics = trpc.useQuery([
-    "pagination.music",
-    {
-      args: {
-        include: {
-          participations: {
-            where: {
-              roleMap: {
-                some: {
-                  role: { name: { in: ["Composer", "Lyrist", "Arranger"] } },
+  const musics = trpc.pagination.music.useQuery({
+            args: {
+              include: {
+                participations: {
+                  where: {
+                    roleMap: {
+                      some: {
+                        role: { name: { in: ["Composer", "Lyrist", "Arranger"] } },
+                      },
+                    },
+                  },
+                  ...participatedArtistQuery(session),
+                  take: 1,
+                },
+                band: true,
+                user: true,
+                bookmarks: bookmarkQuery({ type: "Music", session }),
+                _count: {
+                  select: {
+                    bookmarks: true,
+                  },
                 },
               },
             },
-            ...participatedArtistQuery(session),
-            take: 1,
-          },
-          band: true,
-          user: true,
-          bookmarks: bookmarkQuery({ type: "Music", session }),
-          _count: {
-            select: {
-              bookmarks: true,
+            options: { page: 0, perPage: 12 },
+          });
+  const albums = trpc.pagination.album.useQuery({
+            args: {
+              ...albumListQuery(session),
             },
-          },
-        },
-      },
-      options: { page: 0, perPage: 12 },
-    },
-  ]);
-  const albums = trpc.useQuery([
-    "pagination.album",
-    {
-      args: {
-        ...albumListQuery(session),
-      },
-      options: { page: 0, perPage: 12 },
-    },
-  ]);
-  const artists = trpc.useQuery([
-    "pagination.artist",
-    {
-      args: {
-        ...artistListQuery(session),
-      },
-      options: { page: 0, perPage: 12 },
-    },
-  ]);
-  const bands = trpc.useQuery([
-    "pagination.band",
-    {
-      args: {
-        ...bandListQuery(session),
-      },
-      options: { page: 0, perPage: 12 },
-    },
-  ]);
+            options: { page: 0, perPage: 12 },
+          });
+  const artists = trpc.pagination.artist.useQuery({
+            args: {
+              ...artistListQuery(session),
+            },
+            options: { page: 0, perPage: 12 },
+          });
+  const bands = trpc.pagination.band.useQuery({
+            args: {
+              ...bandListQuery(session),
+            },
+            options: { page: 0, perPage: 12 },
+          });
   return (
     <DefaultSingleColumnLayout>
       <Grid container spacing={1} my={3}>

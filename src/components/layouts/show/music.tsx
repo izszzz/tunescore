@@ -55,7 +55,7 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const id = getRouterId(router);
   const query = path[1];
-  const update = trpc.useMutation(["music.updateOneMusic"], {
+  const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
       enqueueSnackbar("music.update success");

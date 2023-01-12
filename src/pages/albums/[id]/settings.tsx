@@ -22,13 +22,13 @@ const Album: NextPage = () => {
   const session = useSession();
   const path = albumShowPath({ router, session });
   const query = path[1];
-  const { data } = trpc.useQuery(path);
-  const update = trpc.useMutation("album.updateOneAlbum", {
+  const { data } = trpc.useQuery(undefined, path);
+  const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
     },
   });
-  const destroy = trpc.useMutation("album.deleteOneAlbum", {
+  const destroy = trpc.album.deleteOneAlbum.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
     },

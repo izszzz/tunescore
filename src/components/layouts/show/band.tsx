@@ -47,7 +47,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   const { enqueueSnackbar } = useSnackbar();
   const query = path[1];
   const name = setLocale(data.name, router);
-  const update = trpc.useMutation(["band.updateOneBand"], {
+  const update = trpc.band.updateOneBand.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
       enqueueSnackbar("band.update success");

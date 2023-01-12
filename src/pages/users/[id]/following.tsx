@@ -17,9 +17,9 @@ const UserFollowers: NextPage = () => {
   const id = getRouterId(router);
   const path = userShowPath({ router, session });
   const followPath = followingPath({ router });
-  const { data } = trpc.useQuery(path);
-  const { data: followData } = trpc.useQuery(followPath);
-  const search = trpc.useMutation("search.follow");
+  const { data } = trpc.useQuery(undefined, path);
+  const { data: followData } = trpc.useQuery(undefined, followPath);
+  const search = trpc.search.follow.useMutation();
   const userData = data as Prisma.UserGetPayload<{
     include: {
       _count: { select: { following: true; followers: true } };

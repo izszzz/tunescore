@@ -6,10 +6,12 @@ import { ParticipationScalarFieldEnumSchema } from './enums/ParticipationScalarF
 
 export const ParticipationGroupBySchema = z.object({
   where: ParticipationWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    ParticipationOrderByWithAggregationInputObjectSchema,
-    ParticipationOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      ParticipationOrderByWithAggregationInputObjectSchema,
+      ParticipationOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: ParticipationScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

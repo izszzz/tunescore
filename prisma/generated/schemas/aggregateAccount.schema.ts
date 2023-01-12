@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { AccountWhereInputObjectSchema } from './objects/AccountWhereInput.schema';
 import { AccountOrderByWithRelationInputObjectSchema } from './objects/AccountOrderByWithRelationInput.schema';
+import { AccountWhereInputObjectSchema } from './objects/AccountWhereInput.schema';
 import { AccountWhereUniqueInputObjectSchema } from './objects/AccountWhereUniqueInput.schema';
 import { AccountCountAggregateInputObjectSchema } from './objects/AccountCountAggregateInput.schema';
 import { AccountMinAggregateInputObjectSchema } from './objects/AccountMinAggregateInput.schema';
@@ -9,13 +9,13 @@ import { AccountAvgAggregateInputObjectSchema } from './objects/AccountAvgAggreg
 import { AccountSumAggregateInputObjectSchema } from './objects/AccountSumAggregateInput.schema';
 
 export const AccountAggregateSchema = z.object({
-  where: AccountWhereInputObjectSchema.optional(),
   orderBy: z
     .union([
       AccountOrderByWithRelationInputObjectSchema,
       AccountOrderByWithRelationInputObjectSchema.array(),
     ])
     .optional(),
+  where: AccountWhereInputObjectSchema.optional(),
   cursor: AccountWhereUniqueInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

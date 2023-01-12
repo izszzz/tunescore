@@ -21,7 +21,7 @@ const ArtistUpdateAutocomplete = ({
 }: ArtistUpdateAutocomplete) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation("search.artist", {
+  const search = trpc.search.artist.useMutation({
     onError: () => {
       enqueueSnackbar("artist.search error");
     },

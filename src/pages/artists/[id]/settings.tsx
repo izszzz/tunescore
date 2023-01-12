@@ -23,13 +23,13 @@ const EditArtist: NextPage = () => {
   const session = useSession();
   const path = artistShowPath({ router, session });
   const query = path[1];
-  const { data } = trpc.useQuery(path);
-  const update = trpc.useMutation("artist.updateOneArtist", {
+  const { data } = trpc.useQuery(undefined, path);
+  const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
     },
   });
-  const destroy = trpc.useMutation("artist.deleteOneArtist", {
+  const destroy = trpc.artist.deleteOneArtist.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
     },

@@ -36,7 +36,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   const session = useSession();
   const id = getRouterId(router);
   const pullId = getRouterPullId(router);
-  const update = trpc.useMutation("pull.updateOnePull", {
+  const update = trpc.pull.updateOnePull.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData<PullLayoutProps["data"]>(
         [
@@ -61,7 +61,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       );
     },
   });
-  const create = trpc.useMutation("vote.createOneVote", {
+  const create = trpc.vote.createOneVote.useMutation({
     onSuccess: (successData) => {
       fetch("/api/agenda", {
         method: "POST",

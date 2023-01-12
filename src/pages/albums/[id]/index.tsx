@@ -13,7 +13,7 @@ const Album: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const path = albumShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];
   return (

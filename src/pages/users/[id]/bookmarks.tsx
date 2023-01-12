@@ -23,11 +23,11 @@ const UserBookmarks: NextPage = () => {
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
   const path = userShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   const { data: bookmarkData } = trpc.useQuery(
-    bookmarkPath({ router, session })
+    undefined, bookmarkPath({ router, session })
   );
-  const search = trpc.useMutation(["search.bookmark"], {
+  const search = trpc.search.bookmark.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },

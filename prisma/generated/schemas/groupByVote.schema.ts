@@ -6,10 +6,12 @@ import { VoteScalarFieldEnumSchema } from './enums/VoteScalarFieldEnum.schema';
 
 export const VoteGroupBySchema = z.object({
   where: VoteWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    VoteOrderByWithAggregationInputObjectSchema,
-    VoteOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      VoteOrderByWithAggregationInputObjectSchema,
+      VoteOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: VoteScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

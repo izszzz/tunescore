@@ -28,12 +28,12 @@ const Issues: NextPage = () => {
   const id = getRouterId(router);
   const session = useSession();
   const path = musicShowPath({ router, session });
-  const { data } = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const create = trpc.useMutation(["issue.createOneIssue"], {
+    const { data } = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
+        },
+    });
+  const create = trpc.issue.createOneIssue.useMutation({
     onSuccess: () =>
       router.push({
         pathname: "/musics/[id]/issues",

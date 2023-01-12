@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { BandFindUniqueSchema } from "../schemas/findUniqueBand.schema";
 import { BandFindFirstSchema } from "../schemas/findFirstBand.schema";
 import { BandFindManySchema } from "../schemas/findManyBand.schema";
@@ -14,132 +14,102 @@ import { BandGroupBySchema } from "../schemas/groupByBand.schema";
 import { BandFindRawObjectSchema } from "../schemas/objects/BandFindRaw.schema";
 import { BandAggregateRawObjectSchema } from "../schemas/objects/BandAggregateRaw.schema";
 
-export const bandsRouter = createRouter()
-
-  .query("aggregateBand", {
-    input: BandAggregateSchema,
-    async resolve({ ctx, input }) {
+export const bandsRouter = t.router({
+  aggregateBand: publicProcedure
+    .input(BandAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateBand = await ctx.prisma.band.aggregate(input);
       return aggregateBand;
-    },
-  })
-
-  .query("aggregateBandRaw", {
-    input: BandAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateBandRaw: publicProcedure
+    .input(BandAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateBandRaw = await ctx.prisma.band.aggregateRaw(input);
       return aggregateBandRaw;
-    },
-  })
-
-  .mutation("createManyBand", {
-    input: BandCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyBand: publicProcedure
+    .input(BandCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyBand = await ctx.prisma.band.createMany(input);
       return createManyBand;
-    },
-  })
-
-  .mutation("createOneBand", {
-    input: BandCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneBand: publicProcedure
+    .input(BandCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneBand = await ctx.prisma.band.create(input);
       return createOneBand;
-    },
-  })
-
-  .mutation("deleteManyBand", {
-    input: BandDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyBand: publicProcedure
+    .input(BandDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyBand = await ctx.prisma.band.deleteMany(input);
       return deleteManyBand;
-    },
-  })
-
-  .mutation("deleteOneBand", {
-    input: BandDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneBand: publicProcedure
+    .input(BandDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneBand = await ctx.prisma.band.delete(input);
       return deleteOneBand;
-    },
-  })
-
-  .query("findFirstBand", {
-    input: BandFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstBand: publicProcedure
+    .input(BandFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstBand = await ctx.prisma.band.findFirst(input);
       return findFirstBand;
-    },
-  })
-
-  .query("findFirstBandOrThrow", {
-    input: BandFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstBandOrThrow: publicProcedure
+    .input(BandFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstBandOrThrow = await ctx.prisma.band.findFirstOrThrow(input);
       return findFirstBandOrThrow;
-    },
-  })
-
-  .query("findManyBand", {
-    input: BandFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyBand: publicProcedure
+    .input(BandFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyBand = await ctx.prisma.band.findMany(input);
       return findManyBand;
-    },
-  })
-
-  .query("findBandRaw", {
-    input: BandFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findBandRaw: publicProcedure
+    .input(BandFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findBandRaw = await ctx.prisma.band.findRaw(input);
       return findBandRaw;
-    },
-  })
-
-  .query("findUniqueBand", {
-    input: BandFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueBand: publicProcedure
+    .input(BandFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueBand = await ctx.prisma.band.findUnique(input);
       return findUniqueBand;
-    },
-  })
-
-  .query("findUniqueBandOrThrow", {
-    input: BandFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueBandOrThrow: publicProcedure
+    .input(BandFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueBandOrThrow = await ctx.prisma.band.findUniqueOrThrow(input);
       return findUniqueBandOrThrow;
-    },
-  })
-
-  .query("groupByBand", {
-    input: BandGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByBand = await ctx.prisma.band.groupBy(input);
+    }),
+  groupByBand: publicProcedure
+    .input(BandGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByBand = await ctx.prisma.band.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByBand;
-    },
-  })
-
-  .mutation("updateManyBand", {
-    input: BandUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyBand: publicProcedure
+    .input(BandUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyBand = await ctx.prisma.band.updateMany(input);
       return updateManyBand;
-    },
-  })
-
-  .mutation("updateOneBand", {
-    input: BandUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneBand: publicProcedure
+    .input(BandUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneBand = await ctx.prisma.band.update(input);
       return updateOneBand;
-    },
-  })
-
-  .mutation("upsertOneBand", {
-    input: BandUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneBand: publicProcedure
+    .input(BandUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneBand = await ctx.prisma.band.upsert(input);
       return upsertOneBand;
-    },
-  })
+    }),
+
+})

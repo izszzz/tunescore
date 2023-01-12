@@ -12,12 +12,12 @@ const Artists: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation("search.artist", {
+  const search = trpc.search.artist.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const { data } = trpc.useQuery(artistPaginationPath({ router, session }));
+  const { data } = trpc.useQuery(undefined, artistPaginationPath({ router, session }));
   if (!data) return <></>;
   return (
     <IndexLayout

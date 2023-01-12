@@ -1,21 +1,21 @@
 import { z } from 'zod';
 import { ArtistSelectObjectSchema } from './objects/ArtistSelect.schema';
 import { ArtistIncludeObjectSchema } from './objects/ArtistInclude.schema';
-import { ArtistWhereInputObjectSchema } from './objects/ArtistWhereInput.schema';
 import { ArtistOrderByWithRelationInputObjectSchema } from './objects/ArtistOrderByWithRelationInput.schema';
+import { ArtistWhereInputObjectSchema } from './objects/ArtistWhereInput.schema';
 import { ArtistWhereUniqueInputObjectSchema } from './objects/ArtistWhereUniqueInput.schema';
 import { ArtistScalarFieldEnumSchema } from './enums/ArtistScalarFieldEnum.schema';
 
 export const ArtistFindManySchema = z.object({
   select: z.lazy(() => ArtistSelectObjectSchema.optional()),
   include: z.lazy(() => ArtistIncludeObjectSchema.optional()),
-  where: ArtistWhereInputObjectSchema.optional(),
   orderBy: z
     .union([
       ArtistOrderByWithRelationInputObjectSchema,
       ArtistOrderByWithRelationInputObjectSchema.array(),
     ])
     .optional(),
+  where: ArtistWhereInputObjectSchema.optional(),
   cursor: ArtistWhereUniqueInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

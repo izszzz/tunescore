@@ -14,7 +14,7 @@ const Band: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const path = bandShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (

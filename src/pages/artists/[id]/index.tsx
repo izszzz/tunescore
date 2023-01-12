@@ -13,7 +13,7 @@ const Artist: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const path = artistShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];
   return (

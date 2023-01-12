@@ -1,29 +1,27 @@
 // src/pages/_app.tsx
-import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
-import { loggerLink } from "@trpc/client/links/loggerLink";
-import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
-import superjson from "superjson";
 import CssBaseline from "@mui/material/CssBaseline";
 import { SnackbarProvider } from "notistack";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot } from "recoil";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
+import { QueryClient, QueryClientProvider } from "react-query";
 import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { trpc } from "../utils/trpc";
 import type { Session } from "next-auth";
-import type { AppRouter } from "../server/router";
 import type { AppType } from "next/app";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const queryClient = new QueryClient();
   const { isDarkMode } = useDarkMode();
   const theme = createTheme({
     palette: { mode: isDarkMode ? "dark" : "light" },
@@ -34,10 +32,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
           <SessionProvider session={session}>
-            <CssBaseline />
-            <Component {...pageProps} />
-            <ReactQueryDevtools initialIsOpen={false} />
-            <AuthDialog />
+            <QueryClientProvider client={queryClient}>
+              <CssBaseline />
+              <Component {...pageProps} />
+              <ReactQueryDevtools initialIsOpen={false} />
+              <AuthDialog />
+            </QueryClientProvider>
           </SessionProvider>
         </SnackbarProvider>
       </ThemeProvider>
@@ -45,58 +45,4 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
-};
-
-export default withTRPC<AppRouter>({
-  config() {
-    /**
-     * If you want to use SSR, you need to use the server's full URL
-     * @link https://trpc.io/docs/ssr
-     */
-    const url = `${getBaseUrl()}/api/trpc`;
-
-    return {
-      links: [
-        loggerLink({
-          enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error),
-        }),
-        httpBatchLink({ url }),
-      ],
-      url,
-      transformer: superjson,
-      /**
-       * @link https://react-query.tanstack.com/reference/QueryClient
-       */
-      queryClientConfig: {
-        defaultOptions: {
-          queries: {
-            staleTime: 60,
-          },
-        },
-      },
-
-      // To use SSR properly you need to forward the client's headers to the server
-      // headers: () => {
-      //   if (ctx?.req) {
-      //     const headers = ctx?.req?.headers;
-      //     delete headers?.connection;
-      //     return {
-      //       ...headers,
-      //       "x-ssr": "1",
-      //     };
-      //   }
-      //   return {};
-      // }
-    };
-  },
-  /**
-   * @link https://trpc.io/docs/ssr
-   */
-  ssr: false,
-})(MyApp);
+export default trpc.withTRPC(MyApp);

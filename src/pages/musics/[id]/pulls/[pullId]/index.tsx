@@ -20,26 +20,23 @@ const Pull: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const userId = session.data?.user?.id;
-  const create = trpc.useMutation(["comment.createOneComment"]);
+  const create = trpc.comment.createOneComment.useMutation();
   const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const pull = trpc.useQuery(
-    [
-      "pull.findUniquePull",
-      {
-        where: { id: router.query.pullId as string },
-        include: { user: true, music: true, vote: true, comments: true },
-      },
-    ],
+    const music = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
+        },
+    });
+  const pull = trpc.pull.findUniquePull.useQuery(
     {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
+              where: { id: router.query.pullId as string },
+              include: { user: true, music: true, vote: true, comments: true },
+            },
+      {
+          onError: () => {
+              enqueueSnackbar("music.show error");
+          },
+      }
   );
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];

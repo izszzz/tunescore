@@ -1,4 +1,4 @@
-import { createRouter } from "./helpers/createRouter";
+import { t, publicProcedure } from "./helpers/createRouter";
 import { AlbumFindUniqueSchema } from "../schemas/findUniqueAlbum.schema";
 import { AlbumFindFirstSchema } from "../schemas/findFirstAlbum.schema";
 import { AlbumFindManySchema } from "../schemas/findManyAlbum.schema";
@@ -14,132 +14,102 @@ import { AlbumGroupBySchema } from "../schemas/groupByAlbum.schema";
 import { AlbumFindRawObjectSchema } from "../schemas/objects/AlbumFindRaw.schema";
 import { AlbumAggregateRawObjectSchema } from "../schemas/objects/AlbumAggregateRaw.schema";
 
-export const albumsRouter = createRouter()
-
-  .query("aggregateAlbum", {
-    input: AlbumAggregateSchema,
-    async resolve({ ctx, input }) {
+export const albumsRouter = t.router({
+  aggregateAlbum: publicProcedure
+    .input(AlbumAggregateSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateAlbum = await ctx.prisma.album.aggregate(input);
       return aggregateAlbum;
-    },
-  })
-
-  .query("aggregateAlbumRaw", {
-    input: AlbumAggregateRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  aggregateAlbumRaw: publicProcedure
+    .input(AlbumAggregateRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const aggregateAlbumRaw = await ctx.prisma.album.aggregateRaw(input);
       return aggregateAlbumRaw;
-    },
-  })
-
-  .mutation("createManyAlbum", {
-    input: AlbumCreateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  createManyAlbum: publicProcedure
+    .input(AlbumCreateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const createManyAlbum = await ctx.prisma.album.createMany(input);
       return createManyAlbum;
-    },
-  })
-
-  .mutation("createOneAlbum", {
-    input: AlbumCreateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  createOneAlbum: publicProcedure
+    .input(AlbumCreateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const createOneAlbum = await ctx.prisma.album.create(input);
       return createOneAlbum;
-    },
-  })
-
-  .mutation("deleteManyAlbum", {
-    input: AlbumDeleteManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteManyAlbum: publicProcedure
+    .input(AlbumDeleteManySchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteManyAlbum = await ctx.prisma.album.deleteMany(input);
       return deleteManyAlbum;
-    },
-  })
-
-  .mutation("deleteOneAlbum", {
-    input: AlbumDeleteOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  deleteOneAlbum: publicProcedure
+    .input(AlbumDeleteOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const deleteOneAlbum = await ctx.prisma.album.delete(input);
       return deleteOneAlbum;
-    },
-  })
-
-  .query("findFirstAlbum", {
-    input: AlbumFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstAlbum: publicProcedure
+    .input(AlbumFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstAlbum = await ctx.prisma.album.findFirst(input);
       return findFirstAlbum;
-    },
-  })
-
-  .query("findFirstAlbumOrThrow", {
-    input: AlbumFindFirstSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findFirstAlbumOrThrow: publicProcedure
+    .input(AlbumFindFirstSchema)
+    .query(async ({ ctx, input }) => {
       const findFirstAlbumOrThrow = await ctx.prisma.album.findFirstOrThrow(input);
       return findFirstAlbumOrThrow;
-    },
-  })
-
-  .query("findManyAlbum", {
-    input: AlbumFindManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  findManyAlbum: publicProcedure
+    .input(AlbumFindManySchema)
+    .query(async ({ ctx, input }) => {
       const findManyAlbum = await ctx.prisma.album.findMany(input);
       return findManyAlbum;
-    },
-  })
-
-  .query("findAlbumRaw", {
-    input: AlbumFindRawObjectSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findAlbumRaw: publicProcedure
+    .input(AlbumFindRawObjectSchema)
+    .query(async ({ ctx, input }) => {
       const findAlbumRaw = await ctx.prisma.album.findRaw(input);
       return findAlbumRaw;
-    },
-  })
-
-  .query("findUniqueAlbum", {
-    input: AlbumFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueAlbum: publicProcedure
+    .input(AlbumFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueAlbum = await ctx.prisma.album.findUnique(input);
       return findUniqueAlbum;
-    },
-  })
-
-  .query("findUniqueAlbumOrThrow", {
-    input: AlbumFindUniqueSchema,
-    async resolve({ ctx, input }) {
+    }),
+  findUniqueAlbumOrThrow: publicProcedure
+    .input(AlbumFindUniqueSchema)
+    .query(async ({ ctx, input }) => {
       const findUniqueAlbumOrThrow = await ctx.prisma.album.findUniqueOrThrow(input);
       return findUniqueAlbumOrThrow;
-    },
-  })
-
-  .query("groupByAlbum", {
-    input: AlbumGroupBySchema,
-    async resolve({ ctx, input }) {
-      const groupByAlbum = await ctx.prisma.album.groupBy(input);
+    }),
+  groupByAlbum: publicProcedure
+    .input(AlbumGroupBySchema)
+    .query(async ({ ctx, input }) => {
+      const groupByAlbum = await ctx.prisma.album.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByAlbum;
-    },
-  })
-
-  .mutation("updateManyAlbum", {
-    input: AlbumUpdateManySchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateManyAlbum: publicProcedure
+    .input(AlbumUpdateManySchema)
+    .mutation(async ({ ctx, input }) => {
       const updateManyAlbum = await ctx.prisma.album.updateMany(input);
       return updateManyAlbum;
-    },
-  })
-
-  .mutation("updateOneAlbum", {
-    input: AlbumUpdateOneSchema,
-    async resolve({ ctx, input }) {
+    }),
+  updateOneAlbum: publicProcedure
+    .input(AlbumUpdateOneSchema)
+    .mutation(async ({ ctx, input }) => {
       const updateOneAlbum = await ctx.prisma.album.update(input);
       return updateOneAlbum;
-    },
-  })
-
-  .mutation("upsertOneAlbum", {
-    input: AlbumUpsertSchema,
-    async resolve({ ctx, input }) {
+    }),
+  upsertOneAlbum: publicProcedure
+    .input(AlbumUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
       const upsertOneAlbum = await ctx.prisma.album.upsert(input);
       return upsertOneAlbum;
-    },
-  })
+    }),
+
+})

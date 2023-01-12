@@ -25,12 +25,12 @@ const NewPull: NextPage = () => {
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
   const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const create = trpc.useMutation(["pull.createOnePull"], {
+    const music = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
+        },
+    });
+  const create = trpc.pull.createOnePull.useMutation({
     onSuccess: (data) =>
       router.push({
         pathname: "/musics/[id]/pulls/[pullId]",

@@ -27,7 +27,7 @@ const BandSettings: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const path = bandShowPath({ router, session });
   const query = path[1];
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   const update = trpc.useMutation(`band.updateOneBand`, {
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
@@ -37,7 +37,7 @@ const BandSettings: NextPage = () => {
       enqueueSnackbar("music.update error");
     },
   });
-  const destroy = trpc.useMutation("band.deleteOneBand", {
+  const destroy = trpc.band.deleteOneBand.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(path, data);
       enqueueSnackbar("band.update success");

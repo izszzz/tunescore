@@ -19,31 +19,28 @@ const Issue: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const userId = session.data?.user?.id;
-  const create = trpc.useMutation(["comment.createOneComment"]);
+  const create = trpc.comment.createOneComment.useMutation();
   const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const issue = trpc.useQuery(
-    [
-      "issue.findUniqueIssue",
-      {
-        where: { id: issueId },
-        include: {
-          comments: {
-            where: { resourceType: "Issue" },
-            include: { user: true },
-          },
+    const music = trpc.useQuery(undefined, path, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
         },
-      },
-    ],
+    });
+  const issue = trpc.issue.findUniqueIssue.useQuery(
     {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
+              where: { id: issueId },
+              include: {
+                comments: {
+                  where: { resourceType: "Issue" },
+                  include: { user: true },
+                },
+              },
+            },
+      {
+          onError: () => {
+              enqueueSnackbar("music.show error");
+          },
+      }
   );
   if (!music.data || !issue.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];

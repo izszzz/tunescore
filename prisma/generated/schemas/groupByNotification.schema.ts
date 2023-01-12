@@ -6,10 +6,12 @@ import { NotificationScalarFieldEnumSchema } from './enums/NotificationScalarFie
 
 export const NotificationGroupBySchema = z.object({
   where: NotificationWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    NotificationOrderByWithAggregationInputObjectSchema,
-    NotificationOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      NotificationOrderByWithAggregationInputObjectSchema,
+      NotificationOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: NotificationScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

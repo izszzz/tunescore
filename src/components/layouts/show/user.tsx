@@ -36,7 +36,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   const session = useSession();
   const id = getRouterId(router);
   const userId = getCurrentUserId(session);
-  const update = trpc.useMutation("user.updateOneUser");
+  const update = trpc.user.updateOneUser.useMutation();
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {

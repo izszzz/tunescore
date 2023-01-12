@@ -6,10 +6,12 @@ import { RoleMapScalarFieldEnumSchema } from './enums/RoleMapScalarFieldEnum.sch
 
 export const RoleMapGroupBySchema = z.object({
   where: RoleMapWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    RoleMapOrderByWithAggregationInputObjectSchema,
-    RoleMapOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      RoleMapOrderByWithAggregationInputObjectSchema,
+      RoleMapOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: RoleMapScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

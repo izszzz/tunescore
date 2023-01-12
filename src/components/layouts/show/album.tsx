@@ -43,7 +43,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const query = path[1];
-  const update = trpc.useMutation(["album.updateOneAlbum"], {
+  const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData<typeof data>(path, data);
       enqueueSnackbar("album.update success");

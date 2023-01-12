@@ -32,8 +32,8 @@ const SettingsMusic: NextPage = () => {
     id = getRouterId(router),
     path = musicShowPath({ router, session }),
     query = path[1],
-    { data } = trpc.useQuery(path),
-    destroy = trpc.useMutation("music.deleteOneMusic", {
+    { data } = trpc.useQuery(undefined, path),
+    destroy = trpc.music.deleteOneMusic.useMutation({
       onSuccess: () => {
         enqueueSnackbar("music.destroy success");
         router.push("/musics");
@@ -51,13 +51,10 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update error");
       },
     });
-  const { data: userData } = trpc.useQuery([
-    "user.findUniqueUser",
-    {
-      where: { id: session.data?.user?.id },
-      include: { accounts: true },
-    },
-  ]);
+  const { data: userData } = trpc.user.findUniqueUser.useQuery({
+            where: { id: session.data?.user?.id },
+            include: { accounts: true },
+          });
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];

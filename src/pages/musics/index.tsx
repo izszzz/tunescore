@@ -13,16 +13,16 @@ const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
-  const search = trpc.useMutation("search.music", {
+  const search = trpc.search.music.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },
   });
-  const { data } = trpc.useQuery(musicPaginationPath({ router, session }), {
-    onError: () => {
-      enqueueSnackbar("music.index error");
-    },
-  });
+    const { data } = trpc.useQuery(undefined, musicPaginationPath({ router, session }), {
+        onError: () => {
+            enqueueSnackbar("music.index error");
+        },
+    });
   if (!data) return <></>;
   return (
     <DefaultIndexLayout<Music>

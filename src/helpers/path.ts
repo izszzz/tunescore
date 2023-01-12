@@ -4,7 +4,7 @@ import type {
   inferProcedureOutput,
   ProcedureRecord,
 } from "@trpc/server";
-import type { AppRouter } from "../server/router";
+import type { AppRouter } from "../server/routers/trpc";
 
 type TRouter = AppRouter;
 type TQueries = TRouter["_def"]["queries"];

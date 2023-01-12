@@ -17,7 +17,7 @@ const User: NextPage<UserProps> = () => {
   const session = useSession();
   const router = useRouter();
   const path = userShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const { data } = trpc.useQuery(undefined, path);
   if (!data) return <></>;
   const userData = data as Prisma.UserGetPayload<{
     include: {

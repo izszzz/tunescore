@@ -20,7 +20,13 @@ const SpotifySearchHandler = async (
   await spotify
     .search(term as string, [type] as Parameters<typeof spotify.search>[1])
     .then(
-      (data) => res.status(200).json(data),
+      ({ body }) => {
+        const keys = Object.keys(body);
+        if (keys[0])
+          res
+            .status(200)
+            .json(body[keys[0] as keyof SpotifyApi.SearchResponse]);
+      },
       (err) => {
         console.log(err);
         res.status(500).send("これもうわかんねぇな");

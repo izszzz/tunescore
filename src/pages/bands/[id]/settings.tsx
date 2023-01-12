@@ -30,14 +30,19 @@ const BandSettings: NextPage = () => {
   const { data } = trpc.useQuery(path);
   const update = trpc.useMutation(`band.updateOneBand`, {
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(path, data);
+      queryClient.setQueryData(path, data);
       enqueueSnackbar("music.update success");
     },
     onError: () => {
       enqueueSnackbar("music.update error");
     },
   });
-  const destroy = trpc.useMutation("band.deleteOneBand");
+  const destroy = trpc.useMutation("band.deleteOneBand", {
+    onSuccess: (data) => {
+      queryClient.setQueryData(path, data);
+      enqueueSnackbar("band.update success");
+    },
+  });
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (

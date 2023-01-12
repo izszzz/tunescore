@@ -45,7 +45,7 @@ function ItunesSelectForm<T>({
         setValue(undefined);
         setOptions(res);
       });
-  }, [lookup, search, streamingLink, term, value]);
+  }, [lookup, search, streamingLink, term]);
   return (
     <CardSelectForm
       value={value}

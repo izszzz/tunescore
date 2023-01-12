@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
-import { trpc } from "../../../../../../utils/trpc";
 import CardSelectForm from ".";
+import type { AxiosResponse } from "axios";
 import type { spotify } from "../../../../../../server/common/spotify";
 import type { CardSelectFormProps } from ".";
 import type { StreamingLink } from "@prisma/client";
@@ -12,7 +11,7 @@ interface SpotifySelectFormProps<T>
   streamingLink: StreamingLink | null | undefined;
   term: string;
   type: Parameters<typeof spotify.search>[1];
-  lookup: (id: string) => T;
+  lookup: (id: string) => Promise<AxiosResponse<T>>;
 }
 function SpotifySelectForm<T>({
   streamingLink,
@@ -22,7 +21,7 @@ function SpotifySelectForm<T>({
   smallCard,
   lookup,
 }: SpotifySelectFormProps<T>) {
-  const [options, setOptions] = useState<SpotifyApi.SearchResponse>();
+  const [options, setOptions] = useState<SpotifyApi.PagingObject<T>["items"]>();
   const [value, setValue] = useState<T>();
   const [page, setPage] = useState(0);
   const handleChangePage = (
@@ -30,33 +29,28 @@ function SpotifySelectForm<T>({
     page: number
   ) =>
     axios
-      .get<SpotifyApi.SearchResponse>("/api/spotify/search", {
+      .get<SpotifyApi.PagingObject<T>>("/api/spotify/search", {
         params: { term, type },
       })
-      .then((res) => {
+      .then(({ data }) => {
         setPage(page);
-        setOptions(res.data);
+        setOptions(data.items);
       });
   useEffect(() => {
     if (streamingLink?.spotify?.id) {
       const id = streamingLink.spotify.id;
-      if (id)
-        lookup(id).then((res) => {
-          setValue(res.data.body);
-        });
+      if (id) lookup(id).then(({ data }) => setValue(data));
     } else
       axios
-        .get<{
-          body: SpotifyApi.SearchResponse;
-        }>("/api/spotify/search", {
+        .get<SpotifyApi.PagingObject<T>>("/api/spotify/search", {
           params: { term, type },
           withCredentials: true,
           paramsSerializer: { indexes: null },
         })
-        .then((res) => {
+        .then(({ data }) => {
+          console.log(data);
           setValue(undefined);
-          const keys = Object.keys(res.data.body);
-          setOptions(res.data.body[keys[0] as string].items);
+          setOptions(data.items);
         });
   }, [lookup, streamingLink, term, type]);
   return (

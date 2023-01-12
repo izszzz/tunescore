@@ -6,7 +6,7 @@ import type { StreamingLink } from "@prisma/client";
 interface SpotifyMusicSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  onSelect: (data: SpotifyApi.SingleTrackResponse | undefined) => void;
+  onSelect: (data: SpotifyApi.TrackObjectFull) => void;
   onRemove: () => void;
 }
 const SpotifyMusicSelectForm = ({
@@ -14,13 +14,11 @@ const SpotifyMusicSelectForm = ({
   onRemove,
   ...props
 }: SpotifyMusicSelectFormProps) => (
-  <SpotifySelectForm
+  <SpotifySelectForm<SpotifyApi.TrackObjectFull>
     {...props}
     type={["track"]}
     lookup={(id) =>
-      axios.get<{ body: SpotifyApi.SingleTrackResponse }>(
-        `/api/spotify/tracks/${id}`
-      )
+      axios.get<SpotifyApi.TrackObjectFull>(`/api/spotify/tracks/${id}`)
     }
     largeCard={(value) =>
       value && <MusicSpotifyCard size="large" data={value} onClick={onRemove} />

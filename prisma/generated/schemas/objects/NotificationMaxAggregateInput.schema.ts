@@ -7,7 +7,7 @@ const Schema: z.ZodType<Prisma.NotificationMaxAggregateInputType> = z
     id: z.literal(true).optional(),
     userId: z.literal(true).optional(),
     resourceId: z.literal(true).optional(),
-    resurceType: z.literal(true).optional(),
+    resourceType: z.literal(true).optional(),
     createdAt: z.literal(true).optional(),
     readAt: z.literal(true).optional(),
   })

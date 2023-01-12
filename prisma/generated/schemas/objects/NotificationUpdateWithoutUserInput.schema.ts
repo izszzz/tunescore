@@ -19,7 +19,7 @@ const Schema: z.ZodType<Prisma.NotificationUpdateWithoutUserInput> = z
     commented: z
       .lazy(() => CommentUpdateOneWithoutNotificationsNestedInputObjectSchema)
       .optional(),
-    resurceType: z
+    resourceType: z
       .union([
         z.lazy(() => NotificationTypeSchema),
         z.lazy(

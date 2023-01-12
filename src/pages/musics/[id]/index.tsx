@@ -14,6 +14,7 @@ import { getCurrentUserId } from "../../../helpers/user";
 import ParticipationLists from "../../../components/elements/list/participation";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import AlbumLists from "../../../components/elements/list/album";
+import SpotifyButton from "../../../components/elements/button/link/spotify";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -29,6 +30,9 @@ const Music: NextPage = () => {
     <MusicLayout data={musicData} path={path} activeTab="info">
       {data.link?.streaming?.itunes?.id && (
         <AppleButton href={data.link?.streaming?.itunes.id} />
+      )}
+      {data.link?.streaming?.spotify?.id && (
+        <SpotifyButton href={data.link?.streaming?.spotify.id} />
       )}
       <ScoreButtonGroup
         watchButton={{

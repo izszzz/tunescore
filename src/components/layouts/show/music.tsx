@@ -21,7 +21,7 @@ import DefaultShowLayout from "./default";
 import type { AlbumListQueryType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { Locales, Prisma } from "@prisma/client";
+import type { Locale, Prisma } from "@prisma/client";
 import type { musicShowPath } from "../../../paths/musics/[id]";
 import type { BandListQueryType } from "../../../helpers/band";
 import type { ArtistListQueryType } from "../../../helpers/artist";
@@ -128,21 +128,20 @@ const MusicLayout = ({ data, path, activeTab, children }: MusicLayoutProps) => {
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: (bookmarked) =>
+        onClick: () =>
           update.mutate({
             ...query,
             data: {
               bookmarks: bookmarkMutate({
                 type: "Music",
-                bookmarked,
-                bookmarks: data.bookmarks,
+                data,
                 session,
               }),
             },
           }),
       }}
     >
-      {data.title[router.locale as keyof Locales] === null && <LocaleAlert />}
+      {data.title[router.locale as keyof Locale] === null && <LocaleAlert />}
       {children}
     </DefaultShowLayout>
   );

@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import Script from "next/script";
+import axios from "axios";
 import CardSelectForm from ".";
+import type { AxiosResponse } from "axios";
+import type { youtube_v3 } from "googleapis";
 import type { CardSelectFormProps } from ".";
 import type { StreamingLink } from "@prisma/client";
 
+export type Video = youtube_v3.Schema$Video;
+export type VideoList = youtube_v3.Schema$VideoListResponse;
+export type Channel = youtube_v3.Schema$Channel;
+export type ChannelList = youtube_v3.Schema$ChannelListResponse;
+export type SearchResult = youtube_v3.Schema$SearchResult;
+
 interface YoutubeSelectFormProps
   extends Pick<
-    CardSelectFormProps<
-      | gapi.client.youtube.Video
-      | gapi.client.youtube.Channel
-      | gapi.client.youtube.SearchResult
-      | undefined
-    >,
+    CardSelectFormProps<Video | Channel | SearchResult | undefined>,
     "largeCard" | "smallCard"
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
   type: "video" | "channel";
-  lookup: (
-    api: typeof gapi.client.youtube
-  ) =>
-    | typeof gapi.client.youtube.videos.list
-    | typeof gapi.client.youtube.channels.list;
+  lookup: (id: string) => Promise<AxiosResponse<VideoList | ChannelList>>;
 }
 
 function YoutubeSelectForm({
@@ -32,71 +31,36 @@ function YoutubeSelectForm({
   smallCard,
   lookup,
 }: YoutubeSelectFormProps) {
-  const [options, setOptions] = useState<gapi.client.youtube.SearchResult[]>(
-    []
-  );
-  const [value, setValue] = useState<
-    gapi.client.youtube.Video | gapi.client.youtube.Channel | undefined
-  >();
-  const [loading, setLoading] = useState(true);
+  const [options, setOptions] = useState<SearchResult[]>([]);
+  const [value, setValue] = useState<Video | Channel | undefined>();
   const [rowsPerPage, setRowsPerPage] = useState(0);
   const [count, setCount] = useState(0);
   const [page] = useState(0);
   const [current] = useState("");
 
   useEffect(() => {
-    if (!loading)
-      if (streamingLink?.youtube?.id)
-        lookup(gapi.client.youtube)({
-          id: streamingLink?.youtube.id,
-          part: "snippet",
-        }).then((data) => {
-          if (!data.result.items) return;
-          if (!data.result.items[0]) return;
-          data.result.items[0] && setValue(data.result.items[0]);
+    if (streamingLink?.youtube?.id)
+      lookup(streamingLink.youtube.id).then(({ data }) => {
+        if (!data.items) return;
+        if (!data.items[0]) return;
+        data.items[0] && setValue(data.items[0]);
+      });
+    else
+      axios
+        .get<youtube_v3.Schema$SearchListResponse>("/api/youtube/search", {
+          params: { term, type },
+        })
+        .then(({ data }) => {
+          data.items && setOptions(data.items);
+          setRowsPerPage(data.pageInfo?.resultsPerPage || 0);
+          setCount(data.pageInfo?.totalResults || 0);
+          setValue(undefined);
         });
-      else
-        gapi.client.youtube.search
-          .list({
-            q: term,
-            part: "snippet",
-            type,
-            videoCategoryId: "10",
-            maxResults: 6,
-            pageToken: current,
-          })
-          .then((data) => {
-            data.result.items && setOptions(data.result.items);
-            setRowsPerPage(data.result.pageInfo?.resultsPerPage || 0);
-            setCount(data.result.pageInfo?.totalResults || 0);
-            setValue(undefined);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-  }, [term, loading, current, streamingLink?.youtube, lookup, type]);
-
-  const handleLoad = () => {
-    gapi.load("client", () =>
-      gapi.client
-        .init({ apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY })
-        .then(() =>
-          gapi.client
-            .load("https://youtube.googleapis.com/$discovery/rest?version=v3")
-            .then(() => setLoading(false))
-        )
-    );
-  };
+  }, [term, current, streamingLink?.youtube, lookup, type]);
 
   return (
     <>
-      <Script src="https://apis.google.com/js/api.js" onReady={handleLoad} />
-      <CardSelectForm<
-        | gapi.client.youtube.Video
-        | gapi.client.youtube.Channel
-        | gapi.client.youtube.SearchResult
-        | undefined
-      >
+      <CardSelectForm<Video | Channel | SearchResult | undefined>
         value={value}
         options={options}
         largeCard={largeCard}

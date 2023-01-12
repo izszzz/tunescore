@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { LocalesCreateEnvelopeInputObjectSchema } from './LocalesCreateEnvelopeInput.schema';
-import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
+import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInput.schema';
+import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
 import { ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutArtistInput.schema';
@@ -16,8 +16,8 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedCreateWithoutBandsInput> = z
   .object({
     id: z.string().optional(),
     name: z.union([
-      z.lazy(() => LocalesCreateEnvelopeInputObjectSchema),
-      z.lazy(() => LocalesCreateInputObjectSchema),
+      z.lazy(() => LocaleCreateEnvelopeInputObjectSchema),
+      z.lazy(() => LocaleCreateInputObjectSchema),
     ]),
     link: z
       .union([

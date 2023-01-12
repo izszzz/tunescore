@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import { useQueryClient } from "react-query";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
 import { convertAffiliateLink } from "../../../helpers/itunes";
@@ -16,13 +17,22 @@ import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import type { NextPage } from "next";
 
 const Album: NextPage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
   const path = albumShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
-  const update = trpc.useMutation("album.updateOneAlbum");
-  const destroy = trpc.useMutation("album.deleteOneAlbum");
+  const update = trpc.useMutation("album.updateOneAlbum", {
+    onSuccess: (data) => {
+      queryClient.setQueryData(path, data);
+    },
+  });
+  const destroy = trpc.useMutation("album.deleteOneAlbum", {
+    onSuccess: (data) => {
+      queryClient.setQueryData(path, data);
+    },
+  });
   if (!data) return <></>;
   const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];

@@ -7,9 +7,10 @@ import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { trpc } from "../../../utils/trpc";
-import DefaultHeader from "../header/default";
+import DefaultHeader from "../../elements/header/default";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
+import { followMutate } from "../../../helpers/follow";
 import ShowLayout from "./index";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Prisma } from "@prisma/client";
@@ -20,6 +21,7 @@ export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
     include: {
       _count: { select: { following: true; followers: true } };
       followers: true;
+      accounts: true;
     };
   }>;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
@@ -75,14 +77,17 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       header={<DefaultHeader />}
       title={
         <>
-          <Box display="flex" justifyContent="center">
-            <Box>
-              <Avatar
-                sx={{ height: "70px", width: "70px" }}
-                src={data.image || ""}
-              />
-              <Typography variant="h5">{data.name}</Typography>
-            </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <Avatar
+              sx={{ height: "70px", width: "70px" }}
+              src={data.image || ""}
+            />
+            <Typography variant="h5">{data.name}</Typography>
           </Box>
           {id !== userId && (
             <LoadingButton
@@ -92,17 +97,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
                 update.mutate({
                   where: { id },
                   data: {
-                    followers: data.followers.length
-                      ? {
-                          delete: {
-                            id: data.followers[0]?.id,
-                          },
-                        }
-                      : {
-                          create: {
-                            following: { connect: { id: userId } },
-                          },
-                        },
+                    followers: followMutate({ data, session }),
                   },
                 })
               }

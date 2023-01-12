@@ -1,16 +1,7 @@
 ```mermaid
 erDiagram
 
-        TagType {
-            Music Music
-Band Band
-Artist Artist
-Album Album
-        }
-    
-
-
-        BookmarkType {
+        ResourceType {
             Music Music
 Band Band
 Artist Artist
@@ -165,7 +156,7 @@ CLOSE CLOSE
 
   Bookmark {
     String id PK 
-    BookmarkType resourceType  
+    ResourceType resourceType  
     }
   
 
@@ -193,13 +184,13 @@ CLOSE CLOSE
 
   TagMap {
     String id PK 
-    TagType resourceType  
+    ResourceType resourceType  
     }
   
 
   Notification {
     String id PK 
-    NotificationType resurceType  
+    NotificationType resourceType  
     DateTime createdAt  
     DateTime readAt  
     }
@@ -211,7 +202,7 @@ CLOSE CLOSE
     }
   
 
-  Locales {
+  Locale {
     String ja  "nullable"
     String en  "nullable"
     }
@@ -255,22 +246,22 @@ CLOSE CLOSE
     Follow o{--|| User : "follower"
     Follow o{--|| User : "following"
     Music o|--|| MusicType : "enum:type"
-    Music o|--|| Locales : "title"
+    Music o|--|| Locale : "title"
     Music o|--|| Visibility : "enum:visibility"
     Music o|--|o LinkList : "link"
     Music o{--|o User : "user"
     Music o{--|o Band : "band"
     Music o{--}o Album : "albums"
-    Album o|--|| Locales : "title"
+    Album o|--|| Locale : "title"
     Album o|--|o LinkList : "link"
     Album o{--|o Band : "band"
     Album o{--}o Music : "musics"
     Album o{--}o Artist : "artists"
-    Artist o|--|| Locales : "name"
+    Artist o|--|| Locale : "name"
     Artist o|--|o LinkList : "link"
     Artist o{--}o Band : "bands"
     Artist o{--}o Album : "albums"
-    Band o|--|| Locales : "name"
+    Band o|--|| Locale : "name"
     Band o|--|o LinkList : "link"
     Band o{--}o Artist : "artists"
     Issue o|--|| IssueStatus : "enum:status"
@@ -291,7 +282,7 @@ CLOSE CLOSE
     Bookmark o{--|o Album : "album"
     Bookmark o{--|o Artist : "artist"
     Bookmark o{--|| User : "user"
-    Bookmark o|--|| BookmarkType : "enum:resourceType"
+    Bookmark o|--|| ResourceType : "enum:resourceType"
     Participation o{--|| Artist : "artist"
     Participation o{--|| Music : "music"
     RoleMap o{--|| Role : "role"
@@ -301,12 +292,12 @@ CLOSE CLOSE
     TagMap o{--|o Band : "band"
     TagMap o{--|o Album : "album"
     TagMap o{--|o Artist : "artist"
-    TagMap o|--|| TagType : "enum:resourceType"
+    TagMap o|--|| ResourceType : "enum:resourceType"
     Notification o{--|o Bookmark : "bookmarked"
     Notification o{--|o Follow : "followed"
     Notification o{--|o Comment : "commented"
     Notification o{--|| User : "user"
-    Notification o|--|| NotificationType : "enum:resurceType"
+    Notification o|--|| NotificationType : "enum:resourceType"
     LinkList o|--|o StreamingLink : "streaming"
     LinkList o|--|o AccountLink : "account"
     StreamingLink o|--|o Link : "youtube"

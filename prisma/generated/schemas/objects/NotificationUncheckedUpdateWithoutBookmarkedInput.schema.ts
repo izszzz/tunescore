@@ -15,7 +15,7 @@ const Schema: z.ZodType<Prisma.NotificationUncheckedUpdateWithoutBookmarkedInput
           z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
         ])
         .optional(),
-      resurceType: z
+      resourceType: z
         .union([
           z.lazy(() => NotificationTypeSchema),
           z.lazy(

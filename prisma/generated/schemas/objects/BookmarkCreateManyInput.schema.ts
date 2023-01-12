@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BookmarkTypeSchema } from '../enums/BookmarkType.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -8,7 +8,7 @@ const Schema: z.ZodType<Prisma.BookmarkCreateManyInput> = z
     id: z.string().optional(),
     userId: z.string(),
     resourceId: z.string(),
-    resourceType: z.lazy(() => BookmarkTypeSchema),
+    resourceType: z.lazy(() => ResourceTypeSchema),
   })
   .strict();
 

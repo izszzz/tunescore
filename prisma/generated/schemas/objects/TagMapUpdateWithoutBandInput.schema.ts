@@ -3,8 +3,8 @@ import { TagUpdateOneRequiredWithoutTagMapNestedInputObjectSchema } from './TagU
 import { MusicUpdateOneWithoutTagMapsNestedInputObjectSchema } from './MusicUpdateOneWithoutTagMapsNestedInput.schema';
 import { AlbumUpdateOneWithoutTagMapsNestedInputObjectSchema } from './AlbumUpdateOneWithoutTagMapsNestedInput.schema';
 import { ArtistUpdateOneWithoutTagMapsNestedInputObjectSchema } from './ArtistUpdateOneWithoutTagMapsNestedInput.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
-import { EnumTagTypeFieldUpdateOperationsInputObjectSchema } from './EnumTagTypeFieldUpdateOperationsInput.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
+import { EnumResourceTypeFieldUpdateOperationsInputObjectSchema } from './EnumResourceTypeFieldUpdateOperationsInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -24,8 +24,8 @@ const Schema: z.ZodType<Prisma.TagMapUpdateWithoutBandInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => TagTypeSchema),
-        z.lazy(() => EnumTagTypeFieldUpdateOperationsInputObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
+        z.lazy(() => EnumResourceTypeFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
   })

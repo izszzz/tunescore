@@ -5,7 +5,7 @@ import {
   FormContainer,
   useForm,
 } from "react-hook-form-mui";
-import type { Locales } from "@prisma/client";
+import type { Locale } from "@prisma/client";
 import type {
   AutocompleteElementProps,
   FieldValues,
@@ -14,29 +14,29 @@ const LocaleAutocomplete = (
   props: Omit<
     AutocompleteElementProps<
       FieldValues,
-      keyof Locales,
+      keyof Locale,
       false,
       true
     >["autocompleteProps"],
     "fullWidth" | "disableClearable"
   >
 ) => {
-  const formContext = useForm<{ locale: keyof Locales }>();
+  const formContext = useForm<{ locale: keyof Locale }>();
   const { locale, locales, ...router } = useRouter();
-  const handleChange = (lang: keyof Locales | undefined) =>
+  const handleChange = (lang: keyof Locale | undefined) =>
     lang && router.push({ query: router.query }, undefined, { locale: lang });
   useEffect(() => {
-    if (locale) formContext.reset({ locale: locale as keyof Locales });
+    if (locale) formContext.reset({ locale: locale as keyof Locale });
   }, [formContext, locale]);
   return (
     <FormContainer
-      defaultValues={{ locale: locale as keyof Locales }}
+      defaultValues={{ locale: locale as keyof Locale }}
       formContext={formContext}
     >
       <AutocompleteElement
         name="locale"
         label="Locale"
-        options={locales as (keyof Locales)[]}
+        options={locales as (keyof Locale)[]}
         autocompleteProps={{
           ...props,
           fullWidth: true,

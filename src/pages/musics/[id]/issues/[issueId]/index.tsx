@@ -66,6 +66,14 @@ const Issue: NextPage = () => {
                 resourceType: "Issue",
                 issue: { connect: { id: issueId } },
                 user: { connect: { id: userId } },
+                notifications: {
+                  create: {
+                    resourceType: "Comment",
+                    user: {
+                      connect: { id: userId },
+                    },
+                  },
+                },
               },
             }),
         }}

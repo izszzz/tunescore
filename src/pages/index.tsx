@@ -1,9 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import { useSession } from "next-auth/react";
-import MusicCard from "../components/elements/card/music";
-import ArtistCard from "../components/elements/card/artist";
-import AlbumCard from "../components/elements/card/album";
-import BandCard from "../components/elements/card/band";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
 import { participatedArtistQuery } from "../helpers/participation";
@@ -11,6 +7,10 @@ import { bookmarkQuery } from "../helpers/bookmark";
 import { artistListQuery } from "../helpers/artist";
 import { albumListQuery } from "../helpers/album";
 import { bandListQuery } from "../helpers/band";
+import SquareMusicCard from "../components/elements/card/square/music";
+import SquareAlbumCard from "../components/elements/card/square/album";
+import SquareArtistCard from "../components/elements/card/square/artist";
+import SquareBandCard from "../components/elements/card/square/band";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
@@ -84,7 +84,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <MusicCard data={music} />
+            <SquareMusicCard data={music} />
           </Grid>
         ))}
         {albums.data?.data.map((album) => (
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <AlbumCard data={album} />
+            <SquareAlbumCard data={album} />
           </Grid>
         ))}
         {artists.data?.data.map((artist) => (
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <ArtistCard data={artist} />
+            <SquareArtistCard data={artist} />
           </Grid>
         ))}
         {bands.data?.data.map((band) => (
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <BandCard data={band} />
+            <SquareBandCard data={band} />
           </Grid>
         ))}
       </Grid>

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { MusicTypeSchema } from '../enums/MusicType.schema';
 import { EnumMusicTypeFieldUpdateOperationsInputObjectSchema } from './EnumMusicTypeFieldUpdateOperationsInput.schema';
-import { LocalesUpdateEnvelopeInputObjectSchema } from './LocalesUpdateEnvelopeInput.schema';
-import { LocalesCreateInputObjectSchema } from './LocalesCreateInput.schema';
+import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInput.schema';
+import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { VisibilitySchema } from '../enums/Visibility.schema';
 import { EnumVisibilityFieldUpdateOperationsInputObjectSchema } from './EnumVisibilityFieldUpdateOperationsInput.schema';
@@ -30,8 +30,8 @@ const Schema: z.ZodType<Prisma.MusicUpdateWithoutPullsInput> = z
       .optional(),
     title: z
       .union([
-        z.lazy(() => LocalesUpdateEnvelopeInputObjectSchema),
-        z.lazy(() => LocalesCreateInputObjectSchema),
+        z.lazy(() => LocaleUpdateEnvelopeInputObjectSchema),
+        z.lazy(() => LocaleCreateInputObjectSchema),
       ])
       .optional(),
     score: z

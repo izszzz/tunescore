@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import { useQueryClient } from "react-query";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import ArtistLayout from "../../../components/layouts/show/artist";
@@ -17,13 +18,22 @@ import type { NextPage } from "next";
 import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 
 const EditArtist: NextPage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
   const path = artistShowPath({ router, session });
   const query = path[1];
   const { data } = trpc.useQuery(path);
-  const update = trpc.useMutation("artist.updateOneArtist");
-  const destroy = trpc.useMutation("artist.deleteOneArtist");
+  const update = trpc.useMutation("artist.updateOneArtist", {
+    onSuccess: (data) => {
+      queryClient.setQueryData(path, data);
+    },
+  });
+  const destroy = trpc.useMutation("artist.deleteOneArtist", {
+    onSuccess: (data) => {
+      queryClient.setQueryData(path, data);
+    },
+  });
 
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];

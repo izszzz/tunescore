@@ -7,12 +7,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import ResourceIcon from "../../icon/resource";
 import CloseIconButton from "../../button/icon/close";
-import SquareMusicCard from "./square";
+import SquareCard from "../square";
 import type { ItunesMusic } from "../../../../helpers/itunes";
 
 interface ItunesMusicCardProps {
   data: ItunesMusic;
-  size: "small" | "medium" | "large";
+  size: "small" | "large";
   onClick?: (value: ItunesMusic) => void;
 }
 const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
@@ -36,7 +36,8 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) => {
           </>
         }
       >
-        <SquareMusicCard
+        <SquareCard
+          resource="MUSIC"
           title={
             <Typography variant="caption" display="block" noWrap>
               {data.trackCensoredName}

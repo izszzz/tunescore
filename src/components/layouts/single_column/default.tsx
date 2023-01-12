@@ -1,5 +1,5 @@
 import React from "react";
-import DefaultHeader from "../header/default";
+import DefaultHeader from "../../elements/header/default";
 import SingleColumnLayout from "./index";
 
 export interface DefaultSingleColumnLayoutProps {

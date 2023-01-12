@@ -11,7 +11,7 @@ const Schema: z.ZodType<Prisma.NotificationOrderByWithAggregationInput> = z
     id: z.lazy(() => SortOrderSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
     resourceId: z.lazy(() => SortOrderSchema).optional(),
-    resurceType: z.lazy(() => SortOrderSchema).optional(),
+    resourceType: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
     readAt: z.lazy(() => SortOrderSchema).optional(),
     _count: z

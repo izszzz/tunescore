@@ -3,7 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import SvgIcon from "@mui/material/SvgIcon";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 
-const Google = (props: SvgIconProps) => {
+const GoogleIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <FcGoogle />
@@ -11,4 +11,4 @@ const Google = (props: SvgIconProps) => {
   );
 };
 
-export default Google;
+export default GoogleIcon;

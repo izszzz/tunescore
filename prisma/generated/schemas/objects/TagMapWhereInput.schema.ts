@@ -10,8 +10,8 @@ import { AlbumRelationFilterObjectSchema } from './AlbumRelationFilter.schema';
 import { AlbumWhereInputObjectSchema } from './AlbumWhereInput.schema';
 import { ArtistRelationFilterObjectSchema } from './ArtistRelationFilter.schema';
 import { ArtistWhereInputObjectSchema } from './ArtistWhereInput.schema';
-import { EnumTagTypeFilterObjectSchema } from './EnumTagTypeFilter.schema';
-import { TagTypeSchema } from '../enums/TagType.schema';
+import { EnumResourceTypeFilterObjectSchema } from './EnumResourceTypeFilter.schema';
+import { ResourceTypeSchema } from '../enums/ResourceType.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -78,8 +78,8 @@ const Schema: z.ZodType<Prisma.TagMapWhereInput> = z
       .optional(),
     resourceType: z
       .union([
-        z.lazy(() => EnumTagTypeFilterObjectSchema),
-        z.lazy(() => TagTypeSchema),
+        z.lazy(() => EnumResourceTypeFilterObjectSchema),
+        z.lazy(() => ResourceTypeSchema),
       ])
       .optional(),
   })

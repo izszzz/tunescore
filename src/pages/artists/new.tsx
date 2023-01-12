@@ -13,11 +13,12 @@ const NewArtist: NextPage = () => {
   });
   const handleSubmit = (data: Artist) => create.mutate({ data });
   return (
-    <DefaultSingleColumnLayout>
+    <DefaultSingleColumnLayout contained>
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement
           name={"name." + router.locale}
           label="Name"
+          fullWidth
           required
         />
         <br />

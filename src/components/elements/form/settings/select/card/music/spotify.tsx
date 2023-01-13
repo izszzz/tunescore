@@ -17,8 +17,8 @@ const SpotifyMusicSelectForm = ({
   <SpotifySelectForm<SpotifyApi.TrackObjectFull>
     {...props}
     type={["track"]}
-    lookup={(id) =>
-      axios.get<SpotifyApi.TrackObjectFull>(`/api/spotify/tracks/${id}`)
+    lookup={async (id) =>
+      await axios.get<SpotifyApi.TrackObjectFull>(`/api/spotify/tracks/${id}`)
     }
     largeCard={(value) =>
       value && <MusicSpotifyCard size="large" data={value} onClick={onRemove} />

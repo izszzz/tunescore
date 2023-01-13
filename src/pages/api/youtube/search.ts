@@ -12,7 +12,7 @@ const SpotifySearchHandler = async (
   await youtube.search
     .list({
       q: String(term),
-      type: type as string[],
+      type: [type as string],
       part: ["snippet"],
       videoCategoryId: "10",
       maxResults: 6,

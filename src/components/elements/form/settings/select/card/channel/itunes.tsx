@@ -19,7 +19,7 @@ const ItunesArtistSelectForm = ({
   onRemove,
   ...props
 }: ItunesArtistSelectFormProps) => (
-  <ItunesSelectForm
+  <ItunesSelectForm<ItunesArtist>
     {...props}
     search={searchItunesArtists}
     lookup={lookupItunesArtist}

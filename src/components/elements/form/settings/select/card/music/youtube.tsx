@@ -21,7 +21,11 @@ const MusicYoutubeSelectForm = ({
     <YoutubeSelectForm
       {...props}
       type="video"
-      lookup={(id) => axios.get<VideoList>(`/api/youtube/videos/${id}`)}
+      lookup={async (id) =>
+        await axios
+          .get<VideoList>(`/api/youtube/videos/${id}`)
+          .then(({ data }) => data.items && data.items[0])
+      }
       largeCard={(value) =>
         value && (
           <MusicYoutubeCard

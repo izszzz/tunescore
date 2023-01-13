@@ -20,7 +20,11 @@ const ChannelYoutubeSelectForm = ({
   <YoutubeSelectForm
     {...props}
     type="channel"
-    lookup={(id) => axios.get<ChannelList>(`/api/youtube/channels/${id}`)}
+    lookup={(id) =>
+      axios
+        .get<ChannelList>(`/api/youtube/channels/${id}`)
+        .then(({ data }) => data.items && data.items[0])
+    }
     largeCard={(value) =>
       value && (
         <ChannelYoutubeCard

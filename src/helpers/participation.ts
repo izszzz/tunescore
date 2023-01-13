@@ -3,7 +3,7 @@ import { musicListQuery } from "./music";
 import type { Prisma } from "@prisma/client";
 import type { ArtistListQueryType } from "./artist";
 import type { MusicListQueryType } from "./music";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 
 export type ParticipatedArtist = Prisma.ParticipationGetPayload<{
   include: {
@@ -18,13 +18,13 @@ export type ParticipatedMusic = Prisma.ParticipationGetPayload<{
   };
 }>;
 
-export const participatedArtistQuery = (session: GetCurrentUserArg) => ({
+export const participatedArtistQuery = (session: SessionArg) => ({
   include: {
     artist: artistListQuery(session),
     roleMap: { include: { role: true } },
   },
 });
-export const participatedMusicQuery = (session: GetCurrentUserArg) => ({
+export const participatedMusicQuery = (session: SessionArg) => ({
   include: {
     music: musicListQuery(session),
     roleMap: { include: { role: true } },

@@ -8,22 +8,23 @@ import { followingPath } from "../../../paths/users/[id]/following";
 import { userShowQuery } from "../../../paths/users/[id]";
 import IndexLayout from "../../../components/layouts/index";
 import { getRouterId } from "../../../helpers/router";
+import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import type { NextPage } from "next";
 
 const UserFollowers: NextPage = () => {
-  const session = useSession();
   const router = useRouter();
   const id = getRouterId(router);
   const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery({ router, session })
+    userShowQuery({ router, session: useSession().data })
   );
   const { data: followData } = trpc.pagination.follow.useQuery(
     followingPath({ router })
   );
   const search = trpc.search.follow.useMutation();
   if (!data || !followData) return <></>;
+  const userData = data as UserLayoutProps["data"];
   return (
-    <UserLayout data={data} activeTab="">
+    <UserLayout data={userData} activeTab="">
       <IndexLayout
         route={{ pathname: "/users/[id]/following", query: { id } }}
         meta={followData.meta}

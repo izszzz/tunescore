@@ -1,5 +1,5 @@
 import { bookmarkQuery } from "./bookmark";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 
 export type ArtistListQueryType = {
   include: {
@@ -12,7 +12,7 @@ export type ArtistListQueryType = {
     };
   };
 };
-export const artistListQuery = (session: GetCurrentUserArg) => ({
+export const artistListQuery = (session: SessionArg) => ({
   include: {
     bands: true,
     bookmarks: bookmarkQuery({ type: "Artist", session }),

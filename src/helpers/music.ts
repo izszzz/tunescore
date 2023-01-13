@@ -2,9 +2,9 @@ import { match, P } from "ts-pattern";
 import { bookmarkQuery } from "./bookmark";
 import { participatedArtistQuery } from "./participation";
 import setLocale from "./locale";
-import type { GetCurrentUserArg } from "./user";
-import type { NextRouter } from "next/router";
 import type { Prisma } from "@prisma/client";
+import type { SessionArg } from "./user";
+import type { NextRouter } from "next/router";
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;
@@ -72,7 +72,7 @@ export type MusicListQueryType = {
   };
 };
 
-export const musicListQuery = (session: GetCurrentUserArg) => ({
+export const musicListQuery = (session: SessionArg) => ({
   include: {
     band: true,
     participations: participatedArtistQuery(session),

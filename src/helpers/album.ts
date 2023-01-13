@@ -3,7 +3,7 @@ import setLocale from "./locale";
 import { bandListQuery } from "./band";
 import { bookmarkQuery } from "./bookmark";
 import type { NextRouter } from "next/router";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 import type { Prisma } from "@prisma/client";
 
 export type AlbumListQueryType = {
@@ -14,7 +14,7 @@ export type AlbumListQueryType = {
     _count: { select: { bookmarks: true; artists: true; musics: true } };
   };
 };
-export const albumListQuery = (session: GetCurrentUserArg) => ({
+export const albumListQuery = (session: SessionArg) => ({
   include: {
     _count: { select: { bookmarks: true, artists: true, musics: true } },
     band: bandListQuery(session),

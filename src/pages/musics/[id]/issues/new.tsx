@@ -16,41 +16,43 @@ import { trpc } from "../../../../utils/trpc";
 import MusicLayout from "../../../../components/layouts/show/music";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
+import { getCurrentUserId } from "../../../../helpers/user";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
 import type { Issue } from "@prisma/client";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
-  const formContext = useForm<Issue>();
-  const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
-  const id = getRouterId(router);
-  const session = useSession();
-  const query = musicShowQuery({ router, session });
-  const { data } = trpc.music.findUniqueMusic.useQuery(query, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const create = trpc.issue.createOneIssue.useMutation({
-    onSuccess: () =>
-      router.push({
-        pathname: "/musics/[id]/issues",
-        query: { id },
-      }),
-    onError: () => {
-      enqueueSnackbar("issue.create error");
-    },
-  });
-  const handleSubmit = (data: Issue) =>
-    create.mutate({
-      data: {
-        ...data,
-        music: { connect: { id } },
-        user: { connect: { id: session.data?.user?.id as string } },
+  const formContext = useForm<Issue>(),
+    { enqueueSnackbar } = useSnackbar(),
+    router = useRouter(),
+    { data: session } = useSession(),
+    id = getRouterId(router),
+    userId = getCurrentUserId(session),
+    query = musicShowQuery({ router, session }),
+    { data } = trpc.music.findUniqueMusic.useQuery(query, {
+      onError: () => {
+        enqueueSnackbar("music.show error");
       },
-    });
+    }),
+    create = trpc.issue.createOneIssue.useMutation({
+      onSuccess: () =>
+        router.push({
+          pathname: "/musics/[id]/issues",
+          query: { id },
+        }),
+      onError: () => {
+        enqueueSnackbar("issue.create error");
+      },
+    }),
+    handleSubmit = (data: Issue) =>
+      create.mutate({
+        data: {
+          ...data,
+          music: { connect: { id } },
+          user: { connect: { id: userId } },
+        },
+      });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (

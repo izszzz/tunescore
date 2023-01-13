@@ -4,13 +4,13 @@ import { bandListQuery } from "../../../helpers/band";
 import { musicListQuery } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { GetCurrentUserArg } from "../../../helpers/user";
+import type { SessionArg } from "../../../helpers/user";
 export const bookmarkQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   args: {
     where: { userId: getRouterId(router) },

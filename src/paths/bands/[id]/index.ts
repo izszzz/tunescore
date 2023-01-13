@@ -3,14 +3,14 @@ import { bookmarkQuery } from "../../../helpers/bookmark";
 import { musicListQuery } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { GetCurrentUserArg } from "../../../helpers/user";
+import type { SessionArg } from "../../../helpers/user";
 
 export const bandShowPath = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   where: { id: getRouterId(router) },
   include: {

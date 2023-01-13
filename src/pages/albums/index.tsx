@@ -10,10 +10,9 @@ import type { NextPage } from "next";
 
 const Albums: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.pagination.album.useQuery(
-    albumPaginationQuery({ router, session })
+    albumPaginationQuery({ router, session: useSession().data })
   );
   const search = trpc.search.album.useMutation({
     onError: () => {

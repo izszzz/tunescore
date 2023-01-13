@@ -1,5 +1,5 @@
 import { bookmarkQuery } from "./bookmark";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 
 export type BandListQueryType = {
   include: {
@@ -14,7 +14,7 @@ export type BandListQueryType = {
     };
   };
 };
-export const bandListQuery = (session: GetCurrentUserArg) => ({
+export const bandListQuery = (session: SessionArg) => ({
   include: {
     bookmarks: bookmarkQuery({ type: "Band", session }),
     _count: {

@@ -12,8 +12,7 @@ import type { BandLayoutProps } from "../../../components/layouts/show/band";
 
 const Band: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
-  const path = bandShowPath({ router, session });
+  const path = bandShowPath({ router, session: useSession().data });
   const { data } = trpc.band.findUniqueBand.useQuery(path);
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];

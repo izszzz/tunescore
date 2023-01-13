@@ -12,26 +12,25 @@ import type { MusicLayoutProps } from "../../../../../components/layouts/show/mu
 import type { NextPage } from "next";
 
 const Code: NextPage = () => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const session = useSession();
-  const query = musicShowQuery({ router, session });
-  const music = trpc.music.findUniqueMusic.useQuery(query, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const pull = trpc.pull.findUniquePull.useQuery(
-    {
-      where: { id: router.query.pullId as string },
-      include: { user: true, music: true },
-    },
-    {
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    query = musicShowQuery({ router, session: useSession().data }),
+    music = trpc.music.findUniqueMusic.useQuery(query, {
       onError: () => {
         enqueueSnackbar("music.show error");
       },
-    }
-  );
+    }),
+    pull = trpc.pull.findUniquePull.useQuery(
+      {
+        where: { id: router.query.pullId as string },
+        include: { user: true, music: true },
+      },
+      {
+        onError: () => {
+          enqueueSnackbar("music.show error");
+        },
+      }
+    );
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   const pullData = pull.data as PullLayoutProps["data"];

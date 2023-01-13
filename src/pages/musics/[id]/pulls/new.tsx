@@ -14,30 +14,32 @@ import { trpc } from "../../../../utils/trpc";
 import MusicLayout from "../../../../components/layouts/show/music";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
+import { getCurrentUserId } from "../../../../helpers/user";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
-  const router = useRouter();
-  const session = useSession();
-  const id = getRouterId(router);
-  const { enqueueSnackbar } = useSnackbar();
-  const query = musicShowQuery({ router, session });
-  const music = trpc.music.findUniqueMusic.useQuery(query, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const create = trpc.pull.createOnePull.useMutation({
-    onSuccess: (data) =>
-      router.push({
-        pathname: "/musics/[id]/pulls/[pullId]",
-        query: { id, pullId: data.id },
-      }),
-    onError: (error) => console.log(error),
-  });
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    { data: session } = useSession(),
+    id = getRouterId(router),
+    userId = getCurrentUserId(session),
+    query = musicShowQuery({ router, session }),
+    music = trpc.music.findUniqueMusic.useQuery(query, {
+      onError: () => {
+        enqueueSnackbar("music.show error");
+      },
+    }),
+    create = trpc.pull.createOnePull.useMutation({
+      onSuccess: (data) =>
+        router.push({
+          pathname: "/musics/[id]/pulls/[pullId]",
+          query: { id, pullId: data.id },
+        }),
+      onError: (error) => console.log(error),
+    });
   const handleSubmit = (data: Pull) =>
     create.mutate({
       data: {
@@ -50,7 +52,7 @@ const NewPull: NextPage = () => {
         },
         status: "DRAFT",
         music: { connect: { id } },
-        user: { connect: { id: session.data?.user?.id as string } },
+        user: { connect: { id: userId } },
       },
     });
   if (!music.data) return <></>;

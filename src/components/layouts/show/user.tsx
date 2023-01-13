@@ -12,18 +12,12 @@ import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import { followMutate } from "../../../helpers/follow";
 import ShowLayout from "./index";
+import type { UserShowGetPayload } from "../../../paths/users/[id]";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { Prisma } from "@prisma/client";
 import type { ShowLayoutProps } from ".";
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
-  data: Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { following: true; followers: true } };
-      followers: true;
-      accounts: true;
-    };
-  }>;
+  data: UserShowGetPayload;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
 }
 
@@ -33,7 +27,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const id = getRouterId(router);
   const userId = getCurrentUserId(session);
   const update = trpc.user.updateOneUser.useMutation();

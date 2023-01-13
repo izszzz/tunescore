@@ -1,5 +1,6 @@
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
+
 export const followingPath = ({ router }: { router: GetRouterArg }) => ({
   args: {
     where: { followingId: getRouterId(router) },

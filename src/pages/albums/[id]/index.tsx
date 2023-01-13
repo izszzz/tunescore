@@ -11,8 +11,7 @@ import type { NextPage } from "next";
 
 const Album: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
-  const path = albumShowQuery({ router, session });
+  const path = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(path);
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];

@@ -10,7 +10,6 @@ import type { NextPage } from "next";
 
 const Artists: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.artist.useMutation({
     onError: () => {
@@ -18,7 +17,7 @@ const Artists: NextPage = () => {
     },
   });
   const { data } = trpc.pagination.artist.useQuery(
-    artistPaginationPath({ router, session })
+    artistPaginationPath({ router, session: useSession().data })
   );
   if (!data) return <></>;
   return (

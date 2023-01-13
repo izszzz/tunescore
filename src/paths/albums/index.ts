@@ -1,13 +1,13 @@
 import { albumListQuery } from "../../helpers/album";
 import type { GetRouterArg } from "../../helpers/router";
-import type { GetCurrentUserArg } from "../../helpers/user";
+import type { SessionArg } from "../../helpers/user";
 
 export const albumPaginationQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   args: {
     ...albumListQuery(session),

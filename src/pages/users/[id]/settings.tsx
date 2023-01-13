@@ -14,10 +14,9 @@ import type { NextPage } from "next";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const providers = useProviders();
   const update = trpc.user.updateOneUser.useMutation();
-  const query = userShowQuery({ router, session });
+  const query = userShowQuery({ router, session: useSession().data });
   const { data } = trpc.user.findUniqueUser.useQuery(query);
   const destroy = trpc.user.deleteOneUser.useMutation({
     onSuccess: () => router.push("/"),

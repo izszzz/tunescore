@@ -1,8 +1,8 @@
 import { getCurrentUserId } from "./user";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 import type { Prisma } from "@prisma/client";
 
-export const checkCurrentUserFollowingQuery = (session: GetCurrentUserArg) => ({
+export const checkCurrentUserFollowingQuery = (session: SessionArg) => ({
   where: {
     following: { id: getCurrentUserId(session) },
   },
@@ -16,7 +16,7 @@ export const followMutate = ({
       followers: true;
     };
   }>;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }): Prisma.FollowUpdateManyWithoutFollowerNestedInput => {
   const id = getCurrentUserId(session);
   return data.followers.length

@@ -1,14 +1,14 @@
 import { match, P } from "ts-pattern";
 import { getCurrentUserId } from "./user";
 import type { ResourceType, Prisma } from "@prisma/client";
-import type { GetCurrentUserArg } from "./user";
+import type { SessionArg } from "./user";
 
 export const bookmarkQuery = ({
   type,
   session,
 }: {
   type: ResourceType;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   where: {
     user: { id: getCurrentUserId(session) },
@@ -29,9 +29,10 @@ export const bookmarkMutate = ({
 }: {
   data: Data;
   type: ResourceType;
-  session: GetCurrentUserArg;
-}): Prisma.BookmarkUpdateManyWithoutMusicNestedInput =>
-  data.bookmarks[0]
+  session: SessionArg;
+}): Prisma.BookmarkUpdateManyWithoutMusicNestedInput => {
+  const id = getCurrentUserId(session);
+  return data.bookmarks[0]
     ? {
         delete: {
           id: data.bookmarks[0]?.id,
@@ -41,11 +42,11 @@ export const bookmarkMutate = ({
         .with({ type: "ORIGINAL", user: P.not(P.nullish) }, () => ({
           create: {
             resourceType: type,
-            user: { connect: { id: getCurrentUserId(session) } },
+            user: { connect: { id } },
             notifications: {
               create: {
                 resourceType: "Bookmark",
-                user: { connect: { id: session.data?.user?.id } },
+                user: { connect: { id } },
               },
             },
           },
@@ -53,6 +54,7 @@ export const bookmarkMutate = ({
         .otherwise(() => ({
           create: {
             resourceType: type,
-            user: { connect: { id: getCurrentUserId(session) } },
+            user: { connect: { id } },
           },
         }));
+};

@@ -14,10 +14,11 @@ import { getRouterId } from "../../../helpers/router";
 import setLocale from "../../../helpers/locale";
 import UserLayout from "../../../components/layouts/show/user";
 import ArtistListItem from "../../../components/elements/list/item/artist";
+import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import type { NextPage } from "next";
 
 const UserBookmarks: NextPage = () => {
-  const session = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
@@ -33,9 +34,9 @@ const UserBookmarks: NextPage = () => {
     },
   });
   if (!data || !bookmarkData) return <></>;
-
+  const userData = data as UserLayoutProps["data"];
   return (
-    <UserLayout data={data} activeTab="bookmarks">
+    <UserLayout data={userData} activeTab="bookmarks">
       <IndexLayout
         meta={bookmarkData.meta}
         route={{

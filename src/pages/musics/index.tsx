@@ -12,7 +12,7 @@ import type { NextPage } from "next";
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const session = useSession();
+  const { data: session } = useSession();
   const search = trpc.search.music.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");

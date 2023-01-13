@@ -1,18 +1,8 @@
 import { bookmarkQuery } from "./bookmark";
 import type { SessionArg } from "./user";
 
-export type ArtistListQueryType = {
-  include: {
-    bands: true;
-    bookmarks: true;
-    _count: {
-      select: {
-        bookmarks: true;
-      };
-    };
-  };
-};
-export const artistListQuery = (session: SessionArg) => ({
+export type ArtistListArgsType = ReturnType<typeof artistListArgs>;
+export const artistListArgs = (session: SessionArg) => ({
   include: {
     bands: true,
     bookmarks: bookmarkQuery({ type: "Artist", session }),

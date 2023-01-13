@@ -6,14 +6,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import React from "react";
+import type { userListArgs } from "../../../../helpers/user";
 import type { Prisma } from "@prisma/client";
 
 export interface UserListItemProps {
-  data: Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { followers: true; following: true } };
-    };
-  }>;
+  data: Prisma.UserGetPayload<typeof userListArgs>;
 }
 const UserListItem = ({ data }: UserListItemProps) => {
   const router = useRouter();

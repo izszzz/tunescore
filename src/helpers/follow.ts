@@ -1,7 +1,13 @@
-import { getCurrentUserId } from "./user";
+import { getCurrentUserId, userListArgs } from "./user";
 import type { SessionArg } from "./user";
 import type { Prisma } from "@prisma/client";
 
+export const followArgs = {
+  include: {
+    follower: userListArgs,
+    following: userListArgs,
+  },
+};
 export const checkCurrentUserFollowingQuery = (session: SessionArg) => ({
   where: {
     following: { id: getCurrentUserId(session) },

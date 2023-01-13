@@ -1,4 +1,4 @@
-import { artistListQuery } from "../../helpers/artist";
+import { artistListArgs } from "../../helpers/artist";
 import type { GetRouterArg } from "../../helpers/router";
 import type { SessionArg } from "../../helpers/user";
 
@@ -10,7 +10,7 @@ export const artistPaginationPath = ({
   session: SessionArg;
 }) => ({
   args: {
-    ...artistListQuery(session),
+    ...artistListArgs(session),
     where: {
       name: {
         is: {

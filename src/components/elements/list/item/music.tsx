@@ -15,11 +15,11 @@ import BookmarkChip from "../../chip/bookmark";
 import IndexChip from "../../chip";
 import { getContentImage } from "../../../../helpers/image";
 import Image from "../../image";
-import type { MusicListQueryType } from "../../../../helpers/music";
+import type { MusicListArgsType } from "../../../../helpers/music";
 import type { Prisma } from "@prisma/client";
 
 export interface MusicListItemProps {
-  data: Prisma.MusicGetPayload<MusicListQueryType>;
+  data: Prisma.MusicGetPayload<MusicListArgsType>;
 }
 const MusicListItem = ({ data }: MusicListItemProps) => {
   const router = useRouter();

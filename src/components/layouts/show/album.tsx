@@ -14,16 +14,16 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
 import type { albumShowQuery } from "../../../paths/albums/[id]";
-import type { BandListQueryType } from "../../../helpers/band";
-import type { ArtistListQueryType } from "../../../helpers/artist";
-import type { MusicListQueryType } from "../../../helpers/music";
+import type { BandListArgsType } from "../../../helpers/band";
+import type { ArtistListArgsType } from "../../../helpers/artist";
+import type { MusicListArgsType } from "../../../helpers/music";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<{
     include: {
-      band: BandListQueryType;
-      musics: MusicListQueryType;
-      artists: ArtistListQueryType;
+      band: BandListArgsType;
+      musics: MusicListArgsType;
+      artists: ArtistListArgsType;
       bookmarks: true;
       tagMaps: { include: { tag: true } };
     };

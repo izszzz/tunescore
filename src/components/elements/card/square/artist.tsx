@@ -7,11 +7,11 @@ import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
 import { getChannelImage } from "../../../../helpers/image";
 import SquareCard from ".";
-import type { ArtistListQueryType } from "../../../../helpers/artist";
+import type { ArtistListArgsType } from "../../../../helpers/artist";
 import type { Prisma } from "@prisma/client";
 
 interface SquareArtistCardProps {
-  data: Prisma.ArtistGetPayload<ArtistListQueryType>;
+  data: Prisma.ArtistGetPayload<ArtistListArgsType>;
 }
 const SquareArtistCard = ({ data }: SquareArtistCardProps) => {
   const router = useRouter();

@@ -2,61 +2,32 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { useSession } from "next-auth/react";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { trpc } from "../utils/trpc";
-import { participatedArtistQuery } from "../helpers/participation";
-import { bookmarkQuery } from "../helpers/bookmark";
-import { artistListQuery } from "../helpers/artist";
-import { albumListQuery } from "../helpers/album";
-import { bandListQuery } from "../helpers/band";
+import { artistListArgs } from "../helpers/artist";
+import { albumListArgs } from "../helpers/album";
+import { bandListArgs } from "../helpers/band";
 import SquareMusicCard from "../components/elements/card/square/music";
 import SquareAlbumCard from "../components/elements/card/square/album";
 import SquareArtistCard from "../components/elements/card/square/artist";
 import SquareBandCard from "../components/elements/card/square/band";
+import { musicListArgs } from "../helpers/music";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const session = useSession();
+  const { data: session } = useSession();
   const musics = trpc.pagination.music.useQuery({
-    args: {
-      include: {
-        participations: {
-          where: {
-            roleMap: {
-              some: {
-                role: { name: { in: ["Composer", "Lyrist", "Arranger"] } },
-              },
-            },
-          },
-          ...participatedArtistQuery(session),
-          take: 1,
-        },
-        band: true,
-        user: true,
-        bookmarks: bookmarkQuery({ type: "Music", session }),
-        _count: {
-          select: {
-            bookmarks: true,
-          },
-        },
-      },
-    },
+    args: musicListArgs(session),
     options: { page: 0, perPage: 12 },
   });
   const albums = trpc.pagination.album.useQuery({
-    args: {
-      ...albumListQuery(session),
-    },
+    args: albumListArgs(session),
     options: { page: 0, perPage: 12 },
   });
   const artists = trpc.pagination.artist.useQuery({
-    args: {
-      ...artistListQuery(session),
-    },
+    args: artistListArgs(session),
     options: { page: 0, perPage: 12 },
   });
   const bands = trpc.pagination.band.useQuery({
-    args: {
-      ...bandListQuery(session),
-    },
+    args: bandListArgs(session),
     options: { page: 0, perPage: 12 },
   });
   return (

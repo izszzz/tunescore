@@ -1,28 +1,22 @@
 import { match, P } from "ts-pattern";
 import setLocale from "./locale";
-import { bandListQuery } from "./band";
 import { bookmarkQuery } from "./bookmark";
 import type { NextRouter } from "next/router";
 import type { SessionArg } from "./user";
 import type { Prisma } from "@prisma/client";
 
-export type AlbumListQueryType = {
-  include: {
-    band: true;
-    artists: true;
-    bookmarks: true;
-    _count: { select: { bookmarks: true; artists: true; musics: true } };
-  };
-};
-export const albumListQuery = (session: SessionArg) => ({
+export type AlbumListArgsType = ReturnType<typeof albumListArgs>;
+
+export const albumListArgs = (session: SessionArg) => ({
   include: {
     _count: { select: { bookmarks: true, artists: true, musics: true } },
-    band: bandListQuery(session),
+    band: true,
+    artists: true,
     bookmarks: bookmarkQuery({ type: "Album", session }),
   },
 });
 
-type Data = Prisma.AlbumGetPayload<AlbumListQueryType>;
+type Data = Prisma.AlbumGetPayload<AlbumListArgsType>;
 
 export const getAlbumOwner = (data: Data, router: NextRouter) =>
   match(data)

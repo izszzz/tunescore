@@ -1,7 +1,7 @@
-import { albumListQuery } from "../../../helpers/album";
-import { artistListQuery } from "../../../helpers/artist";
-import { bandListQuery } from "../../../helpers/band";
-import { musicListQuery } from "../../../helpers/music";
+import { albumListArgs } from "../../../helpers/album";
+import { artistListArgs } from "../../../helpers/artist";
+import { bandListArgs } from "../../../helpers/band";
+import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
@@ -15,10 +15,10 @@ export const bookmarkQuery = ({
   args: {
     where: { userId: getRouterId(router) },
     include: {
-      music: musicListQuery(session),
-      band: bandListQuery(session),
-      artist: artistListQuery(session),
-      album: albumListQuery(session),
+      music: musicListArgs(session),
+      band: bandListArgs(session),
+      artist: artistListArgs(session),
+      album: albumListArgs(session),
     },
   },
   options: { page: 0, perPage: 12 },

@@ -1,8 +1,8 @@
-import { bandListQuery } from "../../../helpers/band";
+import { bandListArgs } from "../../../helpers/band";
 import { bookmarkQuery } from "../../../helpers/bookmark";
-import { musicListQuery } from "../../../helpers/music";
+import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
-import { artistListQuery } from "../../../helpers/artist";
+import { artistListArgs } from "../../../helpers/artist";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 
@@ -15,9 +15,9 @@ export const albumShowQuery = ({
 }) => ({
   where: { id: getRouterId(router) },
   include: {
-    musics: musicListQuery(session),
-    band: bandListQuery(session),
-    artists: artistListQuery(session),
+    musics: musicListArgs(session),
+    band: bandListArgs(session),
+    artists: artistListArgs(session),
     bookmarks: bookmarkQuery({ type: "Album", session }),
     tagMaps: { include: { tag: true } },
   },

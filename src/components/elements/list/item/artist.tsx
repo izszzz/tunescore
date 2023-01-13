@@ -13,10 +13,10 @@ import BandChip from "../../chip/band";
 import { getChannelImage } from "../../../../helpers/image";
 import Image from "../../image";
 import type { Prisma } from "@prisma/client";
-import type { ArtistListQueryType } from "../../../../helpers/artist";
+import type { ArtistListArgsType } from "../../../../helpers/artist";
 
 export interface ArtistListItemProps {
-  data: Prisma.ArtistGetPayload<ArtistListQueryType>;
+  data: Prisma.ArtistGetPayload<ArtistListArgsType>;
 }
 const ArtistListItem = ({ data }: ArtistListItemProps) => {
   const router = useRouter();

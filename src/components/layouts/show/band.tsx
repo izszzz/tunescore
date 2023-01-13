@@ -17,15 +17,15 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
 import type { bandShowPath } from "../../../paths/bands/[id]";
-import type { ArtistListQueryType } from "../../../helpers/artist";
-import type { MusicListQueryType } from "../../../helpers/music";
+import type { ArtistListArgsType } from "../../../helpers/artist";
+import type { MusicListArgsType } from "../../../helpers/music";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<{
     include: {
-      artists: ArtistListQueryType;
-      musics: MusicListQueryType;
+      artists: ArtistListArgsType;
+      musics: MusicListArgsType;
       bookmarks: true;
       tagMaps: { include: { tag: true } };
     };

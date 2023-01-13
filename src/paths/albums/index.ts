@@ -1,4 +1,4 @@
-import { albumListQuery } from "../../helpers/album";
+import { albumListArgs } from "../../helpers/album";
 import type { GetRouterArg } from "../../helpers/router";
 import type { SessionArg } from "../../helpers/user";
 
@@ -10,7 +10,7 @@ export const albumPaginationQuery = ({
   session: SessionArg;
 }) => ({
   args: {
-    ...albumListQuery(session),
+    ...albumListArgs(session),
     where: {
       title: {
         is: {

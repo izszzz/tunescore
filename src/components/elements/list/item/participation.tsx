@@ -1,17 +1,22 @@
 import { Box, Chip, Stack } from "@mui/material";
+import type { Prisma } from "@prisma/client";
 import type {
-  ParticipatedArtist,
-  ParticipatedMusic,
+  ParticipatedArtistArgs,
+  ParticipatedMusicArgs,
 } from "../../../../helpers/participation";
 
 export interface ParticipationListItemProps<
-  T extends ParticipatedArtist | ParticipatedMusic
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
 > {
   data: T;
   children: (data: ParticipationListItemProps<T>["data"]) => React.ReactNode;
 }
 function ParticipationListItem<
-  T extends ParticipatedArtist | ParticipatedMusic
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
 >({ data, children }: ParticipationListItemProps<T>) {
   return (
     <Box display="flex" alignItems="center">

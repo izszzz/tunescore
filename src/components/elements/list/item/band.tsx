@@ -14,10 +14,10 @@ import AlbumChip from "../../chip/album";
 import BookmarkChip from "../../chip/bookmark";
 import { getChannelImage } from "../../../../helpers/image";
 import Image from "../../image";
-import type { BandListQueryType } from "../../../../helpers/band";
+import type { BandListArgsType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
 export interface BandListItemProps {
-  data: Prisma.BandGetPayload<BandListQueryType>;
+  data: Prisma.BandGetPayload<BandListArgsType>;
 }
 
 const BandListItem = ({ data }: BandListItemProps) => {

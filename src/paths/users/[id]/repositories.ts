@@ -1,12 +1,12 @@
-import { musicListQuery } from "../../../helpers/music";
+import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { Prisma } from "@prisma/client";
-import type { MusicListQueryType } from "../../../helpers/music";
+import type { MusicListArgsType } from "../../../helpers/music";
 import type { SessionArg } from "../../../helpers/user";
 
 export type UserRepositoriesGetPayload =
-  Prisma.UserGetPayload<MusicListQueryType>;
+  Prisma.UserGetPayload<MusicListArgsType>;
 
 export const userRepositoriesQuery = ({
   router,
@@ -16,7 +16,7 @@ export const userRepositoriesQuery = ({
   session: SessionArg;
 }) => ({
   args: {
-    ...musicListQuery(session),
+    ...musicListArgs(session),
     where: (router.query.q as string)
       ? {
           title: {

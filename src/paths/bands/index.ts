@@ -1,4 +1,4 @@
-import { bandListQuery } from "../../helpers/band";
+import { bandListArgs } from "../../helpers/band";
 import type { GetRouterArg } from "../../helpers/router";
 import type { SessionArg } from "../../helpers/user";
 
@@ -10,7 +10,7 @@ export const bandPaginationQuery = ({
   session: SessionArg;
 }) => ({
   args: {
-    ...bandListQuery(session),
+    ...bandListArgs(session),
     where: {
       name: {
         is: {

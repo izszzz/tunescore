@@ -18,26 +18,26 @@ import Image from "../../elements/image";
 import LocaleAlert from "../../elements/alert/locale";
 import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
-import type { AlbumListQueryType } from "../../../helpers/album";
+import type { AlbumListArgsType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locale, Prisma } from "@prisma/client";
 import type { musicShowQuery } from "../../../paths/musics/[id]";
-import type { BandListQueryType } from "../../../helpers/band";
-import type { ArtistListQueryType } from "../../../helpers/artist";
+import type { BandListArgsType } from "../../../helpers/band";
+import type { ArtistListArgsType } from "../../../helpers/artist";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<{
     include: {
-      band: BandListQueryType;
+      band: BandListArgsType;
       participations: {
         include: {
-          artist: ArtistListQueryType;
+          artist: ArtistListArgsType;
           roleMap: { include: { role: true } };
         };
       };
-      albums: AlbumListQueryType;
+      albums: AlbumListArgsType;
       user: true;
       pulls: { include: { vote: true } };
       tagMaps: { include: { tag: true } };

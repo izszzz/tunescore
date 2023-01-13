@@ -16,24 +16,13 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import type { artistShowQuery } from "../../../paths/artists/[id]";
-import type { BandListArgsType } from "../../../helpers/band";
-import type { MusicListArgsType } from "../../../helpers/music";
+import type {
+  ArtistShowArgsType,
+  artistShowQuery,
+} from "../../../paths/artists/[id]";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.ArtistGetPayload<{
-    include: {
-      bands: BandListArgsType;
-      participations: {
-        include: {
-          music: MusicListArgsType;
-          roleMap: { include: { role: true } };
-        };
-      };
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
+  data: Prisma.ArtistGetPayload<ArtistShowArgsType>;
   query: ReturnType<typeof artistShowQuery>;
   activeTab: "info" | "settings";
 }
@@ -46,7 +35,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   const router = useRouter();
   const id = getRouterId(router);
   const name = setLocale(data.name, router);
-  const session = useSession();
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const update = trpc.artist.updateOneArtist.useMutation({

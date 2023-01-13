@@ -8,10 +8,10 @@ import type { NextRouter } from "next/router";
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;
+    user: true;
     participations: {
       include: { artist: true; roleMap: { include: { role: true } } };
     };
-    user: true;
   };
 }>;
 export const getMusicOwner = (data: Data, router: NextRouter) =>

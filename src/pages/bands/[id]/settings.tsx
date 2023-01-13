@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandLayout from "../../../components/layouts/show/band";
-import { bandShowPath } from "../../../paths/bands/[id]";
+import { bandShowQuery } from "../../../paths/bands/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import { getRouterId } from "../../../helpers/router";
@@ -24,7 +24,7 @@ const BandSettings: NextPage = () => {
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
     id = getRouterId(router),
-    query = bandShowPath({ router, session: useSession().data }),
+    query = bandShowQuery({ router, session: useSession().data }),
     { data } = trpc.band.findUniqueBand.useQuery(query),
     update = trpc.band.updateOneBand.useMutation({
       onSuccess: (data) => {

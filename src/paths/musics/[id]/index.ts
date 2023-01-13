@@ -14,6 +14,11 @@ export const musicShowQuery = ({
   session: SessionArg;
 }) => ({
   where: { id: getRouterId(router) },
+  ...musicShowArgs(session),
+});
+
+export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
+const musicShowArgs = (session: SessionArg) => ({
   include: {
     user: true,
     band: bandListArgs(session),

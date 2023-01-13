@@ -14,6 +14,11 @@ export const albumShowQuery = ({
   session: SessionArg;
 }) => ({
   where: { id: getRouterId(router) },
+  ...albumShowArgs(session),
+});
+
+export type AlbumShowArgsType = ReturnType<typeof albumShowArgs>;
+const albumShowArgs = (session: SessionArg) => ({
   include: {
     musics: musicListArgs(session),
     band: bandListArgs(session),

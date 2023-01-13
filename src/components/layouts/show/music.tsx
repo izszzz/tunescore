@@ -18,32 +18,17 @@ import Image from "../../elements/image";
 import LocaleAlert from "../../elements/alert/locale";
 import ResourceIconButton from "../../elements/button/icon/resource";
 import DefaultShowLayout from "./default";
-import type { AlbumListArgsType } from "../../../helpers/album";
 import type { DefaultShowLayoutProps } from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { Locale, Prisma } from "@prisma/client";
-import type { musicShowQuery } from "../../../paths/musics/[id]";
-import type { BandListArgsType } from "../../../helpers/band";
-import type { ArtistListArgsType } from "../../../helpers/artist";
+import type {
+  MusicShowArgsType,
+  musicShowQuery,
+} from "../../../paths/musics/[id]";
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      band: BandListArgsType;
-      participations: {
-        include: {
-          artist: ArtistListArgsType;
-          roleMap: { include: { role: true } };
-        };
-      };
-      albums: AlbumListArgsType;
-      user: true;
-      pulls: { include: { vote: true } };
-      tagMaps: { include: { tag: true } };
-      bookmarks: true;
-    };
-  }>;
+  data: Prisma.MusicGetPayload<MusicShowArgsType>;
   query: ReturnType<typeof musicShowQuery>;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
@@ -55,13 +40,16 @@ const MusicLayout = ({
   children,
 }: MusicLayoutProps) => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const id = getRouterId(router);
   const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(query, data);
+      queryClient.setQueryData<typeof data>(
+        [["music", "findUniqueMusic"], query],
+        data
+      );
       enqueueSnackbar("music.update success");
     },
   });

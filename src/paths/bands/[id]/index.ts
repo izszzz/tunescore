@@ -5,7 +5,7 @@ import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 
-export const bandShowPath = ({
+export const bandShowQuery = ({
   router,
   session,
 }: {
@@ -13,6 +13,11 @@ export const bandShowPath = ({
   session: SessionArg;
 }) => ({
   where: { id: getRouterId(router) },
+  ...bandShowArgs(session),
+});
+
+export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
+const bandShowArgs = (session: SessionArg) => ({
   include: {
     artists: artistListArgs(session),
     musics: musicListArgs(session),

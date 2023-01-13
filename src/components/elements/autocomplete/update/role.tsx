@@ -12,7 +12,7 @@ export type RoleUpdateAutocompleteProps = Pick<
 >;
 const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation("search.tag", {
+  const search = trpc.search.tag.useMutation({
     onError: () => {
       enqueueSnackbar("tag.search error");
     },

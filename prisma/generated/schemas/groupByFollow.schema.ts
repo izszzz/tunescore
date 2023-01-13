@@ -6,10 +6,12 @@ import { FollowScalarFieldEnumSchema } from './enums/FollowScalarFieldEnum.schem
 
 export const FollowGroupBySchema = z.object({
   where: FollowWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    FollowOrderByWithAggregationInputObjectSchema,
-    FollowOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      FollowOrderByWithAggregationInputObjectSchema,
+      FollowOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: FollowScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

@@ -7,18 +7,21 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import SquareCard from "../square";
+import type {
+  Channel,
+  SearchResult,
+} from "../../form/settings/select/card/youtube";
 
 interface ChannelYoutubeCardProps<T> {
   data: T;
   size: "small" | "medium" | "large";
   onClick: (value: T) => void;
 }
-function ChannelYoutubeCard<
-  T extends
-    | gapi.client.youtube.SearchResult
-    | gapi.client.youtube.Channel
-    | undefined
->({ data, size, onClick }: ChannelYoutubeCardProps<T>) {
+function ChannelYoutubeCard<T extends SearchResult | Channel | undefined>({
+  data,
+  size,
+  onClick,
+}: ChannelYoutubeCardProps<T>) {
   if (size === "small")
     return (
       <SquareCard
@@ -44,7 +47,7 @@ function ChannelYoutubeCard<
               height: "auto",
               borderRadius: "3px",
             }}
-            image={data?.snippet?.thumbnails?.medium?.url}
+            image={data?.snippet?.thumbnails?.medium?.url || ""}
             alt="Live from space album cover"
           />
         </CardContent>

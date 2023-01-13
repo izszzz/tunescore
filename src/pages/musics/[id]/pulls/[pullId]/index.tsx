@@ -10,7 +10,7 @@ import PullLayout from "../../../../../components/layouts/show/pull";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { musicShowPath } from "../../../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import type { NextPage } from "next";
 import type { Prisma } from "@prisma/client";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
@@ -20,21 +20,18 @@ const Pull: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const userId = session.data?.user?.id;
-  const create = trpc.useMutation(["comment.createOneComment"]);
-  const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
+  const create = trpc.comment.createOneComment.useMutation();
+  const query = musicShowQuery({ router, session });
+  const music = trpc.music.findUniqueMusic.useQuery(query, {
     onError: () => {
       enqueueSnackbar("music.show error");
     },
   });
-  const pull = trpc.useQuery(
-    [
-      "pull.findUniquePull",
-      {
-        where: { id: router.query.pullId as string },
-        include: { user: true, music: true, vote: true, comments: true },
-      },
-    ],
+  const pull = trpc.pull.findUniquePull.useQuery(
+    {
+      where: { id: router.query.pullId as string },
+      include: { user: true, music: true, vote: true, comments: true },
+    },
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -57,7 +54,7 @@ const Pull: NextPage = () => {
   }>;
   const { id, title, body, comments } = pullData;
   return (
-    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
+    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <PullLayout data={pullData} activeTab="conversation">
         <ArticleCard title={title} body={body} />
         {comments.map((comment) => (

@@ -6,10 +6,12 @@ import { ArtistScalarFieldEnumSchema } from './enums/ArtistScalarFieldEnum.schem
 
 export const ArtistGroupBySchema = z.object({
   where: ArtistWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    ArtistOrderByWithAggregationInputObjectSchema,
-    ArtistOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      ArtistOrderByWithAggregationInputObjectSchema,
+      ArtistOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: ArtistScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

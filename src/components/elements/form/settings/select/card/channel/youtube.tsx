@@ -2,13 +2,13 @@ import React from "react";
 import axios from "axios";
 import ChannelYoutubeCard from "../../../../../card/channel/youtube";
 import YoutubeSelectForm from "../youtube";
-import type { ChannelList } from "../youtube";
+import type { ChannelList, SearchResult, Channel } from "../youtube";
 import type { StreamingLink } from "@prisma/client";
 
 interface ChannelYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  onSelect: (data: gapi.client.youtube.SearchResult | undefined) => void;
+  onSelect: (data: SearchResult | undefined) => void;
   onRemove: () => void;
 }
 
@@ -25,7 +25,7 @@ const ChannelYoutubeSelectForm = ({
       value && (
         <ChannelYoutubeCard
           size="large"
-          data={value as gapi.client.youtube.Channel}
+          data={value as Channel}
           onClick={onRemove}
         />
       )
@@ -34,7 +34,7 @@ const ChannelYoutubeSelectForm = ({
       value && (
         <ChannelYoutubeCard
           size="small"
-          data={value as gapi.client.youtube.SearchResult}
+          data={value as SearchResult}
           onClick={onSelect}
         />
       )

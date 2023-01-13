@@ -8,7 +8,7 @@ import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
 import BandLists from "../../../components/elements/list/band";
-import { musicShowPath } from "../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../paths/musics/[id]";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import ParticipationLists from "../../../components/elements/list/participation";
@@ -22,12 +22,12 @@ const Music: NextPage = () => {
   const router = useRouter();
   const session = useSession();
   const id = getRouterId(router);
-  const path = musicShowPath({ router, session });
-  const { data } = trpc.useQuery(path);
+  const query = musicShowQuery({ router, session });
+  const { data } = trpc.music.findUniqueMusic.useQuery(query);
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} path={path} activeTab="info">
+    <MusicLayout data={musicData} query={query} activeTab="info">
       {data.link?.streaming?.itunes?.id && (
         <AppleButton href={data.link?.streaming?.itunes.id} />
       )}

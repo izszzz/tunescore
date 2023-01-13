@@ -24,7 +24,7 @@ const DefaultHeader = () => {
   const session = useSession();
   const { handleOpen } = useModal();
   const router = useRouter();
-  const search = trpc.useMutation("search.music");
+  const search = trpc.search.music.useMutation();
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter")
       router.replace({

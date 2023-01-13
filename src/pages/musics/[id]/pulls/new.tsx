@@ -12,7 +12,7 @@ import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../../utils/trpc";
 import MusicLayout from "../../../../components/layouts/show/music";
-import { musicShowPath } from "../../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
@@ -24,13 +24,13 @@ const NewPull: NextPage = () => {
   const session = useSession();
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
-  const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
+  const query = musicShowQuery({ router, session });
+  const music = trpc.music.findUniqueMusic.useQuery(query, {
     onError: () => {
       enqueueSnackbar("music.show error");
     },
   });
-  const create = trpc.useMutation(["pull.createOnePull"], {
+  const create = trpc.pull.createOnePull.useMutation({
     onSuccess: (data) =>
       router.push({
         pathname: "/musics/[id]/pulls/[pullId]",
@@ -56,7 +56,7 @@ const NewPull: NextPage = () => {
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
+    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement name="title" margin="dense" fullWidth />
         <Controller

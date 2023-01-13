@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 
 const NewBand: NextPage = () => {
   const router = useRouter();
-  const create = trpc.useMutation(["band.createOneBand"], {
+  const create = trpc.band.createOneBand.useMutation({
     onSuccess: () => router.push("/bands"),
   });
   const handleSubmit = (data: Band) => create.mutate({ data });

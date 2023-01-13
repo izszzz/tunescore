@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 
 const NewBand: NextPage = () => {
   const router = useRouter();
-  const create = trpc.useMutation(["album.createOneAlbum"], {
+  const create = trpc.album.createOneAlbum.useMutation({
     onSuccess: () => router.push("/albums"),
   });
   const handleSubmit = (data: Album) => create.mutate({ data });

@@ -6,10 +6,12 @@ import { MusicScalarFieldEnumSchema } from './enums/MusicScalarFieldEnum.schema'
 
 export const MusicGroupBySchema = z.object({
   where: MusicWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    MusicOrderByWithAggregationInputObjectSchema,
-    MusicOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      MusicOrderByWithAggregationInputObjectSchema,
+      MusicOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: MusicScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

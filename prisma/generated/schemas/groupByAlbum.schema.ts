@@ -6,10 +6,12 @@ import { AlbumScalarFieldEnumSchema } from './enums/AlbumScalarFieldEnum.schema'
 
 export const AlbumGroupBySchema = z.object({
   where: AlbumWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    AlbumOrderByWithAggregationInputObjectSchema,
-    AlbumOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      AlbumOrderByWithAggregationInputObjectSchema,
+      AlbumOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: AlbumScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

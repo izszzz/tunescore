@@ -9,12 +9,12 @@ const ScoreEdit: NextPage = () => {
   const router = useRouter();
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.useQuery(["music.findUniqueMusic", { where: { id } }], {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const update = trpc.useMutation(["music.updateOneMusic"]);
+    const { data } = trpc.music.findUniqueMusic.useQuery({ where: { id } }, {
+        onError: () => {
+            enqueueSnackbar("music.show error");
+        },
+    });
+  const update = trpc.music.updateOneMusic.useMutation();
   if (!data) return <></>;
   return (
     <ScoreEditor

@@ -1,13 +1,9 @@
 import * as trpc from "@trpc/server";
 
-import { Context } from '../../../../src/server/router/context';
+import { Context } from '../../../../src/server/context';
 
-export function createRouter() {
-  return trpc.router<Context>();
-}
+export const t = trpc.initTRPC.context<Context>().create();
 
-export function createProtectedRouter() {
-  return trpc
-    .router<Context>()
-    ;
-}
+export const publicProcedure = t.procedure;
+
+

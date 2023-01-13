@@ -6,10 +6,12 @@ import { BookmarkScalarFieldEnumSchema } from './enums/BookmarkScalarFieldEnum.s
 
 export const BookmarkGroupBySchema = z.object({
   where: BookmarkWhereInputObjectSchema.optional(),
-  orderBy: z.union([
-    BookmarkOrderByWithAggregationInputObjectSchema,
-    BookmarkOrderByWithAggregationInputObjectSchema.array(),
-  ]),
+  orderBy: z
+    .union([
+      BookmarkOrderByWithAggregationInputObjectSchema,
+      BookmarkOrderByWithAggregationInputObjectSchema.array(),
+    ])
+    .optional(),
   having: BookmarkScalarWhereWithAggregatesInputObjectSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),

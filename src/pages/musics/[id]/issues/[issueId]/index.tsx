@@ -7,7 +7,7 @@ import MusicLayout from "../../../../../components/layouts/show/music";
 import CommentCard from "../../../../../components/elements/card/comment";
 import ArticleCard from "../../../../../components/elements/card/article";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { musicShowPath } from "../../../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import { getRouterIssueId } from "../../../../../helpers/router";
 import type { NextPage } from "next";
 import type { Prisma } from "@prisma/client";
@@ -19,26 +19,23 @@ const Issue: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
   const userId = session.data?.user?.id;
-  const create = trpc.useMutation(["comment.createOneComment"]);
-  const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
+  const create = trpc.comment.createOneComment.useMutation();
+  const query = musicShowQuery({ router, session });
+  const music = trpc.music.findUniqueMusic.useQuery(query, {
     onError: () => {
       enqueueSnackbar("music.show error");
     },
   });
-  const issue = trpc.useQuery(
-    [
-      "issue.findUniqueIssue",
-      {
-        where: { id: issueId },
-        include: {
-          comments: {
-            where: { resourceType: "Issue" },
-            include: { user: true },
-          },
+  const issue = trpc.issue.findUniqueIssue.useQuery(
+    {
+      where: { id: issueId },
+      include: {
+        comments: {
+          where: { resourceType: "Issue" },
+          include: { user: true },
         },
       },
-    ],
+    },
     {
       onError: () => {
         enqueueSnackbar("music.show error");
@@ -52,7 +49,7 @@ const Issue: NextPage = () => {
   }>;
   const { title, body, comments } = issueData;
   return (
-    <MusicLayout data={musicData} path={path} activeTab="issues">
+    <MusicLayout data={musicData} query={query} activeTab="issues">
       <ArticleCard title={title} body={body} />
       {comments.map((comment) => (
         <CommentCard key={comment.id} data={comment} />

@@ -5,7 +5,7 @@ import MusicLayout from "../../../../components/layouts/show/music";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import { trpc } from "../../../../utils/trpc";
-import { musicShowPath } from "../../../../paths/musics/[id]";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
@@ -16,33 +16,30 @@ const Issues: NextPage = () => {
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
   const session = useSession();
-  const path = musicShowPath({ router, session });
-  const music = trpc.useQuery(path, {
+  const query = musicShowQuery({ router, session });
+  const music = trpc.music.findUniqueMusic.useQuery(query, {
     onError: () => {
       enqueueSnackbar("music.show error");
     },
   });
-  const { data: pullsData } = trpc.useQuery(
-    [
-      "pagination.pull",
-      {
-        args: {
-          include: { user: true },
-          where: {
-            title: { contains: (router.query.q as string) || "" },
-            music: { id },
-          },
+  const { data: pullsData } = trpc.pagination.pull.useQuery(
+    {
+      args: {
+        include: { user: true },
+        where: {
+          title: { contains: (router.query.q as string) || "" },
+          music: { id },
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
       },
-    ],
+      options: { page: (router.query.page as string) || 0, perPage: 12 },
+    },
     {
       onError: () => {
         enqueueSnackbar("pull.index error");
       },
     }
   );
-  const search = trpc.useMutation(["search.pull"], {
+  const search = trpc.search.pull.useMutation({
     onError: () => {
       enqueueSnackbar("music.search error");
     },
@@ -50,7 +47,7 @@ const Issues: NextPage = () => {
   if (!music.data || !pullsData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} path={path} activeTab="pullrequests">
+    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <IndexLayout<Pull>
         meta={pullsData.meta}
         route={{

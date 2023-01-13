@@ -12,7 +12,7 @@ type TagUpdateAutocomplete = Pick<
 >;
 const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.useMutation("search.tag", {
+  const search = trpc.search.tag.useMutation({
     onError: () => {
       enqueueSnackbar("artist.search error");
     },

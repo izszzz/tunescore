@@ -17,7 +17,7 @@ const ChannelYoutubeSelectForm = ({
   onRemove,
   ...props
 }: ChannelYoutubeSelectFormProps) => (
-  <YoutubeSelectForm
+  <YoutubeSelectForm<Channel>
     {...props}
     type="channel"
     lookup={(id) =>
@@ -27,22 +27,12 @@ const ChannelYoutubeSelectForm = ({
     }
     largeCard={(value) =>
       value && (
-        <ChannelYoutubeCard
-          size="large"
-          data={value as Channel}
-          onClick={onRemove}
-        />
+        <ChannelYoutubeCard size="large" data={value} onClick={onRemove} />
       )
     }
-    smallCard={(value) =>
-      value && (
-        <ChannelYoutubeCard
-          size="small"
-          data={value as SearchResult}
-          onClick={onSelect}
-        />
-      )
-    }
+    smallCard={(value) => (
+      <ChannelYoutubeCard size="small" data={value} onClick={onSelect} />
+    )}
   />
 );
 

@@ -28,11 +28,9 @@ const ItunesArtistSelectForm = ({
         <ItunesChannelCard size="large" data={value} onClick={onRemove} />
       )
     }
-    smallCard={(value) =>
-      value && (
-        <ItunesChannelCard size="small" data={value} onClick={onSelect} />
-      )
-    }
+    smallCard={(value) => (
+      <ItunesChannelCard size="small" data={value} onClick={onSelect} />
+    )}
   />
 );
 

@@ -26,9 +26,9 @@ const ItunesAlbumSelectForm = ({
     largeCard={(value) =>
       value && <ItunesAlbumCard size="large" data={value} onClick={onRemove} />
     }
-    smallCard={(value) =>
-      value && <ItunesAlbumCard size="small" data={value} onClick={onSelect} />
-    }
+    smallCard={(value) => (
+      <ItunesAlbumCard size="small" data={value} onClick={onSelect} />
+    )}
   />
 );
 

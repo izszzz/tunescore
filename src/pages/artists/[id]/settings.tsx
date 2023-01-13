@@ -21,9 +21,8 @@ import type { ArtistLayoutProps } from "../../../components/layouts/show/artist"
 const EditArtist: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const query = artistShowQuery({ router, session });
+  const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {

@@ -1,16 +1,16 @@
-import { musicListQuery } from "../../helpers/music";
+import { musicListArgs } from "../../helpers/music";
 import type { GetRouterArg } from "../../helpers/router";
-import type { GetCurrentUserArg } from "../../helpers/user";
+import type { SessionArg } from "../../helpers/user";
 
 export const musicPaginationQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   args: {
-    ...musicListQuery(session),
+    ...musicListArgs(session),
     where: (router.query.q as string)
       ? {
           title: {

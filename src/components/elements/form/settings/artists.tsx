@@ -13,9 +13,9 @@ import ResourceIcon from "../../icon/resource";
 import ArtistListItem from "../../list/item/artist";
 import CloseIconButton from "../../button/icon/close";
 import RoleUpdateAutocomplete from "../../autocomplete/update/role";
+import type { Artist, Prisma } from "@prisma/client";
 import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
-import type { ParticipatedArtist } from "../../../../helpers/participation";
-import type { Artist } from "@prisma/client";
+import type { ParticipatedArtistArgs } from "../../../../helpers/participation";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 
 interface ArtistsUpdateFormProps<T> {
@@ -25,7 +25,7 @@ interface ArtistsUpdateFormProps<T> {
     onClick: (value: Artist | undefined) => void;
   };
   roleUpdateAutocompleteProps: RoleUpdateAutocompleteProps;
-  onDestroy: (value: ParticipatedArtist) => void;
+  onDestroy: (value: T) => void;
 }
 function ArtistsUpdateForm({
   data,
@@ -33,7 +33,9 @@ function ArtistsUpdateForm({
   loadingButtonProps,
   roleUpdateAutocompleteProps,
   onDestroy,
-}: ArtistsUpdateFormProps<ParticipatedArtist>) {
+}: ArtistsUpdateFormProps<
+  Prisma.ParticipationGetPayload<ParticipatedArtistArgs>
+>) {
   const { enqueueSnackbar } = useSnackbar(),
     [artist, setArtist] = useState<Artist>(),
     router = useRouter(),

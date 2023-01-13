@@ -10,10 +10,9 @@ import type { NextPage } from "next";
 
 const Bands: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.pagination.band.useQuery(
-    bandPaginationQuery({ router, session })
+    bandPaginationQuery({ router, session: useSession().data })
   );
   const search = trpc.search.band.useMutation({
     onError: () => {

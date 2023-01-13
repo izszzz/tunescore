@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import { trpc } from "../../../utils/trpc";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandLayout from "../../../components/layouts/show/band";
-import { bandShowPath } from "../../../paths/bands/[id]";
+import { bandShowQuery } from "../../../paths/bands/[id]";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import { getRouterId } from "../../../helpers/router";
@@ -20,27 +20,26 @@ import type { NextPage } from "next";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
 
 const BandSettings: NextPage = () => {
-  const router = useRouter();
-  const id = getRouterId(router);
-  const session = useSession();
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const query = bandShowPath({ router, session });
-  const { data } = trpc.band.findUniqueBand.useQuery(query);
-  const update = trpc.band.updateOneBand.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData([["band", "findUniqueBand"], query], data);
-      enqueueSnackbar("music.update success");
-    },
-    onError: () => {
-      enqueueSnackbar("music.update error");
-    },
-  });
-  const destroy = trpc.band.deleteOneBand.useMutation({
-    onSuccess: () => {
-      enqueueSnackbar("band.destroy success");
-    },
-  });
+  const router = useRouter(),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    id = getRouterId(router),
+    query = bandShowQuery({ router, session: useSession().data }),
+    { data } = trpc.band.findUniqueBand.useQuery(query),
+    update = trpc.band.updateOneBand.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData([["band", "findUniqueBand"], query], data);
+        enqueueSnackbar("music.update success");
+      },
+      onError: () => {
+        enqueueSnackbar("music.update error");
+      },
+    }),
+    destroy = trpc.band.deleteOneBand.useMutation({
+      onSuccess: () => {
+        enqueueSnackbar("band.destroy success");
+      },
+    });
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (

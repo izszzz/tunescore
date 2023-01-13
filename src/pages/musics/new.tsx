@@ -16,12 +16,13 @@ import Divider from "@mui/material/Divider";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { trpc } from "../../utils/trpc";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import { getCurrentUserId } from "../../helpers/user";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
 
 const NewMusic: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const formContext = useForm<Music>();
   const { enqueueSnackbar } = useSnackbar();
   const create = trpc.music.createOneMusic.useMutation({
@@ -35,7 +36,7 @@ const NewMusic: NextPage = () => {
       data: {
         ...data,
         price: Number(data.price),
-        user: { connect: { id: session.data?.user?.id } },
+        user: { connect: { id: getCurrentUserId(session) } },
       },
     });
   };

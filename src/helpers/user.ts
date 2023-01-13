@@ -1,7 +1,8 @@
-import type { useSession } from "next-auth/react";
+import type { Session } from "next-auth";
 
-export type GetCurrentUserArg = ReturnType<typeof useSession>;
-export const getCurrentUser = (session: GetCurrentUserArg) =>
-  session.data?.user;
-export const getCurrentUserId = (session: GetCurrentUserArg) =>
+export type SessionArg = Session | null;
+export const getCurrentUser = (session: SessionArg) => session?.user;
+export const getCurrentUserId = (session: SessionArg) =>
   getCurrentUser(session)?.id;
+export const userCountQuery = { select: { following: true, followers: true } };
+export const userListArgs = { include: { _count: userCountQuery } };

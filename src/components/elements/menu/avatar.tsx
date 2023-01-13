@@ -10,13 +10,13 @@ import MenuListItem from "./item";
 import MenuManager from ".";
 
 const AvatarMenuManager = () => {
-  const session = useSession();
-  const id = getCurrentUserId(session);
+  const { data } = useSession();
+  const id = getCurrentUserId(data);
   return (
     <MenuManager
       button={(handleOpen) => (
         <IconButton onClick={handleOpen}>
-          <Avatar alt="Remy Sharp" src={session.data?.user?.image || ""} />
+          <Avatar alt="Remy Sharp" src={data?.user?.image || ""} />
         </IconButton>
       )}
     >

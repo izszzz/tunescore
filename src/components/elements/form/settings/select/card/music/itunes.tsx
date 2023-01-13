@@ -25,9 +25,9 @@ const MusicItunesSelectForm = ({
     largeCard={(value) =>
       value && <MusicItunesCard size="large" data={value} onClick={onRemove} />
     }
-    smallCard={(value) =>
-      value && <MusicItunesCard size="small" data={value} onClick={onSelect} />
-    }
+    smallCard={(value) => (
+      <MusicItunesCard size="small" data={value} onClick={onSelect} />
+    )}
   />
 );
 

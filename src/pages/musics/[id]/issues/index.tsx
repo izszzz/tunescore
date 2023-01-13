@@ -10,38 +10,37 @@ import { getRouterId } from "../../../../helpers/router";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
 const Issues: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
-  const id = getRouterId(router);
-  const session = useSession();
-  const query = musicShowQuery({ router, session });
-  const music = trpc.music.findUniqueMusic.useQuery(query, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const { data: issueData } = trpc.pagination.issue.useQuery(
-    {
-      args: {
-        include: { user: true },
-        where: {
-          title: { contains: (router.query.q as string) || "" },
-          music: { id },
-        },
-      },
-      options: { page: (router.query.page as string) || 0, perPage: 12 },
-    },
-    {
+  const { enqueueSnackbar } = useSnackbar(),
+    router = useRouter(),
+    id = getRouterId(router),
+    query = musicShowQuery({ router, session: useSession().data }),
+    music = trpc.music.findUniqueMusic.useQuery(query, {
       onError: () => {
         enqueueSnackbar("music.show error");
       },
-    }
-  );
-  const search = trpc.search.issue.useMutation({
-    onError: () => {
-      enqueueSnackbar("music.search error");
-    },
-  });
+    }),
+    { data: issueData } = trpc.pagination.issue.useQuery(
+      {
+        args: {
+          include: { user: true },
+          where: {
+            title: { contains: (router.query.q as string) || "" },
+            music: { id },
+          },
+        },
+        options: { page: (router.query.page as string) || 0, perPage: 12 },
+      },
+      {
+        onError: () => {
+          enqueueSnackbar("music.show error");
+        },
+      }
+    ),
+    search = trpc.search.issue.useMutation({
+      onError: () => {
+        enqueueSnackbar("music.search error");
+      },
+    });
   if (!music.data || !issueData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (

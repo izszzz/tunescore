@@ -16,21 +16,15 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import type { bandShowPath } from "../../../paths/bands/[id]";
-import type { ArtistListQueryType } from "../../../helpers/artist";
-import type { MusicListQueryType } from "../../../helpers/music";
+import type {
+  BandShowArgsType,
+  bandShowQuery,
+} from "../../../paths/bands/[id]";
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.BandGetPayload<{
-    include: {
-      artists: ArtistListQueryType;
-      musics: MusicListQueryType;
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
-  query: ReturnType<typeof bandShowPath>;
+  data: Prisma.BandGetPayload<BandShowArgsType>;
+  query: ReturnType<typeof bandShowQuery>;
   activeTab: "info" | "settings";
 }
 
@@ -42,7 +36,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
 }) => {
   const router = useRouter();
   const id = getRouterId(router);
-  const session = useSession();
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const name = setLocale(data.name, router);

@@ -27,11 +27,15 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient(),
     router = useRouter(),
-    session = useSession(),
+    { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     id = getRouterId(router),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query),
+    { data: userData } = trpc.user.findUniqueUser.useQuery({
+      where: { id: session?.user?.id },
+      include: { accounts: true },
+    }),
     destroy = trpc.music.deleteOneMusic.useMutation({
       onSuccess: () => {
         enqueueSnackbar("music.destroy success");
@@ -50,10 +54,6 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update error");
       },
     });
-  const { data: userData } = trpc.user.findUniqueUser.useQuery({
-    where: { id: session.data?.user?.id },
-    include: { accounts: true },
-  });
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];

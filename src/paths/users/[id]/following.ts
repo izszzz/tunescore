@@ -1,20 +1,11 @@
 import { getRouterId } from "../../../helpers/router";
+import { followArgs } from "../../../helpers/follow";
 import type { GetRouterArg } from "../../../helpers/router";
+
 export const followingPath = ({ router }: { router: GetRouterArg }) => ({
   args: {
     where: { followingId: getRouterId(router) },
-    include: {
-      follower: {
-        include: {
-          _count: { select: { following: true, followers: true } },
-        },
-      },
-      following: {
-        include: {
-          _count: { select: { following: true, followers: true } },
-        },
-      },
-    },
+    ...followArgs,
   },
   options: { page: 0, perPage: 12 },
 });

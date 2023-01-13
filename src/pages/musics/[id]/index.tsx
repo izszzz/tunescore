@@ -20,7 +20,7 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
 const Music: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const id = getRouterId(router);
   const query = musicShowQuery({ router, session });
   const { data } = trpc.music.findUniqueMusic.useQuery(query);

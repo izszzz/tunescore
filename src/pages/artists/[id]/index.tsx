@@ -11,8 +11,7 @@ import type { ArtistLayoutProps } from "../../../components/layouts/show/artist"
 
 const Artist: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
-  const query = artistShowQuery({ router, session });
+  const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];

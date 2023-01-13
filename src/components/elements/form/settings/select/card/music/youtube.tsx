@@ -18,7 +18,7 @@ const MusicYoutubeSelectForm = ({
   ...props
 }: MusicYoutubeSelectFormProps) => {
   return (
-    <YoutubeSelectForm
+    <YoutubeSelectForm<Video>
       {...props}
       type="video"
       lookup={async (id) =>
@@ -28,22 +28,12 @@ const MusicYoutubeSelectForm = ({
       }
       largeCard={(value) =>
         value && (
-          <MusicYoutubeCard
-            size="large"
-            data={value as Video}
-            onClick={onRemove}
-          />
+          <MusicYoutubeCard size="large" data={value} onClick={onRemove} />
         )
       }
-      smallCard={(value) =>
-        value && (
-          <MusicYoutubeCard
-            size="small"
-            data={value as SearchResult}
-            onClick={onSelect}
-          />
-        )
-      }
+      smallCard={(value) => (
+        <MusicYoutubeCard size="small" data={value} onClick={onSelect} />
+      )}
     />
   );
 };

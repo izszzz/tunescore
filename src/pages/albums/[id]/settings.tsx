@@ -19,8 +19,7 @@ import type { NextPage } from "next";
 const Album: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const session = useSession();
-  const query = albumShowQuery({ router, session });
+  const query = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {

@@ -6,11 +6,11 @@ import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import { getChannelImage } from "../../../../helpers/image";
 import SquareCard from ".";
-import type { BandListQueryType } from "../../../../helpers/band";
+import type { BandListArgsType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
 
 interface SquareBandCardProps {
-  data: Prisma.BandGetPayload<BandListQueryType>;
+  data: Prisma.BandGetPayload<BandListArgsType>;
 }
 const SquareBandCard = ({ data }: SquareBandCardProps) => {
   const router = useRouter();

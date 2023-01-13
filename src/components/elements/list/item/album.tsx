@@ -12,11 +12,11 @@ import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
 import { getContentImage } from "../../../../helpers/image";
 import Image from "../../image";
-import type { AlbumListQueryType } from "../../../../helpers/album";
+import type { AlbumListArgsType } from "../../../../helpers/album";
 import type { Prisma } from "@prisma/client";
 
 export interface AlbumListItemProps {
-  data: Prisma.AlbumGetPayload<AlbumListQueryType>;
+  data: Prisma.AlbumGetPayload<AlbumListArgsType>;
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const router = useRouter();

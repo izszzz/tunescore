@@ -1,6 +1,6 @@
-import { env } from "./src/env/server.mjs";
 import withRoutes from "nextjs-routes/config";
 import removeImports from "next-remove-imports";
+import { env } from "./src/env/server.mjs";
 
 /**
  * Don't be scared of the generics here.
@@ -28,5 +28,8 @@ export default defineNextConfig({
       aggregateTimeout: 300,
     };
     return config;
+  },
+  eslint: {
+    dirs: ["src/"],
   },
 });

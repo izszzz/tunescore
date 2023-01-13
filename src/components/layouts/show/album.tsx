@@ -13,21 +13,13 @@ import DefaultShowLayout from "./default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
-import type { albumShowQuery } from "../../../paths/albums/[id]";
-import type { BandListQueryType } from "../../../helpers/band";
-import type { ArtistListQueryType } from "../../../helpers/artist";
-import type { MusicListQueryType } from "../../../helpers/music";
+import type {
+  AlbumShowArgsType,
+  albumShowQuery,
+} from "../../../paths/albums/[id]";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.AlbumGetPayload<{
-    include: {
-      band: BandListQueryType;
-      musics: MusicListQueryType;
-      artists: ArtistListQueryType;
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
+  data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
   query: ReturnType<typeof albumShowQuery>;
   activeTab: "info" | "settings";
 }
@@ -39,7 +31,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
 }) => {
   const router = useRouter();
   const id = getRouterId(router);
-  const session = useSession();
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const update = trpc.album.updateOneAlbum.useMutation({

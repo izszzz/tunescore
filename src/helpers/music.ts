@@ -1,17 +1,17 @@
 import { match, P } from "ts-pattern";
 import { bookmarkQuery } from "./bookmark";
-import { participatedArtistQuery } from "./participation";
+import { participatedArtistArgs } from "./participation";
 import setLocale from "./locale";
-import type { GetCurrentUserArg } from "./user";
-import type { NextRouter } from "next/router";
 import type { Prisma } from "@prisma/client";
+import type { SessionArg } from "./user";
+import type { NextRouter } from "next/router";
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;
+    user: true;
     participations: {
       include: { artist: true; roleMap: { include: { role: true } } };
     };
-    user: true;
   };
 }>;
 export const getMusicOwner = (data: Data, router: NextRouter) =>
@@ -56,28 +56,13 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
       owner: null,
     }));
 
-export type MusicListQueryType = {
+export type MusicListArgsType = ReturnType<typeof musicListArgs>;
+export const musicListArgs = (session: SessionArg) => ({
   include: {
-    user: true;
-    band: true;
-    participations: {
-      include: { artist: true; roleMap: { include: { role: true } } };
-    };
-    bookmarks: true;
-    _count: {
-      select: {
-        bookmarks: true;
-      };
-    };
-  };
-};
-
-export const musicListQuery = (session: GetCurrentUserArg) => ({
-  include: {
-    band: true,
-    participations: participatedArtistQuery(session),
-    user: true,
+    participations: participatedArtistArgs(session),
     bookmarks: bookmarkQuery({ type: "Music", session }),
+    band: true,
+    user: true,
     _count: {
       select: {
         bookmarks: true,

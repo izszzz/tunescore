@@ -23,9 +23,9 @@ const SpotifyMusicSelectForm = ({
     largeCard={(value) =>
       value && <MusicSpotifyCard size="large" data={value} onClick={onRemove} />
     }
-    smallCard={(value) =>
-      value && <MusicSpotifyCard size="small" data={value} onClick={onSelect} />
-    }
+    smallCard={(value) => (
+      <MusicSpotifyCard size="small" data={value} onClick={onSelect} />
+    )}
   />
 );
 

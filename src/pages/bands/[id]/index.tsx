@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import BandLayout from "../../../components/layouts/show/band";
 import { trpc } from "../../../utils/trpc";
-import { bandShowPath } from "../../../paths/bands/[id]";
+import { bandShowQuery } from "../../../paths/bands/[id]";
 import MusicLists from "../../../components/elements/list/music";
 import ArtistLists from "../../../components/elements/list/artist";
 import AppleButton from "../../../components/elements/button/link/itunes";
@@ -12,8 +12,7 @@ import type { BandLayoutProps } from "../../../components/layouts/show/band";
 
 const Band: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
-  const path = bandShowPath({ router, session });
+  const path = bandShowQuery({ router, session: useSession().data });
   const { data } = trpc.band.findUniqueBand.useQuery(path);
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];

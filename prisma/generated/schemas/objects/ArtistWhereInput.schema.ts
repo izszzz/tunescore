@@ -4,12 +4,13 @@ import { LocaleCompositeFilterObjectSchema } from './LocaleCompositeFilter.schem
 import { LocaleObjectEqualityInputObjectSchema } from './LocaleObjectEqualityInput.schema';
 import { LinkListNullableCompositeFilterObjectSchema } from './LinkListNullableCompositeFilter.schema';
 import { LinkListObjectEqualityInputObjectSchema } from './LinkListObjectEqualityInput.schema';
-import { ParticipationListRelationFilterObjectSchema } from './ParticipationListRelationFilter.schema';
 import { BandListRelationFilterObjectSchema } from './BandListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
+import { ParticipationListRelationFilterObjectSchema } from './ParticipationListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 import { TagMapListRelationFilterObjectSchema } from './TagMapListRelationFilter.schema';
+import { PointListRelationFilterObjectSchema } from './PointListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -47,15 +48,16 @@ const Schema: z.ZodType<Prisma.ArtistWhereInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(() => ParticipationListRelationFilterObjectSchema)
-      .optional(),
     bands: z.lazy(() => BandListRelationFilterObjectSchema).optional(),
     bandIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
     albums: z.lazy(() => AlbumListRelationFilterObjectSchema).optional(),
     albumIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    participations: z
+      .lazy(() => ParticipationListRelationFilterObjectSchema)
+      .optional(),
     bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
     tagMaps: z.lazy(() => TagMapListRelationFilterObjectSchema).optional(),
+    points: z.lazy(() => PointListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

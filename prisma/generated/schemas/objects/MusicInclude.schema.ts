@@ -5,6 +5,8 @@ import { AlbumFindManySchema } from '../findManyAlbum.schema';
 import { ParticipationFindManySchema } from '../findManyParticipation.schema';
 import { IssueFindManySchema } from '../findManyIssue.schema';
 import { PullFindManySchema } from '../findManyPull.schema';
+import { CartFindManySchema } from '../findManyCart.schema';
+import { PointFindManySchema } from '../findManyPoint.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { TagMapFindManySchema } from '../findManyTagMap.schema';
 import { MusicCountOutputTypeArgsObjectSchema } from './MusicCountOutputTypeArgs.schema';
@@ -25,6 +27,10 @@ const Schema: z.ZodType<Prisma.MusicInclude> = z
       .union([z.boolean(), z.lazy(() => IssueFindManySchema)])
       .optional(),
     pulls: z.union([z.boolean(), z.lazy(() => PullFindManySchema)]).optional(),
+    carts: z.union([z.boolean(), z.lazy(() => CartFindManySchema)]).optional(),
+    points: z
+      .union([z.boolean(), z.lazy(() => PointFindManySchema)])
+      .optional(),
     bookmarks: z
       .union([z.boolean(), z.lazy(() => BookmarkFindManySchema)])
       .optional(),

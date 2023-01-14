@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CommentFindManySchema } from '../findManyComment.schema';
+import { PointFindManySchema } from '../findManyPoint.schema';
 import { MusicArgsObjectSchema } from './MusicArgs.schema';
 import { UserArgsObjectSchema } from './UserArgs.schema';
 import { IssueCountOutputTypeArgsObjectSchema } from './IssueCountOutputTypeArgs.schema';
@@ -14,6 +15,9 @@ const Schema: z.ZodType<Prisma.IssueSelect> = z
     status: z.boolean().optional(),
     comments: z
       .union([z.boolean(), z.lazy(() => CommentFindManySchema)])
+      .optional(),
+    points: z
+      .union([z.boolean(), z.lazy(() => PointFindManySchema)])
       .optional(),
     music: z
       .union([z.boolean(), z.lazy(() => MusicArgsObjectSchema)])

@@ -3,6 +3,7 @@ import { StringFilterObjectSchema } from './StringFilter.schema';
 import { EnumIssueStatusFilterObjectSchema } from './EnumIssueStatusFilter.schema';
 import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 import { CommentListRelationFilterObjectSchema } from './CommentListRelationFilter.schema';
+import { PointListRelationFilterObjectSchema } from './PointListRelationFilter.schema';
 import { MusicRelationFilterObjectSchema } from './MusicRelationFilter.schema';
 import { MusicWhereInputObjectSchema } from './MusicWhereInput.schema';
 import { UserRelationFilterObjectSchema } from './UserRelationFilter.schema';
@@ -44,6 +45,7 @@ const Schema: z.ZodType<Prisma.IssueWhereInput> = z
       ])
       .optional(),
     comments: z.lazy(() => CommentListRelationFilterObjectSchema).optional(),
+    points: z.lazy(() => PointListRelationFilterObjectSchema).optional(),
     music: z
       .union([
         z.lazy(() => MusicRelationFilterObjectSchema),

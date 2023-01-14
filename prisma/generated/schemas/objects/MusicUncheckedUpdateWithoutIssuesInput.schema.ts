@@ -13,6 +13,8 @@ import { AlbumUncheckedUpdateManyWithoutMusicsNestedInputObjectSchema } from './
 import { MusicUpdatealbumIDsInputObjectSchema } from './MusicUpdatealbumIDsInput.schema';
 import { ParticipationUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { PullUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PullUncheckedUpdateManyWithoutMusicNestedInput.schema';
+import { CartUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './CartUncheckedUpdateManyWithoutMusicNestedInput.schema';
+import { PointUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { TagMapUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutMusicNestedInput.schema';
 
@@ -90,6 +92,12 @@ const Schema: z.ZodType<Prisma.MusicUncheckedUpdateWithoutIssuesInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullUncheckedUpdateManyWithoutMusicNestedInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartUncheckedUpdateManyWithoutMusicNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedUpdateManyWithoutMusicNestedInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(

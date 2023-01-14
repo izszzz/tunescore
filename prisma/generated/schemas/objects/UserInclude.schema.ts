@@ -7,6 +7,8 @@ import { PullFindManySchema } from '../findManyPull.schema';
 import { CommentFindManySchema } from '../findManyComment.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { NotificationFindManySchema } from '../findManyNotification.schema';
+import { CartFindManySchema } from '../findManyCart.schema';
+import { PointFindManySchema } from '../findManyPoint.schema';
 import { VoteFindManySchema } from '../findManyVote.schema';
 import { FollowFindManySchema } from '../findManyFollow.schema';
 import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema';
@@ -36,6 +38,10 @@ const Schema: z.ZodType<Prisma.UserInclude> = z
       .optional(),
     notifications: z
       .union([z.boolean(), z.lazy(() => NotificationFindManySchema)])
+      .optional(),
+    carts: z.union([z.boolean(), z.lazy(() => CartFindManySchema)]).optional(),
+    points: z
+      .union([z.boolean(), z.lazy(() => PointFindManySchema)])
       .optional(),
     votes: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
     followers: z

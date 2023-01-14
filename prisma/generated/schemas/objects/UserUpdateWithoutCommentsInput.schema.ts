@@ -8,6 +8,8 @@ import { IssueUpdateManyWithoutUserNestedInputObjectSchema } from './IssueUpdate
 import { PullUpdateManyWithoutUserNestedInputObjectSchema } from './PullUpdateManyWithoutUserNestedInput.schema';
 import { BookmarkUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema';
+import { CartUpdateManyWithoutUserNestedInputObjectSchema } from './CartUpdateManyWithoutUserNestedInput.schema';
+import { PointUpdateManyWithoutUserNestedInputObjectSchema } from './PointUpdateManyWithoutUserNestedInput.schema';
 import { VoteUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
 import { FollowUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUpdateManyWithoutFollowerNestedInput.schema';
@@ -65,6 +67,12 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutCommentsInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
     votes: z
       .lazy(() => VoteUpdateManyWithoutUsersNestedInputObjectSchema)

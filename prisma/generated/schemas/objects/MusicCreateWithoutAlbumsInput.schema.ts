@@ -11,6 +11,8 @@ import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput
 import { ParticipationCreateNestedManyWithoutMusicInputObjectSchema } from './ParticipationCreateNestedManyWithoutMusicInput.schema';
 import { IssueCreateNestedManyWithoutMusicInputObjectSchema } from './IssueCreateNestedManyWithoutMusicInput.schema';
 import { PullCreateNestedManyWithoutMusicInputObjectSchema } from './PullCreateNestedManyWithoutMusicInput.schema';
+import { CartCreateNestedManyWithoutMusicInputObjectSchema } from './CartCreateNestedManyWithoutMusicInput.schema';
+import { PointCreateNestedManyWithoutMusicInputObjectSchema } from './PointCreateNestedManyWithoutMusicInput.schema';
 import { BookmarkCreateNestedManyWithoutMusicInputObjectSchema } from './BookmarkCreateNestedManyWithoutMusicInput.schema';
 import { TagMapCreateNestedManyWithoutMusicInputObjectSchema } from './TagMapCreateNestedManyWithoutMusicInput.schema';
 
@@ -54,6 +56,12 @@ const Schema: z.ZodType<Prisma.MusicCreateWithoutAlbumsInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullCreateNestedManyWithoutMusicInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartCreateNestedManyWithoutMusicInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointCreateNestedManyWithoutMusicInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkCreateNestedManyWithoutMusicInputObjectSchema)

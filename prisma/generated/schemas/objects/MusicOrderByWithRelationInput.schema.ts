@@ -8,6 +8,8 @@ import { AlbumOrderByRelationAggregateInputObjectSchema } from './AlbumOrderByRe
 import { ParticipationOrderByRelationAggregateInputObjectSchema } from './ParticipationOrderByRelationAggregateInput.schema';
 import { IssueOrderByRelationAggregateInputObjectSchema } from './IssueOrderByRelationAggregateInput.schema';
 import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRelationAggregateInput.schema';
+import { CartOrderByRelationAggregateInputObjectSchema } from './CartOrderByRelationAggregateInput.schema';
+import { PointOrderByRelationAggregateInputObjectSchema } from './PointOrderByRelationAggregateInput.schema';
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 import { TagMapOrderByRelationAggregateInputObjectSchema } from './TagMapOrderByRelationAggregateInput.schema';
 
@@ -38,6 +40,12 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointOrderByRelationAggregateInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkOrderByRelationAggregateInputObjectSchema)

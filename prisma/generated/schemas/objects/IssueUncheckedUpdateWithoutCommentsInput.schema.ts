@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 import { EnumIssueStatusFieldUpdateOperationsInputObjectSchema } from './EnumIssueStatusFieldUpdateOperationsInput.schema';
+import { PointUncheckedUpdateManyWithoutIssueNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutIssueNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -24,6 +25,9 @@ const Schema: z.ZodType<Prisma.IssueUncheckedUpdateWithoutCommentsInput> = z
         z.lazy(() => IssueStatusSchema),
         z.lazy(() => EnumIssueStatusFieldUpdateOperationsInputObjectSchema),
       ])
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedUpdateManyWithoutIssueNestedInputObjectSchema)
       .optional(),
     musicId: z
       .union([

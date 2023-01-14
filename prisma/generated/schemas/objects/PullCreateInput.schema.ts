@@ -4,6 +4,7 @@ import { PullScoreCreateInputObjectSchema } from './PullScoreCreateInput.schema'
 import { PullStatusSchema } from '../enums/PullStatus.schema';
 import { VoteCreateNestedOneWithoutPullInputObjectSchema } from './VoteCreateNestedOneWithoutPullInput.schema';
 import { CommentCreateNestedManyWithoutPullInputObjectSchema } from './CommentCreateNestedManyWithoutPullInput.schema';
+import { PointCreateNestedManyWithoutPullInputObjectSchema } from './PointCreateNestedManyWithoutPullInput.schema';
 import { MusicCreateNestedOneWithoutPullsInputObjectSchema } from './MusicCreateNestedOneWithoutPullsInput.schema';
 import { UserCreateNestedOneWithoutPullsInputObjectSchema } from './UserCreateNestedOneWithoutPullsInput.schema';
 
@@ -24,6 +25,9 @@ const Schema: z.ZodType<Prisma.PullCreateInput> = z
       .optional(),
     comments: z
       .lazy(() => CommentCreateNestedManyWithoutPullInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointCreateNestedManyWithoutPullInputObjectSchema)
       .optional(),
     music: z.lazy(() => MusicCreateNestedOneWithoutPullsInputObjectSchema),
     user: z.lazy(() => UserCreateNestedOneWithoutPullsInputObjectSchema),

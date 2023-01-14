@@ -3,12 +3,13 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { BandUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './BandUncheckedUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { AlbumUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
+import { ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { TagMapUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutArtistNestedInput.schema';
+import { PointUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutArtistNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -27,12 +28,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateWithoutBookmarksInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(
-        () =>
-          ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
-      )
-      .optional(),
     bands: z
       .lazy(() => BandUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema)
       .optional(),
@@ -51,8 +46,17 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateWithoutBookmarksInput> = z
         z.string().array(),
       ])
       .optional(),
+    participations: z
+      .lazy(
+        () =>
+          ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
+      )
+      .optional(),
     tagMaps: z
       .lazy(() => TagMapUncheckedUpdateManyWithoutArtistNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedUpdateManyWithoutArtistNestedInputObjectSchema)
       .optional(),
   })
   .strict();

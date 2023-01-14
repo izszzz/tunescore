@@ -3,6 +3,7 @@ import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdat
 import { IssueStatusSchema } from '../enums/IssueStatus.schema';
 import { EnumIssueStatusFieldUpdateOperationsInputObjectSchema } from './EnumIssueStatusFieldUpdateOperationsInput.schema';
 import { CommentUpdateManyWithoutIssueNestedInputObjectSchema } from './CommentUpdateManyWithoutIssueNestedInput.schema';
+import { PointUpdateManyWithoutIssueNestedInputObjectSchema } from './PointUpdateManyWithoutIssueNestedInput.schema';
 import { MusicUpdateOneRequiredWithoutIssuesNestedInputObjectSchema } from './MusicUpdateOneRequiredWithoutIssuesNestedInput.schema';
 import { UserUpdateOneRequiredWithoutIssuesNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutIssuesNestedInput.schema';
 
@@ -30,6 +31,9 @@ const Schema: z.ZodType<Prisma.IssueUpdateInput> = z
       .optional(),
     comments: z
       .lazy(() => CommentUpdateManyWithoutIssueNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUpdateManyWithoutIssueNestedInputObjectSchema)
       .optional(),
     music: z
       .lazy(() => MusicUpdateOneRequiredWithoutIssuesNestedInputObjectSchema)

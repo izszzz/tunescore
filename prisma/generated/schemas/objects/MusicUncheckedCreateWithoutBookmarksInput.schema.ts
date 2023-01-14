@@ -10,6 +10,8 @@ import { MusicCreatealbumIDsInputObjectSchema } from './MusicCreatealbumIDsInput
 import { ParticipationUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { IssueUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './IssueUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { PullUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './PullUncheckedCreateNestedManyWithoutMusicInput.schema';
+import { CartUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './CartUncheckedCreateNestedManyWithoutMusicInput.schema';
+import { PointUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './PointUncheckedCreateNestedManyWithoutMusicInput.schema';
 import { TagMapUncheckedCreateNestedManyWithoutMusicInputObjectSchema } from './TagMapUncheckedCreateNestedManyWithoutMusicInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -54,6 +56,12 @@ const Schema: z.ZodType<Prisma.MusicUncheckedCreateWithoutBookmarksInput> = z
       .optional(),
     pulls: z
       .lazy(() => PullUncheckedCreateNestedManyWithoutMusicInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartUncheckedCreateNestedManyWithoutMusicInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedCreateNestedManyWithoutMusicInputObjectSchema)
       .optional(),
     tagMaps: z
       .lazy(() => TagMapUncheckedCreateNestedManyWithoutMusicInputObjectSchema)

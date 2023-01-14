@@ -22,7 +22,7 @@ import type { NextPage } from "next";
 type Type = "music" | "album" | "band" | "artist";
 const Search: NextPage = () => {
   const [type, setType] = useState<Type>("music");
-  const session = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const { data } = match(type)
     .with("music", () =>

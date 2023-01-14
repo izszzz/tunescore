@@ -31,7 +31,7 @@ datasource db {
 // Necessary for Next auth
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
@@ -50,7 +50,7 @@ model Account {
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -70,6 +70,8 @@ model User {
   comments Comment[]
   bookmarks Bookmark[]
   notifications Notification[] 
+  carts Cart[]
+  points Point[]
 
   votes Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
@@ -120,7 +122,9 @@ model Music {
   participations Participation[]
   issues Issue[]
   pulls Pull[]
+  carts Cart[]
 
+  points Point[] @relation("MusicPoint")
   bookmarks Bookmark[] @relation("MusicBookmark")
   tagMaps TagMap[] @relation("MusicTagMap")
 }
@@ -141,6 +145,7 @@ model Album {
 
   bookmarks Bookmark[] @relation("AlbumBookmark")
   tagMaps TagMap[] @relation("AlbumTagMap")
+  points Point[] @relation("AlbumPoint")
 }
 
 model Artist {
@@ -148,16 +153,17 @@ model Artist {
   name Locale
   link LinkList?
 
-  participations Participation[]
-
   bands  Band[] @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
 
   albums Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
   albumIDs          String[] @db.ObjectId
 
+  participations Participation[]
+
   bookmarks Bookmark[] @relation("ArtistBookmark")
   tagMaps TagMap[] @relation("ArtistTagMap")
+  points Point[] @relation("ArtistPoint")
 }
 
 model Band {
@@ -165,15 +171,15 @@ model Band {
   name Locale
   link LinkList?
 
-  musics Music[]
-
   artists Artist[] @relation(fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
 
+  musics Music[]
   albums Album[]
 
   bookmarks Bookmark[] @relation("BandBookmark")
   tagMaps TagMap[] @relation("BandTagMap")
+  points Point[] @relation("BandPoint")
 }
 
 model Issue{
@@ -183,6 +189,7 @@ model Issue{
   status IssueStatus @default(OPEN)
 
   comments Comment[] @relation("IssueComment")
+  points Point[] @relation("IssuePoint")
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
@@ -200,6 +207,7 @@ model Pull{
   vote Vote?
 
   comments Comment[] @relation("PullComment")
+  points Point[] @relation("PullPoint")
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
@@ -311,8 +319,6 @@ model TagMap{
   @@unique([resourceId, tagId, resourceType])
 }
 
-
-// https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
 model Notification{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -328,6 +334,53 @@ model Notification{
 
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
+}
+
+model Cart {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  music Music @relation(fields: [musicId], references:[id])
+  musicId String @db.ObjectId
+}
+
+model Point {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  amount Int
+  actionType PointActionType
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  music Music? @relation("MusicPoint", fields: [resourceId], references: [id])
+  band Band? @relation("BandPoint",fields: [resourceId], references: [id])
+  album Album? @relation("AlbumPoint",fields: [resourceId], references: [id])
+  artist Artist? @relation("ArtistPoint",fields: [resourceId], references: [id])
+  pull Pull? @relation("PullPoint", fields: [resourceId], references: [id])
+  issue Issue? @relation("IssuePoint", fields: [resourceId], references: [id])
+
+  resourceId String @db.ObjectId
+  resourceType PointType
+
+  createdAt DateTime @default(now())
+}
+
+enum PointActionType{
+  PURCHASE
+  CONSUME
+  CONTRIBUTE
+}
+
+enum PointType{
+  Music
+  Band
+  Artist
+  Album
+  Pull
+  Issue
 }
 
 enum ResourceType{

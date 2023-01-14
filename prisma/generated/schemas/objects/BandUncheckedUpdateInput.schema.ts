@@ -3,12 +3,13 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { MusicUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { ArtistUncheckedUpdateManyWithoutBandsNestedInputObjectSchema } from './ArtistUncheckedUpdateManyWithoutBandsNestedInput.schema';
 import { BandUpdateartistIDsInputObjectSchema } from './BandUpdateartistIDsInput.schema';
+import { MusicUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { AlbumUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { TagMapUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutBandNestedInput.schema';
+import { PointUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutBandNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -27,9 +28,6 @@ const Schema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z
       ])
       .optional()
       .nullable(),
-    musics: z
-      .lazy(() => MusicUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
-      .optional(),
     artists: z
       .lazy(() => ArtistUncheckedUpdateManyWithoutBandsNestedInputObjectSchema)
       .optional(),
@@ -39,6 +37,9 @@ const Schema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z
         z.string().array(),
       ])
       .optional(),
+    musics: z
+      .lazy(() => MusicUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
+      .optional(),
     albums: z
       .lazy(() => AlbumUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
@@ -47,6 +48,9 @@ const Schema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z
       .optional(),
     tagMaps: z
       .lazy(() => TagMapUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
   })
   .strict();

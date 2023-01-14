@@ -4,12 +4,13 @@ import { LocaleCompositeFilterObjectSchema } from './LocaleCompositeFilter.schem
 import { LocaleObjectEqualityInputObjectSchema } from './LocaleObjectEqualityInput.schema';
 import { LinkListNullableCompositeFilterObjectSchema } from './LinkListNullableCompositeFilter.schema';
 import { LinkListObjectEqualityInputObjectSchema } from './LinkListObjectEqualityInput.schema';
-import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.schema';
 import { ArtistListRelationFilterObjectSchema } from './ArtistListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
+import { MusicListRelationFilterObjectSchema } from './MusicListRelationFilter.schema';
 import { AlbumListRelationFilterObjectSchema } from './AlbumListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 import { TagMapListRelationFilterObjectSchema } from './TagMapListRelationFilter.schema';
+import { PointListRelationFilterObjectSchema } from './PointListRelationFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -47,12 +48,13 @@ const Schema: z.ZodType<Prisma.BandWhereInput> = z
       ])
       .optional()
       .nullable(),
-    musics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),
     artists: z.lazy(() => ArtistListRelationFilterObjectSchema).optional(),
     artistIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
+    musics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),
     albums: z.lazy(() => AlbumListRelationFilterObjectSchema).optional(),
     bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
     tagMaps: z.lazy(() => TagMapListRelationFilterObjectSchema).optional(),
+    points: z.lazy(() => PointListRelationFilterObjectSchema).optional(),
   })
   .strict();
 

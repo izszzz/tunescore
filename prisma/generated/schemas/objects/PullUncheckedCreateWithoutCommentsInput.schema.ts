@@ -3,6 +3,7 @@ import { PullScoreCreateEnvelopeInputObjectSchema } from './PullScoreCreateEnvel
 import { PullScoreCreateInputObjectSchema } from './PullScoreCreateInput.schema';
 import { PullStatusSchema } from '../enums/PullStatus.schema';
 import { VoteUncheckedCreateNestedOneWithoutPullInputObjectSchema } from './VoteUncheckedCreateNestedOneWithoutPullInput.schema';
+import { PointUncheckedCreateNestedManyWithoutPullInputObjectSchema } from './PointUncheckedCreateNestedManyWithoutPullInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -18,6 +19,9 @@ const Schema: z.ZodType<Prisma.PullUncheckedCreateWithoutCommentsInput> = z
     status: z.lazy(() => PullStatusSchema).optional(),
     vote: z
       .lazy(() => VoteUncheckedCreateNestedOneWithoutPullInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedCreateNestedManyWithoutPullInputObjectSchema)
       .optional(),
     musicId: z.string(),
     userId: z.string(),

@@ -3,11 +3,12 @@ import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { MusicUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './MusicUncheckedCreateNestedManyWithoutBandInput.schema';
 import { ArtistUncheckedCreateNestedManyWithoutBandsInputObjectSchema } from './ArtistUncheckedCreateNestedManyWithoutBandsInput.schema';
 import { BandCreateartistIDsInputObjectSchema } from './BandCreateartistIDsInput.schema';
+import { MusicUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './MusicUncheckedCreateNestedManyWithoutBandInput.schema';
 import { AlbumUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './AlbumUncheckedCreateNestedManyWithoutBandInput.schema';
 import { TagMapUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './TagMapUncheckedCreateNestedManyWithoutBandInput.schema';
+import { PointUncheckedCreateNestedManyWithoutBandInputObjectSchema } from './PointUncheckedCreateNestedManyWithoutBandInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -25,9 +26,6 @@ const Schema: z.ZodType<Prisma.BandUncheckedCreateWithoutBookmarksInput> = z
       ])
       .optional()
       .nullable(),
-    musics: z
-      .lazy(() => MusicUncheckedCreateNestedManyWithoutBandInputObjectSchema)
-      .optional(),
     artists: z
       .lazy(() => ArtistUncheckedCreateNestedManyWithoutBandsInputObjectSchema)
       .optional(),
@@ -37,11 +35,17 @@ const Schema: z.ZodType<Prisma.BandUncheckedCreateWithoutBookmarksInput> = z
         z.string().array(),
       ])
       .optional(),
+    musics: z
+      .lazy(() => MusicUncheckedCreateNestedManyWithoutBandInputObjectSchema)
+      .optional(),
     albums: z
       .lazy(() => AlbumUncheckedCreateNestedManyWithoutBandInputObjectSchema)
       .optional(),
     tagMaps: z
       .lazy(() => TagMapUncheckedCreateNestedManyWithoutBandInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedCreateNestedManyWithoutBandInputObjectSchema)
       .optional(),
   })
   .strict();

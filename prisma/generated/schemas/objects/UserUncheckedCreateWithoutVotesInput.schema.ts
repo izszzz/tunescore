@@ -7,6 +7,8 @@ import { PullUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './Pul
 import { CommentUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './CommentUncheckedCreateNestedManyWithoutUserInput.schema';
 import { BookmarkUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutUserInput.schema';
 import { NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './NotificationUncheckedCreateNestedManyWithoutUserInput.schema';
+import { CartUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './CartUncheckedCreateNestedManyWithoutUserInput.schema';
+import { PointUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './PointUncheckedCreateNestedManyWithoutUserInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
 import { FollowUncheckedCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowUncheckedCreateNestedManyWithoutFollowerInput.schema';
 import { FollowUncheckedCreateNestedManyWithoutFollowingInputObjectSchema } from './FollowUncheckedCreateNestedManyWithoutFollowingInput.schema';
@@ -45,6 +47,12 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutVotesInput> = z
       .lazy(
         () => NotificationUncheckedCreateNestedManyWithoutUserInputObjectSchema,
       )
+      .optional(),
+    carts: z
+      .lazy(() => CartUncheckedCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     voteIDs: z
       .union([

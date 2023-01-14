@@ -3,12 +3,13 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUpdateManyWithoutArtistNestedInput.schema';
 import { BandUpdateManyWithoutArtistsNestedInputObjectSchema } from './BandUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { AlbumUpdateManyWithoutArtistsNestedInputObjectSchema } from './AlbumUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
+import { ParticipationUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUpdateManyWithoutArtistNestedInput.schema';
 import { BookmarkUpdateManyWithoutArtistNestedInputObjectSchema } from './BookmarkUpdateManyWithoutArtistNestedInput.schema';
+import { PointUpdateManyWithoutArtistNestedInputObjectSchema } from './PointUpdateManyWithoutArtistNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -27,9 +28,6 @@ const Schema: z.ZodType<Prisma.ArtistUpdateWithoutTagMapsInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(() => ParticipationUpdateManyWithoutArtistNestedInputObjectSchema)
-      .optional(),
     bands: z
       .lazy(() => BandUpdateManyWithoutArtistsNestedInputObjectSchema)
       .optional(),
@@ -48,8 +46,14 @@ const Schema: z.ZodType<Prisma.ArtistUpdateWithoutTagMapsInput> = z
         z.string().array(),
       ])
       .optional(),
+    participations: z
+      .lazy(() => ParticipationUpdateManyWithoutArtistNestedInputObjectSchema)
+      .optional(),
     bookmarks: z
       .lazy(() => BookmarkUpdateManyWithoutArtistNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUpdateManyWithoutArtistNestedInputObjectSchema)
       .optional(),
   })
   .strict();

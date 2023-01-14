@@ -7,6 +7,8 @@ import { PullCreateNestedManyWithoutUserInputObjectSchema } from './PullCreateNe
 import { CommentCreateNestedManyWithoutUserInputObjectSchema } from './CommentCreateNestedManyWithoutUserInput.schema';
 import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
+import { CartCreateNestedManyWithoutUserInputObjectSchema } from './CartCreateNestedManyWithoutUserInput.schema';
+import { PointCreateNestedManyWithoutUserInputObjectSchema } from './PointCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
 import { FollowCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowCreateNestedManyWithoutFollowerInput.schema';
@@ -43,6 +45,12 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutFollowingInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     votes: z
       .lazy(() => VoteCreateNestedManyWithoutUsersInputObjectSchema)

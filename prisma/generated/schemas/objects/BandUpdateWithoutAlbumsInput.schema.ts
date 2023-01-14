@@ -3,11 +3,12 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { MusicUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUpdateManyWithoutBandNestedInput.schema';
 import { ArtistUpdateManyWithoutBandsNestedInputObjectSchema } from './ArtistUpdateManyWithoutBandsNestedInput.schema';
 import { BandUpdateartistIDsInputObjectSchema } from './BandUpdateartistIDsInput.schema';
+import { MusicUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUpdateManyWithoutBandNestedInput.schema';
 import { BookmarkUpdateManyWithoutBandNestedInputObjectSchema } from './BookmarkUpdateManyWithoutBandNestedInput.schema';
 import { TagMapUpdateManyWithoutBandNestedInputObjectSchema } from './TagMapUpdateManyWithoutBandNestedInput.schema';
+import { PointUpdateManyWithoutBandNestedInputObjectSchema } from './PointUpdateManyWithoutBandNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -26,9 +27,6 @@ const Schema: z.ZodType<Prisma.BandUpdateWithoutAlbumsInput> = z
       ])
       .optional()
       .nullable(),
-    musics: z
-      .lazy(() => MusicUpdateManyWithoutBandNestedInputObjectSchema)
-      .optional(),
     artists: z
       .lazy(() => ArtistUpdateManyWithoutBandsNestedInputObjectSchema)
       .optional(),
@@ -38,11 +36,17 @@ const Schema: z.ZodType<Prisma.BandUpdateWithoutAlbumsInput> = z
         z.string().array(),
       ])
       .optional(),
+    musics: z
+      .lazy(() => MusicUpdateManyWithoutBandNestedInputObjectSchema)
+      .optional(),
     bookmarks: z
       .lazy(() => BookmarkUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
     tagMaps: z
       .lazy(() => TagMapUpdateManyWithoutBandNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
   })
   .strict();

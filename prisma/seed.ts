@@ -20,6 +20,7 @@ import {
   MusicOwendByLyrist,
   MusicOwendByUser,
   OriginalMusicFactory,
+  PaidMusicFactory,
   ScoreMusicFactory,
   YoutubeMusic,
 } from "./fixtures/music";
@@ -70,6 +71,7 @@ async function main() {
 
   // Music
   await MusicFactory;
+  await PaidMusicFactory;
   await OriginalMusicFactory;
   await CopyMusicFactory;
   await ScoreMusicFactory;

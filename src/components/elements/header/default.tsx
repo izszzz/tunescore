@@ -18,6 +18,7 @@ import setLocale from "../../../helpers/locale";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
+import CartIconButton from "../button/icon/cart";
 import Header from ".";
 
 const DefaultHeader = () => {
@@ -93,6 +94,7 @@ const DefaultHeader = () => {
                 ))
                 .with({ status: "authenticated" }, () => (
                   <>
+                    <CartIconButton onClick={() => router.push("/cart")} />
                     <PlusMenuManager />
                     <NotificationsMenuManager />
                     <AvatarMenuManager />

@@ -455,6 +455,7 @@ export * from './objects/NotificationCountOrderByAggregateInput.schema';
 export * from './objects/NotificationMaxOrderByAggregateInput.schema';
 export * from './objects/NotificationMinOrderByAggregateInput.schema';
 export * from './objects/EnumNotificationTypeWithAggregatesFilter.schema';
+export * from './objects/CartUserIdMusicIdCompoundUniqueInput.schema';
 export * from './objects/CartCountOrderByAggregateInput.schema';
 export * from './objects/CartMaxOrderByAggregateInput.schema';
 export * from './objects/CartMinOrderByAggregateInput.schema';

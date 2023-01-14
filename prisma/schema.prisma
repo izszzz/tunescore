@@ -344,6 +344,7 @@ model Cart {
 
   music Music @relation(fields: [musicId], references:[id])
   musicId String @db.ObjectId
+  @@unique([userId, musicId])
 }
 
 model Point {

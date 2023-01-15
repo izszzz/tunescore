@@ -101,6 +101,7 @@ CLOSE CLOSE
     String email  "nullable"
     DateTime emailVerified  "nullable"
     String image  "nullable"
+    String stripeCustomerId  "nullable"
     }
   
 

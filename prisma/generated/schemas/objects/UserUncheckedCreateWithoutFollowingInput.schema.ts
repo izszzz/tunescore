@@ -22,6 +22,7 @@ const Schema: z.ZodType<Prisma.UserUncheckedCreateWithoutFollowingInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    stripeCustomerId: z.string().optional().nullable(),
     accounts: z
       .lazy(() => AccountUncheckedCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),

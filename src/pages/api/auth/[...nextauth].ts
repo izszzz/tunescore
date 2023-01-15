@@ -6,6 +6,7 @@ import SpotifyProvider from "next-auth/providers/spotify";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
+import { stripe } from "../../../server/common/stripe";
 
 console.log(env);
 export const authOptions: NextAuthOptions = {
@@ -16,6 +17,23 @@ export const authOptions: NextAuthOptions = {
         session.user = user;
       }
       return session;
+    },
+  },
+  events: {
+    createUser: async ({ user }) => {
+      if (user.email) {
+        const customer = await stripe.customers.create({
+          email: user.email,
+        });
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            stripeCustomerId: customer.id,
+          },
+        });
+      }
     },
   },
   // Configure one or more authentication providers

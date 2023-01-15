@@ -47,6 +47,13 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMusicsInput> = z
       ])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([
+        z.string(),
+        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     accounts: z
       .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),

@@ -55,6 +55,10 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
       .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     accounts: z.lazy(() => AccountListRelationFilterObjectSchema).optional(),
     sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional(),
     musics: z.lazy(() => MusicListRelationFilterObjectSchema).optional(),

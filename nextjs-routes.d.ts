@@ -15,6 +15,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/restricted">
     | StaticRoute<"/api/spotify/search">
     | DynamicRoute<"/api/spotify/tracks/[id]", { "id": string }>
+    | StaticRoute<"/api/stripe/cards">
     | DynamicRoute<"/api/trpc/[trpc]", { "trpc": string }>
     | DynamicRoute<"/api/youtube/channels/[id]", { "id": string }>
     | StaticRoute<"/api/youtube/search">
@@ -46,12 +47,12 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/scores/[id]", { "id": string }>
     | StaticRoute<"/scores">
     | StaticRoute<"/search">
+    | StaticRoute<"/settings">
     | DynamicRoute<"/users/[id]/bookmarks", { "id": string }>
     | DynamicRoute<"/users/[id]/followers", { "id": string }>
     | DynamicRoute<"/users/[id]/following", { "id": string }>
     | DynamicRoute<"/users/[id]", { "id": string }>
     | DynamicRoute<"/users/[id]/repositories", { "id": string }>
-    | DynamicRoute<"/users/[id]/settings", { "id": string }>
     | StaticRoute<"/users">;
 
   interface StaticRoute<Pathname> {

@@ -48,6 +48,13 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z
       ])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([
+        z.string(),
+        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     accounts: z
       .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),

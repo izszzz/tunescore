@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS=--max-old-space-size=6144 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -75,6 +75,7 @@
     "recoil": "^0.7.6",
     "split.js": "^1.6.5",
     "spotify-web-api-node": "^5.0.2",
+    "stripe": "^11.6.0",
     "superjson": "^1.10.0",
     "trpc-shield": "^0.3.0",
     "ts-node": "^10.9.1",

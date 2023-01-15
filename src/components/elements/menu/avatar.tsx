@@ -40,11 +40,7 @@ const AvatarMenuManager = () => {
           key="settings"
           onClick={() => {
             handleClose();
-            id &&
-              router.push({
-                pathname: `/users/[id]/settings`,
-                query: { id },
-              });
+            router.push("/settings");
           }}
         >
           Settings

@@ -1,18 +1,17 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
-import { useEffect } from "react";
-import axios from "axios";
-import { trpc } from "../utils/trpc";
-import UserLayout from "../components/layouts/show/user";
-import SingleRowForm from "../components/elements/form/single_row";
-import DeleteAlert from "../components/elements/alert/delete";
-import { userShowQuery } from "../paths/users/[id]";
-import GoogleButton from "../components/elements/button/providers/google";
-import SpotifyButton from "../components/elements/button/providers/spotify";
-import { useProviders } from "../hooks/useProvider";
-import type { UserLayoutProps } from "../components/layouts/show/user";
+import { trpc } from "../../utils/trpc";
+import UserLayout from "../../components/layouts/show/user";
+import SingleRowForm from "../../components/elements/form/single_row";
+import DeleteAlert from "../../components/elements/alert/delete";
+import { userShowQuery } from "../../paths/users/[id]";
+import GoogleButton from "../../components/elements/button/providers/google";
+import SpotifyButton from "../../components/elements/button/providers/spotify";
+import { useProviders } from "../../hooks/useProvider";
+import type { UserLayoutProps } from "../../components/layouts/show/user";
 import type { NextPage } from "next";
+import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter(),
@@ -24,12 +23,6 @@ const SettingsUser: NextPage = () => {
       onSuccess: () => router.push("/"),
       onError: (error) => console.log(error),
     });
-  useEffect(() => {
-    (async () => {
-      console.log("aaaaaaaaaaaaaaaaaa");
-      await axios.get("/api/stripe/cards").then((res) => console.log(res));
-    })();
-  }, []);
   if (!data) return <></>;
   const userData = data as UserLayoutProps["data"],
     authedProviders = userData.accounts.map((account) => account.provider);

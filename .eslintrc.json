@@ -13,22 +13,5 @@
     "plugin:import/recommended",
     "prettier"
   ],
-  "rules": {
-    "@typescript-eslint/consistent-type-imports": "warn",
-    "import/order": [
-      "warn",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object",
-          "type"
-        ]
-      }
-    ]
-  }
+  "rules": {}
 }

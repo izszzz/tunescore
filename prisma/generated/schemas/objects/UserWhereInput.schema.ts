@@ -11,6 +11,7 @@ import { CommentListRelationFilterObjectSchema } from './CommentListRelationFilt
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 import { NotificationListRelationFilterObjectSchema } from './NotificationListRelationFilter.schema';
 import { CartListRelationFilterObjectSchema } from './CartListRelationFilter.schema';
+import { PurchaseListRelationFilterObjectSchema } from './PurchaseListRelationFilter.schema';
 import { PointListRelationFilterObjectSchema } from './PointListRelationFilter.schema';
 import { VoteListRelationFilterObjectSchema } from './VoteListRelationFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
@@ -70,6 +71,7 @@ const Schema: z.ZodType<Prisma.UserWhereInput> = z
       .lazy(() => NotificationListRelationFilterObjectSchema)
       .optional(),
     carts: z.lazy(() => CartListRelationFilterObjectSchema).optional(),
+    purchases: z.lazy(() => PurchaseListRelationFilterObjectSchema).optional(),
     points: z.lazy(() => PointListRelationFilterObjectSchema).optional(),
     votes: z.lazy(() => VoteListRelationFilterObjectSchema).optional(),
     voteIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),

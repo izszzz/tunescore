@@ -13,6 +13,7 @@ import { ParticipationCreateNestedManyWithoutMusicInputObjectSchema } from './Pa
 import { IssueCreateNestedManyWithoutMusicInputObjectSchema } from './IssueCreateNestedManyWithoutMusicInput.schema';
 import { PullCreateNestedManyWithoutMusicInputObjectSchema } from './PullCreateNestedManyWithoutMusicInput.schema';
 import { CartCreateNestedManyWithoutMusicInputObjectSchema } from './CartCreateNestedManyWithoutMusicInput.schema';
+import { PurchaseCreateNestedManyWithoutMusicInputObjectSchema } from './PurchaseCreateNestedManyWithoutMusicInput.schema';
 import { PointCreateNestedManyWithoutMusicInputObjectSchema } from './PointCreateNestedManyWithoutMusicInput.schema';
 import { BookmarkCreateNestedManyWithoutMusicInputObjectSchema } from './BookmarkCreateNestedManyWithoutMusicInput.schema';
 
@@ -62,6 +63,9 @@ const Schema: z.ZodType<Prisma.MusicCreateWithoutTagMapsInput> = z
       .optional(),
     carts: z
       .lazy(() => CartCreateNestedManyWithoutMusicInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseCreateNestedManyWithoutMusicInputObjectSchema)
       .optional(),
     points: z
       .lazy(() => PointCreateNestedManyWithoutMusicInputObjectSchema)

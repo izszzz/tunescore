@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Cards from "react-credit-cards";
 import Grid from "@mui/material/Grid";
 import {
@@ -11,25 +11,28 @@ import { loadStripe } from "@stripe/stripe-js";
 import { trpc } from "../../../utils/trpc";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { env } from "../../../env/client.mjs";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 
-const stripePromise = loadStripe(
-  "pk_test_51MQ3NwKLCyNljcxK2UkH4wUKABfXVEmAZS74yLjqQuDj0i18321OExA0dzkb7RxJ11x9E4Dm1t7BUjSlMsEULJ2N003Xj5fwLx"
-);
+const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_CLIENT_ID);
 const CreditForm = () => {
-  const [clientSecret, setClientSecret] = useState<string | null>(null),
-    createSetupIntent = trpc.stripe.createSetupIntent.useMutation({
-      onSuccess: (data) => setClientSecret(data.client_secret),
-    }),
+  const createSetupIntent = trpc.stripe.createSetupIntent.useMutation(),
+    cancelSetupIntent = trpc.stripe.cancelSetupIntent.useMutation(),
     { data: setupIntents } = trpc.stripe.setupIntents.useQuery(),
     { data: paymentMethods } = trpc.stripe.paymentMethods.useQuery();
-
+  console.log(setupIntents);
   useEffect(() => {
-    setupIntents &&
-      setupIntents[0] &&
-      setClientSecret(setupIntents[0].client_secret);
-  }, [setupIntents]);
+    return () => {
+      (async () => {
+        createSetupIntent.data?.client_secret &&
+          (await cancelSetupIntent.mutate(
+            createSetupIntent.data.client_secret
+          ));
+      })();
+    };
+  }, [cancelSetupIntent, createSetupIntent.data?.client_secret]);
 
-  if (!setupIntents || !paymentMethods) return <>loading</>;
+  if (!paymentMethods) return <>loading</>;
   return (
     <Box my={3}>
       <Grid container my={3} spacing={3}>
@@ -46,11 +49,11 @@ const CreditForm = () => {
           </Grid>
         ))}
       </Grid>
-      {clientSecret ? (
+      {createSetupIntent.data?.client_secret ? (
         <Elements
           stripe={stripePromise}
           options={{
-            clientSecret,
+            clientSecret: createSetupIntent.data.client_secret,
           }}
         >
           <CheckoutForm />
@@ -58,6 +61,15 @@ const CreditForm = () => {
       ) : (
         <Button onClick={() => createSetupIntent.mutate()}>Add</Button>
       )}
+      <FormContainer
+        onSuccess={(data) => {
+          console.log(data);
+          cancelSetupIntent.mutate(data.id);
+        }}
+      >
+        <TextFieldElement name="id" />
+        <Button type="submit">Cancel</Button>
+      </FormContainer>
     </Box>
   );
 };
@@ -72,7 +84,7 @@ const CheckoutForm = () => {
 
     const result = await stripe.confirmSetup({
       elements,
-      confirmParams: { return_url: "http://localhost:3000" },
+      confirmParams: { return_url: "http://localhost:3000/settings/credit" },
     });
 
     if (result.error) {

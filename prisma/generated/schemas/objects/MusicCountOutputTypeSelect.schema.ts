@@ -9,6 +9,7 @@ const Schema: z.ZodType<Prisma.MusicCountOutputTypeSelect> = z
     issues: z.boolean().optional(),
     pulls: z.boolean().optional(),
     carts: z.boolean().optional(),
+    purchases: z.boolean().optional(),
     points: z.boolean().optional(),
     bookmarks: z.boolean().optional(),
     tagMaps: z.boolean().optional(),

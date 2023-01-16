@@ -7,6 +7,7 @@ import { PullCreateNestedManyWithoutUserInputObjectSchema } from './PullCreateNe
 import { CommentCreateNestedManyWithoutUserInputObjectSchema } from './CommentCreateNestedManyWithoutUserInput.schema';
 import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
+import { PurchaseCreateNestedManyWithoutUserInputObjectSchema } from './PurchaseCreateNestedManyWithoutUserInput.schema';
 import { PointCreateNestedManyWithoutUserInputObjectSchema } from './PointCreateNestedManyWithoutUserInput.schema';
 import { VoteCreateNestedManyWithoutUsersInputObjectSchema } from './VoteCreateNestedManyWithoutUsersInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
@@ -46,6 +47,9 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutCartsInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     points: z
       .lazy(() => PointCreateNestedManyWithoutUserInputObjectSchema)

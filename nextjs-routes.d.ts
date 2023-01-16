@@ -44,6 +44,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/musics/[id]/settings", { "id": string }>
     | StaticRoute<"/musics">
     | StaticRoute<"/musics/new">
+    | StaticRoute<"/pay">
     | DynamicRoute<"/scores/[id]/edit", { "id": string }>
     | DynamicRoute<"/scores/[id]", { "id": string }>
     | StaticRoute<"/scores">

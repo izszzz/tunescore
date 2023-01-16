@@ -33,4 +33,44 @@ export const stripeRouter = router({
       .listPaymentMethods(user.stripeCustomerId)
       .then(({ data }) => data);
   }),
+  createPaymentIntent: publicProcedure
+    .input(
+      z.object({
+        amount: z.number(),
+        paymentMethodId: z.string(),
+        musicIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { amount, paymentMethodId, musicIds } = input,
+        user = AuthenticateUser(ctx.session),
+        paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+      return await musicIds.map(
+        async (musicId) =>
+          await stripe.paymentIntents
+            .create({
+              amount,
+              currency: "jpy",
+              customer: user.stripeCustomerId,
+              payment_method: paymentMethod.id,
+              metadata: {
+                musicId,
+              },
+            })
+            .then((data) => {
+              // delete cart
+              ctx.prisma.cart.delete({ where: { id: musicId } });
+              // add purchase
+              ctx.prisma.purchase.create({
+                data: {
+                  music: { connect: { id: musicId } },
+                  user: { connect: { id: user.id } },
+                  stripePaymentIntentId: data.id,
+                },
+              });
+              return data;
+            })
+            .catch((err) => err)
+      );
+    }),
 });

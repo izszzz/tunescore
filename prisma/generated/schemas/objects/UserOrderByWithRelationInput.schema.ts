@@ -9,6 +9,7 @@ import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrder
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
 import { CartOrderByRelationAggregateInputObjectSchema } from './CartOrderByRelationAggregateInput.schema';
+import { PurchaseOrderByRelationAggregateInputObjectSchema } from './PurchaseOrderByRelationAggregateInput.schema';
 import { PointOrderByRelationAggregateInputObjectSchema } from './PointOrderByRelationAggregateInput.schema';
 import { VoteOrderByRelationAggregateInputObjectSchema } from './VoteOrderByRelationAggregateInput.schema';
 import { FollowOrderByRelationAggregateInputObjectSchema } from './FollowOrderByRelationAggregateInput.schema';
@@ -49,6 +50,9 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
       .optional(),
     carts: z
       .lazy(() => CartOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseOrderByRelationAggregateInputObjectSchema)
       .optional(),
     points: z
       .lazy(() => PointOrderByRelationAggregateInputObjectSchema)

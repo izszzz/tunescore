@@ -20,6 +20,7 @@ import { ParticipationListRelationFilterObjectSchema } from './ParticipationList
 import { IssueListRelationFilterObjectSchema } from './IssueListRelationFilter.schema';
 import { PullListRelationFilterObjectSchema } from './PullListRelationFilter.schema';
 import { CartListRelationFilterObjectSchema } from './CartListRelationFilter.schema';
+import { PurchaseListRelationFilterObjectSchema } from './PurchaseListRelationFilter.schema';
 import { PointListRelationFilterObjectSchema } from './PointListRelationFilter.schema';
 import { BookmarkListRelationFilterObjectSchema } from './BookmarkListRelationFilter.schema';
 import { TagMapListRelationFilterObjectSchema } from './TagMapListRelationFilter.schema';
@@ -110,6 +111,7 @@ const Schema: z.ZodType<Prisma.MusicWhereInput> = z
     issues: z.lazy(() => IssueListRelationFilterObjectSchema).optional(),
     pulls: z.lazy(() => PullListRelationFilterObjectSchema).optional(),
     carts: z.lazy(() => CartListRelationFilterObjectSchema).optional(),
+    purchases: z.lazy(() => PurchaseListRelationFilterObjectSchema).optional(),
     points: z.lazy(() => PointListRelationFilterObjectSchema).optional(),
     bookmarks: z.lazy(() => BookmarkListRelationFilterObjectSchema).optional(),
     tagMaps: z.lazy(() => TagMapListRelationFilterObjectSchema).optional(),

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { IssueStatusSchema } from '../enums/IssueStatus.schema';
-import { PointCreateNestedManyWithoutIssueInputObjectSchema } from './PointCreateNestedManyWithoutIssueInput.schema';
 import { MusicCreateNestedOneWithoutIssuesInputObjectSchema } from './MusicCreateNestedOneWithoutIssuesInput.schema';
 import { UserCreateNestedOneWithoutIssuesInputObjectSchema } from './UserCreateNestedOneWithoutIssuesInput.schema';
 
@@ -12,9 +11,6 @@ const Schema: z.ZodType<Prisma.IssueCreateWithoutCommentsInput> = z
     title: z.string(),
     body: z.string(),
     status: z.lazy(() => IssueStatusSchema).optional(),
-    points: z
-      .lazy(() => PointCreateNestedManyWithoutIssueInputObjectSchema)
-      .optional(),
     music: z.lazy(() => MusicCreateNestedOneWithoutIssuesInputObjectSchema),
     user: z.lazy(() => UserCreateNestedOneWithoutIssuesInputObjectSchema),
   })

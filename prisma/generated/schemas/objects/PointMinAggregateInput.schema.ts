@@ -8,8 +8,6 @@ const Schema: z.ZodType<Prisma.PointMinAggregateInputType> = z
     amount: z.literal(true).optional(),
     actionType: z.literal(true).optional(),
     userId: z.literal(true).optional(),
-    resourceId: z.literal(true).optional(),
-    resourceType: z.literal(true).optional(),
     createdAt: z.literal(true).optional(),
   })
   .strict();

@@ -34,43 +34,50 @@ export const stripeRouter = router({
       .then(({ data }) => data);
   }),
   createPaymentIntent: publicProcedure
-    .input(
-      z.object({
-        amount: z.number(),
-        paymentMethodId: z.string(),
-        musicIds: z.array(z.string()),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { amount, paymentMethodId, musicIds } = input,
-        user = AuthenticateUser(ctx.session),
-        paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
-      return await musicIds.map(
-        async (musicId) =>
-          await stripe.paymentIntents
-            .create({
-              amount,
-              currency: "jpy",
-              customer: user.stripeCustomerId,
-              payment_method: paymentMethod.id,
-              metadata: {
-                musicId,
-              },
-            })
-            .then((data) => {
-              // delete cart
-              ctx.prisma.cart.delete({ where: { id: musicId } });
-              // add purchase
-              ctx.prisma.purchase.create({
-                data: {
-                  music: { connect: { id: musicId } },
-                  user: { connect: { id: user.id } },
-                  stripePaymentIntentId: data.id,
-                },
-              });
-              return data;
-            })
-            .catch((err) => err)
-      );
+    .input(z.string())
+    .mutation(async ({ ctx: { session, prisma }, input }) => {
+      const user = AuthenticateUser(session),
+        paymentMethod = await stripe.paymentMethods.retrieve(input),
+        carts = await prisma.cart.findMany({
+          where: {
+            user: { id: user.id },
+          },
+          include: {
+            music: true,
+          },
+        }),
+        // get cart
+        musics = carts.map((cart) => cart.music),
+        sum = musics.reduce((sum, music) => sum + (music.price || 0), 0);
+
+      carts.forEach(async (cart) => {
+        try {
+          const data = await stripe.paymentIntents.create({
+            amount: sum,
+            currency: "jpy",
+            customer: user.stripeCustomerId,
+            payment_method: paymentMethod.id,
+            metadata: {
+              musicId: cart.music.id,
+            },
+          });
+
+          // delete cart
+          await prisma.cart.delete({ where: { id: cart.id } });
+
+          // add purchase
+          prisma.purchase.create({
+            data: {
+              music: { connect: { id: cart.music.id } },
+              user: { connect: { id: user.id } },
+              stripePaymentIntentId: data.id,
+            },
+          });
+
+          return data;
+        } catch (err) {
+          return err;
+        }
+      });
     }),
 });

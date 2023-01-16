@@ -9,7 +9,6 @@ import { AlbumUncheckedCreateNestedManyWithoutArtistsInputObjectSchema } from '.
 import { ArtistCreatealbumIDsInputObjectSchema } from './ArtistCreatealbumIDsInput.schema';
 import { ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutArtistInput.schema';
 import { BookmarkUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutArtistInput.schema';
-import { PointUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './PointUncheckedCreateNestedManyWithoutArtistInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -55,9 +54,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedCreateWithoutTagMapsInput> = z
       .lazy(
         () => BookmarkUncheckedCreateNestedManyWithoutArtistInputObjectSchema,
       )
-      .optional(),
-    points: z
-      .lazy(() => PointUncheckedCreateNestedManyWithoutArtistInputObjectSchema)
       .optional(),
   })
   .strict();

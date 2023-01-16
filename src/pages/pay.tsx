@@ -15,10 +15,10 @@ const Pay: NextPage = () => {
   return (
     <DefaultSingleColumnLayout contained>
       <Typography>Pay</Typography>
-      <FormContainer>
+      <FormContainer onSuccess={({ id }) => createPaymentIntent.mutate(id)}>
         <RadioButtonGroup
           label="Payment Methods"
-          name="payment_method"
+          name="id"
           options={paymentMethods.map((paymentMethod) => ({
             id: paymentMethod.id,
             label: (
@@ -33,18 +33,19 @@ const Pay: NextPage = () => {
             ),
           }))}
         />
+        <MusicLists data={data} />
+        合計: {data.reduce((sum, data) => sum + (data.price || 0), 0)}
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          loading={createPaymentIntent.isLoading}
+          disableElevation
+          fullWidth
+        >
+          {" "}
+          注文する
+        </LoadingButton>
       </FormContainer>
-      <MusicLists data={data} />
-      合計: {data.reduce((sum, data) => sum + (data.price || 0), 0)}
-      <LoadingButton
-        onClick={() => createPaymentIntent.mutate()}
-        variant="contained"
-        disableElevation
-        fullWidth
-      >
-        {" "}
-        注文する
-      </LoadingButton>
     </DefaultSingleColumnLayout>
   );
 };

@@ -3,8 +3,6 @@ import { StringFilterObjectSchema } from './StringFilter.schema';
 import { IntFilterObjectSchema } from './IntFilter.schema';
 import { EnumPointActionTypeFilterObjectSchema } from './EnumPointActionTypeFilter.schema';
 import { PointActionTypeSchema } from '../enums/PointActionType.schema';
-import { EnumPointTypeFilterObjectSchema } from './EnumPointTypeFilter.schema';
-import { PointTypeSchema } from '../enums/PointType.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -41,15 +39,6 @@ const Schema: z.ZodType<Prisma.PointScalarWhereInput> = z
       .optional(),
     userId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
-    resourceId: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
-    resourceType: z
-      .union([
-        z.lazy(() => EnumPointTypeFilterObjectSchema),
-        z.lazy(() => PointTypeSchema),
-      ])
       .optional(),
     createdAt: z
       .union([z.lazy(() => DateTimeFilterObjectSchema), z.date()])

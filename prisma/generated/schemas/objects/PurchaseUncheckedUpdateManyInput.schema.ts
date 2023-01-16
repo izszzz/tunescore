@@ -5,6 +5,12 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.PurchaseUncheckedUpdateManyInput> = z
   .object({
+    stripePaymentIntentId: z
+      .union([
+        z.string(),
+        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional(),
     userId: z
       .union([
         z.string(),
@@ -12,12 +18,6 @@ const Schema: z.ZodType<Prisma.PurchaseUncheckedUpdateManyInput> = z
       ])
       .optional(),
     musicId: z
-      .union([
-        z.string(),
-        z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-      ])
-      .optional(),
-    stripePaymentIntentId: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),

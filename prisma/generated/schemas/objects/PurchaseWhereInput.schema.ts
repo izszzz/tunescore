@@ -28,6 +28,9 @@ const Schema: z.ZodType<Prisma.PurchaseWhereInput> = z
     id: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
+    stripePaymentIntentId: z
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
     user: z
       .union([
         z.lazy(() => UserRelationFilterObjectSchema),
@@ -44,9 +47,6 @@ const Schema: z.ZodType<Prisma.PurchaseWhereInput> = z
       ])
       .optional(),
     musicId: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
-    stripePaymentIntentId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
   })

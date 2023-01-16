@@ -127,7 +127,6 @@ model Music {
   carts Cart[]
   purchases Purchase[]
 
-  points Point[] @relation("MusicPoint")
   bookmarks Bookmark[] @relation("MusicBookmark")
   tagMaps TagMap[] @relation("MusicTagMap")
 }
@@ -148,7 +147,6 @@ model Album {
 
   bookmarks Bookmark[] @relation("AlbumBookmark")
   tagMaps TagMap[] @relation("AlbumTagMap")
-  points Point[] @relation("AlbumPoint")
 }
 
 model Artist {
@@ -166,7 +164,6 @@ model Artist {
 
   bookmarks Bookmark[] @relation("ArtistBookmark")
   tagMaps TagMap[] @relation("ArtistTagMap")
-  points Point[] @relation("ArtistPoint")
 }
 
 model Band {
@@ -182,7 +179,6 @@ model Band {
 
   bookmarks Bookmark[] @relation("BandBookmark")
   tagMaps TagMap[] @relation("BandTagMap")
-  points Point[] @relation("BandPoint")
 }
 
 model Issue{
@@ -192,7 +188,6 @@ model Issue{
   status IssueStatus @default(OPEN)
 
   comments Comment[] @relation("IssueComment")
-  points Point[] @relation("IssuePoint")
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
@@ -210,7 +205,6 @@ model Pull{
   vote Vote?
 
   comments Comment[] @relation("PullComment")
-  points Point[] @relation("PullPoint")
 
   music Music   @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
@@ -353,12 +347,13 @@ model Cart {
 model Purchase{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
 
+  stripePaymentIntentId String @db.ObjectId
+
   user User @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
   music Music @relation(fields: [musicId], references:[id])
   musicId String @db.ObjectId
-  stripePaymentIntentId String @db.ObjectId
   @@unique([userId, musicId])
 }
 
@@ -370,16 +365,6 @@ model Point {
 
   user User @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
-
-  music Music? @relation("MusicPoint", fields: [resourceId], references: [id])
-  band Band? @relation("BandPoint",fields: [resourceId], references: [id])
-  album Album? @relation("AlbumPoint",fields: [resourceId], references: [id])
-  artist Artist? @relation("ArtistPoint",fields: [resourceId], references: [id])
-  pull Pull? @relation("PullPoint", fields: [resourceId], references: [id])
-  issue Issue? @relation("IssuePoint", fields: [resourceId], references: [id])
-
-  resourceId String @db.ObjectId
-  resourceType PointType
 
   createdAt DateTime @default(now())
 }

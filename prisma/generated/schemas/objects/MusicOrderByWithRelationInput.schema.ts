@@ -10,7 +10,6 @@ import { IssueOrderByRelationAggregateInputObjectSchema } from './IssueOrderByRe
 import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRelationAggregateInput.schema';
 import { CartOrderByRelationAggregateInputObjectSchema } from './CartOrderByRelationAggregateInput.schema';
 import { PurchaseOrderByRelationAggregateInputObjectSchema } from './PurchaseOrderByRelationAggregateInput.schema';
-import { PointOrderByRelationAggregateInputObjectSchema } from './PointOrderByRelationAggregateInput.schema';
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 import { TagMapOrderByRelationAggregateInputObjectSchema } from './TagMapOrderByRelationAggregateInput.schema';
 
@@ -47,9 +46,6 @@ const Schema: z.ZodType<Prisma.MusicOrderByWithRelationInput> = z
       .optional(),
     purchases: z
       .lazy(() => PurchaseOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointOrderByRelationAggregateInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkOrderByRelationAggregateInputObjectSchema)

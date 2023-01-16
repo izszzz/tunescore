@@ -9,7 +9,6 @@ import { MusicUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './Mu
 import { AlbumUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutBandNestedInput.schema';
 import { TagMapUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutBandNestedInput.schema';
-import { PointUncheckedUpdateManyWithoutBandNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutBandNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -48,9 +47,6 @@ const Schema: z.ZodType<Prisma.BandUncheckedUpdateInput> = z
       .optional(),
     tagMaps: z
       .lazy(() => TagMapUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointUncheckedUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
   })
   .strict();

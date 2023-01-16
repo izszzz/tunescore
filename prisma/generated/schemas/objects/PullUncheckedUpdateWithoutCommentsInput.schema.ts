@@ -5,7 +5,6 @@ import { PullScoreCreateInputObjectSchema } from './PullScoreCreateInput.schema'
 import { PullStatusSchema } from '../enums/PullStatus.schema';
 import { EnumPullStatusFieldUpdateOperationsInputObjectSchema } from './EnumPullStatusFieldUpdateOperationsInput.schema';
 import { VoteUncheckedUpdateOneWithoutPullNestedInputObjectSchema } from './VoteUncheckedUpdateOneWithoutPullNestedInput.schema';
-import { PointUncheckedUpdateManyWithoutPullNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutPullNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -37,9 +36,6 @@ const Schema: z.ZodType<Prisma.PullUncheckedUpdateWithoutCommentsInput> = z
       .optional(),
     vote: z
       .lazy(() => VoteUncheckedUpdateOneWithoutPullNestedInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointUncheckedUpdateManyWithoutPullNestedInputObjectSchema)
       .optional(),
     musicId: z
       .union([

@@ -6,9 +6,9 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.PurchaseMaxOrderByAggregateInput> = z
   .object({
     id: z.lazy(() => SortOrderSchema).optional(),
+    stripePaymentIntentId: z.lazy(() => SortOrderSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
     musicId: z.lazy(() => SortOrderSchema).optional(),
-    stripePaymentIntentId: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();
 

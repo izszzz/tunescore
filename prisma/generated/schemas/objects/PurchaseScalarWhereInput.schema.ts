@@ -24,13 +24,13 @@ const Schema: z.ZodType<Prisma.PurchaseScalarWhereInput> = z
     id: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
+    stripePaymentIntentId: z
+      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
+      .optional(),
     userId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
     musicId: z
-      .union([z.lazy(() => StringFilterObjectSchema), z.string()])
-      .optional(),
-    stripePaymentIntentId: z
       .union([z.lazy(() => StringFilterObjectSchema), z.string()])
       .optional(),
   })

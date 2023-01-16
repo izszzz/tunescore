@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { VoteArgsObjectSchema } from './VoteArgs.schema';
 import { CommentFindManySchema } from '../findManyComment.schema';
-import { PointFindManySchema } from '../findManyPoint.schema';
 import { MusicArgsObjectSchema } from './MusicArgs.schema';
 import { UserArgsObjectSchema } from './UserArgs.schema';
 import { PullCountOutputTypeArgsObjectSchema } from './PullCountOutputTypeArgs.schema';
@@ -13,9 +12,6 @@ const Schema: z.ZodType<Prisma.PullInclude> = z
     vote: z.union([z.boolean(), z.lazy(() => VoteArgsObjectSchema)]).optional(),
     comments: z
       .union([z.boolean(), z.lazy(() => CommentFindManySchema)])
-      .optional(),
-    points: z
-      .union([z.boolean(), z.lazy(() => PointFindManySchema)])
       .optional(),
     music: z
       .union([z.boolean(), z.lazy(() => MusicArgsObjectSchema)])

@@ -9,8 +9,6 @@ const Schema: z.ZodType<Prisma.PointMaxOrderByAggregateInput> = z
     amount: z.lazy(() => SortOrderSchema).optional(),
     actionType: z.lazy(() => SortOrderSchema).optional(),
     userId: z.lazy(() => SortOrderSchema).optional(),
-    resourceId: z.lazy(() => SortOrderSchema).optional(),
-    resourceType: z.lazy(() => SortOrderSchema).optional(),
     createdAt: z.lazy(() => SortOrderSchema).optional(),
   })
   .strict();

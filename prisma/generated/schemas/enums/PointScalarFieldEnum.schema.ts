@@ -5,7 +5,5 @@ export const PointScalarFieldEnumSchema = z.enum([
   'amount',
   'actionType',
   'userId',
-  'resourceId',
-  'resourceType',
   'createdAt',
 ]);

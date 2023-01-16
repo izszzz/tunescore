@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrderByRelationAggregateInput.schema';
-import { PointOrderByRelationAggregateInputObjectSchema } from './PointOrderByRelationAggregateInput.schema';
 import { MusicOrderByWithRelationInputObjectSchema } from './MusicOrderByWithRelationInput.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
 
@@ -15,9 +14,6 @@ const Schema: z.ZodType<Prisma.IssueOrderByWithRelationInput> = z
     status: z.lazy(() => SortOrderSchema).optional(),
     comments: z
       .lazy(() => CommentOrderByRelationAggregateInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointOrderByRelationAggregateInputObjectSchema)
       .optional(),
     music: z.lazy(() => MusicOrderByWithRelationInputObjectSchema).optional(),
     musicId: z.lazy(() => SortOrderSchema).optional(),

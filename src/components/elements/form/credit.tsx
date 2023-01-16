@@ -1,3 +1,4 @@
+import superjson from "superjson";
 import React, { useEffect } from "react";
 import Cards from "react-credit-cards";
 import Grid from "@mui/material/Grid";
@@ -12,25 +13,31 @@ import { trpc } from "../../../utils/trpc";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { env } from "../../../env/client.mjs";
-import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import { AppRouter } from "../../../server/routers/_app";
 
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_CLIENT_ID);
 const CreditForm = () => {
-  const createSetupIntent = trpc.stripe.createSetupIntent.useMutation(),
-    cancelSetupIntent = trpc.stripe.cancelSetupIntent.useMutation(),
-    { data: setupIntents } = trpc.stripe.setupIntents.useQuery(),
+  const client = createTRPCProxyClient<AppRouter>({
+      transformer: superjson,
+      links: [
+        httpBatchLink({
+          url: "http://localhost:3000/trpc",
+        }),
+      ],
+    }),
+    createSetupIntent = trpc.stripe.createSetupIntent.useMutation(),
     { data: paymentMethods } = trpc.stripe.paymentMethods.useQuery();
-  console.log(setupIntents);
   useEffect(() => {
     return () => {
       (async () => {
         createSetupIntent.data?.client_secret &&
-          (await cancelSetupIntent.mutate(
+          client.stripe.cancelSetupIntent.mutate(
             createSetupIntent.data.client_secret
-          ));
+          );
       })();
     };
-  }, [cancelSetupIntent, createSetupIntent.data?.client_secret]);
+  }, [client.stripe, createSetupIntent.data?.client_secret]);
 
   if (!paymentMethods) return <>loading</>;
   return (
@@ -61,15 +68,6 @@ const CreditForm = () => {
       ) : (
         <Button onClick={() => createSetupIntent.mutate()}>Add</Button>
       )}
-      <FormContainer
-        onSuccess={(data) => {
-          console.log(data);
-          cancelSetupIntent.mutate(data.id);
-        }}
-      >
-        <TextFieldElement name="id" />
-        <Button type="submit">Cancel</Button>
-      </FormContainer>
     </Box>
   );
 };

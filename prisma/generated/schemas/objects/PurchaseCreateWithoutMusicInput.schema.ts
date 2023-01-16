@@ -6,8 +6,8 @@ import type { Prisma } from '@prisma/client';
 const Schema: z.ZodType<Prisma.PurchaseCreateWithoutMusicInput> = z
   .object({
     id: z.string().optional(),
-    user: z.lazy(() => UserCreateNestedOneWithoutPurchasesInputObjectSchema),
     stripePaymentIntentId: z.string(),
+    user: z.lazy(() => UserCreateNestedOneWithoutPurchasesInputObjectSchema),
   })
   .strict();
 

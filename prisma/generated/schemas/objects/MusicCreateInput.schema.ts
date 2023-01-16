@@ -14,7 +14,6 @@ import { IssueCreateNestedManyWithoutMusicInputObjectSchema } from './IssueCreat
 import { PullCreateNestedManyWithoutMusicInputObjectSchema } from './PullCreateNestedManyWithoutMusicInput.schema';
 import { CartCreateNestedManyWithoutMusicInputObjectSchema } from './CartCreateNestedManyWithoutMusicInput.schema';
 import { PurchaseCreateNestedManyWithoutMusicInputObjectSchema } from './PurchaseCreateNestedManyWithoutMusicInput.schema';
-import { PointCreateNestedManyWithoutMusicInputObjectSchema } from './PointCreateNestedManyWithoutMusicInput.schema';
 import { BookmarkCreateNestedManyWithoutMusicInputObjectSchema } from './BookmarkCreateNestedManyWithoutMusicInput.schema';
 import { TagMapCreateNestedManyWithoutMusicInputObjectSchema } from './TagMapCreateNestedManyWithoutMusicInput.schema';
 
@@ -67,9 +66,6 @@ const Schema: z.ZodType<Prisma.MusicCreateInput> = z
       .optional(),
     purchases: z
       .lazy(() => PurchaseCreateNestedManyWithoutMusicInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointCreateNestedManyWithoutMusicInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkCreateNestedManyWithoutMusicInputObjectSchema)

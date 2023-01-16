@@ -5,13 +5,13 @@ import type { Prisma } from '@prisma/client';
 
 const Schema: z.ZodType<Prisma.PurchaseUncheckedUpdateWithoutUserInput> = z
   .object({
-    musicId: z
+    stripePaymentIntentId: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
       ])
       .optional(),
-    stripePaymentIntentId: z
+    musicId: z
       .union([
         z.string(),
         z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),

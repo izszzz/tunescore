@@ -16,7 +16,6 @@ import { IssueUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './I
 import { PullUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PullUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { CartUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './CartUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { PurchaseUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PurchaseUncheckedUpdateManyWithoutMusicNestedInput.schema';
-import { PointUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutMusicNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutMusicNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutMusicNestedInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -104,9 +103,6 @@ const Schema: z.ZodType<Prisma.MusicUncheckedUpdateWithoutTagMapsInput> = z
       .lazy(
         () => PurchaseUncheckedUpdateManyWithoutMusicNestedInputObjectSchema,
       )
-      .optional(),
-    points: z
-      .lazy(() => PointUncheckedUpdateManyWithoutMusicNestedInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(

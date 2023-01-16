@@ -8,7 +8,6 @@ import { BandCreateartistIDsInputObjectSchema } from './BandCreateartistIDsInput
 import { MusicCreateNestedManyWithoutBandInputObjectSchema } from './MusicCreateNestedManyWithoutBandInput.schema';
 import { AlbumCreateNestedManyWithoutBandInputObjectSchema } from './AlbumCreateNestedManyWithoutBandInput.schema';
 import { TagMapCreateNestedManyWithoutBandInputObjectSchema } from './TagMapCreateNestedManyWithoutBandInput.schema';
-import { PointCreateNestedManyWithoutBandInputObjectSchema } from './PointCreateNestedManyWithoutBandInput.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -43,9 +42,6 @@ const Schema: z.ZodType<Prisma.BandCreateWithoutBookmarksInput> = z
       .optional(),
     tagMaps: z
       .lazy(() => TagMapCreateNestedManyWithoutBandInputObjectSchema)
-      .optional(),
-    points: z
-      .lazy(() => PointCreateNestedManyWithoutBandInputObjectSchema)
       .optional(),
   })
   .strict();

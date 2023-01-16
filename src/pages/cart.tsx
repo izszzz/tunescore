@@ -20,7 +20,6 @@ const Cart: NextPage = () => {
         disableElevation
         fullWidth
       >
-        {" "}
         注文する
       </Button>
     </DefaultSingleColumnLayout>

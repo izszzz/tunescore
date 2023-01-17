@@ -43,10 +43,9 @@ export const stripeRouter = router({
             user: { id: user.id },
           },
           include: {
-            music: true,
+            music: { include: { user: true } },
           },
         }),
-        // get cart
         musics = carts.map((cart) => cart.music),
         sum = musics.reduce((sum, music) => sum + (music.price || 0), 0);
 
@@ -66,7 +65,7 @@ export const stripeRouter = router({
           await prisma.cart.delete({ where: { id: cart.id } });
 
           // add purchase
-          prisma.purchase.create({
+          await prisma.purchase.create({
             data: {
               music: { connect: { id: cart.music.id } },
               user: { connect: { id: user.id } },
@@ -74,6 +73,15 @@ export const stripeRouter = router({
             },
           });
 
+          // add point
+          if (cart.music.user)
+            await prisma.point.create({
+              data: {
+                amount: cart.music.price || 0,
+                actionType: "PURCHASE",
+                user: { connect: { id: cart.music.user.id } },
+              },
+            });
           return data;
         } catch (err) {
           return err;

@@ -1,11 +1,11 @@
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import MusicLists from "../components/elements/list/music";
-import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { musicListArgs } from "../helpers/music";
-import { trpc } from "../utils/trpc";
+import MusicLists from "../../../components/elements/list/music";
+import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
+import { musicListArgs } from "../../../helpers/music";
+import { trpc } from "../../../utils/trpc";
 
-const Purchase: NextPage = () => {
+const Purchases: NextPage = () => {
   const { data: session } = useSession();
   const { data } = trpc.purchase.findManyPurchase.useQuery({
     include: { music: musicListArgs(session) },
@@ -18,4 +18,4 @@ const Purchase: NextPage = () => {
     </DefaultSingleColumnLayout>
   );
 };
-export default Purchase;
+export default Purchases;

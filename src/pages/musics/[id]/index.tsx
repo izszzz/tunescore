@@ -15,7 +15,7 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import AlbumLists from "../../../components/elements/list/album";
 import SpotifyButton from "../../../components/elements/button/link/spotify";
-import CartButton from "../../../components/elements/button/cart";
+import CartButton from "../../../components/elements/button/loading/cart";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 

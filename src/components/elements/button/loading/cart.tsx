@@ -3,9 +3,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { trpc } from "../../../utils/trpc";
-import { getCurrentUserId } from "../../../helpers/user";
-import { getRouterId } from "../../../helpers/router";
+import { trpc } from "../../../../utils/trpc";
+import { getCurrentUserId } from "../../../../helpers/user";
+import { getRouterId } from "../../../../helpers/router";
 import type { ButtonProps } from "@mui/material/Button";
 
 const CartButton = ({ disabled, ...props }: Omit<ButtonProps, "startIcon">) => {

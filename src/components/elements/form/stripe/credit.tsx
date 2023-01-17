@@ -2,22 +2,18 @@ import superjson from "superjson";
 import React, { useEffect } from "react";
 import Cards from "react-credit-cards";
 import Grid from "@mui/material/Grid";
-import {
-  PaymentElement,
-  Elements,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { trpc } from "../../../utils/trpc";
+import { trpc } from "../../../../utils/trpc";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { env } from "../../../env/client.mjs";
+import { env } from "../../../../env/client.mjs";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
-import { AppRouter } from "../../../server/routers/_app";
+import { AppRouter } from "../../../../server/routers/_app";
+import PaymentStripeForm from "./payment";
 
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_CLIENT_ID);
-const CreditForm = () => {
+const CreditStripeForm = () => {
   const client = createTRPCProxyClient<AppRouter>({
       transformer: superjson,
       links: [
@@ -63,7 +59,7 @@ const CreditForm = () => {
             clientSecret: createSetupIntent.data.client_secret,
           }}
         >
-          <CheckoutForm />
+          <PaymentStripeForm />
         </Elements>
       ) : (
         <Button onClick={() => createSetupIntent.mutate()}>Add</Button>
@@ -72,35 +68,4 @@ const CreditForm = () => {
   );
 };
 
-const CheckoutForm = () => {
-  const elements = useElements();
-  const stripe = useStripe();
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) return;
-
-    const result = await stripe.confirmSetup({
-      elements,
-      confirmParams: { return_url: "http://localhost:3000/settings/credit" },
-    });
-
-    if (result.error) {
-      console.log(result.error.message);
-    } else {
-      // Your customer will be redirected to your `return_url`. For some payment
-      // methods like iDEAL, your customer will be redirected to an intermediate
-      // site first to authorize the payment, then redirected to the `return_url`.
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <Button type="submit" variant="contained" fullWidth>
-        Submit
-      </Button>
-    </form>
-  );
-};
-export default CreditForm;
+export default CreditStripeForm;

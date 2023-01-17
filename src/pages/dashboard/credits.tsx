@@ -5,7 +5,7 @@ import { userShowQuery } from "../../paths/users/[id]";
 import type { UserLayoutProps } from "../../components/layouts/show/user";
 import type { NextPage } from "next";
 import "react-credit-cards/es/styles-compiled.css";
-import CreditForm from "../../components/elements/form/credit";
+import CreditStripeForm from "../../components/elements/form/stripe/credit";
 
 const SettingsUser: NextPage = () => {
   const query = userShowQuery(useSession().data),
@@ -15,7 +15,7 @@ const SettingsUser: NextPage = () => {
 
   return (
     <UserLayout data={userData} activeTab="">
-      <CreditForm />
+      <CreditStripeForm />
     </UserLayout>
   );
 };

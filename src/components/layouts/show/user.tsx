@@ -54,13 +54,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({
           query: { id },
         },
       },
-      {
-        label: "settings",
-        href: {
-          pathname: "/users/[id]/settings",
-          query: { id },
-        },
-      },
     ],
     [id]
   );

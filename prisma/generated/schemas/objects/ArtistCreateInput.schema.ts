@@ -3,11 +3,11 @@ import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationCreateNestedManyWithoutArtistInput.schema';
 import { BandCreateNestedManyWithoutArtistsInputObjectSchema } from './BandCreateNestedManyWithoutArtistsInput.schema';
 import { ArtistCreatebandIDsInputObjectSchema } from './ArtistCreatebandIDsInput.schema';
 import { AlbumCreateNestedManyWithoutArtistsInputObjectSchema } from './AlbumCreateNestedManyWithoutArtistsInput.schema';
 import { ArtistCreatealbumIDsInputObjectSchema } from './ArtistCreatealbumIDsInput.schema';
+import { ParticipationCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationCreateNestedManyWithoutArtistInput.schema';
 import { BookmarkCreateNestedManyWithoutArtistInputObjectSchema } from './BookmarkCreateNestedManyWithoutArtistInput.schema';
 import { TagMapCreateNestedManyWithoutArtistInputObjectSchema } from './TagMapCreateNestedManyWithoutArtistInput.schema';
 
@@ -27,9 +27,6 @@ const Schema: z.ZodType<Prisma.ArtistCreateInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(() => ParticipationCreateNestedManyWithoutArtistInputObjectSchema)
-      .optional(),
     bands: z
       .lazy(() => BandCreateNestedManyWithoutArtistsInputObjectSchema)
       .optional(),
@@ -47,6 +44,9 @@ const Schema: z.ZodType<Prisma.ArtistCreateInput> = z
         z.lazy(() => ArtistCreatealbumIDsInputObjectSchema),
         z.string().array(),
       ])
+      .optional(),
+    participations: z
+      .lazy(() => ParticipationCreateNestedManyWithoutArtistInputObjectSchema)
       .optional(),
     bookmarks: z
       .lazy(() => BookmarkCreateNestedManyWithoutArtistInputObjectSchema)

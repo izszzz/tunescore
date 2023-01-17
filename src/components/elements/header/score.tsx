@@ -2,7 +2,7 @@
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
 import { useToggle } from "react-use";
 import React, { useState } from "react";
-import PlayButton from "../button/play";
+import PlayButton from "../button/icon/play";
 import VolumeSliderInput from "../input/slider/volume";
 import Header from ".";
 import type { AlphaTabApi } from "@coderline/alphatab";

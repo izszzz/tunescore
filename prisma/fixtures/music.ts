@@ -13,6 +13,15 @@ export const MusicFactory = prisma.music.create({
   },
 });
 
+export const PaidMusicFactory = prisma.music.create({
+  data: {
+    title: { ja: "有料", en: "Paid" },
+    type: "ORIGINAL",
+    visibility: "PUBLIC",
+    price: 100,
+  },
+});
+
 export const OriginalMusicFactory = prisma.music.create({
   data: {
     title: {

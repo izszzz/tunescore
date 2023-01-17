@@ -19,6 +19,9 @@ import { rolemapsRouter } from "./RoleMap.router";
 import { tagsRouter } from "./Tag.router";
 import { tagmapsRouter } from "./TagMap.router";
 import { notificationsRouter } from "./Notification.router";
+import { cartsRouter } from "./Cart.router";
+import { purchasesRouter } from "./Purchase.router";
+import { pointsRouter } from "./Point.router";
 
 export const appRouter = t.router({
   account: accountsRouter,
@@ -40,6 +43,9 @@ export const appRouter = t.router({
   rolemap: rolemapsRouter,
   tag: tagsRouter,
   tagmap: tagmapsRouter,
-  notification: notificationsRouter
+  notification: notificationsRouter,
+  cart: cartsRouter,
+  purchase: purchasesRouter,
+  point: pointsRouter
 })
 

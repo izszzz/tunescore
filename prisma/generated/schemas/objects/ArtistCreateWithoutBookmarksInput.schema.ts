@@ -3,11 +3,11 @@ import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationCreateNestedManyWithoutArtistInput.schema';
 import { BandCreateNestedManyWithoutArtistsInputObjectSchema } from './BandCreateNestedManyWithoutArtistsInput.schema';
 import { ArtistCreatebandIDsInputObjectSchema } from './ArtistCreatebandIDsInput.schema';
 import { AlbumCreateNestedManyWithoutArtistsInputObjectSchema } from './AlbumCreateNestedManyWithoutArtistsInput.schema';
 import { ArtistCreatealbumIDsInputObjectSchema } from './ArtistCreatealbumIDsInput.schema';
+import { ParticipationCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationCreateNestedManyWithoutArtistInput.schema';
 import { TagMapCreateNestedManyWithoutArtistInputObjectSchema } from './TagMapCreateNestedManyWithoutArtistInput.schema';
 
 import type { Prisma } from '@prisma/client';
@@ -26,9 +26,6 @@ const Schema: z.ZodType<Prisma.ArtistCreateWithoutBookmarksInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(() => ParticipationCreateNestedManyWithoutArtistInputObjectSchema)
-      .optional(),
     bands: z
       .lazy(() => BandCreateNestedManyWithoutArtistsInputObjectSchema)
       .optional(),
@@ -46,6 +43,9 @@ const Schema: z.ZodType<Prisma.ArtistCreateWithoutBookmarksInput> = z
         z.lazy(() => ArtistCreatealbumIDsInputObjectSchema),
         z.string().array(),
       ])
+      .optional(),
+    participations: z
+      .lazy(() => ParticipationCreateNestedManyWithoutArtistInputObjectSchema)
       .optional(),
     tagMaps: z
       .lazy(() => TagMapCreateNestedManyWithoutArtistInputObjectSchema)

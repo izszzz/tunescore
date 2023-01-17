@@ -1,30 +1,31 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
-import { trpc } from "../../../utils/trpc";
-import UserLayout from "../../../components/layouts/show/user";
-import SingleRowForm from "../../../components/elements/form/single_row";
-import DeleteAlert from "../../../components/elements/alert/delete";
-import { userShowQuery } from "../../../paths/users/[id]";
-import GoogleButton from "../../../components/elements/button/providers/google";
-import SpotifyButton from "../../../components/elements/button/providers/spotify";
-import { useProviders } from "../../../hooks/useProvider";
-import type { UserLayoutProps } from "../../../components/layouts/show/user";
+import { trpc } from "../../utils/trpc";
+import UserLayout from "../../components/layouts/show/user";
+import SingleRowForm from "../../components/elements/form/single_row";
+import DeleteAlert from "../../components/elements/alert/delete";
+import { userShowQuery } from "../../paths/users/[id]";
+import GoogleButton from "../../components/elements/button/providers/google";
+import SpotifyButton from "../../components/elements/button/providers/spotify";
+import { useProviders } from "../../hooks/useProvider";
+import type { UserLayoutProps } from "../../components/layouts/show/user";
 import type { NextPage } from "next";
+import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {
-  const router = useRouter();
-  const providers = useProviders();
-  const update = trpc.user.updateOneUser.useMutation();
-  const query = userShowQuery({ router, session: useSession().data });
-  const { data } = trpc.user.findUniqueUser.useQuery(query);
-  const destroy = trpc.user.deleteOneUser.useMutation({
-    onSuccess: () => router.push("/"),
-    onError: (error) => console.log(error),
-  });
+  const router = useRouter(),
+    providers = useProviders(),
+    update = trpc.user.updateOneUser.useMutation(),
+    query = userShowQuery(useSession().data),
+    { data } = trpc.user.findUniqueUser.useQuery(query),
+    destroy = trpc.user.deleteOneUser.useMutation({
+      onSuccess: () => router.push("/"),
+      onError: (error) => console.log(error),
+    });
   if (!data) return <></>;
-  const userData = data as UserLayoutProps["data"];
-  const authedProviders = userData.accounts.map((account) => account.provider);
+  const userData = data as UserLayoutProps["data"],
+    authedProviders = userData.accounts.map((account) => account.provider);
 
   return (
     <UserLayout data={userData} activeTab="settings">
@@ -54,6 +55,7 @@ const SettingsUser: NextPage = () => {
           name: "name",
         }}
       />
+
       <DeleteAlert
         loadingButtonProps={{
           onClick: () => destroy.mutate({ ...query }),

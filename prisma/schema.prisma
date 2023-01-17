@@ -14,10 +14,10 @@ generator trpc {
   isGenerateInclude  = true
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output="../erd.md"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output="../erd.md"
+// }
 
 datasource db {
   provider = "mongodb"
@@ -31,7 +31,7 @@ datasource db {
 // Necessary for Next auth
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
@@ -50,7 +50,7 @@ model Account {
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -61,6 +61,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  stripeCustomerId String?
 
   accounts      Account[]
   sessions      Session[]
@@ -70,6 +71,9 @@ model User {
   comments Comment[]
   bookmarks Bookmark[]
   notifications Notification[] 
+  carts Cart[]
+  purchases Purchase[]
+  points Point[]
 
   votes Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
@@ -120,6 +124,8 @@ model Music {
   participations Participation[]
   issues Issue[]
   pulls Pull[]
+  carts Cart[]
+  purchases Purchase[]
 
   bookmarks Bookmark[] @relation("MusicBookmark")
   tagMaps TagMap[] @relation("MusicTagMap")
@@ -148,13 +154,13 @@ model Artist {
   name Locale
   link LinkList?
 
-  participations Participation[]
-
   bands  Band[] @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
 
   albums Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
   albumIDs          String[] @db.ObjectId
+
+  participations Participation[]
 
   bookmarks Bookmark[] @relation("ArtistBookmark")
   tagMaps TagMap[] @relation("ArtistTagMap")
@@ -165,11 +171,10 @@ model Band {
   name Locale
   link LinkList?
 
-  musics Music[]
-
   artists Artist[] @relation(fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
 
+  musics Music[]
   albums Album[]
 
   bookmarks Bookmark[] @relation("BandBookmark")
@@ -311,8 +316,6 @@ model TagMap{
   @@unique([resourceId, tagId, resourceType])
 }
 
-
-// https://stackoverflow.com/questions/69224864/polymorphism-in-prisma-schema-best-practices
 model Notification{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -328,6 +331,57 @@ model Notification{
 
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
+}
+
+model Cart {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  music Music @relation(fields: [musicId], references:[id])
+  musicId String @db.ObjectId
+  @@unique([userId, musicId])
+}
+
+model Purchase{
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  stripePaymentIntentId String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  music Music @relation(fields: [musicId], references:[id])
+  musicId String @db.ObjectId
+  @@unique([userId, musicId])
+}
+
+model Point {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  amount Int
+  actionType PointActionType
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+}
+
+enum PointActionType{
+  PURCHASE
+  CONSUME
+  CONTRIBUTE
+}
+
+enum PointType{
+  Music
+  Band
+  Artist
+  Album
+  Pull
+  Issue
 }
 
 enum ResourceType{

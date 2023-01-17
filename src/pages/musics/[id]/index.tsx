@@ -15,6 +15,7 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import AlbumLists from "../../../components/elements/list/album";
 import SpotifyButton from "../../../components/elements/button/link/spotify";
+import CartButton from "../../../components/elements/button/cart";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 
@@ -34,27 +35,30 @@ const Music: NextPage = () => {
       {data.link?.streaming?.spotify?.id && (
         <SpotifyButton href={data.link?.streaming?.spotify.id} />
       )}
-      <ScoreButtonGroup
-        watchButton={{
-          route: {
-            pathname: "/scores/[id]",
-            query: { id },
-          },
-          buttonProps: {
-            disabled: !musicData.score,
-          },
-        }}
-        editButton={{
-          route: {
-            pathname: "/scores/[id]/edit",
-            query: { id },
-          },
-          hidden: !(
-            data.type === "ORIGINAL" &&
-            musicData.user?.id === getCurrentUserId(session)
-          ),
-        }}
-      />
+      {data.type === "ORIGINAL" ? (
+        <CartButton disabled={!!musicData.carts.length} fullWidth />
+      ) : (
+        <ScoreButtonGroup
+          watchButton={{
+            route: {
+              pathname: "/scores/[id]",
+              query: { id },
+            },
+            buttonProps: {
+              disabled: !musicData.score,
+            },
+          }}
+          editButton={{
+            route: {
+              pathname: "/scores/[id]/edit",
+              query: { id },
+            },
+            hidden:
+              data.type === "COPY" &&
+              musicData.user?.id !== getCurrentUserId(session),
+          }}
+        />
+      )}
 
       {data.link?.streaming?.youtube?.id && (
         <YouTube

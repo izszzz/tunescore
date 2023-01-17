@@ -9,6 +9,7 @@ const Schema: z.ZodType<Prisma.UserCountAggregateInputType> = z
     email: z.literal(true).optional(),
     emailVerified: z.literal(true).optional(),
     image: z.literal(true).optional(),
+    stripeCustomerId: z.literal(true).optional(),
     voteIDs: z.literal(true).optional(),
     _all: z.literal(true).optional(),
   })

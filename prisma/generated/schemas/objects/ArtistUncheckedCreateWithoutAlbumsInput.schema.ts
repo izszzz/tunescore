@@ -3,10 +3,10 @@ import { LocaleCreateEnvelopeInputObjectSchema } from './LocaleCreateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableCreateEnvelopeInputObjectSchema } from './LinkListNullableCreateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutArtistInput.schema';
 import { BandUncheckedCreateNestedManyWithoutArtistsInputObjectSchema } from './BandUncheckedCreateNestedManyWithoutArtistsInput.schema';
 import { ArtistCreatebandIDsInputObjectSchema } from './ArtistCreatebandIDsInput.schema';
 import { ArtistCreatealbumIDsInputObjectSchema } from './ArtistCreatealbumIDsInput.schema';
+import { ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './ParticipationUncheckedCreateNestedManyWithoutArtistInput.schema';
 import { BookmarkUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './BookmarkUncheckedCreateNestedManyWithoutArtistInput.schema';
 import { TagMapUncheckedCreateNestedManyWithoutArtistInputObjectSchema } from './TagMapUncheckedCreateNestedManyWithoutArtistInput.schema';
 
@@ -26,12 +26,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedCreateWithoutAlbumsInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(
-        () =>
-          ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema,
-      )
-      .optional(),
     bands: z
       .lazy(() => BandUncheckedCreateNestedManyWithoutArtistsInputObjectSchema)
       .optional(),
@@ -46,6 +40,12 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedCreateWithoutAlbumsInput> = z
         z.lazy(() => ArtistCreatealbumIDsInputObjectSchema),
         z.string().array(),
       ])
+      .optional(),
+    participations: z
+      .lazy(
+        () =>
+          ParticipationUncheckedCreateNestedManyWithoutArtistInputObjectSchema,
+      )
       .optional(),
     bookmarks: z
       .lazy(

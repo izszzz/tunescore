@@ -8,6 +8,9 @@ import { PullOrderByRelationAggregateInputObjectSchema } from './PullOrderByRela
 import { CommentOrderByRelationAggregateInputObjectSchema } from './CommentOrderByRelationAggregateInput.schema';
 import { BookmarkOrderByRelationAggregateInputObjectSchema } from './BookmarkOrderByRelationAggregateInput.schema';
 import { NotificationOrderByRelationAggregateInputObjectSchema } from './NotificationOrderByRelationAggregateInput.schema';
+import { CartOrderByRelationAggregateInputObjectSchema } from './CartOrderByRelationAggregateInput.schema';
+import { PurchaseOrderByRelationAggregateInputObjectSchema } from './PurchaseOrderByRelationAggregateInput.schema';
+import { PointOrderByRelationAggregateInputObjectSchema } from './PointOrderByRelationAggregateInput.schema';
 import { VoteOrderByRelationAggregateInputObjectSchema } from './VoteOrderByRelationAggregateInput.schema';
 import { FollowOrderByRelationAggregateInputObjectSchema } from './FollowOrderByRelationAggregateInput.schema';
 
@@ -20,6 +23,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
     email: z.lazy(() => SortOrderSchema).optional(),
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    stripeCustomerId: z.lazy(() => SortOrderSchema).optional(),
     accounts: z
       .lazy(() => AccountOrderByRelationAggregateInputObjectSchema)
       .optional(),
@@ -43,6 +47,15 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseOrderByRelationAggregateInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointOrderByRelationAggregateInputObjectSchema)
       .optional(),
     votes: z
       .lazy(() => VoteOrderByRelationAggregateInputObjectSchema)

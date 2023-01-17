@@ -3,8 +3,8 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { MusicUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUpdateManyWithoutBandNestedInput.schema';
 import { BandUpdateartistIDsInputObjectSchema } from './BandUpdateartistIDsInput.schema';
+import { MusicUpdateManyWithoutBandNestedInputObjectSchema } from './MusicUpdateManyWithoutBandNestedInput.schema';
 import { AlbumUpdateManyWithoutBandNestedInputObjectSchema } from './AlbumUpdateManyWithoutBandNestedInput.schema';
 import { BookmarkUpdateManyWithoutBandNestedInputObjectSchema } from './BookmarkUpdateManyWithoutBandNestedInput.schema';
 import { TagMapUpdateManyWithoutBandNestedInputObjectSchema } from './TagMapUpdateManyWithoutBandNestedInput.schema';
@@ -26,14 +26,14 @@ const Schema: z.ZodType<Prisma.BandUpdateWithoutArtistsInput> = z
       ])
       .optional()
       .nullable(),
-    musics: z
-      .lazy(() => MusicUpdateManyWithoutBandNestedInputObjectSchema)
-      .optional(),
     artistIDs: z
       .union([
         z.lazy(() => BandUpdateartistIDsInputObjectSchema),
         z.string().array(),
       ])
+      .optional(),
+    musics: z
+      .lazy(() => MusicUpdateManyWithoutBandNestedInputObjectSchema)
       .optional(),
     albums: z
       .lazy(() => AlbumUpdateManyWithoutBandNestedInputObjectSchema)

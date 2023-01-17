@@ -43,6 +43,10 @@ const Schema: z.ZodType<Prisma.UserScalarWhereInput> = z
       .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([z.lazy(() => StringNullableFilterObjectSchema), z.string()])
+      .optional()
+      .nullable(),
     voteIDs: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();

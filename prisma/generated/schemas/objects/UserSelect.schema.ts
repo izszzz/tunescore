@@ -7,6 +7,9 @@ import { PullFindManySchema } from '../findManyPull.schema';
 import { CommentFindManySchema } from '../findManyComment.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { NotificationFindManySchema } from '../findManyNotification.schema';
+import { CartFindManySchema } from '../findManyCart.schema';
+import { PurchaseFindManySchema } from '../findManyPurchase.schema';
+import { PointFindManySchema } from '../findManyPoint.schema';
 import { VoteFindManySchema } from '../findManyVote.schema';
 import { FollowFindManySchema } from '../findManyFollow.schema';
 import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema';
@@ -20,6 +23,7 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
     email: z.boolean().optional(),
     emailVerified: z.boolean().optional(),
     image: z.boolean().optional(),
+    stripeCustomerId: z.boolean().optional(),
     accounts: z
       .union([z.boolean(), z.lazy(() => AccountFindManySchema)])
       .optional(),
@@ -41,6 +45,13 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
       .optional(),
     notifications: z
       .union([z.boolean(), z.lazy(() => NotificationFindManySchema)])
+      .optional(),
+    carts: z.union([z.boolean(), z.lazy(() => CartFindManySchema)]).optional(),
+    purchases: z
+      .union([z.boolean(), z.lazy(() => PurchaseFindManySchema)])
+      .optional(),
+    points: z
+      .union([z.boolean(), z.lazy(() => PointFindManySchema)])
       .optional(),
     votes: z.union([z.boolean(), z.lazy(() => VoteFindManySchema)]).optional(),
     voteIDs: z.boolean().optional(),

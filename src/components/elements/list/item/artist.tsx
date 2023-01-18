@@ -1,5 +1,4 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Stack from "@mui/material/Stack";
 import ResourceIcon from "../../icon/resource";
@@ -26,11 +25,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
       }}
       icon={<ResourceIcon resource="ARTIST" />}
       listItemTextProps={{
-        primary: (
-          <Typography variant="h6" noWrap>
-            {name}
-          </Typography>
-        ),
+        primary: name,
         secondary: (
           <Stack direction="row" spacing={1}>
             {data.bands[0] && (

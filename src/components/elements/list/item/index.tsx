@@ -6,6 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import type { ListItemTextProps } from "@mui/material/ListItemText";
 import { useRouter } from "next/router";
 import type { Route } from "nextjs-routes";
+import Typography from "@mui/material/Typography";
 
 interface ListItemProps extends MuiListItemProps {
   icon: React.ReactNode;
@@ -25,7 +26,14 @@ const ListItem = ({
     <MuiListItem {...props} disablePadding onClick={() => router.push(route)}>
       <ListItemButton>
         <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText {...listItemTextProps} />
+        <ListItemText
+          {...listItemTextProps}
+          primary={
+            <Typography variant="h6" mr={3} noWrap>
+              {listItemTextProps.primary}
+            </Typography>
+          }
+        />
         {children}
       </ListItemButton>
     </MuiListItem>

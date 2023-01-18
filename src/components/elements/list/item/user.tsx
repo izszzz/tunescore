@@ -16,11 +16,7 @@ const UserListItem = ({ data }: UserListItemProps) => (
     }}
     icon={<Avatar alt={data.name || ""} src={data.image || ""} />}
     listItemTextProps={{
-      primary: (
-        <Typography variant="h6" noWrap>
-          {data.name}
-        </Typography>
-      ),
+      primary: data.name,
       secondary: (
         <Typography
           sx={{ display: "inline" }}

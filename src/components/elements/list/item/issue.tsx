@@ -25,11 +25,7 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
       }}
       icon={<StatusIcon resource={data.status} />}
       listItemTextProps={{
-        primary: (
-          <Typography variant="h6" noWrap>
-            {data.title}
-          </Typography>
-        ),
+        primary: data.title,
         secondary: (
           <Box display="flex" alignItems="center">
             <Typography mr={1} variant="body2" color="text.subprimary">

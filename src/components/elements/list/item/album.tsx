@@ -1,5 +1,4 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
@@ -26,11 +25,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
       }}
       icon={<ResourceIcon resource="ALBUM" />}
       listItemTextProps={{
-        primary: (
-          <Typography variant="h6" noWrap>
-            {title}
-          </Typography>
-        ),
+        primary: title,
         secondary: (
           <Stack direction="row" spacing={1}>
             <BookmarkChip

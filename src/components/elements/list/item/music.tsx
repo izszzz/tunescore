@@ -1,7 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
@@ -29,14 +27,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
       }}
       icon={<ResourceIcon resource="BAND" />}
       listItemTextProps={{
-        primary: (
-          <Box component="span" display="flex" alignItems="center">
-            <Typography variant="h6" mr={3} noWrap>
-              {title}
-            </Typography>
-            <Chip component="span" label={data.type} size="small" />
-          </Box>
-        ),
+        primary: title,
         secondary: (
           <Stack direction="row" spacing={1}>
             <Owner data={data} />
@@ -45,6 +36,7 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
               size="small"
               bookmarked={!!data.bookmarks.length}
             />
+            <Chip label={data.type} size="small" />
           </Stack>
         ),
       }}

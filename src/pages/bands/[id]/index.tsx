@@ -5,10 +5,9 @@ import { trpc } from "../../../utils/trpc";
 import { bandShowQuery } from "../../../paths/bands/[id]";
 import MusicLists from "../../../components/elements/list/music";
 import ArtistLists from "../../../components/elements/list/artist";
-import AppleButton from "../../../components/elements/button/link/itunes";
-import YoutubeButton from "../../../components/elements/button/link/youtube";
 import type { NextPage } from "next";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
+import LinkButtons from "../../../components/elements/button/link";
 
 const Band: NextPage = () => {
   const router = useRouter();
@@ -18,12 +17,8 @@ const Band: NextPage = () => {
   const bandData = data as BandLayoutProps["data"];
   return (
     <BandLayout data={bandData} query={path} activeTab="info">
-      {data.link?.streaming?.itunes?.id && (
-        <AppleButton href={data.link?.streaming?.itunes.id} />
-      )}
-      {data.link?.streaming?.youtube?.id && (
-        <YoutubeButton href={data.link?.streaming?.youtube.id} />
-      )}
+      {data.link && <LinkButtons data={data.link} />}
+
       <MusicLists data={bandData.musics} />
       <ArtistLists data={bandData.artists} />
     </BandLayout>

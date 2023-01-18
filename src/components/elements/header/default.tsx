@@ -11,7 +11,7 @@ import { match } from "ts-pattern";
 import CircularProgress from "@mui/material/CircularProgress";
 import LocaleAutocomplete from "../autocomplete/locale";
 import { useModal } from "../../../hooks/useModal";
-import ThemeToggleButton from "../button/providers/toggle/theme";
+import ThemeToggleButton from "../button/toggle/theme";
 import SearchAutocomplete from "../autocomplete/search";
 import { trpc } from "../../../utils/trpc";
 import setLocale from "../../../helpers/locale";
@@ -22,21 +22,21 @@ import CartIconButton from "../button/icon/cart";
 import Header from ".";
 
 const DefaultHeader = () => {
-  const session = useSession();
-  const { handleOpen } = useModal();
-  const router = useRouter();
-  const search = trpc.search.music.useMutation();
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter")
-      router.replace({
-        pathname: "/search",
-        query: {
-          type: "music",
-          page: String(1),
-          q: String((e.target as HTMLInputElement).value),
-        },
-      });
-  };
+  const session = useSession(),
+    { handleOpen } = useModal(),
+    router = useRouter(),
+    search = trpc.search.music.useMutation(),
+    handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter")
+        router.replace({
+          pathname: "/search",
+          query: {
+            type: "music",
+            page: String(1),
+            q: String((e.target as HTMLInputElement).value),
+          },
+        });
+    };
   return (
     <>
       <Header>

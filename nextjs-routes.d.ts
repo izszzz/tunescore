@@ -30,6 +30,11 @@ declare module "nextjs-routes" {
     | StaticRoute<"/bands">
     | StaticRoute<"/bands/new">
     | StaticRoute<"/cart">
+    | StaticRoute<"/dashboard/credits">
+    | StaticRoute<"/dashboard">
+    | StaticRoute<"/dashboard/library/bookmarks">
+    | StaticRoute<"/dashboard/library/purchases">
+    | StaticRoute<"/dashboard/library/repositories">
     | StaticRoute<"/">
     | DynamicRoute<"/musics/[id]", { "id": string }>
     | DynamicRoute<"/musics/[id]/issues/[issueId]", { "id": string; "issueId": string }>
@@ -45,13 +50,10 @@ declare module "nextjs-routes" {
     | StaticRoute<"/musics">
     | StaticRoute<"/musics/new">
     | StaticRoute<"/pay">
-    | StaticRoute<"/purchase">
     | DynamicRoute<"/scores/[id]/edit", { "id": string }>
     | DynamicRoute<"/scores/[id]", { "id": string }>
     | StaticRoute<"/scores">
     | StaticRoute<"/search">
-    | StaticRoute<"/settings/credit">
-    | StaticRoute<"/settings">
     | DynamicRoute<"/users/[id]/bookmarks", { "id": string }>
     | DynamicRoute<"/users/[id]/followers", { "id": string }>
     | DynamicRoute<"/users/[id]/following", { "id": string }>

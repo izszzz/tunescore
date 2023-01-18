@@ -1,12 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Stack from "@mui/material/Stack";
 import setLocale from "../../../../helpers/locale";
 import ResourceIcon from "../../icon/resource";
@@ -17,6 +11,7 @@ import { getContentImage } from "../../../../helpers/image";
 import Image from "../../image";
 import type { MusicListArgsType } from "../../../../helpers/music";
 import type { Prisma } from "@prisma/client";
+import ListItem from ".";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
@@ -26,46 +21,34 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
   const title = setLocale(data.title, router);
   return (
     <ListItem
-      disablePadding
-      onClick={() =>
-        router.push({ pathname: "/musics/[id]", query: { id: data.id } })
-      }
+      route={{
+        pathname: "/musics/[id]",
+        query: { id: data.id },
+      }}
+      icon={<ResourceIcon resource="BAND" />}
+      listItemTextProps={{
+        primary: title,
+        secondary: (
+          <Stack direction="row" spacing={1}>
+            <Owner data={data} />
+            <BookmarkChip
+              label={data._count.bookmarks}
+              size="small"
+              bookmarked={!!data.bookmarks.length}
+            />
+            <Chip label={data.type} size="small" />
+          </Stack>
+        ),
+      }}
     >
-      <ListItemButton>
-        <ListItemIcon>
-          <ResourceIcon resource="MUSIC" />
-        </ListItemIcon>
-        <ListItemText
-          primary={
-            <Box component="span" display="flex" alignItems="center">
-              <Typography variant="h6" mr={3} noWrap>
-                {title}
-              </Typography>
-              <Chip component="span" label={data.type} size="small" />
-            </Box>
-          }
-          secondary={
-            <Stack direction="row" spacing={1}>
-              <Owner data={data} />
-              <BookmarkChip
-                label={data._count.bookmarks}
-                size="small"
-                bookmarked={!!data.bookmarks.length}
-              />
-            </Stack>
-          }
+      {data.link?.streaming && (
+        <Image
+          height="60"
+          alt={title}
+          src={getContentImage(data.link.streaming)?.image?.size?.medium || ""}
+          style={{ borderRadius: 3 }}
         />
-        {data.link?.streaming && (
-          <Image
-            height="60"
-            alt={title}
-            src={
-              getContentImage(data.link.streaming)?.image?.size?.medium || ""
-            }
-            style={{ borderRadius: 3 }}
-          />
-        )}
-      </ListItemButton>
+      )}
     </ListItem>
   );
 };

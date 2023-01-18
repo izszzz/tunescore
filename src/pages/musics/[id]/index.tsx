@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import YouTube from "react-youtube";
 import Box from "@mui/material/Box";
 import MusicLayout from "../../../components/layouts/show/music";
-import AppleButton from "../../../components/elements/button/link/itunes";
 import { trpc } from "../../../utils/trpc";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import VoteAlert from "../../../components/elements/alert/vote";
@@ -14,10 +13,10 @@ import { getCurrentUserId } from "../../../helpers/user";
 import ParticipationLists from "../../../components/elements/list/participation";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import AlbumLists from "../../../components/elements/list/album";
-import SpotifyButton from "../../../components/elements/button/link/spotify";
-import CartButton from "../../../components/elements/button/cart";
+import CartButton from "../../../components/elements/button/loading/cart";
 import type { NextPage } from "next";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import LinkButtons from "../../../components/elements/button/link";
 
 const Music: NextPage = () => {
   const router = useRouter();
@@ -29,12 +28,7 @@ const Music: NextPage = () => {
   const musicData = data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} query={query} activeTab="info">
-      {data.link?.streaming?.itunes?.id && (
-        <AppleButton href={data.link?.streaming?.itunes.id} />
-      )}
-      {data.link?.streaming?.spotify?.id && (
-        <SpotifyButton href={data.link?.streaming?.spotify.id} />
-      )}
+      {data.link && <LinkButtons data={data.link} />}
       {data.type === "ORIGINAL" ? (
         <CartButton disabled={!!musicData.carts.length} fullWidth />
       ) : (

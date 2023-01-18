@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { AuthenticateUser } from "../../helpers/user";
+import { authenticateUser } from "../../helpers/user";
 import { stripe } from "../common/stripe";
 import { router, publicProcedure } from "../trpc";
 
 export const stripeRouter = router({
   setupIntents: publicProcedure.query(async ({ ctx }) => {
-    const user = AuthenticateUser(ctx.session);
+    const user = authenticateUser(ctx.session);
     return await stripe.setupIntents
       .list({
         customer: user.stripeCustomerId,
@@ -13,7 +13,7 @@ export const stripeRouter = router({
       .then(({ data }) => data);
   }),
   createSetupIntent: publicProcedure.mutation(async ({ ctx }) => {
-    const user = AuthenticateUser(ctx.session);
+    const user = authenticateUser(ctx.session);
     return await stripe.setupIntents
       .create({
         customer: user.stripeCustomerId,
@@ -28,7 +28,7 @@ export const stripeRouter = router({
         await stripe.setupIntents.cancel(input).then((data) => data)
     ),
   paymentMethods: publicProcedure.query(async ({ ctx }) => {
-    const user = AuthenticateUser(ctx.session);
+    const user = authenticateUser(ctx.session);
     return await stripe.customers
       .listPaymentMethods(user.stripeCustomerId)
       .then(({ data }) => data);
@@ -36,7 +36,7 @@ export const stripeRouter = router({
   createPaymentIntent: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx: { session, prisma }, input }) => {
-      const user = AuthenticateUser(session),
+      const user = authenticateUser(session),
         paymentMethod = await stripe.paymentMethods.retrieve(input),
         carts = await prisma.cart.findMany({
           where: {

@@ -1,8 +1,8 @@
+import { artistListArgs } from "../../../helpers/artist";
 import { bandListArgs } from "../../../helpers/band";
 import { bookmarkQuery } from "../../../helpers/bookmark";
 import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
-import { artistListArgs } from "../../../helpers/artist";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 

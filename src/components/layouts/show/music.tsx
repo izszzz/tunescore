@@ -1,30 +1,35 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
+import type { Locale, Prisma } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
-import { useQueryClient } from "@tanstack/react-query";
-import { trpc } from "../../../utils/trpc";
+
+import { bookmarkMutate } from "../../../helpers/bookmark";
+import { getContentImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
-import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getContentImage } from "../../../helpers/image";
-import Image from "../../elements/image";
-import LocaleAlert from "../../elements/alert/locale";
-import ResourceIconButton from "../../elements/button/icon/resource";
-import DefaultShowLayout from "./default";
-import type { DefaultShowLayoutProps } from "./default";
-import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { Locale, Prisma } from "@prisma/client";
 import type {
   MusicShowArgsType,
   musicShowQuery,
 } from "../../../paths/musics/[id]";
+import { trpc } from "../../../utils/trpc";
+import LocaleAlert from "../../elements/alert/locale";
+import ResourceIconButton from "../../elements/button/icon/resource";
+import Image from "../../elements/image";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+
+import DefaultShowLayout from "./default";
+import type { DefaultShowLayoutProps } from "./default";
+
+
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {

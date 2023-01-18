@@ -1,12 +1,14 @@
 import React from "react";
-import ToggleButton from "@mui/material/ToggleButton";
-import Slider from "@mui/material/Slider";
-import Box from "@mui/material/Box";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import type { MouseEvent } from "react";
+
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import type { MouseEvent } from "react";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
+import ToggleButton from "@mui/material/ToggleButton";
+
 
 interface VolumeIconProps {
   value?: number;

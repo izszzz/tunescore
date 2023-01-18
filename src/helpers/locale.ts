@@ -1,5 +1,5 @@
-import type { NextRouter } from "next/router";
 import type { Locales } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 //選択している言語がない場合、値が存在する言語の最初の値を取得し返す。
 const setLocale = (locales: Locales, router: NextRouter) => {

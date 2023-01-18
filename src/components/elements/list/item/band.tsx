@@ -1,16 +1,20 @@
 import React from "react";
-import { useRouter } from "next/router";
+
 import Stack from "@mui/material/Stack";
-import setLocale from "../../../../helpers/locale";
-import ResourceIcon from "../../icon/resource";
-import MusicChip from "../../chip/music";
-import ArtistChip from "../../chip/artist";
-import AlbumChip from "../../chip/album";
-import BookmarkChip from "../../chip/bookmark";
-import { getChannelImage } from "../../../../helpers/image";
-import Image from "../../image";
-import type { BandListArgsType } from "../../../../helpers/band";
 import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
+import type { BandListArgsType } from "../../../../helpers/band";
+import { getChannelImage } from "../../../../helpers/image";
+import setLocale from "../../../../helpers/locale";
+import AlbumChip from "../../chip/album";
+import ArtistChip from "../../chip/artist";
+import BookmarkChip from "../../chip/bookmark";
+import MusicChip from "../../chip/music";
+import ResourceIcon from "../../icon/resource";
+import Image from "../../image";
+
+
 import ListItem from ".";
 export interface BandListItemProps {
   data: Prisma.BandGetPayload<BandListArgsType>;

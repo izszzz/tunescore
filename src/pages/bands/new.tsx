@@ -1,10 +1,13 @@
-import Button from "@mui/material/Button";
-import { useRouter } from "next/router";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { trpc } from "../../utils/trpc";
+
+import Button from "@mui/material/Button";
 import type { Band } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import { trpc } from "../../utils/trpc";
+
 
 const NewBand: NextPage = () => {
   const router = useRouter();

@@ -1,21 +1,23 @@
-import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 import { createPaginator } from "prisma-pagination";
-import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
-import { PaginateOptionsSchema } from "../../utils/zod";
-import { IssueFindManySchema as PullFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
+import { z } from "zod";
+
+import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
-import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
-import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
-import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
-import { router, publicProcedure } from "../trpc";
-import type { userCountQuery } from "../../helpers/user";
-import type { MusicListArgsType } from "../../helpers/music";
-import type { BandListArgsType } from "../../helpers/band";
-import type { ArtistListArgsType } from "../../helpers/artist";
+import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
+import { IssueFindManySchema as PullFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
+import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
+import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import type { AlbumListArgsType } from "../../helpers/album";
-import type { Prisma } from "@prisma/client";
+import type { ArtistListArgsType } from "../../helpers/artist";
+import type { BandListArgsType } from "../../helpers/band";
+import type { MusicListArgsType } from "../../helpers/music";
+import type { userCountQuery } from "../../helpers/user";
+import { PaginateOptionsSchema } from "../../utils/zod";
+import { router, publicProcedure } from "../trpc";
+
 
 export const paginationRouter = router({
   music: publicProcedure

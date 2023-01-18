@@ -1,14 +1,16 @@
 import React from "react";
-import Tooltip from "@mui/material/Tooltip";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import ResourceIcon from "../../icon/resource";
-import CloseIconButton from "../../button/icon/close";
-import SquareCard from "../square";
+
 import type { ItunesMusic } from "../../../../helpers/itunes";
+import CloseIconButton from "../../button/icon/close";
+import ResourceIcon from "../../icon/resource";
+import SquareCard from "../square";
 
 interface ItunesMusicCardProps {
   data: ItunesMusic;

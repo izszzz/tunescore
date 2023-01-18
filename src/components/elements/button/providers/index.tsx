@@ -1,8 +1,10 @@
 import Stack from "@mui/material/Stack";
 import type { StackProps } from "@mui/material/Stack";
-import GoogleButton from "./google";
 import { match } from "ts-pattern";
+
 import { useProviders } from "../../../../hooks/useProvider";
+
+import GoogleButton from "./google";
 import SpotifyButton from "./spotify";
 
 interface ProviderButtonsProps {

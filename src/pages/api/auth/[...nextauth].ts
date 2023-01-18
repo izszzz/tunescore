@@ -1,12 +1,12 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import SpotifyProvider from "next-auth/providers/spotify";
 
 // Prisma adapter for NextAuth, optional and can be removed
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
 import { stripe } from "../../../server/common/stripe";
+import { prisma } from "../../../server/db/client";
 
 console.log(env);
 export const authOptions: NextAuthOptions = {

@@ -1,12 +1,16 @@
 import React from "react";
-import ParticipationListItem from "./item/participation";
-import Lists from ".";
+
 import type { Prisma } from "@prisma/client";
+
 import type {
   ParticipatedArtistArgs,
   ParticipatedMusicArgs,
 } from "../../../helpers/participation";
+
+import ParticipationListItem from "./item/participation";
 import type { ParticipationListItemProps } from "./item/participation";
+
+import Lists from ".";
 interface ParticipationListProps<
   T extends Prisma.ParticipationGetPayload<
     ParticipatedMusicArgs | ParticipatedArtistArgs

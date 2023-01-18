@@ -1,15 +1,19 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import React from "react";
 import ReactDiffViewer from "react-diff-viewer";
-import MusicLayout from "../../../../../components/layouts/show/music";
-import PullLayout from "../../../../../components/layouts/show/pull";
-import { trpc } from "../../../../../utils/trpc";
-import { musicShowQuery } from "../../../../../paths/musics/[id]";
-import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
-import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+
+import MusicLayout from "../../../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import PullLayout from "../../../../../components/layouts/show/pull";
+import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import { trpc } from "../../../../../utils/trpc";
+
 
 const Code: NextPage = () => {
   const router = useRouter(),

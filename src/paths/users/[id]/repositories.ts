@@ -1,8 +1,9 @@
+import type { Prisma } from "@prisma/client";
+
 import { musicListArgs } from "../../../helpers/music";
+import type { MusicListArgsType } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { Prisma } from "@prisma/client";
-import type { MusicListArgsType } from "../../../helpers/music";
 import type { SessionArg } from "../../../helpers/user";
 
 export type UserRepositoriesGetPayload =

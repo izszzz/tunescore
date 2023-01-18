@@ -1,5 +1,6 @@
 import { Box, Chip, Stack } from "@mui/material";
 import type { Prisma } from "@prisma/client";
+
 import type {
   ParticipatedArtistArgs,
   ParticipatedMusicArgs,

@@ -1,11 +1,14 @@
-import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
-import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import React from "react";
-import IconButton from "@mui/material/IconButton";
+
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CloudDoneIcon from "@mui/icons-material/CloudDone";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/router";
+
 import { getRouterId } from "../../../helpers/router";
+
 import Header from ".";
 
 interface EditorHeaderProps {

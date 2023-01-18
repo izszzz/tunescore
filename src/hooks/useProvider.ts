@@ -1,5 +1,6 @@
-import { getProviders } from "next-auth/react";
 import { useEffect, useState } from "react";
+
+import { getProviders } from "next-auth/react";
 import type { ClientSafeProvider } from "next-auth/react";
 
 export const useProviders = () => {

@@ -1,28 +1,30 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
+
 import Divider from "@mui/material/Divider";
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
+import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import MusicLayout from "../../../components/layouts/show/music";
-import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import DangerAlert from "../../../components/elements/alert/delete";
-import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/music/itunes";
-import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
-import setLocale from "../../../helpers/locale";
-import { trpc } from "../../../utils/trpc";
-import SingleRowForm from "../../../components/elements/form/single_row";
-import { musicShowQuery } from "../../../paths/musics/[id]";
-import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
-import { getRouterId } from "../../../helpers/router";
-import { convertAffiliateLink } from "../../../helpers/itunes";
-import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
-import AlbumUpdateAutocomplete from "../../../components/elements/autocomplete/update/album";
-import SpotifyMusicSelectForm from "../../../components/elements/form/settings/select/card/music/spotify";
-import SpotifyButton from "../../../components/elements/button/providers/spotify";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import DangerAlert from "../../../components/elements/alert/delete";
+import AlbumUpdateAutocomplete from "../../../components/elements/autocomplete/update/album";
+import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
+import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
+import SpotifyButton from "../../../components/elements/button/providers/spotify";
+import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
+import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/music/itunes";
+import SpotifyMusicSelectForm from "../../../components/elements/form/settings/select/card/music/spotify";
+import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
+import SingleRowForm from "../../../components/elements/form/single_row";
+import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import { convertAffiliateLink } from "../../../helpers/itunes";
+import setLocale from "../../../helpers/locale";
+import { getRouterId } from "../../../helpers/router";
+import { musicShowQuery } from "../../../paths/musics/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient(),

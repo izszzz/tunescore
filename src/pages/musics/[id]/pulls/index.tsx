@@ -1,15 +1,16 @@
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import { useSession } from "next-auth/react";
-import MusicLayout from "../../../../components/layouts/show/music";
-import PullLists from "../../../../components/elements/list/pull";
-import IndexLayout from "../../../../components/layouts/index";
-import { trpc } from "../../../../utils/trpc";
-import { musicShowQuery } from "../../../../paths/musics/[id]";
-import { getRouterId } from "../../../../helpers/router";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import PullLists from "../../../../components/elements/list/pull";
+import IndexLayout from "../../../../components/layouts/index";
+import MusicLayout from "../../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import { getRouterId } from "../../../../helpers/router";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
+import { trpc } from "../../../../utils/trpc";
 
 const Issues: NextPage = () => {
   const router = useRouter(),

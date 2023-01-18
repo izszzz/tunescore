@@ -1,12 +1,15 @@
-import { match, P } from "ts-pattern";
 import { useRouter } from "next/router";
-import NotificationsIconButton from "../button/icon/notification";
-import { trpc } from "../../../utils/trpc";
+import { match, P } from "ts-pattern";
+
 import setLocale from "../../../helpers/locale";
-import NoneMenuListItem from "./item/none";
+import { trpc } from "../../../utils/trpc";
+import NotificationsIconButton from "../button/icon/notification";
+
 import BookmarkMenuListItem from "./item/bookmark";
-import FollowMenuListItem from "./item/follow";
 import CommentMenuListItem from "./item/comment";
+import FollowMenuListItem from "./item/follow";
+import NoneMenuListItem from "./item/none";
+
 import MenuManager from ".";
 
 const NotificationsMenuManager = () => {

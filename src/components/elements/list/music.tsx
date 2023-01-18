@@ -1,7 +1,9 @@
 import React from "react";
+
 import MusicListItem from "./item/music";
-import Lists from ".";
 import type { MusicListItemProps } from "./item/music";
+
+import Lists from ".";
 interface MusicListProps {
   data: MusicListItemProps["data"][];
 }

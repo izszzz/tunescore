@@ -1,7 +1,8 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { spotify } from "../server/common/spotify";
 import { prisma } from "../server/db/client";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 export const authorized = async (req: NextApiRequest, res: NextApiResponse) => {
   // check authrized

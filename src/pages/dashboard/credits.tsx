@@ -1,11 +1,12 @@
-import { useSession } from "next-auth/react";
-import { trpc } from "../../utils/trpc";
-import UserLayout from "../../components/layouts/show/user";
-import { userShowQuery } from "../../paths/users/[id]";
-import type { UserLayoutProps } from "../../components/layouts/show/user";
 import type { NextPage } from "next";
-import "react-credit-cards/es/styles-compiled.css";
+import { useSession } from "next-auth/react";
+
 import CreditStripeForm from "../../components/elements/form/stripe/credit";
+import UserLayout from "../../components/layouts/show/user";
+import type { UserLayoutProps } from "../../components/layouts/show/user";
+import { userShowQuery } from "../../paths/users/[id]";
+import { trpc } from "../../utils/trpc";
+import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {
   const query = userShowQuery(useSession().data),

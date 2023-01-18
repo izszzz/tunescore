@@ -1,11 +1,15 @@
 import React from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
 import { getRouterId } from "../../../../helpers/router";
 import StatusIcon from "../../icon/status";
-import type { Prisma } from "@prisma/client";
+
+
 import ListItem from ".";
 
 export interface IssueListItemProps {

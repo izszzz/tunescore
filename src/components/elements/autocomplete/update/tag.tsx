@@ -1,10 +1,14 @@
-import { useSnackbar } from "notistack";
 import React from "react";
+
+import type { Tag } from "@prisma/client";
+import { useSnackbar } from "notistack";
+
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
+
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
-import type { Tag } from "@prisma/client";
+
 
 type TagUpdateAutocomplete = Pick<
   UpdateAutocompleteProps<Tag, true, undefined, undefined>,

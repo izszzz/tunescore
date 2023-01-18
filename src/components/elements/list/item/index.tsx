@@ -4,9 +4,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import type { ListItemTextProps } from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import type { Route } from "nextjs-routes";
-import Typography from "@mui/material/Typography";
 
 interface ListItemProps extends MuiListItemProps {
   icon: React.ReactNode;

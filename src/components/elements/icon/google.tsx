@@ -1,7 +1,8 @@
 import React from "react";
-import { FcGoogle } from "react-icons/fc";
+
 import SvgIcon from "@mui/material/SvgIcon";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { FcGoogle } from "react-icons/fc";
 
 const GoogleIcon = (props: SvgIconProps) => {
   return (

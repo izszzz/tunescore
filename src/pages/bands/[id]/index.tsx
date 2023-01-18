@@ -1,13 +1,14 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import BandLayout from "../../../components/layouts/show/band";
-import { trpc } from "../../../utils/trpc";
-import { bandShowQuery } from "../../../paths/bands/[id]";
-import MusicLists from "../../../components/elements/list/music";
-import ArtistLists from "../../../components/elements/list/artist";
-import type { NextPage } from "next";
-import type { BandLayoutProps } from "../../../components/layouts/show/band";
+
 import LinkButtons from "../../../components/elements/button/link";
+import ArtistLists from "../../../components/elements/list/artist";
+import MusicLists from "../../../components/elements/list/music";
+import BandLayout from "../../../components/layouts/show/band";
+import type { BandLayoutProps } from "../../../components/layouts/show/band";
+import { bandShowQuery } from "../../../paths/bands/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const Band: NextPage = () => {
   const router = useRouter();

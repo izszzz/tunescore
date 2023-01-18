@@ -1,7 +1,9 @@
 import React from "react";
+
 import UserListItem from "./item/user";
-import Lists from ".";
 import type { UserListItemProps } from "./item/user";
+
+import Lists from ".";
 interface UserListProps {
   data: UserListItemProps["data"][];
 }

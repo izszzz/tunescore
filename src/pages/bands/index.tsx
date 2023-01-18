@@ -1,12 +1,13 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import BandLists from "../../components/elements/list/band";
 import IndexLayout from "../../components/layouts/index/default";
-import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
 import { bandPaginationQuery } from "../../paths/bands";
-import type { NextPage } from "next";
+import { trpc } from "../../utils/trpc";
 
 const Bands: NextPage = () => {
   const router = useRouter();

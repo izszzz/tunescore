@@ -1,8 +1,9 @@
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import superjson from "superjson";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { NextPageContext } from "next";
+import superjson from "superjson";
+
 // ℹ️ Type-only import:
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from "../server/routers/_app";

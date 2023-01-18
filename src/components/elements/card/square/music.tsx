@@ -1,14 +1,18 @@
 import React from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
 import Box from "@mui/material/Box";
-import { getMusicOwner } from "../../../../helpers/music";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
+import { getContentImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
+import { getMusicOwner } from "../../../../helpers/music";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
-import { getContentImage } from "../../../../helpers/image";
+
 import SquareCard from ".";
-import type { Prisma } from "@prisma/client";
+
 interface SquareMusicCardProps {
   data: Prisma.MusicGetPayload<{
     include: {

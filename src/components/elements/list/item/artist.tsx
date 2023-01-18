@@ -1,14 +1,17 @@
 import React from "react";
-import { useRouter } from "next/router";
+
 import Stack from "@mui/material/Stack";
-import ResourceIcon from "../../icon/resource";
-import setLocale from "../../../../helpers/locale";
-import BookmarkChip from "../../chip/bookmark";
-import BandChip from "../../chip/band";
-import { getChannelImage } from "../../../../helpers/image";
-import Image from "../../image";
 import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
 import type { ArtistListArgsType } from "../../../../helpers/artist";
+import { getChannelImage } from "../../../../helpers/image";
+import setLocale from "../../../../helpers/locale";
+import BandChip from "../../chip/band";
+import BookmarkChip from "../../chip/bookmark";
+import ResourceIcon from "../../icon/resource";
+import Image from "../../image";
+
 import ListItem from ".";
 
 export interface ArtistListItemProps {

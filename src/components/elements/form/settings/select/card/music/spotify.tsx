@@ -1,7 +1,8 @@
-import axios from "axios";
-import SpotifySelectForm from "../spotify";
-import MusicSpotifyCard from "../../../../../card/music/spotify";
 import type { StreamingLink } from "@prisma/client";
+import axios from "axios";
+
+import MusicSpotifyCard from "../../../../../card/music/spotify";
+import SpotifySelectForm from "../spotify";
 
 interface SpotifyMusicSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

@@ -1,24 +1,27 @@
 import React from "react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Toolbar from "@mui/material/Toolbar";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
-import CircularProgress from "@mui/material/CircularProgress";
-import LocaleAutocomplete from "../autocomplete/locale";
-import { useModal } from "../../../hooks/useModal";
-import ThemeToggleButton from "../button/toggle/theme";
-import SearchAutocomplete from "../autocomplete/search";
-import { trpc } from "../../../utils/trpc";
+
 import setLocale from "../../../helpers/locale";
+import { useModal } from "../../../hooks/useModal";
+import { trpc } from "../../../utils/trpc";
+import LocaleAutocomplete from "../autocomplete/locale";
+import SearchAutocomplete from "../autocomplete/search";
+import CartIconButton from "../button/icon/cart";
+import ThemeToggleButton from "../button/icon/toggle/theme";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
-import CartIconButton from "../button/icon/cart";
+
 import Header from ".";
 
 const DefaultHeader = () => {

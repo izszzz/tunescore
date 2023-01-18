@@ -1,18 +1,20 @@
 import React from "react";
+
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../../../utils/trpc";
-import MusicLayout from "../../../../../components/layouts/show/music";
-import CommentCard from "../../../../../components/elements/card/comment";
+import { useSnackbar } from "notistack";
+
 import ArticleCard from "../../../../../components/elements/card/article";
+import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import MusicLayout from "../../../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import { getRouterIssueId } from "../../../../../helpers/router";
 import { getCurrentUserId } from "../../../../../helpers/user";
-import type { NextPage } from "next";
-import type { Prisma } from "@prisma/client";
-import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import { trpc } from "../../../../../utils/trpc";
 
 const Issue: NextPage = () => {
   const router = useRouter(),

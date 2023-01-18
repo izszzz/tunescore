@@ -1,16 +1,17 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
-import { trpc } from "../../utils/trpc";
-import UserLayout from "../../components/layouts/show/user";
-import SingleRowForm from "../../components/elements/form/single_row";
+
 import DeleteAlert from "../../components/elements/alert/delete";
-import { userShowQuery } from "../../paths/users/[id]";
 import GoogleButton from "../../components/elements/button/providers/google";
 import SpotifyButton from "../../components/elements/button/providers/spotify";
-import { useProviders } from "../../hooks/useProvider";
+import SingleRowForm from "../../components/elements/form/single_row";
+import UserLayout from "../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../components/layouts/show/user";
-import type { NextPage } from "next";
+import { useProviders } from "../../hooks/useProvider";
+import { userShowQuery } from "../../paths/users/[id]";
+import { trpc } from "../../utils/trpc";
 import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {

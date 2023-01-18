@@ -1,22 +1,24 @@
+import YouTube from "react-youtube";
+
+import Box from "@mui/material/Box";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import YouTube from "react-youtube";
-import Box from "@mui/material/Box";
-import MusicLayout from "../../../components/layouts/show/music";
-import { trpc } from "../../../utils/trpc";
-import ScoreButtonGroup from "../../../components/elements/button/group/score";
+
 import VoteAlert from "../../../components/elements/alert/vote";
+import ScoreButtonGroup from "../../../components/elements/button/group/score";
+import LinkButtons from "../../../components/elements/button/link";
+import CartButton from "../../../components/elements/button/loading/cart";
+import AlbumLists from "../../../components/elements/list/album";
 import BandLists from "../../../components/elements/list/band";
-import { musicShowQuery } from "../../../paths/musics/[id]";
+import ArtistListItem from "../../../components/elements/list/item/artist";
+import ParticipationLists from "../../../components/elements/list/participation";
+import MusicLayout from "../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import ParticipationLists from "../../../components/elements/list/participation";
-import ArtistListItem from "../../../components/elements/list/item/artist";
-import AlbumLists from "../../../components/elements/list/album";
-import CartButton from "../../../components/elements/button/loading/cart";
-import type { NextPage } from "next";
-import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import LinkButtons from "../../../components/elements/button/link";
+import { musicShowQuery } from "../../../paths/musics/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const Music: NextPage = () => {
   const router = useRouter();

@@ -1,16 +1,17 @@
 import Grid from "@mui/material/Unstable_Grid2";
+import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { trpc } from "../utils/trpc";
-import { artistListArgs } from "../helpers/artist";
-import { albumListArgs } from "../helpers/album";
-import { bandListArgs } from "../helpers/band";
-import SquareMusicCard from "../components/elements/card/square/music";
+
 import SquareAlbumCard from "../components/elements/card/square/album";
 import SquareArtistCard from "../components/elements/card/square/artist";
 import SquareBandCard from "../components/elements/card/square/band";
+import SquareMusicCard from "../components/elements/card/square/music";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
+import { albumListArgs } from "../helpers/album";
+import { artistListArgs } from "../helpers/artist";
+import { bandListArgs } from "../helpers/band";
 import { musicListArgs } from "../helpers/music";
-import type { NextPage } from "next";
+import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();

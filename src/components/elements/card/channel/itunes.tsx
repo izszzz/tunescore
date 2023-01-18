@@ -1,11 +1,13 @@
 import React from "react";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+
+import type { ItunesArtist } from "../../../../helpers/itunes";
 import CloseIconButton from "../../button/icon/close";
 import SquareCard from "../square";
-import type { ItunesArtist } from "../../../../helpers/itunes";
 
 interface ItunesChannelCardProps {
   data: ItunesArtist;

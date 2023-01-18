@@ -1,8 +1,12 @@
+import React from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import React from "react";
-import type { userListArgs } from "../../../../helpers/user";
 import type { Prisma } from "@prisma/client";
+
+import type { userListArgs } from "../../../../helpers/user";
+
+
 import ListItem from ".";
 
 export interface UserListItemProps {

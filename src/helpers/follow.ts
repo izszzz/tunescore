@@ -1,6 +1,7 @@
+import type { Prisma } from "@prisma/client";
+
 import { getCurrentUserId, userListArgs } from "./user";
 import type { SessionArg } from "./user";
-import type { Prisma } from "@prisma/client";
 
 export const followArgs = {
   include: {

@@ -1,15 +1,18 @@
-import superjson from "superjson";
 import React, { useEffect } from "react";
 import Cards from "react-credit-cards";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { trpc } from "../../../../utils/trpc";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import { env } from "../../../../env/client.mjs";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
-import { AppRouter } from "../../../../server/routers/_app";
+import superjson from "superjson";
+
+import { env } from "../../../../env/client.mjs";
+import type { AppRouter } from "../../../../server/routers/_app";
+import { trpc } from "../../../../utils/trpc";
+
 import PaymentStripeForm from "./payment";
 
 const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_CLIENT_ID);

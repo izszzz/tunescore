@@ -1,20 +1,22 @@
 import React from "react";
+
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { useSnackbar } from "notistack";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import ArticleCard from "../../../../../components/elements/card/article";
-import { trpc } from "../../../../../utils/trpc";
-import PullLayout from "../../../../../components/layouts/show/pull";
-import MusicLayout from "../../../../../components/layouts/show/music";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { musicShowQuery } from "../../../../../paths/musics/[id]";
-import { getCurrentUserId } from "../../../../../helpers/user";
-import type { NextPage } from "next";
-import type { Prisma } from "@prisma/client";
+import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import PullLayout from "../../../../../components/layouts/show/pull";
+import { getCurrentUserId } from "../../../../../helpers/user";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import { trpc } from "../../../../../utils/trpc";
 
 const Pull: NextPage = () => {
   const router = useRouter(),

@@ -1,11 +1,14 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
-import { useToggle } from "react-use";
 import React, { useState } from "react";
-import PlayButton from "../button/icon/play";
-import VolumeSliderInput from "../input/slider/volume";
-import Header from ".";
+import { useToggle } from "react-use";
+
 import type { AlphaTabApi } from "@coderline/alphatab";
+
+import PlayButton from "../../music-mateial-ui/button/icon/play";
+import VolumeSliderInput from "../../music-mateial-ui/input/slider/volume";
+
+import Header from ".";
 
 interface ScoreHeaderProps {
   apiRef: React.MutableRefObject<AlphaTabApi | null>;

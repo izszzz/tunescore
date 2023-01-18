@@ -1,9 +1,11 @@
-import { match, P } from "ts-pattern";
-import setLocale from "./locale";
-import { bookmarkQuery } from "./bookmark";
-import type { NextRouter } from "next/router";
-import type { SessionArg } from "./user";
 import type { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
+import { match, P } from "ts-pattern";
+
+import { bookmarkQuery } from "./bookmark";
+import setLocale from "./locale";
+import type { SessionArg } from "./user";
+
 
 export type AlbumListArgsType = ReturnType<typeof albumListArgs>;
 

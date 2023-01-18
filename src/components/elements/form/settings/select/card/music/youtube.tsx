@@ -1,9 +1,11 @@
 import React from "react";
+
+import type { StreamingLink } from "@prisma/client";
 import axios from "axios";
+
 import MusicYoutubeCard from "../../../../../card/music/youtube";
 import YoutubeSelectForm from "../youtube";
 import type { SearchResult, Video, VideoList } from "../youtube";
-import type { StreamingLink } from "@prisma/client";
 
 interface MusicYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

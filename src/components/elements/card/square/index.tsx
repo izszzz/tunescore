@@ -1,10 +1,12 @@
 import React from "react";
+
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useDarkMode } from "usehooks-ts";
+
 import ResourceIcon from "../../icon/resource";
-import Image from "../../image";
 import type { ResourceIconProps } from "../../icon/resource";
+import Image from "../../image";
 
 export interface SquareCardProps {
   title: string | React.ReactNode;

@@ -1,6 +1,7 @@
-import { match, P } from "ts-pattern";
-import { getCurrentUserId } from "./user";
 import type { ResourceType, Prisma } from "@prisma/client";
+import { match, P } from "ts-pattern";
+
+import { getCurrentUserId } from "./user";
 import type { SessionArg } from "./user";
 
 export const bookmarkQuery = ({

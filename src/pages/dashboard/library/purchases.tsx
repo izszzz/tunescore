@@ -1,5 +1,6 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
+
 import MusicLists from "../../../components/elements/list/music";
 import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
 import { musicListArgs } from "../../../helpers/music";

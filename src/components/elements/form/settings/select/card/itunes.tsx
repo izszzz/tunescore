@@ -1,6 +1,7 @@
 import React from "react";
-import CardSelectForm from ".";
-import type { CardSelectFormProps } from ".";
+
+import type { StreamingLink } from "@prisma/client";
+
 import type {
   ItunesResponse,
   searchItunes,
@@ -11,7 +12,9 @@ import type {
   ItunesArtist,
   ItunesAlbum,
 } from "../../../../../../helpers/itunes";
-import type { StreamingLink } from "@prisma/client";
+
+import CardSelectForm from ".";
+import type { CardSelectFormProps } from ".";
 
 interface ItunesSelectFormProps<
   T extends ItunesMusic | ItunesArtist | ItunesAlbum

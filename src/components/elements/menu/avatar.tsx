@@ -1,12 +1,15 @@
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
+import AccountBox from "@mui/icons-material/AccountBox";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import AccountBox from "@mui/icons-material/AccountBox";
-import { signOut, useSession } from "next-auth/react";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
 import router from "next/router";
+import { signOut, useSession } from "next-auth/react";
+
 import { getCurrentUserId } from "../../../helpers/user";
+
 import MenuListItem from "./item";
+
 import MenuManager from ".";
 
 const AvatarMenuManager = () => {

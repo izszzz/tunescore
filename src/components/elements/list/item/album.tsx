@@ -1,14 +1,18 @@
 import React from "react";
-import { useRouter } from "next/router";
+
 import Stack from "@mui/material/Stack";
+import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
+import type { AlbumListArgsType } from "../../../../helpers/album";
+import { getContentImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
-import ResourceIcon from "../../icon/resource";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import { getContentImage } from "../../../../helpers/image";
+import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
-import type { AlbumListArgsType } from "../../../../helpers/album";
-import type { Prisma } from "@prisma/client";
+
+
 import ListItem from ".";
 
 export interface AlbumListItemProps {

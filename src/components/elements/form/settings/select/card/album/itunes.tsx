@@ -1,12 +1,14 @@
 import React from "react";
+
+import type { StreamingLink } from "@prisma/client";
+
 import {
   lookupItunesAlbum,
   searchItunesAlbums,
 } from "../../../../../../../helpers/itunes";
+import type { ItunesAlbum } from "../../../../../../../helpers/itunes";
 import ItunesAlbumCard from "../../../../../card/album/itunes";
 import ItunesSelectForm from "../itunes";
-import type { ItunesAlbum } from "../../../../../../../helpers/itunes";
-import type { StreamingLink } from "@prisma/client";
 
 interface ItunesAlbumSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

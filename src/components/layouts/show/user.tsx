@@ -1,20 +1,24 @@
 import React, { useMemo } from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
+import LoadingButton from "@mui/lab/LoadingButton";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { trpc } from "../../../utils/trpc";
-import DefaultHeader from "../../elements/header/default";
+import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
+import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import { followMutate } from "../../../helpers/follow";
-import ShowLayout from "./index";
 import type { UserShowGetPayload } from "../../../paths/users/[id]";
+import { trpc } from "../../../utils/trpc";
+import DefaultHeader from "../../elements/header/default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
+
 import type { ShowLayoutProps } from ".";
+import ShowLayout from "./index";
+
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: UserShowGetPayload;

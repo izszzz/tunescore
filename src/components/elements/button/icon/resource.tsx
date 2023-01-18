@@ -1,7 +1,8 @@
 import IconButton from "@mui/material/IconButton";
+import type { IconButtonProps } from "@mui/material/IconButton";
+
 import ResourceIcon from "../../icon/resource";
 import type { ResourceIconProps } from "../../icon/resource";
-import type { IconButtonProps } from "@mui/material/IconButton";
 
 interface ResourceIconButtonProps extends IconButtonProps {
   resource: ResourceIconProps["resource"];

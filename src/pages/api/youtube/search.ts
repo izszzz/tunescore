@@ -1,5 +1,6 @@
-import { youtube } from "../../../server/common/youtube";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { youtube } from "../../../server/common/youtube";
 
 const SpotifySearchHandler = async (
   req: NextApiRequest,

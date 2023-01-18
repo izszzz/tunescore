@@ -1,22 +1,27 @@
 import React, { useMemo } from "react";
-import { useRouter } from "next/router";
+
 import Typography from "@mui/material/Typography";
-import { useSession } from "next-auth/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
-import setLocale from "../../../helpers/locale";
-import { trpc } from "../../../utils/trpc";
-import { getRouterId } from "../../../helpers/router";
-import { bookmarkMutate } from "../../../helpers/bookmark";
-import ResourceIconButton from "../../elements/button/icon/resource";
-import DefaultShowLayout from "./default";
-import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { DefaultShowLayoutProps } from "./default";
 import type { Prisma } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import { bookmarkMutate } from "../../../helpers/bookmark";
+import setLocale from "../../../helpers/locale";
+import { getRouterId } from "../../../helpers/router";
 import type {
   AlbumShowArgsType,
   albumShowQuery,
 } from "../../../paths/albums/[id]";
+import { trpc } from "../../../utils/trpc";
+import ResourceIconButton from "../../elements/button/icon/resource";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+
+import DefaultShowLayout from "./default";
+import type { DefaultShowLayoutProps } from "./default";
+
+
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;

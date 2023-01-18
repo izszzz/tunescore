@@ -1,4 +1,5 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+
 import AppleButton from "./itunes";
 import SpotifyButton from "./spotify";
 import YoutubeButton from "./youtube";

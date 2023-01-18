@@ -1,6 +1,7 @@
-import { prisma } from "../../server/db/client";
-import { agenda } from "../../server/common/agenda";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { agenda } from "../../server/common/agenda";
+import { prisma } from "../../server/db/client";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {

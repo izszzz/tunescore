@@ -1,5 +1,6 @@
-import { authorized } from "../../../helpers/spotify";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { authorized } from "../../../helpers/spotify";
 
 const SpotifySearchHandler = async (
   req: NextApiRequest,

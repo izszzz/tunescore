@@ -1,16 +1,18 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
+
+import Close from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
-import Close from "@mui/icons-material/Close";
-import SquareCard from "../square";
+import Typography from "@mui/material/Typography";
+
 import type {
   Channel,
   SearchResult,
 } from "../../form/settings/select/card/youtube";
+import SquareCard from "../square";
 
 interface ChannelYoutubeCardProps<T> {
   data: T;

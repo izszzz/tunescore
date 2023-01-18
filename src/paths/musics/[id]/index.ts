@@ -1,8 +1,8 @@
+import { albumListArgs } from "../../../helpers/album";
 import { bandListArgs } from "../../../helpers/band";
 import { bookmarkQuery } from "../../../helpers/bookmark";
 import { participatedArtistArgs } from "../../../helpers/participation";
 import { getRouterId } from "../../../helpers/router";
-import { albumListArgs } from "../../../helpers/album";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 

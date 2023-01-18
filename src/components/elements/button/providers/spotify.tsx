@@ -1,8 +1,9 @@
 import Button from "@mui/material/Button";
 import type { ButtonProps } from "@mui/material/Button";
 import type { ClientSafeProvider } from "next-auth/react";
-import SpotifyIcon from "../../icon/spotify";
 import { signIn } from "next-auth/react";
+
+import SpotifyIcon from "../../icon/spotify";
 
 interface SpotifyButtonsProps extends ButtonProps {
   provider: Readonly<ClientSafeProvider>;

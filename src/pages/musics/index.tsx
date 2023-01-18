@@ -1,14 +1,17 @@
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import { useSession } from "next-auth/react";
 import React from "react";
-import DefaultIndexLayout from "../../components/layouts/index/default";
-import MusicLists from "../../components/elements/list/music";
-import { trpc } from "../../utils/trpc";
-import setLocale from "../../helpers/locale";
-import { musicPaginationQuery } from "../../paths/musics";
+
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import MusicLists from "../../components/elements/list/music";
+import DefaultIndexLayout from "../../components/layouts/index/default";
+import setLocale from "../../helpers/locale";
+import { musicPaginationQuery } from "../../paths/musics";
+import { trpc } from "../../utils/trpc";
+
 const Musics: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();

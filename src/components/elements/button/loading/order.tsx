@@ -1,6 +1,8 @@
 import React from "react";
+
 import PaidIcon from "@mui/icons-material/Paid";
-import LoadingButton, { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const OrderLoadingButton = (props: Omit<LoadingButtonProps, "startIcon">) => {
   return (

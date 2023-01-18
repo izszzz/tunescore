@@ -1,12 +1,13 @@
 import React from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import GroupIcon from "@mui/icons-material/Group";
-import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import AlbumIcon from "@mui/icons-material/Album";
+
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AlbumIcon from "@mui/icons-material/Album";
+import GroupIcon from "@mui/icons-material/Group";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import { match } from "ts-pattern";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import PersonIcon from "@mui/icons-material/Person";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { match } from "ts-pattern";
 
 export interface ResourceIconProps extends SvgIconProps {
   resource: "ARTIST" | "BAND" | "MUSIC" | "ALBUM" | "USER" | "TAG";

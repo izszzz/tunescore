@@ -1,25 +1,27 @@
 import React from "react";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Controller,
   FormContainer,
   TextFieldElement,
   useForm,
 } from "react-hook-form-mui";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+import type { Issue } from "@prisma/client";
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../../utils/trpc";
+import { useSnackbar } from "notistack";
+
 import MusicLayout from "../../../../components/layouts/show/music";
-import { musicShowQuery } from "../../../../paths/musics/[id]";
+import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import { getRouterId } from "../../../../helpers/router";
 import { getCurrentUserId } from "../../../../helpers/user";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import type { NextPage } from "next";
-import type { Issue } from "@prisma/client";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
+import { trpc } from "../../../../utils/trpc";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {

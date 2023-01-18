@@ -1,12 +1,14 @@
 import React from "react";
+
+import type { StreamingLink } from "@prisma/client";
+
 import {
   lookupItunesArtist,
   searchItunesArtists,
 } from "../../../../../../../helpers/itunes";
+import type { ItunesArtist } from "../../../../../../../helpers/itunes";
 import ItunesChannelCard from "../../../../../card/channel/itunes";
 import ItunesSelectForm from "../itunes";
-import type { ItunesArtist } from "../../../../../../../helpers/itunes";
-import type { StreamingLink } from "@prisma/client";
 
 interface ItunesArtistSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

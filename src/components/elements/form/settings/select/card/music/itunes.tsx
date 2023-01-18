@@ -1,11 +1,12 @@
+import type { StreamingLink } from "@prisma/client";
+
 import {
   searchItunesMusics,
   lookupItunesMusic,
 } from "../../../../../../../helpers/itunes";
+import type { ItunesMusic } from "../../../../../../../helpers/itunes";
 import MusicItunesCard from "../../../../../card/music/itunes";
 import ItunesSelectForm from "../itunes";
-import type { ItunesMusic } from "../../../../../../../helpers/itunes";
-import type { StreamingLink } from "@prisma/client";
 
 interface MusicItunesSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

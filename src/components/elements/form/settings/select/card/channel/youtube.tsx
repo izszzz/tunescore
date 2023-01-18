@@ -1,9 +1,11 @@
 import React from "react";
+
+import type { StreamingLink } from "@prisma/client";
 import axios from "axios";
+
 import ChannelYoutubeCard from "../../../../../card/channel/youtube";
 import YoutubeSelectForm from "../youtube";
 import type { ChannelList, SearchResult, Channel } from "../youtube";
-import type { StreamingLink } from "@prisma/client";
 
 interface ChannelYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;

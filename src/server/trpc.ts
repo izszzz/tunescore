@@ -1,7 +1,7 @@
 // src/server/router/index.ts
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 
-import { initTRPC } from "@trpc/server";
 
 import type { Context } from "./context";
 

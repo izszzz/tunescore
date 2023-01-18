@@ -1,10 +1,12 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import UserLayout from "../../../components/layouts/show/user";
-import { trpc } from "../../../utils/trpc";
-import { userShowQuery } from "../../../paths/users/[id]";
-import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
+import UserLayout from "../../../components/layouts/show/user";
+import type { UserLayoutProps } from "../../../components/layouts/show/user";
+import { userShowQuery } from "../../../paths/users/[id]";
+import { trpc } from "../../../utils/trpc";
+
 
 const User: NextPage = () => {
   const router = useRouter();

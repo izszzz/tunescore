@@ -1,7 +1,8 @@
-import type { NextPage } from "next";
 import Typography from "@mui/material/Typography";
-import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
+import type { NextPage } from "next";
+
 import OrderForm from "../components/elements/form/order";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 
 const Pay: NextPage = () => {
   return (

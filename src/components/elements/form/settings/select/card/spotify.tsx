@@ -1,10 +1,13 @@
 import React from "react";
-import axios from "axios";
-import CardSelectForm from ".";
-import type { AxiosResponse } from "axios";
-import type { spotify } from "../../../../../../server/common/spotify";
-import type { CardSelectFormProps } from ".";
+
 import type { StreamingLink } from "@prisma/client";
+import axios from "axios";
+import type { AxiosResponse } from "axios";
+
+import type { spotify } from "../../../../../../server/common/spotify";
+
+import CardSelectForm from ".";
+import type { CardSelectFormProps } from ".";
 
 interface SpotifySelectFormProps<T>
   extends Pick<

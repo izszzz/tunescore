@@ -1,5 +1,7 @@
 import React from "react";
+
 import DefaultHeader from "../../elements/header/default";
+
 import IndexLayout from "./";
 import type { IndexLayoutProps } from "./";
 

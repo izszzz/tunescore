@@ -1,12 +1,13 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
-import IndexLayout from "../../components/layouts/index/default";
+import { useSnackbar } from "notistack";
+
 import ArtistLists from "../../components/elements/list/artist";
-import { trpc } from "../../utils/trpc";
+import IndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { artistPaginationPath } from "../../paths/artists";
-import type { NextPage } from "next";
+import { trpc } from "../../utils/trpc";
 
 const Artists: NextPage = () => {
   const router = useRouter();

@@ -1,23 +1,24 @@
-import { useRouter } from "next/router";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
-import { useSession } from "next-auth/react";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { trpc } from "../../../utils/trpc";
+import Typography from "@mui/material/Typography";
+import { useQueryClient } from "@tanstack/react-query";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import DeleteAlert from "../../../components/elements/alert/delete";
+import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
+import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
+import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
 import SingleRowForm from "../../../components/elements/form/single_row";
 import BandLayout from "../../../components/layouts/show/band";
-import { bandShowQuery } from "../../../paths/bands/[id]";
-import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
-import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
-import { getRouterId } from "../../../helpers/router";
-import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
-import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
-import DeleteAlert from "../../../components/elements/alert/delete";
-import type { NextPage } from "next";
-import type { BandLayoutProps } from "../../../components/layouts/show/band";
+import { getRouterId } from "../../../helpers/router";
+import { bandShowQuery } from "../../../paths/bands/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const BandSettings: NextPage = () => {
   const router = useRouter(),

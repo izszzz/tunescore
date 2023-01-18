@@ -1,10 +1,12 @@
-import { match, P } from "ts-pattern";
-import { bookmarkQuery } from "./bookmark";
-import { participatedArtistArgs } from "./participation";
-import setLocale from "./locale";
 import type { Prisma } from "@prisma/client";
-import type { SessionArg } from "./user";
 import type { NextRouter } from "next/router";
+import { match, P } from "ts-pattern";
+
+import { bookmarkQuery } from "./bookmark";
+import setLocale from "./locale";
+import { participatedArtistArgs } from "./participation";
+import type { SessionArg } from "./user";
+
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;

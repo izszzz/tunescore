@@ -1,16 +1,18 @@
-import { useSession } from "next-auth/react";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import UserLayout from "../../../components/layouts/show/user";
-import { trpc } from "../../../utils/trpc";
-import { userShowQuery } from "../../../paths/users/[id]";
+import { useSession } from "next-auth/react";
+
 import MusicLists from "../../../components/elements/list/music";
-import { userRepositoriesQuery } from "../../../paths/users/[id]/repositories";
 import IndexLayout from "../../../components/layouts/index";
+import UserLayout from "../../../components/layouts/show/user";
+import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import setLocale from "../../../helpers/locale";
+import { userShowQuery } from "../../../paths/users/[id]";
 import type { UserShowGetPayload } from "../../../paths/users/[id]";
-import type { NextPage } from "next";
+import { userRepositoriesQuery } from "../../../paths/users/[id]/repositories";
+import { trpc } from "../../../utils/trpc";
+
 
 const User: NextPage = () => {
   const router = useRouter();

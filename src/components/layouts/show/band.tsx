@@ -1,25 +1,30 @@
 import React, { useMemo } from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
-import { useSession } from "next-auth/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
+
 import Box from "@mui/material/Box";
-import Image from "../../elements/image";
-import setLocale from "../../../helpers/locale";
-import { trpc } from "../../../utils/trpc";
-import { getRouterId } from "../../../helpers/router";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getChannelImage } from "../../../helpers/image";
-import ResourceIconButton from "../../elements/button/icon/resource";
-import DefaultShowLayout from "./default";
-import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { DefaultShowLayoutProps } from "./default";
-import type { Prisma } from "@prisma/client";
+import setLocale from "../../../helpers/locale";
+import { getRouterId } from "../../../helpers/router";
 import type {
   BandShowArgsType,
   bandShowQuery,
 } from "../../../paths/bands/[id]";
+import { trpc } from "../../../utils/trpc";
+import ResourceIconButton from "../../elements/button/icon/resource";
+import Image from "../../elements/image";
+import type { DefaultTabsProps } from "../../elements/tabs/default";
+
+import DefaultShowLayout from "./default";
+import type { DefaultShowLayoutProps } from "./default";
+
+
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {

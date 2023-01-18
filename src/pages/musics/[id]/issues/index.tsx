@@ -1,14 +1,15 @@
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import { useSession } from "next-auth/react";
-import IndexLayout from "../../../../components/layouts/index";
-import IssueLists from "../../../../components/elements/list/issue";
-import MusicLayout from "../../../../components/layouts/show/music";
-import { trpc } from "../../../../utils/trpc";
-import { musicShowQuery } from "../../../../paths/musics/[id]";
-import { getRouterId } from "../../../../helpers/router";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import IssueLists from "../../../../components/elements/list/issue";
+import IndexLayout from "../../../../components/layouts/index";
+import MusicLayout from "../../../../components/layouts/show/music";
+import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import { getRouterId } from "../../../../helpers/router";
+import { musicShowQuery } from "../../../../paths/musics/[id]";
+import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar(),
     router = useRouter(),

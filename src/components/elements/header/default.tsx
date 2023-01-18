@@ -17,7 +17,7 @@ import { trpc } from "../../../utils/trpc";
 import LocaleAutocomplete from "../autocomplete/locale";
 import SearchAutocomplete from "../autocomplete/search";
 import CartIconButton from "../button/icon/cart";
-import ThemeToggleButton from "../button/toggle/theme";
+import ThemeToggleButton from "../button/icon/toggle/theme";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";

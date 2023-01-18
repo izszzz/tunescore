@@ -5,8 +5,8 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 
-import BookmarkToggleButton from "../../elements/button/toggle/bookmark";
-import type { BookmarkToggleButtonProps } from "../../elements/button/toggle/bookmark";
+import BookmarkToggleButton from "../../elements/button/icon/toggle/bookmark";
+import type { BookmarkToggleButtonProps } from "../../elements/button/icon/toggle/bookmark";
 import DefaultHeader from "../../elements/header/default";
 import ResourceIcon from "../../elements/icon/resource";
 

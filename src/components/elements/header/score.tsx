@@ -5,7 +5,7 @@ import { useToggle } from "react-use";
 
 import type { AlphaTabApi } from "@coderline/alphatab";
 
-import PlayButton from "../../music-mateial-ui/button/icon/play";
+import PlayButton from "../../music-mateial-ui/button/icon/toggle/play";
 import VolumeSliderInput from "../../music-mateial-ui/input/slider/volume";
 
 import Header from ".";
@@ -17,7 +17,11 @@ interface ScoreHeaderProps {
 const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
   const [masterVolume, setMasterVolume] = useState(100);
   const [muted, toggleMuted] = useToggle(false);
-  const handlePlay = () => apiRef.current?.playPause();
+  const [played, togglePlayed] = useToggle(false);
+  const handlePlay = () => {
+    togglePlayed();
+    apiRef.current?.playPause();
+  };
   const handleMute = () => {
     if (!apiRef.current) return;
     toggleMuted();
@@ -44,7 +48,7 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
       }}
     >
       {children}
-      <PlayButton onClick={handlePlay} />
+      <PlayButton value={played} onClick={handlePlay} />
       <VolumeSliderInput
         muted={muted}
         volume={masterVolume}

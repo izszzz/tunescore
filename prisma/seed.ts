@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import {
   AlbumFactory,
   AlbumOwnedByArtist,
@@ -7,6 +8,7 @@ import {
 } from "./fixtures/album";
 import { ArtistFactory, LongNameArtistFactory } from "./fixtures/artist";
 import { BandFactory, LongNameBandFactory } from "./fixtures/band";
+import { IssueFactory } from "./fixtures/issue";
 import { LingTositeSigure } from "./fixtures/lingTositeSigure";
 import {
   CopyMusicFactory,
@@ -25,7 +27,6 @@ import {
   YoutubeMusic,
 } from "./fixtures/music";
 import { PullFactory } from "./fixtures/pull";
-import { IssueFactory } from "./fixtures/issue";
 import { TkFromLingTositeSigure } from "./fixtures/tkFromLingTositeSigure";
 import {
   BookmarksUserFactory,

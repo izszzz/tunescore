@@ -1,7 +1,7 @@
-import { TRPCError } from "@trpc/server";
-import { musicListArgs } from "../../helpers/music";
 import { getCurrentUserId } from "../../helpers/user";
-import { router, publicProcedure } from "../trpc";
+import { musicListArgs } from "../../helpers/music";
+import { publicProcedure, router } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 export const currentUserRouter = router({
   findManyCart: publicProcedure.query(async ({ ctx }) => {
@@ -10,16 +10,24 @@ export const currentUserRouter = router({
         code: "UNAUTHORIZED",
         message: "Please Sign In",
       });
-    const { session } = ctx;
-    const cart = await ctx.prisma.cart.findMany({
-      where: { user: { id: getCurrentUserId(session) } },
-      include: { music: musicListArgs(session) },
-    });
+    const { session } = ctx,
+      cart = await ctx.prisma.cart.findMany({
+        include: { music: musicListArgs(session) },
+        where: { user: { id: getCurrentUserId(session) } },
+      });
     return cart.map((cart) => cart.music);
   }),
   notification: publicProcedure.query(async ({ ctx }) => {
     const userId = getCurrentUserId(ctx.session);
-    return await ctx.prisma.notification.findMany({
+    return ctx.prisma.notification.findMany({
+      include: {
+        bookmarked: {
+          include: {
+            music: true,
+          },
+        },
+        user: true,
+      },
       where: {
         OR: [
           {
@@ -53,14 +61,6 @@ export const currentUserRouter = router({
             },
           },
         ],
-      },
-      include: {
-        bookmarked: {
-          include: {
-            music: true,
-          },
-        },
-        user: true,
       },
     });
   }),

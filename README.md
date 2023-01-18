@@ -7,4 +7,10 @@ npx prisma studio
 npx prisma db seed
 ```
 
+# ESlint
+
+```
+npx eslint --fix ./src
+```
+
 ER

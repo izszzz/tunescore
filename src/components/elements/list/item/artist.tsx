@@ -16,8 +16,9 @@ import ListItem from ".";
 
 export interface ArtistListItemProps {
   data: Prisma.ArtistGetPayload<ArtistListArgsType>;
+  children: React.ReactNode;
 }
-const ArtistListItem = ({ data }: ArtistListItemProps) => {
+const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
   const router = useRouter();
   const name = setLocale(data.name, router);
   return (
@@ -54,6 +55,7 @@ const ArtistListItem = ({ data }: ArtistListItemProps) => {
           style={{ borderRadius: 3 }}
         />
       )}
+      {children}
     </ListItem>
   );
 };

@@ -14,13 +14,13 @@ import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
-
 import ListItem from ".";
 
 export interface MusicListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
+  children: React.ReactNode;
 }
-const MusicListItem = ({ data }: MusicListItemProps) => {
+const MusicListItem = ({ data, children }: MusicListItemProps) => {
   const router = useRouter();
   const title = setLocale(data.title, router);
   return (
@@ -53,11 +53,12 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           style={{ borderRadius: 3 }}
         />
       )}
+      {children}
     </ListItem>
   );
 };
 
-const Owner = ({ data }: MusicListItemProps) => {
+const Owner = ({ data }: Omit<MusicListItemProps, "children">) => {
   const router = useRouter();
   const { type, owner } = getMusicOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;

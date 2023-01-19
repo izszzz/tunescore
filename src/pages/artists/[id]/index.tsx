@@ -20,7 +20,9 @@ const Artist: NextPage = () => {
     <ArtistLayout data={artistData} query={query} activeTab="info">
       <BandLists data={artistData.bands} />
       <ParticipationLists data={artistData.participations}>
-        {(data) => <MusicListItem data={data.music} />}
+        {(participation, data) => (
+          <MusicListItem data={data.music}>{participation}</MusicListItem>
+        )}
       </ParticipationLists>
     </ArtistLayout>
   );

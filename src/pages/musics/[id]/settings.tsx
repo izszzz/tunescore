@@ -59,7 +59,6 @@ const SettingsMusic: NextPage = () => {
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];
-  const providers = userData.accounts.map((account) => account.provider);
   return (
     <MusicLayout data={musicData} query={query} activeTab="settings">
       <Typography variant="h4"> Info</Typography>
@@ -201,7 +200,7 @@ const SettingsMusic: NextPage = () => {
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 
-      {providers.includes("spotify") ? (
+      {session?.user?.providers.includes("spotify") ? (
         <SpotifyMusicSelectForm
           term={setLocale(data.title, router)}
           streamingLink={data.link?.streaming}

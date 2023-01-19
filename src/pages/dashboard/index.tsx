@@ -1,22 +1,18 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { match } from "ts-pattern";
 
 import DeleteAlert from "../../components/elements/alert/delete";
-import GoogleButton from "../../components/elements/button/providers/google";
-import SpotifyButton from "../../components/elements/button/providers/spotify";
+import ProviderButtons from "../../components/elements/button/providers";
 import SingleRowForm from "../../components/elements/form/single_row";
-import UserLayout from "../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../components/layouts/show/user";
-import { useProviders } from "../../hooks/useProvider";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { userShowQuery } from "../../paths/users/[id]";
 import { trpc } from "../../utils/trpc";
 import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter(),
-    providers = useProviders(),
     update = trpc.user.updateOneUser.useMutation(),
     query = userShowQuery(useSession().data),
     { data } = trpc.user.findUniqueUser.useQuery(query),
@@ -25,27 +21,12 @@ const SettingsUser: NextPage = () => {
       onError: (error) => console.log(error),
     });
   if (!data) return <></>;
-  const userData = data as UserLayoutProps["data"],
-    authedProviders = userData.accounts.map((account) => account.provider);
+  const userData = data as UserLayoutProps["data"];
 
   return (
-    <UserLayout data={userData} activeTab="settings">
-      {providers.map((provider) =>
-        match(provider)
-          .with({ id: "google" }, ({ id }) => (
-            <GoogleButton
-              provider={provider}
-              disabled={authedProviders.includes(id)}
-            />
-          ))
-          .with({ id: "spotify" }, ({ id }) => (
-            <SpotifyButton
-              provider={provider}
-              disabled={authedProviders.includes(id)}
-            />
-          ))
-          .otherwise(() => <></>)
-      )}
+    <DefaultSingleColumnLayout contained>
+      <ProviderButtons stackProps={{ direction: "row" }} />
+
       <SingleRowForm
         data={userData}
         loading={update.isLoading}
@@ -63,7 +44,7 @@ const SettingsUser: NextPage = () => {
           loading: destroy.isLoading,
         }}
       />
-    </UserLayout>
+    </DefaultSingleColumnLayout>
   );
 };
 

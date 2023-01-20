@@ -1,6 +1,7 @@
 import React from "react";
 
 import Chip from "@mui/material/Chip";
+import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -16,20 +17,20 @@ import Image from "../../image";
 
 import ListItem from ".";
 
-export interface MusicListItemProps {
+export interface MusicListItemProps extends ListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
-  children: React.ReactNode;
 }
-const MusicListItem = ({ data, children }: MusicListItemProps) => {
+const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter();
   const title = setLocale(data.title, router);
   return (
     <ListItem
+      {...props}
       route={{
         pathname: "/musics/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="BAND" />}
+      icon={<ResourceIcon resource="MUSIC" />}
       listItemTextProps={{
         primary: title,
         secondary: (

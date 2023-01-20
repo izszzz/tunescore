@@ -1,11 +1,11 @@
 import React from "react";
 
-import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
+import MusicListItem from "../../components/elements/list/item/music";
 import MusicLists from "../../components/elements/list/music";
 import DefaultIndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
@@ -31,13 +31,14 @@ const Musics: NextPage = () => {
   );
   if (!data) return <></>;
   return (
-    <DefaultIndexLayout<Music>
+    <DefaultIndexLayout
       newRoute={{ pathname: "/musics/new" }}
       route={{ pathname: "/musics" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => <MusicListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.title, router),
         onInputChange: (_e, inputValue) => {
           search.mutate({

@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
 import AlbumLists from "../../components/elements/list/album";
+import AlbumListItem from "../../components/elements/list/item/album";
 import IndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { albumPaginationQuery } from "../../paths/albums";
@@ -29,6 +30,7 @@ const Albums: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => <AlbumListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.title, router),
         textFieldProps: {
           onChange: (e) =>

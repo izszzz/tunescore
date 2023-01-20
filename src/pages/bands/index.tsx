@@ -4,7 +4,8 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
 import BandLists from "../../components/elements/list/band";
-import IndexLayout from "../../components/layouts/index/default";
+import BandListItem from "../../components/elements/list/item/band";
+import DefaultIndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { bandPaginationQuery } from "../../paths/bands";
 import { trpc } from "../../utils/trpc";
@@ -22,13 +23,14 @@ const Bands: NextPage = () => {
   });
   if (!data) return <></>;
   return (
-    <IndexLayout
+    <DefaultIndexLayout
       newRoute={{ pathname: "/bands/new" }}
       route={{ pathname: "/bands" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => <BandListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.name, router),
         textFieldProps: {
           onChange: (e) =>
@@ -44,7 +46,7 @@ const Bands: NextPage = () => {
       }}
     >
       <BandLists data={data.data} />
-    </IndexLayout>
+    </DefaultIndexLayout>
   );
 };
 

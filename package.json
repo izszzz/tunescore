@@ -98,6 +98,7 @@
     "@commitlint/config-conventional": "^17.4.0",
     "@getbigger-io/prisma-fixtures-cli": "^2.0.1",
     "@mermaid-js/mermaid-cli": "^9.2.2",
+    "@playwright/test": "^1.29.2",
     "@prisma/client": "^4.8.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

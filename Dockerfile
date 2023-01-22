@@ -1,5 +1,5 @@
 # reference https://nodejs.org/ja/docs/guides/nodejs-docker-webapp/
-FROM node:14
+FROM node:14 
 
 # アプリケーションディレクトリを作成する
 WORKDIR /app

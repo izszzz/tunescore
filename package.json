@@ -9,7 +9,7 @@
     "lint": "next lint --dir src",
     "lint:fix": "eslint src --ext .js,jsx,.ts,.tsx --fix",
     "test": "jest --watch",
-    "postinstall": "prisma generate"
+    "postinstall": "whoami && prisma generate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

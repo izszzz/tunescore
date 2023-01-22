@@ -1,8 +1,18 @@
 # reference https://nodejs.org/ja/docs/guides/nodejs-docker-webapp/
-FROM node:14 
+FROM mcr.microsoft.com/playwright:v1.16.3-focal
 
-# アプリケーションディレクトリを作成する
+ENV PWUSER pwuser
+
+RUN apt-get update && apt-get install -y sudo\
+	&& usermod -aG sudo $PWUSER \
+	&& npm i -g npm \
+	&& npx playwright install-deps
+
+USER $PWUSER
+
 WORKDIR /app
+
+RUN sudo chown -R $PWUSER:$PWUSER /app
 
 # アプリケーションの依存関係をインストールする
 # ワイルドカードを使用して、package.json と package-lock.json の両方が確実にコピーされるようにします。
@@ -10,11 +20,12 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+
 # 本番用にコードを作成している場合
 # RUN npm install --only=production
 
 # アプリケーションのソースをバンドルする
-COPY . .
+COPY --chown=$PWUSER:$PWUSER . .
 
 EXPOSE 3000
 

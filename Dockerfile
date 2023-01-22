@@ -7,7 +7,7 @@ WORKDIR /app
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     # Install node16
-    apt-get install -y curl wget gpg && \
+    apt-get install -y curl wget gpg git && \
     curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm && \
@@ -19,7 +19,7 @@ RUN apt-get update && \
 # 可能であれば (npm@5+)
 COPY package*.json ./
 
-RUN npm install
+RUN npm i --legacy-peer-deps
 # 本番用にコードを作成している場合
 # RUN npm install --only=production
 

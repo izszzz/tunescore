@@ -1,4 +1,5 @@
 import AccountBox from "@mui/icons-material/AccountBox";
+import Dashboard from "@mui/icons-material/Dashboard";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
 import Avatar from "@mui/material/Avatar";
@@ -37,6 +38,16 @@ const AvatarMenuManager = () => {
           }}
         >
           Profile
+        </MenuListItem>,
+        <MenuListItem
+          key="dashboard"
+          icon={<Dashboard />}
+          onClick={() => {
+            handleClose();
+            router.push(`/dashboard`);
+          }}
+        >
+          Dashboard
         </MenuListItem>,
         <MenuListItem
           icon={<Settings />}

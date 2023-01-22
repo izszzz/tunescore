@@ -1,19 +1,15 @@
-import Button from "@mui/material/Button";
 import type { ButtonProps } from "@mui/material/Button";
-import type { ClientSafeProvider } from "next-auth/react";
+import Button from "@mui/material/Button";
 import { signIn } from "next-auth/react";
 
 import GoogleIcon from "../../icon/google";
 
-interface GoogleButtons extends ButtonProps {
-  provider: ClientSafeProvider;
-}
-const GoogleButton = ({ provider, ...props }: GoogleButtons) => (
+const GoogleButton = (props: ButtonProps) => (
   <Button
     {...props}
     variant="outlined"
     startIcon={<GoogleIcon />}
-    onClick={async () => await signIn(provider.id)}
+    onClick={async () => await signIn("google")}
   >
     Login with Google
   </Button>

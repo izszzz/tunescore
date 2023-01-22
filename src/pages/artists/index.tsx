@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
 import ArtistLists from "../../components/elements/list/artist";
+import ArtistListItem from "../../components/elements/list/item/artist";
 import IndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { artistPaginationPath } from "../../paths/artists";
@@ -29,6 +30,9 @@ const Artists: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => (
+          <ArtistListItem data={option} dense />
+        ),
         getOptionLabel: (option) => setLocale(option.name, router),
         textFieldProps: {
           onChange: (e) =>

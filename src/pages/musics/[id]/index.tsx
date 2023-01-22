@@ -76,7 +76,9 @@ const Music: NextPage = () => {
 
       {musicData.band && <BandLists data={[musicData.band]} />}
       <ParticipationLists data={musicData.participations}>
-        {(data) => <ArtistListItem data={data.artist} />}
+        {(participation, data) => (
+          <ArtistListItem data={data.artist}>{participation}</ArtistListItem>
+        )}
       </ParticipationLists>
       <AlbumLists data={musicData.albums} />
     </MusicLayout>

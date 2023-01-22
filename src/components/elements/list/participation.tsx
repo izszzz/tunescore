@@ -17,7 +17,10 @@ interface ParticipationListProps<
   >
 > {
   data: ParticipationListItemProps<T>["data"][];
-  children: ParticipationListItemProps<T>["children"];
+  children: (
+    participationListItem: React.ReactNode,
+    data: T
+  ) => React.ReactNode;
 }
 function ParticipationLists<
   T extends Prisma.ParticipationGetPayload<
@@ -27,9 +30,9 @@ function ParticipationLists<
   return (
     <Lists
       data={data}
-      listItem={(props) => (
-        <ParticipationListItem data={props}>{children}</ParticipationListItem>
-      )}
+      listItem={(props) =>
+        children(<ParticipationListItem data={props} />, props)
+      }
     />
   );
 }

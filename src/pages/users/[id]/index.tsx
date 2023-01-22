@@ -7,13 +7,10 @@ import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { trpc } from "../../../utils/trpc";
 
-
 const User: NextPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery({ router, session })
-  );
+  const { data } = trpc.user.findUniqueUser.useQuery(userShowQuery(session));
   if (!data) return <></>;
   const userData = data as UserLayoutProps["data"];
   return (

@@ -1,6 +1,7 @@
 import React from "react";
 
 import Chip from "@mui/material/Chip";
+import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -14,22 +15,22 @@ import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
-
 import ListItem from ".";
 
-export interface MusicListItemProps {
+export interface MusicListItemProps extends ListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
 }
-const MusicListItem = ({ data }: MusicListItemProps) => {
+const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter();
   const title = setLocale(data.title, router);
   return (
     <ListItem
+      {...props}
       route={{
         pathname: "/musics/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="BAND" />}
+      icon={<ResourceIcon resource="MUSIC" />}
       listItemTextProps={{
         primary: title,
         secondary: (
@@ -53,11 +54,12 @@ const MusicListItem = ({ data }: MusicListItemProps) => {
           style={{ borderRadius: 3 }}
         />
       )}
+      {children}
     </ListItem>
   );
 };
 
-const Owner = ({ data }: MusicListItemProps) => {
+const Owner = ({ data }: Omit<MusicListItemProps, "children">) => {
   const router = useRouter();
   const { type, owner } = getMusicOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;

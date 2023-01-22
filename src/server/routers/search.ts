@@ -9,21 +9,33 @@ import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPu
 import { RoleFindManySchema } from "../../../prisma/generated/schemas/findManyRole.schema";
 import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
+import { albumListArgs } from "../../helpers/album";
+import { artistListArgs } from "../../helpers/artist";
+import { bandListArgs } from "../../helpers/band";
+import { musicListArgs } from "../../helpers/music";
 import { publicProcedure, router } from "../trpc";
 
 export const searchRouter = router({
   music: publicProcedure
     .input(MusicFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.music.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.music.findMany(musicListArgs(ctx.session))
+    ),
   artist: publicProcedure
     .input(ArtistFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.artist.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.artist.findMany(artistListArgs(ctx.session))
+    ),
   band: publicProcedure
     .input(BandFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.band.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.band.findMany(bandListArgs(ctx.session))
+    ),
   album: publicProcedure
     .input(AlbumFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.album.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.album.findMany(albumListArgs(ctx.session))
+    ),
   user: publicProcedure
     .input(UserFindManySchema)
     .mutation(async ({ ctx, input }) => ctx.prisma.user.findMany(input)),

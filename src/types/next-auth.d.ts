@@ -1,4 +1,4 @@
-import type { DefaultSession } from "next-auth";
+import type { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -8,6 +8,12 @@ declare module "next-auth" {
     user?: {
       id: string;
       stripeCustomerId: string;
+      providers: string[];
     } & DefaultSession["user"];
+  }
+
+  interface User extends DefaultUser {
+    stripeCustomerId: string;
+    providers: string[];
   }
 }

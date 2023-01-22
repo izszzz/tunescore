@@ -1,19 +1,15 @@
-import Button from "@mui/material/Button";
 import type { ButtonProps } from "@mui/material/Button";
-import type { ClientSafeProvider } from "next-auth/react";
+import Button from "@mui/material/Button";
 import { signIn } from "next-auth/react";
 
 import SpotifyIcon from "../../icon/spotify";
 
-interface SpotifyButtonsProps extends ButtonProps {
-  provider: Readonly<ClientSafeProvider>;
-}
-const SpotifyButton = ({ provider, ...props }: SpotifyButtonsProps) => (
+const SpotifyButton = (props: ButtonProps) => (
   <Button
     {...props}
     variant="outlined"
     startIcon={<SpotifyIcon />}
-    onClick={async () => signIn(provider.id)}
+    onClick={async () => signIn("spotify")}
     color="success"
   >
     Login with Spotify

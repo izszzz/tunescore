@@ -23,7 +23,12 @@ const ListItem = ({
 }: ListItemProps) => {
   const router = useRouter();
   return (
-    <MuiListItem {...props} disablePadding onClick={() => router.push(route)}>
+    <MuiListItem
+      {...props}
+      onClick={() => router.push(route)}
+      divider
+      disablePadding
+    >
       <ListItemButton>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText

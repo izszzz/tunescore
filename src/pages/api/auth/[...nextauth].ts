@@ -12,10 +12,12 @@ console.log(env);
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user = user;
-      }
+    session: async ({ session, user }) => {
+      const data = await prisma.account.findMany({
+        where: { user: { id: user.id } },
+      });
+      user.providers = data.map((account) => account.provider);
+      session.user = user;
       return session;
     },
   },

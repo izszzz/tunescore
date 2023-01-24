@@ -60,5 +60,5 @@ jobs:
           gcloud compute ssh \
           --project=$GCE_INSTANCE \
           --zone=$GCE_INSTANCE_ZONE \
-          --command="(bash -ic 'docker-compose down && docker-compose build && docker-compose -f docker-compose.yml -f docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d'') &" \
+          --command="(bash -ic 'docker-compose down && docker-compose build && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d') &" \
           "$GCE_USER"@"$GCE_INSTANCE"

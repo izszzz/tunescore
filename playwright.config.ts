@@ -11,6 +11,7 @@ import { devices } from "@playwright/test";
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
+  globalSetup: "./tests/setup/globalSetup.ts",
   testDir: "./tests",
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
@@ -40,6 +41,8 @@ const config: PlaywrightTestConfig = {
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+
+    storageState: "./tests/setup/storageState.json",
   },
 
   /* Configure projects for major browsers */
@@ -48,6 +51,9 @@ const config: PlaywrightTestConfig = {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
+        launchOptions: {
+          args: ["--disable-blink-features=AutomationControlled"],
+        },
       },
     },
 
@@ -87,9 +93,9 @@ const config: PlaywrightTestConfig = {
     //   },
     // },
     // {
-    //   name: 'Google Chrome',
+    //   name: "Google Chrome",
     //   use: {
-    //     channel: 'chrome',
+    //     channel: "chrome",
     //   },
     // },
   ],

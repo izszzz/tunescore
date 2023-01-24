@@ -15,10 +15,10 @@ test.describe("has music title", () => {
       data.title.en
     );
   });
-
 });
 
 test("unauthorize user cannot bookmark", async ({ page }) => {
+  page.context().clearCookies();
   const data = await prisma.music.findFirst();
   if (!data) return;
   await page.goto(`/musics/${data.id}`);

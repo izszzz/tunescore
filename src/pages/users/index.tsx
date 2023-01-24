@@ -1,9 +1,11 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { trpc } from "../../utils/trpc";
+
 import UserLists from "../../components/elements/list/user";
-import type { NextPage } from "next";
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import { userCountQuery } from "../../helpers/user";
+import { trpc } from "../../utils/trpc";
 
 const Users: NextPage = () => {
   const router = useRouter();
@@ -15,7 +17,7 @@ const Users: NextPage = () => {
           name: { contains: (router.query.q as string) || "" },
         },
         include: {
-          _count: { select: { following: true, followers: true } },
+          _count: userCountQuery,
         },
       },
       options: { page: (router.query.page as string) || 0, perPage: 12 },

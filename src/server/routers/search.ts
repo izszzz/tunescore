@@ -1,29 +1,41 @@
-import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
-import { IssueFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
+import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
-import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
-import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
-import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
-import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { BookmarkFindManySchema } from "../../../prisma/generated/schemas/findManyBookmark.schema";
 import { FollowFindManySchema } from "../../../prisma/generated/schemas/findManyFollow.schema";
+import { IssueFindManySchema } from "../../../prisma/generated/schemas/findManyIssue.schema";
+import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
+import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
 import { RoleFindManySchema } from "../../../prisma/generated/schemas/findManyRole.schema";
+import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
+import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
+import { albumListArgs } from "../../helpers/album";
+import { artistListArgs } from "../../helpers/artist";
+import { bandListArgs } from "../../helpers/band";
+import { musicListArgs } from "../../helpers/music";
 import { publicProcedure, router } from "../trpc";
 
 export const searchRouter = router({
   music: publicProcedure
     .input(MusicFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.music.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.music.findMany(musicListArgs(ctx.session))
+    ),
   artist: publicProcedure
     .input(ArtistFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.artist.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.artist.findMany(artistListArgs(ctx.session))
+    ),
   band: publicProcedure
     .input(BandFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.band.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.band.findMany(bandListArgs(ctx.session))
+    ),
   album: publicProcedure
     .input(AlbumFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.album.findMany(input)),
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.album.findMany(albumListArgs(ctx.session))
+    ),
   user: publicProcedure
     .input(UserFindManySchema)
     .mutation(async ({ ctx, input }) => ctx.prisma.user.findMany(input)),

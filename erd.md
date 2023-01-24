@@ -1,6 +1,25 @@
 ```mermaid
 erDiagram
 
+        PointActionType {
+            PURCHASE PURCHASE
+CONSUME CONSUME
+CONTRIBUTE CONTRIBUTE
+        }
+    
+
+
+        PointType {
+            Music Music
+Band Band
+Artist Artist
+Album Album
+Pull Pull
+Issue Issue
+        }
+    
+
+
         ResourceType {
             Music Music
 Band Band
@@ -82,6 +101,7 @@ CLOSE CLOSE
     String email  "nullable"
     DateTime emailVerified  "nullable"
     String image  "nullable"
+    String stripeCustomerId  "nullable"
     }
   
 
@@ -196,6 +216,20 @@ CLOSE CLOSE
     }
   
 
+  Cart {
+    String z_id PK 
+    }
+  
+
+  Point {
+    String z_id PK 
+    Int amount  
+    PointActionType actionType  
+    PointType resourceType  
+    DateTime createdAt  
+    }
+  
+
   PullScore {
     String original  
     String changed  
@@ -298,6 +332,17 @@ CLOSE CLOSE
     Notification o{--|o Comment : "commented"
     Notification o{--|| User : "user"
     Notification o|--|| NotificationType : "enum:resourceType"
+    Cart o{--|| User : "user"
+    Cart o{--|| Music : "music"
+    Point o|--|| PointActionType : "enum:actionType"
+    Point o{--|| User : "user"
+    Point o{--|o Music : "music"
+    Point o{--|o Band : "band"
+    Point o{--|o Album : "album"
+    Point o{--|o Artist : "artist"
+    Point o{--|o Pull : "pull"
+    Point o{--|o Issue : "issue"
+    Point o|--|| PointType : "enum:resourceType"
     LinkList o|--|o StreamingLink : "streaming"
     LinkList o|--|o AccountLink : "account"
     StreamingLink o|--|o Link : "youtube"

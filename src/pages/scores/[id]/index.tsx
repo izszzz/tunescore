@@ -1,9 +1,10 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+
 import ScoreLayout from "../../../components/layouts/score";
-import { trpc } from "../../../utils/trpc";
 import { getRouterId } from "../../../helpers/router";
-import type { NextPage } from "next";
+import { trpc } from "../../../utils/trpc";
 
 const Score: NextPage = () => {
   const router = useRouter();

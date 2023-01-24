@@ -1,16 +1,17 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
-import IndexLayout from "../../components/layouts/index/default";
+import { useSnackbar } from "notistack";
+
 import ArtistLists from "../../components/elements/list/artist";
-import { trpc } from "../../utils/trpc";
+import ArtistListItem from "../../components/elements/list/item/artist";
+import IndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { artistPaginationPath } from "../../paths/artists";
-import type { NextPage } from "next";
+import { trpc } from "../../utils/trpc";
 
 const Artists: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.artist.useMutation({
     onError: () => {
@@ -18,7 +19,7 @@ const Artists: NextPage = () => {
     },
   });
   const { data } = trpc.pagination.artist.useQuery(
-    artistPaginationPath({ router, session })
+    artistPaginationPath({ router, session: useSession().data })
   );
   if (!data) return <></>;
   return (
@@ -29,6 +30,9 @@ const Artists: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => (
+          <ArtistListItem data={option} dense />
+        ),
         getOptionLabel: (option) => setLocale(option.name, router),
         textFieldProps: {
           onChange: (e) =>

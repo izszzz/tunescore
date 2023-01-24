@@ -1,12 +1,15 @@
 import React from "react";
+
+import type { Album } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+
+import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
-import setLocale from "../../../../helpers/locale";
+
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
-import type { Album } from "@prisma/client";
 
 type AlbumUpdateAutocompleteProps = Pick<
   UpdateAutocompleteProps<Album, true, undefined, undefined>,

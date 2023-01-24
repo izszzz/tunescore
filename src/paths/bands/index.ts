@@ -1,16 +1,16 @@
-import { bandListQuery } from "../../helpers/band";
+import { bandListArgs } from "../../helpers/band";
 import type { GetRouterArg } from "../../helpers/router";
-import type { GetCurrentUserArg } from "../../helpers/user";
+import type { SessionArg } from "../../helpers/user";
 
 export const bandPaginationQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   args: {
-    ...bandListQuery(session),
+    ...bandListArgs(session),
     where: {
       name: {
         is: {

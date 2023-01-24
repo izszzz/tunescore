@@ -1,8 +1,9 @@
 import React from "react";
+
 import LoadingButton from "@mui/lab/LoadingButton";
+import type { ButtonProps } from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useRouter } from "next/router";
-import type { ButtonProps } from "@mui/material/Button";
 import type { Route } from "nextjs-routes";
 
 interface ScoreButtonProps {

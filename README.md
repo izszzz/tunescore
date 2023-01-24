@@ -7,4 +7,15 @@ npx prisma studio
 npx prisma db seed
 ```
 
-ER
+# ESlint
+
+```
+npx eslint --fix ./src
+```
+
+# Playwight
+
+```
+npx playwright codegen http://localhost:3000/
+npx playwright test
+```

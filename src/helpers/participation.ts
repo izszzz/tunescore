@@ -1,32 +1,19 @@
-import { artistListQuery } from "./artist";
-import { musicListQuery } from "./music";
-import type { Prisma } from "@prisma/client";
-import type { ArtistListQueryType } from "./artist";
-import type { MusicListQueryType } from "./music";
-import type { GetCurrentUserArg } from "./user";
+import { artistListArgs } from "./artist";
+import { musicListArgs } from "./music";
+import { roleMapArgs } from "./roleMap";
+import type { SessionArg } from "./user";
 
-export type ParticipatedArtist = Prisma.ParticipationGetPayload<{
+export type ParticipatedArtistArgs = ReturnType<typeof participatedArtistArgs>;
+export type ParticipatedMusicArgs = ReturnType<typeof participatedMusicArgs>;
+export const participatedArtistArgs = (session: SessionArg) => ({
   include: {
-    artist: ArtistListQueryType;
-    roleMap: { include: { role: true } };
-  };
-}>;
-export type ParticipatedMusic = Prisma.ParticipationGetPayload<{
-  include: {
-    music: MusicListQueryType;
-    roleMap: { include: { role: true } };
-  };
-}>;
-
-export const participatedArtistQuery = (session: GetCurrentUserArg) => ({
-  include: {
-    artist: artistListQuery(session),
-    roleMap: { include: { role: true } },
+    artist: artistListArgs(session),
+    roleMap: roleMapArgs,
   },
 });
-export const participatedMusicQuery = (session: GetCurrentUserArg) => ({
+export const participatedMusicArgs = (session: SessionArg) => ({
   include: {
-    music: musicListQuery(session),
-    roleMap: { include: { role: true } },
+    music: musicListArgs(session),
+    roleMap: roleMapArgs,
   },
 });

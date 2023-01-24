@@ -1,22 +1,27 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+
+import SendIcon from "@mui/icons-material/Send";
 import LoadingButton from "@mui/lab/LoadingButton";
+import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import SendIcon from "@mui/icons-material/Send";
+import type { Artist, Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+
 import setLocale from "../../../../helpers/locale";
-import { handleChangeAutocomplete } from "../../autocomplete/update";
-import SearchAutocomplete from "../../autocomplete/search";
+import type { ParticipatedArtistArgs } from "../../../../helpers/participation";
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
-import ArtistListItem from "../../list/item/artist";
-import CloseIconButton from "../../button/icon/close";
+import SearchAutocomplete from "../../autocomplete/search";
+import { handleChangeAutocomplete } from "../../autocomplete/update";
 import RoleUpdateAutocomplete from "../../autocomplete/update/role";
 import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
-import type { ParticipatedArtist } from "../../../../helpers/participation";
-import type { Artist } from "@prisma/client";
-import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import CloseIconButton from "../../button/icon/close";
+import ResourceIcon from "../../icon/resource";
+import ArtistListItem from "../../list/item/artist";
+
+
+
 
 interface ArtistsUpdateFormProps<T> {
   data: T[];
@@ -25,7 +30,7 @@ interface ArtistsUpdateFormProps<T> {
     onClick: (value: Artist | undefined) => void;
   };
   roleUpdateAutocompleteProps: RoleUpdateAutocompleteProps;
-  onDestroy: (value: ParticipatedArtist) => void;
+  onDestroy: (value: T) => void;
 }
 function ArtistsUpdateForm({
   data,
@@ -33,7 +38,9 @@ function ArtistsUpdateForm({
   loadingButtonProps,
   roleUpdateAutocompleteProps,
   onDestroy,
-}: ArtistsUpdateFormProps<ParticipatedArtist>) {
+}: ArtistsUpdateFormProps<
+  Prisma.ParticipationGetPayload<ParticipatedArtistArgs>
+>) {
   const { enqueueSnackbar } = useSnackbar(),
     [artist, setArtist] = useState<Artist>(),
     router = useRouter(),

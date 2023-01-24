@@ -14,15 +14,24 @@ services:
       - "27017:27017"
 
   web:
-    build: .
-    command: bash -c "npm ci && npm run dev"
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "npm ci --legacy-peer-deps && npm run dev"
     volumes:
       - .:/app
       - nextjs-node-modules:/app/node_modules
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /mnt/wslg:/mnt/wslg
     ports:
       - 3000:3000
     depends_on:
       - db
     tty: true
     environment:
+      - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
+      - DISPLAY=:0
+      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+      - PULSE_SERVER=${PULSE_SERVER}

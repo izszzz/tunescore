@@ -1,27 +1,38 @@
 import React from "react";
-import ParticipationListItem from "./item/participation";
-import Lists from ".";
+
+import type { Prisma } from "@prisma/client";
+
 import type {
-  ParticipatedArtist,
-  ParticipatedMusic,
+  ParticipatedArtistArgs,
+  ParticipatedMusicArgs,
 } from "../../../helpers/participation";
+
+import ParticipationListItem from "./item/participation";
 import type { ParticipationListItemProps } from "./item/participation";
+
+import Lists from ".";
 interface ParticipationListProps<
-  T extends ParticipatedArtist | ParticipatedMusic
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
 > {
   data: ParticipationListItemProps<T>["data"][];
-  children: ParticipationListItemProps<T>["children"];
+  children: (
+    participationListItem: React.ReactNode,
+    data: T
+  ) => React.ReactNode;
 }
-function ParticipationLists<T extends ParticipatedMusic | ParticipatedArtist>({
-  data,
-  children,
-}: ParticipationListProps<T>) {
+function ParticipationLists<
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
+>({ data, children }: ParticipationListProps<T>) {
   return (
     <Lists
       data={data}
-      listItem={(props) => (
-        <ParticipationListItem data={props}>{children}</ParticipationListItem>
-      )}
+      listItem={(props) =>
+        children(<ParticipationListItem data={props} />, props)
+      }
     />
   );
 }

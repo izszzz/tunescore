@@ -1,26 +1,26 @@
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import { useQueryClient } from "@tanstack/react-query";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import { useQueryClient } from "@tanstack/react-query";
-import { trpc } from "../../../utils/trpc";
-import setLocale from "../../../helpers/locale";
-import { convertAffiliateLink } from "../../../helpers/itunes";
-import AlbumLayout from "../../../components/layouts/show/album";
-import { albumShowQuery } from "../../../paths/albums/[id]";
-import SingleRowForm from "../../../components/elements/form/single_row";
-import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
-import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
+
 import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
+import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
+import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
+import SingleRowForm from "../../../components/elements/form/single_row";
+import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
-import type { NextPage } from "next";
+import { convertAffiliateLink } from "../../../helpers/itunes";
+import setLocale from "../../../helpers/locale";
+import { albumShowQuery } from "../../../paths/albums/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const session = useSession();
-  const query = albumShowQuery({ router, session });
+  const query = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { MusicFindManySchema } from '../findManyMusic.schema';
 import { ArtistFindManySchema } from '../findManyArtist.schema';
+import { MusicFindManySchema } from '../findManyMusic.schema';
 import { AlbumFindManySchema } from '../findManyAlbum.schema';
 import { BookmarkFindManySchema } from '../findManyBookmark.schema';
 import { TagMapFindManySchema } from '../findManyTagMap.schema';
@@ -13,13 +13,13 @@ const Schema: z.ZodType<Prisma.BandSelect> = z
     id: z.boolean().optional(),
     name: z.boolean().optional(),
     link: z.boolean().optional(),
-    musics: z
-      .union([z.boolean(), z.lazy(() => MusicFindManySchema)])
-      .optional(),
     artists: z
       .union([z.boolean(), z.lazy(() => ArtistFindManySchema)])
       .optional(),
     artistIDs: z.boolean().optional(),
+    musics: z
+      .union([z.boolean(), z.lazy(() => MusicFindManySchema)])
+      .optional(),
     albums: z
       .union([z.boolean(), z.lazy(() => AlbumFindManySchema)])
       .optional(),

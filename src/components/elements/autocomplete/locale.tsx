@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 import {
   AutocompleteElement,
   FormContainer,
   useForm,
 } from "react-hook-form-mui";
-import type { Locale } from "@prisma/client";
 import type {
   AutocompleteElementProps,
   FieldValues,
 } from "react-hook-form-mui";
+
+import type { Locale } from "@prisma/client";
+import { useRouter } from "next/router";
 const LocaleAutocomplete = (
   props: Omit<
     AutocompleteElementProps<

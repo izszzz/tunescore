@@ -1,16 +1,21 @@
 import React from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
+import type { BandListArgsType } from "../../../../helpers/band";
+import { getChannelImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
-import { getChannelImage } from "../../../../helpers/image";
+
 import SquareCard from ".";
-import type { BandListQueryType } from "../../../../helpers/band";
-import type { Prisma } from "@prisma/client";
+
+
 
 interface SquareBandCardProps {
-  data: Prisma.BandGetPayload<BandListQueryType>;
+  data: Prisma.BandGetPayload<BandListArgsType>;
 }
 const SquareBandCard = ({ data }: SquareBandCardProps) => {
   const router = useRouter();

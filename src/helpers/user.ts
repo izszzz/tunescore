@@ -1,7 +1,16 @@
-import type { useSession } from "next-auth/react";
+import { TRPCError } from "@trpc/server";
+import type { Session } from "next-auth";
 
-export type GetCurrentUserArg = ReturnType<typeof useSession>;
-export const getCurrentUser = (session: GetCurrentUserArg) =>
-  session.data?.user;
-export const getCurrentUserId = (session: GetCurrentUserArg) =>
-  getCurrentUser(session)?.id;
+export type SessionArg = Session | null;
+
+export const authenticateUser = (session: SessionArg) => {
+    if (session?.user) return session.user;
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Please Sign In",
+    });
+  },
+  getCurrentUser = (session: SessionArg) => session?.user,
+  getCurrentUserId = (session: SessionArg) => getCurrentUser(session)?.id,
+  userCountQuery = { select: { followers: true, following: true } },
+  userListArgs = { include: { _count: userCountQuery } };

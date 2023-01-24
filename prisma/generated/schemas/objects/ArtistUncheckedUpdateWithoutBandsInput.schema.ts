@@ -3,10 +3,10 @@ import { LocaleUpdateEnvelopeInputObjectSchema } from './LocaleUpdateEnvelopeInp
 import { LocaleCreateInputObjectSchema } from './LocaleCreateInput.schema';
 import { LinkListNullableUpdateEnvelopeInputObjectSchema } from './LinkListNullableUpdateEnvelopeInput.schema';
 import { LinkListCreateInputObjectSchema } from './LinkListCreateInput.schema';
-import { ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { ArtistUpdatebandIDsInputObjectSchema } from './ArtistUpdatebandIDsInput.schema';
 import { AlbumUncheckedUpdateManyWithoutArtistsNestedInputObjectSchema } from './AlbumUncheckedUpdateManyWithoutArtistsNestedInput.schema';
 import { ArtistUpdatealbumIDsInputObjectSchema } from './ArtistUpdatealbumIDsInput.schema';
+import { ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './ParticipationUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutArtistNestedInput.schema';
 import { TagMapUncheckedUpdateManyWithoutArtistNestedInputObjectSchema } from './TagMapUncheckedUpdateManyWithoutArtistNestedInput.schema';
 
@@ -27,12 +27,6 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateWithoutBandsInput> = z
       ])
       .optional()
       .nullable(),
-    participations: z
-      .lazy(
-        () =>
-          ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
-      )
-      .optional(),
     bandIDs: z
       .union([
         z.lazy(() => ArtistUpdatebandIDsInputObjectSchema),
@@ -47,6 +41,12 @@ const Schema: z.ZodType<Prisma.ArtistUncheckedUpdateWithoutBandsInput> = z
         z.lazy(() => ArtistUpdatealbumIDsInputObjectSchema),
         z.string().array(),
       ])
+      .optional(),
+    participations: z
+      .lazy(
+        () =>
+          ParticipationUncheckedUpdateManyWithoutArtistNestedInputObjectSchema,
+      )
       .optional(),
     bookmarks: z
       .lazy(

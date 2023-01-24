@@ -1,27 +1,30 @@
-import { Box, Chip, Stack } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import type { Prisma } from "@prisma/client";
+
 import type {
-  ParticipatedArtist,
-  ParticipatedMusic,
+  ParticipatedArtistArgs,
+  ParticipatedMusicArgs,
 } from "../../../../helpers/participation";
 
 export interface ParticipationListItemProps<
-  T extends ParticipatedArtist | ParticipatedMusic
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
 > {
   data: T;
-  children: (data: ParticipationListItemProps<T>["data"]) => React.ReactNode;
 }
 function ParticipationListItem<
-  T extends ParticipatedArtist | ParticipatedMusic
->({ data, children }: ParticipationListItemProps<T>) {
+  T extends Prisma.ParticipationGetPayload<
+    ParticipatedMusicArgs | ParticipatedArtistArgs
+  >
+>({ data }: ParticipationListItemProps<T>) {
   return (
-    <Box display="flex" alignItems="center">
-      {children(data)}
-      <Stack direction="row" spacing={1}>
-        {data.roleMap.map((roleMap) => (
-          <Chip key={roleMap.id} label={roleMap.role.name} />
-        ))}
-      </Stack>
-    </Box>
+    <Stack direction="row" spacing={1}>
+      {data.roleMap.map((roleMap) => (
+        <Chip key={roleMap.id} label={roleMap.role.name} />
+      ))}
+    </Stack>
   );
 }
 

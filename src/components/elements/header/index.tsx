@@ -1,6 +1,6 @@
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import type { AppBarProps } from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 
 const Header = ({ children, ...props }: AppBarProps) => {
   return (

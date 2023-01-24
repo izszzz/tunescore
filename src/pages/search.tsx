@@ -1,28 +1,31 @@
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
 import React, { useState } from "react";
-import { match } from "ts-pattern";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
-import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { trpc } from "../utils/trpc";
-import { musicPaginationQuery } from "../paths/musics";
-import { albumPaginationQuery } from "../paths/albums";
-import { bandPaginationQuery } from "../paths/bands";
-import { artistPaginationPath } from "../paths/artists";
-import MusicLists from "../components/elements/list/music";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { match } from "ts-pattern";
+
 import AlbumLists from "../components/elements/list/album";
 import ArtistLists from "../components/elements/list/artist";
 import BandLists from "../components/elements/list/band";
-import type { NextPage } from "next";
+import MusicLists from "../components/elements/list/music";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
+import { albumPaginationQuery } from "../paths/albums";
+import { artistPaginationPath } from "../paths/artists";
+import { bandPaginationQuery } from "../paths/bands";
+import { musicPaginationQuery } from "../paths/musics";
+import { trpc } from "../utils/trpc";
+
 
 type Type = "music" | "album" | "band" | "artist";
 const Search: NextPage = () => {
   const [type, setType] = useState<Type>("music");
-  const session = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const { data } = match(type)
     .with("music", () =>

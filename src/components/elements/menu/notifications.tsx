@@ -1,83 +1,28 @@
-import { useSession } from "next-auth/react";
-import { match, P } from "ts-pattern";
 import { useRouter } from "next/router";
-import NotificationsIconButton from "../button/icon/notification";
-import { trpc } from "../../../utils/trpc";
+import { match, P } from "ts-pattern";
+
 import setLocale from "../../../helpers/locale";
-import { getCurrentUserId } from "../../../helpers/user";
-import NoneMenuListItem from "./item/none";
+import { trpc } from "../../../utils/trpc";
+import NotificationsIconButton from "../button/icon/notification";
+
 import BookmarkMenuListItem from "./item/bookmark";
-import FollowMenuListItem from "./item/follow";
 import CommentMenuListItem from "./item/comment";
+import FollowMenuListItem from "./item/follow";
+import NoneMenuListItem from "./item/none";
+
 import MenuManager from ".";
-import type { Prisma } from "@prisma/client";
 
 const NotificationsMenuManager = () => {
-  const session = useSession();
-  const userId = getCurrentUserId(session);
   const router = useRouter();
-  const { data } = trpc.notification.findManyNotification.useQuery({
-            where: {
-              OR: [
-                {
-                  bookmarked: {
-                    music: {
-                      user: {
-                        id: userId,
-                      },
-                    },
-                  },
-                },
-                {
-                  followed: {
-                    follower: {
-                      id: userId,
-                    },
-                  },
-                },
-                {
-                  commented: {
-                    issue: {
-                      id: userId,
-                    },
-                  },
-                },
-                {
-                  commented: {
-                    pull: {
-                      id: userId,
-                    },
-                  },
-                },
-              ],
-            },
-            include: {
-              bookmarked: {
-                include: {
-                  music: true,
-                },
-              },
-              user: true,
-            },
-          });
+  const { data } = trpc.currentUser.notification.useQuery();
   if (!data) return <></>;
-  const notificationsData = data as Prisma.NotificationGetPayload<{
-    include: {
-      bookmarked: {
-        include: {
-          music: true;
-        };
-      };
-      user: true;
-    };
-  }>[];
   return (
     <MenuManager
       button={(handleOpen) => <NotificationsIconButton onClick={handleOpen} />}
     >
       {(handleClose) =>
-        notificationsData.length
-          ? notificationsData.map((notification) => [
+        data.length
+          ? data.map((notification) => [
               match(notification)
                 .with(
                   {

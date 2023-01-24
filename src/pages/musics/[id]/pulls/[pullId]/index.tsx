@@ -1,43 +1,46 @@
 import React from "react";
+
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import { useSnackbar } from "notistack";
+import type { Prisma } from "@prisma/client";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import ArticleCard from "../../../../../components/elements/card/article";
-import { trpc } from "../../../../../utils/trpc";
-import PullLayout from "../../../../../components/layouts/show/pull";
-import MusicLayout from "../../../../../components/layouts/show/music";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
-import { musicShowQuery } from "../../../../../paths/musics/[id]";
-import type { NextPage } from "next";
-import type { Prisma } from "@prisma/client";
+import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import PullLayout from "../../../../../components/layouts/show/pull";
+import { getCurrentUserId } from "../../../../../helpers/user";
+import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import { trpc } from "../../../../../utils/trpc";
 
 const Pull: NextPage = () => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const session = useSession();
-  const userId = session.data?.user?.id;
-  const create = trpc.comment.createOneComment.useMutation();
-  const query = musicShowQuery({ router, session });
-  const music = trpc.music.findUniqueMusic.useQuery(query, {
-    onError: () => {
-      enqueueSnackbar("music.show error");
-    },
-  });
-  const pull = trpc.pull.findUniquePull.useQuery(
-    {
-      where: { id: router.query.pullId as string },
-      include: { user: true, music: true, vote: true, comments: true },
-    },
-    {
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    { data: session } = useSession(),
+    userId = getCurrentUserId(session),
+    create = trpc.comment.createOneComment.useMutation(),
+    query = musicShowQuery({ router, session }),
+    music = trpc.music.findUniqueMusic.useQuery(query, {
       onError: () => {
         enqueueSnackbar("music.show error");
       },
-    }
-  );
+    }),
+    pull = trpc.pull.findUniquePull.useQuery(
+      {
+        where: { id: router.query.pullId as string },
+        include: { user: true, music: true, vote: true, comments: true },
+      },
+      {
+        onError: () => {
+          enqueueSnackbar("music.show error");
+        },
+      }
+    );
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   const pullData = pull.data as Prisma.PullGetPayload<{

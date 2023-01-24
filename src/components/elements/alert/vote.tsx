@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { intervalToDuration, isPast } from "date-fns";
-import Box from "@mui/material/Box";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import LinearProgress from "@mui/material/LinearProgress";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useRouter } from "next/router";
-import { getRouterId } from "../../../helpers/router";
-import type { Prisma } from "@prisma/client";
+import IconButton from "@mui/material/IconButton";
 import type { IconButtonProps } from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { intervalToDuration, isPast } from "date-fns";
+import { useRouter } from "next/router";
+
+import { getRouterId } from "../../../helpers/router";
 
 export interface VoteAlertProps {
   data: Prisma.PullGetPayload<{

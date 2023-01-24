@@ -1,29 +1,30 @@
 import React from "react";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
-import setLocale from "../../../helpers/locale";
-import { trpc } from "../../../utils/trpc";
-import ArtistLayout from "../../../components/layouts/show/artist";
-import SingleRowForm from "../../../components/elements/form/single_row";
-import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
-import { artistShowQuery } from "../../../paths/artists/[id]";
-import DeleteAlert from "../../../components/elements/alert/delete";
-import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
-import { convertAffiliateLink } from "../../../helpers/itunes";
-import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import DeleteAlert from "../../../components/elements/alert/delete";
+import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
+import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
+import SingleRowForm from "../../../components/elements/form/single_row";
+import ArtistLayout from "../../../components/layouts/show/artist";
 import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
+import { convertAffiliateLink } from "../../../helpers/itunes";
+import setLocale from "../../../helpers/locale";
+import { artistShowQuery } from "../../../paths/artists/[id]";
+import { trpc } from "../../../utils/trpc";
 
 const EditArtist: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
-  const query = artistShowQuery({ router, session });
+  const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {

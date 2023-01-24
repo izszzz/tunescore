@@ -8,6 +8,9 @@ import { PullUpdateManyWithoutUserNestedInputObjectSchema } from './PullUpdateMa
 import { CommentUpdateManyWithoutUserNestedInputObjectSchema } from './CommentUpdateManyWithoutUserNestedInput.schema';
 import { BookmarkUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema';
+import { CartUpdateManyWithoutUserNestedInputObjectSchema } from './CartUpdateManyWithoutUserNestedInput.schema';
+import { PurchaseUpdateManyWithoutUserNestedInputObjectSchema } from './PurchaseUpdateManyWithoutUserNestedInput.schema';
+import { PointUpdateManyWithoutUserNestedInputObjectSchema } from './PointUpdateManyWithoutUserNestedInput.schema';
 import { VoteUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
 import { FollowUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUpdateManyWithoutFollowerNestedInput.schema';
@@ -45,6 +48,13 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutSessionsInput> = z
       ])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([
+        z.string(),
+        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     accounts: z
       .lazy(() => AccountUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
@@ -65,6 +75,15 @@ const Schema: z.ZodType<Prisma.UserUpdateWithoutSessionsInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
     votes: z
       .lazy(() => VoteUpdateManyWithoutUsersNestedInputObjectSchema)

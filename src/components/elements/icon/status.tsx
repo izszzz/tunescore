@@ -1,8 +1,9 @@
 import React from "react";
+
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import { match } from "ts-pattern";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { match } from "ts-pattern";
 
 export interface StatusProps extends SvgIconProps {
   resource: "OPEN" | "CLOSE";

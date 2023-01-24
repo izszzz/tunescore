@@ -1,23 +1,33 @@
-import React, { useEffect, useState } from "react";
-import CardSelectForm from ".";
-import type { CardSelectFormProps } from ".";
+import React from "react";
+
+import type { StreamingLink } from "@prisma/client";
+
 import type {
   ItunesResponse,
   searchItunes,
   BaseSearchParams,
   BaseLookupParams,
   lookupItunes,
+  ItunesMusic,
+  ItunesArtist,
+  ItunesAlbum,
 } from "../../../../../../helpers/itunes";
-import type { StreamingLink } from "@prisma/client";
 
-interface ItunesSelectFormProps<T>
-  extends Pick<CardSelectFormProps<T | undefined>, "largeCard" | "smallCard"> {
+import CardSelectForm from ".";
+import type { CardSelectFormProps } from ".";
+
+interface ItunesSelectFormProps<
+  T extends ItunesMusic | ItunesArtist | ItunesAlbum
+> extends Pick<
+    CardSelectFormProps<T, ItunesResponse<T>["results"]>,
+    "largeCard" | "smallCard"
+  > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
   search: (params: BaseSearchParams) => ReturnType<typeof searchItunes<T>>;
   lookup: (params: BaseLookupParams) => ReturnType<typeof lookupItunes<T>>;
 }
-function ItunesSelectForm<T>({
+function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   streamingLink,
   term,
   largeCard,
@@ -25,31 +35,16 @@ function ItunesSelectForm<T>({
   search,
   lookup,
 }: ItunesSelectFormProps<T>) {
-  const [options, setOptions] = useState<ItunesResponse<T>>();
-  const [value, setValue] = useState<T>();
-  const [page, setPage] = useState(0);
-  const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
-    page: number
-  ) =>
-    search({ term, offset: 12 * page, limit: 12 }).then((res) => {
-      setOptions(res);
-      setPage(page);
-    });
-  useEffect(() => {
-    if (streamingLink?.itunes?.id) {
-      const id = new URL(streamingLink.itunes.id).pathname.split("/")[4];
-      if (id) lookup({ id }).then((res) => setValue(res.results[0]));
-    } else
-      search({ term, offset: 0, limit: 12 }).then((res) => {
-        setValue(undefined);
-        setOptions(res);
-      });
-  }, [lookup, search, streamingLink, term]);
   return (
-    <CardSelectForm
-      value={value}
-      options={options?.results || []}
+    <CardSelectForm<T, ItunesResponse<T>["results"]>
+      link={streamingLink?.itunes}
+      lookup={async (url) => {
+        const id = new URL(url).pathname.split("/")[4];
+        if (id) return await lookup({ id }).then((res) => res.results[0]);
+      }}
+      search={() =>
+        search({ term, offset: 0, limit: 12 }).then(({ results }) => results)
+      }
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{
@@ -61,8 +56,9 @@ function ItunesSelectForm<T>({
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,
-        page: page,
-        onPageChange: handleChangePage,
+        page: 0,
+        onPageChange: () => undefined,
+        // onPageChange: handleChangePage,
       }}
     />
   );

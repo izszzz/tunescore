@@ -1,41 +1,52 @@
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import Button from "@mui/material/Button";
 import {
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
   useForm,
 } from "react-hook-form-mui";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
-import Script from "next/script";
+
 import { importer } from "@coderline/alphatab";
-import { useSession } from "next-auth/react";
+import DriveFolderUpload from "@mui/icons-material/DriveFolderUpload";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import AlphaTexExporter from "../../helpers/AlphaTexExporter";
-import { trpc } from "../../utils/trpc";
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import Typography from "@mui/material/Typography";
 import type { Music } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import Script from "next/script";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
+import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import AlphaTexExporter from "../../helpers/AlphaTexExporter";
+import { getCurrentUserId } from "../../helpers/user";
+import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
-  const router = useRouter();
-  const session = useSession();
-  const formContext = useForm<Music>();
-  const { enqueueSnackbar } = useSnackbar();
-  const create = trpc.music.createOneMusic.useMutation({
-    onSuccess: () => router.push("/musics"),
-    onError: (error) => {
-      enqueueSnackbar(String(error));
-    },
-  });
+  const router = useRouter(),
+    formContext = useForm<Music>({ defaultValues: { price: 0 } }),
+    {
+      watch,
+      setValue,
+      formState: { isDirty, isValid },
+    } = formContext,
+    type = watch("type"),
+    { data: session } = useSession(),
+    { enqueueSnackbar } = useSnackbar(),
+    create = trpc.music.createOneMusic.useMutation({
+      onSuccess: () => router.push("/musics"),
+      onError: (error) => {
+        enqueueSnackbar(String(error));
+      },
+    });
   const handleSubmit = (data: Music) => {
     create.mutate({
       data: {
         ...data,
         price: Number(data.price),
-        user: { connect: { id: session.data?.user?.id } },
+        user: { connect: { id: getCurrentUserId(session) } },
       },
     });
   };
@@ -61,7 +72,7 @@ const NewMusic: NextPage = () => {
     if (score != null) {
       const exporter = new AlphaTexExporter();
       exporter.Export(score);
-      formContext.setValue("score", exporter.ToTex());
+      setValue("score", exporter.ToTex());
     }
   };
   return (
@@ -70,57 +81,79 @@ const NewMusic: NextPage = () => {
         src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
         onError={(e) => console.log(e)}
       />
-      <Typography variant="h4">Create a New Music</Typography>
-      <Divider />
+      <Box my={3}>
+        <Typography variant="h4">Create a New Music</Typography>
+        <Divider />
 
-      <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-        <Button variant="contained" component="label" disableElevation>
-          Guitar Pro
-          <input type="file" hidden onChange={handleChange} />
-        </Button>
-        <Box mb={3}>
-          <RadioButtonGroup
-            label="type"
-            name="type"
-            options={[
-              { id: "ORIGINAL", label: "original" },
-              { id: "COPY", label: "copy" },
-            ]}
-            row
-            required
-          />
+        <Box my={3}>
+          <FormContainer formContext={formContext} onSuccess={handleSubmit}>
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<DriveFolderUpload />}
+              disableElevation
+              fullWidth
+            >
+              Guitar Pro
+              <input type="file" hidden onChange={handleChange} />
+            </Button>
+            <Box mb={3}>
+              <RadioButtonGroup
+                label="type"
+                name="type"
+                options={[
+                  { id: "ORIGINAL", label: "original" },
+                  { id: "COPY", label: "copy" },
+                ]}
+                row
+                required
+              />
+            </Box>
+            <Box mb={3}>
+              <RadioButtonGroup
+                label="visibillity"
+                name="visibility"
+                options={[
+                  { id: "PUBLIC", label: "public" },
+                  { id: "PRIVATE", label: "private" },
+                ]}
+                row
+                required
+              />
+            </Box>
+            <TextFieldElement
+              name={"title." + router.locale}
+              label="Title"
+              margin="dense"
+              required
+              fullWidth
+            />
+            <br />
+            {type === "ORIGINAL" && (
+              <>
+                <TextFieldElement
+                  label="price"
+                  name="price"
+                  margin="dense"
+                  type="number"
+                  required
+                  fullWidth
+                />
+                <br />
+              </>
+            )}
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              disabled={!isDirty || !isValid || create.isLoading}
+              fullWidth
+              disableElevation
+            >
+              submit
+            </LoadingButton>
+          </FormContainer>
         </Box>
-        <Box mb={3}>
-          <RadioButtonGroup
-            label="visibillity"
-            name="visibility"
-            options={[
-              { id: "PUBLIC", label: "public" },
-              { id: "PRIVATE", label: "private" },
-            ]}
-            row
-            required
-          />
-        </Box>
-        <TextFieldElement
-          name={"title." + router.locale}
-          label="Title"
-          required
-          fullWidth
-        />
-        <br />
-        <TextFieldElement
-          margin="dense"
-          label="price"
-          name="price"
-          required
-          type="number"
-        />
-        <br />
-        <Button type="submit" variant="contained" fullWidth disableElevation>
-          submit
-        </Button>
-      </FormContainer>
+      </Box>
     </DefaultSingleColumnLayout>
   );
 };

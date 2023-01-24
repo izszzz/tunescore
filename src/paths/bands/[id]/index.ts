@@ -1,21 +1,26 @@
-import { artistListQuery } from "../../../helpers/artist";
+import { artistListArgs } from "../../../helpers/artist";
 import { bookmarkQuery } from "../../../helpers/bookmark";
-import { musicListQuery } from "../../../helpers/music";
+import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
-import type { GetCurrentUserArg } from "../../../helpers/user";
+import type { SessionArg } from "../../../helpers/user";
 
-export const bandShowPath = ({
+export const bandShowQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
-  session: GetCurrentUserArg;
+  session: SessionArg;
 }) => ({
   where: { id: getRouterId(router) },
+  ...bandShowArgs(session),
+});
+
+export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
+const bandShowArgs = (session: SessionArg) => ({
   include: {
-    artists: artistListQuery(session),
-    musics: musicListQuery(session),
+    artists: artistListArgs(session),
+    musics: musicListArgs(session),
     bookmarks: bookmarkQuery({ type: "Band", session }),
     tagMaps: { include: { tag: true } },
   },

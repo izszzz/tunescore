@@ -1,36 +1,35 @@
 import React, { useMemo } from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
-import { useSession } from "next-auth/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
+
 import Box from "@mui/material/Box";
-import Image from "../../elements/image";
-import setLocale from "../../../helpers/locale";
-import { trpc } from "../../../utils/trpc";
-import { getRouterId } from "../../../helpers/router";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getChannelImage } from "../../../helpers/image";
+import setLocale from "../../../helpers/locale";
+import { getRouterId } from "../../../helpers/router";
+import type {
+  BandShowArgsType,
+  bandShowQuery,
+} from "../../../paths/bands/[id]";
+import { trpc } from "../../../utils/trpc";
 import ResourceIconButton from "../../elements/button/icon/resource";
-import DefaultShowLayout from "./default";
+import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
+
+import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
-import type { Prisma } from "@prisma/client";
-import type { bandShowPath } from "../../../paths/bands/[id]";
-import type { ArtistListQueryType } from "../../../helpers/artist";
-import type { MusicListQueryType } from "../../../helpers/music";
+
+
 
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.BandGetPayload<{
-    include: {
-      artists: ArtistListQueryType;
-      musics: MusicListQueryType;
-      bookmarks: true;
-      tagMaps: { include: { tag: true } };
-    };
-  }>;
-  query: ReturnType<typeof bandShowPath>;
+  data: Prisma.BandGetPayload<BandShowArgsType>;
+  query: ReturnType<typeof bandShowQuery>;
   activeTab: "info" | "settings";
 }
 
@@ -42,7 +41,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
 }) => {
   const router = useRouter();
   const id = getRouterId(router);
-  const session = useSession();
+  const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const name = setLocale(data.name, router);

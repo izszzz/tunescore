@@ -1,22 +1,26 @@
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
+import AccountBox from "@mui/icons-material/AccountBox";
+import Dashboard from "@mui/icons-material/Dashboard";
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import AccountBox from "@mui/icons-material/AccountBox";
-import { signOut, useSession } from "next-auth/react";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
 import router from "next/router";
+import { signOut, useSession } from "next-auth/react";
+
 import { getCurrentUserId } from "../../../helpers/user";
+
 import MenuListItem from "./item";
+
 import MenuManager from ".";
 
 const AvatarMenuManager = () => {
-  const session = useSession();
-  const id = getCurrentUserId(session);
+  const { data } = useSession();
+  const id = getCurrentUserId(data);
   return (
     <MenuManager
       button={(handleOpen) => (
         <IconButton onClick={handleOpen}>
-          <Avatar alt="Remy Sharp" src={session.data?.user?.image || ""} />
+          <Avatar alt="Remy Sharp" src={data?.user?.image || ""} />
         </IconButton>
       )}
     >
@@ -36,15 +40,21 @@ const AvatarMenuManager = () => {
           Profile
         </MenuListItem>,
         <MenuListItem
+          key="dashboard"
+          icon={<Dashboard />}
+          onClick={() => {
+            handleClose();
+            router.push(`/dashboard`);
+          }}
+        >
+          Dashboard
+        </MenuListItem>,
+        <MenuListItem
           icon={<Settings />}
           key="settings"
           onClick={() => {
             handleClose();
-            id &&
-              router.push({
-                pathname: `/users/[id]/settings`,
-                query: { id },
-              });
+            router.push("/settings");
           }}
         >
           Settings

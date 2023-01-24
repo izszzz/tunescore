@@ -1,11 +1,13 @@
 import React from "react";
-import ButtonGroup from "@mui/material/ButtonGroup";
+
 import LoadingButton from "@mui/lab/LoadingButton";
-import { match } from "ts-pattern";
-import PullStatusIcon from "../../icon/pull/status";
-import VoteAlert from "../../alert/vote";
-import type { Prisma } from "@prisma/client";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import type { Prisma } from "@prisma/client";
+import { match } from "ts-pattern";
+
+import VoteAlert from "../../alert/vote";
+import PullStatusIcon from "../../icon/pull/status";
 
 interface PullButtonProps {
   conflict: boolean;

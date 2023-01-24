@@ -1,12 +1,16 @@
 // src/pages/_app.tsx
-import { SessionProvider } from "next-auth/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { SnackbarProvider } from "notistack";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { AppType } from "next/app";
+import Head from "next/head";
+import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
+
 import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
@@ -14,8 +18,6 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { trpc } from "../utils/trpc";
-import type { Session } from "next-auth";
-import type { AppType } from "next/app";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -33,6 +35,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <SnackbarProvider maxSnack={3}>
           <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
+              <Head>
+                <title>tunescore</title>
+              </Head>
               <CssBaseline />
               <Component {...pageProps} />
               <ReactQueryDevtools initialIsOpen={false} />

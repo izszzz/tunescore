@@ -9,6 +9,9 @@ import { PullUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './Pul
 import { CommentUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './CommentUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { BookmarkUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './BookmarkUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUncheckedUpdateManyWithoutUserNestedInput.schema';
+import { CartUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './CartUncheckedUpdateManyWithoutUserNestedInput.schema';
+import { PurchaseUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PurchaseUncheckedUpdateManyWithoutUserNestedInput.schema';
+import { PointUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './PointUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { VoteUncheckedUpdateManyWithoutUsersNestedInputObjectSchema } from './VoteUncheckedUpdateManyWithoutUsersNestedInput.schema';
 import { UserUpdatevoteIDsInputObjectSchema } from './UserUpdatevoteIDsInput.schema';
 import { FollowUncheckedUpdateManyWithoutFollowerNestedInputObjectSchema } from './FollowUncheckedUpdateManyWithoutFollowerNestedInput.schema';
@@ -46,6 +49,13 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z
       ])
       .optional()
       .nullable(),
+    stripeCustomerId: z
+      .union([
+        z.string(),
+        z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
+      ])
+      .optional()
+      .nullable(),
     accounts: z
       .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
@@ -71,6 +81,15 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z
       .lazy(
         () => NotificationUncheckedUpdateManyWithoutUserNestedInputObjectSchema,
       )
+      .optional(),
+    carts: z
+      .lazy(() => CartUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
     votes: z
       .lazy(() => VoteUncheckedUpdateManyWithoutUsersNestedInputObjectSchema)

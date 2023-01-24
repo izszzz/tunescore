@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import { ArtistFactory } from "./artist";
 import { BandFactory } from "./band";
 import { UserFactory } from "./user";
@@ -10,6 +11,15 @@ export const MusicFactory = prisma.music.create({
     title: { ja: "曲", en: "music" },
     type: "ORIGINAL",
     visibility: "PUBLIC",
+  },
+});
+
+export const PaidMusicFactory = prisma.music.create({
+  data: {
+    title: { ja: "有料", en: "Paid" },
+    type: "ORIGINAL",
+    visibility: "PUBLIC",
+    price: 100,
   },
 });
 
@@ -30,7 +40,7 @@ export const CopyMusicFactory = prisma.music.create({
       en: "Copy Music",
       ja: "コピー曲",
     },
-    type: "ORIGINAL",
+    type: "COPY",
     visibility: "PUBLIC",
   },
 });

@@ -1,8 +1,11 @@
-import IconButton from "@mui/material/IconButton";
 import Add from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
 import router from "next/router";
+
 import ResourceIcon from "../icon/resource";
+
 import MenuListItem from "./item";
+
 import MenuManager from ".";
 
 const PlusMenuManager = () => (

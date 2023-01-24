@@ -7,6 +7,9 @@ import { PullCreateNestedManyWithoutUserInputObjectSchema } from './PullCreateNe
 import { CommentCreateNestedManyWithoutUserInputObjectSchema } from './CommentCreateNestedManyWithoutUserInput.schema';
 import { BookmarkCreateNestedManyWithoutUserInputObjectSchema } from './BookmarkCreateNestedManyWithoutUserInput.schema';
 import { NotificationCreateNestedManyWithoutUserInputObjectSchema } from './NotificationCreateNestedManyWithoutUserInput.schema';
+import { CartCreateNestedManyWithoutUserInputObjectSchema } from './CartCreateNestedManyWithoutUserInput.schema';
+import { PurchaseCreateNestedManyWithoutUserInputObjectSchema } from './PurchaseCreateNestedManyWithoutUserInput.schema';
+import { PointCreateNestedManyWithoutUserInputObjectSchema } from './PointCreateNestedManyWithoutUserInput.schema';
 import { UserCreatevoteIDsInputObjectSchema } from './UserCreatevoteIDsInput.schema';
 import { FollowCreateNestedManyWithoutFollowerInputObjectSchema } from './FollowCreateNestedManyWithoutFollowerInput.schema';
 import { FollowCreateNestedManyWithoutFollowingInputObjectSchema } from './FollowCreateNestedManyWithoutFollowingInput.schema';
@@ -20,6 +23,7 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutVotesInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    stripeCustomerId: z.string().optional().nullable(),
     accounts: z
       .lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
@@ -43,6 +47,15 @@ const Schema: z.ZodType<Prisma.UserCreateWithoutVotesInput> = z
       .optional(),
     notifications: z
       .lazy(() => NotificationCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    carts: z
+      .lazy(() => CartCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    purchases: z
+      .lazy(() => PurchaseCreateNestedManyWithoutUserInputObjectSchema)
+      .optional(),
+    points: z
+      .lazy(() => PointCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),
     voteIDs: z
       .union([

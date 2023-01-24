@@ -1,19 +1,20 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import BandLists from "../../components/elements/list/band";
-import IndexLayout from "../../components/layouts/index/default";
-import { trpc } from "../../utils/trpc";
+import BandListItem from "../../components/elements/list/item/band";
+import DefaultIndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
 import { bandPaginationQuery } from "../../paths/bands";
-import type { NextPage } from "next";
+import { trpc } from "../../utils/trpc";
 
 const Bands: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.pagination.band.useQuery(
-    bandPaginationQuery({ router, session })
+    bandPaginationQuery({ router, session: useSession().data })
   );
   const search = trpc.search.band.useMutation({
     onError: () => {
@@ -22,13 +23,14 @@ const Bands: NextPage = () => {
   });
   if (!data) return <></>;
   return (
-    <IndexLayout
+    <DefaultIndexLayout
       newRoute={{ pathname: "/bands/new" }}
       route={{ pathname: "/bands" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => <BandListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.name, router),
         textFieldProps: {
           onChange: (e) =>
@@ -44,7 +46,7 @@ const Bands: NextPage = () => {
       }}
     >
       <BandLists data={data.data} />
-    </IndexLayout>
+    </DefaultIndexLayout>
   );
 };
 

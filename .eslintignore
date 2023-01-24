@@ -1,1 +1,2 @@
-prisma/generated/*
+/src/env/*
+/src/server/db/client.ts

@@ -1,10 +1,14 @@
-import { useSnackbar } from "notistack";
 import React from "react";
+
+import type { Role } from "@prisma/client";
+import { useSnackbar } from "notistack";
+
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
+
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
-import type { Role } from "@prisma/client";
+
 
 export type RoleUpdateAutocompleteProps = Pick<
   UpdateAutocompleteProps<Role, true, undefined, undefined>,

@@ -38,22 +38,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@main
-        with:
-          node-version: 14.x
-
-      - name: npm install and build
-        run: |
-          npm install
-          npm run build
-
-      - name: Create Build Folder
-        run: mkdir build
-
-      - name: Move
-        run: mv .next prisma package.json package-lock.json Dockerfile docker-compose.yml docker-compose.prod.yml build
-
       # Configure Workload Identity Federation and generate an access token.
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -67,7 +51,7 @@ jobs:
 
       - name: Deploy
         run: |-
-          gcloud compute scp ./build "$GCE_USER"@"$GCE_INSTANCE":./ \
+          gcloud compute scp $(pwd) "$GCE_USER"@"$GCE_INSTANCE":./ \
           --recurse \
           --zone "$GCE_INSTANCE_ZONE" \
 
@@ -76,5 +60,5 @@ jobs:
           gcloud compute ssh \
           --project=$GCE_INSTANCE \
           --zone=$GCE_INSTANCE_ZONE \
-          --command="(bash -ic 'docker-compose down && docker-compose build && docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d') &" \
+          --command="(bash -ic 'docker-compose down && docker-compose build && docker-compose -f docker-compose.yml -f docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d'') &" \
           "$GCE_USER"@"$GCE_INSTANCE"

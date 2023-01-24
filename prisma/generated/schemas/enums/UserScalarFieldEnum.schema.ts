@@ -6,5 +6,6 @@ export const UserScalarFieldEnumSchema = z.enum([
   'email',
   'emailVerified',
   'image',
+  'stripeCustomerId',
   'voteIDs',
 ]);

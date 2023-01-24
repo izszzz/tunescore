@@ -1,5 +1,6 @@
-import { youtube } from "../../../server/common/youtube";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { youtube } from "../../../server/common/youtube";
 
 const SpotifySearchHandler = async (
   req: NextApiRequest,
@@ -12,7 +13,7 @@ const SpotifySearchHandler = async (
   await youtube.search
     .list({
       q: String(term),
-      type: type as string[],
+      type: [type as string],
       part: ["snippet"],
       videoCategoryId: "10",
       maxResults: 6,

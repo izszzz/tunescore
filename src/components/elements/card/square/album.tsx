@@ -1,18 +1,23 @@
 import React from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
+import { useRouter } from "next/router";
+
 import { getAlbumOwner } from "../../../../helpers/album";
+import type { AlbumListArgsType } from "../../../../helpers/album";
+import { getContentImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
-import { getContentImage } from "../../../../helpers/image";
+
 import SquareCard from ".";
-import type { AlbumListQueryType } from "../../../../helpers/album";
-import type { Prisma } from "@prisma/client";
+
+
 
 interface SquareAlbumCardProps {
-  data: Prisma.AlbumGetPayload<AlbumListQueryType>;
+  data: Prisma.AlbumGetPayload<AlbumListArgsType>;
 }
 const SquareAlbumCard = ({ data }: SquareAlbumCardProps) => {
   const router = useRouter();

@@ -1,19 +1,20 @@
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
+
 import AlbumLists from "../../components/elements/list/album";
+import AlbumListItem from "../../components/elements/list/item/album";
 import IndexLayout from "../../components/layouts/index/default";
-import { trpc } from "../../utils/trpc";
 import setLocale from "../../helpers/locale";
 import { albumPaginationQuery } from "../../paths/albums";
-import type { NextPage } from "next";
+import { trpc } from "../../utils/trpc";
 
 const Albums: NextPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.pagination.album.useQuery(
-    albumPaginationQuery({ router, session })
+    albumPaginationQuery({ router, session: useSession().data })
   );
   const search = trpc.search.album.useMutation({
     onError: () => {
@@ -29,6 +30,7 @@ const Albums: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
+        renderOption: (_props, option) => <AlbumListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.title, router),
         textFieldProps: {
           onChange: (e) =>

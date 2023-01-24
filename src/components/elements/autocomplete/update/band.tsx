@@ -1,10 +1,13 @@
 import React from "react";
-import { useSnackbar } from "notistack";
-import { useRouter } from "next/router";
-import { trpc } from "../../../../utils/trpc";
-import setLocale from "../../../../helpers/locale";
-import UpdateAutocomplete from ".";
+
 import type { Band } from "@prisma/client";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+
+import setLocale from "../../../../helpers/locale";
+import { trpc } from "../../../../utils/trpc";
+
+import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
 type BandUpdateAutocomplete<T extends boolean | undefined = false> = Pick<

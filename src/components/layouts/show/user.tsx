@@ -1,29 +1,27 @@
 import React, { useMemo } from "react";
-import { useRouter } from "next/router";
-import Typography from "@mui/material/Typography";
+
+import LoadingButton from "@mui/lab/LoadingButton";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { useSession } from "next-auth/react";
 import Button from "@mui/material/Button";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { trpc } from "../../../utils/trpc";
-import DefaultHeader from "../../elements/header/default";
+import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
+import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import { followMutate } from "../../../helpers/follow";
-import ShowLayout from "./index";
+import type { UserShowGetPayload } from "../../../paths/users/[id]";
+import { trpc } from "../../../utils/trpc";
+import DefaultHeader from "../../elements/header/default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
-import type { Prisma } from "@prisma/client";
+
 import type { ShowLayoutProps } from ".";
+import ShowLayout from "./index";
+
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
-  data: Prisma.UserGetPayload<{
-    include: {
-      _count: { select: { following: true; followers: true } };
-      followers: true;
-      accounts: true;
-    };
-  }>;
+  data: UserShowGetPayload;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
 }
 
@@ -33,7 +31,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const id = getRouterId(router);
   const userId = getCurrentUserId(session);
   const update = trpc.user.updateOneUser.useMutation();
@@ -57,13 +55,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         label: "repositories",
         href: {
           pathname: "/users/[id]/repositories",
-          query: { id },
-        },
-      },
-      {
-        label: "settings",
-        href: {
-          pathname: "/users/[id]/settings",
           query: { id },
         },
       },

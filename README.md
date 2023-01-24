@@ -16,7 +16,6 @@ npx eslint --fix ./src
 # Playwight
 
 ```
-npx playwright codegen http://localhost:3000/
+npx playwright codegen --device="Desktop Safari" http://localhost:3000/
+npx playwright test
 ```
-
-ER

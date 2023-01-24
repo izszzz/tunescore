@@ -1,32 +1,27 @@
 # reference https://nodejs.org/ja/docs/guides/nodejs-docker-webapp/
-FROM ubuntu:focal
+FROM mcr.microsoft.com/playwright:v1.16.3-focal
 
-# アプリケーションディレクトリを作成する
-WORKDIR /app
+ENV PWUSER pwuser
 
-ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    # Install node16
-    apt-get install -y curl wget gpg git && \
-    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y nodejs sudo && \
+    usermod -aG sudo $PWUSER && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
     npm install -g npm && \
-    # clean apt cache
-    rm -rf /var/lib/apt/lists/* 
+    npx playwright install-deps 
 
-# アプリケーションの依存関係をインストールする
-# ワイルドカードを使用して、package.json と package-lock.json の両方が確実にコピーされるようにします。
-# 可能であれば (npm@5+)
 COPY package*.json ./
 
 RUN npm i --legacy-peer-deps
-# 本番用にコードを作成している場合
-# RUN npm install --only=production
 
-RUN npx playwright install-deps chromium firefox webkit
+USER $PWUSER
 
-# アプリケーションのソースをバンドルする
-COPY . .
+WORKDIR /home/$PWUSER/app
+
+# RUN npx playwright install-deps chromium firefox webkit
+
+RUN sudo chown -R $PWUSER:$PWUSER /home/$PWUSER/app
+COPY --chown=$PWUSER:$PWUSER . .
 
 EXPOSE 3000
 

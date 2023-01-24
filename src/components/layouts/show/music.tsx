@@ -16,6 +16,8 @@ import { getContentImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
+import { getCurrentUser } from "../../../helpers/user";
+import { useModal } from "../../../hooks/useModal";
 import type {
   MusicShowArgsType,
   musicShowQuery,
@@ -28,8 +30,6 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
-
-
 
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
@@ -48,6 +48,7 @@ const MusicLayout = ({
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
+  const { handleOpen } = useModal();
   const id = getRouterId(router);
   const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
@@ -125,17 +126,20 @@ const MusicLayout = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: () =>
-          update.mutate({
-            ...query,
-            data: {
-              bookmarks: bookmarkMutate({
-                type: "Music",
-                data,
-                session,
-              }),
-            },
-          }),
+        onClick: () => {
+          if (getCurrentUser(session))
+            update.mutate({
+              ...query,
+              data: {
+                bookmarks: bookmarkMutate({
+                  type: "Music",
+                  data,
+                  session,
+                }),
+              },
+            });
+          else handleOpen();
+        },
       }}
     >
       {data.title[router.locale as keyof Locale] === null && <LocaleAlert />}

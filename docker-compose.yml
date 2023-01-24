@@ -27,6 +27,7 @@ services:
       - db
     tty: true
     environment:
+      - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - DISPLAY=:0
       - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}

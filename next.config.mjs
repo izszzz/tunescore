@@ -1,5 +1,6 @@
-import withRoutes from "nextjs-routes/config";
 import removeImports from "next-remove-imports";
+import withRoutes from "nextjs-routes/config";
+
 import { env } from "./src/env/server.mjs";
 
 /**
@@ -17,6 +18,7 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
+  output: "standalone",
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
   i18n: {
     locales: ["en", "ja"],

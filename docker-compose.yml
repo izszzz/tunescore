@@ -14,7 +14,9 @@ services:
       - "27017:27017"
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: bash -c "npm ci --legacy-peer-deps && npm run dev"
     volumes:
       - .:/app

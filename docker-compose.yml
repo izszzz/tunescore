@@ -17,10 +17,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "npm ci --legacy-peer-deps && npm run dev"
+    command: bash -c "npm ci && npm run dev"
     volumes:
-      - .:/app
-      - nextjs-node-modules:/app/node_modules
+      - .:/home/pwuser/app
+      - nextjs-node-modules:/home/pwuser/app/node_modules
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /mnt/wslg:/mnt/wslg
     ports:

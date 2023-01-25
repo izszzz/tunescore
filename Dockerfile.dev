@@ -1,21 +1,19 @@
 FROM mcr.microsoft.com/playwright:v1.16.3-focal
 
 ENV PWUSER pwuser
+ENV NPM_CONFIG_LEGACY_PEER_DEPS true
 
 COPY package*.json ./
 
 RUN apt-get update && \
-    apt-get install -y nodejs sudo && \
+    apt-get install -y sudo && \
     usermod -aG sudo $PWUSER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
-    npm install -g npm && \
-    npx playwright install-deps && \
-    npm i --legacy-peer-deps
-
-USER $PWUSER
+    npm i -g npm && \
+    npx playwright install-deps &&\
+    npm i
 
 WORKDIR /home/$PWUSER/app
-
 RUN sudo chown -R $PWUSER:$PWUSER /home/$PWUSER/app
 COPY --chown=$PWUSER:$PWUSER . .
 

@@ -25,7 +25,6 @@ const Bands: NextPage = () => {
   return (
     <DefaultIndexLayout
       newRoute={{ pathname: "/bands/new" }}
-      route={{ pathname: "/bands" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],

@@ -1,15 +1,23 @@
 version: "3"
 services:
+  db:
+    image: "bitnami/mongodb:latest"
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=127.0.0.1
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=example
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    ports:
+      - "27017:27017"
+
   web:
     platform: "linux/amd64"
     build:
       context: .
       dockerfile: Dockerfile.prod
-      args:
-        NEXT_PUBLIC_CLIENTVAR: "clientvar"
     working_dir: /app
     ports:
       - "80:3000"
     image: t3-app
-    environment:
-      - DATABASE_URL=database_url_goes_here
+    env_file: .env

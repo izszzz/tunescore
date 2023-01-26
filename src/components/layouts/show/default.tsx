@@ -5,8 +5,8 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 
+import type { BookmarkToggleIconButtonProps } from "../../elements/button/icon/toggle/bookmark";
 import BookmarkToggleButton from "../../elements/button/icon/toggle/bookmark";
-import type { BookmarkToggleButtonProps } from "../../elements/button/icon/toggle/bookmark";
 import DefaultHeader from "../../elements/header/default";
 import ResourceIcon from "../../elements/icon/resource";
 
@@ -14,7 +14,7 @@ import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
 
 export interface DefaultShowLayoutProps extends ShowLayoutProps {
-  bookmarkToggleButtonProps: BookmarkToggleButtonProps;
+  bookmarkToggleButtonProps: BookmarkToggleIconButtonProps;
   tagMaps: Prisma.TagMapGetPayload<{ include: { tag: true } }>[];
 }
 

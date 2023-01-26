@@ -13,12 +13,11 @@ import { userShowQuery } from "../../../paths/users/[id]";
 import { followingPath } from "../../../paths/users/[id]/following";
 import { trpc } from "../../../utils/trpc";
 
-
 const UserFollowers: NextPage = () => {
   const router = useRouter();
   const id = getRouterId(router);
   const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery({ router, session: useSession().data })
+    userShowQuery(useSession().data)
   );
   const { data: followData } = trpc.pagination.follow.useQuery(
     followingPath({ router })

@@ -17,7 +17,6 @@ import { useModal } from "../../../hooks/useModal";
 import SingleColumnLayout from "../single_column";
 import type { SingleColumnLayoutProps } from "../single_column";
 
-
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
   route: Route;
@@ -28,29 +27,23 @@ export interface IndexLayoutProps<T>
 function IndexLayout<T>({
   header,
   meta,
-  route,
   newRoute,
   children,
   searchAutocompleteProps,
 }: IndexLayoutProps<T>) {
   const { handleOpen } = useModal();
   const router = useRouter();
-  const session = useSession();
-  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) =>
-    router.replace({
-      ...route,
-      query: { page: String(value), ...route.query },
-    });
+  const { data: session } = useSession();
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    router.query.page = String(value);
+    router.push(router);
+  };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter")
-      router.replace({
-        ...route,
-        query: {
-          ...route.query,
-          page: String(1),
-          q: String((e.target as HTMLInputElement).value),
-        },
-      });
+    if (e.key === "Enter") {
+      router.query.page = String(1);
+      router.query.q = String((e.target as HTMLInputElement).value);
+      router.push(router);
+    }
   };
   const handleClick = () => {
     if (!getCurrentUser(session)) return handleOpen();

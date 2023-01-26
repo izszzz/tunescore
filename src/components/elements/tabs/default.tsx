@@ -16,7 +16,7 @@ export interface DefaultTabsProps {
 }
 const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session } = useSession();
   const { handleOpen } = useModal();
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

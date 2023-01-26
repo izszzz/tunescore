@@ -19,15 +19,12 @@ import { userShowQuery } from "../../../paths/users/[id]";
 import { bookmarkQuery } from "../../../paths/users/[id]/bookmark";
 import { trpc } from "../../../utils/trpc";
 
-
 const UserBookmarks: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const id = getRouterId(router);
   const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery({ router, session })
-  );
+  const { data } = trpc.user.findUniqueUser.useQuery(userShowQuery(session));
   const { data: bookmarkData } = trpc.pagination.bookmark.useQuery(
     bookmarkQuery({ router, session })
   );

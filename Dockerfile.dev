@@ -10,8 +10,7 @@ RUN apt-get update && \
     usermod -aG sudo $PWUSER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
     npm i -g npm && \
-    npx playwright install-deps &&\
-    npm i
+    npx playwright install-deps
 
 WORKDIR /home/$PWUSER/app
 RUN sudo chown -R $PWUSER:$PWUSER /home/$PWUSER/app

@@ -20,7 +20,7 @@ const User: NextPage = () => {
   const id = getRouterId(router);
   const search = trpc.search.music.useMutation();
   const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery({ router, session })
+    userShowQuery(session)
   );
   const { data: musicData } = trpc.pagination.music.useQuery(
     userRepositoriesQuery({ router, session })

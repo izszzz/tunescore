@@ -14,7 +14,7 @@ interface CommentFormProps {
 }
 const CommentForm = ({ formContainerProps, loading }: CommentFormProps) => {
   return (
-    <FormContainer {...formContainerProps}>
+    <FormContainer {...formContainerProps} defaultValues={{ body: "" }}>
       <Controller name="body" render={({ field }) => <MDEditor {...field} />} />
       <LoadingButton
         type="submit"

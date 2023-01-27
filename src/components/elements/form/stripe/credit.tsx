@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Cards from "react-credit-cards";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,6 +11,7 @@ import superjson from "superjson";
 import { env } from "../../../../env/client.mjs";
 import type { AppRouter } from "../../../../server/routers/_app";
 import { trpc } from "../../../../utils/trpc";
+import CreditCard from "../../card/credit";
 
 import PaymentStripeForm from "./payment";
 
@@ -44,14 +44,7 @@ const CreditStripeForm = () => {
       <Grid container my={3} spacing={3}>
         {paymentMethods.map((paymentMethod) => (
           <Grid key={paymentMethod.id} item xs={6}>
-            <Cards
-              name={""}
-              number={`**** **** **** ${paymentMethod.card?.last4}`}
-              cvc={0}
-              expiry={`${paymentMethod.card?.exp_month}${paymentMethod.card?.exp_year}`}
-              preview
-              issuer={paymentMethod.card?.brand.toLowerCase()}
-            />
+            <CreditCard data={paymentMethod} />
           </Grid>
         ))}
       </Grid>
@@ -65,7 +58,14 @@ const CreditStripeForm = () => {
           <PaymentStripeForm />
         </Elements>
       ) : (
-        <Button onClick={() => createSetupIntent.mutate()}>Add</Button>
+        <Button
+          variant="contained"
+          onClick={() => createSetupIntent.mutate()}
+          fullWidth
+          disableElevation
+        >
+          Add Credit Card
+        </Button>
       )}
     </Box>
   );

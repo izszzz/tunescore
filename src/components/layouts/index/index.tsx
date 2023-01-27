@@ -19,7 +19,6 @@ import type { SingleColumnLayoutProps } from "../single_column";
 
 export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
-  route: Route;
   newRoute?: Route;
   meta: PaginatedResult<null>["meta"];
   searchAutocompleteProps: SearchAutocompleteProps<T, false, false, false>;

@@ -39,10 +39,6 @@ const UserBookmarks: NextPage = () => {
     <UserLayout data={userData} activeTab="bookmarks">
       <IndexLayout
         meta={bookmarkData.meta}
-        route={{
-          pathname: "/users/[id]/bookmarks",
-          query: { id },
-        }}
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,

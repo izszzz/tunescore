@@ -13,10 +13,12 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { Music } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
 
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
@@ -26,6 +28,7 @@ import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
   const router = useRouter(),
+    { t } = useTranslation("common"),
     formContext = useForm<Music>({ defaultValues: { price: 0 } }),
     {
       watch,
@@ -40,41 +43,41 @@ const NewMusic: NextPage = () => {
       onError: (error) => {
         enqueueSnackbar(String(error));
       },
-    });
-  const handleSubmit = (data: Music) => {
-    create.mutate({
-      data: {
-        ...data,
-        price: Number(data.price),
-        user: { connect: { id: getCurrentUserId(session) } },
-      },
-    });
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = ({ target }) => {
-        const result = target?.result as ArrayBuffer;
-        if (result) exportFile(new Uint8Array(result));
-      };
-      reader.readAsArrayBuffer(files[0] as Blob);
-    }
-    e.target.value = "";
-  };
-  const exportFile = (data: Uint8Array) => {
-    let score = null;
-    try {
-      score = importer.ScoreLoader.loadScoreFromBytes(data);
-    } catch (e) {
-      alert("楽譜じゃねえだろこれ");
-    }
-    if (score != null) {
-      const exporter = new AlphaTexExporter();
-      exporter.Export(score);
-      setValue("score", exporter.ToTex());
-    }
-  };
+    }),
+    handleSubmit = (data: Music) => {
+      create.mutate({
+        data: {
+          ...data,
+          price: Number(data.price),
+          user: { connect: { id: getCurrentUserId(session) } },
+        },
+      });
+    },
+    handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = ({ target }) => {
+          const result = target?.result as ArrayBuffer;
+          if (result) exportFile(new Uint8Array(result));
+        };
+        reader.readAsArrayBuffer(files[0] as Blob);
+      }
+      e.target.value = "";
+    },
+    exportFile = (data: Uint8Array) => {
+      let score = null;
+      try {
+        score = importer.ScoreLoader.loadScoreFromBytes(data);
+      } catch (e) {
+        alert("楽譜じゃねえだろこれ");
+      }
+      if (score != null) {
+        const exporter = new AlphaTexExporter();
+        exporter.Export(score);
+        setValue("score", exporter.ToTex());
+      }
+    };
   return (
     <DefaultSingleColumnLayout contained>
       <Script
@@ -149,7 +152,7 @@ const NewMusic: NextPage = () => {
               fullWidth
               disableElevation
             >
-              submit
+              {t("submit")}
             </LoadingButton>
           </FormContainer>
         </Box>
@@ -159,3 +162,11 @@ const NewMusic: NextPage = () => {
 };
 
 export default NewMusic;
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale || "", ["common"])),
+    },
+  };
+};

@@ -30,7 +30,6 @@ const User: NextPage = () => {
   return (
     <UserLayout data={userData} activeTab="repositories">
       <IndexLayout
-        route={{ pathname: "/users/[id]/repositories", query: { id } }}
         meta={musicData.meta}
         searchAutocompleteProps={{
           options: search.data || [],

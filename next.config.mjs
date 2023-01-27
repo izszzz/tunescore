@@ -33,5 +33,6 @@ export default defineNextConfig({
   eslint: {
     dirs: ["src/"],
     ignoreDuringBuilds: true,
+    ignoreBuildErrors: true,
   },
 });

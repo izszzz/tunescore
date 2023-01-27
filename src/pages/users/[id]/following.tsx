@@ -28,7 +28,6 @@ const UserFollowers: NextPage = () => {
   return (
     <UserLayout data={userData} activeTab="">
       <IndexLayout
-        route={{ pathname: "/users/[id]/following", query: { id } }}
         meta={followData.meta}
         searchAutocompleteProps={{
           options: search.data?.map((follow) => follow.follower) || [],

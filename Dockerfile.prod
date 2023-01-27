@@ -2,7 +2,6 @@
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS deps
 
-ENV NPM_CONFIG_LEGACY_PEER_DEPS true
 ENV NODE_OPTIONS --max-old-space-size=1024
 
 RUN apk add --no-cache libc6-compat openssl1.1-compat

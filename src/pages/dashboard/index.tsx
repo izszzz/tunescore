@@ -9,7 +9,6 @@ import type { UserLayoutProps } from "../../components/layouts/show/user";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
 import { userShowQuery } from "../../paths/users/[id]";
 import { trpc } from "../../utils/trpc";
-import "react-credit-cards/es/styles-compiled.css";
 
 const SettingsUser: NextPage = () => {
   const router = useRouter(),

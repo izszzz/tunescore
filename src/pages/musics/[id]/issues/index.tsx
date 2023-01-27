@@ -48,10 +48,6 @@ const Issues: NextPage = () => {
     <MusicLayout data={musicData} query={query} activeTab="issues">
       <IndexLayout
         meta={issueData.meta}
-        route={{
-          pathname: "/musics/[id]/issues",
-          query: { id },
-        }}
         newRoute={{
           pathname: "/musics/[id]/issues/new",
           query: { id },

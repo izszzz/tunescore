@@ -50,10 +50,6 @@ const Issues: NextPage = () => {
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <IndexLayout<Pull>
         meta={pullsData.meta}
-        route={{
-          pathname: "/musics/[id]/pulls",
-          query: { id },
-        }}
         newRoute={{
           pathname: "/musics/[id]/pulls/new",
           query: { id },

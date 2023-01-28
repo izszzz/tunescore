@@ -49,6 +49,17 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: build
+        run: npm build
+
       - name: Deploy
         run: |-
           gcloud compute scp $(pwd) "$GCE_USER"@"$GCE_INSTANCE":./ \

@@ -60,10 +60,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: build
+      - name: Build
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
+
+      - name: Remove Files
+        run: rm -rf node_modules src
 
       - name: Deploy
         run: |-

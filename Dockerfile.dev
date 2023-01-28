@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/playwright:v1.16.3-focal
 
 ENV PWUSER pwuser
-ENV NPM_CONFIG_LEGACY_PEER_DEPS true
 
 COPY package*.json ./
 

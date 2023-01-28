@@ -1,8 +1,8 @@
-import Cards from "react-credit-cards";
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 
 import { trpc } from "../../../utils/trpc";
 import OrderLoadingButton from "../button/loading/order";
+import CreditCard from "../card/credit";
 import MusicLists from "../list/music";
 
 const OrderForm = () => {
@@ -17,16 +17,7 @@ const OrderForm = () => {
         name="id"
         options={paymentMethods.map((paymentMethod) => ({
           id: paymentMethod.id,
-          label: (
-            <Cards
-              name={""}
-              number={`**** **** **** ${paymentMethod.card?.last4}`}
-              cvc={0}
-              expiry={`${paymentMethod.card?.exp_month}${paymentMethod.card?.exp_year}`}
-              preview
-              issuer={paymentMethod.card?.brand.toLowerCase()}
-            />
-          ),
+          label: <CreditCard data={paymentMethod} />,
         }))}
       />
       <MusicLists data={data} />

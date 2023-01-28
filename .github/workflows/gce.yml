@@ -28,6 +28,9 @@ jobs:
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
       SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      STRIPE_CLIENT_ID: ${{ secrets.STRIPE_CLIENT_ID }}
+      STRIPE_CLIENT_SECRET: ${{ secrets.STRIPE_CLIENT_SECRET }}
+      NEXT_PUBLIC_STRIPE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_STRIPE_CLIENT_ID}}
 
     # Add "id-token" with the intended permissions.
     permissions:
@@ -48,6 +51,22 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+        run: npm run build
+
+      - name: Remove Files
+        run: rm -rf node_modules src
 
       - name: Deploy
         run: |-

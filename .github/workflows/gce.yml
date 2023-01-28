@@ -28,6 +28,9 @@ jobs:
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
       SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      STRIPE_CLIENT_ID: ${{ secrets.STRIPE_CLIENT_ID }}
+      STRIPE_CLIENT_SECRET: ${{ secrets.STRIPE_CLIENT_SECRET }}
       NEXT_PUBLIC_STRIPE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_STRIPE_CLIENT_ID}}
 
     # Add "id-token" with the intended permissions.

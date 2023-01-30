@@ -1,4 +1,4 @@
-import { t, publicProcedure } from "./helpers/createRouter";
+import { t, shieldedProcedure } from "./helpers/createRouter";
 import { RoleMapFindUniqueSchema } from "../schemas/findUniqueRoleMap.schema";
 import { RoleMapFindFirstSchema } from "../schemas/findFirstRoleMap.schema";
 import { RoleMapFindManySchema } from "../schemas/findManyRoleMap.schema";
@@ -15,97 +15,97 @@ import { RoleMapFindRawObjectSchema } from "../schemas/objects/RoleMapFindRaw.sc
 import { RoleMapAggregateRawObjectSchema } from "../schemas/objects/RoleMapAggregateRaw.schema";
 
 export const rolemapsRouter = t.router({
-  aggregateRoleMap: publicProcedure
+  aggregateRoleMap: shieldedProcedure
     .input(RoleMapAggregateSchema)
     .query(async ({ ctx, input }) => {
       const aggregateRoleMap = await ctx.prisma.roleMap.aggregate(input);
       return aggregateRoleMap;
     }),
-  aggregateRoleMapRaw: publicProcedure
+  aggregateRoleMapRaw: shieldedProcedure
     .input(RoleMapAggregateRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const aggregateRoleMapRaw = await ctx.prisma.roleMap.aggregateRaw(input);
       return aggregateRoleMapRaw;
     }),
-  createManyRoleMap: publicProcedure
+  createManyRoleMap: shieldedProcedure
     .input(RoleMapCreateManySchema)
     .mutation(async ({ ctx, input }) => {
       const createManyRoleMap = await ctx.prisma.roleMap.createMany(input);
       return createManyRoleMap;
     }),
-  createOneRoleMap: publicProcedure
+  createOneRoleMap: shieldedProcedure
     .input(RoleMapCreateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const createOneRoleMap = await ctx.prisma.roleMap.create(input);
       return createOneRoleMap;
     }),
-  deleteManyRoleMap: publicProcedure
+  deleteManyRoleMap: shieldedProcedure
     .input(RoleMapDeleteManySchema)
     .mutation(async ({ ctx, input }) => {
       const deleteManyRoleMap = await ctx.prisma.roleMap.deleteMany(input);
       return deleteManyRoleMap;
     }),
-  deleteOneRoleMap: publicProcedure
+  deleteOneRoleMap: shieldedProcedure
     .input(RoleMapDeleteOneSchema)
     .mutation(async ({ ctx, input }) => {
       const deleteOneRoleMap = await ctx.prisma.roleMap.delete(input);
       return deleteOneRoleMap;
     }),
-  findFirstRoleMap: publicProcedure
+  findFirstRoleMap: shieldedProcedure
     .input(RoleMapFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstRoleMap = await ctx.prisma.roleMap.findFirst(input);
       return findFirstRoleMap;
     }),
-  findFirstRoleMapOrThrow: publicProcedure
+  findFirstRoleMapOrThrow: shieldedProcedure
     .input(RoleMapFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstRoleMapOrThrow = await ctx.prisma.roleMap.findFirstOrThrow(input);
       return findFirstRoleMapOrThrow;
     }),
-  findManyRoleMap: publicProcedure
+  findManyRoleMap: shieldedProcedure
     .input(RoleMapFindManySchema)
     .query(async ({ ctx, input }) => {
       const findManyRoleMap = await ctx.prisma.roleMap.findMany(input);
       return findManyRoleMap;
     }),
-  findRoleMapRaw: publicProcedure
+  findRoleMapRaw: shieldedProcedure
     .input(RoleMapFindRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const findRoleMapRaw = await ctx.prisma.roleMap.findRaw(input);
       return findRoleMapRaw;
     }),
-  findUniqueRoleMap: publicProcedure
+  findUniqueRoleMap: shieldedProcedure
     .input(RoleMapFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueRoleMap = await ctx.prisma.roleMap.findUnique(input);
       return findUniqueRoleMap;
     }),
-  findUniqueRoleMapOrThrow: publicProcedure
+  findUniqueRoleMapOrThrow: shieldedProcedure
     .input(RoleMapFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueRoleMapOrThrow = await ctx.prisma.roleMap.findUniqueOrThrow(input);
       return findUniqueRoleMapOrThrow;
     }),
-  groupByRoleMap: publicProcedure
+  groupByRoleMap: shieldedProcedure
     .input(RoleMapGroupBySchema)
     .query(async ({ ctx, input }) => {
       const groupByRoleMap = await ctx.prisma.roleMap.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByRoleMap;
     }),
-  updateManyRoleMap: publicProcedure
+  updateManyRoleMap: shieldedProcedure
     .input(RoleMapUpdateManySchema)
     .mutation(async ({ ctx, input }) => {
       const updateManyRoleMap = await ctx.prisma.roleMap.updateMany(input);
       return updateManyRoleMap;
     }),
-  updateOneRoleMap: publicProcedure
+  updateOneRoleMap: shieldedProcedure
     .input(RoleMapUpdateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const updateOneRoleMap = await ctx.prisma.roleMap.update(input);
       return updateOneRoleMap;
     }),
-  upsertOneRoleMap: publicProcedure
+  upsertOneRoleMap: shieldedProcedure
     .input(RoleMapUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       const upsertOneRoleMap = await ctx.prisma.roleMap.upsert(input);

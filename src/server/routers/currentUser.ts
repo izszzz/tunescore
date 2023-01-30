@@ -1,17 +1,11 @@
-import { TRPCError } from "@trpc/server";
-
 import { musicListArgs } from "../../helpers/music";
 import { getCurrentUserId } from "../../helpers/user";
-import { publicProcedure, router } from "../trpc";
+import { router } from "../trpc";
 
+import { shieldedProcedure } from "./shield";
 
 export const currentUserRouter = router({
-  findManyCart: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.session?.user)
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Please Sign In",
-      });
+  findManyCart: shieldedProcedure.query(async ({ ctx }) => {
     const { session } = ctx,
       cart = await ctx.prisma.cart.findMany({
         include: { music: musicListArgs(session) },
@@ -19,7 +13,7 @@ export const currentUserRouter = router({
       });
     return cart.map((cart) => cart.music);
   }),
-  notification: publicProcedure.query(async ({ ctx }) => {
+  notification: shieldedProcedure.query(async ({ ctx }) => {
     const userId = getCurrentUserId(ctx.session);
     return ctx.prisma.notification.findMany({
       include: {

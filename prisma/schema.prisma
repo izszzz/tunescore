@@ -8,7 +8,7 @@ generator client {
 generator trpc {
   provider       = "prisma-trpc-generator"
   withMiddleware = false
-  withShield     = false
+  withShield     = true
   contextPath    = "../src/server/context"
   isGenerateSelect   = true
   isGenerateInclude  = true

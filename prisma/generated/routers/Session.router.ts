@@ -1,4 +1,4 @@
-import { t, publicProcedure } from "./helpers/createRouter";
+import { t, shieldedProcedure } from "./helpers/createRouter";
 import { SessionFindUniqueSchema } from "../schemas/findUniqueSession.schema";
 import { SessionFindFirstSchema } from "../schemas/findFirstSession.schema";
 import { SessionFindManySchema } from "../schemas/findManySession.schema";
@@ -15,97 +15,97 @@ import { SessionFindRawObjectSchema } from "../schemas/objects/SessionFindRaw.sc
 import { SessionAggregateRawObjectSchema } from "../schemas/objects/SessionAggregateRaw.schema";
 
 export const sessionsRouter = t.router({
-  aggregateSession: publicProcedure
+  aggregateSession: shieldedProcedure
     .input(SessionAggregateSchema)
     .query(async ({ ctx, input }) => {
       const aggregateSession = await ctx.prisma.session.aggregate(input);
       return aggregateSession;
     }),
-  aggregateSessionRaw: publicProcedure
+  aggregateSessionRaw: shieldedProcedure
     .input(SessionAggregateRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const aggregateSessionRaw = await ctx.prisma.session.aggregateRaw(input);
       return aggregateSessionRaw;
     }),
-  createManySession: publicProcedure
+  createManySession: shieldedProcedure
     .input(SessionCreateManySchema)
     .mutation(async ({ ctx, input }) => {
       const createManySession = await ctx.prisma.session.createMany(input);
       return createManySession;
     }),
-  createOneSession: publicProcedure
+  createOneSession: shieldedProcedure
     .input(SessionCreateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const createOneSession = await ctx.prisma.session.create(input);
       return createOneSession;
     }),
-  deleteManySession: publicProcedure
+  deleteManySession: shieldedProcedure
     .input(SessionDeleteManySchema)
     .mutation(async ({ ctx, input }) => {
       const deleteManySession = await ctx.prisma.session.deleteMany(input);
       return deleteManySession;
     }),
-  deleteOneSession: publicProcedure
+  deleteOneSession: shieldedProcedure
     .input(SessionDeleteOneSchema)
     .mutation(async ({ ctx, input }) => {
       const deleteOneSession = await ctx.prisma.session.delete(input);
       return deleteOneSession;
     }),
-  findFirstSession: publicProcedure
+  findFirstSession: shieldedProcedure
     .input(SessionFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstSession = await ctx.prisma.session.findFirst(input);
       return findFirstSession;
     }),
-  findFirstSessionOrThrow: publicProcedure
+  findFirstSessionOrThrow: shieldedProcedure
     .input(SessionFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstSessionOrThrow = await ctx.prisma.session.findFirstOrThrow(input);
       return findFirstSessionOrThrow;
     }),
-  findManySession: publicProcedure
+  findManySession: shieldedProcedure
     .input(SessionFindManySchema)
     .query(async ({ ctx, input }) => {
       const findManySession = await ctx.prisma.session.findMany(input);
       return findManySession;
     }),
-  findSessionRaw: publicProcedure
+  findSessionRaw: shieldedProcedure
     .input(SessionFindRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const findSessionRaw = await ctx.prisma.session.findRaw(input);
       return findSessionRaw;
     }),
-  findUniqueSession: publicProcedure
+  findUniqueSession: shieldedProcedure
     .input(SessionFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueSession = await ctx.prisma.session.findUnique(input);
       return findUniqueSession;
     }),
-  findUniqueSessionOrThrow: publicProcedure
+  findUniqueSessionOrThrow: shieldedProcedure
     .input(SessionFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueSessionOrThrow = await ctx.prisma.session.findUniqueOrThrow(input);
       return findUniqueSessionOrThrow;
     }),
-  groupBySession: publicProcedure
+  groupBySession: shieldedProcedure
     .input(SessionGroupBySchema)
     .query(async ({ ctx, input }) => {
       const groupBySession = await ctx.prisma.session.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupBySession;
     }),
-  updateManySession: publicProcedure
+  updateManySession: shieldedProcedure
     .input(SessionUpdateManySchema)
     .mutation(async ({ ctx, input }) => {
       const updateManySession = await ctx.prisma.session.updateMany(input);
       return updateManySession;
     }),
-  updateOneSession: publicProcedure
+  updateOneSession: shieldedProcedure
     .input(SessionUpdateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const updateOneSession = await ctx.prisma.session.update(input);
       return updateOneSession;
     }),
-  upsertOneSession: publicProcedure
+  upsertOneSession: shieldedProcedure
     .input(SessionUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       const upsertOneSession = await ctx.prisma.session.upsert(input);

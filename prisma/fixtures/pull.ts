@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import { UserFactory } from "./user";
 
 const prisma = new PrismaClient();

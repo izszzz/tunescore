@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import { ArtistFactory } from "./artist";
 import { BandFactory } from "./band";
 import { MusicFactory } from "./music";

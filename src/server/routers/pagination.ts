@@ -18,7 +18,6 @@ import type { userCountQuery } from "../../helpers/user";
 import { PaginateOptionsSchema } from "../../utils/zod";
 import { router, publicProcedure } from "../trpc";
 
-
 export const paginationRouter = router({
   music: publicProcedure
     .input(

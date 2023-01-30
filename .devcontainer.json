@@ -3,7 +3,7 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "web",
   "workspaceFolder": "/home/pwuser/app",
-  "remoteUser": "pwuser",
+  "remoteUser": "root",
   "extensions": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",

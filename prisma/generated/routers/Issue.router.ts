@@ -1,4 +1,4 @@
-import { t, publicProcedure } from "./helpers/createRouter";
+import { t, shieldedProcedure } from "./helpers/createRouter";
 import { IssueFindUniqueSchema } from "../schemas/findUniqueIssue.schema";
 import { IssueFindFirstSchema } from "../schemas/findFirstIssue.schema";
 import { IssueFindManySchema } from "../schemas/findManyIssue.schema";
@@ -15,97 +15,97 @@ import { IssueFindRawObjectSchema } from "../schemas/objects/IssueFindRaw.schema
 import { IssueAggregateRawObjectSchema } from "../schemas/objects/IssueAggregateRaw.schema";
 
 export const issuesRouter = t.router({
-  aggregateIssue: publicProcedure
+  aggregateIssue: shieldedProcedure
     .input(IssueAggregateSchema)
     .query(async ({ ctx, input }) => {
       const aggregateIssue = await ctx.prisma.issue.aggregate(input);
       return aggregateIssue;
     }),
-  aggregateIssueRaw: publicProcedure
+  aggregateIssueRaw: shieldedProcedure
     .input(IssueAggregateRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const aggregateIssueRaw = await ctx.prisma.issue.aggregateRaw(input);
       return aggregateIssueRaw;
     }),
-  createManyIssue: publicProcedure
+  createManyIssue: shieldedProcedure
     .input(IssueCreateManySchema)
     .mutation(async ({ ctx, input }) => {
       const createManyIssue = await ctx.prisma.issue.createMany(input);
       return createManyIssue;
     }),
-  createOneIssue: publicProcedure
+  createOneIssue: shieldedProcedure
     .input(IssueCreateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const createOneIssue = await ctx.prisma.issue.create(input);
       return createOneIssue;
     }),
-  deleteManyIssue: publicProcedure
+  deleteManyIssue: shieldedProcedure
     .input(IssueDeleteManySchema)
     .mutation(async ({ ctx, input }) => {
       const deleteManyIssue = await ctx.prisma.issue.deleteMany(input);
       return deleteManyIssue;
     }),
-  deleteOneIssue: publicProcedure
+  deleteOneIssue: shieldedProcedure
     .input(IssueDeleteOneSchema)
     .mutation(async ({ ctx, input }) => {
       const deleteOneIssue = await ctx.prisma.issue.delete(input);
       return deleteOneIssue;
     }),
-  findFirstIssue: publicProcedure
+  findFirstIssue: shieldedProcedure
     .input(IssueFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstIssue = await ctx.prisma.issue.findFirst(input);
       return findFirstIssue;
     }),
-  findFirstIssueOrThrow: publicProcedure
+  findFirstIssueOrThrow: shieldedProcedure
     .input(IssueFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstIssueOrThrow = await ctx.prisma.issue.findFirstOrThrow(input);
       return findFirstIssueOrThrow;
     }),
-  findManyIssue: publicProcedure
+  findManyIssue: shieldedProcedure
     .input(IssueFindManySchema)
     .query(async ({ ctx, input }) => {
       const findManyIssue = await ctx.prisma.issue.findMany(input);
       return findManyIssue;
     }),
-  findIssueRaw: publicProcedure
+  findIssueRaw: shieldedProcedure
     .input(IssueFindRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const findIssueRaw = await ctx.prisma.issue.findRaw(input);
       return findIssueRaw;
     }),
-  findUniqueIssue: publicProcedure
+  findUniqueIssue: shieldedProcedure
     .input(IssueFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueIssue = await ctx.prisma.issue.findUnique(input);
       return findUniqueIssue;
     }),
-  findUniqueIssueOrThrow: publicProcedure
+  findUniqueIssueOrThrow: shieldedProcedure
     .input(IssueFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueIssueOrThrow = await ctx.prisma.issue.findUniqueOrThrow(input);
       return findUniqueIssueOrThrow;
     }),
-  groupByIssue: publicProcedure
+  groupByIssue: shieldedProcedure
     .input(IssueGroupBySchema)
     .query(async ({ ctx, input }) => {
       const groupByIssue = await ctx.prisma.issue.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByIssue;
     }),
-  updateManyIssue: publicProcedure
+  updateManyIssue: shieldedProcedure
     .input(IssueUpdateManySchema)
     .mutation(async ({ ctx, input }) => {
       const updateManyIssue = await ctx.prisma.issue.updateMany(input);
       return updateManyIssue;
     }),
-  updateOneIssue: publicProcedure
+  updateOneIssue: shieldedProcedure
     .input(IssueUpdateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const updateOneIssue = await ctx.prisma.issue.update(input);
       return updateOneIssue;
     }),
-  upsertOneIssue: publicProcedure
+  upsertOneIssue: shieldedProcedure
     .input(IssueUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       const upsertOneIssue = await ctx.prisma.issue.upsert(input);

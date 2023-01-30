@@ -2,7 +2,6 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 
-
 import type { Context } from "./context";
 
 const t = initTRPC.context<Context>().create({
@@ -23,5 +22,6 @@ const t = initTRPC.context<Context>().create({
  * use so we can enforce which base procedures should be used
  **/
 export const router = t.router;
+export const middleware = t.middleware;
 export const mergeRouters = t.mergeRouters;
 export const publicProcedure = t.procedure;

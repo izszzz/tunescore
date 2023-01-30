@@ -1,4 +1,4 @@
-import { t, publicProcedure } from "./helpers/createRouter";
+import { t, shieldedProcedure } from "./helpers/createRouter";
 import { BandFindUniqueSchema } from "../schemas/findUniqueBand.schema";
 import { BandFindFirstSchema } from "../schemas/findFirstBand.schema";
 import { BandFindManySchema } from "../schemas/findManyBand.schema";
@@ -15,97 +15,97 @@ import { BandFindRawObjectSchema } from "../schemas/objects/BandFindRaw.schema";
 import { BandAggregateRawObjectSchema } from "../schemas/objects/BandAggregateRaw.schema";
 
 export const bandsRouter = t.router({
-  aggregateBand: publicProcedure
+  aggregateBand: shieldedProcedure
     .input(BandAggregateSchema)
     .query(async ({ ctx, input }) => {
       const aggregateBand = await ctx.prisma.band.aggregate(input);
       return aggregateBand;
     }),
-  aggregateBandRaw: publicProcedure
+  aggregateBandRaw: shieldedProcedure
     .input(BandAggregateRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const aggregateBandRaw = await ctx.prisma.band.aggregateRaw(input);
       return aggregateBandRaw;
     }),
-  createManyBand: publicProcedure
+  createManyBand: shieldedProcedure
     .input(BandCreateManySchema)
     .mutation(async ({ ctx, input }) => {
       const createManyBand = await ctx.prisma.band.createMany(input);
       return createManyBand;
     }),
-  createOneBand: publicProcedure
+  createOneBand: shieldedProcedure
     .input(BandCreateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const createOneBand = await ctx.prisma.band.create(input);
       return createOneBand;
     }),
-  deleteManyBand: publicProcedure
+  deleteManyBand: shieldedProcedure
     .input(BandDeleteManySchema)
     .mutation(async ({ ctx, input }) => {
       const deleteManyBand = await ctx.prisma.band.deleteMany(input);
       return deleteManyBand;
     }),
-  deleteOneBand: publicProcedure
+  deleteOneBand: shieldedProcedure
     .input(BandDeleteOneSchema)
     .mutation(async ({ ctx, input }) => {
       const deleteOneBand = await ctx.prisma.band.delete(input);
       return deleteOneBand;
     }),
-  findFirstBand: publicProcedure
+  findFirstBand: shieldedProcedure
     .input(BandFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstBand = await ctx.prisma.band.findFirst(input);
       return findFirstBand;
     }),
-  findFirstBandOrThrow: publicProcedure
+  findFirstBandOrThrow: shieldedProcedure
     .input(BandFindFirstSchema)
     .query(async ({ ctx, input }) => {
       const findFirstBandOrThrow = await ctx.prisma.band.findFirstOrThrow(input);
       return findFirstBandOrThrow;
     }),
-  findManyBand: publicProcedure
+  findManyBand: shieldedProcedure
     .input(BandFindManySchema)
     .query(async ({ ctx, input }) => {
       const findManyBand = await ctx.prisma.band.findMany(input);
       return findManyBand;
     }),
-  findBandRaw: publicProcedure
+  findBandRaw: shieldedProcedure
     .input(BandFindRawObjectSchema)
     .query(async ({ ctx, input }) => {
       const findBandRaw = await ctx.prisma.band.findRaw(input);
       return findBandRaw;
     }),
-  findUniqueBand: publicProcedure
+  findUniqueBand: shieldedProcedure
     .input(BandFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueBand = await ctx.prisma.band.findUnique(input);
       return findUniqueBand;
     }),
-  findUniqueBandOrThrow: publicProcedure
+  findUniqueBandOrThrow: shieldedProcedure
     .input(BandFindUniqueSchema)
     .query(async ({ ctx, input }) => {
       const findUniqueBandOrThrow = await ctx.prisma.band.findUniqueOrThrow(input);
       return findUniqueBandOrThrow;
     }),
-  groupByBand: publicProcedure
+  groupByBand: shieldedProcedure
     .input(BandGroupBySchema)
     .query(async ({ ctx, input }) => {
       const groupByBand = await ctx.prisma.band.groupBy({ where: input.where, orderBy: input.orderBy, by: input.by, having: input.having, take: input.take, skip: input.skip });
       return groupByBand;
     }),
-  updateManyBand: publicProcedure
+  updateManyBand: shieldedProcedure
     .input(BandUpdateManySchema)
     .mutation(async ({ ctx, input }) => {
       const updateManyBand = await ctx.prisma.band.updateMany(input);
       return updateManyBand;
     }),
-  updateOneBand: publicProcedure
+  updateOneBand: shieldedProcedure
     .input(BandUpdateOneSchema)
     .mutation(async ({ ctx, input }) => {
       const updateOneBand = await ctx.prisma.band.update(input);
       return updateOneBand;
     }),
-  upsertOneBand: publicProcedure
+  upsertOneBand: shieldedProcedure
     .input(BandUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       const upsertOneBand = await ctx.prisma.band.upsert(input);

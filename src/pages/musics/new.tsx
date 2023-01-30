@@ -39,20 +39,19 @@ const NewMusic: NextPage = () => {
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     create = trpc.music.createOneMusic.useMutation({
-      onSuccess: () => router.push("/musics"),
-      onError: (error) => {
-        enqueueSnackbar(String(error));
+      onSuccess: () => {
+        router.push("/musics");
+        enqueueSnackbar("music.create success");
       },
     }),
-    handleSubmit = (data: Music) => {
+    handleSubmit = (data: Music) =>
       create.mutate({
         data: {
           ...data,
           price: Number(data.price),
           user: { connect: { id: getCurrentUserId(session) } },
         },
-      });
-    },
+      }),
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
       if (files && files.length > 0) {

@@ -4,6 +4,7 @@ import {
   TextFieldElement,
 } from "react-hook-form-mui";
 
+import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
@@ -25,7 +26,8 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
   const router = useRouter(),
     { enqueueSnackbar } = useSnackbar(),
-    { data: session } = useSession(),
+    { data: session, status } = useSession(),
+    { show } = useModal("auth-dialog"),
     id = getRouterId(router),
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
@@ -42,21 +44,24 @@ const NewPull: NextPage = () => {
         }),
       onError: (error) => console.log(error),
     });
-  const handleSubmit = (data: Pull) =>
-    create.mutate({
-      data: {
-        ...data,
-        score: {
-          set: {
-            original: "",
-            changed: "",
+  const handleSubmit = (data: Pull) => {
+    if (status === "authenticated")
+      create.mutate({
+        data: {
+          ...data,
+          score: {
+            set: {
+              original: "",
+              changed: "",
+            },
           },
+          status: "DRAFT",
+          music: { connect: { id } },
+          user: { connect: { id: userId } },
         },
-        status: "DRAFT",
-        music: { connect: { id } },
-        user: { connect: { id: userId } },
-      },
-    });
+      });
+    else show();
+  };
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (

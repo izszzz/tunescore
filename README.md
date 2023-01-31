@@ -16,6 +16,7 @@ npx eslint --fix ./src
 # Playwight
 
 ```
+su pwuser
 npx playwright codegen http://localhost:3000/
 npx playwright test
 ```

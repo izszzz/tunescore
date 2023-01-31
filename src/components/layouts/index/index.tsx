@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,8 +13,6 @@ import type { PaginatedResult } from "prisma-pagination";
 
 import SearchAutocomplete from "../../../components/elements/autocomplete/search";
 import type { SearchAutocompleteProps } from "../../../components/elements/autocomplete/search";
-import { getCurrentUser } from "../../../helpers/user";
-import { useModal } from "../../../hooks/useModal";
 import SingleColumnLayout from "../single_column";
 import type { SingleColumnLayoutProps } from "../single_column";
 
@@ -30,9 +29,10 @@ function IndexLayout<T>({
   children,
   searchAutocompleteProps,
 }: IndexLayoutProps<T>) {
-  const { handleOpen } = useModal();
-  const router = useRouter();
-  const { data: session } = useSession();
+  const router = useRouter(),
+    { status } = useSession(),
+    { show } = useModal("auth-dialog");
+
   const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     router.query.page = String(value);
     router.push(router);
@@ -45,8 +45,8 @@ function IndexLayout<T>({
     }
   };
   const handleClick = () => {
-    if (!getCurrentUser(session)) return handleOpen();
-    newRoute && router.push(newRoute);
+    if (status === "authenticated") newRoute && router.push(newRoute);
+    else show();
   };
   return (
     <SingleColumnLayout contained header={header}>

@@ -6,6 +6,7 @@ import {
 } from "react-hook-form-mui";
 
 import { importer } from "@coderline/alphatab";
+import { useModal } from "@ebay/nice-modal-react";
 import DriveFolderUpload from "@mui/icons-material/DriveFolderUpload";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
@@ -21,37 +22,44 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
 
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { getCurrentUserId } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
   const router = useRouter(),
-    { t } = useTranslation("common"),
     formContext = useForm<Music>({ defaultValues: { price: 0 } }),
+    { show } = useModal("auth-dialog"),
+    { t } = useTranslation(),
+    { data: session, status } = useSession(),
+    { enqueueSnackbar } = useSnackbar(),
     {
       watch,
       setValue,
       formState: { isDirty, isValid },
     } = formContext,
     type = watch("type"),
-    { data: session } = useSession(),
-    { enqueueSnackbar } = useSnackbar(),
     create = trpc.music.createOneMusic.useMutation({
       onSuccess: () => {
         router.push("/musics");
         enqueueSnackbar("music.create success");
       },
+      onError: () => {
+        enqueueSnackbar("music.create fail");
+      },
     }),
-    handleSubmit = (data: Music) =>
-      create.mutate({
-        data: {
-          ...data,
-          price: Number(data.price),
-          user: { connect: { id: getCurrentUserId(session) } },
-        },
-      }),
+    handleSubmit = (data: Music) => {
+      if (status === "authenticated")
+        create.mutate({
+          data: {
+            ...data,
+            price: Number(data.price),
+            user: { connect: { id: getCurrentUserId(session) } },
+          },
+        });
+      else show();
+    },
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
       if (files && files.length > 0) {
@@ -78,7 +86,7 @@ const NewMusic: NextPage = () => {
       }
     };
   return (
-    <DefaultSingleColumnLayout contained>
+    <NewLayout>
       <Script
         src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
         onError={(e) => console.log(e)}
@@ -156,7 +164,7 @@ const NewMusic: NextPage = () => {
           </FormContainer>
         </Box>
       </Box>
-    </DefaultSingleColumnLayout>
+    </NewLayout>
   );
 };
 

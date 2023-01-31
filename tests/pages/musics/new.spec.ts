@@ -1,17 +1,15 @@
 import { test, expect } from "@playwright/test";
 
-// test.describe.configure({ mode: "serial" });
+import { getAuthDialog } from "../../helpers";
 
 test.describe("Unauthenticated User", () => {
   test("should not be created music", async ({ page }) => {
     await page.goto("/musics/new");
     await page.getByLabel("copy").click();
     await page.getByLabel("private").click();
-    await page.getByLabel("Title *").fill("test");
-    await page.getByRole("button", { name: "submit" }).click();
-    await expect(page.getByRole("heading", { name: "Sign In" })).toHaveText(
-      "Sign In"
-    );
+    await page.getByLabel("Title *").type("test");
+    await page.getByRole("button", { name: "投稿" }).click();
+    await expect(await getAuthDialog(page)).toHaveText("Sign In");
   });
 });
 
@@ -28,11 +26,15 @@ test.describe("Authenticated User", () => {
         expires: 1661406204,
       },
     ]);
+
     await page.goto("/musics/new");
-    await page.getByText("copy").click();
-    await page.getByText("private").click();
-    await page.getByLabel("Title *").fill("test");
-    await page.getByRole("button", { name: "submit" }).click();
+    await page.getByLabel("copy").click();
+    await page.getByLabel("private").click();
+    await page.getByLabel("Title *").type("test");
+    await page.getByRole("button", { name: "投稿" }).click();
+    await page.screenshot({
+      path: `./images/${page.context().browser()?.browserType().name()}.png`,
+    });
     await expect(page).toHaveURL(/.*\//);
   });
 });

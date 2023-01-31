@@ -6,6 +6,7 @@ import {
   useForm,
 } from "react-hook-form-mui";
 
+import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { Issue } from "@prisma/client";
 import type { NextPage } from "next";
@@ -28,8 +29,9 @@ const Issues: NextPage = () => {
   const formContext = useForm<Issue>(),
     { enqueueSnackbar } = useSnackbar(),
     router = useRouter(),
-    { data: session } = useSession(),
+    { data: session, status } = useSession(),
     id = getRouterId(router),
+    { show } = useModal("auth-dialog"),
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query, {
@@ -47,14 +49,17 @@ const Issues: NextPage = () => {
         enqueueSnackbar("issue.create error");
       },
     }),
-    handleSubmit = (data: Issue) =>
-      create.mutate({
-        data: {
-          ...data,
-          music: { connect: { id } },
-          user: { connect: { id: userId } },
-        },
-      });
+    handleSubmit = (data: Issue) => {
+      if (status === "authenticated")
+        create.mutate({
+          data: {
+            ...data,
+            music: { connect: { id } },
+            user: { connect: { id: userId } },
+          },
+        });
+      else show();
+    };
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (

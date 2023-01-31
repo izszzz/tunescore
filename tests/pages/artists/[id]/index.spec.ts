@@ -5,8 +5,8 @@ import { getBookmarkButton } from "../../../helpers";
 
 test.describe("Unauthenticated User", () => {
   test("should not be bookmarked", async ({ page }) => {
-    const music = await prisma.music.findFirst();
-    await page.goto(`/musics/${music?.id}`);
+    const artist = await prisma.artist.findFirst();
+    await page.goto(`/artists/${artist?.id}`);
     await (await getBookmarkButton(page)).click();
   });
 });

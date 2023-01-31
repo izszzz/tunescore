@@ -1,4 +1,5 @@
 // src/pages/_app.tsx
+import NiceModal from "@ebay/nice-modal-react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,12 +13,12 @@ import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
 import { useDarkMode } from "usehooks-ts";
 
-import AuthDialog from "../components/elements/dialog/auth";
 import "../styles/globals.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import ModalsProvider from "../providers/modals";
 import { trpc } from "../utils/trpc";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -35,15 +36,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
           <SessionProvider session={session}>
-            <QueryClientProvider client={queryClient}>
-              <Head>
-                <title>tunescore</title>
-              </Head>
-              <CssBaseline />
-              <Component {...pageProps} />
-              <ReactQueryDevtools initialIsOpen={false} />
-              <AuthDialog />
-            </QueryClientProvider>
+            <NiceModal.Provider>
+              <QueryClientProvider client={queryClient}>
+                <Head>
+                  <title>tunescore</title>
+                </Head>
+                <CssBaseline />
+                <ModalsProvider>
+                  <Component {...pageProps} />
+                </ModalsProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
+              </QueryClientProvider>
+            </NiceModal.Provider>
           </SessionProvider>
         </SnackbarProvider>
       </ThemeProvider>

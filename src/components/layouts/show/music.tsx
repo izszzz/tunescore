@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
@@ -16,8 +17,6 @@ import { getContentImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUser } from "../../../helpers/user";
-import { useModal } from "../../../hooks/useModal";
 import type {
   MusicShowArgsType,
   musicShowQuery,
@@ -45,10 +44,10 @@ const MusicLayout = ({
   children,
 }: MusicLayoutProps) => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const { show } = useModal("auth-dialog");
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const { handleOpen } = useModal();
   const id = getRouterId(router);
   const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
@@ -127,7 +126,7 @@ const MusicLayout = ({
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
         onClick: () => {
-          if (getCurrentUser(session))
+          if (status === "authenticated")
             update.mutate({
               ...query,
               data: {
@@ -138,7 +137,7 @@ const MusicLayout = ({
                 }),
               },
             });
-          else handleOpen();
+          else show();
         },
       }}
     >

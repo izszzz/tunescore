@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
@@ -24,8 +25,6 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 
-
-
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<BandShowArgsType>;
@@ -39,9 +38,10 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter();
+  const router = useRouter(),
+    { show } = useModal("auth-modal");
   const id = getRouterId(router);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const name = setLocale(data.name, router);
@@ -80,7 +80,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
             resource="BAND"
             onClick={() => router.push("/bands")}
           />
-          s<Typography variant="h5">{name}</Typography>
+          <Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image
@@ -100,17 +100,20 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: () =>
-          update.mutate({
-            ...query,
-            data: {
-              bookmarks: bookmarkMutate({
-                type: "Band",
-                data,
-                session,
-              }),
-            },
-          }),
+        onClick: () => {
+          if (status === "authenticated")
+            update.mutate({
+              ...query,
+              data: {
+                bookmarks: bookmarkMutate({
+                  type: "Band",
+                  data,
+                  session,
+                }),
+              },
+            });
+          else show();
+        },
       }}
     >
       {children}

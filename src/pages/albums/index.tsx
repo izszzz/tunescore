@@ -24,7 +24,6 @@ const Albums: NextPage = () => {
   if (!data) return <></>;
   return (
     <IndexLayout
-      newRoute={{ pathname: "/albums/new" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],

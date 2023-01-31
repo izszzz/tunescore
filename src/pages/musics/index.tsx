@@ -32,7 +32,6 @@ const Musics: NextPage = () => {
   if (!data) return <></>;
   return (
     <DefaultIndexLayout
-      newRoute={{ pathname: "/musics/new" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],

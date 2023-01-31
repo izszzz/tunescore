@@ -19,4 +19,5 @@ npx eslint --fix ./src
 su pwuser
 npx playwright codegen http://localhost:3000/
 npx playwright test
+npx playwright show-report
 ```

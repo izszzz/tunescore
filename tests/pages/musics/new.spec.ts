@@ -26,15 +26,11 @@ test.describe("Authenticated User", () => {
         expires: 1661406204,
       },
     ]);
-
     await page.goto("/musics/new");
     await page.getByLabel("copy").click();
     await page.getByLabel("private").click();
     await page.getByLabel("Title *").type("test");
     await page.getByRole("button", { name: "投稿" }).click();
-    await page.screenshot({
-      path: `./images/${page.context().browser()?.browserType().name()}.png`,
-    });
     await expect(page).toHaveURL(/.*\//);
   });
 });

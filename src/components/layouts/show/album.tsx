@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,7 +22,6 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 
-
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
@@ -34,17 +34,18 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter();
-  const id = getRouterId(router);
-  const { data: session } = useSession();
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const update = trpc.album.updateOneAlbum.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
-      enqueueSnackbar("album.update success");
-    },
-  });
+  const router = useRouter(),
+    { show } = useModal("auth-modal"),
+    id = getRouterId(router),
+    { data: session, status } = useSession(),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    update = trpc.album.updateOneAlbum.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
+        enqueueSnackbar("album.update success");
+      },
+    });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -81,17 +82,20 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: () =>
-          update.mutate({
-            ...query,
-            data: {
-              bookmarks: bookmarkMutate({
-                type: "Album",
-                data,
-                session,
-              }),
-            },
-          }),
+        onClick: () => {
+          if (status === "authenticated")
+            update.mutate({
+              ...query,
+              data: {
+                bookmarks: bookmarkMutate({
+                  type: "Album",
+                  data,
+                  session,
+                }),
+              },
+            });
+          else show();
+        },
       }}
     >
       {children}

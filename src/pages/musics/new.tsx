@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FormContainer,
   RadioButtonGroup,
@@ -29,6 +30,7 @@ import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
   const router = useRouter(),
+    [loading, setLoading] = useState(false),
     formContext = useForm<Music>({ defaultValues: { price: 0 } }),
     { show } = useModal("auth-dialog"),
     { t } = useTranslation(),
@@ -72,6 +74,18 @@ const NewMusic: NextPage = () => {
       }
       e.target.value = "";
     },
+    handleRecognition = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      const body = new FormData();
+      setLoading(true);
+      body.append("file", files[0]);
+      const res = await fetch("/api/audiveris", {
+        method: "POST",
+        body,
+      });
+      setLoading(false);
+      console.log(res);
+    },
     exportFile = (data: Uint8Array) => {
       let score = null;
       try {
@@ -106,6 +120,17 @@ const NewMusic: NextPage = () => {
             >
               Guitar Pro
               <input type="file" hidden onChange={handleChange} />
+            </Button>
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<DriveFolderUpload />}
+              disabled={loading}
+              disableElevation
+              fullWidth
+            >
+              Recognition
+              <input type="file" hidden onChange={handleRecognition} />
             </Button>
             <Box mb={3}>
               <RadioButtonGroup

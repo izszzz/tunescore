@@ -11,6 +11,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/albums">
     | StaticRoute<"/albums/new">
     | StaticRoute<"/api/agenda">
+    | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/restricted">
     | StaticRoute<"/api/spotify/search">

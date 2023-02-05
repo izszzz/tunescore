@@ -44,6 +44,8 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
+RUN apt-get install git openjdk-11-jdk tesseract-ocr-rus && \
+	git clone https://github.com/Audiveris/audiveris.git
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # RUN addgroup --system --gid 1001 nodejs

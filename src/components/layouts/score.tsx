@@ -10,12 +10,9 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
-import Script from "next/script";
-
 
 import ScoreHeader from "../elements/header/score";
 import VolumeSliderInput from "../music-mateial-ui/input/slider/volume";
-
 
 const drawerWidth = 240;
 
@@ -51,29 +48,6 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
   const apiRef = useRef<AlphaTabApi | null>(null);
   const mainRef = useRef(null);
   const handleOpen = () => setOpen((p) => !p);
-  const handleLoad = () => {
-    const settings = {
-      // file: "/asymmetry.gp",
-      player: {
-        enablePlayer: true,
-        soundFont:
-          "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2",
-        // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
-      },
-    };
-    if (mainRef.current)
-      apiRef.current = new window.alphaTab.AlphaTabApi(
-        mainRef.current,
-        settings
-      );
-    apiRef.current?.scoreLoaded.on((score) => {
-      setTracks(score.tracks);
-    });
-    apiRef.current?.renderStarted.on(() => {
-      if (apiRef.current) setActiveTracks(apiRef.current?.tracks);
-    });
-    apiRef.current?.tex(value);
-  };
   const handleTrackClick = (track: model.Track) => {
     setActiveTracks((prevTracks) => {
       if (prevTracks.some((prevTrack) => prevTrack.index === track.index)) {
@@ -88,22 +62,37 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     });
   };
   useEffect(() => {
+    const settings = {
+      // file: "/Kick Back.musicxml",
+      // file: "https://www.alphatab.net/files/canon.gp",
+      player: {
+        enablePlayer: true,
+        soundFont:
+          "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2",
+        // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
+      },
+    };
+    if (mainRef.current) {
+      apiRef.current = new window.alphaTab.AlphaTabApi(
+        mainRef.current,
+        settings
+      );
+    }
+    apiRef.current?.scoreLoaded.on((score) => {
+      setTracks(score.tracks);
+    });
+    apiRef.current?.renderStarted.on(() => {
+      if (apiRef.current) setActiveTracks(apiRef.current?.tracks);
+    });
+  }, []);
+  useEffect(() => {
     apiRef.current?.renderTracks(activeTracks);
   }, [activeTracks]);
-  useEffect(() => {
-    return apiRef.current?.stop;
-  }, []);
   useEffect(() => {
     apiRef.current?.tex(value);
   }, [value]);
   return (
     <Box width="100%" sx={{ display: "flex" }}>
-      <Script
-        strategy="lazyOnload"
-        src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
-        onLoad={handleLoad}
-        onError={(e) => console.log(e)}
-      />
       <Drawer
         variant="persistent"
         anchor="left"

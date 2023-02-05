@@ -1,3 +1,5 @@
+import path from "path";
+
 import { useState } from "react";
 import {
   FormContainer,
@@ -15,13 +17,14 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { Music } from "@prisma/client";
+import axios from "axios";
 import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import Script from "next/script";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
+import { match, P } from "ts-pattern";
 
 import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
@@ -64,27 +67,35 @@ const NewMusic: NextPage = () => {
     },
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files;
-      if (files && files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = ({ target }) => {
-          const result = target?.result as ArrayBuffer;
-          if (result) exportFile(new Uint8Array(result));
-        };
-        reader.readAsArrayBuffer(files[0] as Blob);
-      }
+      if (!files) return;
+      if (!files[0]) return;
+      const file = files[0];
+      const extname = path.extname(file.name) as
+        | ".jpg"
+        | ".png"
+        | ".pdf"
+        | ".gp"
+        | ".mxl";
+      match(extname)
+        .with(P.union(".gp", ".mxl"), () => {
+          const reader = new FileReader();
+          reader.onload = ({ target }) => {
+            const result = target?.result as ArrayBuffer;
+            if (result) exportFile(new Uint8Array(result));
+          };
+          reader.readAsArrayBuffer(file as Blob);
+        })
+        .with(P.union(".jpg", ".png", ".pdf"), async () => {
+          setLoading(true);
+          const body = new FormData();
+          body.append("file", file);
+          const { data } = await axios.post<string>("/api/audiveris", body);
+          setValue("score", data);
+
+          setLoading(false);
+        })
+        .exhaustive();
       e.target.value = "";
-    },
-    handleRecognition = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      const body = new FormData();
-      setLoading(true);
-      body.append("file", files[0]);
-      const res = await fetch("/api/audiveris", {
-        method: "POST",
-        body,
-      });
-      setLoading(false);
-      console.log(res);
     },
     exportFile = (data: Uint8Array) => {
       let score = null;
@@ -101,10 +112,6 @@ const NewMusic: NextPage = () => {
     };
   return (
     <NewLayout>
-      <Script
-        src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
-        onError={(e) => console.log(e)}
-      />
       <Box my={3}>
         <Typography variant="h4">Create a New Music</Typography>
         <Divider />
@@ -115,22 +122,17 @@ const NewMusic: NextPage = () => {
               variant="contained"
               component="label"
               startIcon={<DriveFolderUpload />}
-              disableElevation
-              fullWidth
-            >
-              Guitar Pro
-              <input type="file" hidden onChange={handleChange} />
-            </Button>
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<DriveFolderUpload />}
               disabled={loading}
               disableElevation
               fullWidth
             >
-              Recognition
-              <input type="file" hidden onChange={handleRecognition} />
+              Load Score
+              <input
+                type="file"
+                accept=".jpg,.png,.pdf,.gp,.mxl"
+                hidden
+                onChange={handleChange}
+              />
             </Button>
             <Box mb={3}>
               <RadioButtonGroup

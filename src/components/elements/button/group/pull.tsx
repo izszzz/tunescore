@@ -73,59 +73,60 @@ const PullButton = ({
       <PullDraftButton loading={loading} onClick={onDraft} />
     ))
     .exhaustive();
+
 const PullOpenButton = (props: LoadingButtonProps) => (
-  <LoadingButton
-    variant="outlined"
+  <DefaultButton
     color="success"
     startIcon={<PullStatusIcon status="OPEN" />}
     {...props}
-    fullWidth
   >
     OPEN
-  </LoadingButton>
+  </DefaultButton>
 );
 
 const PullMergeButton = (props: LoadingButtonProps) => (
-  <LoadingButton
-    variant="outlined"
+  <DefaultButton
     color="success"
     startIcon={<PullStatusIcon status="MERGE" />}
     {...props}
   >
     Merge
-  </LoadingButton>
+  </DefaultButton>
 );
 
 const PullCloseButton = (props: LoadingButtonProps) => (
-  <LoadingButton
-    variant="outlined"
+  <DefaultButton
     color="error"
     startIcon={<PullStatusIcon status="CLOSE" />}
     {...props}
   >
     Close
-  </LoadingButton>
+  </DefaultButton>
 );
 
 const PullDraftButton = (props: LoadingButtonProps) => (
-  <LoadingButton
-    variant="outlined"
+  <DefaultButton
     color="info"
     startIcon={<PullStatusIcon status="DRAFT" />}
     {...props}
   >
     Draft
-  </LoadingButton>
+  </DefaultButton>
 );
 
 const VoteCreateButton = (props: LoadingButtonProps) => (
-  <LoadingButton
-    variant="outlined"
+  <DefaultButton
     color="success"
     startIcon={<PullStatusIcon status="VOTE" />}
     {...props}
   >
-    Vote
+    Draft
+  </DefaultButton>
+);
+
+const DefaultButton = ({ children, ...props }: LoadingButtonProps) => (
+  <LoadingButton variant="outlined" {...props}>
+    {children}
   </LoadingButton>
 );
 

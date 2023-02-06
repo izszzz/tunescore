@@ -1,3 +1,4 @@
+import * as R from "remeda";
 import { z } from "zod";
 
 import { authenticateUser } from "../../helpers/user";
@@ -41,8 +42,11 @@ export const stripeRouter = router({
             music: { include: { user: true } },
           },
         }),
-        musics = carts.map((cart) => cart.music),
-        sum = musics.reduce((sum, music) => sum + (music.price || 0), 0);
+        sum = R.pipe(
+          carts,
+          R.map((cart) => cart.music.price),
+          R.reduce((sum, price) => sum + (price || 0), 0)
+        );
 
       carts.forEach(async (cart) => {
         try {

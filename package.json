@@ -90,6 +90,7 @@
     "react-use": "^17.4.0",
     "react-youtube": "^10.1.0",
     "recoil": "^0.7.6",
+    "remeda": "^1.6.1",
     "split.js": "^1.6.5",
     "spotify-web-api-node": "^5.0.2",
     "stripe": "^11.6.0",

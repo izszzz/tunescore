@@ -14,12 +14,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/restricted">
-    | StaticRoute<"/api/spotify/search">
-    | DynamicRoute<"/api/spotify/tracks/[id]", { "id": string }>
     | DynamicRoute<"/api/trpc/[trpc]", { "trpc": string }>
-    | DynamicRoute<"/api/youtube/channels/[id]", { "id": string }>
-    | StaticRoute<"/api/youtube/search">
-    | DynamicRoute<"/api/youtube/videos/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]/settings", { "id": string }>
     | StaticRoute<"/artists">

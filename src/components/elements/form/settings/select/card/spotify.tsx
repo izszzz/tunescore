@@ -1,10 +1,9 @@
 import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
-import axios from "axios";
-import type { AxiosResponse } from "axios";
 
-import type { spotify } from "../../../../../../server/common/spotify";
+import type { SearchType } from "../../../../../../helpers/spotify";
+import { trpc } from "../../../../../../utils/trpc";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -16,30 +15,21 @@ interface SpotifySelectFormProps<T>
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  type: Parameters<typeof spotify.search>[1];
-  lookup: (id: string) => Promise<AxiosResponse<T>>;
+  lookup: T | undefined;
 }
 function SpotifySelectForm<T extends SpotifyApi.TrackObjectFull>({
   streamingLink,
   term,
-  type,
   largeCard,
   smallCard,
   lookup,
 }: SpotifySelectFormProps<T>) {
+  const { data } = trpc.spotify.searchTracks.useQuery(term);
   return (
     <CardSelectForm<T, SpotifyApi.PagingObject<T>["items"]>
       link={streamingLink?.spotify}
-      lookup={(id) => lookup(id).then(({ data }) => data)}
-      search={() =>
-        axios
-          .get<SpotifyApi.PagingObject<T>>("/api/spotify/search", {
-            params: { term, type },
-            withCredentials: true,
-            paramsSerializer: { indexes: null },
-          })
-          .then(({ data }) => data.items)
-      }
+      lookup={lookup}
+      search={data?.items}
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{

@@ -13,8 +13,8 @@ export interface CardSelectFormProps<Value, Options extends unknown[]> {
   tablePaginationProps: TablePaginationProps;
   largeCard: (value: Value | undefined) => React.ReactNode;
   smallCard: (value: Options[0]) => React.ReactNode;
-  search: () => Promise<Options | undefined>;
-  lookup: (id: string) => Promise<Value | undefined>;
+  search: Options | undefined;
+  lookup: Value | undefined;
 }
 function CardSelectForm<Value, Options extends unknown[] = []>({
   link,
@@ -25,23 +25,15 @@ function CardSelectForm<Value, Options extends unknown[] = []>({
   lookup,
   search,
 }: CardSelectFormProps<Value, Options>) {
-  const [error, setError] = useState<boolean>(false);
   const [options, setOptions] = useState<Options>();
   const [value, setValue] = useState<Value>();
   useEffect(() => {
-    (async () => {
-      try {
-        if (link?.id) await lookup(link.id).then((res) => setValue(res));
-        else {
-          await search().then((res) => setOptions(res));
-          setValue(undefined);
-        }
-      } catch {
-        setError(true);
-      }
-    })();
+    if (link?.id) setValue(lookup);
+    else {
+      setOptions(search);
+      setValue(undefined);
+    }
   }, [link?.id, lookup, search]);
-  if (error) return <>fetch error</>;
   return (
     <Box my={2}>
       {value ? (

@@ -1,13 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { TRPCError } from "@trpc/server";
+import type { Session } from "next-auth";
+import { z } from "zod";
 
-import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { spotify } from "../server/common/spotify";
 import { prisma } from "../server/db/client";
 
-export const authorized = async (req: NextApiRequest, res: NextApiResponse) => {
+export const authorized = async (session: Session | null) => {
   // check authrized
-  const session = await getServerAuthSession({ req, res });
-  if (!session?.user) throw new Error("Not Authorized Session.user");
+  if (!session?.user) throw new TRPCError({ code: "UNAUTHORIZED" });
 
   // check authrized user exist
   let user;
@@ -17,14 +17,21 @@ export const authorized = async (req: NextApiRequest, res: NextApiResponse) => {
       include: { accounts: true },
     });
   } catch (err) {
-    throw new Error("Session.User is not exist");
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Session.user is not exist",
+    });
   }
 
   // check spotify account linked
   const account = user?.accounts.find(
     (account) => account.provider === "spotify"
   );
-  if (!account) throw new Error("Not linked spotify account");
+  if (!account)
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Not linked spotify account",
+    });
 
   account.access_token && spotify.setAccessToken(account.access_token);
   account.refresh_token && spotify.setRefreshToken(account.refresh_token);
@@ -49,3 +56,13 @@ export const authorized = async (req: NextApiRequest, res: NextApiResponse) => {
 
   return spotify;
 };
+
+export const searchType = z.union([
+  z.literal("album"),
+  z.literal("artist"),
+  z.literal("playlist"),
+  z.literal("track"),
+  z.literal("show"),
+  z.literal("episode"),
+]);
+export type SearchType = z.infer<typeof searchType>;

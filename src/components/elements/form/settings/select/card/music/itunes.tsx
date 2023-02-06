@@ -1,10 +1,7 @@
 import type { StreamingLink } from "@prisma/client";
 
-import {
-  searchItunesMusics,
-  lookupItunesMusic,
-} from "../../../../../../../helpers/itunes";
 import type { ItunesMusic } from "../../../../../../../helpers/itunes";
+import { itunes } from "../../../../../../../server/common/itunes";
 import MusicItunesCard from "../../../../../card/music/itunes";
 import ItunesSelectForm from "../itunes";
 
@@ -21,8 +18,8 @@ const MusicItunesSelectForm = ({
 }: MusicItunesSelectFormProps) => (
   <ItunesSelectForm<ItunesMusic>
     {...props}
-    search={searchItunesMusics}
-    lookup={lookupItunesMusic}
+    search={itunes.searchMusics}
+    lookup={itunes.lookupMusic}
     largeCard={(value) =>
       value && <MusicItunesCard size="large" data={value} onClick={onRemove} />
     }

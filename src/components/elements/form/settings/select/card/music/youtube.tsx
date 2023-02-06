@@ -1,11 +1,11 @@
 import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
-import axios from "axios";
 
+import { trpc } from "../../../../../../../utils/trpc";
 import MusicYoutubeCard from "../../../../../card/music/youtube";
 import YoutubeSelectForm from "../youtube";
-import type { SearchResult, Video, VideoList } from "../youtube";
+import type { SearchResult, Video } from "../youtube";
 
 interface MusicYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
@@ -15,19 +15,20 @@ interface MusicYoutubeSelectFormProps {
 }
 
 const MusicYoutubeSelectForm = ({
+  streamingLink,
   onSelect,
   onRemove,
   ...props
 }: MusicYoutubeSelectFormProps) => {
+  const { data } = trpc.youtube.findUniqueVideo.useQuery(
+    streamingLink?.youtube?.id
+  );
   return (
     <YoutubeSelectForm<Video>
       {...props}
+      streamingLink={streamingLink}
       type="video"
-      lookup={async (id) =>
-        await axios
-          .get<VideoList>(`/api/youtube/videos/${id}`)
-          .then(({ data }) => data.items && data.items[0])
-      }
+      lookup={data?.items?.[0]}
       largeCard={(value) =>
         value && (
           <MusicYoutubeCard size="large" data={value} onClick={onRemove} />

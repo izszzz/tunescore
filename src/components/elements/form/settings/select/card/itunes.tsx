@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import type { StreamingLink } from "@prisma/client";
 
@@ -35,16 +35,22 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   search,
   lookup,
 }: ItunesSelectFormProps<T>) {
+  const [results, setResults] = useState<T[]>();
+  const [result, setResult] = useState<T>();
+  useEffect(() => {
+    if (streamingLink?.itunes?.id) {
+      const id = new URL(streamingLink.itunes.id).pathname.split("/")[4];
+      if (id) lookup({ id }).then((res) => setResult(res.results[0]));
+    }
+    search({ term, offset: 0, limit: 12 }).then(({ results }) =>
+      setResults(results)
+    );
+  }, [lookup, search, streamingLink?.itunes?.id, term]);
   return (
     <CardSelectForm<T, ItunesResponse<T>["results"]>
       link={streamingLink?.itunes}
-      lookup={async (url) => {
-        const id = new URL(url).pathname.split("/")[4];
-        if (id) return await lookup({ id }).then((res) => res.results[0]);
-      }}
-      search={() =>
-        search({ term, offset: 0, limit: 12 }).then(({ results }) => results)
-      }
+      lookup={result}
+      search={results}
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{

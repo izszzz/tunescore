@@ -11,7 +11,7 @@ import * as R from "remeda";
 
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const audiveris = async (req: NextApiRequest, res: NextApiResponse) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
     const { file } = files;
@@ -29,37 +29,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       exporter = new AlphaTexExporter();
 
     try {
-      saveFile(uploadedFile);
+      const alphaTex = R.pipe(
+        uploadedFile,
+        () => saveFile(uploadedFile),
+        () => recognizeFile(savedFilePathName),
+        () => fs.readFileSync(xmlFilePathName),
+        (buffer) => new admZip(buffer),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        (zip) => zip.getEntries()?.[0]?.getData(),
+        (unzipBuffer) =>
+          importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(unzipBuffer)),
+        (score) => {
+          exporter.Export(score);
+          return exporter.ToTex();
+        }
+      );
+
+      return res.status(201).end(alphaTex);
     } catch {
-      return res.status(500).end("upload failed");
+      return res.status(500).end("failed");
+    } finally {
+      // remove cache
+      fs.unlinkSync(uploadedFile.filepath);
+      fs.unlinkSync(savedFilePathName);
+      fs.rmdirSync(audiverisFolderPathName, {
+        recursive: true,
+      });
     }
-    try {
-      recognizeFile(savedFilePathName);
-    } catch {
-      return res.status(500).end("recognize failed");
-    }
-
-    const alphaTex = R.pipe(
-      fs.readFileSync(xmlFilePathName),
-      (buffer) => new admZip(buffer),
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      (zip) => zip.getEntries()[0]!.getData(),
-      (buffer) =>
-        importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(buffer)),
-      (score) => {
-        exporter.Export(score);
-        return exporter.ToTex();
-      }
-    );
-
-    // remove cache
-    fs.unlinkSync(uploadedFile.filepath);
-    fs.unlinkSync(savedFilePathName);
-    fs.rmdirSync(audiverisFolderPathName, {
-      recursive: true,
-    });
-
-    return res.status(201).end(alphaTex);
   });
 };
 
@@ -74,9 +70,6 @@ const recognizeFile = (savedFilePathName: string) =>
   execSync(
     `java -cp 'audiveris/Audiveris-5.2.5/lib/*' Audiveris -batch -export -output '${basePath}' '${savedFilePathName}'`
   );
-
-const audiveris = async (req: NextApiRequest, res: NextApiResponse) =>
-  await handler(req, res);
 
 export const config = {
   api: {

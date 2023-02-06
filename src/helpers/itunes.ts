@@ -54,56 +54,44 @@ export interface ItunesResponse<T> {
   resultCount: number;
   results: T[];
 }
-
 export interface BaseParams {
   entity: "musicArtist" | "album" | "song";
 }
-
 export interface BaseSearchParams {
   term: string;
   limit: number;
   offset: number;
 }
-
 export interface BaseLookupParams {
   id: number | string;
 }
-
 export interface LookupParams extends BaseParams, BaseLookupParams {}
-
 export interface SearchParams extends BaseParams, BaseSearchParams {}
+export class Itunes {
+  lookup<T>(params: LookupParams): Promise<ItunesResponse<T>> {
+    return itunes.jsonp<null, ItunesResponse<T>>("/lookup", {
+      params,
+    });
+  }
+  lookupArtist = ({ id }: BaseLookupParams) =>
+    this.lookup<ItunesArtist>({ id, entity: "musicArtist" });
+  lookupAlbum = ({ id }: BaseLookupParams) =>
+    this.lookup<ItunesAlbum>({ id, entity: "album" });
+  lookupMusic = ({ id }: BaseLookupParams) =>
+    this.lookup<ItunesMusic>({ id, entity: "song" });
 
-export function lookupItunes<T>(
-  params: LookupParams
-): Promise<ItunesResponse<T>> {
-  return itunes.jsonp<null, ItunesResponse<T>>("/lookup", {
-    params,
-  });
+  search<T>(params: SearchParams) {
+    return itunes.jsonp<null, ItunesResponse<T>>("/search", {
+      params,
+    });
+  }
+  searchMusics = (params: BaseSearchParams) =>
+    this.search<ItunesMusic>({ ...params, entity: "song" });
+  searchArtists = (params: BaseSearchParams) =>
+    this.search<ItunesArtist>({ ...params, entity: "musicArtist" });
+  searchAlbums = (params: BaseSearchParams) =>
+    this.search<ItunesAlbum>({ ...params, entity: "album" });
 }
-
-export const lookupItunesArtist = ({ id }: BaseLookupParams) =>
-  lookupItunes<ItunesArtist>({ id, entity: "musicArtist" });
-
-export const lookupItunesAlbum = ({ id }: BaseLookupParams) =>
-  lookupItunes<ItunesAlbum>({ id, entity: "album" });
-
-export const lookupItunesMusic = ({ id }: BaseLookupParams) =>
-  lookupItunes<ItunesMusic>({ id, entity: "song" });
-
-export function searchItunes<T>(params: SearchParams) {
-  return itunes.jsonp<null, ItunesResponse<T>>("/search", {
-    params,
-  });
-}
-
-export const searchItunesMusics = (params: BaseSearchParams) =>
-  searchItunes<ItunesMusic>({ ...params, entity: "song" });
-
-export const searchItunesArtists = (params: BaseSearchParams) =>
-  searchItunes<ItunesArtist>({ ...params, entity: "musicArtist" });
-
-export const searchItunesAlbums = (params: BaseSearchParams) =>
-  searchItunes<ItunesAlbum>({ ...params, entity: "album" });
 
 export const convertAffiliateLink = (url: string) => {
   const parsedUrl = new URL(url);

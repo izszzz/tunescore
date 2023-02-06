@@ -2,11 +2,8 @@ import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
 
-import {
-  lookupItunesAlbum,
-  searchItunesAlbums,
-} from "../../../../../../../helpers/itunes";
 import type { ItunesAlbum } from "../../../../../../../helpers/itunes";
+import { itunes } from "../../../../../../../server/common/itunes";
 import ItunesAlbumCard from "../../../../../card/album/itunes";
 import ItunesSelectForm from "../itunes";
 
@@ -23,8 +20,8 @@ const ItunesAlbumSelectForm = ({
 }: ItunesAlbumSelectFormProps) => (
   <ItunesSelectForm<ItunesAlbum>
     {...props}
-    search={searchItunesAlbums}
-    lookup={lookupItunesAlbum}
+    search={itunes.searchAlbums}
+    lookup={itunes.lookupAlbum}
     largeCard={(value) =>
       value && <ItunesAlbumCard size="large" data={value} onClick={onRemove} />
     }

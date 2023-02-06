@@ -20,9 +20,6 @@ import CloseIconButton from "../../button/icon/close";
 import ResourceIcon from "../../icon/resource";
 import ArtistListItem from "../../list/item/artist";
 
-
-
-
 interface ArtistsUpdateFormProps<T> {
   data: T[];
   loading: boolean;

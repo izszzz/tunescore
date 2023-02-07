@@ -6,7 +6,7 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
 import type { AlbumListArgsType } from "../../../../helpers/album";
-import { getContentImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
@@ -46,7 +46,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         <Image
           height="60"
           alt={title}
-          src={getContentImage(data.link.streaming)?.image?.size?.medium || ""}
+          src={getImage(data.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />
       )}

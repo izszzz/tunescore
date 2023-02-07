@@ -7,14 +7,12 @@ import { useRouter } from "next/router";
 
 import { getAlbumOwner } from "../../../../helpers/album";
 import type { AlbumListArgsType } from "../../../../helpers/album";
-import { getContentImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
 
 import SquareCard from ".";
-
-
 
 interface SquareAlbumCardProps {
   data: Prisma.AlbumGetPayload<AlbumListArgsType>;
@@ -43,11 +41,7 @@ const SquareAlbumCard = ({ data }: SquareAlbumCardProps) => {
           {owner && <IndexChip label={owner.name} resource={type} />}
         </>
       }
-      image={
-        data.link?.streaming
-          ? getContentImage(data.link.streaming)?.image?.size?.large
-          : null
-      }
+      image={getImage(data.link?.streaming, 200)}
       onClick={() =>
         router.push({ pathname: "/albums/[id]", query: { id: data.id } })
       }

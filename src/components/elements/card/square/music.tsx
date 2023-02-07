@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
-import { getContentImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
 import IndexChip from "../../chip";
@@ -54,11 +54,7 @@ const SquareMusicCard = ({ data }: SquareMusicCardProps) => {
           {owner && <IndexChip label={owner.name} resource={type} />}
         </>
       }
-      image={
-        data.link?.streaming
-          ? getContentImage(data.link.streaming)?.image?.size?.large
-          : null
-      }
+      image={getImage(data.link?.streaming, 200, { square: true })}
       onClick={() =>
         router.push({ pathname: "/musics/[id]", query: { id: data.id } })
       }

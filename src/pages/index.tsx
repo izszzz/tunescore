@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   const { data: session } = useSession();
   const musics = trpc.pagination.music.useQuery({
     args: musicListArgs(session),
-    options: { page: 0, perPage: 12 },
+    options: { page: 0, perPage: 30 },
   });
   const albums = trpc.pagination.album.useQuery({
     args: albumListArgs(session),

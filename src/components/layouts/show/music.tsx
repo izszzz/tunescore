@@ -13,7 +13,7 @@ import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getContentImage } from "../../../helpers/image";
+import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
@@ -112,10 +112,7 @@ const MusicLayout = ({
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={setLocale(data.title, router)}
-                src={
-                  getContentImage(data.link.streaming)?.image?.size?.medium ||
-                  ""
-                }
+                src={getImage(data.link?.streaming, 80)}
               />
             </Box>
           )}

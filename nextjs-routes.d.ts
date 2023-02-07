@@ -19,6 +19,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/artists/[id]/settings", { "id": string }>
     | StaticRoute<"/artists">
     | StaticRoute<"/artists/new">
+    | StaticRoute<"/auth/signin">
     | DynamicRoute<"/bands/[id]", { "id": string }>
     | DynamicRoute<"/bands/[id]/settings", { "id": string }>
     | StaticRoute<"/bands">

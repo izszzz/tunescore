@@ -21,7 +21,6 @@ import { bandPaginationQuery } from "../paths/bands";
 import { musicPaginationQuery } from "../paths/musics";
 import { trpc } from "../utils/trpc";
 
-
 type Type = "music" | "album" | "band" | "artist";
 const Search: NextPage = () => {
   const [type, setType] = useState<Type>("music");

@@ -1,7 +1,7 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -17,6 +17,7 @@ import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { redirectToSignIn } from "../../../helpers/user";
 import { bandShowQuery } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -189,4 +190,10 @@ const BandSettings: NextPage = () => {
     </BandLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const redirect = await redirectToSignIn(ctx);
+  return { props: {}, redirect };
+};
+
 export default BandSettings;

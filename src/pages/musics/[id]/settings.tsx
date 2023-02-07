@@ -3,7 +3,7 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -23,6 +23,7 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { redirectToSignIn } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -335,6 +336,11 @@ const SettingsMusic: NextPage = () => {
       />
     </MusicLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const redirect = await redirectToSignIn(ctx);
+  return { props: {}, redirect };
 };
 
 export default SettingsMusic;

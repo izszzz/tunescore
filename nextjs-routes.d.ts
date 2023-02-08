@@ -27,7 +27,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
     | StaticRoute<"/dashboard">
-    | StaticRoute<"/dashboard/library/purchases">
+    | StaticRoute<"/dashboard/library">
+    | StaticRoute<"/dashboard/settings">
     | StaticRoute<"/">
     | DynamicRoute<"/musics/[id]", { "id": string }>
     | DynamicRoute<"/musics/[id]/issues/[issueId]", { "id": string; "issueId": string }>

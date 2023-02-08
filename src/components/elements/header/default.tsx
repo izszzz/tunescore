@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
@@ -43,10 +42,12 @@ const DefaultHeader = () => {
   return (
     <>
       <Header>
-        <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-          <Link href="/">
-            <a>tunescore</a>
-          </Link>
+        <Typography
+          variant="h4"
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+          onClick={() => router.push("/")}
+        >
+          tunescore
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />

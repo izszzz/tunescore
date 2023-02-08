@@ -3,12 +3,12 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 
 import MusicLists from "../../../components/elements/list/music";
-import DefaultSingleColumnLayout from "../../../components/layouts/single_column/default";
+import DashboardLayout from "../../../components/layouts/dashboard";
 import type { MusicListArgsType } from "../../../helpers/music";
 import { musicListArgs } from "../../../helpers/music";
 import { trpc } from "../../../utils/trpc";
 
-const Purchases: NextPage = () => {
+const Library: NextPage = () => {
   const { data: session } = useSession();
   const { data } = trpc.purchase.findManyPurchase.useQuery({
     include: { music: musicListArgs(session) },
@@ -19,9 +19,10 @@ const Purchases: NextPage = () => {
   }>[];
   const musics = purchaseData?.map((data) => data.music);
   return (
-    <DefaultSingleColumnLayout contained>
+    <DashboardLayout active="library">
       <MusicLists data={musics} />
-    </DefaultSingleColumnLayout>
+    </DashboardLayout>
   );
 };
-export default Purchases;
+
+export default Library;

@@ -10,8 +10,10 @@ import { getRouterId } from "../../../../helpers/router";
 import { getCurrentUserId } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
-
-const CartButton = ({ disabled, ...props }: Omit<ButtonProps, "startIcon">) => {
+const CartLoadingButton = ({
+  disabled,
+  ...props
+}: Omit<ButtonProps, "startIcon">) => {
   const { data: session } = useSession();
   const router = useRouter();
   const create = trpc.cart.createOneCart.useMutation();
@@ -39,4 +41,4 @@ const CartButton = ({ disabled, ...props }: Omit<ButtonProps, "startIcon">) => {
   );
 };
 
-export default CartButton;
+export default CartLoadingButton;

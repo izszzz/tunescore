@@ -1,5 +1,7 @@
 import { FormContainer, RadioButtonGroup } from "react-hook-form-mui";
 
+import router from "next/router";
+
 import { trpc } from "../../../utils/trpc";
 import OrderLoadingButton from "../button/loading/order";
 import CreditCard from "../card/credit";
@@ -8,7 +10,9 @@ import MusicLists from "../list/music";
 const OrderForm = () => {
   const { data: paymentMethods } = trpc.stripe.paymentMethods.useQuery(),
     { data } = trpc.currentUser.findManyCart.useQuery(),
-    createPaymentIntent = trpc.stripe.createPaymentIntent.useMutation();
+    createPaymentIntent = trpc.stripe.createPaymentIntent.useMutation({
+      onSuccess: () => router.push("/thanks"),
+    });
   if (!data || !paymentMethods) return <></>;
   return (
     <FormContainer onSuccess={({ id }) => createPaymentIntent.mutate(id)}>

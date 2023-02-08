@@ -48,6 +48,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/scores/[id]", { "id": string }>
     | StaticRoute<"/scores">
     | StaticRoute<"/search">
+    | StaticRoute<"/thanks">
     | DynamicRoute<"/users/[id]/bookmarks", { "id": string }>
     | DynamicRoute<"/users/[id]/followers", { "id": string }>
     | DynamicRoute<"/users/[id]/following", { "id": string }>

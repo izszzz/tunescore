@@ -11,6 +11,7 @@ export const MusicFactory = prisma.music.create({
     title: { ja: "曲", en: "music" },
     type: "ORIGINAL",
     visibility: "PUBLIC",
+    price: 0,
   },
 });
 

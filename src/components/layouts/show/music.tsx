@@ -6,6 +6,7 @@ import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import type { Locale, Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -51,8 +52,8 @@ const MusicLayout = ({
   const id = getRouterId(router);
   const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(
-        [["music", "findUniqueMusic"], query],
+      queryClient.setQueryData(
+        getQueryKey(trpc.music.findUniqueMusic, query, "query"),
         data
       );
       enqueueSnackbar("music.update success");

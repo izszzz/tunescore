@@ -1,4 +1,4 @@
-import * as R from "remeda";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { authenticateUser } from "../../helpers/user";
@@ -41,17 +41,13 @@ export const stripeRouter = router({
           include: {
             music: { include: { user: true } },
           },
-        }),
-        sum = R.pipe(
-          carts,
-          R.map((cart) => cart.music.price),
-          R.reduce((sum, price) => sum + (price || 0), 0)
-        );
+        });
 
       carts.forEach(async (cart) => {
         try {
+          if (!cart.music.price) throw "Not Valid Price";
           const data = await stripe.paymentIntents.create({
-            amount: sum,
+            amount: cart.music.price,
             currency: "jpy",
             customer: user.stripeCustomerId,
             payment_method: paymentMethod.id,
@@ -83,7 +79,10 @@ export const stripeRouter = router({
             });
           return data;
         } catch (err) {
-          return err;
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            cause: err,
+          });
         }
       });
     }),

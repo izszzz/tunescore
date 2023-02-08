@@ -112,7 +112,7 @@ const MusicLayout = ({
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={setLocale(data.title, router)}
-                src={getImage(data.link?.streaming, 80)}
+                src={getImage(data.link?.streaming, 80) || ""}
               />
             </Box>
           )}
@@ -179,7 +179,12 @@ const Owner = ({ data }: OwnerProps) => {
   return (
     <>
       <Link href={{ pathname, query: { id: owner.id } }}>
-        <a>{owner.name}</a>
+        <Box
+          component="a"
+          sx={{ cursor: "pointer", textDecoration: "underline" }}
+        >
+          {owner.name}
+        </Box>
       </Link>{" "}
       /
     </>

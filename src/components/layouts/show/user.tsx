@@ -5,20 +5,23 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
 
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import type { UserShowGetPayload } from "../../../paths/users/[id]";
+import { userShowQuery } from "../../../paths/users/[id]";
 import { trpc } from "../../../utils/trpc";
 import DefaultHeader from "../../elements/header/default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import type { ShowLayoutProps } from ".";
 import ShowLayout from "./index";
-
 
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: UserShowGetPayload;
@@ -32,9 +35,21 @@ const UserLayout: React.FC<UserLayoutProps> = ({
 }) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
   const id = getRouterId(router);
   const userId = getCurrentUserId(session);
-  const update = trpc.user.updateOneUser.useMutation();
+  const query = userShowQuery(session);
+  const update = trpc.user.updateOneUser.useMutation({
+    onSuccess: (data) => {
+      queryClient.setQueryData(
+        getQueryKey(trpc.user.findUniqueUser, query, "query"),
+        data
+      );
+      enqueueSnackbar("user.update success");
+    },
+    onError: () => enqueueSnackbar("user.update error"),
+  });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {

@@ -5,11 +5,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma, PullStatus } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { addWeeks } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import * as Diff3 from "node-diff3";
+import { useSnackbar } from "notistack";
 
 import { getRouterId, getRouterPullId } from "../../../helpers/router";
 import { trpc } from "../../../utils/trpc";
@@ -19,8 +21,6 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
-
-
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<{
@@ -36,6 +36,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
 }) => {
   const [conflict, setConflict] = useState(false);
   const [diff, setDiff] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession();
@@ -43,28 +44,22 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   const pullId = getRouterPullId(router);
   const update = trpc.pull.updateOnePull.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<PullLayoutProps["data"]>(
-        [
-          ["pull", "findUniquePull"],
+      queryClient.setQueryData(
+        getQueryKey(
+          trpc.pull.findUniquePull,
           {
             include: { music: true, user: true, vote: true },
             where: {
               id: pullId,
             },
           },
-        ],
-        (prev) =>
-          prev
-            ? {
-                ...data,
-                score: prev.score,
-                user: prev.user,
-                music: prev.music,
-                vote: prev.vote,
-              }
-            : (data as PullLayoutProps["data"])
+          "query"
+        ),
+        data
       );
+      enqueueSnackbar("pull.update success");
     },
+    onError: () => enqueueSnackbar("pull.update error"),
   });
   const create = trpc.vote.createOneVote.useMutation({
     onSuccess: (successData) => {
@@ -72,7 +67,6 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: JSON.stringify({ voteId: successData.id, pullId: data.id }),
       });

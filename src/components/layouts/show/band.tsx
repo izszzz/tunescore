@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -47,9 +48,13 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   const name = setLocale(data.name, router);
   const update = trpc.band.updateOneBand.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData([["band", "findUniqueBand"], query], data);
+      queryClient.setQueryData(
+        getQueryKey(trpc.band.findUniqueBand, query, "query"),
+        data
+      );
       enqueueSnackbar("band.update success");
     },
+    onError: () => enqueueSnackbar("band.update error"),
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [

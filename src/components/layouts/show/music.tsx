@@ -58,6 +58,7 @@ const MusicLayout = ({
       );
       enqueueSnackbar("music.update success");
     },
+    onError: () => enqueueSnackbar("music.update error"),
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [

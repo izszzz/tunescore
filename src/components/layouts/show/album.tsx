@@ -4,6 +4,7 @@ import { useModal } from "@ebay/nice-modal-react";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -42,9 +43,13 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
     { enqueueSnackbar } = useSnackbar(),
     update = trpc.album.updateOneAlbum.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
+        queryClient.setQueryData(
+          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          data
+        );
         enqueueSnackbar("album.update success");
       },
+      onError: () => enqueueSnackbar("album.update error"),
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [

@@ -1,6 +1,7 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -30,11 +31,14 @@ const BandSettings: NextPage = () => {
     { data } = trpc.band.findUniqueBand.useQuery(query),
     update = trpc.band.updateOneBand.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData([["band", "findUniqueBand"], query], data);
-        enqueueSnackbar("music.update success");
+        queryClient.setQueryData(
+          getQueryKey(trpc.band.findUniqueBand, query, "query"),
+          data
+        );
+        enqueueSnackbar("band.update success");
       },
       onError: () => {
-        enqueueSnackbar("music.update error");
+        enqueueSnackbar("band.update error");
       },
     }),
     destroy = trpc.band.deleteOneBand.useMutation({

@@ -26,6 +26,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/bands/new">
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
+    | StaticRoute<"/dashboard/history">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/dashboard/library">
     | StaticRoute<"/dashboard/settings">

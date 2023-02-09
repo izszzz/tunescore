@@ -13,6 +13,8 @@
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
+/prisma/generated/routers
+/prisma/generated/schemas
 
 # next.js
 /.next/

@@ -62,6 +62,7 @@ model User {
   emailVerified DateTime?
   image         String?
   stripeCustomerId String?
+  point         Int   @default(0)
 
   accounts      Account[]
   sessions      Session[]
@@ -72,11 +73,12 @@ model User {
   bookmarks Bookmark[]
   notifications Notification[] 
   carts Cart[]
-  purchases Purchase[]
-  points Point[]
 
   votes Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
+
+  sender Transaction[] @relation("TransactionSender")
+  recipient Transaction[] @relation("TransactionRecipient")
 
   followers Follow[] @relation("UserFollower")
   following Follow[] @relation("UserFollowing")
@@ -125,7 +127,7 @@ model Music {
   issues Issue[]
   pulls Pull[]
   carts Cart[]
-  purchases Purchase[]
+  transactions Transaction[]
 
   bookmarks Bookmark[] @relation("MusicBookmark")
   tagMaps TagMap[] @relation("MusicTagMap")
@@ -344,44 +346,31 @@ model Cart {
   @@unique([userId, musicId])
 }
 
-model Purchase{
+model Transaction{
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  type TransactionType
+  amount Int @default(0)
 
   stripePaymentIntentId String
 
-  user User @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
-
   music Music @relation(fields: [musicId], references:[id])
   musicId String @db.ObjectId
-  @@unique([userId, musicId])
-}
 
-model Point {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  sender User @relation("TransactionSender",fields: [senderId], references: [id])
+  senderId String @db.ObjectId
 
-  amount Int
-  actionType PointActionType
-
-  user User @relation(fields: [userId], references: [id])
-  userId String @db.ObjectId
+  recipient User @relation("TransactionRecipient",fields: [recipientId], references: [id])
+  recipientId String @db.ObjectId
 
   createdAt DateTime @default(now())
 }
 
-enum PointActionType{
+enum TransactionType{
   PURCHASE
-  CONSUME
-  CONTRIBUTE
-}
-
-enum PointType{
-  Music
-  Band
-  Artist
-  Album
-  Pull
-  Issue
+  WITHDRAW
+  REWARD
+  DONATE
 }
 
 enum ResourceType{

@@ -5,6 +5,13 @@ import { router } from "../trpc";
 import { shieldedProcedure } from "./shield";
 
 export const currentUserRouter = router({
+  findManyPurchase: shieldedProcedure.query(async ({ ctx }) => {
+    const { session } = ctx;
+    return ctx.prisma.purchase.findMany({
+      include: { music: musicListArgs(session) },
+      where: { user: { id: getCurrentUserId(session) } },
+    });
+  }),
   findManyCart: shieldedProcedure.query(async ({ ctx }) => {
     const { session } = ctx,
       cart = await ctx.prisma.cart.findMany({
@@ -13,7 +20,7 @@ export const currentUserRouter = router({
       });
     return cart.map((cart) => cart.music);
   }),
-  notification: shieldedProcedure.query(async ({ ctx }) => {
+  findManyNotification: shieldedProcedure.query(async ({ ctx }) => {
     const userId = getCurrentUserId(ctx.session);
     return ctx.prisma.notification.findMany({
       include: {

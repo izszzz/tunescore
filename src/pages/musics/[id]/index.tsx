@@ -1,9 +1,12 @@
 import YouTube from "react-youtube";
 
 import Box from "@mui/material/Box";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
 import { match, P } from "ts-pattern";
 
 import VoteAlert from "../../../components/elements/alert/vote";
@@ -16,22 +19,48 @@ import ArtistListItem from "../../../components/elements/list/item/artist";
 import ParticipationLists from "../../../components/elements/list/participation";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Music: NextPage = () => {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const query = musicShowQuery({ router, session });
-  const { data } = trpc.music.findUniqueMusic.useQuery(query);
+  const router = useRouter(),
+    queryClient = useQueryClient(),
+    { data: session } = useSession(),
+    query = musicShowQuery({ router, session }),
+    { enqueueSnackbar } = useSnackbar(),
+    { data } = trpc.music.findUniqueMusic.useQuery(query),
+    create = trpc.cart.createOneCart.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData<typeof data>(
+          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          (prev) => prev && { ...prev, carts: [data] }
+        );
+        enqueueSnackbar("cart.create success");
+      },
+      onError: () => enqueueSnackbar("cart.create error"),
+    });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} query={query} activeTab="info">
       {data.link && <LinkButtons data={data.link} />}
 
-      <ActionButton data={musicData} />
+      <ActionButton
+        data={musicData}
+        loading={create.isLoading}
+        onAddCart={() =>
+          create.mutate({
+            data: {
+              user: {
+                connect: { id: getCurrentUserId(session) },
+              },
+              music: { connect: { id: getRouterId(router) } },
+            },
+          })
+        }
+      />
 
       {data.link?.streaming?.youtube?.id && (
         <YouTube
@@ -62,7 +91,12 @@ const Music: NextPage = () => {
   );
 };
 
-const ActionButton = ({ data }: { data: MusicLayoutProps["data"] }) => {
+interface ActionButtonProps {
+  data: MusicLayoutProps["data"];
+  loading: boolean;
+  onAddCart: () => void;
+}
+const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
   const { data: session } = useSession();
   return match(data)
     .with(
@@ -71,7 +105,14 @@ const ActionButton = ({ data }: { data: MusicLayoutProps["data"] }) => {
         price: P.when((price) => price || 0 > 0),
         purchases: P.when((purchases) => !purchases.length),
       },
-      () => <CartLoadingButton disabled={!!data.carts.length} fullWidth />
+      () => (
+        <CartLoadingButton
+          disabled={!!data.carts.length}
+          loading={loading}
+          onClick={onAddCart}
+          fullWidth
+        />
+      )
     )
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup

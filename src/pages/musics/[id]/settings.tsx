@@ -3,6 +3,7 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -44,13 +45,14 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.destroy success");
         router.push("/musics");
       },
-      onError: () => {
-        enqueueSnackbar("music.destroy error");
-      },
+      onError: () => enqueueSnackbar("music.destroy error"),
     }),
     update = trpc.music.updateOneMusic.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData([["music", "findUniqueMusic"], query], data);
+        queryClient.setQueryData<typeof data>(
+          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          data
+        );
         enqueueSnackbar("music.update success");
       },
       onError: () => {

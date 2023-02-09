@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -46,9 +47,13 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   const { enqueueSnackbar } = useSnackbar();
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData([["artist", "findUniqueArtist"], query], data);
+      queryClient.setQueryData(
+        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+        data
+      );
       enqueueSnackbar("artist.update success");
     },
+    onError: () => enqueueSnackbar("artist.update error"),
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [

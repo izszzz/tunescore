@@ -3,6 +3,7 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -29,13 +30,17 @@ const EditArtist: NextPage = () => {
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData([["artist", "findUniqueArtist"], query], data);
+      queryClient.setQueryData(
+        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+        data
+      );
+      enqueueSnackbar("artist.update success");
     },
+    onError: () => enqueueSnackbar("artist.update error"),
   });
   const destroy = trpc.artist.deleteOneArtist.useMutation({
-    onSuccess: () => {
-      enqueueSnackbar("artist.destroy success");
-    },
+    onSuccess: () => enqueueSnackbar("artist.destroy success"),
+    onError: () => enqueueSnackbar("artist.destroy error"),
   });
 
   if (!data) return <></>;

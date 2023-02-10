@@ -103,7 +103,7 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       {
         type: "ORIGINAL",
         price: P.when((price) => price || 0 > 0),
-        purchases: P.when((purchases) => !purchases.length),
+        transactions: P.when((transactions) => !transactions.length),
       },
       () => (
         <CartLoadingButton

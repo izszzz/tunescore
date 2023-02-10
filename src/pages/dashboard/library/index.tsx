@@ -10,17 +10,16 @@ import { trpc } from "../../../utils/trpc";
 
 const Library: NextPage = () => {
   const { data: session } = useSession();
-  const { data } = trpc.purchase.findManyPurchase.useQuery({
+  const { data } = trpc.transaction.findManyTransaction.useQuery({
     include: { music: musicListArgs(session) },
   });
   if (!data) return <></>;
-  const purchaseData = data as Prisma.PurchaseGetPayload<{
+  const transactionData = data as unknown as Prisma.TransactionGetPayload<{
     include: { music: MusicListArgsType };
   }>[];
-  const musics = purchaseData?.map((data) => data.music);
   return (
     <DashboardLayout active="library">
-      <MusicLists data={musics} />
+      <MusicLists data={transactionData?.map((data) => data.music)} />
     </DashboardLayout>
   );
 };

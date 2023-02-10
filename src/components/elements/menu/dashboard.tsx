@@ -1,6 +1,7 @@
+import AttachMoney from "@mui/icons-material/AttachMoney";
 import Book from "@mui/icons-material/Book";
 import CreditCard from "@mui/icons-material/CreditCard";
-import History from "@mui/icons-material/History";
+import Home from "@mui/icons-material/Home";
 import Settings from "@mui/icons-material/Settings";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -9,10 +10,20 @@ import MenuList from "@mui/material/MenuList";
 import router from "next/router";
 
 export interface DashboardMenuProps {
-  active?: "library" | "credits" | "settings" | "history";
+  active?: "home" | "library" | "credits" | "settings" | "transactions";
 }
 const DashboardMenu = ({ active }: DashboardMenuProps) => (
   <MenuList>
+    <MenuItem
+      selected={active === "home"}
+      onClick={() => router.push("/dashboard")}
+    >
+      <ListItemIcon>
+        <Home />
+      </ListItemIcon>
+      <ListItemText>Home</ListItemText>
+    </MenuItem>
+
     <MenuItem
       selected={active === "library"}
       onClick={() => router.push("/dashboard/library")}
@@ -24,13 +35,13 @@ const DashboardMenu = ({ active }: DashboardMenuProps) => (
     </MenuItem>
 
     <MenuItem
-      selected={active === "history"}
-      onClick={() => router.push("/dashboard/history")}
+      selected={active === "transactions"}
+      onClick={() => router.push("/dashboard/transactions")}
     >
       <ListItemIcon>
-        <History />
+        <AttachMoney />
       </ListItemIcon>
-      <ListItemText>History</ListItemText>
+      <ListItemText>Transaction</ListItemText>
     </MenuItem>
 
     <MenuItem

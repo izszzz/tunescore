@@ -26,10 +26,11 @@ declare module "nextjs-routes" {
     | StaticRoute<"/bands/new">
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
-    | StaticRoute<"/dashboard/history">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/dashboard/library">
     | StaticRoute<"/dashboard/settings">
+    | DynamicRoute<"/dashboard/transactions/[id]", { "id": string }>
+    | StaticRoute<"/dashboard/transactions">
     | StaticRoute<"/">
     | DynamicRoute<"/musics/[id]", { "id": string }>
     | DynamicRoute<"/musics/[id]/issues/[issueId]", { "id": string; "issueId": string }>

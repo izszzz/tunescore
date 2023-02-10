@@ -29,7 +29,12 @@ const musicShowArgs = (session: SessionArg) => ({
       include: { vote: true },
       take: 3,
     },
-    purchases: { where: { user: { id: session?.user?.id } } },
+    transactions: {
+      where: {
+        type: "PURCHASE" as const,
+        user: { id: session?.user?.id },
+      },
+    },
     carts: { where: { user: { id: session?.user?.id } } },
     bookmarks: bookmarkQuery({ type: "Music", session }),
     tagMaps: { include: { tag: true } },

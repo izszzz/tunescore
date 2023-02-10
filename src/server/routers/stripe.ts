@@ -29,6 +29,12 @@ export const stripeRouter = router({
       .listPaymentMethods(user.stripeCustomerId)
       .then(({ data }) => data);
   }),
+  paymentIntent: shieldedProcedure
+    .input(z.string().nullish())
+    .query(async ({ input }) => {
+      if (!input) return null;
+      return await stripe.paymentIntents.retrieve(input).then((data) => data);
+    }),
   createPaymentIntent: shieldedProcedure
     .input(z.string())
     .mutation(async ({ ctx: { session, prisma }, input }) => {
@@ -45,9 +51,11 @@ export const stripeRouter = router({
 
       carts.forEach(async (cart) => {
         try {
-          if (!cart.music.price) throw "Not Valid Price";
+          const { music } = cart;
+          const price = music.price;
+          if (!price) throw "Not Valid Price";
           const data = await stripe.paymentIntents.create({
-            amount: cart.music.price,
+            amount: price,
             currency: "jpy",
             customer: user.stripeCustomerId,
             payment_method: paymentMethod.id,
@@ -60,22 +68,32 @@ export const stripeRouter = router({
           await prisma.cart.delete({ where: { id: cart.id } });
 
           // add purchase
-          await prisma.purchase.create({
+          await prisma.transaction.create({
             data: {
-              music: { connect: { id: cart.music.id } },
+              type: "PURCHASE",
+              amount: price,
+              music: { connect: { id: music.id } },
               user: { connect: { id: user.id } },
               stripePaymentIntentId: data.id,
             },
           });
 
           // add point
-          if (cart.music.user)
-            await prisma.point.create({
-              data: {
-                amount: cart.music.price || 0,
-                actionType: "PURCHASE",
-                user: { connect: { id: cart.music.user.id } },
-              },
+          // sender user
+          const prismaUser = await prisma.user.findUnique({
+            where: { id: user.id },
+          });
+          if (!prismaUser) throw "Not found CurrentUser";
+          // TODO: 購入ポイント
+          // await prisma.user.update({
+          //   where: { id: user.id },
+          //   data: { point: prismaUser.point - price },
+          // });
+          // recipient user
+          if (music.user?.id)
+            await prisma.user.update({
+              where: { id: music.user.id },
+              data: { point: music.user.point + price },
             });
           return data;
         } catch (err) {

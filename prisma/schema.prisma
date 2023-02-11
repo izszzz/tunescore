@@ -74,12 +74,14 @@ model User {
   notifications Notification[] 
   carts Cart[]
   transactions Transaction[] 
+  reports Report[]
 
   votes Vote[] @relation(fields:[voteIDs], references: [id])
   voteIDs String[] @db.ObjectId
 
   followers Follow[] @relation("UserFollower")
   following Follow[] @relation("UserFollowing")
+  reported Report[] @relation("ReportedUser")
 }
 
 model Follow {
@@ -129,6 +131,7 @@ model Music {
 
   bookmarks Bookmark[] @relation("MusicBookmark")
   tagMaps TagMap[] @relation("MusicTagMap")
+  reports Report[] @relation("ReportedMusic")
 }
 
 model Album {
@@ -361,54 +364,83 @@ model Transaction{
   createdAt DateTime @default(now())
 }
 
-enum TransactionType{
+model Report {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  type ReportType
+  body String
+
+  reportedUser User? @relation("ReportedUser", fields: [resourceId], references: [id])
+  reportedMusic Music? @relation("ReportedMusic", fields: [resourceId], references: [id])
+
+  resourceType ReportResourceType
+  resourceId String @db.ObjectId
+
+  user User? @relation(fields: [userId], references: [id])
+  userId String? @db.ObjectId
+}
+
+enum ReportResourceType {
+  User
+  Music
+}
+  
+enum ReportType {
+  COPYRIGHT
+  GARBAGE
+  TROLL
+  OTHER
+}
+
+enum TransactionType {
   PURCHASE
   WITHDRAW
   REWARD
   DONATE
 }
 
-enum ResourceType{
+enum ResourceType {
   Music
   Band
   Artist
   Album
 }
 
-enum CommentType{
+enum CommentType {
   Pull
   Issue
 }
 
-enum NotificationType{
+enum NotificationType {
   Follow
   Bookmark
   Comment
 }
 
-enum Visibility{
+enum Visibility {
   PUBLIC
   PRIVATE
 }
 
-enum MusicType{
+enum MusicType {
   ORIGINAL
   COPY
 }
 
-enum PullStatus{
+enum PullStatus {
   DRAFT
   OPEN
   VOTE
   CLOSE
   MERGE
 }
-enum IssueStatus{
+
+enum IssueStatus {
   OPEN
   CLOSE
 }
 
-type PullScore{
+type PullScore {
   original String
   changed String
 }
@@ -418,12 +450,12 @@ type Locale {
   en String?
 }
 
-type LinkList{
+type LinkList {
   streaming StreamingLink?
   account AccountLink?
 }
 
-type StreamingLink{
+type StreamingLink {
   youtube Link?
   spotify Link?
   itunes Link?
@@ -434,16 +466,16 @@ type AccountLink {
   wikipedia String?
 }
 
-type Link{
+type Link {
   id String?
   image Image?
 }
 
-type Image{
+type Image {
   size ImageSize?
 }
 
-type ImageSize{
+type ImageSize {
   small String?
   medium String?
   large String?

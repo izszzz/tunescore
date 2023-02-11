@@ -24,6 +24,7 @@ import type {
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
+import FlagIconButton from "../../elements/button/icon/flag";
 import ResourceIconButton from "../../elements/button/icon/resource";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
@@ -47,6 +48,7 @@ const MusicLayout = ({
   const router = useRouter();
   const { data: session, status } = useSession();
   const { show } = useModal("auth-dialog");
+  const { show: showReportDialog } = useModal("report-dialog");
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const id = getRouterId(router);
@@ -118,6 +120,11 @@ const MusicLayout = ({
               />
             </Box>
           )}
+          <FlagIconButton
+            onClick={() =>
+              showReportDialog({ resourceType: "Music", resourceId: id })
+            }
+          />
         </>
       }
       tagMaps={data.tagMaps}

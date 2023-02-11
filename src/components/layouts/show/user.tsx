@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -17,6 +18,7 @@ import { getCurrentUserId } from "../../../helpers/user";
 import type { UserShowGetPayload } from "../../../paths/users/[id]";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { trpc } from "../../../utils/trpc";
+import FlagIconButton from "../../elements/button/icon/flag";
 import DefaultHeader from "../../elements/header/default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -34,22 +36,23 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   children,
 }) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
-  const id = getRouterId(router);
-  const userId = getCurrentUserId(session);
-  const query = userShowQuery(session);
-  const update = trpc.user.updateOneUser.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(trpc.user.findUniqueUser, query, "query"),
-        data
-      );
-      enqueueSnackbar("user.update success");
-    },
-    onError: () => enqueueSnackbar("user.update error"),
-  });
+  const { data: session } = useSession(),
+    { enqueueSnackbar } = useSnackbar(),
+    queryClient = useQueryClient(),
+    { show: showReportDialog } = useModal("report-dialog"),
+    id = getRouterId(router),
+    userId = getCurrentUserId(session),
+    query = userShowQuery(session),
+    update = trpc.user.updateOneUser.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.user.findUniqueUser, query, "query"),
+          data
+        );
+        enqueueSnackbar("user.update success");
+      },
+      onError: () => enqueueSnackbar("user.update error"),
+    });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -95,6 +98,11 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             />
             <Typography variant="h5">{data.name}</Typography>
           </Box>
+          <FlagIconButton
+            onClick={() =>
+              showReportDialog({ resourceType: "User", resourceId: id })
+            }
+          />
           {id !== userId && (
             <LoadingButton
               loading={update.isLoading}

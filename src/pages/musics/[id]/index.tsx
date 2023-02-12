@@ -116,7 +116,7 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
     )
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup
-        watchButton={{
+        watch={{
           route: {
             pathname: "/scores/[id]",
             query: { id },
@@ -125,7 +125,7 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
             disabled: !score,
           },
         }}
-        editButton={{
+        edit={{
           route: {
             pathname: "/scores/[id]/edit",
             query: { id },

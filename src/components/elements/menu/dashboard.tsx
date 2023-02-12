@@ -3,66 +3,54 @@ import Book from "@mui/icons-material/Book";
 import CreditCard from "@mui/icons-material/CreditCard";
 import Home from "@mui/icons-material/Home";
 import Settings from "@mui/icons-material/Settings";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import router from "next/router";
+import MenuListItem from "./item";
 
 export interface DashboardMenuProps {
   active?: "home" | "library" | "credits" | "settings" | "transactions";
 }
 const DashboardMenu = ({ active }: DashboardMenuProps) => (
   <MenuList>
-    <MenuItem
+    <MenuListItem
+      icon={<Home />}
       selected={active === "home"}
       onClick={() => router.push("/dashboard")}
     >
-      <ListItemIcon>
-        <Home />
-      </ListItemIcon>
-      <ListItemText>Home</ListItemText>
-    </MenuItem>
+      Home
+    </MenuListItem>
 
-    <MenuItem
+    <MenuListItem
+      icon={<Book />}
       selected={active === "library"}
       onClick={() => router.push("/dashboard/library")}
     >
-      <ListItemIcon>
-        <Book />
-      </ListItemIcon>
-      <ListItemText>Library</ListItemText>
-    </MenuItem>
+      Library
+    </MenuListItem>
 
-    <MenuItem
+    <MenuListItem
+      icon={<AttachMoney />}
       selected={active === "transactions"}
       onClick={() => router.push("/dashboard/transactions")}
     >
-      <ListItemIcon>
-        <AttachMoney />
-      </ListItemIcon>
-      <ListItemText>Transaction</ListItemText>
-    </MenuItem>
+      Transaction
+    </MenuListItem>
 
-    <MenuItem
+    <MenuListItem
+      icon={<CreditCard />}
       selected={active === "credits"}
       onClick={() => router.push("/dashboard/credits")}
     >
-      <ListItemIcon>
-        <CreditCard />
-      </ListItemIcon>
-      <ListItemText>Credit Card</ListItemText>
-    </MenuItem>
+      Credit Card
+    </MenuListItem>
 
-    <MenuItem
+    <MenuListItem
+      icon={<Settings />}
       selected={active === "settings"}
       onClick={() => router.push("/dashboard/settings")}
     >
-      <ListItemIcon>
-        <Settings />
-      </ListItemIcon>
-      <ListItemText>Settings</ListItemText>
-    </MenuItem>
+      Settings
+    </MenuListItem>
   </MenuList>
 );
 

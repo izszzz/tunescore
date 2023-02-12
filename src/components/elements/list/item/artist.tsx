@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { ListItemProps } from "@mui/material/ListItem";
+import Person from "@mui/icons-material/Person";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -10,7 +11,6 @@ import { getChannelImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BandChip from "../../chip/band";
 import BookmarkChip from "../../chip/bookmark";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -27,7 +27,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
         pathname: "/artists/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="ARTIST" />}
+      icon={<Person />}
       listItemTextProps={{
         primary: name,
         secondary: (

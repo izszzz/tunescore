@@ -2,7 +2,6 @@ import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
 
-import type { SearchType } from "../../../../../../helpers/spotify";
 import { trpc } from "../../../../../../utils/trpc";
 
 import CardSelectForm from ".";

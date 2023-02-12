@@ -28,7 +28,9 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
       }}
       icon={<AttachMoney />}
       listItemTextProps={{
-        primary: `${data.type} ${setLocale(data.music?.title, router)}`,
+        primary: `${data.type} ${
+          data.music ? setLocale(data.music.title, router) : ""
+        }`,
         secondary: (
           <Box display="flex" alignItems="center">
             <Typography mr={1} variant="body2" color="text.subprimary">

@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { ListItemProps } from "@mui/material/ListItem";
+import Album from "@mui/icons-material/Album";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -10,10 +11,10 @@ import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
+import ArtistChip from "../../chip/artist";
 
 export interface AlbumListItemProps extends ListItemProps {
   data: Prisma.AlbumGetPayload<AlbumListArgsType>;
@@ -27,7 +28,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         pathname: "/albums/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="ALBUM" />}
+      icon={<Album />}
       listItemTextProps={{
         primary: title,
         secondary: (
@@ -38,6 +39,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
               bookmarked={!!data.bookmarks.length}
             />
             <MusicChip label={data._count.musics} size="small" />
+            <ArtistChip label={data._count.artists} size="small" />
           </Stack>
         ),
       }}

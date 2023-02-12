@@ -179,7 +179,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
           </Box>
           <ScoreButtonGroup
             loading={update.isLoading}
-            watchButton={{
+            watch={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score",
                 query: {
@@ -189,7 +189,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
               },
               hidden: false,
             }}
-            editButton={{
+            edit={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score/edit",
                 query: {

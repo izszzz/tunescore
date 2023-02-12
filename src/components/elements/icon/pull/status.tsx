@@ -14,7 +14,7 @@ const PullStatusIcon = ({ status }: PullStatusIconProps) =>
     .with("DRAFT", () => <LockIcon color="disabled" />)
     .with("OPEN", () => <TaskAltIcon color="success" />)
     .with("CLOSE", () => <HighlightOffIcon color="error" />)
-    .with("MERGE", () => <TaskAltIcon color="disabled" />)
+    .with("MERGE", () => <TaskAltIcon color="success" />)
     .with("VOTE", () => <HowToVoteIcon color="success" />)
     .exhaustive();
 export default PullStatusIcon;

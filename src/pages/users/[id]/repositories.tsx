@@ -13,15 +13,11 @@ import type { UserShowGetPayload } from "../../../paths/users/[id]";
 import { userRepositoriesQuery } from "../../../paths/users/[id]/repositories";
 import { trpc } from "../../../utils/trpc";
 
-
 const User: NextPage = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  const id = getRouterId(router);
   const search = trpc.search.music.useMutation();
-  const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery(session)
-  );
+  const { data } = trpc.user.findUniqueUser.useQuery(userShowQuery(session));
   const { data: musicData } = trpc.pagination.music.useQuery(
     userRepositoriesQuery({ router, session })
   );

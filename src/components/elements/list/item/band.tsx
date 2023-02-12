@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { ListItemProps } from "@mui/material/ListItem";
+import Group from "@mui/icons-material/Group";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -12,7 +13,6 @@ import AlbumChip from "../../chip/album";
 import ArtistChip from "../../chip/artist";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -30,7 +30,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
         pathname: "/bands/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="BAND" />}
+      icon={<Group />}
       listItemTextProps={{
         primary: name,
         secondary: (

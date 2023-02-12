@@ -3,6 +3,7 @@ import React from "react";
 import Chip from "@mui/material/Chip";
 import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
+import MusicNote from "@mui/icons-material/MusicNote";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
@@ -12,7 +13,6 @@ import { getMusicOwner } from "../../../../helpers/music";
 import type { MusicListArgsType } from "../../../../helpers/music";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -30,7 +30,7 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
         pathname: "/musics/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="MUSIC" />}
+      icon={<MusicNote />}
       listItemTextProps={{
         primary: title,
         secondary: (

@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import MusicListItem from "../../../../../components/elements/list/item/music";
 
 export default {

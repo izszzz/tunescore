@@ -89,7 +89,7 @@ export const PullFactory = async () =>
                 user: {
                   connect: { id: (await UserFactory).id },
                 },
-                resourceType: "Pull",
+                unionType: "Pull",
               },
             },
           },

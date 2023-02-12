@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import IssueListItem from "../../../../../components/elements/list/item/issue";
 
 export default {

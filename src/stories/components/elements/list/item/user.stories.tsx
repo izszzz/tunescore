@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import UserListItem from "../../../../../components/elements/list/item/user";
 
 export default {

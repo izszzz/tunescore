@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import VolumeSliderInput from "../../../../../../components/music-mateial-ui/input/slider/volume";
 
 export default {

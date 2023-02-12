@@ -39,7 +39,7 @@ export const IssueFactory = async () =>
                 user: {
                   connect: { id: (await UserFactory).id },
                 },
-                resourceType: "Issue",
+                unionType: "Issue",
               },
             },
           },

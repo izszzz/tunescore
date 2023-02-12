@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import Loop from "../../../../../../../components/music-mateial-ui/button/toggle/loop";
 
 export default {

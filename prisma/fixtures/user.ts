@@ -41,19 +41,19 @@ export const BookmarksUserFactory = async () =>
         create: [
           {
             music: { connect: { id: (await MusicFactory).id } },
-            resourceType: "Music",
+            unionType: "Music",
           },
           {
             album: { connect: { id: (await AlbumFactory).id } },
-            resourceType: "Album",
+            unionType: "Album",
           },
           {
             band: { connect: { id: (await BandFactory).id } },
-            resourceType: "Band",
+            unionType: "Band",
           },
           {
             artist: { connect: { id: (await ArtistFactory).id } },
-            resourceType: "Artist",
+            unionType: "Artist",
           },
         ],
       },

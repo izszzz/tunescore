@@ -122,7 +122,7 @@ const MusicLayout = ({
           )}
           <FlagIconButton
             onClick={() =>
-              showReportDialog({ resourceType: "Music", resourceId: id })
+              showReportDialog({ unionType: "Music", unionId: id })
             }
           />
         </>

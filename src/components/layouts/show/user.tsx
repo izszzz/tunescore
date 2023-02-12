@@ -99,9 +99,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             <Typography variant="h5">{data.name}</Typography>
           </Box>
           <FlagIconButton
-            onClick={() =>
-              showReportDialog({ resourceType: "User", resourceId: id })
-            }
+            onClick={() => showReportDialog({ unionType: "User", unionId: id })}
           />
           {id !== userId && (
             <LoadingButton

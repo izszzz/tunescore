@@ -184,7 +184,7 @@ model Band {
   tagMaps TagMap[] @relation("BandTagMap")
 }
 
-model Issue{
+model Issue {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   body String
@@ -199,7 +199,7 @@ model Issue{
   userId String @db.ObjectId
 }
 
-model Pull{
+model Pull {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   body String
@@ -216,7 +216,7 @@ model Pull{
   userId String @db.ObjectId
 }
 
-model Vote{
+model Vote {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   start DateTime @default(now())
   end DateTime
@@ -230,42 +230,42 @@ model Vote{
   userIDs String[] @db.ObjectId
 }
 
-model Comment{
+model Comment {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   body String
 
-  pull Pull? @relation("PullComment", fields: [resourceId], references: [id])
-  issue Issue? @relation("IssueComment", fields: [resourceId], references: [id])
+  pull Pull? @relation("PullComment", fields: [unionId], references: [id])
+  issue Issue? @relation("IssueComment", fields: [unionId], references: [id])
 
   user User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
   notifications Notification[] @relation("CommentNotification")
 
-  resourceId String @db.ObjectId
-  resourceType CommentType 
+  unionId String @db.ObjectId
+  unionType CommentUnionType 
 }
 
-model Bookmark{
+model Bookmark {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
   notifications Notification[] @relation("BookmarkNotification")
 
-  music Music? @relation("MusicBookmark", fields: [resourceId], references: [id])
-  band Band? @relation("BandBookmark",fields: [resourceId], references: [id])
-  album Album? @relation("AlbumBookmark",fields: [resourceId], references: [id])
-  artist Artist? @relation("ArtistBookmark",fields: [resourceId], references: [id])
+  music Music? @relation("MusicBookmark", fields: [unionId], references: [id])
+  band Band? @relation("BandBookmark",fields: [unionId], references: [id])
+  album Album? @relation("AlbumBookmark",fields: [unionId], references: [id])
+  artist Artist? @relation("ArtistBookmark",fields: [unionId], references: [id])
 
   user User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
-  resourceId String @db.ObjectId
-  resourceType ResourceType 
+  unionId String @db.ObjectId
+  unionType BookmarkUnionType 
 
-  @@unique([resourceId, resourceType, userId])
+  @@unique([unionId, unionType, userId])
 }
 
-model Participation{
+model Participation {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
 
   artist Artist @relation(fields: [artistId], references: [id])
@@ -278,14 +278,14 @@ model Participation{
   @@unique([artistId, musicId])
 }
 
-model Role{
+model Role {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
 
   roleMap RoleMap[]
 }
 
-model RoleMap{
+model RoleMap {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
   role Role @relation(fields:[roleId], references: [id])
@@ -295,42 +295,42 @@ model RoleMap{
   participationId String @db.ObjectId
 }
 
-model Tag{
+model Tag {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   
   name String  @unique
   tagMap TagMap[]
 }
 
-model TagMap{
+model TagMap {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
 
   tag Tag @relation(fields:[tagId], references: [id])
   tagId String @db.ObjectId
 
-  music Music? @relation("MusicTagMap", fields: [resourceId], references: [id])
-  band Band? @relation("BandTagMap",fields: [resourceId], references: [id])
-  album Album? @relation("AlbumTagMap",fields: [resourceId], references: [id])
-  artist Artist? @relation("ArtistTagMap",fields: [resourceId], references: [id])
+  music Music? @relation("MusicTagMap", fields: [unionId], references: [id])
+  band Band? @relation("BandTagMap",fields: [unionId], references: [id])
+  album Album? @relation("AlbumTagMap",fields: [unionId], references: [id])
+  artist Artist? @relation("ArtistTagMap",fields: [unionId], references: [id])
 
-  resourceId String @db.ObjectId
-  resourceType ResourceType 
+  unionId String @db.ObjectId
+  unionType TagMapUnionType 
 
-  @@unique([resourceId, tagId, resourceType])
+  @@unique([unionId, tagId, unionType])
 }
 
-model Notification{
+model Notification {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
 
-  bookmarked Bookmark? @relation("BookmarkNotification", fields: [resourceId], references: [id])
-  followed Follow? @relation("FollowNotification", fields:[resourceId], references: [id])
-  commented Comment? @relation("CommentNotification", fields: [resourceId], references:[id])
+  bookmarked Bookmark? @relation("BookmarkNotification", fields: [unionId], references: [id])
+  followed Follow? @relation("FollowNotification", fields:[unionId], references: [id])
+  commented Comment? @relation("CommentNotification", fields: [unionId], references:[id])
 
   user User @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
-  resourceId String @db.ObjectId
-  resourceType NotificationType
+  unionId String @db.ObjectId
+  unionType NotificationUnionType
 
   createdAt DateTime @default(now())
   readAt DateTime @default(now())
@@ -370,17 +370,17 @@ model Report {
   type ReportType
   body String
 
-  reportedUser User? @relation("ReportedUser", fields: [resourceId], references: [id])
-  reportedMusic Music? @relation("ReportedMusic", fields: [resourceId], references: [id])
+  reportedUser User? @relation("ReportedUser", fields: [unionId], references: [id])
+  reportedMusic Music? @relation("ReportedMusic", fields: [unionId], references: [id])
 
-  resourceType ReportResourceType
-  resourceId String @db.ObjectId
+  unionType ReportUnionType
+  unionId String @db.ObjectId
 
   user User? @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
 }
 
-enum ReportResourceType {
+enum ReportUnionType {
   User
   Music
 }
@@ -399,19 +399,26 @@ enum TransactionType {
   DONATE
 }
 
-enum ResourceType {
+enum TagMapUnionType {
   Music
   Band
   Artist
   Album
 }
 
-enum CommentType {
+enum BookmarkUnionType {
+  Music
+  Band
+  Artist
+  Album
+}
+
+enum CommentUnionType {
   Pull
   Issue
 }
 
-enum NotificationType {
+enum NotificationUnionType {
   Follow
   Bookmark
   Comment

@@ -34,7 +34,7 @@ const Issue: NextPage = () => {
         where: { id: issueId },
         include: {
           comments: {
-            where: { resourceType: "Issue" },
+            where: { unionType: "Issue" },
             include: { user: true },
           },
         },
@@ -63,12 +63,12 @@ const Issue: NextPage = () => {
             create.mutate({
               data: {
                 ...data,
-                resourceType: "Issue",
+                unionType: "Issue",
                 issue: { connect: { id: issueId } },
                 user: { connect: { id: userId } },
                 notifications: {
                   create: {
-                    resourceType: "Comment",
+                    unionType: "Comment",
                     user: {
                       connect: { id: userId },
                     },

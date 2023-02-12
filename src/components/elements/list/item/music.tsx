@@ -1,9 +1,9 @@
 import React from "react";
 
+import MusicNote from "@mui/icons-material/MusicNote";
 import Chip from "@mui/material/Chip";
 import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
-import MusicNote from "@mui/icons-material/MusicNote";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 

@@ -69,12 +69,12 @@ const Pull: NextPage = () => {
               create.mutate({
                 data: {
                   ...data,
-                  resourceType: "Pull",
+                  unionType: "Pull",
                   pull: { connect: { id } },
                   user: { connect: { id: userId } },
                   notifications: {
                     create: {
-                      resourceType: "Comment",
+                      unionType: "Comment",
                       user: {
                         connect: { id: userId },
                       },

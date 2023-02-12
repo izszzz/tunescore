@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import PlayButton from "../../../../../../../components/music-mateial-ui/button/icon/toggle/play";
 
 export default {

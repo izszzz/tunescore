@@ -6,7 +6,6 @@ import MusicLists from "../../../components/elements/list/music";
 import IndexLayout from "../../../components/layouts/index";
 import UserLayout from "../../../components/layouts/show/user";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import { userShowQuery } from "../../../paths/users/[id]";
 import type { UserShowGetPayload } from "../../../paths/users/[id]";

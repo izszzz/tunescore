@@ -14,7 +14,6 @@ import IndexLayout from "../../../components/layouts/index";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { bookmarkQuery } from "../../../paths/users/[id]/bookmark";
 import { trpc } from "../../../utils/trpc";
@@ -44,19 +43,19 @@ const UserBookmarks: NextPage = () => {
           getOptionLabel: (option) =>
             match(option)
               .with(
-                { resourceType: "Music", music: P.select(P.not(P.nullish)) },
+                { unionType: "Music", music: P.select(P.not(P.nullish)) },
                 (music) => setLocale(music.title, router)
               )
               .with(
-                { resourceType: "Album", album: P.select(P.not(P.nullish)) },
+                { unionType: "Album", album: P.select(P.not(P.nullish)) },
                 (album) => setLocale(album.title, router)
               )
               .with(
-                { resourceType: "Band", band: P.select(P.not(P.nullish)) },
+                { unionType: "Band", band: P.select(P.not(P.nullish)) },
                 (band) => setLocale(band.name, router)
               )
               .with(
-                { resourceType: "Artist", artist: P.select(P.not(P.nullish)) },
+                { unionType: "Artist", artist: P.select(P.not(P.nullish)) },
                 (artist) => setLocale(artist.name, router)
               )
               .otherwise(() => ""),
@@ -109,19 +108,19 @@ const UserBookmarks: NextPage = () => {
         {bookmarkData.data.map((bookmark) =>
           match(bookmark)
             .with(
-              { resourceType: "Music", music: P.select(P.not(P.nullish)) },
+              { unionType: "Music", music: P.select(P.not(P.nullish)) },
               (music) => <MusicListItem data={music} />
             )
             .with(
-              { resourceType: "Album", album: P.select(P.not(P.nullish)) },
+              { unionType: "Album", album: P.select(P.not(P.nullish)) },
               (album) => <AlbumListItem data={album} />
             )
             .with(
-              { resourceType: "Band", band: P.select(P.not(P.nullish)) },
+              { unionType: "Band", band: P.select(P.not(P.nullish)) },
               (band) => <BandListItem data={band} />
             )
             .with(
-              { resourceType: "Artist", artist: P.select(P.not(P.nullish)) },
+              { unionType: "Artist", artist: P.select(P.not(P.nullish)) },
               (artist) => <ArtistListItem data={artist} />
             )
             .otherwise(() => <></>)

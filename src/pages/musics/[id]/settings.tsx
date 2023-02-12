@@ -122,7 +122,7 @@ const SettingsMusic: NextPage = () => {
                 tagMaps: {
                   create: {
                     tag: { connect: { id: details.option.id } },
-                    resourceType: "Music",
+                    unionType: "Music",
                   },
                 },
               },
@@ -134,9 +134,9 @@ const SettingsMusic: NextPage = () => {
               data: {
                 tagMaps: {
                   delete: {
-                    resourceId_tagId_resourceType: {
-                      resourceType: "Music",
-                      resourceId: id,
+                    unionId_tagId_unionType: {
+                      unionType: "Music",
+                      unionId: id,
                       tagId: details.option.id,
                     },
                   },
@@ -176,7 +176,7 @@ const SettingsMusic: NextPage = () => {
                   tagMaps: {
                     create: {
                       tag: { connect: { id: details.option.id } },
-                      resourceType: "Music",
+                      unionType: "Music",
                     },
                   },
                 },
@@ -188,9 +188,9 @@ const SettingsMusic: NextPage = () => {
                 data: {
                   tagMaps: {
                     delete: {
-                      resourceId_tagId_resourceType: {
-                        resourceType: "Music",
-                        resourceId: id,
+                      unionId_tagId_unionType: {
+                        unionType: "Music",
+                        unionId: id,
                         tagId: details.option.id,
                       },
                     },

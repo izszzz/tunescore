@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import Metronome from "../../../../../../../components/music-mateial-ui/button/toggle/metronome";
 
 export default {

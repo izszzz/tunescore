@@ -1,7 +1,7 @@
 import React from "react";
 
-import type { ListItemProps } from "@mui/material/ListItem";
 import Person from "@mui/icons-material/Person";
+import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";

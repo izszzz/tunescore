@@ -1,7 +1,7 @@
 import React from "react";
 
-import type { ListItemProps } from "@mui/material/ListItem";
 import Album from "@mui/icons-material/Album";
+import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -9,12 +9,12 @@ import { useRouter } from "next/router";
 import type { AlbumListArgsType } from "../../../../helpers/album";
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
+import ArtistChip from "../../chip/artist";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
 import Image from "../../image";
 
 import ListItem from ".";
-import ArtistChip from "../../chip/artist";
 
 export interface AlbumListItemProps extends ListItemProps {
   data: Prisma.AlbumGetPayload<AlbumListArgsType>;

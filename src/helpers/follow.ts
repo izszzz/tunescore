@@ -37,7 +37,7 @@ export const followMutate = ({
           following: { connect: { id } },
           notifications: {
             create: {
-              resourceType: "Follow",
+              unionType: "Follow",
               user: {
                 connect: { id },
               },

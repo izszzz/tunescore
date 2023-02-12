@@ -1,4 +1,4 @@
-import type { ResourceType, Prisma } from "@prisma/client";
+import type { BookmarkUnionType, Prisma } from "@prisma/client";
 import { match, P } from "ts-pattern";
 
 import { getCurrentUserId } from "./user";
@@ -8,12 +8,12 @@ export const bookmarkQuery = ({
   type,
   session,
 }: {
-  type: ResourceType;
+  type: BookmarkUnionType;
   session: SessionArg;
 }) => ({
   where: {
     user: { id: getCurrentUserId(session) },
-    resourceType: type,
+    unionType: type,
   },
 });
 
@@ -29,7 +29,7 @@ export const bookmarkMutate = ({
   session,
 }: {
   data: Data;
-  type: ResourceType;
+  type: BookmarkUnionType;
   session: SessionArg;
 }): Prisma.BookmarkUpdateManyWithoutMusicNestedInput => {
   const id = getCurrentUserId(session);
@@ -42,11 +42,11 @@ export const bookmarkMutate = ({
     : match(data)
         .with({ type: "ORIGINAL", user: P.not(P.nullish) }, () => ({
           create: {
-            resourceType: type,
+            unionType: type,
             user: { connect: { id } },
             notifications: {
               create: {
-                resourceType: "Bookmark",
+                unionType: "Bookmark",
                 user: { connect: { id } },
               },
             },
@@ -54,7 +54,7 @@ export const bookmarkMutate = ({
         }))
         .otherwise(() => ({
           create: {
-            resourceType: type,
+            unionType: type,
             user: { connect: { id } },
           },
         }));

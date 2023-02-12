@@ -1,4 +1,5 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
 import CountIn from "../../../../../../../components/music-mateial-ui/button/toggle/countIn";
 
 export default {

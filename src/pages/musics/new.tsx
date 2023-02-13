@@ -10,10 +10,8 @@ import {
 
 import { importer } from "@coderline/alphatab";
 import { useModal } from "@ebay/nice-modal-react";
-import DriveFolderUpload from "@mui/icons-material/DriveFolderUpload";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { Music } from "@prisma/client";
@@ -26,6 +24,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
 import { match, P } from "ts-pattern";
 
+import Dropzone from "../../components/elements/form/dropzone";
 import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { getCurrentUserId } from "../../helpers/user";
@@ -38,7 +37,7 @@ const NewMusic: NextPage = () => {
     { show } = useModal("auth-dialog"),
     { t } = useTranslation(),
     { data: session, status } = useSession(),
-    { enqueueSnackbar } = useSnackbar(),
+    { enqueueSnackbar, closeSnackbar } = useSnackbar(),
     {
       watch,
       setValue,
@@ -65,37 +64,40 @@ const NewMusic: NextPage = () => {
         });
       else show();
     },
-    handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (!files) return;
-      if (!files[0]) return;
-      const file = files[0];
-      const extname = path.extname(file.name) as
-        | ".jpg"
-        | ".png"
-        | ".pdf"
-        | ".gp"
-        | ".mxl";
-      match(extname)
-        .with(P.union(".gp", ".mxl"), () => {
-          const reader = new FileReader();
-          reader.onload = ({ target }) => {
-            const result = target?.result as ArrayBuffer;
-            if (result) exportFile(new Uint8Array(result));
-          };
-          reader.readAsArrayBuffer(file as Blob);
-        })
-        .with(P.union(".jpg", ".png", ".pdf"), async () => {
-          setLoading(true);
-          const body = new FormData();
-          body.append("file", file);
-          const { data } = await axios.post<string>("/api/audiveris", body);
-          setValue("score", data);
+    handleDrag = (acceptedFiles: File[]) => {
+      acceptedFiles.forEach((file) => {
+        const extname = path.extname(file.name) as
+          | ".jpg"
+          | ".png"
+          | ".pdf"
+          | ".gp"
+          | ".mxl";
+        match(extname)
+          .with(P.union(".gp", ".mxl"), () => {
+            const reader = new FileReader();
+            reader.onload = ({ target }) => {
+              const result = target?.result as ArrayBuffer;
+              if (result) exportFile(new Uint8Array(result));
+            };
+            reader.readAsArrayBuffer(file as Blob);
+          })
+          .with(P.union(".jpg", ".png", ".pdf"), async () => {
+            setLoading(true);
+            const snackbarId = enqueueSnackbar("Loading ...", {
+              autoHideDuration: null,
+            });
+            const body = new FormData();
 
-          setLoading(false);
-        })
-        .exhaustive();
-      e.target.value = "";
+            body.append("file", file);
+            const { data } = await axios.post<string>("/api/audiveris", body);
+
+            setValue("score", data);
+            closeSnackbar(snackbarId);
+            enqueueSnackbar("recognize score image success");
+            setLoading(false);
+          })
+          .exhaustive();
+      });
     },
     exportFile = (data: Uint8Array) => {
       let score = null;
@@ -118,22 +120,6 @@ const NewMusic: NextPage = () => {
 
         <Box my={3}>
           <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<DriveFolderUpload />}
-              disabled={loading}
-              disableElevation
-              fullWidth
-            >
-              Load Score
-              <input
-                type="file"
-                accept=".jpg,.png,.pdf,.gp,.mxl"
-                hidden
-                onChange={handleChange}
-              />
-            </Button>
             <Box mb={3}>
               <RadioButtonGroup
                 label="type"
@@ -179,6 +165,15 @@ const NewMusic: NextPage = () => {
                 <br />
               </>
             )}
+
+            <Dropzone
+              maxFiles={2}
+              accept={{
+                "image/*": [".jpg", ".png", ".pdf"],
+                "text/*": [".gp", ".mxl"],
+              }}
+              onDrop={handleDrag}
+            />
             <LoadingButton
               type="submit"
               variant="contained"

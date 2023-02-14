@@ -4,6 +4,7 @@
 import { appRouter as generatedRouter } from "../../../prisma/generated/routers";
 import { mergeRouters, router } from "../trpc";
 
+import { agendaRouter } from "./agenda";
 import { currentUserRouter } from "./currentUser";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
@@ -19,6 +20,7 @@ export const appRouter = mergeRouters(
     stripe: stripeRouter,
     youtube: youtubeRouter,
     spotify: spotifyRouter,
+    agenda: agendaRouter,
   }),
   generatedRouter
 );

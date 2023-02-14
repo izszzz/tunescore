@@ -12,7 +12,7 @@ import { getRouterId } from "../../../../helpers/router";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
-const Issues: NextPage = () => {
+const Pulls: NextPage = () => {
   const router = useRouter(),
     id = getRouterId(router),
     { enqueueSnackbar } = useSnackbar(),
@@ -76,4 +76,4 @@ const Issues: NextPage = () => {
   );
 };
 
-export default Issues;
+export default Pulls;

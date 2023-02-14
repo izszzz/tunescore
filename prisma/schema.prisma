@@ -76,12 +76,15 @@ model User {
   transactions Transaction[] 
   reports Report[]
 
-  votes Vote[] @relation(fields:[voteIDs], references: [id])
-  voteIDs String[] @db.ObjectId
-
   followers Follow[] @relation("UserFollower")
   following Follow[] @relation("UserFollowing")
   reported Report[] @relation("ReportedUser")
+
+  opponents Vote[] @relation("Opponents",fields: [opponentIDs], references: [id])
+  opponentIDs String[] @db.ObjectId
+
+  proponents Vote[] @relation("Proponents", fields: [proponentIDs], references: [id])
+  proponentIDs String[] @db.ObjectId
 }
 
 model Follow {
@@ -220,14 +223,15 @@ model Vote {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   start DateTime @default(now())
   end DateTime
-  good Int @default(0)
-  bad Int @default(0)
+
+  proponents User[] @relation("Proponents", fields: [proponentIDs], references: [id])
+  proponentIDs String[] @db.ObjectId
+
+  opponents User[] @relation("Opponents", fields: [opponentIDs], references: [id])
+  opponentIDs String[] @db.ObjectId
 
   pull Pull @relation(fields: [pullId], references: [id])
   pullId String @db.ObjectId @unique
-
-  users User[] @relation(fields:[userIDs] , references: [id])
-  userIDs String[] @db.ObjectId
 }
 
 model Comment {

@@ -1,4 +1,6 @@
 // src/pages/_app.tsx
+import { useEffect } from "react";
+
 import NiceModal from "@ebay/nice-modal-react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -30,6 +32,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const theme = createTheme({
     palette: { mode: isDarkMode ? "dark" : "light" },
   });
+  useEffect(() => {
+    isDarkMode
+      ? document.documentElement.setAttribute("data-color-mode", "dark")
+      : document.documentElement.setAttribute("data-color-mode", "light");
+  }, [isDarkMode]);
 
   return (
     <RecoilRoot>

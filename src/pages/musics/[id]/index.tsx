@@ -9,10 +9,10 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 import { match, P } from "ts-pattern";
 
-import VoteAlert from "../../../components/elements/alert/vote";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import LinkButtons from "../../../components/elements/button/link";
 import CartLoadingButton from "../../../components/elements/button/loading/cart";
+import VoteCard from "../../../components/elements/card/vote";
 import AlbumLists from "../../../components/elements/list/album";
 import BandLists from "../../../components/elements/list/band";
 import ArtistListItem from "../../../components/elements/list/item/artist";
@@ -72,7 +72,7 @@ const Music: NextPage = () => {
 
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
-          <VoteAlert
+          <VoteCard
             data={pull}
             goodIconButtonProps={{ disabled: true }}
             badIconButtonProps={{ disabled: true }}

@@ -10,7 +10,6 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
     | StaticRoute<"/albums">
     | StaticRoute<"/albums/new">
-    | StaticRoute<"/api/agenda">
     | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/restricted">

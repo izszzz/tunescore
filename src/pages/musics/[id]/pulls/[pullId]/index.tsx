@@ -16,6 +16,8 @@ import type { MusicLayoutProps } from "../../../../../components/layouts/show/mu
 import PullLayout from "../../../../../components/layouts/show/pull";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import type { PullShowArgsType } from "../../../../../paths/musics/[id]/pulls/[pullId]";
+import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Pull: NextPage = () => {
@@ -26,35 +28,17 @@ const Pull: NextPage = () => {
     create = trpc.comment.createOneComment.useMutation(),
     query = musicShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(
+      pullShowQuery({ session, router }),
       {
-        where: { id: router.query.pullId as string },
-        include: { user: true, music: true, vote: true, comments: true },
-      },
-      {
-        onError: () => {
-          enqueueSnackbar("music.show error");
-        },
+        onError: () => enqueueSnackbar("music.show error"),
       }
     );
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as Prisma.PullGetPayload<{
-    include: {
-      music: true;
-      user: true;
-      vote: true;
-      comments: {
-        include: {
-          user: true;
-        };
-      };
-    };
-  }>;
+  const pullData = pull.data as Prisma.PullGetPayload<PullShowArgsType>;
   const { id, title, body, comments } = pullData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">

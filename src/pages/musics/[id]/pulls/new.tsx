@@ -51,8 +51,8 @@ const NewPull: NextPage = () => {
           ...data,
           score: {
             set: {
-              original: "",
-              changed: "",
+              original: music.data?.score || "",
+              changed: music.data?.score || "",
             },
           },
           status: "DRAFT",

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import type { Prisma, PullStatus } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { addWeeks } from "date-fns";
+import { addMinutes } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -14,6 +14,9 @@ import * as Diff3 from "node-diff3";
 import { useSnackbar } from "notistack";
 
 import { getRouterId, getRouterPullId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
+import type { PullShowArgsType } from "../../../paths/musics/[id]/pulls/[pullId]";
+import { pullShowQuery } from "../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../utils/trpc";
 import PullButton from "../../elements/button/group/pull";
 import ScoreButtonGroup from "../../elements/button/group/score";
@@ -23,9 +26,7 @@ import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
-  data: Prisma.PullGetPayload<{
-    include: { music: true; user: true; vote: true };
-  }>;
+  data: Prisma.PullGetPayload<PullShowArgsType>;
   activeTab: "code" | "conversation";
 }
 
@@ -34,44 +35,35 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const [conflict, setConflict] = useState(false);
-  const [diff, setDiff] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const session = useSession();
-  const id = getRouterId(router);
-  const pullId = getRouterPullId(router);
-  const update = trpc.pull.updateOnePull.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(
-          trpc.pull.findUniquePull,
-          {
-            include: { music: true, user: true, vote: true },
-            where: {
-              id: pullId,
-            },
-          },
-          "query"
+  const [conflict, setConflict] = useState(false),
+    [diff, setDiff] = useState(false),
+    { enqueueSnackbar } = useSnackbar(),
+    router = useRouter(),
+    { data: session } = useSession(),
+    queryClient = useQueryClient(),
+    query = pullShowQuery({ session, router }),
+    id = getRouterId(router),
+    pullId = getRouterPullId(router),
+    agenda = trpc.agenda.create.useMutation({
+      onSuccess: (data) =>
+        queryClient.setQueryData(
+          getQueryKey(trpc.pull.findUniquePull, query, "query"),
+          data
         ),
-        data
-      );
-      enqueueSnackbar("pull.update success");
-    },
-    onError: () => enqueueSnackbar("pull.update error"),
-  });
-  const create = trpc.vote.createOneVote.useMutation({
-    onSuccess: (successData) => {
-      fetch("/api/agenda", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ voteId: successData.id, pullId: data.id }),
-      });
-    },
-  });
+    }),
+    update = trpc.pull.updateOnePull.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.pull.findUniquePull, query, "query"),
+          data
+        );
+        enqueueSnackbar("pull.update success");
+      },
+      onError: () => enqueueSnackbar("pull.update error"),
+    }),
+    create = trpc.vote.createOneVote.useMutation({
+      onSuccess: () => agenda.mutate(pullId),
+    });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -97,38 +89,31 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     ],
     [id, pullId]
   );
-  const handleUpdateStatus = (status: PullStatus) =>
-    update.mutate({
-      where: {
-        id: pullId,
-      },
-      data: {
-        status,
-      },
-    });
-  const handleVote = () => {
-    handleUpdateStatus("VOTE");
-    create.mutate({
-      data: {
-        end: addWeeks(Date.now(), 1),
-        pull: { connect: { id: pullId } },
-      },
-    });
-  };
-  const handleOpen = () => handleUpdateStatus("OPEN");
-  const handleDraft = () => handleUpdateStatus("DRAFT");
-  const handleClose = () => handleUpdateStatus("CLOSE");
-  const handleMerge = () => {
-    update.mutate({
-      where: {
-        id: pullId,
-      },
-      data: {
-        status: "MERGE",
-        music: { update: { score: data.score.changed } },
-      },
-    });
-  };
+  const handleUpdate = (
+      input: Omit<Parameters<typeof update.mutate>[0], "where">
+    ) => update.mutate({ ...input, ...query }),
+    handleUpdateStatus = (status: PullStatus) =>
+      handleUpdate({ data: { status } }),
+    handleOpen = () => handleUpdateStatus("OPEN"),
+    handleDraft = () => handleUpdateStatus("DRAFT"),
+    handleClose = () => handleUpdateStatus("CLOSE"),
+    handleMerge = () =>
+      handleUpdate({
+        data: {
+          status: "MERGE",
+          music: { update: { score: data.score.changed } },
+        },
+      }),
+    handleVote = () => {
+      handleUpdateStatus("VOTE");
+      create.mutate({
+        data: {
+          // end: addWeeks(Date.now(), 1),
+          end: addMinutes(Date.now(), 1),
+          pull: { connect: { id: pullId } },
+        },
+      });
+    };
   useEffect(() => {
     const merged = Diff3.mergeDiff3(
       data.music.score || "",
@@ -163,19 +148,43 @@ const PullLayout: React.FC<PullLayoutProps> = ({
             </Typography>
           </Link>
           <Box my={3}>
-            {session.data?.user?.id === data.userId && (
-              <PullButton
-                data={data}
-                conflict={conflict}
-                diff={diff}
-                loading={update.isLoading}
-                onOpen={handleOpen}
-                onClose={handleClose}
-                onMerge={handleMerge}
-                onDraft={handleDraft}
-                onVote={handleVote}
-              />
-            )}
+            <PullButton
+              data={data}
+              conflict={conflict}
+              diff={diff}
+              loading={update.isLoading}
+              onOpen={handleOpen}
+              onClose={handleClose}
+              onMerge={handleMerge}
+              onDraft={handleDraft}
+              onVote={handleVote}
+              onGood={() =>
+                handleUpdate({
+                  data: {
+                    vote: {
+                      update: {
+                        proponents: {
+                          connect: { id: getCurrentUserId(session) },
+                        },
+                      },
+                    },
+                  },
+                })
+              }
+              onBad={() =>
+                handleUpdate({
+                  data: {
+                    vote: {
+                      update: {
+                        opponents: {
+                          connect: { id: getCurrentUserId(session) },
+                        },
+                      },
+                    },
+                  },
+                })
+              }
+            />
           </Box>
           <ScoreButtonGroup
             loading={update.isLoading}

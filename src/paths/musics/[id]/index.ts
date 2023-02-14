@@ -5,6 +5,7 @@ import { participatedArtistArgs } from "../../../helpers/participation";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
+import { getCurrentUserId } from "../../../helpers/user";
 
 export const musicShowQuery = ({
   router,
@@ -26,7 +27,20 @@ const musicShowArgs = (session: SessionArg) => ({
     participations: participatedArtistArgs(session),
     pulls: {
       where: { status: "VOTE" as const },
-      include: { vote: true },
+      include: {
+        vote: {
+          include: {
+            proponents: { where: { id: getCurrentUserId(session) } },
+            opponents: { where: { id: getCurrentUserId(session) } },
+            _count: {
+              select: {
+                proponents: true,
+                opponents: true,
+              },
+            },
+          },
+        },
+      },
       take: 3,
     },
     transactions: {

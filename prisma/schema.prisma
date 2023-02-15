@@ -387,6 +387,9 @@ model Report {
 enum ReportUnionType {
   User
   Music
+  Artist
+  Album
+  Band
 }
   
 enum ReportType {

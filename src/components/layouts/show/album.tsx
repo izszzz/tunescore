@@ -9,9 +9,9 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
   albumShowPath,
@@ -84,6 +84,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         </>
       }
       tagMaps={data.tagMaps}
+      reportButtonProps={{ unionType: "Album", id }}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
@@ -92,18 +93,11 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
             update.mutate({
               ...query,
               data: {
-                bookmarks: data.bookmarks.length
-                  ? {
-                      delete: {
-                        id: data.bookmarks[0]?.id,
-                      },
-                    }
-                  : {
-                      create: {
-                        unionType: "Album",
-                        user: { connect: { id: getCurrentUserId(session) } },
-                      },
-                    },
+                bookmarks: bookmarkMutate({
+                  bookmarks: data.bookmarks,
+                  unionType: "Album",
+                  session,
+                }),
               },
             });
           else show();

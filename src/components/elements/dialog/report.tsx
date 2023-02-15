@@ -14,7 +14,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import type { Report, ReportUnionType } from "@prisma/client";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 
 import { trpc } from "../../../utils/trpc";
 interface ReportDialogProps {
@@ -48,6 +48,10 @@ const ReportDialog = create<ReportDialogProps>(({ unionType, unionId }) => {
               options={match(unionType)
                 .with("Music", () => [
                   { id: "COPYRIGHT", label: "Copyright" },
+                  { id: "GARBAGE", label: "Garbage" },
+                  { id: "OTHER", label: "other" },
+                ])
+                .with(P.union("Album", "Artist", "Band"), () => [
                   { id: "GARBAGE", label: "Garbage" },
                   { id: "OTHER", label: "other" },
                 ])

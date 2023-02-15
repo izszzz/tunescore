@@ -1,6 +1,6 @@
-import type { BookmarkUnionType } from "@prisma/client";
+import type { Bookmark, BookmarkUnionType } from "@prisma/client";
 
-import { userWhere } from "./user";
+import { getCurrentUserId, userWhere } from "./user";
 import type { SessionArg } from "./user";
 
 export const bookmarkArgs = ({
@@ -12,3 +12,21 @@ export const bookmarkArgs = ({
 }) => ({
   where: { user: userWhere(session), unionType: type },
 });
+
+export const bookmarkMutate = ({
+  bookmarks,
+  session,
+  unionType,
+}: {
+  bookmarks: Bookmark[];
+  session: SessionArg;
+  unionType: BookmarkUnionType;
+}) =>
+  bookmarks.length
+    ? { delete: { id: bookmarks[0]?.id } }
+    : {
+        create: {
+          unionType,
+          user: { connect: { id: getCurrentUserId(session) } },
+        },
+      };

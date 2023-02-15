@@ -10,10 +10,10 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
+import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getChannelImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
 import type {
   ArtistShowArgsType,
   artistShowQuery,
@@ -101,6 +101,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         </>
       }
       tagMaps={data.tagMaps}
+      reportButtonProps={{ unionType: "Artist", id }}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
@@ -109,18 +110,11 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
             update.mutate({
               ...query,
               data: {
-                bookmarks: data.bookmarks.length
-                  ? {
-                      delete: {
-                        id: data.bookmarks[0]?.id,
-                      },
-                    }
-                  : {
-                      create: {
-                        unionType: "Artist",
-                        user: { connect: { id: getCurrentUserId(session) } },
-                      },
-                    },
+                bookmarks: bookmarkMutate({
+                  bookmarks: data.bookmarks,
+                  unionType: "Artist",
+                  session,
+                }),
               },
             });
           else show();

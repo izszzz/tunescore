@@ -10,10 +10,10 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getChannelImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
 import type {
   BandShowArgsType,
   bandShowQuery,
@@ -110,11 +110,18 @@ const BandLayout: React.FC<BandLayoutProps> = ({
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  type: "Band",
-                  data,
-                  session,
-                }),
+                bookmarks: data.bookmarks.length
+                  ? {
+                      delete: {
+                        id: data.bookmarks[0]?.id,
+                      },
+                    }
+                  : {
+                      create: {
+                        unionType: "Band",
+                        user: { connect: { id: getCurrentUserId(session) } },
+                      },
+                    },
               },
             });
           else show();

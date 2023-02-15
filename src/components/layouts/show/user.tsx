@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
@@ -15,7 +16,7 @@ import { useSnackbar } from "notistack";
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import type { UserShowGetPayload } from "../../../paths/users/[id]";
+import type { UserShowArgsType } from "../../../paths/users/[id]";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { trpc } from "../../../utils/trpc";
 import FlagIconButton from "../../elements/button/icon/flag";
@@ -24,9 +25,8 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import type { ShowLayoutProps } from ".";
 import ShowLayout from "./index";
-
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
-  data: UserShowGetPayload;
+  data: Prisma.UserGetPayload<UserShowArgsType>;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
 }
 
@@ -35,8 +35,8 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter();
-  const { data: session } = useSession(),
+  const router = useRouter(),
+    { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
     { show: showReportDialog } = useModal("report-dialog"),

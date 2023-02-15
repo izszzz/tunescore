@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { GetServerSideProps } from "next";
 import type { Session } from "next-auth";
@@ -22,5 +23,21 @@ export const authenticateUser = (session: SessionArg) => {
   },
   getCurrentUser = (session: SessionArg) => session?.user,
   getCurrentUserId = (session: SessionArg) => getCurrentUser(session)?.id,
-  userCountQuery = { select: { followers: true, following: true } },
-  userListArgs = { include: { _count: userCountQuery } };
+  userCount = Prisma.validator<Prisma.UserCountOutputTypeArgs>()({
+    select: { followers: true, following: true },
+  }),
+  userSelect = Prisma.validator<Prisma.UserSelect>()({
+    id: true,
+    name: true,
+    image: true,
+    stripeCustomerId: true,
+    point: true,
+    _count: userCount,
+  }),
+  userArgs = Prisma.validator<Prisma.UserArgs>()({
+    select: userSelect,
+  }),
+  userWhere = (session: SessionArg) =>
+    Prisma.validator<Prisma.UserWhereUniqueInput>()({
+      id: getCurrentUserId(session),
+    });

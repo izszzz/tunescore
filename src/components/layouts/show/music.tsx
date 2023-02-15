@@ -13,14 +13,14 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
 
-import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
-  musicShowQuery,
+  MusicShowQueryType,
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
@@ -35,7 +35,7 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<MusicShowArgsType>;
-  query: ReturnType<typeof musicShowQuery>;
+  query: MusicShowQueryType;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
@@ -136,11 +136,28 @@ const MusicLayout = ({
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  type: "Music",
-                  data,
-                  session,
-                }),
+                bookmarks: data.bookmarks.length
+                  ? {
+                      delete: {
+                        id: data.bookmarks[0]?.id,
+                      },
+                    }
+                  : {
+                      create: {
+                        unionType: "Music",
+                        user: { connect: { id: getCurrentUserId(session) } },
+                        ...(data.type === "ORIGINAL" && data.user
+                          ? {
+                              notifications: {
+                                create: {
+                                  unionType: "Bookmark",
+                                  user: { connect: { id } },
+                                },
+                              },
+                            }
+                          : {}),
+                      },
+                    },
               },
             });
           else show();

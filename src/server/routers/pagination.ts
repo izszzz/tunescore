@@ -14,7 +14,7 @@ import type { AlbumListArgsType } from "../../helpers/album";
 import type { ArtistListArgsType } from "../../helpers/artist";
 import type { BandListArgsType } from "../../helpers/band";
 import type { MusicListArgsType } from "../../helpers/music";
-import type { userCountQuery } from "../../helpers/user";
+import type { userCount } from "../../helpers/user";
 import { PaginateOptionsSchema } from "../../utils/zod";
 import { router, publicProcedure } from "../trpc";
 
@@ -96,7 +96,7 @@ export const paginationRouter = router({
       return await paginate<
         Prisma.UserGetPayload<{
           include: {
-            _count: typeof userCountQuery;
+            _count: typeof userCount;
           };
         }>,
         Prisma.UserFindManyArgs

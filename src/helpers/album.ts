@@ -1,22 +1,22 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
 import { match, P } from "ts-pattern";
 
-import { bookmarkQuery } from "./bookmark";
+import { bookmarkArgs } from "./bookmark";
 import setLocale from "./locale";
 import type { SessionArg } from "./user";
 
-
 export type AlbumListArgsType = ReturnType<typeof albumListArgs>;
 
-export const albumListArgs = (session: SessionArg) => ({
-  include: {
-    _count: { select: { bookmarks: true, artists: true, musics: true } },
-    band: true,
-    artists: true,
-    bookmarks: bookmarkQuery({ type: "Album", session }),
-  },
-});
+export const albumListArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.AlbumArgs>()({
+    include: {
+      _count: { select: { bookmarks: true, artists: true, musics: true } },
+      band: true,
+      artists: true,
+      bookmarks: bookmarkArgs({ type: "Album", session }),
+    },
+  });
 
 type Data = Prisma.AlbumGetPayload<AlbumListArgsType>;
 

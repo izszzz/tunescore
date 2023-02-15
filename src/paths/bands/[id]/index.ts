@@ -1,5 +1,7 @@
+import { Prisma } from "@prisma/client";
+
 import { artistListArgs } from "../../../helpers/artist";
-import { bookmarkQuery } from "../../../helpers/bookmark";
+import { bookmarkArgs } from "../../../helpers/bookmark";
 import { musicListArgs } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
@@ -11,17 +13,19 @@ export const bandShowQuery = ({
 }: {
   router: GetRouterArg;
   session: SessionArg;
-}) => ({
-  where: { id: getRouterId(router) },
-  ...bandShowArgs(session),
-});
+}) =>
+  Prisma.validator<Prisma.BandFindUniqueArgs>()({
+    where: { id: getRouterId(router) },
+    ...bandShowArgs(session),
+  });
 
 export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
-const bandShowArgs = (session: SessionArg) => ({
-  include: {
-    artists: artistListArgs(session),
-    musics: musicListArgs(session),
-    bookmarks: bookmarkQuery({ type: "Band", session }),
-    tagMaps: { include: { tag: true } },
-  },
-});
+const bandShowArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.BandArgs>()({
+    include: {
+      artists: artistListArgs(session),
+      musics: musicListArgs(session),
+      bookmarks: bookmarkArgs({ type: "Band", session }),
+      tagMaps: { include: { tag: true } },
+    },
+  });

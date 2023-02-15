@@ -1,16 +1,17 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
 import { match, P } from "ts-pattern";
 
-import { bookmarkQuery } from "./bookmark";
+import { bookmarkArgs } from "./bookmark";
 import setLocale from "./locale";
 import { participatedArtistArgs } from "./participation";
 import type { SessionArg } from "./user";
+import { userArgs } from "./user";
 
 type Data = Prisma.MusicGetPayload<{
   include: {
     band: true;
-    user: true;
+    user: typeof userArgs;
     participations: {
       include: { artist: true; roleMap: { include: { role: true } } };
     };
@@ -18,21 +19,15 @@ type Data = Prisma.MusicGetPayload<{
 }>;
 export const getMusicOwner = (data: Data, router: NextRouter) =>
   match(data)
-    .with({ type: "ORIGINAL", user: P.select(P.not(P.nullish)) }, (user) => ({
-      type: "USER" as const,
-      owner: {
-        id: user.id,
-        name: user.name,
-      },
-    }))
     .with(
-      {
-        type: "COPY",
-        band: P.select(P.not(P.nullish)),
-      },
-      (band) => ({
+      { type: "ORIGINAL", user: P.select(P.not(P.nullish)) },
+      ({ id, name }) => ({ type: "USER" as const, owner: { id, name } })
+    )
+    .with(
+      { type: "COPY", band: P.select(P.not(P.nullish)) },
+      ({ id, name }) => ({
         type: "BAND" as const,
-        owner: { id: band.id, name: setLocale(band.name, router) },
+        owner: { id, name: setLocale(name, router) },
       })
     )
     .with(
@@ -59,16 +54,13 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
     }));
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
-export const musicListArgs = (session: SessionArg) => ({
-  include: {
-    participations: participatedArtistArgs(session),
-    bookmarks: bookmarkQuery({ type: "Music", session }),
-    band: true,
-    user: true,
-    _count: {
-      select: {
-        bookmarks: true,
-      },
+export const musicListArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.MusicArgs>()({
+    include: {
+      participations: participatedArtistArgs(session),
+      bookmarks: bookmarkArgs({ type: "Music", session }),
+      band: true,
+      user: userArgs,
+      _count: { select: { bookmarks: true } },
     },
-  },
-});
+  });

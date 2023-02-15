@@ -24,7 +24,7 @@ const UserBookmarks: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.user.findUniqueUser.useQuery(userShowQuery(session));
   const { data: bookmarkData } = trpc.pagination.bookmark.useQuery(
-    bookmarkQuery({ router, session })
+    bookmarkQuery(session)
   );
   const search = trpc.search.bookmark.useMutation({
     onError: () => {

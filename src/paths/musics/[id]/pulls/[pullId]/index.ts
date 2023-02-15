@@ -1,6 +1,9 @@
+import { Prisma } from "@prisma/client";
+
 import type { GetRouterArg } from "../../../../../helpers/router";
 import type { SessionArg } from "../../../../../helpers/user";
-import { getCurrentUserId } from "../../../../../helpers/user";
+import { userSelect } from "../../../../../helpers/user";
+import { voteInclude } from "../../../../../helpers/vote";
 
 export const pullShowQuery = ({
   session,
@@ -8,28 +11,19 @@ export const pullShowQuery = ({
 }: {
   session: SessionArg;
   router: GetRouterArg;
-}) => ({
-  where: { id: router.query.pullId as string },
-  ...pullShowArgs(session),
-});
+}) =>
+  Prisma.validator<Prisma.PullFindUniqueArgs>()({
+    where: { id: router.query.pullId as string },
+    ...pullShowArgs(session),
+  });
 
 export type PullShowArgsType = ReturnType<typeof pullShowArgs>;
-export const pullShowArgs = (session: SessionArg) => ({
-  include: {
-    user: true,
-    music: true,
-    vote: {
-      include: {
-        proponents: { where: { id: getCurrentUserId(session) } },
-        opponents: { where: { id: getCurrentUserId(session) } },
-        _count: {
-          select: {
-            proponents: true,
-            opponents: true,
-          },
-        },
-      },
+export const pullShowArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.PullArgs>()({
+    include: {
+      user: { select: userSelect },
+      music: true,
+      vote: { include: voteInclude(session) },
+      comments: { include: { user: { select: userSelect } } },
     },
-    comments: { include: { user: true } },
-  },
-});
+  });

@@ -9,12 +9,12 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import { bookmarkMutate } from "../../../helpers/bookmark";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { getCurrentUserId } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
-  albumShowQuery,
+  albumShowPath,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 import ResourceIconButton from "../../elements/button/icon/resource";
@@ -26,7 +26,7 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowQuery>;
+  query: ReturnType<typeof albumShowPath>;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
@@ -92,11 +92,18 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  type: "Album",
-                  data,
-                  session,
-                }),
+                bookmarks: data.bookmarks.length
+                  ? {
+                      delete: {
+                        id: data.bookmarks[0]?.id,
+                      },
+                    }
+                  : {
+                      create: {
+                        unionType: "Album",
+                        user: { connect: { id: getCurrentUserId(session) } },
+                      },
+                    },
               },
             });
           else show();

@@ -1,56 +1,46 @@
+import { Prisma } from "@prisma/client";
+
 import { albumListArgs } from "../../../helpers/album";
 import { bandListArgs } from "../../../helpers/band";
-import { bookmarkQuery } from "../../../helpers/bookmark";
+import { bookmarkArgs } from "../../../helpers/bookmark";
 import { participatedArtistArgs } from "../../../helpers/participation";
 import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
-import { getCurrentUserId } from "../../../helpers/user";
+import { userWhere, userArgs } from "../../../helpers/user";
+import { voteInclude } from "../../../helpers/vote";
 
+export type MusicShowQueryType = ReturnType<typeof musicShowQuery>;
 export const musicShowQuery = ({
   router,
   session,
 }: {
   router: GetRouterArg;
   session: SessionArg;
-}) => ({
-  where: { id: getRouterId(router) },
-  ...musicShowArgs(session),
-});
+}) =>
+  Prisma.validator<Prisma.MusicFindUniqueArgs>()({
+    where: { id: getRouterId(router) },
+    ...musicShowArgs(session),
+  });
 
 export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
-const musicShowArgs = (session: SessionArg) => ({
-  include: {
-    user: true,
-    band: bandListArgs(session),
-    albums: albumListArgs(session),
-    participations: participatedArtistArgs(session),
-    pulls: {
-      where: { status: "VOTE" as const },
-      include: {
-        vote: {
-          include: {
-            proponents: { where: { id: getCurrentUserId(session) } },
-            opponents: { where: { id: getCurrentUserId(session) } },
-            _count: {
-              select: {
-                proponents: true,
-                opponents: true,
-              },
-            },
-          },
-        },
+const musicShowArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.MusicArgs>()({
+    include: {
+      user: userArgs,
+      band: bandListArgs(session),
+      albums: albumListArgs(session),
+      participations: participatedArtistArgs(session),
+      pulls: {
+        where: { status: "VOTE" as const },
+        include: { vote: { include: voteInclude(session) } },
+        take: 3,
       },
-      take: 3,
-    },
-    transactions: {
-      where: {
-        type: "PURCHASE" as const,
-        user: { id: session?.user?.id },
+      transactions: {
+        where: { type: "PURCHASE" as const, user: userWhere(session) },
       },
+      carts: { where: { user: userWhere(session) } },
+      bookmarks: bookmarkArgs({ type: "Music", session }),
+      tagMaps: { include: { tag: true } },
     },
-    carts: { where: { user: { id: session?.user?.id } } },
-    bookmarks: bookmarkQuery({ type: "Music", session }),
-    tagMaps: { include: { tag: true } },
-  },
-});
+  });

@@ -2,18 +2,11 @@ import { albumListArgs } from "../../../helpers/album";
 import { artistListArgs } from "../../../helpers/artist";
 import { bandListArgs } from "../../../helpers/band";
 import { musicListArgs } from "../../../helpers/music";
-import { getRouterId } from "../../../helpers/router";
-import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
-export const bookmarkQuery = ({
-  router,
-  session,
-}: {
-  router: GetRouterArg;
-  session: SessionArg;
-}) => ({
+import { userWhere } from "../../../helpers/user";
+export const bookmarkQuery = (session: SessionArg) => ({
   args: {
-    where: { userId: getRouterId(router) },
+    where: { user: userWhere(session) },
     include: {
       music: musicListArgs(session),
       band: bandListArgs(session),

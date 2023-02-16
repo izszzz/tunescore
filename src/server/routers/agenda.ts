@@ -15,8 +15,8 @@ export const agendaRouter = router({
     .mutation(async ({ ctx, input }) => {
       // init
       const id = input,
-        { session } = ctx,
-        pull = await ctx.prisma.pull.findUnique({
+        { prisma, session } = ctx,
+        pull = await prisma.pull.findUnique({
           where: { id },
           include: {
             music: true,
@@ -27,7 +27,7 @@ export const agendaRouter = router({
             },
           },
         });
-      if (!pull?.vote) return new TRPCError({ code: "BAD_REQUEST" });
+      if (!pull?.vote) throw new TRPCError({ code: "BAD_REQUEST" });
 
       const merged = Diff3.mergeDiff3(
         pull.music.score || "",
@@ -35,29 +35,42 @@ export const agendaRouter = router({
         pull.score.changed
       );
 
-      if (pull.score.original !== pull.score.changed)
-        return new TRPCError({ code: "BAD_REQUEST", message: "no diff" });
+      if (pull.score.original === pull.score.changed)
+        throw new TRPCError({ code: "BAD_REQUEST", message: "no diff" });
 
       if (merged.conflict)
-        return new TRPCError({ code: "BAD_REQUEST", message: "conflict" });
+        throw new TRPCError({ code: "BAD_REQUEST", message: "conflict" });
 
-      const { opponents, proponents } = pull.vote._count;
       agenda.define(`vote: { id: ${id} }`, async () => {
-        if (proponents > opponents)
-          await ctx.prisma.pull.update({
-            where: { id },
-            data: {
-              status: "MERGE",
-              music: { update: { score: pull.score.changed } },
+        const pull = await prisma.pull.findUnique({
+          where: { id },
+          include: {
+            vote: {
+              include: {
+                _count: { select: { opponents: true, proponents: true } },
+              },
             },
-          });
-        else
-          await ctx.prisma.pull.update({
-            where: { id },
-            data: {
-              status: "CLOSE",
-            },
-          });
+          },
+        });
+        if (!pull?.vote) return;
+        const {
+          vote: {
+            _count: { opponents, proponents },
+          },
+        } = pull;
+        await prisma.pull.update({
+          where: { id },
+          data:
+            proponents > opponents
+              ? {
+                  status: "MERGE",
+                  music: { update: { score: pull.score.changed } },
+                }
+              : {
+                  status: "CLOSE",
+                  vote: { delete: true },
+                },
+        });
       });
 
       // act
@@ -65,8 +78,8 @@ export const agendaRouter = router({
       await agenda.schedule(pull.vote.end, `vote: { id: ${id} }`);
 
       const router = { query: { pullId: id } };
-      return await ctx.prisma.pull.findUnique({
-        ...pullShowQuery({ session, router: router as GetRouterArg }),
-      });
+      return await prisma.pull.findUnique(
+        pullShowQuery({ session, router: router as GetRouterArg })
+      );
     }),
 });

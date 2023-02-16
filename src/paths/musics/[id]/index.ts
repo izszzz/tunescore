@@ -8,7 +8,8 @@ import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere, userArgs } from "../../../helpers/user";
-import { voteInclude } from "../../../helpers/vote";
+
+import { pullShowArgs } from "./pulls/[pullId]";
 
 export type MusicShowQueryType = ReturnType<typeof musicShowQuery>;
 export const musicShowQuery = ({
@@ -32,8 +33,8 @@ const musicShowArgs = (session: SessionArg) =>
       albums: albumListArgs(session),
       participations: participatedArtistArgs(session),
       pulls: {
+        ...pullShowArgs(session),
         where: { status: "VOTE" as const },
-        include: { vote: { include: voteInclude(session) } },
         take: 3,
       },
       transactions: {

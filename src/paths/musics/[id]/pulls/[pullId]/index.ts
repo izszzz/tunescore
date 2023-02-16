@@ -5,6 +5,7 @@ import type { SessionArg } from "../../../../../helpers/user";
 import { userSelect } from "../../../../../helpers/user";
 import { voteInclude } from "../../../../../helpers/vote";
 
+export type PullShowQueryType = ReturnType<typeof pullShowQuery>;
 export const pullShowQuery = ({
   session,
   router,

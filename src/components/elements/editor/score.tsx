@@ -5,16 +5,24 @@ import Box from "@mui/material/Box";
 import Split from "split.js";
 
 import Score from "../../layouts/score";
+import type { EditorHeaderProps } from "../header/editor";
 import EditorHeader from "../header/editor";
 
-interface ScoreEditorProps {
+interface ScoreEditorProps
+  extends Omit<EditorHeaderProps, "onSave" | "onResolve"> {
   defaultValue: string;
   onSave: (value: string) => void;
+  onResolve?: () => string;
 }
-const ScoreEditor = ({ defaultValue, onSave }: ScoreEditorProps) => {
-  const [value, setValue] = useState(defaultValue);
-  const handleChange = (value: string | undefined) => value && setValue(value);
-  const handleSave = () => onSave(value);
+const ScoreEditor = ({
+  defaultValue,
+  onSave,
+  onResolve,
+  ...props
+}: ScoreEditorProps) => {
+  const [value, setValue] = useState(defaultValue),
+    handleResolve = () => onResolve && setValue(onResolve()),
+    handleChange = (value: string | undefined) => value && setValue(value);
   useEffect(() => {
     Split(["#editor", "#score"], { sizes: [50, 50] });
   }, []);
@@ -24,7 +32,11 @@ const ScoreEditor = ({ defaultValue, onSave }: ScoreEditorProps) => {
 
   return (
     <>
-      <EditorHeader onSave={handleSave} />
+      <EditorHeader
+        {...props}
+        onSave={() => onSave(value)}
+        onResolve={handleResolve}
+      />
       <Box display="flex" flexDirection="row">
         <div id="editor">
           <Editor

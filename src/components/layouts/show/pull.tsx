@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import type { Prisma, PullStatus } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { addMinutes } from "date-fns";
+import { addMinutes, addWeeks } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -15,8 +15,10 @@ import { useSnackbar } from "notistack";
 
 import { getRouterId, getRouterPullId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import type { PullShowArgsType } from "../../../paths/musics/[id]/pulls/[pullId]";
-import { pullShowQuery } from "../../../paths/musics/[id]/pulls/[pullId]";
+import type {
+  PullShowArgsType,
+  PullShowQueryType,
+} from "../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../utils/trpc";
 import PullButton from "../../elements/button/group/pull";
 import ScoreButtonGroup from "../../elements/button/group/score";
@@ -27,6 +29,7 @@ import type { ShowLayoutProps } from "./";
 
 export interface PullLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.PullGetPayload<PullShowArgsType>;
+  query: PullShowQueryType;
   activeTab: "code" | "conversation";
 }
 
@@ -34,6 +37,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   data,
   activeTab,
   children,
+  query,
 }) => {
   const [conflict, setConflict] = useState(false),
     [diff, setDiff] = useState(false),
@@ -41,16 +45,9 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     router = useRouter(),
     { data: session } = useSession(),
     queryClient = useQueryClient(),
-    query = pullShowQuery({ session, router }),
     id = getRouterId(router),
     pullId = getRouterPullId(router),
-    agenda = trpc.agenda.create.useMutation({
-      onSuccess: (data) =>
-        queryClient.setQueryData(
-          getQueryKey(trpc.pull.findUniquePull, query, "query"),
-          data
-        ),
-    }),
+    agenda = trpc.agenda.create.useMutation(),
     update = trpc.pull.updateOnePull.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -62,7 +59,17 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       onError: () => enqueueSnackbar("pull.update error"),
     }),
     create = trpc.vote.createOneVote.useMutation({
-      onSuccess: () => agenda.mutate(pullId),
+      onSuccess: (data) => {
+        agenda.mutate(pullId);
+        queryClient.setQueryData(
+          getQueryKey(trpc.pull.findUniquePull, query, "query"),
+          (prev) => ({
+            ...(prev as PullLayoutProps["data"]),
+            vote: data,
+          })
+        );
+        enqueueSnackbar("pull.create success");
+      },
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -108,10 +115,13 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       handleUpdateStatus("VOTE");
       create.mutate({
         data: {
-          // end: addWeeks(Date.now(), 1),
-          end: addMinutes(Date.now(), 1),
+          end:
+            process.env.NODE_ENV === "development"
+              ? addMinutes(Date.now(), 2)
+              : addWeeks(Date.now(), 1),
           pull: { connect: { id: pullId } },
         },
+        ...query.include.vote,
       });
     };
   useEffect(() => {

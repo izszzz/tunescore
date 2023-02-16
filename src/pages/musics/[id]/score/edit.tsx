@@ -2,9 +2,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
-import ScoreEditor from "../../../components/elements/editor/score";
-import { getRouterId } from "../../../helpers/router";
-import { trpc } from "../../../utils/trpc";
+import ScoreEditor from "../../../../components/elements/editor/score";
+import { getRouterId } from "../../../../helpers/router";
+import { trpc } from "../../../../utils/trpc";
 
 const ScoreEdit: NextPage = () => {
   const router = useRouter();
@@ -22,6 +22,10 @@ const ScoreEdit: NextPage = () => {
   if (!data) return <></>;
   return (
     <ScoreEditor
+      backRoute={{
+        pathname: "/musics/[id]",
+        query: { id },
+      }}
       defaultValue={data.score || ""}
       onSave={(value) =>
         update.mutate({

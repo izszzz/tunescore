@@ -13,8 +13,8 @@ import NoneMenuListItem from "./item/none";
 import MenuManager from ".";
 
 const NotificationsMenuManager = () => {
-  const router = useRouter();
-  const { data } = trpc.currentUser.findManyNotification.useQuery();
+  const router = useRouter(),
+    { data } = trpc.currentUser.findManyNotification.useQuery();
   if (!data) return <></>;
   return (
     <MenuManager

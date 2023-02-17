@@ -1,83 +1,54 @@
 import { z } from "zod";
 
+import { UserUpdateInputObjectSchema } from "../../../prisma/generated/schemas";
 import { musicListArgs } from "../../helpers/music";
-import { getCurrentUserId } from "../../helpers/user";
+import { userArgs, getCurrentUserId, userWhere } from "../../helpers/user";
 import { router } from "../trpc";
 
 import { shieldedProcedure } from "./shield";
 
 export const currentUserRouter = router({
-  findCurrentUser: shieldedProcedure.query(async ({ ctx }) => {
-    const { session } = ctx;
-    return await ctx.prisma.user.findUnique({
-      where: { id: getCurrentUserId(session) },
-    });
-  }),
+  findCurrentUser: shieldedProcedure.query(
+    async ({ ctx: { session, prisma } }) =>
+      await prisma.user.findUnique({ where: userWhere(session) })
+  ),
+  updateCurrentUser: shieldedProcedure
+    .input(UserUpdateInputObjectSchema)
+    .mutation(
+      async ({ ctx: { session, prisma }, input }) =>
+        await prisma.user.update({ where: userWhere(session), data: input })
+    ),
+  deleteCurrentUser: shieldedProcedure.mutation(
+    async ({ ctx: { session, prisma } }) =>
+      await prisma.user.delete({ where: userWhere(session) })
+  ),
   findUniqueTransaction: shieldedProcedure
     .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const { session } = ctx;
-      return ctx.prisma.transaction.findUnique({
-        include: {
-          music: musicListArgs(session),
-          user: true,
-        },
-        where: {
-          id: input,
-        },
-      });
-    }),
-  findManyCart: shieldedProcedure.query(async ({ ctx }) => {
-    const { session } = ctx,
-      cart = await ctx.prisma.cart.findMany({
+    .query(async ({ ctx: { prisma, session }, input }) =>
+      prisma.transaction.findUnique({
+        include: { music: musicListArgs(session), user: userArgs },
+        where: { id: input },
+      })
+    ),
+  findManyCart: shieldedProcedure.query(
+    async ({ ctx: { session, prisma } }) => {
+      const cart = await prisma.cart.findMany({
         include: { music: musicListArgs(session) },
-        where: { user: { id: getCurrentUserId(session) } },
+        where: { user: userWhere(session) },
       });
-    return cart.map((cart) => cart.music);
-  }),
+      return cart.map((cart) => cart.music);
+    }
+  ),
   findManyNotification: shieldedProcedure.query(async ({ ctx }) => {
-    const userId = getCurrentUserId(ctx.session);
+    const id = getCurrentUserId(ctx.session);
     return ctx.prisma.notification.findMany({
-      include: {
-        bookmarked: {
-          include: {
-            music: true,
-          },
-        },
-        user: true,
-      },
+      include: { bookmarked: { include: { music: true } }, user: userArgs },
       where: {
         OR: [
-          {
-            bookmarked: {
-              music: {
-                user: {
-                  id: userId,
-                },
-              },
-            },
-          },
-          {
-            followed: {
-              follower: {
-                id: userId,
-              },
-            },
-          },
-          {
-            commented: {
-              issue: {
-                id: userId,
-              },
-            },
-          },
-          {
-            commented: {
-              pull: {
-                id: userId,
-              },
-            },
-          },
+          { bookmarked: { music: { user: { id } } } },
+          { followed: { follower: { id } } },
+          { commented: { issue: { id } } },
+          { commented: { pull: { id } } },
         ],
       },
     });

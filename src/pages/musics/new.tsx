@@ -177,7 +177,7 @@ const NewMusic: NextPage = () => {
             <LoadingButton
               type="submit"
               variant="contained"
-              disabled={!isDirty || !isValid || create.isLoading}
+              disabled={!isDirty || !isValid || create.isLoading || loading}
               fullWidth
               disableElevation
             >

@@ -4,13 +4,12 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 
-import type { userListArgs } from "../../../../helpers/user";
-
+import type { userArgs } from "../../../../helpers/user";
 
 import ListItem from ".";
 
 export interface UserListItemProps {
-  data: Prisma.UserGetPayload<typeof userListArgs>;
+  data: Prisma.UserGetPayload<typeof userArgs>;
 }
 const UserListItem = ({ data }: UserListItemProps) => (
   <ListItem

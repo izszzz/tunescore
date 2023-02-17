@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
+import type { userArgs } from "../../../../helpers/user";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
 
@@ -16,7 +17,7 @@ import SquareCard from ".";
 interface SquareMusicCardProps {
   data: Prisma.MusicGetPayload<{
     include: {
-      user: true;
+      user: typeof userArgs;
       band: true;
       participations: {
         include: { artist: true; roleMap: { include: { role: true } } };

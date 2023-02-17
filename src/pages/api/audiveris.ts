@@ -35,10 +35,11 @@ const audiveris = async (req: NextApiRequest, res: NextApiResponse) => {
         () => recognizeFile(savedFilePathName),
         () => fs.readFileSync(xmlFilePathName),
         (buffer) => new admZip(buffer),
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         (zip) => zip.getEntries()?.[0]?.getData(),
         (unzipBuffer) =>
-          importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(unzipBuffer)),
+          importer.ScoreLoader.loadScoreFromBytes(
+            new Uint8Array(unzipBuffer as Buffer)
+          ),
         (score) => {
           exporter.Export(score);
           return exporter.ToTex();

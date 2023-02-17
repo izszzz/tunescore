@@ -1,11 +1,20 @@
 import { Prisma } from "@prisma/client";
 
+import type { GetRouterArg } from "../../../helpers/router";
+import { getRouterId } from "../../../helpers/router";
 import { userSelect, userWhere } from "../../../helpers/user";
 import type { SessionArg } from "../../../helpers/user";
 
-export const userShowQuery = (session: SessionArg) =>
+export type UserShowQueryType = ReturnType<typeof userShowQuery>;
+export const userShowQuery = ({
+  session,
+  router,
+}: {
+  session: SessionArg;
+  router: GetRouterArg;
+}) =>
   Prisma.validator<Prisma.UserFindUniqueArgsBase>()({
-    where: userWhere(session),
+    where: { id: getRouterId(router) },
     ...userShowArgs(session),
   });
 

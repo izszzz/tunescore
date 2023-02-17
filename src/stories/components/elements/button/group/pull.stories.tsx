@@ -34,13 +34,15 @@ Default.args = {
     user: {
       id: "1",
       name: "user",
-      email: "",
       point: 0,
       image: "",
-      emailVerified: null,
       stripeCustomerId: "",
-      voteIDs: [],
+      _count: {
+        following: 0,
+        followers: 0,
+      },
     },
+    comments: [],
     vote: null,
     musicId: "",
     userId: "",

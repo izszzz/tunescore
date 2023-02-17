@@ -14,19 +14,19 @@ import { followingPath } from "../../../paths/users/[id]/following";
 import { trpc } from "../../../utils/trpc";
 
 const UserFollowers: NextPage = () => {
-  const router = useRouter();
-  const id = getRouterId(router);
-  const { data } = trpc.user.findUniqueUser.useQuery(
-    userShowQuery(useSession().data)
-  );
-  const { data: followData } = trpc.pagination.follow.useQuery(
-    followingPath({ router })
-  );
-  const search = trpc.search.follow.useMutation();
+  const router = useRouter(),
+    id = getRouterId(router),
+    { data: session } = useSession(),
+    query = userShowQuery({ router, session }),
+    { data } = trpc.user.findUniqueUser.useQuery(query),
+    { data: followData } = trpc.pagination.follow.useQuery(
+      followingPath({ router })
+    ),
+    search = trpc.search.follow.useMutation();
   if (!data || !followData) return <></>;
-  const userData = data as UserLayoutProps["data"];
+  const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout data={userData} activeTab="">
+    <UserLayout query={query} data={userData} activeTab="">
       <IndexLayout
         meta={followData.meta}
         searchAutocompleteProps={{

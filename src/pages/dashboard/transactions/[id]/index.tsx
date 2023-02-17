@@ -17,16 +17,17 @@ const Transaction: NextPage = () => {
     { data: stripeData } = trpc.stripe.paymentIntent.useQuery(
       data?.stripePaymentIntentId
     );
-  console.log(stripeData);
-  if (!data) return <> loading</>;
+  if (!data) return <></>;
   return (
     <DashboardLayout active="transactions">
       <Typography variant="h3">{data.type}</Typography>
 
       <Typography variant="h5">Data</Typography>
       <Typography>{format(data.createdAt, "yyyy-MM-dd HH:mm:ss")}</Typography>
-      <Typography>{setLocale(data.music.title, router)}</Typography>
-      <MusicListItem data={data.music} />
+      <Typography>
+        {data.music ? setLocale(data.music.title, router) : ""}
+      </Typography>
+      {data.music && <MusicListItem data={data.music} />}
       <Typography>amount : {data.amount}</Typography>
 
       <Typography variant="h5">Stripe</Typography>

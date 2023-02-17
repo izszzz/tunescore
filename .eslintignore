@@ -1,4 +1,3 @@
 /src/env/*
 /src/server/db/client.ts
-/prisma/generated
 /.storybook

@@ -7,13 +7,14 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
 import { getRouterId } from "../../../../helpers/router";
+import type { userArgs } from "../../../../helpers/user";
 import PullStatusIcon from "../../icon/pull/status";
 
 import ListItem from ".";
 export interface PullListItemProps {
   data: Prisma.PullGetPayload<{
     include: {
-      user: true;
+      user: typeof userArgs;
     };
   }>;
 }

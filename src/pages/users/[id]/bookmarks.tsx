@@ -19,22 +19,21 @@ import { bookmarkQuery } from "../../../paths/users/[id]/bookmark";
 import { trpc } from "../../../utils/trpc";
 
 const UserBookmarks: NextPage = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.user.findUniqueUser.useQuery(userShowQuery(session));
-  const { data: bookmarkData } = trpc.pagination.bookmark.useQuery(
-    bookmarkQuery(session)
-  );
-  const search = trpc.search.bookmark.useMutation({
-    onError: () => {
-      enqueueSnackbar("music.search error");
-    },
-  });
+  const { data: session } = useSession(),
+    router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    query = userShowQuery({ router, session }),
+    { data } = trpc.user.findUniqueUser.useQuery(query),
+    { data: bookmarkData } = trpc.pagination.bookmark.useQuery(
+      bookmarkQuery(session)
+    ),
+    search = trpc.search.bookmark.useMutation({
+      onError: () => enqueueSnackbar("music.search error"),
+    });
   if (!data || !bookmarkData) return <></>;
-  const userData = data as UserLayoutProps["data"];
+  const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout data={userData} activeTab="bookmarks">
+    <UserLayout query={query} data={userData} activeTab="bookmarks">
       <IndexLayout
         meta={bookmarkData.meta}
         searchAutocompleteProps={{

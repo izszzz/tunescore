@@ -21,7 +21,7 @@ import type { ArtistListArgsType } from "../../helpers/artist";
 import type { BandListArgsType } from "../../helpers/band";
 import type { MusicListArgsType } from "../../helpers/music";
 import type { TransactionArgsType } from "../../helpers/transaction";
-import type { userCount } from "../../helpers/user";
+import type { userArgs, userCount } from "../../helpers/user";
 import type { NotificationArgsType } from "../../paths/dashboard/notifications";
 import { PaginateInputSchema } from "../../utils/zod";
 import { router, publicProcedure } from "../trpc";
@@ -78,7 +78,7 @@ export const paginationRouter = router({
     async ({ ctx, input: { args, options } }) =>
       await createPaginator(options)<
         Prisma.IssueGetPayload<{
-          include: { user: true };
+          include: { user: typeof userArgs };
         }>,
         Prisma.IssueFindManyArgs
       >(ctx.prisma.issue, args)
@@ -87,7 +87,7 @@ export const paginationRouter = router({
     async ({ ctx, input: { args, options } }) =>
       await createPaginator(options)<
         Prisma.PullGetPayload<{
-          include: { user: true };
+          include: { user: typeof userArgs };
         }>,
         Prisma.PullFindManyArgs
       >(ctx.prisma.pull, args)

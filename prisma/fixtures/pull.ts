@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+
 import { UserFactory } from "./user";
 
 const prisma = new PrismaClient();
@@ -88,7 +89,7 @@ export const PullFactory = async () =>
                 user: {
                   connect: { id: (await UserFactory).id },
                 },
-                resourceType: "Pull",
+                unionType: "Pull",
               },
             },
           },

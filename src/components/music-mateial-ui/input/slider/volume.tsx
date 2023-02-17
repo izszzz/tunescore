@@ -9,7 +9,6 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import ToggleButton from "@mui/material/ToggleButton";
 
-
 interface VolumeIconProps {
   value?: number;
   muted?: boolean;

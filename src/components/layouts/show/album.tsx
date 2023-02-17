@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -12,7 +14,7 @@ import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
 import type {
   AlbumShowArgsType,
-  albumShowQuery,
+  albumShowPath,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 import ResourceIconButton from "../../elements/button/icon/resource";
@@ -21,11 +23,10 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 
-
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowQuery>;
+  query: ReturnType<typeof albumShowPath>;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
@@ -34,17 +35,22 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter();
-  const id = getRouterId(router);
-  const { data: session } = useSession();
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const update = trpc.album.updateOneAlbum.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
-      enqueueSnackbar("album.update success");
-    },
-  });
+  const router = useRouter(),
+    { show } = useModal("auth-modal"),
+    id = getRouterId(router),
+    { data: session, status } = useSession(),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    update = trpc.album.updateOneAlbum.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          data
+        );
+        enqueueSnackbar("album.update success");
+      },
+      onError: () => enqueueSnackbar("album.update error"),
+    });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {
@@ -78,20 +84,24 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         </>
       }
       tagMaps={data.tagMaps}
+      reportButtonProps={{ unionType: "Album", id }}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: () =>
-          update.mutate({
-            ...query,
-            data: {
-              bookmarks: bookmarkMutate({
-                type: "Album",
-                data,
-                session,
-              }),
-            },
-          }),
+        onClick: () => {
+          if (status === "authenticated")
+            update.mutate({
+              ...query,
+              data: {
+                bookmarks: bookmarkMutate({
+                  bookmarks: data.bookmarks,
+                  unionType: "Album",
+                  session,
+                }),
+              },
+            });
+          else show();
+        },
       }}
     >
       {children}

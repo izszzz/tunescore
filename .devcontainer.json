@@ -3,22 +3,26 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "web",
   "workspaceFolder": "/home/pwuser/app",
-  "remoteUser": "pwuser",
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "ms-azuretools.vscode-docker",
-    "ms-playwright.playwright",
-    "Prisma.prisma"
-  ],
-  "shutdownAction": "stopCompose",
-  "settings": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true
-  }
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "ms-playwright.playwright",
+        "Prisma.prisma"
+      ],
+      "settings": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.formatOnType": true
+      }
+    }
+  },
+  "shutdownAction": "stopCompose"
 }

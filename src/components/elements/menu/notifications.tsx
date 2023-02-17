@@ -13,8 +13,8 @@ import NoneMenuListItem from "./item/none";
 import MenuManager from ".";
 
 const NotificationsMenuManager = () => {
-  const router = useRouter();
-  const { data } = trpc.currentUser.notification.useQuery();
+  const router = useRouter(),
+    { data } = trpc.currentUser.findManyNotification.useQuery();
   if (!data) return <></>;
   return (
     <MenuManager
@@ -26,7 +26,7 @@ const NotificationsMenuManager = () => {
               match(notification)
                 .with(
                   {
-                    resourceType: "Bookmark",
+                    unionType: "Bookmark",
                     bookmarked: {
                       music: P.select("music", P.not(P.nullish)),
                     },
@@ -40,7 +40,7 @@ const NotificationsMenuManager = () => {
                 )
                 .with(
                   {
-                    resourceType: "Follow",
+                    unionType: "Follow",
                     user: P.select("user", P.not(P.nullish)),
                   },
                   ({ user }) => (
@@ -51,7 +51,7 @@ const NotificationsMenuManager = () => {
                 )
                 .with(
                   {
-                    resourceType: "Comment",
+                    unionType: "Comment",
                     user: P.select("user", P.not(P.nullish)),
                   },
                   ({ user }) => (

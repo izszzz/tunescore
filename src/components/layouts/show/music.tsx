@@ -1,26 +1,26 @@
 import React, { useEffect, useMemo, useState } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import type { Locale, Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
 
-import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getContentImage } from "../../../helpers/image";
+import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUser } from "../../../helpers/user";
-import { useModal } from "../../../hooks/useModal";
+import { getCurrentUserId } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
-  musicShowQuery,
+  MusicShowQueryType,
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
@@ -34,7 +34,7 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface MusicLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.MusicGetPayload<MusicShowArgsType>;
-  query: ReturnType<typeof musicShowQuery>;
+  query: MusicShowQueryType;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
 
@@ -45,19 +45,20 @@ const MusicLayout = ({
   children,
 }: MusicLayoutProps) => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const { show } = useModal("auth-dialog");
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  const { handleOpen } = useModal();
   const id = getRouterId(router);
   const update = trpc.music.updateOneMusic.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData<typeof data>(
-        [["music", "findUniqueMusic"], query],
+      queryClient.setQueryData(
+        getQueryKey(trpc.music.findUniqueMusic, query, "query"),
         data
       );
       enqueueSnackbar("music.update success");
     },
+    onError: () => enqueueSnackbar("music.update error"),
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -113,32 +114,47 @@ const MusicLayout = ({
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={setLocale(data.title, router)}
-                src={
-                  getContentImage(data.link.streaming)?.image?.size?.medium ||
-                  ""
-                }
+                src={getImage(data.link?.streaming, 80) || ""}
               />
             </Box>
           )}
         </>
       }
       tagMaps={data.tagMaps}
+      reportButtonProps={{ unionType: "Music", id }}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
         onClick: () => {
-          if (getCurrentUser(session))
+          if (status === "authenticated")
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  type: "Music",
-                  data,
-                  session,
-                }),
+                bookmarks: data.bookmarks.length
+                  ? {
+                      delete: {
+                        id: data.bookmarks[0]?.id,
+                      },
+                    }
+                  : {
+                      create: {
+                        unionType: "Music",
+                        user: { connect: { id: getCurrentUserId(session) } },
+                        ...(data.type === "ORIGINAL" && data.user
+                          ? {
+                              notifications: {
+                                create: {
+                                  unionType: "Bookmark",
+                                  user: { connect: { id } },
+                                },
+                              },
+                            }
+                          : {}),
+                      },
+                    },
               },
             });
-          else handleOpen();
+          else show();
         },
       }}
     >
@@ -183,7 +199,12 @@ const Owner = ({ data }: OwnerProps) => {
   return (
     <>
       <Link href={{ pathname, query: { id: owner.id } }}>
-        <a>{owner.name}</a>
+        <Box
+          component="a"
+          sx={{ cursor: "pointer", textDecoration: "underline" }}
+        >
+          {owner.name}
+        </Box>
       </Link>{" "}
       /
     </>

@@ -10,19 +10,15 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
     | StaticRoute<"/albums">
     | StaticRoute<"/albums/new">
-    | StaticRoute<"/api/agenda">
+    | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/restricted">
-    | StaticRoute<"/api/spotify/search">
-    | DynamicRoute<"/api/spotify/tracks/[id]", { "id": string }>
     | DynamicRoute<"/api/trpc/[trpc]", { "trpc": string }>
-    | DynamicRoute<"/api/youtube/channels/[id]", { "id": string }>
-    | StaticRoute<"/api/youtube/search">
-    | DynamicRoute<"/api/youtube/videos/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]/settings", { "id": string }>
     | StaticRoute<"/artists">
     | StaticRoute<"/artists/new">
+    | StaticRoute<"/auth/signin">
     | DynamicRoute<"/bands/[id]", { "id": string }>
     | DynamicRoute<"/bands/[id]/settings", { "id": string }>
     | StaticRoute<"/bands">
@@ -30,7 +26,11 @@ declare module "nextjs-routes" {
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
     | StaticRoute<"/dashboard">
-    | StaticRoute<"/dashboard/library/purchases">
+    | StaticRoute<"/dashboard/library">
+    | StaticRoute<"/dashboard/notifications">
+    | StaticRoute<"/dashboard/settings">
+    | DynamicRoute<"/dashboard/transactions/[id]", { "id": string }>
+    | StaticRoute<"/dashboard/transactions">
     | StaticRoute<"/">
     | DynamicRoute<"/musics/[id]", { "id": string }>
     | DynamicRoute<"/musics/[id]/issues/[issueId]", { "id": string; "issueId": string }>
@@ -42,14 +42,14 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/musics/[id]/pulls/[pullId]/score", { "id": string; "pullId": string }>
     | DynamicRoute<"/musics/[id]/pulls", { "id": string }>
     | DynamicRoute<"/musics/[id]/pulls/new", { "id": string }>
+    | DynamicRoute<"/musics/[id]/score/edit", { "id": string }>
+    | DynamicRoute<"/musics/[id]/score", { "id": string }>
     | DynamicRoute<"/musics/[id]/settings", { "id": string }>
     | StaticRoute<"/musics">
     | StaticRoute<"/musics/new">
     | StaticRoute<"/pay">
-    | DynamicRoute<"/scores/[id]/edit", { "id": string }>
-    | DynamicRoute<"/scores/[id]", { "id": string }>
-    | StaticRoute<"/scores">
     | StaticRoute<"/search">
+    | StaticRoute<"/thanks">
     | DynamicRoute<"/users/[id]/bookmarks", { "id": string }>
     | DynamicRoute<"/users/[id]/followers", { "id": string }>
     | DynamicRoute<"/users/[id]/following", { "id": string }>

@@ -1,7 +1,7 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -14,13 +14,14 @@ import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
-import { albumShowQuery } from "../../../paths/albums/[id]";
+import { redirectToSignIn } from "../../../helpers/user";
+import { albumShowPath } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const query = albumShowQuery({ router, session: useSession().data });
+  const query = albumShowPath({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {
@@ -150,6 +151,11 @@ const Album: NextPage = () => {
       />
     </AlbumLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const redirect = await redirectToSignIn(ctx);
+  return { props: {}, redirect };
 };
 
 export default Album;

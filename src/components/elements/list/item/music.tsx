@@ -1,18 +1,18 @@
 import React from "react";
 
+import MusicNote from "@mui/icons-material/MusicNote";
 import Chip from "@mui/material/Chip";
 import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
-import { getContentImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
 import type { MusicListArgsType } from "../../../../helpers/music";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -30,7 +30,7 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
         pathname: "/musics/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="MUSIC" />}
+      icon={<MusicNote />}
       listItemTextProps={{
         primary: title,
         secondary: (
@@ -50,7 +50,7 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
         <Image
           height="60"
           alt={title}
-          src={getContentImage(data.link.streaming)?.image?.size?.medium || ""}
+          src={getImage(data.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />
       )}

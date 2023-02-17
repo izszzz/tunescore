@@ -1,7 +1,8 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import type { NextPage } from "next";
+import { getQueryKey } from "@trpc/react-query";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -17,6 +18,7 @@ import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { redirectToSignIn } from "../../../helpers/user";
 import { bandShowQuery } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -29,11 +31,14 @@ const BandSettings: NextPage = () => {
     { data } = trpc.band.findUniqueBand.useQuery(query),
     update = trpc.band.updateOneBand.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData([["band", "findUniqueBand"], query], data);
-        enqueueSnackbar("music.update success");
+        queryClient.setQueryData(
+          getQueryKey(trpc.band.findUniqueBand, query, "query"),
+          data
+        );
+        enqueueSnackbar("band.update success");
       },
       onError: () => {
-        enqueueSnackbar("music.update error");
+        enqueueSnackbar("band.update error");
       },
     }),
     destroy = trpc.band.deleteOneBand.useMutation({
@@ -84,7 +89,7 @@ const BandSettings: NextPage = () => {
                 tagMaps: {
                   create: {
                     tag: { connect: { id: details.option.id } },
-                    resourceType: "Music",
+                    unionType: "Music",
                   },
                 },
               },
@@ -96,9 +101,9 @@ const BandSettings: NextPage = () => {
               data: {
                 tagMaps: {
                   delete: {
-                    resourceId_tagId_resourceType: {
-                      resourceType: "Music",
-                      resourceId: id,
+                    unionId_tagId_unionType: {
+                      unionType: "Music",
+                      unionId: id,
                       tagId: details.option.id,
                     },
                   },
@@ -189,4 +194,10 @@ const BandSettings: NextPage = () => {
     </BandLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const redirect = await redirectToSignIn(ctx);
+  return { props: {}, redirect };
+};
+
 export default BandSettings;

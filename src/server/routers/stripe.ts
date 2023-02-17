@@ -1,40 +1,41 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { authenticateUser } from "../../helpers/user";
 import { stripe } from "../common/stripe";
-import { router, publicProcedure } from "../trpc";
+import { router } from "../trpc";
+
+import { shieldedProcedure } from "./shield";
 
 export const stripeRouter = router({
-  setupIntents: publicProcedure.query(async ({ ctx }) => {
-    const user = authenticateUser(ctx.session);
-    return await stripe.setupIntents
-      .list({
-        customer: user.stripeCustomerId,
-      })
-      .then(({ data }) => data);
-  }),
-  createSetupIntent: publicProcedure.mutation(async ({ ctx }) => {
-    const user = authenticateUser(ctx.session);
-    return await stripe.setupIntents
-      .create({
-        customer: user.stripeCustomerId,
-        payment_method_types: ["card"],
-      })
-      .then((data) => data);
-  }),
-  cancelSetupIntent: publicProcedure
+  createSetupIntent: shieldedProcedure.mutation(
+    async ({ ctx }) =>
+      await stripe.setupIntents
+        .create({
+          customer: ctx.session?.user?.stripeCustomerId,
+          payment_method_types: ["card"],
+        })
+        .then((data) => data)
+  ),
+  cancelSetupIntent: shieldedProcedure
     .input(z.string())
     .mutation(
       async ({ input }) =>
         await stripe.setupIntents.cancel(input).then((data) => data)
     ),
-  paymentMethods: publicProcedure.query(async ({ ctx }) => {
+  paymentMethods: shieldedProcedure.query(async ({ ctx }) => {
     const user = authenticateUser(ctx.session);
     return await stripe.customers
       .listPaymentMethods(user.stripeCustomerId)
       .then(({ data }) => data);
   }),
-  createPaymentIntent: publicProcedure
+  paymentIntent: shieldedProcedure
+    .input(z.string().nullish())
+    .query(async ({ input }) => {
+      if (!input) return null;
+      return await stripe.paymentIntents.retrieve(input).then((data) => data);
+    }),
+  createPaymentIntent: shieldedProcedure
     .input(z.string())
     .mutation(async ({ ctx: { session, prisma }, input }) => {
       const user = authenticateUser(session),
@@ -46,14 +47,15 @@ export const stripeRouter = router({
           include: {
             music: { include: { user: true } },
           },
-        }),
-        musics = carts.map((cart) => cart.music),
-        sum = musics.reduce((sum, music) => sum + (music.price || 0), 0);
+        });
 
       carts.forEach(async (cart) => {
         try {
+          const { music } = cart;
+          const price = music.price;
+          if (!price) throw "Not Valid Price";
           const data = await stripe.paymentIntents.create({
-            amount: sum,
+            amount: price,
             currency: "jpy",
             customer: user.stripeCustomerId,
             payment_method: paymentMethod.id,
@@ -66,26 +68,39 @@ export const stripeRouter = router({
           await prisma.cart.delete({ where: { id: cart.id } });
 
           // add purchase
-          await prisma.purchase.create({
+          await prisma.transaction.create({
             data: {
-              music: { connect: { id: cart.music.id } },
+              type: "PURCHASE",
+              amount: price,
+              music: { connect: { id: music.id } },
               user: { connect: { id: user.id } },
               stripePaymentIntentId: data.id,
             },
           });
 
           // add point
-          if (cart.music.user)
-            await prisma.point.create({
-              data: {
-                amount: cart.music.price || 0,
-                actionType: "PURCHASE",
-                user: { connect: { id: cart.music.user.id } },
-              },
+          // sender user
+          const prismaUser = await prisma.user.findUnique({
+            where: { id: user.id },
+          });
+          if (!prismaUser) throw "Not found CurrentUser";
+          // TODO: 購入ポイント
+          // await prisma.user.update({
+          //   where: { id: user.id },
+          //   data: { point: prismaUser.point - price },
+          // });
+          // recipient user
+          if (music.user?.id)
+            await prisma.user.update({
+              where: { id: music.user.id },
+              data: { point: music.user.point + price },
             });
           return data;
         } catch (err) {
-          return err;
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            cause: err,
+          });
         }
       });
     }),

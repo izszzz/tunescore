@@ -1,16 +1,17 @@
 import React from "react";
 
+import Album from "@mui/icons-material/Album";
 import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
 import type { AlbumListArgsType } from "../../../../helpers/album";
-import { getContentImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
+import ArtistChip from "../../chip/artist";
 import BookmarkChip from "../../chip/bookmark";
 import MusicChip from "../../chip/music";
-import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -27,7 +28,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         pathname: "/albums/[id]",
         query: { id: data.id },
       }}
-      icon={<ResourceIcon resource="ALBUM" />}
+      icon={<Album />}
       listItemTextProps={{
         primary: title,
         secondary: (
@@ -38,6 +39,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
               bookmarked={!!data.bookmarks.length}
             />
             <MusicChip label={data._count.musics} size="small" />
+            <ArtistChip label={data._count.artists} size="small" />
           </Stack>
         ),
       }}
@@ -46,7 +48,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         <Image
           height="60"
           alt={title}
-          src={getContentImage(data.link.streaming)?.image?.size?.medium || ""}
+          src={getImage(data.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />
       )}

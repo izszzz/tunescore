@@ -16,6 +16,8 @@ import type { MusicLayoutProps } from "../../../../../components/layouts/show/mu
 import PullLayout from "../../../../../components/layouts/show/pull";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
+import type { PullShowArgsType } from "../../../../../paths/musics/[id]/pulls/[pullId]";
+import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Pull: NextPage = () => {
@@ -25,40 +27,20 @@ const Pull: NextPage = () => {
     userId = getCurrentUserId(session),
     create = trpc.comment.createOneComment.useMutation(),
     query = musicShowQuery({ router, session }),
+    pullQuery = pullShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
-    pull = trpc.pull.findUniquePull.useQuery(
-      {
-        where: { id: router.query.pullId as string },
-        include: { user: true, music: true, vote: true, comments: true },
-      },
-      {
-        onError: () => {
-          enqueueSnackbar("music.show error");
-        },
-      }
-    );
+    pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
+      onError: () => enqueueSnackbar("music.show error"),
+    });
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as Prisma.PullGetPayload<{
-    include: {
-      music: true;
-      user: true;
-      vote: true;
-      comments: {
-        include: {
-          user: true;
-        };
-      };
-    };
-  }>;
+  const pullData = pull.data as Prisma.PullGetPayload<PullShowArgsType>;
   const { id, title, body, comments } = pullData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout data={pullData} activeTab="conversation">
+      <PullLayout query={pullQuery} data={pullData} activeTab="conversation">
         <ArticleCard title={title} body={body} />
         {comments.map((comment) => (
           <CommentCard key={comment.id} data={comment} />
@@ -69,12 +51,12 @@ const Pull: NextPage = () => {
               create.mutate({
                 data: {
                   ...data,
-                  resourceType: "Pull",
+                  unionType: "Pull",
                   pull: { connect: { id } },
                   user: { connect: { id: userId } },
                   notifications: {
                     create: {
-                      resourceType: "Comment",
+                      unionType: "Comment",
                       user: {
                         connect: { id: userId },
                       },

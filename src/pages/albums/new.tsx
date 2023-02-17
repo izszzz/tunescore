@@ -1,34 +1,48 @@
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 
-import Button from "@mui/material/Button";
+import { useModal } from "@ebay/nice-modal-react";
+import LoadingButton from "@mui/lab/LoadingButton";
 import type { Album } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import NewLayout from "../../components/layouts/new";
 import { trpc } from "../../utils/trpc";
 
-
 const NewBand: NextPage = () => {
-  const router = useRouter();
-  const create = trpc.album.createOneAlbum.useMutation({
-    onSuccess: () => router.push("/albums"),
-  });
-  const handleSubmit = (data: Album) => create.mutate({ data });
+  const router = useRouter(),
+    { status } = useSession(),
+    { show } = useModal("auth-dialog"),
+    create = trpc.album.createOneAlbum.useMutation({
+      onSuccess: () => router.push("/albums"),
+    }),
+    handleSubmit = (data: Album) => {
+      if (status === "authenticated") create.mutate({ data });
+      else show();
+    };
   return (
-    <DefaultSingleColumnLayout>
+    <NewLayout>
       <p>new album</p>
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement
           name={"title." + router.locale}
           label="Title"
+          margin="dense"
           fullWidth
           required
         />
-        <br />
-        <Button type="submit">submit</Button>
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          disabled={create.isLoading}
+          fullWidth
+          disableElevation
+        >
+          submit
+        </LoadingButton>
       </FormContainer>
-    </DefaultSingleColumnLayout>
+    </NewLayout>
   );
 };
 

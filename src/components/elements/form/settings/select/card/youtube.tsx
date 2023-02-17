@@ -1,8 +1,9 @@
 import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
-import axios from "axios";
 import type { youtube_v3 } from "googleapis";
+
+import { trpc } from "../../../../../../utils/trpc";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -21,7 +22,7 @@ interface YoutubeSelectFormProps<T>
   streamingLink: StreamingLink | null | undefined;
   term: string;
   type: "video" | "channel";
-  lookup: (id: string) => Promise<T | undefined>;
+  lookup: T | undefined;
 }
 
 function YoutubeSelectForm<T extends Video | Channel>({
@@ -32,17 +33,13 @@ function YoutubeSelectForm<T extends Video | Channel>({
   smallCard,
   lookup,
 }: YoutubeSelectFormProps<T>) {
+  const { data } = trpc.youtube.search.useQuery({ term, type });
+  if (!data) return <>loading</>;
   return (
     <CardSelectForm<T | undefined, SearchResult[]>
       link={streamingLink?.youtube}
-      lookup={(id) => lookup(id).then((data) => data)}
-      search={() =>
-        axios
-          .get<youtube_v3.Schema$SearchListResponse>("/api/youtube/search", {
-            params: { term, type },
-          })
-          .then(({ data }) => data.items)
-      }
+      lookup={lookup}
+      search={data.items}
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{

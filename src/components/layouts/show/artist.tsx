@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -24,7 +26,6 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import DefaultShowLayout from "./default";
 import type { DefaultShowLayoutProps } from "./default";
 
-
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<ArtistShowArgsType>;
@@ -37,17 +38,22 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter();
-  const id = getRouterId(router);
+  const router = useRouter(),
+    id = getRouterId(router),
+    { show } = useModal("auth-modal");
   const name = setLocale(data.name, router);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const update = trpc.artist.updateOneArtist.useMutation({
     onSuccess: (data) => {
-      queryClient.setQueryData([["artist", "findUniqueArtist"], query], data);
+      queryClient.setQueryData(
+        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+        data
+      );
       enqueueSnackbar("artist.update success");
     },
+    onError: () => enqueueSnackbar("artist.update error"),
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -95,20 +101,24 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         </>
       }
       tagMaps={data.tagMaps}
+      reportButtonProps={{ unionType: "Artist", id }}
       bookmarkToggleButtonProps={{
         value: !!data.bookmarks.length,
         disabled: update.isLoading,
-        onClick: () =>
-          update.mutate({
-            ...query,
-            data: {
-              bookmarks: bookmarkMutate({
-                type: "Artist",
-                data,
-                session,
-              }),
-            },
-          }),
+        onClick: () => {
+          if (status === "authenticated")
+            update.mutate({
+              ...query,
+              data: {
+                bookmarks: bookmarkMutate({
+                  bookmarks: data.bookmarks,
+                  unionType: "Artist",
+                  session,
+                }),
+              },
+            });
+          else show();
+        },
       }}
     >
       {children}

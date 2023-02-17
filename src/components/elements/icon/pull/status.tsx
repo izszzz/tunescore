@@ -1,5 +1,6 @@
 import React from "react";
 
+import CallMergeIcon from "@mui/icons-material/CallMerge";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import LockIcon from "@mui/icons-material/Lock";
@@ -14,7 +15,7 @@ const PullStatusIcon = ({ status }: PullStatusIconProps) =>
     .with("DRAFT", () => <LockIcon color="disabled" />)
     .with("OPEN", () => <TaskAltIcon color="success" />)
     .with("CLOSE", () => <HighlightOffIcon color="error" />)
-    .with("MERGE", () => <TaskAltIcon color="disabled" />)
+    .with("MERGE", () => <CallMergeIcon color="secondary" />)
     .with("VOTE", () => <HowToVoteIcon color="success" />)
     .exhaustive();
 export default PullStatusIcon;

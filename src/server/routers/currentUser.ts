@@ -1,17 +1,33 @@
-import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 import { musicListArgs } from "../../helpers/music";
 import { getCurrentUserId } from "../../helpers/user";
-import { publicProcedure, router } from "../trpc";
+import { router } from "../trpc";
 
+import { shieldedProcedure } from "./shield";
 
 export const currentUserRouter = router({
-  findManyCart: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.session?.user)
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Please Sign In",
+  findCurrentUser: shieldedProcedure.query(async ({ ctx }) => {
+    const { session } = ctx;
+    return await ctx.prisma.user.findUnique({
+      where: { id: getCurrentUserId(session) },
+    });
+  }),
+  findUniqueTransaction: shieldedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const { session } = ctx;
+      return ctx.prisma.transaction.findUnique({
+        include: {
+          music: musicListArgs(session),
+          user: true,
+        },
+        where: {
+          id: input,
+        },
       });
+    }),
+  findManyCart: shieldedProcedure.query(async ({ ctx }) => {
     const { session } = ctx,
       cart = await ctx.prisma.cart.findMany({
         include: { music: musicListArgs(session) },
@@ -19,7 +35,7 @@ export const currentUserRouter = router({
       });
     return cart.map((cart) => cart.music);
   }),
-  notification: publicProcedure.query(async ({ ctx }) => {
+  findManyNotification: shieldedProcedure.query(async ({ ctx }) => {
     const userId = getCurrentUserId(ctx.session);
     return ctx.prisma.notification.findMany({
       include: {

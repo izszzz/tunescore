@@ -1,61 +1,32 @@
-import type { ResourceType, Prisma } from "@prisma/client";
-import { match, P } from "ts-pattern";
+import type { Bookmark, BookmarkUnionType } from "@prisma/client";
 
-import { getCurrentUserId } from "./user";
+import { getCurrentUserId, userWhere } from "./user";
 import type { SessionArg } from "./user";
 
-export const bookmarkQuery = ({
+export const bookmarkArgs = ({
   type,
   session,
 }: {
-  type: ResourceType;
+  type: BookmarkUnionType;
   session: SessionArg;
 }) => ({
-  where: {
-    user: { id: getCurrentUserId(session) },
-    resourceType: type,
-  },
+  where: { user: userWhere(session), unionType: type },
 });
 
-type Include = { include: { bookmarks: true } };
-type Data =
-  | Prisma.ArtistGetPayload<Include>
-  | Prisma.MusicGetPayload<{ include: { bookmarks: true; user: true } }>
-  | Prisma.AlbumGetPayload<Include>
-  | Prisma.BandGetPayload<Include>;
 export const bookmarkMutate = ({
-  data,
-  type,
+  bookmarks,
   session,
+  unionType,
 }: {
-  data: Data;
-  type: ResourceType;
+  bookmarks: Bookmark[];
   session: SessionArg;
-}): Prisma.BookmarkUpdateManyWithoutMusicNestedInput => {
-  const id = getCurrentUserId(session);
-  return data.bookmarks[0]
-    ? {
-        delete: {
-          id: data.bookmarks[0]?.id,
+  unionType: BookmarkUnionType;
+}) =>
+  bookmarks.length
+    ? { delete: { id: bookmarks[0]?.id } }
+    : {
+        create: {
+          unionType,
+          user: { connect: { id: getCurrentUserId(session) } },
         },
-      }
-    : match(data)
-        .with({ type: "ORIGINAL", user: P.not(P.nullish) }, () => ({
-          create: {
-            resourceType: type,
-            user: { connect: { id } },
-            notifications: {
-              create: {
-                resourceType: "Bookmark",
-                user: { connect: { id } },
-              },
-            },
-          },
-        }))
-        .otherwise(() => ({
-          create: {
-            resourceType: type,
-            user: { connect: { id } },
-          },
-        }));
-};
+      };

@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/audiveris
+/tmp
 
 # testing
 /coverage
@@ -11,6 +13,8 @@
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
+/prisma/generated/routers
+/prisma/generated/schemas
 
 # next.js
 /.next/
@@ -32,6 +36,8 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+.env.development
+.env.production
 
 # vercel
 .vercel

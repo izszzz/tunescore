@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 
 import UserLists from "../../components/elements/list/user";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { userCountQuery } from "../../helpers/user";
+import { userCount } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const Users: NextPage = () => {
@@ -17,7 +17,7 @@ const Users: NextPage = () => {
           name: { contains: (router.query.q as string) || "" },
         },
         include: {
-          _count: userCountQuery,
+          _count: userCount,
         },
       },
       options: { page: (router.query.page as string) || 0, perPage: 12 },

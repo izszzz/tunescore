@@ -1,18 +1,17 @@
 import React from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
 
 import setLocale from "../../../helpers/locale";
-import { useModal } from "../../../hooks/useModal";
 import { trpc } from "../../../utils/trpc";
 import LocaleAutocomplete from "../autocomplete/locale";
 import SearchAutocomplete from "../autocomplete/search";
@@ -26,8 +25,8 @@ import Header from ".";
 
 const DefaultHeader = () => {
   const session = useSession(),
-    { handleOpen } = useModal(),
     router = useRouter(),
+    { show } = useModal("auth-dialog"),
     search = trpc.search.music.useMutation(),
     handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter")
@@ -43,10 +42,12 @@ const DefaultHeader = () => {
   return (
     <>
       <Header>
-        <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-          <Link href="/">
-            <a>tunescore</a>
-          </Link>
+        <Typography
+          variant="h4"
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+          onClick={() => router.push("/")}
+        >
+          tunescore
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />
@@ -84,12 +85,13 @@ const DefaultHeader = () => {
             >
               <LocaleAutocomplete />
               <ThemeToggleButton />
+              <PlusMenuManager />
               {match(session)
                 .with({ status: "loading" }, () => <CircularProgress />)
                 .with({ status: "unauthenticated" }, () => (
                   <Button
                     variant="contained"
-                    onClick={handleOpen}
+                    onClick={() => show()}
                     disableElevation
                   >
                     SignIn
@@ -98,7 +100,6 @@ const DefaultHeader = () => {
                 .with({ status: "authenticated" }, () => (
                   <>
                     <CartIconButton onClick={() => router.push("/cart")} />
-                    <PlusMenuManager />
                     <NotificationsMenuManager />
                     <AvatarMenuManager />
                   </>

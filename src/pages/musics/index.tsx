@@ -17,9 +17,7 @@ const Musics: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { data: session } = useSession();
   const search = trpc.search.music.useMutation({
-    onError: () => {
-      enqueueSnackbar("music.search error");
-    },
+    onError: () => enqueueSnackbar("music.search error"),
   });
   const { data } = trpc.pagination.music.useQuery(
     musicPaginationQuery({ router, session }),
@@ -32,7 +30,6 @@ const Musics: NextPage = () => {
   if (!data) return <></>;
   return (
     <DefaultIndexLayout
-      newRoute={{ pathname: "/musics/new" }}
       meta={data.meta}
       searchAutocompleteProps={{
         options: search.data || [],

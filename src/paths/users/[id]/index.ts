@@ -1,22 +1,19 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-import { checkCurrentUserFollowingQuery } from "../../../helpers/follow";
-import { getCurrentUserId, userCountQuery } from "../../../helpers/user";
+import { userSelect, userWhere } from "../../../helpers/user";
 import type { SessionArg } from "../../../helpers/user";
 
-export type UserShowGetPayload = Prisma.UserGetPayload<
-  ReturnType<typeof userShowArgs>
->;
+export const userShowQuery = (session: SessionArg) =>
+  Prisma.validator<Prisma.UserFindUniqueArgsBase>()({
+    where: userWhere(session),
+    ...userShowArgs(session),
+  });
 
-export const userShowQuery = (session: SessionArg) => ({
-  where: { id: getCurrentUserId(session) },
-  ...userShowArgs(session),
-});
-
-export const userShowArgs = (session: SessionArg) => ({
-  include: {
-    accounts: true,
-    followers: checkCurrentUserFollowingQuery(session),
-    _count: userCountQuery,
-  },
-});
+export type UserShowArgsType = ReturnType<typeof userShowArgs>;
+export const userShowArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.UserArgs>()({
+    select: {
+      followers: { where: { following: userWhere(session) } },
+      ...userSelect,
+    },
+  });

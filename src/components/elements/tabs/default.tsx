@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -7,17 +8,15 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import type { Route } from "nextjs-routes";
 
-import { getCurrentUser } from "../../../helpers/user";
-import { useModal } from "../../../hooks/useModal";
-
 export interface DefaultTabsProps {
   value: string;
   tabs: { label: string; href: Route; disabled?: boolean }[];
 }
 const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const { handleOpen } = useModal();
+  const router = useRouter(),
+    { status } = useSession(),
+    { show } = useModal("auth-dialog");
+
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs value={value}>
@@ -27,8 +26,8 @@ const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
             {...tab}
             value={tab.label}
             onClick={() => {
-              if (tab.label === "settings" && !getCurrentUser(session))
-                return handleOpen();
+              if (tab.label === "settings" && status === "unauthenticated")
+                return show();
               router.push(href);
             }}
           />

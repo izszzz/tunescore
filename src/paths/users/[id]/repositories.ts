@@ -2,9 +2,9 @@ import type { Prisma } from "@prisma/client";
 
 import { musicListArgs } from "../../../helpers/music";
 import type { MusicListArgsType } from "../../../helpers/music";
-import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
+import { userWhere } from "../../../helpers/user";
 
 export type UserRepositoriesGetPayload =
   Prisma.UserGetPayload<MusicListArgsType>;
@@ -27,10 +27,10 @@ export const userRepositoriesQuery = ({
               },
             },
           },
-          user: { id: getRouterId(router) },
+          user: userWhere(session),
         }
       : {
-          user: { id: getRouterId(router) },
+          user: userWhere(session),
         },
   },
   options: { page: (router.query.page as string) || 0, perPage: 12 },

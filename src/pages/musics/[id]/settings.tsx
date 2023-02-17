@@ -3,7 +3,8 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
-import type { NextPage } from "next";
+import { getQueryKey } from "@trpc/react-query";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -23,6 +24,7 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
+import { redirectToSignIn } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -43,13 +45,14 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.destroy success");
         router.push("/musics");
       },
-      onError: () => {
-        enqueueSnackbar("music.destroy error");
-      },
+      onError: () => enqueueSnackbar("music.destroy error"),
     }),
     update = trpc.music.updateOneMusic.useMutation({
       onSuccess: (data) => {
-        queryClient.setQueryData([["music", "findUniqueMusic"], query], data);
+        queryClient.setQueryData<typeof data>(
+          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          data
+        );
         enqueueSnackbar("music.update success");
       },
       onError: () => {
@@ -119,7 +122,7 @@ const SettingsMusic: NextPage = () => {
                 tagMaps: {
                   create: {
                     tag: { connect: { id: details.option.id } },
-                    resourceType: "Music",
+                    unionType: "Music",
                   },
                 },
               },
@@ -131,9 +134,9 @@ const SettingsMusic: NextPage = () => {
               data: {
                 tagMaps: {
                   delete: {
-                    resourceId_tagId_resourceType: {
-                      resourceType: "Music",
-                      resourceId: id,
+                    unionId_tagId_unionType: {
+                      unionType: "Music",
+                      unionId: id,
                       tagId: details.option.id,
                     },
                   },
@@ -173,7 +176,7 @@ const SettingsMusic: NextPage = () => {
                   tagMaps: {
                     create: {
                       tag: { connect: { id: details.option.id } },
-                      resourceType: "Music",
+                      unionType: "Music",
                     },
                   },
                 },
@@ -185,9 +188,9 @@ const SettingsMusic: NextPage = () => {
                 data: {
                   tagMaps: {
                     delete: {
-                      resourceId_tagId_resourceType: {
-                        resourceType: "Music",
-                        resourceId: id,
+                      unionId_tagId_unionType: {
+                        unionType: "Music",
+                        unionId: id,
                         tagId: details.option.id,
                       },
                     },
@@ -335,6 +338,11 @@ const SettingsMusic: NextPage = () => {
       />
     </MusicLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const redirect = await redirectToSignIn(ctx);
+  return { props: {}, redirect };
 };
 
 export default SettingsMusic;

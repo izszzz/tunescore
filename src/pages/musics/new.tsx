@@ -1,3 +1,6 @@
+import path from "path";
+
+import { useState } from "react";
 import {
   FormContainer,
   RadioButtonGroup,
@@ -6,64 +9,95 @@ import {
 } from "react-hook-form-mui";
 
 import { importer } from "@coderline/alphatab";
-import DriveFolderUpload from "@mui/icons-material/DriveFolderUpload";
+import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { Music } from "@prisma/client";
+import axios from "axios";
 import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import Script from "next/script";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
+import { match, P } from "ts-pattern";
 
-import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
+import Dropzone from "../../components/elements/form/dropzone";
+import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
 import { getCurrentUserId } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
   const router = useRouter(),
-    { t } = useTranslation("common"),
+    [loading, setLoading] = useState(false),
     formContext = useForm<Music>({ defaultValues: { price: 0 } }),
+    { show } = useModal("auth-dialog"),
+    { t } = useTranslation(),
+    { data: session, status } = useSession(),
+    { enqueueSnackbar, closeSnackbar } = useSnackbar(),
     {
       watch,
       setValue,
       formState: { isDirty, isValid },
     } = formContext,
     type = watch("type"),
-    { data: session } = useSession(),
-    { enqueueSnackbar } = useSnackbar(),
     create = trpc.music.createOneMusic.useMutation({
-      onSuccess: () => router.push("/musics"),
-      onError: (error) => {
-        enqueueSnackbar(String(error));
+      onSuccess: () => {
+        router.push("/musics");
+        enqueueSnackbar("music.create success");
+      },
+      onError: () => {
+        enqueueSnackbar("music.create fail");
       },
     }),
     handleSubmit = (data: Music) => {
-      create.mutate({
-        data: {
-          ...data,
-          price: Number(data.price),
-          user: { connect: { id: getCurrentUserId(session) } },
-        },
-      });
+      if (status === "authenticated")
+        create.mutate({
+          data: {
+            ...data,
+            price: Number(data.price),
+            user: { connect: { id: getCurrentUserId(session) } },
+          },
+        });
+      else show();
     },
-    handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (files && files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = ({ target }) => {
-          const result = target?.result as ArrayBuffer;
-          if (result) exportFile(new Uint8Array(result));
-        };
-        reader.readAsArrayBuffer(files[0] as Blob);
-      }
-      e.target.value = "";
+    handleDrag = (acceptedFiles: File[]) => {
+      acceptedFiles.forEach((file) => {
+        const extname = path.extname(file.name) as
+          | ".jpg"
+          | ".png"
+          | ".pdf"
+          | ".gp"
+          | ".mxl";
+        match(extname)
+          .with(P.union(".gp", ".mxl"), () => {
+            const reader = new FileReader();
+            reader.onload = ({ target }) => {
+              const result = target?.result as ArrayBuffer;
+              if (result) exportFile(new Uint8Array(result));
+            };
+            reader.readAsArrayBuffer(file as Blob);
+          })
+          .with(P.union(".jpg", ".png", ".pdf"), async () => {
+            setLoading(true);
+            const snackbarId = enqueueSnackbar("Loading ...", {
+              autoHideDuration: null,
+            });
+            const body = new FormData();
+
+            body.append("file", file);
+            const { data } = await axios.post<string>("/api/audiveris", body);
+
+            setValue("score", data);
+            closeSnackbar(snackbarId);
+            enqueueSnackbar("recognize score image success");
+            setLoading(false);
+          })
+          .exhaustive();
+      });
     },
     exportFile = (data: Uint8Array) => {
       let score = null;
@@ -79,27 +113,13 @@ const NewMusic: NextPage = () => {
       }
     };
   return (
-    <DefaultSingleColumnLayout contained>
-      <Script
-        src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
-        onError={(e) => console.log(e)}
-      />
+    <NewLayout>
       <Box my={3}>
         <Typography variant="h4">Create a New Music</Typography>
         <Divider />
 
         <Box my={3}>
           <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<DriveFolderUpload />}
-              disableElevation
-              fullWidth
-            >
-              Guitar Pro
-              <input type="file" hidden onChange={handleChange} />
-            </Button>
             <Box mb={3}>
               <RadioButtonGroup
                 label="type"
@@ -145,6 +165,15 @@ const NewMusic: NextPage = () => {
                 <br />
               </>
             )}
+
+            <Dropzone
+              maxFiles={2}
+              accept={{
+                "image/*": [".jpg", ".png", ".pdf"],
+                "text/*": [".gp", ".mxl"],
+              }}
+              onDrop={handleDrag}
+            />
             <LoadingButton
               type="submit"
               variant="contained"
@@ -157,7 +186,7 @@ const NewMusic: NextPage = () => {
           </FormContainer>
         </Box>
       </Box>
-    </DefaultSingleColumnLayout>
+    </NewLayout>
   );
 };
 

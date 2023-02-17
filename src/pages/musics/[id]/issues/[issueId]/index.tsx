@@ -12,6 +12,7 @@ import CommentForm from "../../../../../components/elements/form/comment";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
 import { getRouterIssueId } from "../../../../../helpers/router";
+import type { userArgs } from "../../../../../helpers/user";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import { trpc } from "../../../../../utils/trpc";
@@ -48,7 +49,7 @@ const Issue: NextPage = () => {
   if (!music.data || !issue.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   const issueData = issue.data as Prisma.IssueGetPayload<{
-    include: { comments: { include: { user: true } } };
+    include: { comments: { include: { user: typeof userArgs } } };
   }>;
   const { title, body, comments } = issueData;
   return (

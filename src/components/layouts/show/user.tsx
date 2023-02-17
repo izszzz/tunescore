@@ -16,8 +16,10 @@ import { useSnackbar } from "notistack";
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
-import type { UserShowArgsType } from "../../../paths/users/[id]";
-import { userShowQuery } from "../../../paths/users/[id]";
+import type {
+  UserShowArgsType,
+  UserShowQueryType,
+} from "../../../paths/users/[id]";
 import { trpc } from "../../../utils/trpc";
 import FlagIconButton from "../../elements/button/icon/flag";
 import DefaultHeader from "../../elements/header/default";
@@ -25,13 +27,16 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import type { ShowLayoutProps } from ".";
 import ShowLayout from "./index";
+
 export interface UserLayoutProps extends Pick<ShowLayoutProps, "children"> {
   data: Prisma.UserGetPayload<UserShowArgsType>;
+  query: UserShowQueryType;
   activeTab: "info" | "settings" | "bookmarks" | "repositories" | "";
 }
 
 const UserLayout: React.FC<UserLayoutProps> = ({
   data,
+  query,
   activeTab,
   children,
 }) => {
@@ -42,7 +47,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     { show: showReportDialog } = useModal("report-dialog"),
     id = getRouterId(router),
     userId = getCurrentUserId(session),
-    query = userShowQuery(session),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(

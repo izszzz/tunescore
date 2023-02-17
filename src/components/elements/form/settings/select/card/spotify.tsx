@@ -28,7 +28,7 @@ function SpotifySelectForm<T extends SpotifyApi.TrackObjectFull>({
     <CardSelectForm<T, SpotifyApi.PagingObject<T>["items"]>
       link={streamingLink?.spotify}
       lookup={lookup}
-      search={data?.items}
+      search={data?.items as T[]}
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{

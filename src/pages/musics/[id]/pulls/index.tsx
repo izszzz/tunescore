@@ -9,6 +9,7 @@ import IndexLayout from "../../../../components/layouts/index";
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
 import { getRouterId } from "../../../../helpers/router";
+import { userArgs } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
@@ -25,7 +26,7 @@ const Pulls: NextPage = () => {
     { data: pullsData } = trpc.pagination.pull.useQuery(
       {
         args: {
-          include: { user: true },
+          include: { user: userArgs },
           where: {
             title: { contains: (router.query.q as string) || "" },
             music: { id },

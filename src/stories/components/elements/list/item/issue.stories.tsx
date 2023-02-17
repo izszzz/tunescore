@@ -21,12 +21,13 @@ Open.args = {
     user: {
       id: "1",
       name: "user",
-      email: "",
       point: 0,
       image: "",
-      emailVerified: null,
       stripeCustomerId: "",
-      voteIDs: [],
+      _count: {
+        followers: 0,
+        following: 0,
+      },
     },
     musicId: "",
     userId: "",
@@ -43,12 +44,13 @@ Close.args = {
     user: {
       id: "1",
       name: "user",
-      email: "",
       point: 0,
       image: "",
-      emailVerified: null,
       stripeCustomerId: "",
-      voteIDs: [],
+      _count: {
+        followers: 0,
+        following: 0,
+      },
     },
     musicId: "",
     userId: "",

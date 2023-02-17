@@ -4,13 +4,12 @@ import type { StreamingLink } from "@prisma/client";
 
 import type {
   ItunesResponse,
-  searchItunes,
   BaseSearchParams,
   BaseLookupParams,
-  lookupItunes,
   ItunesMusic,
   ItunesArtist,
   ItunesAlbum,
+  Itunes,
 } from "../../../../../../helpers/itunes";
 
 import CardSelectForm from ".";
@@ -24,8 +23,8 @@ interface ItunesSelectFormProps<
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  search: (params: BaseSearchParams) => ReturnType<typeof searchItunes<T>>;
-  lookup: (params: BaseLookupParams) => ReturnType<typeof lookupItunes<T>>;
+  search: (params: BaseSearchParams) => ReturnType<typeof Itunes.search<T>>;
+  lookup: (params: BaseLookupParams) => ReturnType<typeof Itunes.lookup<T>>;
 }
 function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   streamingLink,

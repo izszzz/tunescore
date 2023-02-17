@@ -16,12 +16,9 @@ Default.args = {
   data: {
     id: "1",
     name: "User",
-    email: "",
     point: 0,
     image: "",
-    emailVerified: null,
     stripeCustomerId: "",
-    voteIDs: [],
     _count: {
       followers: 0,
       following: 0,

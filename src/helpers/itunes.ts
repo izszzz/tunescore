@@ -68,29 +68,29 @@ export interface BaseLookupParams {
 export interface LookupParams extends BaseParams, BaseLookupParams {}
 export interface SearchParams extends BaseParams, BaseSearchParams {}
 export class Itunes {
-  lookup<T>(params: LookupParams): Promise<ItunesResponse<T>> {
+  static lookup<T>(params: LookupParams): Promise<ItunesResponse<T>> {
     return itunes.jsonp<null, ItunesResponse<T>>("/lookup", {
       params,
     });
   }
   lookupArtist = ({ id }: BaseLookupParams) =>
-    this.lookup<ItunesArtist>({ id, entity: "musicArtist" });
+    Itunes.lookup<ItunesArtist>({ id, entity: "musicArtist" });
   lookupAlbum = ({ id }: BaseLookupParams) =>
-    this.lookup<ItunesAlbum>({ id, entity: "album" });
+    Itunes.lookup<ItunesAlbum>({ id, entity: "album" });
   lookupMusic = ({ id }: BaseLookupParams) =>
-    this.lookup<ItunesMusic>({ id, entity: "song" });
+    Itunes.lookup<ItunesMusic>({ id, entity: "song" });
 
-  search<T>(params: SearchParams) {
+  static search<T>(params: SearchParams) {
     return itunes.jsonp<null, ItunesResponse<T>>("/search", {
       params,
     });
   }
   searchMusics = (params: BaseSearchParams) =>
-    this.search<ItunesMusic>({ ...params, entity: "song" });
+    Itunes.search<ItunesMusic>({ ...params, entity: "song" });
   searchArtists = (params: BaseSearchParams) =>
-    this.search<ItunesArtist>({ ...params, entity: "musicArtist" });
+    Itunes.search<ItunesArtist>({ ...params, entity: "musicArtist" });
   searchAlbums = (params: BaseSearchParams) =>
-    this.search<ItunesAlbum>({ ...params, entity: "album" });
+    Itunes.search<ItunesAlbum>({ ...params, entity: "album" });
 }
 
 export const convertAffiliateLink = (url: string) => {

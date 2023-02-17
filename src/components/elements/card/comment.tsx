@@ -7,13 +7,13 @@ import CardContent from "@mui/material/CardContent";
 import type { Prisma } from "@prisma/client";
 import dynamic from "next/dynamic";
 
-import type { userSelect } from "../../../helpers/user";
+import type { userArgs } from "../../../helpers/user";
 const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
 });
 interface CommentCardProps {
   data: Prisma.CommentGetPayload<{
-    include: { user: { select: typeof userSelect } };
+    include: { user: typeof userArgs };
   }>;
 }
 const CommentCard = ({ data: { body, user } }: CommentCardProps) => (

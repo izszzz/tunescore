@@ -2,6 +2,7 @@ import AttachMoney from "@mui/icons-material/AttachMoney";
 import Book from "@mui/icons-material/Book";
 import CreditCard from "@mui/icons-material/CreditCard";
 import Home from "@mui/icons-material/Home";
+import Notifications from "@mui/icons-material/Notifications";
 import Settings from "@mui/icons-material/Settings";
 import MenuList from "@mui/material/MenuList";
 import router from "next/router";
@@ -9,7 +10,13 @@ import router from "next/router";
 import MenuListItem from "./item";
 
 export interface DashboardMenuProps {
-  active?: "home" | "library" | "credits" | "settings" | "transactions";
+  active?:
+    | "home"
+    | "library"
+    | "credits"
+    | "settings"
+    | "transactions"
+    | "notifications";
 }
 const DashboardMenu = ({ active }: DashboardMenuProps) => (
   <MenuList>
@@ -43,6 +50,14 @@ const DashboardMenu = ({ active }: DashboardMenuProps) => (
       onClick={() => router.push("/dashboard/credits")}
     >
       Credit Card
+    </MenuListItem>
+
+    <MenuListItem
+      icon={<Notifications />}
+      selected={active === "notifications"}
+      onClick={() => router.push("/dashboard/notifications")}
+    >
+      Notifications
     </MenuListItem>
 
     <MenuListItem

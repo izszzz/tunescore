@@ -20,7 +20,7 @@ export interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
   newRoute?: Route;
   meta: PaginatedResult<null>["meta"];
-  searchAutocompleteProps: SearchAutocompleteProps<T, false, false, false>;
+  searchAutocompleteProps?: SearchAutocompleteProps<T, false, false, false>;
 }
 function IndexLayout<T>({
   header,
@@ -51,29 +51,31 @@ function IndexLayout<T>({
   return (
     <SingleColumnLayout contained header={header}>
       <Box my={3}>
-        <Grid container spacing={1}>
-          <Grid item xs={newRoute ? 11 : 12}>
-            <SearchAutocomplete
-              {...searchAutocompleteProps}
-              textFieldProps={{
-                ...searchAutocompleteProps.textFieldProps,
-                onKeyDown: handleKeyDown,
-              }}
-            />
+        {searchAutocompleteProps && (
+          <Grid container spacing={1}>
+            <Grid item xs={newRoute ? 11 : 12}>
+              <SearchAutocomplete
+                {...searchAutocompleteProps}
+                textFieldProps={{
+                  ...searchAutocompleteProps.textFieldProps,
+                  onKeyDown: handleKeyDown,
+                }}
+              />
+            </Grid>
+            <Grid item xs={1} display="flex" alignItems="stretch">
+              {newRoute && (
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={handleClick}
+                  fullWidth
+                >
+                  New
+                </Button>
+              )}
+            </Grid>
           </Grid>
-          <Grid item xs={1} display="flex" alignItems="stretch">
-            {newRoute && (
-              <Button
-                variant="outlined"
-                startIcon={<AddIcon />}
-                onClick={handleClick}
-                fullWidth
-              >
-                New
-              </Button>
-            )}
-          </Grid>
-        </Grid>
+        )}
         {children}
         <Box display="flex" justifyContent="center">
           <Pagination

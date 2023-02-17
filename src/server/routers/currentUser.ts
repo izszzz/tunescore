@@ -13,25 +13,6 @@ export const currentUserRouter = router({
       where: { id: getCurrentUserId(session) },
     });
   }),
-  findManyTransaction: shieldedProcedure.query(async ({ ctx }) => {
-    const { session } = ctx;
-    return ctx.prisma.transaction.findMany({
-      include: {
-        music: musicListArgs(session),
-        user: true,
-      },
-      where: {
-        OR: [
-          {
-            music: {
-              user: { id: getCurrentUserId(session) },
-            },
-          },
-          { user: { id: getCurrentUserId(session) } },
-        ],
-      },
-    });
-  }),
   findUniqueTransaction: shieldedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {

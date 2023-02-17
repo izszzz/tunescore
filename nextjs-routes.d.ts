@@ -27,6 +27,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/dashboard/credits">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/dashboard/library">
+    | StaticRoute<"/dashboard/notifications">
     | StaticRoute<"/dashboard/settings">
     | DynamicRoute<"/dashboard/transactions/[id]", { "id": string }>
     | StaticRoute<"/dashboard/transactions">

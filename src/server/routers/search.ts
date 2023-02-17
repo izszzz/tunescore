@@ -1,3 +1,4 @@
+import { TransactionFindManySchema } from "../../../prisma/generated/schemas";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
@@ -13,6 +14,7 @@ import { albumListArgs } from "../../helpers/album";
 import { artistListArgs } from "../../helpers/artist";
 import { bandListArgs } from "../../helpers/band";
 import { musicListArgs } from "../../helpers/music";
+import { transactionArgs } from "../../helpers/transaction";
 import { publicProcedure, router } from "../trpc";
 
 export const searchRouter = router({
@@ -57,6 +59,14 @@ export const searchRouter = router({
       ctx.prisma.follow.findMany({
         ...input,
         include: { follower: true, following: true },
+      })
+    ),
+  transaction: publicProcedure
+    .input(TransactionFindManySchema)
+    .mutation(async ({ ctx, input }) =>
+      ctx.prisma.transaction.findMany({
+        ...input,
+        include: transactionArgs(ctx.session),
       })
     ),
   bookmark: publicProcedure

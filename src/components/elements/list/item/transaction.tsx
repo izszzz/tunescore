@@ -8,16 +8,16 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
 import setLocale from "../../../../helpers/locale";
+import type { TransactionArgsType } from "../../../../helpers/transaction";
 
 import ListItem from ".";
+
 export interface TransactionListItemProps {
   data: Prisma.TransactionGetPayload<{
-    include: {
-      user: true;
-      music: true;
-    };
+    include: TransactionArgsType;
   }>;
 }
+
 const TransactionListItem = ({ data }: TransactionListItemProps) => {
   const router = useRouter();
   return (

@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import type { GetRouterArg } from "../../../../../helpers/router";
 import type { SessionArg } from "../../../../../helpers/user";
-import { userSelect } from "../../../../../helpers/user";
+import { userArgs } from "../../../../../helpers/user";
 import { voteInclude } from "../../../../../helpers/vote";
 
 export type PullShowQueryType = ReturnType<typeof pullShowQuery>;
@@ -22,9 +22,9 @@ export type PullShowArgsType = ReturnType<typeof pullShowArgs>;
 export const pullShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.PullArgs>()({
     include: {
-      user: { select: userSelect },
+      user: userArgs,
       music: true,
       vote: { include: voteInclude(session) },
-      comments: { include: { user: { select: userSelect } } },
+      comments: { include: { user: userArgs } },
     },
   });

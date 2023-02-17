@@ -2,6 +2,7 @@ import React from "react";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
+import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import type { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -47,7 +48,11 @@ const PullButton = ({
         <></>
       )
     )
-    .with({ status: "MERGE" }, () => <>revert</>)
+    .with({ status: "MERGE" }, () => (
+      <Button variant="outlined" color="secondary" disabled fullWidth>
+        MERGED
+      </Button>
+    ))
     .with({ music: { type: "ORIGINAL" }, status: "OPEN" }, () =>
       session?.user?.id === data.userId ? (
         <ButtonGroup fullWidth>
@@ -99,7 +104,7 @@ const PullButton = ({
     })
     .with({ status: "CLOSE" }, () =>
       session?.user?.id === data.userId ? (
-        <PullDraftButton loading={loading} onClick={onDraft} />
+        <PullDraftButton loading={loading} onClick={onDraft} fullWidth />
       ) : (
         <></>
       )
@@ -158,8 +163,7 @@ const VoteCreateButton = ({
     disabled={conflict || !diff}
     {...props}
   >
-    {conflict ? "conflict" : diff ? "no diff" : "vote"}
-    Vote
+    {conflict ? "conflict" : !diff ? "no diff" : "vote"}
   </DefaultButton>
 );
 

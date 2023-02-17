@@ -27,22 +27,20 @@ const Pull: NextPage = () => {
     userId = getCurrentUserId(session),
     create = trpc.comment.createOneComment.useMutation(),
     query = musicShowQuery({ router, session }),
+    pullQuery = pullShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
-    pull = trpc.pull.findUniquePull.useQuery(
-      pullShowQuery({ session, router }),
-      {
-        onError: () => enqueueSnackbar("music.show error"),
-      }
-    );
+    pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
+      onError: () => enqueueSnackbar("music.show error"),
+    });
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   const pullData = pull.data as Prisma.PullGetPayload<PullShowArgsType>;
   const { id, title, body, comments } = pullData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout data={pullData} activeTab="conversation">
+      <PullLayout query={pullQuery} data={pullData} activeTab="conversation">
         <ArticleCard title={title} body={body} />
         {comments.map((comment) => (
           <CommentCard key={comment.id} data={comment} />

@@ -8,6 +8,7 @@ import type { Prisma } from "@prisma/client";
 import dynamic from "next/dynamic";
 
 import type { userArgs } from "../../../helpers/user";
+
 const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
 });

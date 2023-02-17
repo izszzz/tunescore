@@ -118,7 +118,7 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       <ScoreButtonGroup
         watch={{
           route: {
-            pathname: "/scores/[id]",
+            pathname: "/musics/[id]/score",
             query: { id },
           },
           buttonProps: {
@@ -127,11 +127,12 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
         }}
         edit={{
           route: {
-            pathname: "/scores/[id]/edit",
+            pathname: "/musics/[id]/score/edit",
             query: { id },
           },
-          hidden:
-            data.type === "ORIGINAL" && user?.id !== getCurrentUserId(session),
+          hidden: !(
+            data.type === "ORIGINAL" && user?.id === getCurrentUserId(session)
+          ),
         }}
       />
     ));

@@ -45,12 +45,6 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV GRADLE_OPTS -Xmx1g -Dorg.gradle.daemon=true
 
-RUN apt-get install git openjdk-11-jdk tesseract-ocr-rus && \
-    tar -xf build/distributions/Audiveris-5.2.5.tar
-
-ENV NODE_ENV production
-ENV GRADLE_OPTS -Xmx1g -Dorg.gradle.daemon=true
-
 RUN apk install --update git openjdk11
 
 WORKDIR /tesseract-ocr/tessdata

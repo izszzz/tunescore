@@ -71,12 +71,13 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
+          distribution: "zulu"
           java-version: "11"
 
       - name: Build Audiveris
         env:
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=2g"
-        run: |-
+        run: |
           cd audiveris
           ./gradlew build
           cd ..

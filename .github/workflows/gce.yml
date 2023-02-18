@@ -76,7 +76,10 @@ jobs:
       - name: Build Audiveris
         env:
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=2g"
-        run: cd audiveris/gradlew build
+        run: |-
+          cd audiveris
+          ./gradlew build
+          cd ..
 
       - name: Remove Files
         run: rm -rf node_modules src

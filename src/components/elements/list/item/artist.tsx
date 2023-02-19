@@ -31,7 +31,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
       listItemTextProps={{
         primary: name,
         secondary: (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} component="span">
             {data.bands[0] && (
               <BandChip
                 label={setLocale(data.bands[0].name, router)}

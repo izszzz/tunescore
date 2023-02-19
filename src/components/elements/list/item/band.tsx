@@ -34,7 +34,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
       listItemTextProps={{
         primary: name,
         secondary: (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} component="span">
             <MusicChip label={data._count.musics} size="small" />
             <AlbumChip label={data._count.albums} size="small" />
             <ArtistChip label={data._count.artists} size="small" />

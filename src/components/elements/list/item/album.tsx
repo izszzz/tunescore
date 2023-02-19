@@ -32,7 +32,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} component="span">
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"

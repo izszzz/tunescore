@@ -11,6 +11,7 @@ import {
 import { importer } from "@coderline/alphatab";
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
@@ -153,18 +154,19 @@ const NewMusic: NextPage = () => {
             />
             <br />
             {type === "ORIGINAL" && (
-              <>
-                <TextFieldElement
-                  label="price"
-                  name="price"
-                  margin="dense"
-                  type="number"
-                  required
-                  fullWidth
-                />
-                <br />
-              </>
+              <TextFieldElement
+                label="price"
+                name="price"
+                margin="dense"
+                type="number"
+                required
+                fullWidth
+              />
             )}
+
+            <Alert severity="error">
+              dropzone still not working properly. But you can get the output.
+            </Alert>
 
             <Dropzone
               maxFiles={2}
@@ -174,6 +176,7 @@ const NewMusic: NextPage = () => {
               }}
               onDrop={handleDrag}
             />
+
             <LoadingButton
               type="submit"
               variant="contained"

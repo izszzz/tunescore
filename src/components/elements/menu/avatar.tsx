@@ -54,7 +54,7 @@ const AvatarMenuManager = () => {
           key="settings"
           onClick={() => {
             handleClose();
-            router.push("/settings");
+            router.push("/dashboard/settings");
           }}
         >
           Settings

@@ -50,19 +50,18 @@ RUN apk update && apk add git openjdk11 tesseract-ocr-data-rus
 COPY audiveris/build ./audiveris/build
 RUN tar -xf ./audiveris/build/distributions/Audiveris-5.2.5.tar
 
-RUN npm ci
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # RUN addgroup --system --gid 1001 nodejs
 # RUN adduser --system --uid 1001 nextjs
 
 COPY prisma ./
-
 COPY ./next.config.mjs ./
-COPY ./public ./public
-COPY ./package.json ./package.json
+COPY ./public ./
+COPY ./package.json ./
+COPY ./package-lock.json ./
 COPY ./.next/standalone ./
-COPY ./.next/static ./.next/static
+COPY ./.next/static ./
 
 RUN npm ci
 

@@ -73,6 +73,7 @@
     "next-auth": "^4.10.3",
     "next-i18next": "^13.0.3",
     "next-remove-imports": "^1.0.8",
+    "next-seo": "^5.15.0",
     "nextjs-routes": "^1.0.1",
     "node-diff3": "^3.1.2",
     "notistack": "^2.0.8",

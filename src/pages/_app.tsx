@@ -11,6 +11,7 @@ import Head from "next/head";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { appWithTranslation } from "next-i18next";
+import { DefaultSeo } from "next-seo";
 import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
 import { useDarkMode } from "usehooks-ts";
@@ -48,6 +49,30 @@ const MyApp: AppType<{ session: Session | null }> = ({
                 <Head>
                   <title>tunescore</title>
                 </Head>
+                <DefaultSeo
+                  defaultTitle="tunescore"
+                  description="Music Score Web Site"
+                  openGraph={{
+                    type: "website",
+                    title: "tunescore",
+                    description: "Music Score Web Site",
+                    site_name: "tunescore",
+                    url: "https://tunescore.dev",
+                    images: [
+                      {
+                        url: "/images/dark/logo_1000x1000.png",
+                        width: 1000,
+                        height: 1000,
+                        alt: "Og Image Alt",
+                        type: "image/png",
+                      },
+                    ],
+                  }}
+                  twitter={{
+                    site: "@hakei_prod",
+                    cardType: "summary",
+                  }}
+                />
                 <CssBaseline />
                 <ModalsProvider>
                   <Component {...pageProps} />

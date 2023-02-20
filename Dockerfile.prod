@@ -47,11 +47,6 @@ ENV GRADLE_OPTS -Xmx1g -Dorg.gradle.daemon=true
 
 RUN apk update && apk add git openjdk11 tesseract-ocr-data-rus
 
-RUN git clone https://github.com/Audiveris/audiveris.git
-RUN cd audiveris && \ 
-    ./gradlew build && \
-    cd ..
-
 COPY audiveris/build ./audiveris/build
 RUN tar -xf ./audiveris/build/distributions/Audiveris-5.2.5.tar
 

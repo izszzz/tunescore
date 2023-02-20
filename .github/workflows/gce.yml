@@ -62,6 +62,20 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
+        
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: Build Audiveris
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=2g"
+        run: |
+          cd audiveris
+          ./gradlew build
+          cd ..
 
       - name: Remove Files
         run: rm -rf node_modules src

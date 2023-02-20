@@ -11,7 +11,11 @@ export interface IndexChipProps extends Omit<ChipProps, "icon"> {
 }
 
 const IndexChip = ({ resource, ...props }: IndexChipProps) => (
-  <Chip {...props} icon={<ResourceIcon resource={resource} />} />
+  <Chip
+    {...props}
+    icon={<ResourceIcon resource={resource} />}
+    component="span"
+  />
 );
 
 export default IndexChip;

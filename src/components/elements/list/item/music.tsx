@@ -34,14 +34,14 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} component="span">
             <Owner data={data} />
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"
               bookmarked={!!data.bookmarks.length}
             />
-            <Chip label={data.type} size="small" />
+            <Chip label={data.type} size="small" component="span" />
           </Stack>
         ),
       }}

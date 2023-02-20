@@ -45,10 +45,7 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV GRADLE_OPTS -Xmx1g -Dorg.gradle.daemon=true
 
-RUN apk install --update git openjdk11
-
-WORKDIR /tesseract-ocr/tessdata
-RUN https://github.com/tesseract-ocr/langdata.git /rus
+RUN apk update && apk add git openjdk11 tesseract-ocr-data-rus-5.2.0-r1
 
 WORKDIR /app
 

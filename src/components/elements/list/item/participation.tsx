@@ -20,9 +20,9 @@ function ParticipationListItem<
   >
 >({ data }: ParticipationListItemProps<T>) {
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} component="span">
       {data.roleMap.map((roleMap) => (
-        <Chip key={roleMap.id} label={roleMap.role.name} />
+        <Chip key={roleMap.id} label={roleMap.role.name} component="span" />
       ))}
     </Stack>
   );

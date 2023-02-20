@@ -21,5 +21,17 @@ services:
     image: node:16-alpine
     env_file:
       - .env
+      - .env.production
+
+  https-portal:
+    image: steveltn/https-portal
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      TESSDATA_PREFIX: /tesseract-ocr
+      DOMAINS: tunescore.dev -> http://web:80
+      STAGE: production

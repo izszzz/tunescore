@@ -90,7 +90,6 @@ jobs:
         run: |-
           gcloud compute scp $(pwd) "$GCE_USER"@"$GCE_INSTANCE":./ \
           --recurse \
-          --compress \
           --zone "$GCE_INSTANCE_ZONE" \
 
       - name: Compose Up

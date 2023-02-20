@@ -78,6 +78,7 @@ jobs:
         run: |
           cd audiveris
           ./gradlew build
+          rm -rf .git
           cd ..
 
       - name: Remove Files

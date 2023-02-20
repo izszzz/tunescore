@@ -11,6 +11,7 @@ interface BookmarkChip extends Omit<ChipProps, "icon"> {
 const BookmarkChip = ({ bookmarked, ...props }: Omit<BookmarkChip, "icon">) => (
   <Chip
     {...props}
+    component="span"
     icon={bookmarked ? <BookmarkIcon color="info" /> : <BookmarkBorderIcon />}
   />
 );

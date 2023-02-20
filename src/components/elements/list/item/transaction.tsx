@@ -32,11 +32,12 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
           data.music ? setLocale(data.music.title, router) : ""
         }`,
         secondary: (
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" component="span">
             <Typography mr={1} variant="body2" color="text.subprimary">
               created by {data.user.name}
             </Typography>
             <Avatar
+              component="span"
               src={data.user.image || ""}
               sx={{ width: 24, height: 24 }}
             />

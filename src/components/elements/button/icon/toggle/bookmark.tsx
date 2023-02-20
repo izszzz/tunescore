@@ -2,6 +2,7 @@ import React from "react";
 
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 
 import type { ToggleIconButtonProps } from ".";
@@ -15,11 +16,13 @@ const BookmarkToggleButton = ({
   ...props
 }: Omit<ToggleIconButtonProps, "onIcon" | "offIcon">) => (
   <Tooltip title="Bookmark">
-    <ToggleIconButton
-      {...props}
-      onIcon={<BookmarkIcon color="primary" />}
-      offIcon={<BookmarkBorderIcon />}
-    />
+    <Box display="inline">
+      <ToggleIconButton
+        {...props}
+        onIcon={<BookmarkIcon color="primary" />}
+        offIcon={<BookmarkBorderIcon />}
+      />
+    </Box>
   </Tooltip>
 );
 export default BookmarkToggleButton;

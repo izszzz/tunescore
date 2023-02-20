@@ -60,7 +60,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
                     url: "https://tunescore.dev",
                     images: [
                       {
-                        url: "/images/dark/logo_1000x1000.png",
+                        url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
                         width: 1000,
                         height: 1000,
                         alt: "Og Image Alt",

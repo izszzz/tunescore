@@ -63,7 +63,6 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
         rowsPerPage: 12,
         page: 0,
         onPageChange: () => undefined,
-        // onPageChange: handleChangePage,
       }}
     />
   );

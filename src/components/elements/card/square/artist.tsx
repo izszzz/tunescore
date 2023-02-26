@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import type { ArtistListArgsType } from "../../../../helpers/artist";
 import { getChannelImage } from "../../../../helpers/image";
@@ -12,8 +13,6 @@ import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
 
 import SquareCard from ".";
-
-
 
 interface SquareArtistCardProps {
   data: Prisma.ArtistGetPayload<ArtistListArgsType>;
@@ -34,11 +33,11 @@ const SquareArtistCard = ({ data }: SquareArtistCardProps) => {
               <BookmarkChip
                 label={data._count.bookmarks}
                 size="small"
-                bookmarked={!!data.bookmarks.length}
+                bookmarked={isNonEmpty(data.bookmarks)}
               />
             </Box>
           </Box>
-          {data.bands[0] && (
+          {isNonEmpty(data.bands) && (
             <IndexChip
               label={setLocale(data.bands[0].name, router)}
               resource="BAND"

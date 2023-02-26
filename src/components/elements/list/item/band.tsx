@@ -5,6 +5,7 @@ import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import type { BandListArgsType } from "../../../../helpers/band";
 import { getChannelImage } from "../../../../helpers/image";
@@ -41,7 +42,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"
-              bookmarked={!!data.bookmarks.length}
+              bookmarked={isNonEmpty(data.bookmarks)}
             />
           </Stack>
         ),

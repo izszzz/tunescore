@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
@@ -103,11 +104,11 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       {
         type: "ORIGINAL",
         price: P.when((price) => price || 0 > 0),
-        transactions: P.when((transactions) => !transactions.length),
+        transactions: P.when((transactions) => !isNonEmpty(transactions)),
       },
       () => (
         <CartLoadingButton
-          disabled={!!data.carts.length}
+          disabled={isNonEmpty(data.carts)}
           loading={loading}
           onClick={onAddCart}
           fullWidth
@@ -117,19 +118,11 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup
         watch={{
-          route: {
-            pathname: "/musics/[id]/score",
-            query: { id },
-          },
-          buttonProps: {
-            disabled: !score,
-          },
+          route: { pathname: "/musics/[id]/score", query: { id } },
+          buttonProps: { disabled: !score },
         }}
         edit={{
-          route: {
-            pathname: "/musics/[id]/score/edit",
-            query: { id },
-          },
+          route: { pathname: "/musics/[id]/score/edit", query: { id } },
           hidden: !(
             data.type === "ORIGINAL" && user?.id === getCurrentUserId(session)
           ),

@@ -5,6 +5,7 @@ import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import type { ArtistListArgsType } from "../../../../helpers/artist";
 import { getChannelImage } from "../../../../helpers/image";
@@ -19,8 +20,8 @@ export interface ArtistListItemProps extends ListItemProps {
   data: Prisma.ArtistGetPayload<ArtistListArgsType>;
 }
 const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
-  const router = useRouter();
-  const name = setLocale(data.name, router);
+  const router = useRouter(),
+    name = setLocale(data.name, router);
   return (
     <ListItem
       route={{
@@ -32,7 +33,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
         primary: name,
         secondary: (
           <Stack direction="row" spacing={1} component="span">
-            {data.bands[0] && (
+            {isNonEmpty(data.bands) && (
               <BandChip
                 label={setLocale(data.bands[0].name, router)}
                 size="small"
@@ -41,7 +42,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"
-              bookmarked={!!data.bookmarks.length}
+              bookmarked={isNonEmpty(data.bookmarks)}
             />
           </Stack>
         ),

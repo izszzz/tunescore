@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { isNonEmpty } from "ts-array-length";
 
 import type { UserShowArgsType } from "../paths/users/[id]";
 
@@ -23,8 +24,8 @@ export const followMutate = ({
 }) => {
   const id = getCurrentUserId(session);
   return Prisma.validator<Prisma.FollowUpdateManyWithoutFollowerNestedInput>()(
-    data.followers.length
-      ? { delete: { id: data.followers[0]?.id } }
+    isNonEmpty(data.followers)
+      ? { delete: { id: data.followers[0].id } }
       : {
           create: {
             following: { connect: { id } },

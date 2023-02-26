@@ -9,6 +9,7 @@ import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getChannelImage } from "../../../helpers/image";
@@ -103,7 +104,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       tagMaps={data.tagMaps}
       reportButtonProps={{ unionType: "Artist", id }}
       bookmarkToggleButtonProps={{
-        value: !!data.bookmarks.length,
+        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (status === "authenticated")

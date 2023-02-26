@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
 import { bookmarkArgs } from "./bookmark";
@@ -27,12 +28,12 @@ export const getAlbumOwner = (data: Data, router: NextRouter) =>
       owner: { id: band.id, name: setLocale(band.name, router) },
     }))
     .with({ artists: P.select(P.not(P.nullish)) }, (artists) =>
-      artists[0]
+      isNonEmpty(artists)
         ? {
             type: "ARTIST" as const,
             owner: {
-              id: artists[0]?.id,
-              name: setLocale(artists[0]?.name, router),
+              id: artists[0].id,
+              name: setLocale(artists[0].name, router),
             },
           }
         : { type: "ARTIST" as const, owner: null }

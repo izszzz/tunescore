@@ -8,6 +8,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import Lists from "../components/elements/list";
 import MusicListItem from "../components/elements/list/item/music";
@@ -71,7 +72,7 @@ const Cart: NextPage = () => {
       <Button
         onClick={() => router.push("/pay")}
         variant="contained"
-        disabled={!data?.length}
+        disabled={!isNonEmpty(data)}
         disableElevation
         fullWidth
       >

@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
 import setLocale from "../../../helpers/locale";
@@ -21,15 +22,13 @@ const NotificationsMenuManager = () => {
       button={(handleOpen) => <NotificationsIconButton onClick={handleOpen} />}
     >
       {(handleClose) =>
-        data.length
+        isNonEmpty(data)
           ? data.map((notification) => [
               match(notification)
                 .with(
                   {
                     unionType: "Bookmark",
-                    bookmarked: {
-                      music: P.select("music", P.not(P.nullish)),
-                    },
+                    bookmarked: { music: P.select("music", P.not(P.nullish)) },
                     user: P.select("user", P.not(P.nullish)),
                   },
                   ({ music, user }) => (

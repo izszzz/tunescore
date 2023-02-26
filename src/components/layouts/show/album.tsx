@@ -14,7 +14,7 @@ import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
 import type {
   AlbumShowArgsType,
-  albumShowPath,
+  albumShowQuery,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 import ResourceIconButton from "../../elements/button/icon/resource";
@@ -26,7 +26,7 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowPath>;
+  query: ReturnType<typeof albumShowQuery>;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({

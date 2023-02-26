@@ -24,21 +24,12 @@ export const followMutate = ({
   const id = getCurrentUserId(session);
   return Prisma.validator<Prisma.FollowUpdateManyWithoutFollowerNestedInput>()(
     data.followers.length
-      ? {
-          delete: {
-            id: data.followers[0]?.id,
-          },
-        }
+      ? { delete: { id: data.followers[0]?.id } }
       : {
           create: {
             following: { connect: { id } },
             notifications: {
-              create: {
-                unionType: "Follow",
-                user: {
-                  connect: { id },
-                },
-              },
+              create: { unionType: "Follow", user: { connect: { id } } },
             },
           },
         }

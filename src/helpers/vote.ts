@@ -7,10 +7,5 @@ export const voteInclude = (session: SessionArg) =>
   Prisma.validator<Prisma.VoteInclude>()({
     proponents: { where: userWhere(session), select: userSelect },
     opponents: { where: userWhere(session), select: userSelect },
-    _count: {
-      select: {
-        proponents: true,
-        opponents: true,
-      },
-    },
+    _count: { select: { proponents: true, opponents: true } },
   });

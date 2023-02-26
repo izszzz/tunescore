@@ -48,10 +48,7 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
             }
           : { type: "ARTIST" as const, owner: null }
     )
-    .otherwise(() => ({
-      type: "NONE" as const,
-      owner: null,
-    }));
+    .otherwise(() => ({ type: "NONE" as const, owner: null }));
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
 export const musicListArgs = (session: SessionArg) =>

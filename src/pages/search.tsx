@@ -16,7 +16,7 @@ import BandLists from "../components/elements/list/band";
 import MusicLists from "../components/elements/list/music";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { albumPaginationQuery } from "../paths/albums";
-import { artistPaginationPath } from "../paths/artists";
+import { artistPaginationQuery } from "../paths/artists";
 import { bandPaginationQuery } from "../paths/bands";
 import { musicPaginationQuery } from "../paths/musics";
 import { trpc } from "../utils/trpc";
@@ -37,7 +37,9 @@ const Search: NextPage = () => {
       trpc.pagination.band.useQuery(bandPaginationQuery({ router, session }))
     )
     .with("artist", () =>
-      trpc.pagination.artist.useQuery(artistPaginationPath({ router, session }))
+      trpc.pagination.artist.useQuery(
+        artistPaginationQuery({ router, session })
+      )
     )
     .exhaustive();
 

@@ -7,12 +7,12 @@ import BandLists from "../../../components/elements/list/band";
 import MusicLists from "../../../components/elements/list/music";
 import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
-import { albumShowPath } from "../../../paths/albums/[id]";
+import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
   const router = useRouter();
-  const path = albumShowPath({ router, session: useSession().data });
+  const path = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(path);
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];

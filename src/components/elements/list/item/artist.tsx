@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import type { ArtistListArgsType } from "../../../../helpers/artist";
-import { getChannelImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BandChip from "../../chip/band";
 import BookmarkChip from "../../chip/bookmark";
@@ -52,7 +52,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
         <Image
           height="60"
           alt={name}
-          src={getChannelImage(data.link.streaming)?.image?.size?.medium || ""}
+          src={getImage(data.link.streaming, 60) || undefined}
           style={{ borderRadius: 3 }}
         />
       )}

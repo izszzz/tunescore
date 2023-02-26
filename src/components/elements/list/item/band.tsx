@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import type { BandListArgsType } from "../../../../helpers/band";
-import { getChannelImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import AlbumChip from "../../chip/album";
 import ArtistChip from "../../chip/artist";
@@ -52,7 +52,7 @@ const BandListItem = ({ data }: BandListItemProps) => {
         <Image
           height="60"
           alt={name}
-          src={getChannelImage(data.link.streaming)?.image?.size?.medium || ""}
+          src={getImage(data.link.streaming, 60) || undefined}
           style={{ borderRadius: 3 }}
         />
       )}

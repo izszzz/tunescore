@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import type { ArtistListArgsType } from "../../../../helpers/artist";
-import { getChannelImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
@@ -45,11 +45,7 @@ const SquareArtistCard = ({ data }: SquareArtistCardProps) => {
           )}
         </>
       }
-      image={
-        data.link?.streaming
-          ? getChannelImage(data.link.streaming)?.image?.size?.large
-          : null
-      }
+      image={getImage(data.link?.streaming, 200, { square: true })}
       onClick={() =>
         router.push({ pathname: "/artists/[id]", query: { id: data.id } })
       }

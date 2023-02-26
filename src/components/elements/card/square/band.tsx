@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import type { BandListArgsType } from "../../../../helpers/band";
-import { getChannelImage } from "../../../../helpers/image";
+import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BookmarkChip from "../../chip/bookmark";
 
@@ -36,11 +36,7 @@ const SquareBandCard = ({ data }: SquareBandCardProps) => {
           </Box>
         </Box>
       }
-      image={
-        data.link?.streaming
-          ? getChannelImage(data.link.streaming)?.image?.size?.large
-          : null
-      }
+      image={getImage(data.link?.streaming, 200, { square: true })}
       onClick={() =>
         router.push({ pathname: "/bands/[id]", query: { id: data.id } })
       }

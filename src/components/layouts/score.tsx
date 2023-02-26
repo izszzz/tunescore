@@ -10,6 +10,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
+import { isNonEmpty } from "ts-array-length";
 
 import ScoreHeader from "../elements/header/score";
 import VolumeSliderInput from "../music-mateial-ui/input/slider/volume";
@@ -51,7 +52,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
   const handleTrackClick = (track: model.Track) => {
     setActiveTracks((prevTracks) => {
       if (prevTracks.some((prevTrack) => prevTrack.index === track.index)) {
-        if (prevTracks.length > 1)
+        if (isNonEmpty(prevTracks))
           return prevTracks.filter(
             (prevTrack) => prevTrack.index !== track.index
           );
@@ -63,7 +64,6 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
   };
   useEffect(() => {
     const settings = {
-      // file: "/Kick Back.musicxml",
       // file: "https://www.alphatab.net/files/canon.gp",
       player: {
         enablePlayer: true,

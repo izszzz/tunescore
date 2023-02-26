@@ -7,7 +7,7 @@ import ArtistLists from "../../components/elements/list/artist";
 import ArtistListItem from "../../components/elements/list/item/artist";
 import IndexLayout from "../../components/layouts/index/default";
 import setLocale from "../../helpers/locale";
-import { artistPaginationPath } from "../../paths/artists";
+import { artistPaginationQuery } from "../../paths/artists";
 import { trpc } from "../../utils/trpc";
 
 const Artists: NextPage = () => {
@@ -19,7 +19,7 @@ const Artists: NextPage = () => {
     },
   });
   const { data } = trpc.pagination.artist.useQuery(
-    artistPaginationPath({ router, session: useSession().data })
+    artistPaginationQuery({ router, session: useSession().data })
   );
   if (!data) return <></>;
   return (

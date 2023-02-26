@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
 import { bookmarkArgs } from "./bookmark";
@@ -33,12 +34,10 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
     .with(
       {
         type: "COPY",
-        participations: P.select(
-          P.when((participations) => participations.length > 0)
-        ),
+        participations: P.select(P.when((p) => isNonEmpty(p))),
       },
       (participations) =>
-        participations[0]
+        isNonEmpty(participations)
           ? {
               type: "ARTIST" as const,
               owner: {
@@ -48,10 +47,7 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
             }
           : { type: "ARTIST" as const, owner: null }
     )
-    .otherwise(() => ({
-      type: "NONE" as const,
-      owner: null,
-    }));
+    .otherwise(() => ({ type: "NONE" as const, owner: null }));
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
 export const musicListArgs = (session: SessionArg) =>

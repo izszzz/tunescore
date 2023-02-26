@@ -12,6 +12,7 @@ import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
@@ -47,6 +48,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     { show: showReportDialog } = useModal("report-dialog"),
     id = getRouterId(router),
     userId = getCurrentUserId(session),
+    followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -59,26 +61,14 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/users/[id]",
-          query: { id },
-        },
-      },
+      { label: "info", href: { pathname: "/users/[id]", query: { id } } },
       {
         label: "bookmarks",
-        href: {
-          pathname: "/users/[id]/bookmarks",
-          query: { id },
-        },
+        href: { pathname: "/users/[id]/bookmarks", query: { id } },
       },
       {
         label: "repositories",
-        href: {
-          pathname: "/users/[id]/repositories",
-          query: { id },
-        },
+        href: { pathname: "/users/[id]/repositories", query: { id } },
       },
     ],
     [id]
@@ -108,35 +98,27 @@ const UserLayout: React.FC<UserLayoutProps> = ({
           {id !== userId && (
             <LoadingButton
               loading={update.isLoading}
-              variant={data.followers.length ? "outlined" : "contained"}
+              variant={followed ? "outlined" : "contained"}
               onClick={() =>
                 update.mutate({
                   where: { id },
-                  data: {
-                    followers: followMutate({ data, session }),
-                  },
+                  data: { followers: followMutate({ data, session }) },
                 })
               }
             >
-              {data.followers.length ? "unfollow" : "follow"}
+              {followed ? "unfollow" : "follow"}
             </LoadingButton>
           )}
           <Button
             onClick={() =>
-              router.push({
-                pathname: "/users/[id]/following",
-                query: { id },
-              })
+              router.push({ pathname: "/users/[id]/following", query: { id } })
             }
           >
             following:{data._count.following}
           </Button>
           <Button
             onClick={() =>
-              router.push({
-                pathname: "/users/[id]/followers",
-                query: { id },
-              })
+              router.push({ pathname: "/users/[id]/followers", query: { id } })
             }
           >
             followers:{data._count.followers}

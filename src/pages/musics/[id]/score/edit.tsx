@@ -12,11 +12,7 @@ const ScoreEdit: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.music.findUniqueMusic.useQuery(
     { where: { id } },
-    {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
-    }
+    { onError: () => enqueueSnackbar("music.show error") }
   );
   const update = trpc.music.updateOneMusic.useMutation();
   if (!data) return <></>;

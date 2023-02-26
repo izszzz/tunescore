@@ -91,14 +91,8 @@ const PullButton = ({
       return (
         <VoteCard
           data={data}
-          goodIconButtonProps={{
-            disabled: voted,
-            onClick: () => onGood(),
-          }}
-          badIconButtonProps={{
-            disabled: voted,
-            onClick: () => onBad(),
-          }}
+          goodIconButtonProps={{ disabled: voted, onClick: () => onGood() }}
+          badIconButtonProps={{ disabled: voted, onClick: () => onBad() }}
         />
       );
     })

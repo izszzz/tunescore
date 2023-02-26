@@ -17,9 +17,7 @@ const Albums: NextPage = () => {
     albumPaginationQuery({ router, session: useSession().data })
   );
   const search = trpc.search.album.useMutation({
-    onError: () => {
-      enqueueSnackbar("music.search error");
-    },
+    onError: () => enqueueSnackbar("music.search error"),
   });
   if (!data) return <></>;
   return (

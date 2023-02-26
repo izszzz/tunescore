@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import { getAlbumOwner } from "../../../../helpers/album";
 import type { AlbumListArgsType } from "../../../../helpers/album";
@@ -34,7 +35,7 @@ const SquareAlbumCard = ({ data }: SquareAlbumCardProps) => {
               <BookmarkChip
                 label={data._count.bookmarks}
                 size="small"
-                bookmarked={!!data.bookmarks.length}
+                bookmarked={isNonEmpty(data.bookmarks)}
               />
             </Box>
           </Box>

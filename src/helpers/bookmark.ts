@@ -1,4 +1,5 @@
 import type { Bookmark, BookmarkUnionType } from "@prisma/client";
+import { isNonEmpty } from "ts-array-length";
 
 import { getCurrentUserId, userWhere } from "./user";
 import type { SessionArg } from "./user";
@@ -22,8 +23,8 @@ export const bookmarkMutate = ({
   session: SessionArg;
   unionType: BookmarkUnionType;
 }) =>
-  bookmarks.length
-    ? { delete: { id: bookmarks[0]?.id } }
+  isNonEmpty(bookmarks)
+    ? { delete: { id: bookmarks[0].id } }
     : {
         create: {
           unionType,

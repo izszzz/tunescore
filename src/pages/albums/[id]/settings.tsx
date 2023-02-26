@@ -15,13 +15,13 @@ import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
-import { albumShowPath } from "../../../paths/albums/[id]";
+import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const query = albumShowPath({ router, session: useSession().data });
+  const query = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
     onSuccess: (data) => {

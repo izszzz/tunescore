@@ -8,13 +8,14 @@ import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
 import type {
   AlbumShowArgsType,
-  albumShowPath,
+  albumShowQuery,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 import ResourceIconButton from "../../elements/button/icon/resource";
@@ -26,7 +27,7 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowPath>;
+  query: ReturnType<typeof albumShowQuery>;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
@@ -86,7 +87,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       tagMaps={data.tagMaps}
       reportButtonProps={{ unionType: "Album", id }}
       bookmarkToggleButtonProps={{
-        value: !!data.bookmarks.length,
+        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (status === "authenticated")

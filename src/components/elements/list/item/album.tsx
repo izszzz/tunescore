@@ -5,6 +5,7 @@ import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import type { AlbumListArgsType } from "../../../../helpers/album";
 import { getImage } from "../../../../helpers/image";
@@ -36,7 +37,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"
-              bookmarked={!!data.bookmarks.length}
+              bookmarked={isNonEmpty(data.bookmarks)}
             />
             <MusicChip label={data._count.musics} size="small" />
             <ArtistChip label={data._count.artists} size="small" />

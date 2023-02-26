@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
@@ -48,7 +49,7 @@ const SquareMusicCard = ({ data }: SquareMusicCardProps) => {
               <BookmarkChip
                 label={data._count.bookmarks}
                 size="small"
-                bookmarked={!!data.bookmarks.length}
+                bookmarked={isNonEmpty(data.bookmarks)}
               />
             </Box>
           </Box>

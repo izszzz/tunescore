@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 import { match } from "ts-pattern";
 
 import { getImage } from "../../../helpers/image";
@@ -62,33 +63,18 @@ const MusicLayout = ({
   });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/musics/[id]",
-          query: { id },
-        },
-      },
+      { label: "info", href: { pathname: "/musics/[id]", query: { id } } },
       {
         label: "issues",
-        href: {
-          pathname: "/musics/[id]/issues",
-          query: { id },
-        },
+        href: { pathname: "/musics/[id]/issues", query: { id } },
       },
       {
         label: "pullrequests",
-        href: {
-          pathname: "/musics/[id]/pulls",
-          query: { id },
-        },
+        href: { pathname: "/musics/[id]/pulls", query: { id } },
       },
       {
         label: "settings",
-        href: {
-          pathname: "/musics/[id]/settings",
-          query: { id },
-        },
+        href: { pathname: "/musics/[id]/settings", query: { id } },
       },
     ],
     [id]
@@ -106,7 +92,7 @@ const MusicLayout = ({
           />
           <MusicTitle data={data} />
           <Box ml={3}>
-            <Chip label={data?.type} size="small" />
+            <Chip label={data.type} size="small" />
           </Box>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
@@ -123,19 +109,15 @@ const MusicLayout = ({
       tagMaps={data.tagMaps}
       reportButtonProps={{ unionType: "Music", id }}
       bookmarkToggleButtonProps={{
-        value: !!data.bookmarks.length,
+        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (status === "authenticated")
             update.mutate({
               ...query,
               data: {
-                bookmarks: data.bookmarks.length
-                  ? {
-                      delete: {
-                        id: data.bookmarks[0]?.id,
-                      },
-                    }
+                bookmarks: isNonEmpty(data.bookmarks)
+                  ? { delete: { id: data.bookmarks[0].id } }
                   : {
                       create: {
                         unionType: "Music",

@@ -9,9 +9,10 @@ import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getChannelImage } from "../../../helpers/image";
+import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
 import type {
@@ -91,10 +92,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={name}
-                src={
-                  getChannelImage(data.link.streaming)?.image?.size?.medium ||
-                  ""
-                }
+                src={getImage(data.link.streaming, 80) || undefined}
               />
             </Box>
           )}
@@ -103,7 +101,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       tagMaps={data.tagMaps}
       reportButtonProps={{ unionType: "Artist", id }}
       bookmarkToggleButtonProps={{
-        value: !!data.bookmarks.length,
+        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (status === "authenticated")

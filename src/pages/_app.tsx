@@ -12,6 +12,7 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { appWithTranslation } from "next-i18next";
 import { DefaultSeo } from "next-seo";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import { SnackbarProvider } from "notistack";
 import { RecoilRoot } from "recoil";
 import { useDarkMode } from "usehooks-ts";
@@ -49,6 +50,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
                 <Head>
                   <title>tunescore</title>
                 </Head>
+                <GoogleAnalytics trackPageViews />
                 <DefaultSeo
                   defaultTitle="tunescore"
                   description="Music Score Web Site"

@@ -12,8 +12,6 @@ import BookmarkChip from "../../chip/bookmark";
 
 import SquareCard from ".";
 
-
-
 interface SquareBandCardProps {
   data: Prisma.BandGetPayload<BandListArgsType>;
 }

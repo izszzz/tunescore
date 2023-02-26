@@ -56,14 +56,17 @@ RUN tar -xf ./audiveris/build/distributions/Audiveris-5.2.5.tar
 # RUN adduser --system --uid 1001 nextjs
 
 COPY prisma ./
-COPY ./next.config.mjs ./
-COPY ./public ./
-COPY ./package.json ./
-COPY ./package-lock.json ./
-COPY ./.next/standalone ./
-COPY ./.next/static ./
+COPY package.json package-lock.json ./
 
 RUN npm ci
+
+COPY ./next.config.mjs ./
+COPY ./public ./
+COPY ./.next/standalone ./
+COPY ./.next/static ./.next/static
+COPY ./.env ./
+COPY ./.env.production ./
+COPY ./.env.production.local ./
 
 # USER nextjs
 EXPOSE 3000

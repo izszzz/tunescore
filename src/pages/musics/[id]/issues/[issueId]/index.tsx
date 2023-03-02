@@ -26,24 +26,17 @@ const Issue: NextPage = () => {
     query = musicShowQuery({ router, session }),
     create = trpc.comment.createOneComment.useMutation(),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     issue = trpc.issue.findUniqueIssue.useQuery(
       {
         where: { id: issueId },
         include: {
-          comments: {
-            where: { unionType: "Issue" },
-            include: { user: true },
-          },
+          comments: { where: { unionType: "Issue" }, include: { user: true } },
         },
       },
       {
-        onError: () => {
-          enqueueSnackbar("music.show error");
-        },
+        onError: () => enqueueSnackbar("music.show error"),
       }
     );
   if (!music.data || !issue.data) return <></>;

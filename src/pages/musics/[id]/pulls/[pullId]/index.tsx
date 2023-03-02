@@ -57,9 +57,7 @@ const Pull: NextPage = () => {
                   notifications: {
                     create: {
                       unionType: "Comment",
-                      user: {
-                        connect: { id: userId },
-                      },
+                      user: { connect: { id: userId } },
                     },
                   },
                 },

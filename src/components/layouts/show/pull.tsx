@@ -70,6 +70,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         );
         enqueueSnackbar("pull.create success");
       },
+      onError: () => enqueueSnackbar("pull.create error"),
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -201,20 +202,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({
             watch={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score",
-                query: {
-                  id,
-                  pullId,
-                },
+                query: { id, pullId },
               },
               hidden: false,
             }}
             edit={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score/edit",
-                query: {
-                  id,
-                  pullId,
-                },
+                query: { id, pullId },
               },
               hidden: false,
             }}

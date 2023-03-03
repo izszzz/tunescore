@@ -16,7 +16,7 @@ import { isNonEmpty } from "ts-array-length";
 
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { isSelf } from "../../../helpers/user";
 import type {
   UserShowArgsType,
   UserShowQueryType,
@@ -45,9 +45,8 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
-    { show: showReportDialog } = useModal("report-dialog"),
+    { show } = useModal("report-dialog"),
     id = getRouterId(router),
-    userId = getCurrentUserId(session),
     followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
@@ -92,22 +91,24 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             />
             <Typography variant="h5">{data.name}</Typography>
           </Box>
-          <FlagIconButton
-            onClick={() => showReportDialog({ unionType: "User", unionId: id })}
-          />
-          {id !== userId && (
-            <LoadingButton
-              loading={update.isLoading}
-              variant={followed ? "outlined" : "contained"}
-              onClick={() =>
-                update.mutate({
-                  where: { id },
-                  data: { followers: followMutate({ data, session }) },
-                })
-              }
-            >
-              {followed ? "unfollow" : "follow"}
-            </LoadingButton>
+          {!isSelf(session, { user: { id } }) && (
+            <>
+              <FlagIconButton
+                onClick={() => show({ unionType: "User", unionId: id })}
+              />
+              <LoadingButton
+                loading={update.isLoading}
+                variant={followed ? "outlined" : "contained"}
+                onClick={() =>
+                  update.mutate({
+                    where: { id },
+                    data: { followers: followMutate({ data, session }) },
+                  })
+                }
+              >
+                {followed ? "unfollow" : "follow"}
+              </LoadingButton>
+            </>
           )}
           <Button
             onClick={() =>

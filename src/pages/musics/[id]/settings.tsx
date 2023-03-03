@@ -24,7 +24,11 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
 import { getRouterId } from "../../../helpers/router";
-import { redirectToSignIn } from "../../../helpers/user";
+import {
+  getCurrentUserId,
+  isSelf,
+  redirectToSignIn,
+} from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -34,10 +38,11 @@ const SettingsMusic: NextPage = () => {
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     id = getRouterId(router),
+    currentUserId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query),
     { data: userData } = trpc.user.findUniqueUser.useQuery({
-      where: { id: session?.user?.id },
+      where: { id: currentUserId },
       include: { accounts: true },
     }),
     destroy = trpc.music.deleteOneMusic.useMutation({
@@ -55,38 +60,30 @@ const SettingsMusic: NextPage = () => {
         );
         enqueueSnackbar("music.update success");
       },
-      onError: () => {
-        enqueueSnackbar("music.update error");
-      },
+      onError: () => enqueueSnackbar("music.update error"),
     });
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} query={query} activeTab="settings">
-      <Typography variant="h4"> Info</Typography>
+      <Typography variant="h4">Info</Typography>
       <Divider />
       <SingleRowForm
         data={musicData}
         loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ title }) => {
-            update.mutate({ ...query, data: { title } });
-          },
+          onSuccess: ({ title }) =>
+            update.mutate({ ...query, data: { title } }),
         }}
-        textFieldElementProps={{
-          name: "title",
-        }}
+        textFieldElementProps={{ name: "title" }}
       />
       <BandUpdateAutocomplete
         value={musicData.band}
         loading={update.isLoading}
         onChange={{
           onClear: () =>
-            update.mutate({
-              ...query,
-              data: { band: { disconnect: true } },
-            }),
+            update.mutate({ ...query, data: { band: { disconnect: true } } }),
           onSelect: (_e, _v, _r, details) =>
             update.mutate({
               ...query,
@@ -205,8 +202,8 @@ const SettingsMusic: NextPage = () => {
 
       {session?.user?.providers.includes("spotify") ? (
         <SpotifyMusicSelectForm
-          term={setLocale(data.title, router)}
-          streamingLink={data.link?.streaming}
+          term={setLocale(musicData.title, router)}
+          streamingLink={musicData.link?.streaming}
           onSelect={(value) =>
             value &&
             update.mutate({
@@ -214,7 +211,7 @@ const SettingsMusic: NextPage = () => {
               data: {
                 link: {
                   streaming: {
-                    ...data.link?.streaming,
+                    ...musicData.link?.streaming,
                     spotify: {
                       id: value.id,
                       image: {
@@ -235,7 +232,10 @@ const SettingsMusic: NextPage = () => {
               ...query,
               data: {
                 link: {
-                  streaming: { ...data.link?.streaming, spotify: undefined },
+                  streaming: {
+                    ...musicData.link?.streaming,
+                    spotify: undefined,
+                  },
                 },
               },
             })
@@ -249,8 +249,8 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicItunesSelectForm
-        term={setLocale(data.title, router)}
-        streamingLink={data.link?.streaming}
+        term={setLocale(musicData.title, router)}
+        streamingLink={musicData.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
@@ -258,7 +258,7 @@ const SettingsMusic: NextPage = () => {
             data: {
               link: {
                 streaming: {
-                  ...data.link?.streaming,
+                  ...musicData.link?.streaming,
                   itunes: {
                     id: convertAffiliateLink(value.trackViewUrl).toString(),
                     image: {
@@ -279,7 +279,7 @@ const SettingsMusic: NextPage = () => {
             ...query,
             data: {
               link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
+                streaming: { ...musicData.link?.streaming, itunes: undefined },
               },
             },
           })
@@ -290,17 +290,17 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        term={setLocale(data.title, router)}
-        streamingLink={data.link?.streaming}
+        term={setLocale(musicData.title, router)}
+        streamingLink={musicData.link?.streaming}
         onSelect={(value) =>
           value?.id &&
-          data.link &&
+          musicData.link &&
           update.mutate({
             ...query,
             data: {
               link: {
                 streaming: {
-                  ...data.link.streaming,
+                  ...musicData.link.streaming,
                   youtube: {
                     id: value.id.videoId,
                     image: {
@@ -330,12 +330,14 @@ const SettingsMusic: NextPage = () => {
       <Typography variant="h4">Danger Zone</Typography>
       <Divider />
 
-      <DangerAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
-      />
+      {data.type === "ORIGINAL" && isSelf(session, musicData) && (
+        <DangerAlert
+          loadingButtonProps={{
+            loading: destroy.isLoading,
+            onClick: () => destroy.mutate({ ...query }),
+          }}
+        />
+      )}
     </MusicLayout>
   );
 };

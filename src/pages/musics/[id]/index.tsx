@@ -21,7 +21,7 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -54,9 +54,7 @@ const Music: NextPage = () => {
         onAddCart={() =>
           create.mutate({
             data: {
-              user: {
-                connect: { id: getCurrentUserId(session) },
-              },
+              user: { connect: { id: getCurrentUserId(session) } },
               music: { connect: { id: getRouterId(router) } },
             },
           })
@@ -123,9 +121,7 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
         }}
         edit={{
           route: { pathname: "/musics/[id]/score/edit", query: { id } },
-          hidden: !(
-            data.type === "ORIGINAL" && user?.id === getCurrentUserId(session)
-          ),
+          hidden: !(data.type === "ORIGINAL" && isSelf(session, { user })),
         }}
       />
     ));

@@ -63,10 +63,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         agenda.mutate(pullId);
         queryClient.setQueryData(
           getQueryKey(trpc.pull.findUniquePull, query, "query"),
-          (prev) => ({
-            ...(prev as PullLayoutProps["data"]),
-            vote: data,
-          })
+          (prev) => ({ ...(prev as PullLayoutProps["data"]), vote: data })
         );
         enqueueSnackbar("pull.create success");
       },
@@ -78,20 +75,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         label: "conversation",
         href: {
           pathname: "/musics/[id]/pulls/[pullId]",
-          query: {
-            id,
-            pullId,
-          },
+          query: { id, pullId },
         },
       },
       {
         label: "code",
         href: {
           pathname: "/musics/[id]/pulls/[pullId]/code",
-          query: {
-            id,
-            pullId,
-          },
+          query: { id, pullId },
         },
       },
     ],

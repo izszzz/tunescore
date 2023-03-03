@@ -45,7 +45,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
-    { show: showReportDialog } = useModal("report-dialog"),
+    { show } = useModal("report-dialog"),
     id = getRouterId(router),
     followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
@@ -94,9 +94,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
           {!isSelf(session, { user: { id } }) && (
             <>
               <FlagIconButton
-                onClick={() =>
-                  showReportDialog({ unionType: "User", unionId: id })
-                }
+                onClick={() => show({ unionType: "User", unionId: id })}
               />
               <LoadingButton
                 loading={update.isLoading}

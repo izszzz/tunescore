@@ -25,7 +25,7 @@ const OrderForm = () => {
         }))}
       />
       <MusicLists data={data} />
-      合計: {data.reduce((sum, data) => sum + (data.price || 0), 0)}
+      {data.reduce((sum, data) => sum + (data.price || 0), 0)}
       <OrderLoadingButton
         type="submit"
         variant="contained"

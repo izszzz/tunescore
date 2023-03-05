@@ -30,6 +30,8 @@ Default.args = {
       userId: "",
       bandId: "",
       albumIDs: [],
+      pulls: [],
+      _count: { pulls: 0 },
     },
     user: {
       id: "1",

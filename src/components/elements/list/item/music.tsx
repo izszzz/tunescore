@@ -6,6 +6,7 @@ import type { ListItemProps } from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
+import { isNonEmpty } from "ts-array-length";
 
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
@@ -39,7 +40,7 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
             <BookmarkChip
               label={data._count.bookmarks}
               size="small"
-              bookmarked={!!data.bookmarks.length}
+              bookmarked={isNonEmpty(data.bookmarks)}
             />
             <Chip label={data.type} size="small" component="span" />
           </Stack>

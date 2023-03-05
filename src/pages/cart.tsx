@@ -7,20 +7,25 @@ import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import router from "next/router";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import Lists from "../components/elements/list";
 import MusicListItem from "../components/elements/list/item/music";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { redirectToSignIn } from "../helpers/user";
+import { getCurrentUserId, redirectToSignIn } from "../helpers/user";
 import { trpc } from "../utils/trpc";
 
 const Cart: NextPage = () => {
   const { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
-    { data } = trpc.currentUser.findManyCart.useQuery(),
+    { t } = useTranslation(),
     queryClient = useQueryClient(),
-    destroy = trpc.cart.deleteOneCart.useMutation();
+    { data } = trpc.currentUser.findManyCart.useQuery(),
+    destroy = trpc.cart.deleteOneCart.useMutation(),
+    currentUserId = getCurrentUserId(session);
   if (!data) return <></>;
   return (
     <DefaultSingleColumnLayout contained>
@@ -34,12 +39,12 @@ const Cart: NextPage = () => {
               <IconButton
                 edge="end"
                 onClick={(e) => {
-                  if (session?.user?.id)
+                  if (currentUserId)
                     destroy.mutate(
                       {
                         where: {
                           userId_musicId: {
-                            userId: session.user.id,
+                            userId: currentUserId,
                             musicId: props.id,
                           },
                         },
@@ -67,15 +72,15 @@ const Cart: NextPage = () => {
           />
         )}
       />
-      合計: {data.reduce((sum, data) => sum + (data.price || 0), 0)}
+      {data.reduce((sum, data) => sum + (data.price || 0), 0)}
       <Button
         onClick={() => router.push("/pay")}
         variant="contained"
-        disabled={!data?.length}
+        disabled={!isNonEmpty(data)}
         disableElevation
         fullWidth
       >
-        注文する
+        {t("order")}
       </Button>
     </DefaultSingleColumnLayout>
   );
@@ -83,6 +88,12 @@ const Cart: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const redirect = await redirectToSignIn(ctx);
-  return { props: {}, redirect };
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale || "", ["common"])),
+    },
+    redirect,
+  };
 };
+
 export default Cart;

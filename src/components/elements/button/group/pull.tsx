@@ -4,11 +4,11 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import type { Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
 
-import type { PullShowArgsType } from "../../../../paths/musics/[id]/pulls/[pullId]";
+import { isSelf } from "../../../../helpers/user";
+import type { PullLayoutProps } from "../../../layouts/show/pull";
 import VoteCard from "../../card/vote";
 import PullStatusIcon from "../../icon/pull/status";
 
@@ -16,7 +16,7 @@ interface PullButtonProps {
   conflict: boolean;
   diff: boolean;
   loading: boolean;
-  data: Prisma.PullGetPayload<PullShowArgsType>;
+  data: PullLayoutProps["data"];
   onOpen: () => void;
   onMerge: () => void;
   onClose: () => void;
@@ -40,50 +40,54 @@ const PullButton = ({
   onBad,
 }: PullButtonProps) => {
   const { data: session } = useSession();
+  if (!isSelf(session, data)) return <></>;
   return match(data)
-    .with({ status: "DRAFT" }, () =>
-      session?.user?.id === data.userId ? (
-        <PullOpenButton loading={loading} onClick={onOpen} fullWidth />
-      ) : (
-        <></>
-      )
-    )
+    .with({ status: "DRAFT" }, () => (
+      <PullOpenButton loading={loading} onClick={onOpen} fullWidth />
+    ))
     .with({ status: "MERGE" }, () => (
       <Button variant="outlined" color="secondary" disabled fullWidth>
         MERGED
       </Button>
     ))
-    .with({ music: { type: "ORIGINAL" }, status: "OPEN" }, () =>
-      session?.user?.id === data.userId ? (
-        <ButtonGroup fullWidth>
-          <PullMergeButton
-            loading={loading}
-            disabled={conflict || !diff}
-            onClick={onMerge}
-          />
-          <PullCloseButton loading={loading} onClick={onClose} />
-          <PullDraftButton loading={loading} onClick={onDraft} />
-        </ButtonGroup>
-      ) : (
-        <></>
-      )
-    )
-    .with({ music: { type: "COPY" }, status: "OPEN" }, () =>
-      session?.user?.id === data.userId ? (
-        <ButtonGroup fullWidth>
-          <VoteCreateButton
-            loading={loading}
-            conflict={conflict}
-            diff={diff}
-            onClick={onVote}
-          />
-          <PullCloseButton loading={loading} onClick={onClose} />
-          <PullDraftButton loading={loading} onClick={onDraft} />
-        </ButtonGroup>
-      ) : (
-        <></>
-      )
-    )
+    .with({ music: { type: "ORIGINAL" }, status: "OPEN" }, () => (
+      <ButtonGroup fullWidth>
+        <PullMergeButton
+          loading={loading}
+          disabled={conflict || !diff}
+          onClick={onMerge}
+        />
+        <PullCloseButton loading={loading} onClick={onClose} />
+        <PullDraftButton loading={loading} onClick={onDraft} />
+      </ButtonGroup>
+    ))
+    .with({ music: { type: "COPY" }, status: "OPEN" }, () => {
+      if (data.music.pulls.length >= 5)
+        return (
+          <ButtonGroup fullWidth>
+            <VoteCreateButton
+              loading={loading}
+              conflict={conflict}
+              diff={diff}
+              onClick={onVote}
+            />
+            <PullCloseButton loading={loading} onClick={onClose} />
+            <PullDraftButton loading={loading} onClick={onDraft} />
+          </ButtonGroup>
+        );
+      else
+        return (
+          <ButtonGroup fullWidth>
+            <PullMergeButton
+              loading={loading}
+              disabled={conflict || !diff}
+              onClick={onMerge}
+            />
+            <PullCloseButton loading={loading} onClick={onClose} />
+            <PullDraftButton loading={loading} onClick={onDraft} />
+          </ButtonGroup>
+        );
+    })
     .with({ music: { type: "ORIGINAL" }, status: "VOTE" }, () => <>vote</>)
     .with({ music: { type: "COPY" }, status: "VOTE" }, () => {
       const voted =
@@ -91,24 +95,14 @@ const PullButton = ({
       return (
         <VoteCard
           data={data}
-          goodIconButtonProps={{
-            disabled: voted,
-            onClick: () => onGood(),
-          }}
-          badIconButtonProps={{
-            disabled: voted,
-            onClick: () => onBad(),
-          }}
+          goodIconButtonProps={{ disabled: voted, onClick: () => onGood() }}
+          badIconButtonProps={{ disabled: voted, onClick: () => onBad() }}
         />
       );
     })
-    .with({ status: "CLOSE" }, () =>
-      session?.user?.id === data.userId ? (
-        <PullDraftButton loading={loading} onClick={onDraft} fullWidth />
-      ) : (
-        <></>
-      )
-    )
+    .with({ status: "CLOSE" }, () => (
+      <PullDraftButton loading={loading} onClick={onDraft} fullWidth />
+    ))
     .exhaustive();
 };
 

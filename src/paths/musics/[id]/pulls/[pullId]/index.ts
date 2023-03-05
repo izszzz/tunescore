@@ -23,7 +23,12 @@ export const pullShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.PullArgs>()({
     include: {
       user: userArgs,
-      music: true,
+      music: {
+        include: {
+          pulls: { distinct: ["userId"], take: 5 },
+          _count: { select: { pulls: true } },
+        },
+      },
       vote: { include: voteInclude(session) },
       comments: { include: { user: userArgs } },
     },

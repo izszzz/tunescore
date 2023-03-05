@@ -8,7 +8,7 @@ import { getRouterId } from "../../../helpers/router";
 import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 
-export const albumShowPath = ({
+export const albumShowQuery = ({
   router,
   session,
 }: {

@@ -63,13 +63,11 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         agenda.mutate(pullId);
         queryClient.setQueryData(
           getQueryKey(trpc.pull.findUniquePull, query, "query"),
-          (prev) => ({
-            ...(prev as PullLayoutProps["data"]),
-            vote: data,
-          })
+          (prev) => ({ ...(prev as PullLayoutProps["data"]), vote: data })
         );
         enqueueSnackbar("pull.create success");
       },
+      onError: () => enqueueSnackbar("pull.create error"),
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
@@ -77,20 +75,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         label: "conversation",
         href: {
           pathname: "/musics/[id]/pulls/[pullId]",
-          query: {
-            id,
-            pullId,
-          },
+          query: { id, pullId },
         },
       },
       {
         label: "code",
         href: {
           pathname: "/musics/[id]/pulls/[pullId]/code",
-          query: {
-            id,
-            pullId,
-          },
+          query: { id, pullId },
         },
       },
     ],
@@ -201,20 +193,14 @@ const PullLayout: React.FC<PullLayoutProps> = ({
             watch={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score",
-                query: {
-                  id,
-                  pullId,
-                },
+                query: { id, pullId },
               },
               hidden: false,
             }}
             edit={{
               route: {
                 pathname: "/musics/[id]/pulls/[pullId]/score/edit",
-                query: {
-                  id,
-                  pullId,
-                },
+                query: { id, pullId },
               },
               hidden: false,
             }}

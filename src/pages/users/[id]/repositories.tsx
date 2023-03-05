@@ -35,9 +35,7 @@ const User: NextPage = () => {
             search.mutate({
               where: {
                 title: {
-                  is: {
-                    [router.locale as string]: { contains: inputValue },
-                  },
+                  is: { [router.locale as string]: { contains: inputValue } },
                 },
                 user: { id: getCurrentUserId(session) },
               },

@@ -2,7 +2,6 @@ import React from "react";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -13,10 +12,10 @@ import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
 import PullLayout from "../../../../../components/layouts/show/pull";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
-import type { PullShowArgsType } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
@@ -36,7 +35,7 @@ const Pull: NextPage = () => {
     });
   if (!music.data || !pull.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as Prisma.PullGetPayload<PullShowArgsType>;
+  const pullData = pull.data as PullLayoutProps["data"];
   const { id, title, body, comments } = pullData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
@@ -57,9 +56,7 @@ const Pull: NextPage = () => {
                   notifications: {
                     create: {
                       unionType: "Comment",
-                      user: {
-                        connect: { id: userId },
-                      },
+                      user: { connect: { id: userId } },
                     },
                   },
                 },

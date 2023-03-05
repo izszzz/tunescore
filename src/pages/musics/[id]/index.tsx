@@ -1,5 +1,3 @@
-import YouTube from "react-youtube";
-
 import Box from "@mui/material/Box";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
@@ -7,6 +5,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
@@ -17,10 +16,11 @@ import AlbumLists from "../../../components/elements/list/album";
 import BandLists from "../../../components/elements/list/band";
 import ArtistListItem from "../../../components/elements/list/item/artist";
 import ParticipationLists from "../../../components/elements/list/participation";
+import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
@@ -45,29 +45,23 @@ const Music: NextPage = () => {
   const musicData = data as MusicLayoutProps["data"];
   return (
     <MusicLayout data={musicData} query={query} activeTab="info">
-      {data.link && <LinkButtons data={data.link} />}
-
       <ActionButton
         data={musicData}
         loading={create.isLoading}
         onAddCart={() =>
           create.mutate({
             data: {
-              user: {
-                connect: { id: getCurrentUserId(session) },
-              },
+              user: { connect: { id: getCurrentUserId(session) } },
               music: { connect: { id: getRouterId(router) } },
             },
           })
         }
       />
 
+      {data.link && <LinkButtons data={data.link} />}
+
       {data.link?.streaming?.youtube?.id && (
-        <YouTube
-          className="youtubeContainer"
-          videoId={data.link.streaming.youtube.id}
-          opts={{ width: "100%", height: "100%" }}
-        />
+        <YoutubeAmbient videoId={data.link.streaming.youtube.id} />
       )}
 
       {musicData.pulls.map((pull) => (
@@ -103,11 +97,11 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       {
         type: "ORIGINAL",
         price: P.when((price) => price || 0 > 0),
-        transactions: P.when((transactions) => !transactions.length),
+        transactions: P.when((transactions) => !isNonEmpty(transactions)),
       },
       () => (
         <CartLoadingButton
-          disabled={!!data.carts.length}
+          disabled={isNonEmpty(data.carts)}
           loading={loading}
           onClick={onAddCart}
           fullWidth
@@ -117,22 +111,12 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup
         watch={{
-          route: {
-            pathname: "/musics/[id]/score",
-            query: { id },
-          },
-          buttonProps: {
-            disabled: !score,
-          },
+          route: { pathname: "/musics/[id]/score", query: { id } },
+          buttonProps: { disabled: !score },
         }}
         edit={{
-          route: {
-            pathname: "/musics/[id]/score/edit",
-            query: { id },
-          },
-          hidden: !(
-            data.type === "ORIGINAL" && user?.id === getCurrentUserId(session)
-          ),
+          route: { pathname: "/musics/[id]/score/edit", query: { id } },
+          hidden: !(data.type === "ORIGINAL" && isSelf(session, { user })),
         }}
       />
     ));

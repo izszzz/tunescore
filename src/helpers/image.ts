@@ -1,9 +1,6 @@
 import type { ImageSize, StreamingLink } from "@prisma/client";
 import * as R from "remeda";
 
-export const getChannelImage = (link: StreamingLink) =>
-  link.spotify || link.youtube || null;
-
 export const getImage = (
   streamingLink: StreamingLink | null | undefined,
   size: number,

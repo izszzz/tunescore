@@ -12,10 +12,11 @@ import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
+import { isNonEmpty } from "ts-array-length";
 
 import { followMutate } from "../../../helpers/follow";
 import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { isSelf } from "../../../helpers/user";
 import type {
   UserShowArgsType,
   UserShowQueryType,
@@ -44,9 +45,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
-    { show: showReportDialog } = useModal("report-dialog"),
+    { show } = useModal("report-dialog"),
     id = getRouterId(router),
-    userId = getCurrentUserId(session),
+    followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -59,26 +60,14 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     });
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/users/[id]",
-          query: { id },
-        },
-      },
+      { label: "info", href: { pathname: "/users/[id]", query: { id } } },
       {
         label: "bookmarks",
-        href: {
-          pathname: "/users/[id]/bookmarks",
-          query: { id },
-        },
+        href: { pathname: "/users/[id]/bookmarks", query: { id } },
       },
       {
         label: "repositories",
-        href: {
-          pathname: "/users/[id]/repositories",
-          query: { id },
-        },
+        href: { pathname: "/users/[id]/repositories", query: { id } },
       },
     ],
     [id]
@@ -102,41 +91,35 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             />
             <Typography variant="h5">{data.name}</Typography>
           </Box>
-          <FlagIconButton
-            onClick={() => showReportDialog({ unionType: "User", unionId: id })}
-          />
-          {id !== userId && (
-            <LoadingButton
-              loading={update.isLoading}
-              variant={data.followers.length ? "outlined" : "contained"}
-              onClick={() =>
-                update.mutate({
-                  where: { id },
-                  data: {
-                    followers: followMutate({ data, session }),
-                  },
-                })
-              }
-            >
-              {data.followers.length ? "unfollow" : "follow"}
-            </LoadingButton>
+          {!isSelf(session, { user: { id } }) && (
+            <>
+              <FlagIconButton
+                onClick={() => show({ unionType: "User", unionId: id })}
+              />
+              <LoadingButton
+                loading={update.isLoading}
+                variant={followed ? "outlined" : "contained"}
+                onClick={() =>
+                  update.mutate({
+                    where: { id },
+                    data: { followers: followMutate({ data, session }) },
+                  })
+                }
+              >
+                {followed ? "unfollow" : "follow"}
+              </LoadingButton>
+            </>
           )}
           <Button
             onClick={() =>
-              router.push({
-                pathname: "/users/[id]/following",
-                query: { id },
-              })
+              router.push({ pathname: "/users/[id]/following", query: { id } })
             }
           >
             following:{data._count.following}
           </Button>
           <Button
             onClick={() =>
-              router.push({
-                pathname: "/users/[id]/followers",
-                query: { id },
-              })
+              router.push({ pathname: "/users/[id]/followers", query: { id } })
             }
           >
             followers:{data._count.followers}

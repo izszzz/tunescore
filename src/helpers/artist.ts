@@ -9,10 +9,6 @@ export const artistListArgs = (session: SessionArg) =>
     include: {
       bands: true,
       bookmarks: bookmarkArgs({ type: "Artist", session }),
-      _count: {
-        select: {
-          bookmarks: true,
-        },
-      },
+      _count: { select: { bookmarks: true } },
     },
   });

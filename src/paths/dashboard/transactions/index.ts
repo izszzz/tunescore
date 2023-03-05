@@ -14,11 +14,7 @@ export const transactionsPaginationQuery = ({
     include: transactionArgs(session),
     where: {
       OR: [
-        {
-          music: {
-            user: { id: getCurrentUserId(session) },
-          },
-        },
+        { music: { user: { id: getCurrentUserId(session) } } },
         { user: { id: getCurrentUserId(session) } },
       ],
     },

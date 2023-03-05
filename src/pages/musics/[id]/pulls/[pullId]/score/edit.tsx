@@ -30,7 +30,7 @@ const PullScoreEdit: NextPage = () => {
           getQueryKey(trpc.pull.findUniquePull, query, "query"),
           (prev) => prev && { ...prev, carts: [data] }
         );
-        enqueueSnackbar("cart.create success");
+        enqueueSnackbar("pull.update success");
       },
     });
   useEffect(() => {

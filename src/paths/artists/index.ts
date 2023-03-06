@@ -1,12 +1,13 @@
+import type { NextRouter } from "next/router";
+
 import { artistListArgs } from "../../helpers/artist";
-import type { GetRouterArg } from "../../helpers/router";
 import type { SessionArg } from "../../helpers/user";
 
 export const artistPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => ({
   args: {

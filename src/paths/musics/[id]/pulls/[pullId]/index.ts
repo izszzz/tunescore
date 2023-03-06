@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
-import type { GetRouterArg } from "../../../../../helpers/router";
 import type { SessionArg } from "../../../../../helpers/user";
 import { userArgs } from "../../../../../helpers/user";
 import { voteInclude } from "../../../../../helpers/vote";
@@ -11,7 +11,7 @@ export const pullShowQuery = ({
   router,
 }: {
   session: SessionArg;
-  router: GetRouterArg;
+  router: NextRouter;
 }) =>
   Prisma.validator<Prisma.PullFindUniqueArgs>()({
     where: { id: router.query.pullId as string },

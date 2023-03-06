@@ -1,8 +1,8 @@
 import type { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 import { musicListArgs } from "../../../helpers/music";
 import type { MusicListArgsType } from "../../../helpers/music";
-import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere } from "../../../helpers/user";
 
@@ -13,7 +13,7 @@ export const userRepositoriesQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => ({
   args: {

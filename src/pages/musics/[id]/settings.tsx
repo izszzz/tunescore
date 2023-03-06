@@ -23,7 +23,6 @@ import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import {
   getCurrentUserId,
   isSelf,
@@ -34,10 +33,10 @@ import { trpc } from "../../../utils/trpc";
 
 const SettingsMusic: NextPage = () => {
   const queryClient = useQueryClient(),
-    router = useRouter(),
+    router = useRouter<"/musics/[id]">(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
-    id = getRouterId(router),
+    { id } = router.query,
     currentUserId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query),

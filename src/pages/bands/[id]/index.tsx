@@ -11,7 +11,7 @@ import { bandShowQuery } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Band: NextPage = () => {
-  const router = useRouter();
+  const router = useRouter<"/bands/[id]">();
   const path = bandShowQuery({ router, session: useSession().data });
   const { data } = trpc.band.findUniqueBand.useQuery(path);
   if (!data) return <></>;

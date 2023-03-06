@@ -11,7 +11,7 @@ import { artistShowQuery } from "../../../paths/artists/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Artist: NextPage = () => {
-  const router = useRouter();
+  const router = useRouter<"/artists/[id]">();
   const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   if (!data) return <></>;

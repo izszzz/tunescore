@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
+import type { NextRouter } from "next/router";
 import * as Diff3 from "node-diff3";
 import { z } from "zod";
 
-import type { GetRouterArg } from "../../helpers/router";
 import { pullShowQuery } from "../../paths/musics/[id]/pulls/[pullId]";
 import { agenda } from "../common/agenda";
 import { router } from "../trpc";
@@ -79,7 +79,7 @@ export const agendaRouter = router({
 
       const router = { query: { pullId: id } };
       return await prisma.pull.findUnique(
-        pullShowQuery({ session, router: router as GetRouterArg })
+        pullShowQuery({ session, router: router as NextRouter })
       );
     }),
 });

@@ -12,7 +12,6 @@ import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import type {
   AlbumShowArgsType,
   albumShowQuery,
@@ -36,11 +35,10 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
-    { show } = useModal("auth-modal"),
-    id = getRouterId(router),
-    { data: session, status } = useSession(),
+  const router = useRouter<"/albums/[id]">(),
     queryClient = useQueryClient(),
+    { show } = useModal("auth-modal"),
+    { data: session, status } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     update = trpc.album.updateOneAlbum.useMutation({
       onSuccess: (data) => {
@@ -51,7 +49,8 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         enqueueSnackbar("album.update success");
       },
       onError: () => enqueueSnackbar("album.update error"),
-    });
+    }),
+    { id } = router.query;
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {

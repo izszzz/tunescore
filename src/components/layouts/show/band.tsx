@@ -14,7 +14,6 @@ import { isNonEmpty } from "ts-array-length";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import type {
   BandShowArgsType,
   bandShowQuery,
@@ -40,23 +39,23 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
-    { show } = useModal("auth-modal");
-  const id = getRouterId(router);
-  const { data: session, status } = useSession();
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const name = setLocale(data.name, router);
-  const update = trpc.band.updateOneBand.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(trpc.band.findUniqueBand, query, "query"),
-        data
-      );
-      enqueueSnackbar("band.update success");
-    },
-    onError: () => enqueueSnackbar("band.update error"),
-  });
+  const router = useRouter<"/bands/[id]">(),
+    { show } = useModal("auth-modal"),
+    { data: session, status } = useSession(),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    update = trpc.band.updateOneBand.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.band.findUniqueBand, query, "query"),
+          data
+        );
+        enqueueSnackbar("band.update success");
+      },
+      onError: () => enqueueSnackbar("band.update error"),
+    }),
+    name = setLocale(data.name, router),
+    { id } = router.query;
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {

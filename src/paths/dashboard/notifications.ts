@@ -1,4 +1,5 @@
-import type { GetRouterArg } from "../../helpers/router";
+import type { NextRouter } from "next/router";
+
 import type { SessionArg } from "../../helpers/user";
 import { userArgs, getCurrentUserId } from "../../helpers/user";
 
@@ -13,7 +14,7 @@ export const notificationPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => {
   const id = getCurrentUserId(session);

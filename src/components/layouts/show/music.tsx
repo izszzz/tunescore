@@ -17,7 +17,6 @@ import { match } from "ts-pattern";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
-import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
@@ -45,22 +44,22 @@ const MusicLayout = ({
   activeTab,
   children,
 }: MusicLayoutProps) => {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  const { show } = useModal("auth-dialog");
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const id = getRouterId(router);
-  const update = trpc.music.updateOneMusic.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(trpc.music.findUniqueMusic, query, "query"),
-        data
-      );
-      enqueueSnackbar("music.update success");
-    },
-    onError: () => enqueueSnackbar("music.update error"),
-  });
+  const router = useRouter<"/musics/[id]">(),
+    { data: session, status } = useSession(),
+    { show } = useModal("auth-dialog"),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    update = trpc.music.updateOneMusic.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          data
+        );
+        enqueueSnackbar("music.update success");
+      },
+      onError: () => enqueueSnackbar("music.update error"),
+    }),
+    { id } = router.query;
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       { label: "info", href: { pathname: "/musics/[id]", query: { id } } },

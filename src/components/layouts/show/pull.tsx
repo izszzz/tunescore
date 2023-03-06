@@ -13,7 +13,6 @@ import { useSession } from "next-auth/react";
 import * as Diff3 from "node-diff3";
 import { useSnackbar } from "notistack";
 
-import { getRouterId, getRouterPullId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import type {
   PullShowArgsType,
@@ -41,12 +40,11 @@ const PullLayout: React.FC<PullLayoutProps> = ({
 }) => {
   const [conflict, setConflict] = useState(false),
     [diff, setDiff] = useState(false),
-    { enqueueSnackbar } = useSnackbar(),
-    router = useRouter(),
-    { data: session } = useSession(),
+    router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     queryClient = useQueryClient(),
-    id = getRouterId(router),
-    pullId = getRouterPullId(router),
+    { enqueueSnackbar } = useSnackbar(),
+    { data: session } = useSession(),
+    { id, pullId } = router.query,
     agenda = trpc.agenda.create.useMutation(),
     update = trpc.pull.updateOnePull.useMutation({
       onSuccess: (data) => {

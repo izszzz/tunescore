@@ -1,14 +1,14 @@
 import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 import { musicListArgs } from "../../../helpers/music";
-import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 
 export const libraryPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => ({
   args: Prisma.validator<Prisma.TransactionFindManyArgs>()({

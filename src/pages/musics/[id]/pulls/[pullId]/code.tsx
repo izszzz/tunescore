@@ -15,7 +15,7 @@ import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Code: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     query = musicShowQuery({ router, session: useSession().data }),

@@ -9,7 +9,7 @@ import { trpc } from "../../../utils/trpc";
 
 const User: NextPage = () => {
   const { data: session } = useSession(),
-    router = useRouter(),
+    router = useRouter<"/users/[id]">(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query);
   if (!data) return <></>;

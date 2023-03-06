@@ -1,21 +1,22 @@
 import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 import { artistListArgs } from "../../../helpers/artist";
 import { bookmarkArgs } from "../../../helpers/bookmark";
 import { musicListArgs } from "../../../helpers/music";
-import { getRouterId } from "../../../helpers/router";
-import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 
 export const bandShowQuery = ({
-  router,
+  router: {
+    query: { id },
+  },
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter<"/bands/[id]">;
   session: SessionArg;
 }) =>
   Prisma.validator<Prisma.BandFindUniqueArgs>()({
-    where: { id: getRouterId(router) },
+    where: { id },
     ...bandShowArgs(session),
   });
 

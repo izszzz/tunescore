@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 
-import { getRouterId } from "../../../../helpers/router";
 import type { userArgs } from "../../../../helpers/user";
 import PullStatusIcon from "../../icon/pull/status";
 
@@ -19,12 +18,14 @@ export interface PullListItemProps {
   }>;
 }
 const PullListItem = ({ data }: PullListItemProps) => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter<"/musics/[id]">();
   return (
     <ListItem
       route={{
         pathname: "/musics/[id]/pulls/[pullId]",
-        query: { id: getRouterId(router), pullId: data.id },
+        query: { id, pullId: data.id },
       }}
       icon={<PullStatusIcon status={data.status} />}
       listItemTextProps={{

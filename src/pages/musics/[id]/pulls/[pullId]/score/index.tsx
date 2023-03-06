@@ -5,9 +5,9 @@ import ScoreLayout from "../../../../../../components/layouts/score";
 import { trpc } from "../../../../../../utils/trpc";
 
 const Score: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     { data } = trpc.pull.findUniquePull.useQuery({
-      where: { id: router.query.pullId as string },
+      where: { id: router.query.pullId },
     });
   if (!data) return <></>;
   return <ScoreLayout value={data.score.changed} />;

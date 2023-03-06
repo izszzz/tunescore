@@ -1,12 +1,13 @@
+import type { NextRouter } from "next/router";
+
 import { bandListArgs } from "../../helpers/band";
-import type { GetRouterArg } from "../../helpers/router";
 import type { SessionArg } from "../../helpers/user";
 
 export const bandPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => ({
   args: {

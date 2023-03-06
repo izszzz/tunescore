@@ -13,7 +13,7 @@ import { userRepositoriesQuery } from "../../../paths/users/[id]/repositories";
 import { trpc } from "../../../utils/trpc";
 
 const User: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/users/[id]">(),
     { data: session } = useSession(),
     search = trpc.search.music.useMutation(),
     query = userShowQuery({ session, router }),

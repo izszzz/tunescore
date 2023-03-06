@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
@@ -54,26 +54,11 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       onError: () => enqueueSnackbar("artist.update error"),
     }),
     name = setLocale(data.name, router),
-    { id } = router.query;
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/artists/[id]",
-          query: { id },
-        },
-      },
-      {
-        label: "settings",
-        href: {
-          pathname: "/artists/[id]/settings",
-          query: { id },
-        },
-      },
-    ],
-    [id]
-  );
+    { id } = router.query,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/artists/[id]" },
+      { label: "settings", pathname: "/artists/[id]/settings" },
+    ];
   return (
     <DefaultShowLayout
       activeTab={activeTab}

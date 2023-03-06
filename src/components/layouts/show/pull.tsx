@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -66,26 +66,11 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         enqueueSnackbar("pull.create success");
       },
       onError: () => enqueueSnackbar("pull.create error"),
-    });
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "conversation",
-        href: {
-          pathname: "/musics/[id]/pulls/[pullId]",
-          query: { id, pullId },
-        },
-      },
-      {
-        label: "code",
-        href: {
-          pathname: "/musics/[id]/pulls/[pullId]/code",
-          query: { id, pullId },
-        },
-      },
-    ],
-    [id, pullId]
-  );
+    }),
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "conversation", pathname: "/musics/[id]/pulls/[pullId]" },
+      { label: "code", pathname: "/musics/[id]/pulls/[pullId]/code" },
+    ];
   const handleUpdate = (
       input: Omit<Parameters<typeof update.mutate>[0], "where">
     ) => update.mutate({ ...input, ...query }),

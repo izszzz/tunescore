@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
@@ -59,25 +59,13 @@ const MusicLayout = ({
       },
       onError: () => enqueueSnackbar("music.update error"),
     }),
-    { id } = router.query;
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      { label: "info", href: { pathname: "/musics/[id]", query: { id } } },
-      {
-        label: "issues",
-        href: { pathname: "/musics/[id]/issues", query: { id } },
-      },
-      {
-        label: "pullrequests",
-        href: { pathname: "/musics/[id]/pulls", query: { id } },
-      },
-      {
-        label: "settings",
-        href: { pathname: "/musics/[id]/settings", query: { id } },
-      },
-    ],
-    [id]
-  );
+    { id } = router.query,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/musics/[id]" },
+      { label: "issues", pathname: "/musics/[id]/issues" },
+      { label: "pullrequests", pathname: "/musics/[id]/pulls" },
+      { label: "settings", pathname: "/musics/[id]/settings" },
+    ];
 
   return (
     <DefaultShowLayout

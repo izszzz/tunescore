@@ -1,30 +1,30 @@
 import React, { useEffect } from "react";
-import {
-  FormContainer,
-  TextFieldElement,
-  useForm,
-} from "react-hook-form-mui";
+import { FormContainer, TextFieldElement, useForm } from "react-hook-form-mui";
 import type {
   FieldValues,
   FormContainerProps,
-  TextFieldElementProps} from "react-hook-form-mui";
+  TextFieldElementProps,
+} from "react-hook-form-mui";
 
 import SendIcon from "@mui/icons-material/Send";
 import LoadingButton from "@mui/lab/LoadingButton";
+import type { GridProps } from "@mui/material/Grid";
 import Grid from "@mui/material/Grid";
 import { useRouter } from "next/router";
-interface DefaultSettingsFormProps<T extends FieldValues> {
+interface SingleFormProps<T extends FieldValues> {
   data: T;
+  direction?: GridProps["direction"];
   loading: boolean;
   formContainerProps: Omit<FormContainerProps<T>, "formContext">;
   textFieldElementProps: TextFieldElementProps;
 }
-function SingleRowForm<T extends FieldValues>({
+function SingleForm<T extends FieldValues>({
   data,
   loading,
   formContainerProps,
   textFieldElementProps,
-}: DefaultSettingsFormProps<T>) {
+  direction = "row",
+}: SingleFormProps<T>) {
   const router = useRouter();
   const formContext = useForm<T>();
   useEffect(() => {
@@ -32,15 +32,14 @@ function SingleRowForm<T extends FieldValues>({
   }, [router.locale, formContext, data]);
   return (
     <FormContainer {...formContainerProps} formContext={formContext}>
-      <Grid container spacing={1} my={1}>
+      <Grid container spacing={1} my={1} direction={direction}>
         <Grid item xs={10}>
           <TextFieldElement
             {...textFieldElementProps}
-            name={textFieldElementProps.name + "." + router.locale}
             label={textFieldElementProps.name}
             disabled={loading}
-            required
             fullWidth
+            multiline={direction === "column"}
           />
         </Grid>
         <Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
@@ -60,4 +59,4 @@ function SingleRowForm<T extends FieldValues>({
   );
 }
 
-export default SingleRowForm;
+export default SingleForm;

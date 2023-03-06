@@ -18,7 +18,7 @@ import ArtistsUpdateForm from "../../../components/elements/form/settings/artist
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/music/itunes";
 import SpotifyMusicSelectForm from "../../../components/elements/form/settings/select/card/music/spotify";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
-import SingleRowForm from "../../../components/elements/form/single_row";
+import SingleForm from "../../../components/elements/form/single";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { convertAffiliateLink } from "../../../helpers/itunes";
@@ -68,14 +68,14 @@ const SettingsMusic: NextPage = () => {
     <MusicLayout data={musicData} query={query} activeTab="settings">
       <Typography variant="h4">Info</Typography>
       <Divider />
-      <SingleRowForm
+      <SingleForm
         data={musicData}
         loading={update.isLoading}
         formContainerProps={{
           onSuccess: ({ title }) =>
             update.mutate({ ...query, data: { title } }),
         }}
-        textFieldElementProps={{ name: "title" }}
+        textFieldElementProps={{ name: `title.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         value={musicData.band}
@@ -196,6 +196,24 @@ const SettingsMusic: NextPage = () => {
           },
         }}
       />
+      {navigator.language !== "ja" && (
+        <>
+          <Typography variant="h4">Lyric</Typography>
+          <Divider />
+
+          <SingleForm
+            data={musicData}
+            loading={update.isLoading}
+            formContainerProps={{
+              onSuccess: ({ lyric }) =>
+                update.mutate({ ...query, data: { lyric } }),
+            }}
+            textFieldElementProps={{ name: "lyric" }}
+            direction="column"
+          />
+        </>
+      )}
+
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 

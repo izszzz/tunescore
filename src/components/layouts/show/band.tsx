@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Box from "@mui/material/Box";
@@ -55,20 +55,11 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       onError: () => enqueueSnackbar("band.update error"),
     }),
     name = setLocale(data.name, router),
-    { id } = router.query;
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "info",
-        href: { pathname: "/bands/[id]", query: { id } },
-      },
-      {
-        label: "settings",
-        href: { pathname: "/bands/[id]/settings", query: { id } },
-      },
-    ],
-    [id]
-  );
+    { id } = router.query,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/bands/[id]" },
+      { label: "settings", pathname: "/bands/[id]/settings" },
+    ];
   return (
     <DefaultShowLayout
       tabs={tabs}

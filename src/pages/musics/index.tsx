@@ -21,11 +21,7 @@ const Musics: NextPage = () => {
   });
   const { data } = trpc.pagination.music.useQuery(
     musicPaginationQuery({ router, session }),
-    {
-      onError: () => {
-        enqueueSnackbar("music.index error");
-      },
-    }
+    { onError: () => enqueueSnackbar("music.index error") }
   );
   if (!data) return <></>;
   return (

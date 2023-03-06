@@ -12,6 +12,26 @@ export const MusicFactory = prisma.music.create({
     type: "ORIGINAL",
     visibility: "PUBLIC",
     price: 0,
+    lyric: `
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    a
+    `,
   },
 });
 

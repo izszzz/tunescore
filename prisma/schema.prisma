@@ -113,6 +113,7 @@ model Music {
   type MusicType
   title Locale
   score String?
+  lyric String?
   visibility Visibility
   price Int?
   link LinkList?

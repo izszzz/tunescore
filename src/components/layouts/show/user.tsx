@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -57,20 +57,11 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     }),
     { id } = router.query,
     followed = isNonEmpty(data.followers);
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      { label: "info", href: { pathname: "/users/[id]", query: { id } } },
-      {
-        label: "bookmarks",
-        href: { pathname: "/users/[id]/bookmarks", query: { id } },
-      },
-      {
-        label: "repositories",
-        href: { pathname: "/users/[id]/repositories", query: { id } },
-      },
-    ],
-    [id]
-  );
+  const tabs: DefaultTabsProps["tabs"] = [
+    { label: "info", pathname: "/users/[id]" },
+    { label: "bookmarks", pathname: "/users/[id]/bookmarks" },
+    { label: "repositories", pathname: "/users/[id]/repositories" },
+  ];
   return (
     <ShowLayout
       tabs={tabs}

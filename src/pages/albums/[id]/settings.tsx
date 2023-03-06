@@ -9,7 +9,7 @@ import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
-import SingleRowForm from "../../../components/elements/form/single_row";
+import SingleForm from "../../../components/elements/form/single";
 import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { convertAffiliateLink } from "../../../helpers/itunes";
@@ -34,16 +34,14 @@ const Album: NextPage = () => {
   const albumData = data as AlbumLayoutProps["data"];
   return (
     <AlbumLayout data={albumData} query={query} activeTab="settings">
-      <SingleRowForm
+      <SingleForm
         data={albumData}
         loading={update.isLoading}
         formContainerProps={{
           onSuccess: ({ title }) =>
             update.mutate({ ...query, data: { title } }),
         }}
-        textFieldElementProps={{
-          name: "title",
-        }}
+        textFieldElementProps={{ name: `title.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         value={albumData.band}

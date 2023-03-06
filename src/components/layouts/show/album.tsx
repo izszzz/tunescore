@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Typography from "@mui/material/Typography";
@@ -50,26 +50,11 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("album.update error"),
     }),
-    { id } = router.query;
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/albums/[id]",
-          query: { id },
-        },
-      },
-      {
-        label: "settings",
-        href: {
-          pathname: "/albums/[id]/settings",
-          query: { id },
-        },
-      },
-    ],
-    [id]
-  );
+    { id } = router.query,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/albums/[id]" },
+      { label: "settings", pathname: "/albums/[id]/settings" },
+    ];
   return (
     <DefaultShowLayout
       activeTab={activeTab}

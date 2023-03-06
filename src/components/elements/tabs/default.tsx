@@ -10,7 +10,11 @@ import type { Route } from "nextjs-routes";
 
 export interface DefaultTabsProps {
   value: string;
-  tabs: { label: string; href: Route; disabled?: boolean }[];
+  tabs: {
+    label: "info" | "settings" | string;
+    pathname: Route["pathname"];
+    disabled?: boolean;
+  }[];
 }
 const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
   const router = useRouter(),
@@ -20,7 +24,7 @@ const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs value={value}>
-        {tabs.map(({ href, ...tab }, i) => (
+        {tabs.map(({ pathname, ...tab }, i) => (
           <Tab
             key={i}
             {...tab}
@@ -28,7 +32,7 @@ const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
             onClick={() => {
               if (tab.label === "settings" && status === "unauthenticated")
                 return show();
-              router.push(href);
+              router.push({ pathname, query: router.query });
             }}
           />
         ))}

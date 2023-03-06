@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import DeleteAlert from "../../components/elements/alert/delete";
 import ProviderButtons from "../../components/elements/button/providers";
-import SingleRowForm from "../../components/elements/form/single_row";
+import SingleForm from "../../components/elements/form/single";
 import DashboardLayout from "../../components/layouts/dashboard";
 import { trpc } from "../../utils/trpc";
 
@@ -21,7 +21,7 @@ const Dashboard: NextPage = () => {
     <DashboardLayout active="settings">
       <ProviderButtons stackProps={{ direction: "row" }} />
 
-      <SingleRowForm
+      <SingleForm
         data={data}
         loading={update.isLoading}
         formContainerProps={{

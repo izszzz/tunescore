@@ -24,6 +24,7 @@ Default.args = {
       type: "ORIGINAL",
       score: "",
       visibility: "PUBLIC",
+      lyric: "",
       price: 0,
       link: null,
       title: { ja: "", en: "" },

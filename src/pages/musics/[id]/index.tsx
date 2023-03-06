@@ -19,13 +19,12 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Music: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]">(),
     queryClient = useQueryClient(),
     { data: session } = useSession(),
     query = musicShowQuery({ router, session }),
@@ -52,7 +51,7 @@ const Music: NextPage = () => {
           create.mutate({
             data: {
               user: { connect: { id: getCurrentUserId(session) } },
-              music: { connect: { id: getRouterId(router) } },
+              music: { connect: { id: router.query.id } },
             },
           })
         }

@@ -11,15 +11,14 @@ import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
-import { getRouterIssueId } from "../../../../../helpers/router";
 import type { userArgs } from "../../../../../helpers/user";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Issue: NextPage = () => {
-  const router = useRouter(),
-    issueId = getRouterIssueId(router),
+  const router = useRouter<"/musics/[id]/issues/[issueId]">(),
+    { issueId } = router.query,
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
     userId = getCurrentUserId(session),

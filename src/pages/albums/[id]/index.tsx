@@ -11,7 +11,7 @@ import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
-  const router = useRouter();
+  const router = useRouter<"/albums/[id]">();
   const path = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(path);
   if (!data) return <></>;

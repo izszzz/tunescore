@@ -24,7 +24,7 @@ import { trpc } from "../../../utils/trpc";
 
 const EditArtist: NextPage = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const router = useRouter<"/artists/[id]">();
   const { enqueueSnackbar } = useSnackbar();
   const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);

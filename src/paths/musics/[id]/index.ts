@@ -1,11 +1,10 @@
 import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 import { albumListArgs } from "../../../helpers/album";
 import { bandListArgs } from "../../../helpers/band";
 import { bookmarkArgs } from "../../../helpers/bookmark";
 import { participatedArtistArgs } from "../../../helpers/participation";
-import { getRouterId } from "../../../helpers/router";
-import type { GetRouterArg } from "../../../helpers/router";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere, userArgs } from "../../../helpers/user";
 
@@ -13,14 +12,20 @@ import { pullShowArgs } from "./pulls/[pullId]";
 
 export type MusicShowQueryType = ReturnType<typeof musicShowQuery>;
 export const musicShowQuery = ({
-  router,
+  router: {
+    query: { id },
+  },
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter<
+    | "/musics/[id]"
+    | "/musics/[id]/issues/[issueId]"
+    | "/musics/[id]/pulls/[pullId]"
+  >;
   session: SessionArg;
 }) =>
   Prisma.validator<Prisma.MusicFindUniqueArgs>()({
-    where: { id: getRouterId(router) },
+    where: { id },
     ...musicShowArgs(session),
   });
 

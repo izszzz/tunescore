@@ -15,7 +15,6 @@ import { useSnackbar } from "notistack";
 import { isNonEmpty } from "ts-array-length";
 
 import { followMutate } from "../../../helpers/follow";
-import { getRouterId } from "../../../helpers/router";
 import { isSelf } from "../../../helpers/user";
 import type {
   UserShowArgsType,
@@ -41,13 +40,11 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
+  const router = useRouter<"/users/[id]">(),
+    queryClient = useQueryClient(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
-    queryClient = useQueryClient(),
     { show } = useModal("report-dialog"),
-    id = getRouterId(router),
-    followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -57,7 +54,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         enqueueSnackbar("user.update success");
       },
       onError: () => enqueueSnackbar("user.update error"),
-    });
+    }),
+    { id } = router.query,
+    followed = isNonEmpty(data.followers);
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       { label: "info", href: { pathname: "/users/[id]", query: { id } } },

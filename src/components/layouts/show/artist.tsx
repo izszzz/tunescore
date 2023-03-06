@@ -14,7 +14,6 @@ import { isNonEmpty } from "ts-array-length";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import type {
   ArtistShowArgsType,
   artistShowQuery,
@@ -39,23 +38,23 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
-    id = getRouterId(router),
-    { show } = useModal("auth-modal");
-  const name = setLocale(data.name, router);
-  const { data: session, status } = useSession();
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const update = trpc.artist.updateOneArtist.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
-        data
-      );
-      enqueueSnackbar("artist.update success");
-    },
-    onError: () => enqueueSnackbar("artist.update error"),
-  });
+  const router = useRouter<"/artists/[id]">(),
+    { data: session, status } = useSession(),
+    { enqueueSnackbar } = useSnackbar(),
+    queryClient = useQueryClient(),
+    { show } = useModal("auth-modal"),
+    update = trpc.artist.updateOneArtist.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+          data
+        );
+        enqueueSnackbar("artist.update success");
+      },
+      onError: () => enqueueSnackbar("artist.update error"),
+    }),
+    name = setLocale(data.name, router),
+    { id } = router.query;
   const tabs: DefaultTabsProps["tabs"] = useMemo(
     () => [
       {

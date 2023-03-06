@@ -8,14 +8,13 @@ import UserLists from "../../../components/elements/list/user";
 import IndexLayout from "../../../components/layouts/index";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
-import { getRouterId } from "../../../helpers/router";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { followingPath } from "../../../paths/users/[id]/following";
 import { trpc } from "../../../utils/trpc";
 
 const UserFollowers: NextPage = () => {
-  const router = useRouter(),
-    id = getRouterId(router),
+  const router = useRouter<"/users/[id]">(),
+    { id } = router.query,
     { data: session } = useSession(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query),

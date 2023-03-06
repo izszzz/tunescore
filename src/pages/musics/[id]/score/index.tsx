@@ -3,18 +3,17 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
 import ScoreLayout from "../../../../components/layouts/score";
-import { getRouterId } from "../../../../helpers/router";
 import { trpc } from "../../../../utils/trpc";
 
 const Score: NextPage = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter<"/musics/[id]/score">();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.music.findUniqueMusic.useQuery(
-    { where: { id: getRouterId(router) } },
+    { where: { id } },
     {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }
   );
   if (!data) return <></>;

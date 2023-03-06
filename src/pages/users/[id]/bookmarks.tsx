@@ -20,7 +20,7 @@ import { trpc } from "../../../utils/trpc";
 
 const UserBookmarks: NextPage = () => {
   const { data: session } = useSession(),
-    router = useRouter(),
+    router = useRouter<"/users/[id]">(),
     { enqueueSnackbar } = useSnackbar(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query),

@@ -6,14 +6,11 @@ import { useRouter } from "next/router";
 import MusicListItem from "../../../../components/elements/list/item/music";
 import DashboardLayout from "../../../../components/layouts/dashboard";
 import setLocale from "../../../../helpers/locale";
-import { getRouterId } from "../../../../helpers/router";
 import { trpc } from "../../../../utils/trpc";
 
 const Transaction: NextPage = () => {
-  const router = useRouter(),
-    { data } = trpc.currentUser.findUniqueTransaction.useQuery(
-      getRouterId(router)
-    ),
+  const router = useRouter<"/dashboard/transactions/[id]">(),
+    { data } = trpc.currentUser.findUniqueTransaction.useQuery(router.query.id),
     { data: stripeData } = trpc.stripe.paymentIntent.useQuery(
       data?.stripePaymentIntentId
     );

@@ -20,7 +20,7 @@ import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const router = useRouter<"/albums/[id]">();
   const query = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({

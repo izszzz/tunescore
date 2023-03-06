@@ -17,16 +17,14 @@ import BandLayout from "../../../components/layouts/show/band";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import { redirectToSignIn } from "../../../helpers/user";
 import { bandShowQuery } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const BandSettings: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/bands/[id]">(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    id = getRouterId(router),
     query = bandShowQuery({ router, session: useSession().data }),
     { data } = trpc.band.findUniqueBand.useQuery(query),
     update = trpc.band.updateOneBand.useMutation({
@@ -37,15 +35,13 @@ const BandSettings: NextPage = () => {
         );
         enqueueSnackbar("band.update success");
       },
-      onError: () => {
-        enqueueSnackbar("band.update error");
-      },
+      onError: () => enqueueSnackbar("band.update error"),
     }),
     destroy = trpc.band.deleteOneBand.useMutation({
-      onSuccess: () => {
-        enqueueSnackbar("band.destroy success");
-      },
-    });
+      onSuccess: () => enqueueSnackbar("band.destroy success"),
+      onError: () => enqueueSnackbar("band.destroy error"),
+    }),
+    { id } = router.query;
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
   return (
@@ -56,9 +52,7 @@ const BandSettings: NextPage = () => {
         formContainerProps={{
           onSuccess: ({ name }) => update.mutate({ ...query, data: { name } }),
         }}
-        textFieldElementProps={{
-          name: "name",
-        }}
+        textFieldElementProps={{ name: "name" }}
       />
       <ArtistUpdateAutocomplete
         value={bandData.artists}

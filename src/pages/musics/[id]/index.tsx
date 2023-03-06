@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
+import Article from "../../../components/elements/article";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import LinkButtons from "../../../components/elements/button/link";
 import CartLoadingButton from "../../../components/elements/button/loading/cart";
@@ -72,6 +73,8 @@ const Music: NextPage = () => {
           />
         </Box>
       ))}
+
+      {musicData.lyric && <Article text={musicData.lyric} />}
 
       {musicData.band && <BandLists data={[musicData.band]} />}
       <ParticipationLists data={musicData.participations}>

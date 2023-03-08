@@ -50,9 +50,7 @@ const NewMusic: NextPage = () => {
         router.push("/musics");
         enqueueSnackbar("music.create success");
       },
-      onError: () => {
-        enqueueSnackbar("music.create fail");
-      },
+      onError: () => enqueueSnackbar("music.create fail"),
     }),
     handleSubmit = (data: Music) => {
       if (status === "authenticated")

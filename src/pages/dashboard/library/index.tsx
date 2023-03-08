@@ -40,9 +40,7 @@ const Library: NextPage = () => {
               where: {
                 music: {
                   title: {
-                    is: {
-                      [router.locale as string]: { contains: inputValue },
-                    },
+                    is: { [router.locale]: { contains: inputValue } },
                   },
                 },
               },

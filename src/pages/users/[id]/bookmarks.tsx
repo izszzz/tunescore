@@ -65,36 +65,28 @@ const UserBookmarks: NextPage = () => {
                   music: {
                     title: {
                       is: {
-                        [router.locale as string]: {
-                          contains: e.currentTarget.value,
-                        },
+                        [router.locale]: { contains: e.currentTarget.value },
                       },
                     },
                   },
                   album: {
                     title: {
                       is: {
-                        [router.locale as string]: {
-                          contains: e.currentTarget.value,
-                        },
+                        [router.locale]: { contains: e.currentTarget.value },
                       },
                     },
                   },
                   artist: {
                     name: {
                       is: {
-                        [router.locale as string]: {
-                          contains: e.currentTarget.value,
-                        },
+                        [router.locale]: { contains: e.currentTarget.value },
                       },
                     },
                   },
                   band: {
                     name: {
                       is: {
-                        [router.locale as string]: {
-                          contains: e.currentTarget.value,
-                        },
+                        [router.locale]: { contains: e.currentTarget.value },
                       },
                     },
                   },

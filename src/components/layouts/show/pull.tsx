@@ -125,7 +125,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
           <Link
             href={{
               pathname: "/users/[id]",
-              query: { id: data.user.id as string },
+              query: { id: data.user.id },
             }}
           >
             <Typography variant="subtitle2" color="text.secondary">

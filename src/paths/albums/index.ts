@@ -14,9 +14,7 @@ export const albumPaginationQuery = ({
     ...albumListArgs(session),
     where: {
       title: {
-        is: {
-          [router.locale as string]: { contains: router.query.q as string },
-        },
+        is: { [router.locale]: { contains: router.query.q as string } },
       },
     },
   },

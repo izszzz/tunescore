@@ -15,7 +15,7 @@ export const artistPaginationQuery = ({
     where: {
       name: {
         is: {
-          [router.locale as string]: { contains: router.query.q as string },
+          [router.locale]: { contains: router.query.q as string },
         },
       },
     },

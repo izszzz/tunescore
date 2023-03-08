@@ -35,11 +35,7 @@ const Musics: NextPage = () => {
         onInputChange: (_e, inputValue) => {
           search.mutate({
             where: {
-              title: {
-                is: {
-                  [router.locale as string]: { contains: inputValue },
-                },
-              },
+              title: { is: { [router.locale]: { contains: inputValue } } },
             },
             take: 10,
           });

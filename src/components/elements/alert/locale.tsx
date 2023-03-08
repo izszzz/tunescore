@@ -16,7 +16,7 @@ const LocaleAlert = () => {
         <Button
           onClick={() => {
             if (status === "authenticated")
-              router.push(router.pathname + "/settings");
+              router.push(router.asPath + "/settings");
             else show();
           }}
         >

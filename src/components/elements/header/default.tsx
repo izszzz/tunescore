@@ -61,9 +61,7 @@ const DefaultHeader = () => {
                 search.mutate({
                   where: {
                     title: {
-                      is: {
-                        [router.locale as string]: { contains: inputValue },
-                      },
+                      is: { [router.locale]: { contains: inputValue } },
                     },
                   },
                   take: 10,

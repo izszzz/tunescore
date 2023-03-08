@@ -30,18 +30,15 @@ const User: NextPage = () => {
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
-          getOptionLabel: (option) => setLocale(option.title, router),
-          onInputChange: (_e, inputValue) => {
+          getOptionLabel: ({ title }) => setLocale(title, router),
+          onInputChange: (_e, inputValue) =>
             search.mutate({
               where: {
-                title: {
-                  is: { [router.locale as string]: { contains: inputValue } },
-                },
+                title: { is: { [router.locale]: { contains: inputValue } } },
                 user: { id: getCurrentUserId(session) },
               },
               take: 10,
-            });
-          },
+            }),
         }}
       >
         <MusicLists data={musicData.data} />

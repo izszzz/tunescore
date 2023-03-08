@@ -18,20 +18,17 @@ export const userRepositoriesQuery = ({
 }) => ({
   args: {
     ...musicListArgs(session),
-    where: (router.query.q as string)
-      ? {
-          title: {
-            is: {
-              [router.locale as string]: {
-                contains: (router.query.q as string) || "",
-              },
+    where: {
+      type: "ORIGINAL" as const,
+      ...((router.query.q as string)
+        ? {
+            title: {
+              is: { [router.locale]: { contains: router.query.q as string } },
             },
-          },
-          user: userWhere(session),
-        }
-      : {
-          user: userWhere(session),
-        },
+          }
+        : {}),
+      user: userWhere(session),
+    },
   },
   options: { page: (router.query.page as string) || 0, perPage: 12 },
 });

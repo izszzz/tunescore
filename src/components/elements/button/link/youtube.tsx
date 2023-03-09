@@ -11,7 +11,8 @@ const YoutubeButton = ({ href }: { href: string }) => (
       component={Link}
       color="error"
       target="blank"
-      href={"https://www.youtube.com/channel/" + href}
+      href={href}
+      // "https://www.youtube.com/channel/"
     >
       <YoutubeIcon />
     </IconButton>

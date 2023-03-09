@@ -61,4 +61,21 @@ export const spotifyRouter = router({
         ? spotify.getArtist(input).then(({ body }) => body)
         : undefined;
     }),
+  searchAlbums: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const spotify = await authorized(ctx.session);
+      return spotify.searchAlbums(input).then(({ body }) => {
+        const keys = Object.keys(body);
+        return body[keys[0] as keyof SpotifyApi.SearchResponse];
+      });
+    }),
+  findUniqueAlbum: publicProcedure
+    .input(z.string().nullish())
+    .query(async ({ ctx, input }) => {
+      const spotify = await authorized(ctx.session);
+      return input
+        ? spotify.getAlbum(input).then(({ body }) => body)
+        : undefined;
+    }),
 });

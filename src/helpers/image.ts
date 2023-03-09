@@ -27,7 +27,10 @@ export const getImage = (
         if (options.channel) return shapeImageSize(size, [88, 240, 800]);
         if (!options.square) return shapeImageSize(size, [90, 180, 360]);
       }
-      if (R.equals(key, "spotify")) return shapeImageSize(size, [64, 300, 640]);
+      if (R.equals(key, "spotify")) {
+        if (options.channel) return shapeImageSize(size, [160, 320, 640]);
+        return shapeImageSize(size, [64, 300, 640]);
+      }
     }),
     R.flatten(),
     R.compact,

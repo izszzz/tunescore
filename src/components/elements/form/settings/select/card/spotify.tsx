@@ -17,8 +17,12 @@ interface SpotifySelectFormProps<Value, Options>
 function SpotifySelectForm<
   Value extends
     | SpotifyApi.SingleTrackResponse
-    | SpotifyApi.SingleArtistResponse,
-  Options extends SpotifyApi.TrackObjectFull | SpotifyApi.ArtistObjectFull
+    | SpotifyApi.SingleArtistResponse
+    | SpotifyApi.SingleAlbumResponse,
+  Options extends
+    | SpotifyApi.TrackObjectFull
+    | SpotifyApi.ArtistObjectFull
+    | SpotifyApi.AlbumObjectFull
 >({
   streamingLink,
   lookup,

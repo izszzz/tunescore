@@ -81,7 +81,6 @@ const EditArtist: NextPage = () => {
         term={setLocale(data.name, router)}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
-          value &&
           update.mutate({
             ...query,
             data: {
@@ -90,6 +89,13 @@ const EditArtist: NextPage = () => {
                   ...data.link?.streaming,
                   spotify: {
                     id: value.id,
+                    image: {
+                      size: {
+                        small: value.images[2]?.url,
+                        medium: value.images[1]?.url,
+                        large: value.images[0]?.url,
+                      },
+                    },
                   },
                 },
               },

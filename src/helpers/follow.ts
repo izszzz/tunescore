@@ -7,10 +7,7 @@ import { getCurrentUserId, userArgs, userWhere } from "./user";
 import type { SessionArg } from "./user";
 
 export const followArgs = {
-  include: {
-    follower: userArgs,
-    following: userArgs,
-  },
+  include: { follower: userArgs, following: userArgs },
 };
 export const checkCurrentUserFollowingQuery = (session: SessionArg) => ({
   where: { following: userWhere(session) },
@@ -26,13 +23,6 @@ export const followMutate = ({
   return Prisma.validator<Prisma.FollowUpdateManyWithoutFollowerNestedInput>()(
     isNonEmpty(data.followers)
       ? { delete: { id: data.followers[0].id } }
-      : {
-          create: {
-            following: { connect: { id } },
-            notifications: {
-              create: { unionType: "Follow", user: { connect: { id } } },
-            },
-          },
-        }
+      : { create: { following: { connect: { id } } } }
   );
 };

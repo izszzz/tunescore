@@ -91,7 +91,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
                 variant={followed ? "outlined" : "contained"}
                 onClick={() =>
                   update.mutate({
-                    where: { id },
+                    ...query,
                     data: { followers: followMutate({ data, session }) },
                   })
                 }

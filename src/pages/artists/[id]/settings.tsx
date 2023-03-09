@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import SpotifyArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/spotify";
 import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
 import SingleForm from "../../../components/elements/form/single";
 import ArtistLayout from "../../../components/layouts/show/artist";
@@ -72,6 +73,50 @@ const EditArtist: NextPage = () => {
         }}
         multiple
       />
+
+      <Typography variant="h4">Spotify</Typography>
+      <Divider />
+
+      <SpotifyArtistSelectForm
+        term={setLocale(data.name, router)}
+        streamingLink={data.link?.streaming}
+        onSelect={(value) =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: {
+                  ...data.link?.streaming,
+                  spotify: {
+                    id: value.id,
+                    image: {
+                      size: {
+                        small: value.images[2]?.url,
+                        medium: value.images[1]?.url,
+                        large: value.images[0]?.url,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          })
+        }
+        onRemove={() =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: { ...data.link?.streaming, spotify: undefined },
+              },
+            },
+          })
+        }
+      />
+
+      <Typography variant="h4">iTunes</Typography>
+      <Divider />
+
       <ItunesArtistSelectForm
         term={setLocale(data.name, router)}
         streamingLink={data.link?.streaming}
@@ -122,7 +167,7 @@ const EditArtist: NextPage = () => {
                     id: value.id.channelId,
                     image: {
                       size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
+                        small: value.snippet?.thumbnails?.default?.url,
                         medium: value.snippet?.thumbnails?.medium?.url,
                         large: value.snippet?.thumbnails?.high?.url,
                       },

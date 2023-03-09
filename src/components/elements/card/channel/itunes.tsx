@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { match } from "ts-pattern";
 
 import type { ItunesArtist } from "../../../../helpers/itunes";
 import CloseIconButton from "../../button/icon/close";
@@ -11,12 +12,12 @@ import SquareCard from "../square";
 
 interface ItunesChannelCardProps {
   data: ItunesArtist;
-  size: "small" | "medium" | "large";
+  size: "small" | "large";
   onClick?: (value: ItunesArtist) => void;
 }
-const ItunesChannelCard = ({ size, data, onClick }: ItunesChannelCardProps) => {
-  if (size === "small")
-    return (
+const ItunesChannelCard = ({ size, data, onClick }: ItunesChannelCardProps) =>
+  match(size)
+    .with("small", () => (
       <SquareCard
         resource="ARTIST"
         title={
@@ -28,9 +29,8 @@ const ItunesChannelCard = ({ size, data, onClick }: ItunesChannelCardProps) => {
         size="100px"
         onClick={() => onClick && onClick(data)}
       />
-    );
-  if (size === "large")
-    return (
+    ))
+    .with("large", () => (
       <Card sx={{ display: "flex" }}>
         <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
           <Box>
@@ -41,8 +41,7 @@ const ItunesChannelCard = ({ size, data, onClick }: ItunesChannelCardProps) => {
           </Box>
         </CardContent>
       </Card>
-    );
-  return <></>;
-};
+    ))
+    .exhaustive();
 
 export default ItunesChannelCard;

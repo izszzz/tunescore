@@ -36,7 +36,10 @@ const SquareBandCard = ({ data }: SquareBandCardProps) => {
           </Box>
         </Box>
       }
-      image={getImage(data.link?.streaming, 200, { square: true })}
+      image={getImage(data.link?.streaming, 200, {
+        square: true,
+        channel: true,
+      })}
       onClick={() =>
         router.push({ pathname: "/bands/[id]", query: { id: data.id } })
       }

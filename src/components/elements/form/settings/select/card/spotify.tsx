@@ -2,33 +2,39 @@ import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
 
-import { trpc } from "../../../../../../utils/trpc";
-
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
 
-interface SpotifySelectFormProps<T>
+interface SpotifySelectFormProps<Value, Options>
   extends Pick<
-    CardSelectFormProps<T, SpotifyApi.PagingObject<T>["items"]>,
+    CardSelectFormProps<Value, SpotifyApi.PagingObject<Options>["items"]>,
     "largeCard" | "smallCard"
   > {
   streamingLink: StreamingLink | null | undefined;
-  term: string;
-  lookup: T | undefined;
+  lookup: Value | undefined;
+  search: Options[];
 }
-function SpotifySelectForm<T extends SpotifyApi.TrackObjectFull>({
+function SpotifySelectForm<
+  Value extends
+    | SpotifyApi.SingleTrackResponse
+    | SpotifyApi.SingleArtistResponse
+    | SpotifyApi.SingleAlbumResponse,
+  Options extends
+    | SpotifyApi.TrackObjectFull
+    | SpotifyApi.ArtistObjectFull
+    | SpotifyApi.AlbumObjectFull
+>({
   streamingLink,
-  term,
+  lookup,
+  search,
   largeCard,
   smallCard,
-  lookup,
-}: SpotifySelectFormProps<T>) {
-  const { data } = trpc.spotify.searchTracks.useQuery(term);
+}: SpotifySelectFormProps<Value, Options>) {
   return (
-    <CardSelectForm<T, SpotifyApi.PagingObject<T>["items"]>
+    <CardSelectForm<Value, Options[]>
       link={streamingLink?.spotify}
       lookup={lookup}
-      search={data?.items as T[]}
+      search={search}
       largeCard={largeCard}
       smallCard={smallCard}
       gridProps={{

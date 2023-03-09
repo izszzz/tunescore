@@ -1,6 +1,7 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -8,6 +9,7 @@ import { useSession } from "next-auth/react";
 import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
+import SpotifyAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/spotify";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
 import SingleForm from "../../../components/elements/form/single";
 import AlbumLayout from "../../../components/layouts/show/album";
@@ -24,9 +26,11 @@ const Album: NextPage = () => {
   const query = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(query);
   const update = trpc.album.updateOneAlbum.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
-    },
+    onSuccess: (data) =>
+      queryClient.setQueryData(
+        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+        data
+      ),
   });
   const destroy = trpc.album.deleteOneAlbum.useMutation();
   if (!data) return <></>;
@@ -59,6 +63,51 @@ const Album: NextPage = () => {
             }),
         }}
       />
+
+      <Typography variant="h4">Spotify</Typography>
+      <Divider />
+
+      <SpotifyAlbumSelectForm
+        term={title}
+        streamingLink={data.link?.streaming}
+        onSelect={(value) =>
+          value &&
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: {
+                  ...data.link?.streaming,
+                  spotify: {
+                    id: value.id,
+                    image: {
+                      size: {
+                        small: value.images[2]?.url,
+                        medium: value.images[1]?.url,
+                        large: value.images[0]?.url,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          })
+        }
+        onRemove={() =>
+          update.mutate({
+            ...query,
+            data: {
+              link: {
+                streaming: { ...data.link?.streaming, spotify: undefined },
+              },
+            },
+          })
+        }
+      />
+
+      <Typography variant="h4">iTunes</Typography>
+      <Divider />
+
       <ItunesAlbumSelectForm
         term={title}
         streamingLink={data.link?.streaming}

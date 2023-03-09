@@ -23,14 +23,12 @@ export interface BandListItemProps extends ListItemProps {
 }
 
 const BandListItem = ({ data }: BandListItemProps) => {
-  const router = useRouter();
-  const name = setLocale(data.name, router);
+  const router = useRouter(),
+    name = setLocale(data.name, router),
+    image = getImage(data.link?.streaming, 60);
   return (
     <ListItem
-      route={{
-        pathname: "/bands/[id]",
-        query: { id: data.id },
-      }}
+      route={{ pathname: "/bands/[id]", query: { id: data.id } }}
       icon={<Group />}
       listItemTextProps={{
         primary: name,
@@ -48,13 +46,8 @@ const BandListItem = ({ data }: BandListItemProps) => {
         ),
       }}
     >
-      {data.link?.streaming && (
-        <Image
-          height="60"
-          alt={name}
-          src={getImage(data.link.streaming, 60) || undefined}
-          style={{ borderRadius: 3 }}
-        />
+      {image && (
+        <Image height="60" alt={name} src={image} style={{ borderRadius: 3 }} />
       )}
     </ListItem>
   );

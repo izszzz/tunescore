@@ -8,46 +8,27 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { match } from "ts-pattern";
 
-import type { ItunesMusic } from "../../../../helpers/itunes";
 import CloseIconButton from "../../button/icon/close";
-import ResourceIcon from "../../icon/resource";
 import SquareCard from "../square";
 
-interface ItunesMusicCardProps {
-  data: ItunesMusic;
+interface SpotifyArtistCardProps {
+  data: SpotifyApi.ArtistObjectFull;
   size: "small" | "large";
-  onClick?: (value: ItunesMusic) => void;
+  onClick?: (value: SpotifyApi.ArtistObjectFull) => void;
 }
-const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) =>
+const SpotifyChannelCard = ({ size, data, onClick }: SpotifyArtistCardProps) =>
   match(size)
     .with("small", () => (
-      <Tooltip
-        title={
-          <>
-            <Typography variant="subtitle1">
-              {data.trackCensoredName}
-            </Typography>
-            <Typography variant="caption">
-              <ResourceIcon resource="ALBUM" fontSize="inherit" />{" "}
-              {data.collectionCensoredName}
-            </Typography>
-            <br />
-            <Typography variant="caption">
-              <ResourceIcon resource="BAND" fontSize="inherit" />{" "}
-              {data.artistName}
-            </Typography>
-          </>
-        }
-      >
+      <Tooltip title={<Typography variant="subtitle1">{data.name}</Typography>}>
         <Box>
           <SquareCard
-            resource="MUSIC"
+            resource="ARTIST"
             title={
               <Typography variant="caption" display="block" noWrap>
-                {data.trackCensoredName}
+                {data.name}
               </Typography>
             }
-            image={data.artworkUrl100}
+            image={data.images[1]?.url || ""}
             size="100px"
             onClick={() => onClick && onClick(data)}
           />
@@ -56,24 +37,15 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) =>
     ))
     .with("large", () => (
       <Card sx={{ display: "flex" }}>
-        {" "}
         <CardContent>
           <CardMedia
             component="img"
             sx={{ width: 100, height: "auto", borderRadius: "3px" }}
-            image={data.artworkUrl100}
+            image={data.images[1]?.url || ""}
             alt="Live from space album cover"
           />
         </CardContent>
         <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
-          <Box>
-            <Typography variant="h6">{data.trackCensoredName}</Typography>
-            <Typography variant="caption">
-              {data.collectionCensoredName}
-            </Typography>
-            <br />
-            <Typography variant="caption">{data.artistName}</Typography>
-          </Box>
           <Box display="flex" alignItems="center">
             <CloseIconButton onClick={() => onClick && onClick(data)} />
           </Box>
@@ -82,4 +54,4 @@ const ItunesMusicCard = ({ size, data, onClick }: ItunesMusicCardProps) =>
     ))
     .exhaustive();
 
-export default ItunesMusicCard;
+export default SpotifyChannelCard;

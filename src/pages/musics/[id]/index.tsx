@@ -58,7 +58,7 @@ const Music: NextPage = () => {
         }
       />
 
-      {data.link && <LinkButtons data={data.link} />}
+      {data.link && <LinkButtons data={data.link} type="Music" />}
 
       {data.link?.streaming?.youtube?.id && (
         <YoutubeAmbient videoId={data.link.streaming.youtube.id} />

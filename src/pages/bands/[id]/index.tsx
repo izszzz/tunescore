@@ -18,8 +18,7 @@ const Band: NextPage = () => {
   const bandData = data as BandLayoutProps["data"];
   return (
     <BandLayout data={bandData} query={path} activeTab="info">
-      {data.link && <LinkButtons data={data.link} />}
-
+      {data.link && <LinkButtons data={data.link} type="Band" />}
       <MusicLists data={bandData.musics} />
       <ArtistLists data={bandData.artists} />
     </BandLayout>

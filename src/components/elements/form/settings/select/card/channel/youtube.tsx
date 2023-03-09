@@ -20,8 +20,9 @@ const ChannelYoutubeSelectForm = ({
   onRemove,
   ...props
 }: ChannelYoutubeSelectFormProps) => {
-  const { data } = trpc.youtube.channel.useQuery(streamingLink?.youtube?.id);
-  if (!data) return <>loading</>;
+  const { data } = trpc.youtube.findUniqueChannel.useQuery(
+    streamingLink?.youtube?.id
+  );
   return (
     <YoutubeSelectForm<Channel>
       {...props}

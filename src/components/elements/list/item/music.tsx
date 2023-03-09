@@ -22,8 +22,9 @@ export interface MusicListItemProps extends ListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
 }
 const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
-  const router = useRouter();
-  const title = setLocale(data.title, router);
+  const router = useRouter(),
+    title = setLocale(data.title, router),
+    image = getImage(data.link?.streaming, 60);
   return (
     <ListItem
       {...props}
@@ -47,11 +48,11 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
         ),
       }}
     >
-      {data.link?.streaming && (
+      {image && (
         <Image
           height="60"
           alt={title}
-          src={getImage(data.link.streaming, 60) || ""}
+          src={image}
           style={{ borderRadius: 3 }}
         />
       )}

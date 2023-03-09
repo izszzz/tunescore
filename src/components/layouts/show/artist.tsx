@@ -55,6 +55,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
     }),
     name = setLocale(data.name, router),
     { id } = router.query,
+    image = getImage(data.link?.streaming, 80, { channel: true }),
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/artists/[id]" },
       { label: "settings", pathname: "/artists/[id]/settings" },
@@ -70,13 +71,13 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
             onClick={() => router.push("/artists")}
           />
           <Typography variant="h5">{name}</Typography>
-          {data.link?.streaming && (
+          {image && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={name}
-                src={getImage(data.link.streaming, 80) || undefined}
+                src={image}
               />
             </Box>
           )}

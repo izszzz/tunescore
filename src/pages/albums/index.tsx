@@ -11,14 +11,14 @@ import { albumPaginationQuery } from "../../paths/albums";
 import { trpc } from "../../utils/trpc";
 
 const Albums: NextPage = () => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.pagination.album.useQuery(
-    albumPaginationQuery({ router, session: useSession().data })
-  );
-  const search = trpc.search.album.useMutation({
-    onError: () => enqueueSnackbar("music.search error"),
-  });
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    { data } = trpc.pagination.album.useQuery(
+      albumPaginationQuery({ router, session: useSession().data })
+    ),
+    search = trpc.search.album.useMutation({
+      onError: () => enqueueSnackbar("music.search error"),
+    });
   if (!data) return <></>;
   return (
     <IndexLayout
@@ -27,13 +27,11 @@ const Albums: NextPage = () => {
         options: search.data || [],
         loading: search.isLoading,
         renderOption: (_props, option) => <AlbumListItem data={option} dense />,
-        getOptionLabel: (option) => setLocale(option.title, router),
+        getOptionLabel: ({ title }) => setLocale(title, router),
         textFieldProps: {
-          onChange: ({ currentTarget: { value } }) =>
+          onChange: ({ currentTarget: { value: v } }) =>
             search.mutate({
-              where: {
-                title: { is: { [router.locale]: { contains: value } } },
-              },
+              where: { title: { is: { [router.locale]: { contains: v } } } },
               take: 10,
             }),
         },

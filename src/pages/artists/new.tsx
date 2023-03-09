@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 import NewLayout from "../../components/layouts/new";
+import { isAuth } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const NewArtist: NextPage = () => {
@@ -18,7 +19,7 @@ const NewArtist: NextPage = () => {
       onSuccess: () => router.push("/artists"),
     });
   const handleSubmit = (data: Artist) => {
-    if (status === "authenticated") create.mutate({ data });
+    if (isAuth(status)) create.mutate({ data });
     else show();
   };
   return (

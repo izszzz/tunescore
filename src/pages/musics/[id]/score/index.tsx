@@ -12,9 +12,7 @@ const Score: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.music.findUniqueMusic.useQuery(
     { where: { id } },
-    {
-      onError: () => enqueueSnackbar("music.show error"),
-    }
+    { onError: () => enqueueSnackbar("music.show error") }
   );
   if (!data) return <></>;
   return <ScoreLayout value={data.score || ""} />;

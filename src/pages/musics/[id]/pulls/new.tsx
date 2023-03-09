@@ -17,7 +17,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getCurrentUserId } from "../../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
@@ -42,7 +42,7 @@ const NewPull: NextPage = () => {
       onError: (error) => console.log(error),
     });
   const handleSubmit = (data: Pull) => {
-    if (status === "authenticated")
+    if (isAuth(status))
       create.mutate({
         data: {
           ...data,

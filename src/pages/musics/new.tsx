@@ -28,7 +28,7 @@ import { match, P } from "ts-pattern";
 import Dropzone from "../../components/elements/form/dropzone";
 import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
-import { getCurrentUserId } from "../../helpers/user";
+import { isAuth, getCurrentUserId } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
@@ -53,7 +53,7 @@ const NewMusic: NextPage = () => {
       onError: () => enqueueSnackbar("music.create fail"),
     }),
     handleSubmit = (data: Music) => {
-      if (status === "authenticated")
+      if (isAuth(status))
         create.mutate({
           data: {
             ...data,

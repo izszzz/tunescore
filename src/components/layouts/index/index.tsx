@@ -13,6 +13,7 @@ import type { PaginatedResult } from "prisma-pagination";
 
 import SearchAutocomplete from "../../../components/elements/autocomplete/search";
 import type { SearchAutocompleteProps } from "../../../components/elements/autocomplete/search";
+import { isAuth } from "../../../helpers/user";
 import SingleColumnLayout from "../single_column";
 import type { SingleColumnLayoutProps } from "../single_column";
 
@@ -45,7 +46,7 @@ function IndexLayout<T>({
     }
   };
   const handleClick = () => {
-    if (status === "authenticated") newRoute && router.push(newRoute);
+    if (isAuth(status)) newRoute && router.push(newRoute);
     else show();
   };
   return (

@@ -19,7 +19,7 @@ import { useSnackbar } from "notistack";
 
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getCurrentUserId } from "../../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
@@ -47,7 +47,7 @@ const Issues: NextPage = () => {
       },
     }),
     handleSubmit = (data: Issue) => {
-      if (status === "authenticated")
+      if (isAuth(status))
         create.mutate({
           data: {
             ...data,

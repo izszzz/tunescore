@@ -17,7 +17,7 @@ import { match } from "ts-pattern";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
-import { getCurrentUserId } from "../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
   MusicShowQueryType,
@@ -99,7 +99,7 @@ const MusicLayout = ({
         value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
-          if (status === "authenticated")
+          if (isAuth(status))
             update.mutate({
               ...query,
               data: {

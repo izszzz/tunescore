@@ -14,6 +14,7 @@ import { isNonEmpty } from "ts-array-length";
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
+import { isAuth } from "../../../helpers/user";
 import type {
   ArtistShowArgsType,
   artistShowQuery,
@@ -89,7 +90,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
-          if (status === "authenticated")
+          if (isAuth(status))
             update.mutate({
               ...query,
               data: {

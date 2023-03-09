@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { GetServerSideProps } from "next";
 import type { Session } from "next-auth";
+import type { useSession } from "next-auth/react";
 import { getSession } from "next-auth/react";
 
 export type SessionArg = Session | null;
@@ -37,4 +38,6 @@ export const authenticateUser = (session: SessionArg) => {
   isSelf = (
     session: SessionArg,
     data: unknown & { user: { id: string } | null }
-  ) => getCurrentUserId(session) === data.user?.id;
+  ) => getCurrentUserId(session) === data.user?.id,
+  isAuth = (status: ReturnType<typeof useSession>["status"]) =>
+    status === "authenticated";

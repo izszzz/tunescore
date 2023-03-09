@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import router from "next/router";
 import { useSession } from "next-auth/react";
 
+import { isAuth } from "../../../helpers/user";
+
 const LocaleAlert = () => {
   const { show } = useModal("auth-dialog"),
     { status } = useSession();
@@ -15,8 +17,7 @@ const LocaleAlert = () => {
       action={
         <Button
           onClick={() => {
-            if (status === "authenticated")
-              router.push(router.asPath + "/settings");
+            if (isAuth(status)) router.push(router.asPath + "/settings");
             else show();
           }}
         >

@@ -27,15 +27,11 @@ const Bands: NextPage = () => {
         options: search.data || [],
         loading: search.isLoading,
         renderOption: (_props, option) => <BandListItem data={option} dense />,
-        getOptionLabel: (option) => setLocale(option.name, router),
+        getOptionLabel: ({ name }) => setLocale(name, router),
         textFieldProps: {
-          onChange: (e) =>
+          onChange: ({ currentTarget: { value } }) =>
             search.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
+              where: { name: { is: { [router.locale]: { contains: value } } } },
               take: 10,
             }),
         },

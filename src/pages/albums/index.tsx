@@ -29,12 +29,10 @@ const Albums: NextPage = () => {
         renderOption: (_props, option) => <AlbumListItem data={option} dense />,
         getOptionLabel: (option) => setLocale(option.title, router),
         textFieldProps: {
-          onChange: (e) =>
+          onChange: ({ currentTarget: { value } }) =>
             search.mutate({
               where: {
-                title: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
+                title: { is: { [router.locale]: { contains: value } } },
               },
               take: 10,
             }),

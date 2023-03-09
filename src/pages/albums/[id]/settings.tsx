@@ -6,7 +6,6 @@ import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
 import SpotifyAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/spotify";
@@ -14,13 +13,22 @@ import MusicYoutubeSelectForm from "../../../components/elements/form/settings/s
 import SingleForm from "../../../components/elements/form/single";
 import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
+import { clearBandMutate, selectBandMutate } from "../../../helpers";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import {
+  removeItunesMutate,
+  removeSpotifyMutate,
+  removeYoutubeMutate,
+  selectItunesMutate,
+  selectSpotifyMutate,
+  selectYoutubeMutate,
+} from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
 import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
-const Album: NextPage = () => {
+const AlbumSettings: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter<"/albums/[id]">();
   const query = albumShowQuery({ router, session: useSession().data });
@@ -32,7 +40,6 @@ const Album: NextPage = () => {
         data
       ),
   });
-  const destroy = trpc.album.deleteOneAlbum.useMutation();
   if (!data) return <></>;
   const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];
@@ -51,16 +58,9 @@ const Album: NextPage = () => {
         value={albumData.band}
         loading={update.isLoading}
         onChange={{
-          onClear: () =>
-            update.mutate({
-              ...query,
-              data: { band: { disconnect: true } },
-            }),
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { band: { connect: { id: details?.option.id } } },
-            }),
+          onClear: () => update.mutate({ ...query, ...clearBandMutate }),
+          onSelect: (_e, _v, _r, d) =>
+            update.mutate({ ...query, ...selectBandMutate(d?.option.id) }),
         }}
       />
 
@@ -70,38 +70,18 @@ const Album: NextPage = () => {
       <SpotifyAlbumSelectForm
         term={title}
         streamingLink={data.link?.streaming}
-        onSelect={(value) =>
-          value &&
+        onSelect={({ id, images }) =>
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  spotify: {
-                    id: value.id,
-                    image: {
-                      size: {
-                        small: value.images[2]?.url,
-                        medium: value.images[1]?.url,
-                        large: value.images[0]?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectSpotifyMutate({
+              link: data.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, spotify: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
         }
       />
 
@@ -115,36 +95,19 @@ const Album: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  itunes: {
-                    id: convertAffiliateLink(
-                      value.collectionViewUrl
-                    ).toString(),
-                    image: {
-                      size: {
-                        small: value.artworkUrl30,
-                        medium: value.artworkUrl60,
-                        large: value.artworkUrl100,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectItunesMutate({
+              link: data.link,
+              id: convertAffiliateLink(value.collectionViewUrl).toString(),
+              images: [
+                value.artworkUrl30,
+                value.artworkUrl60,
+                value.artworkUrl100,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(data.link) })
         }
       />
 
@@ -155,46 +118,23 @@ const Album: NextPage = () => {
         term={title}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
-          value?.id &&
-          data.link &&
+          value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link.streaming,
-                  youtube: {
-                    id: value.id.videoId,
-                    image: {
-                      size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
-                        medium: value.snippet?.thumbnails?.medium?.url,
-                        large: value.snippet?.thumbnails?.high?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectYoutubeMutate({
+              link: data.link,
+              id: value.id?.videoId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, youtube: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
         }
-      />
-
-      <DeleteAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
       />
     </AlbumLayout>
   );
@@ -205,4 +145,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: {}, redirect };
 };
 
-export default Album;
+export default AlbumSettings;

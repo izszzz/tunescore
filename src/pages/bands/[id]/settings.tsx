@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import DeleteAlert from "../../../components/elements/alert/delete";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
@@ -17,9 +16,23 @@ import SingleForm from "../../../components/elements/form/single";
 import BandLayout from "../../../components/layouts/show/band";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import {
+  removeItunesMutate,
+  removeSpotifyMutate,
+  removeYoutubeMutate,
+  selectItunesMutate,
+  selectSpotifyMutate,
+  selectYoutubeMutate,
+} from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
 import { bandShowQuery } from "../../../paths/bands/[id]";
+import {
+  removeArtists,
+  removeTags,
+  selectArtists,
+  selectTags,
+} from "../../../paths/bands/[id]/settings";
 import { trpc } from "../../../utils/trpc";
 
 const BandSettings: NextPage = () => {
@@ -38,10 +51,6 @@ const BandSettings: NextPage = () => {
       },
       onError: () => enqueueSnackbar("band.update error"),
     }),
-    destroy = trpc.band.deleteOneBand.useMutation({
-      onSuccess: () => enqueueSnackbar("band.destroy success"),
-      onError: () => enqueueSnackbar("band.destroy error"),
-    }),
     { id } = router.query;
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"];
@@ -53,9 +62,7 @@ const BandSettings: NextPage = () => {
         formContainerProps={{
           onSuccess: ({ name }) => update.mutate({ ...query, data: { name } }),
         }}
-        textFieldElementProps={{
-          name: `name.${router.locale}`,
-        }}
+        textFieldElementProps={{ name: `name.${router.locale}` }}
       />
       <ArtistUpdateAutocomplete
         value={bandData.artists}
@@ -63,15 +70,9 @@ const BandSettings: NextPage = () => {
         label="artists"
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { artists: { connect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...selectArtists(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { artists: { disconnect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...removeArtists(details?.option.id) }),
         }}
       />
       <TagUpdateAutocomplete
@@ -79,34 +80,10 @@ const BandSettings: NextPage = () => {
         loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  create: {
-                    tag: { connect: { id: details.option.id } },
-                    unionType: "Music",
-                  },
-                },
-              },
-            }),
+            update.mutate({ ...query, ...selectTags(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  delete: {
-                    unionId_tagId_unionType: {
-                      unionType: "Music",
-                      unionId: id,
-                      tagId: details.option.id,
-                    },
-                  },
-                },
-              },
-            }),
+            update.mutate({ ...query, ...removeTags(details.option.id, id) }),
         }}
       />
 
@@ -116,37 +93,18 @@ const BandSettings: NextPage = () => {
       <SpotifyArtistSelectForm
         term={setLocale(data.name, router)}
         streamingLink={data.link?.streaming}
-        onSelect={(value) =>
+        onSelect={({ id, images }) =>
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  spotify: {
-                    id: value.id,
-                    image: {
-                      size: {
-                        small: value.images[2]?.url,
-                        medium: value.images[1]?.url,
-                        large: value.images[0]?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectSpotifyMutate({
+              link: data.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, spotify: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
         }
       />
       <Typography variant="h4">iTunes</Typography>
@@ -159,27 +117,15 @@ const BandSettings: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  itunes: {
-                    id: convertAffiliateLink(value.artistLinkUrl).toString(),
-                  },
-                },
-              },
-            },
+            ...selectItunesMutate({
+              link: data.link,
+              id: convertAffiliateLink(value.artistLinkUrl).toString(),
+              images: [],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(data.link) })
         }
       />
 
@@ -194,42 +140,20 @@ const BandSettings: NextPage = () => {
           data.link &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link.streaming,
-                  youtube: {
-                    id: value.id.channelId,
-                    image: {
-                      size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
-                        medium: value.snippet?.thumbnails?.medium?.url,
-                        large: value.snippet?.thumbnails?.high?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectYoutubeMutate({
+              link: data.link,
+              id: value.id?.channelId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, youtube: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
         }
-      />
-
-      <DeleteAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
       />
     </BandLayout>
   );

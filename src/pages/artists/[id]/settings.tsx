@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
 import SpotifyArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/spotify";
@@ -18,12 +17,21 @@ import SingleForm from "../../../components/elements/form/single";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import {
+  removeItunesMutate,
+  removeSpotifyMutate,
+  removeYoutubeMutate,
+  selectItunesMutate,
+  selectSpotifyMutate,
+  selectYoutubeMutate,
+} from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
 import { artistShowQuery } from "../../../paths/artists/[id]";
+import { removeBands, selectBands } from "../../../paths/artists/[id]/settings";
 import { trpc } from "../../../utils/trpc";
 
-const EditArtist: NextPage = () => {
+const ArtistSettings: NextPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter<"/artists/[id]">();
   const { enqueueSnackbar } = useSnackbar();
@@ -38,10 +46,6 @@ const EditArtist: NextPage = () => {
       enqueueSnackbar("artist.update success");
     },
     onError: () => enqueueSnackbar("artist.update error"),
-  });
-  const destroy = trpc.artist.deleteOneArtist.useMutation({
-    onSuccess: () => enqueueSnackbar("artist.destroy success"),
-    onError: () => enqueueSnackbar("artist.destroy error"),
   });
 
   if (!data) return <></>;
@@ -61,15 +65,9 @@ const EditArtist: NextPage = () => {
         loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { bands: { connect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...selectBands(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { bands: { disconnect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...removeBands(details?.option.id) }),
         }}
         multiple
       />
@@ -80,36 +78,17 @@ const EditArtist: NextPage = () => {
       <SpotifyArtistSelectForm
         term={setLocale(data.name, router)}
         streamingLink={data.link?.streaming}
-        onSelect={(value) =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  spotify: {
-                    id: value.id,
-                    image: {
-                      size: {
-                        small: value.images[2]?.url,
-                        medium: value.images[1]?.url,
-                        large: value.images[0]?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          })
-        }
         onRemove={() =>
+          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
+        }
+        onSelect={({ id, images }) =>
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, spotify: undefined },
-              },
-            },
+            ...selectSpotifyMutate({
+              link: data.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           })
         }
       />
@@ -124,27 +103,15 @@ const EditArtist: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  itunes: {
-                    id: convertAffiliateLink(value.artistLinkUrl).toString(),
-                  },
-                },
-              },
-            },
+            ...selectItunesMutate({
+              link: data.link,
+              id: convertAffiliateLink(value.artistLinkUrl).toString(),
+              images: [],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(data.link) })
         }
       />
 
@@ -159,42 +126,20 @@ const EditArtist: NextPage = () => {
           data.link &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link.streaming,
-                  youtube: {
-                    id: value.id.channelId,
-                    image: {
-                      size: {
-                        small: value.snippet?.thumbnails?.default?.url,
-                        medium: value.snippet?.thumbnails?.medium?.url,
-                        large: value.snippet?.thumbnails?.high?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            ...selectYoutubeMutate({
+              link: data.link,
+              id: value.id?.channelId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, youtube: undefined },
-              },
-            },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
         }
-      />
-
-      <DeleteAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
       />
     </ArtistLayout>
   );
@@ -204,4 +149,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: {}, redirect };
 };
 
-export default EditArtist;
+export default ArtistSettings;

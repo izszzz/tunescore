@@ -11,6 +11,7 @@ import { userWhere, userArgs } from "../../../helpers/user";
 import { pullShowArgs } from "./pulls/[pullId]";
 
 export type MusicShowQueryType = ReturnType<typeof musicShowQuery>;
+export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
 export const musicShowQuery = ({
   router: {
     query: { id },
@@ -28,8 +29,6 @@ export const musicShowQuery = ({
     where: { id },
     ...musicShowArgs(session),
   });
-
-export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
 const musicShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {

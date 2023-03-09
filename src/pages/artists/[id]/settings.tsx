@@ -122,7 +122,7 @@ const EditArtist: NextPage = () => {
                     id: value.id.channelId,
                     image: {
                       size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
+                        small: value.snippet?.thumbnails?.default?.url,
                         medium: value.snippet?.thumbnails?.medium?.url,
                         large: value.snippet?.thumbnails?.high?.url,
                       },

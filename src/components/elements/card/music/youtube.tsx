@@ -8,6 +8,7 @@ import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { match } from "ts-pattern";
 
 import type {
   SearchResult,
@@ -26,8 +27,8 @@ function YoutubeMusicCard<T extends SearchResult | Video | undefined>({
   size,
   onClick,
 }: YoutubeMusicCardProps<T>) {
-  if (size === "small")
-    return (
+  return match(size)
+    .with("small", () => (
       <Tooltip
         title={
           <>
@@ -53,9 +54,8 @@ function YoutubeMusicCard<T extends SearchResult | Video | undefined>({
           />
         </Box>
       </Tooltip>
-    );
-  if (size === "large")
-    return (
+    ))
+    .with("large", () => (
       <Card sx={{ display: "flex" }}>
         <CardContent>
           <CardMedia
@@ -84,8 +84,8 @@ function YoutubeMusicCard<T extends SearchResult | Video | undefined>({
           </Box>
         </CardContent>
       </Card>
-    );
-  return <></>;
+    ))
+    .exhaustive();
 }
 
 export default YoutubeMusicCard;

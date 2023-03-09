@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { match } from "ts-pattern";
 
 import CloseIconButton from "../../button/icon/close";
 import SquareCard from "../square";
@@ -15,9 +16,9 @@ interface SpotifyAlbumCardProps {
   size: "small" | "large";
   onClick?: (value: SpotifyApi.AlbumObjectFull) => void;
 }
-const SpotifyAlbumCard = ({ size, data, onClick }: SpotifyAlbumCardProps) => {
-  if (size === "small")
-    return (
+const SpotifyAlbumCard = ({ size, data, onClick }: SpotifyAlbumCardProps) =>
+  match(size)
+    .with("small", () => (
       <Tooltip title={<Typography variant="subtitle1">{data.name}</Typography>}>
         <Box>
           <SquareCard
@@ -33,9 +34,8 @@ const SpotifyAlbumCard = ({ size, data, onClick }: SpotifyAlbumCardProps) => {
           />
         </Box>
       </Tooltip>
-    );
-  if (size === "large")
-    return (
+    ))
+    .with("large", () => (
       <Card sx={{ display: "flex" }}>
         <CardContent>
           <CardMedia
@@ -51,8 +51,7 @@ const SpotifyAlbumCard = ({ size, data, onClick }: SpotifyAlbumCardProps) => {
           </Box>
         </CardContent>
       </Card>
-    );
-  return <></>;
-};
+    ))
+    .exhaustive();
 
 export default SpotifyAlbumCard;

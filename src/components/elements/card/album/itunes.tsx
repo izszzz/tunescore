@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { match } from "ts-pattern";
 
 import type { ItunesAlbum } from "../../../../helpers/itunes";
 import CloseIconButton from "../../button/icon/close";
@@ -14,12 +15,12 @@ import SquareCard from "../square";
 
 interface ItunesAlbumCardProps {
   data: ItunesAlbum;
-  size: "small" | "medium" | "large";
+  size: "small" | "large";
   onClick?: (value: ItunesAlbum) => void;
 }
-const ItunesAlbumCard = ({ size, data, onClick }: ItunesAlbumCardProps) => {
-  if (size === "small")
-    return (
+const ItunesAlbumCard = ({ size, data, onClick }: ItunesAlbumCardProps) =>
+  match(size)
+    .with("small", () => (
       <Tooltip
         title={
           <>
@@ -48,9 +49,8 @@ const ItunesAlbumCard = ({ size, data, onClick }: ItunesAlbumCardProps) => {
           onClick={() => onClick && onClick(data)}
         />
       </Tooltip>
-    );
-  if (size === "large")
-    return (
+    ))
+    .with("large", () => (
       <Card sx={{ display: "flex" }}>
         <CardContent>
           <CardMedia
@@ -74,8 +74,7 @@ const ItunesAlbumCard = ({ size, data, onClick }: ItunesAlbumCardProps) => {
           </Box>
         </CardContent>
       </Card>
-    );
-  return <></>;
-};
+    ))
+    .exhaustive();
 
 export default ItunesAlbumCard;

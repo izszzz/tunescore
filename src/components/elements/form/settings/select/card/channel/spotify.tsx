@@ -1,10 +1,10 @@
 import type { StreamingLink } from "@prisma/client";
 
 import { trpc } from "../../../../../../../utils/trpc";
-import SpotifyArtistCard from "../../../../../card/channel/spotify";
+import SpotifyChannelCard from "../../../../../card/channel/spotify";
 import SpotifySelectForm from "../spotify";
 
-interface SpotifyArtistSelectFormProps {
+interface SpotifyChannelSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
   term: string;
   onSelect: (data: SpotifyApi.ArtistObjectFull) => void;
@@ -15,7 +15,7 @@ const SpotifyArtistSelectForm = ({
   term,
   onSelect,
   onRemove,
-}: SpotifyArtistSelectFormProps) => {
+}: SpotifyChannelSelectFormProps) => {
   const { data } = trpc.spotify.findUniqueArtist.useQuery(
       streamingLink?.spotify?.id
     ),
@@ -27,11 +27,11 @@ const SpotifyArtistSelectForm = ({
       search={(searchData?.items as SpotifyApi.ArtistObjectFull[]) || []}
       largeCard={(value) =>
         value && (
-          <SpotifyArtistCard size="large" data={value} onClick={onRemove} />
+          <SpotifyChannelCard size="large" data={value} onClick={onRemove} />
         )
       }
       smallCard={(value) => (
-        <SpotifyArtistCard size="small" data={value} onClick={onSelect} />
+        <SpotifyChannelCard size="small" data={value} onClick={onSelect} />
       )}
     />
   );

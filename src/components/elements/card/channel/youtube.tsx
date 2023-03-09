@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { match } from "ts-pattern";
 
 import type {
   Channel,
@@ -16,7 +17,7 @@ import SquareCard from "../square";
 
 interface ChannelYoutubeCardProps<T> {
   data: T;
-  size: "small" | "medium" | "large";
+  size: "small" | "large";
   onClick: (value: T) => void;
 }
 function ChannelYoutubeCard<T extends SearchResult | Channel | undefined>({
@@ -24,8 +25,8 @@ function ChannelYoutubeCard<T extends SearchResult | Channel | undefined>({
   size,
   onClick,
 }: ChannelYoutubeCardProps<T>) {
-  if (size === "small")
-    return (
+  return match(size)
+    .with("small", () => (
       <SquareCard
         resource="ARTIST"
         title={
@@ -37,9 +38,8 @@ function ChannelYoutubeCard<T extends SearchResult | Channel | undefined>({
         size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
         onClick={() => onClick && onClick(data)}
       />
-    );
-  if (size === "large")
-    return (
+    ))
+    .with("large", () => (
       <Card sx={{ display: "flex" }}>
         <CardContent>
           <CardMedia
@@ -62,8 +62,8 @@ function ChannelYoutubeCard<T extends SearchResult | Channel | undefined>({
           </Box>
         </CardContent>
       </Card>
-    );
-  return <></>;
+    ))
+    .exhaustive();
 }
 
 export default ChannelYoutubeCard;

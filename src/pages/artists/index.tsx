@@ -14,9 +14,7 @@ const Artists: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.artist.useMutation({
-    onError: () => {
-      enqueueSnackbar("music.search error");
-    },
+    onError: () => enqueueSnackbar("music.search error"),
   });
   const { data } = trpc.pagination.artist.useQuery(
     artistPaginationQuery({ router, session: useSession().data })
@@ -31,15 +29,11 @@ const Artists: NextPage = () => {
         renderOption: (_props, option) => (
           <ArtistListItem data={option} dense />
         ),
-        getOptionLabel: (option) => setLocale(option.name, router),
+        getOptionLabel: ({ name }) => setLocale(name, router),
         textFieldProps: {
-          onChange: (e) =>
+          onChange: ({ currentTarget: { value } }) =>
             search.mutate({
-              where: {
-                name: {
-                  is: { [router.locale]: { contains: e.currentTarget.value } },
-                },
-              },
+              where: { name: { is: { [router.locale]: { contains: value } } } },
               take: 10,
             }),
         },

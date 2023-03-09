@@ -51,12 +51,9 @@ const Issues: NextPage = () => {
           loading: search.isLoading,
           getOptionLabel: (option) => option.title,
           textFieldProps: {
-            onChange: (e) =>
+            onChange: ({ currentTarget: { value } }) =>
               search.mutate({
-                where: {
-                  title: { contains: e.currentTarget.value },
-                  music: { id },
-                },
+                where: { title: { contains: value }, music: { id } },
                 take: 10,
               }),
           },

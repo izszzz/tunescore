@@ -6,6 +6,8 @@ import { bookmarkArgs } from "../../../helpers/bookmark";
 import { musicListArgs } from "../../../helpers/music";
 import type { SessionArg } from "../../../helpers/user";
 
+export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
+export type BandShowQueryType = ReturnType<typeof bandShowQuery>;
 export const bandShowQuery = ({
   router: {
     query: { id },
@@ -19,8 +21,6 @@ export const bandShowQuery = ({
     where: { id },
     ...bandShowArgs(session),
   });
-
-export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
 const bandShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.BandArgs>()({
     include: {

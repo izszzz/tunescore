@@ -9,7 +9,6 @@ import ResourceIcon from "../../icon/resource";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-
 type TagUpdateAutocomplete = Pick<
   UpdateAutocompleteProps<Tag, true, undefined, undefined>,
   "onChange" | "loading" | "value"
@@ -31,15 +30,8 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
       textFieldProps={{
         label: "tags",
         margin: "dense",
-        onChange: (e) =>
-          search.mutate({
-            where: {
-              name: {
-                contains: e.currentTarget.value,
-              },
-            },
-            take: 10,
-          }),
+        onChange: ({ currentTarget: { value } }) =>
+          search.mutate({ where: { name: { contains: value } }, take: 10 }),
       }}
       multiple
     />

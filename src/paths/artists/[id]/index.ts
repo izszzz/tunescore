@@ -6,6 +6,8 @@ import { bookmarkArgs } from "../../../helpers/bookmark";
 import { participatedMusicArgs } from "../../../helpers/participation";
 import type { SessionArg } from "../../../helpers/user";
 
+export type ArtistShowArgsType = ReturnType<typeof artistShowArgs>;
+export type ArtistShowQueryType = ReturnType<typeof artistShowQuery>;
 export const artistShowQuery = ({
   router: {
     query: { id },
@@ -19,8 +21,6 @@ export const artistShowQuery = ({
     where: { id },
     ...artistShowArgs(session),
   });
-
-export type ArtistShowArgsType = ReturnType<typeof artistShowArgs>;
 const artistShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.ArtistArgs>()({
     include: {

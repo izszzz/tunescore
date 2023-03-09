@@ -24,10 +24,7 @@ const ScoreEdit: NextPage = () => {
       }}
       defaultValue={data.score || ""}
       onSave={(value) =>
-        update.mutate({
-          where: { id },
-          data: { score: value },
-        })
+        update.mutate({ where: { id }, data: { score: value } })
       }
     />
   );

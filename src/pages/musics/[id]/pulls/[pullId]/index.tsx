@@ -34,9 +34,9 @@ const Pull: NextPage = () => {
       onError: () => enqueueSnackbar("pull.show error"),
     });
   if (!music.data || !pull.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as PullLayoutProps["data"];
-  const { id, title, body, comments } = pullData;
+  const musicData = music.data as MusicLayoutProps["data"],
+    pullData = pull.data as PullLayoutProps["data"],
+    { id, title, body, comments } = pullData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <PullLayout query={pullQuery} data={pullData} activeTab="conversation">

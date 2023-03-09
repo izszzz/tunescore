@@ -56,12 +56,12 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       onError: () => enqueueSnackbar("user.update error"),
     }),
     { id } = router.query,
-    followed = isNonEmpty(data.followers);
-  const tabs: DefaultTabsProps["tabs"] = [
-    { label: "info", pathname: "/users/[id]" },
-    { label: "bookmarks", pathname: "/users/[id]/bookmarks" },
-    { label: "repositories", pathname: "/users/[id]/repositories" },
-  ];
+    followed = isNonEmpty(data.followers),
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/users/[id]" },
+      { label: "bookmarks", pathname: "/users/[id]/bookmarks" },
+      { label: "repositories", pathname: "/users/[id]/repositories" },
+    ];
   return (
     <ShowLayout
       tabs={tabs}
@@ -91,7 +91,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
                 variant={followed ? "outlined" : "contained"}
                 onClick={() =>
                   update.mutate({
-                    where: { id },
+                    ...query,
                     data: { followers: followMutate({ data, session }) },
                   })
                 }

@@ -29,7 +29,8 @@ const UserBookmarks: NextPage = () => {
     ),
     search = trpc.search.bookmark.useMutation({
       onError: () => enqueueSnackbar("music.search error"),
-    });
+    }),
+    { locale } = router;
   if (!data || !bookmarkData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
@@ -59,37 +60,13 @@ const UserBookmarks: NextPage = () => {
               )
               .otherwise(() => ""),
           textFieldProps: {
-            onChange: (e) =>
+            onChange: ({ currentTarget: { value: v } }) =>
               search.mutate({
                 where: {
-                  music: {
-                    title: {
-                      is: {
-                        [router.locale]: { contains: e.currentTarget.value },
-                      },
-                    },
-                  },
-                  album: {
-                    title: {
-                      is: {
-                        [router.locale]: { contains: e.currentTarget.value },
-                      },
-                    },
-                  },
-                  artist: {
-                    name: {
-                      is: {
-                        [router.locale]: { contains: e.currentTarget.value },
-                      },
-                    },
-                  },
-                  band: {
-                    name: {
-                      is: {
-                        [router.locale]: { contains: e.currentTarget.value },
-                      },
-                    },
-                  },
+                  music: { title: { is: { [locale]: { contains: v } } } },
+                  album: { title: { is: { [locale]: { contains: v } } } },
+                  artist: { name: { is: { [locale]: { contains: v } } } },
+                  band: { name: { is: { [locale]: { contains: v } } } },
                 },
                 take: 10,
               }),

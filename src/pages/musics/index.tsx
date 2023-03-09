@@ -31,12 +31,10 @@ const Musics: NextPage = () => {
         options: search.data || [],
         loading: search.isLoading,
         renderOption: (_props, option) => <MusicListItem data={option} dense />,
-        getOptionLabel: (option) => setLocale(option.title, router),
-        onInputChange: (_e, inputValue) => {
+        getOptionLabel: ({ title }) => setLocale(title, router),
+        onInputChange: (_e, value) => {
           search.mutate({
-            where: {
-              title: { is: { [router.locale]: { contains: inputValue } } },
-            },
+            where: { title: { is: { [router.locale]: { contains: value } } } },
             take: 10,
           });
         },

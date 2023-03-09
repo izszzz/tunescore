@@ -33,12 +33,9 @@ const UserFollowers: NextPage = () => {
           loading: search.isLoading,
           getOptionLabel: (option) => option.name || "",
           textFieldProps: {
-            onChange: (e) =>
+            onChange: ({ currentTarget: { value: v } }) =>
               search.mutate({
-                where: {
-                  followerId: id,
-                  following: { name: { contains: e.currentTarget.value } },
-                },
+                where: { followerId: id, following: { name: { contains: v } } },
                 take: 10,
               }),
           },

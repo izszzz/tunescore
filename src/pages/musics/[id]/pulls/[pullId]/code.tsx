@@ -21,18 +21,14 @@ const Code: NextPage = () => {
     query = musicShowQuery({ router, session: useSession().data }),
     pullQuery = pullShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     });
   if (!music.data || !pull.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as PullLayoutProps["data"];
+  const musicData = music.data as MusicLayoutProps["data"],
+    pullData = pull.data as PullLayoutProps["data"];
   return (
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <PullLayout query={pullQuery} data={pullData} activeTab="code">

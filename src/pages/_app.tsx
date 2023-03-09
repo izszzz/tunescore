@@ -70,10 +70,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
                       },
                     ],
                   }}
-                  twitter={{
-                    site: "@hakei_prod",
-                    cardType: "summary",
-                  }}
+                  twitter={{ site: "@hakei_prod", cardType: "summary" }}
                 />
                 <CssBaseline />
                 <ModalsProvider>

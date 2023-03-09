@@ -29,9 +29,7 @@ const Issues: NextPage = () => {
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
       },
-      {
-        onError: () => enqueueSnackbar("music.show error"),
-      }
+      { onError: () => enqueueSnackbar("music.show error") }
     ),
     search = trpc.search.issue.useMutation({
       onError: () => enqueueSnackbar("music.search error"),

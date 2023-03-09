@@ -31,14 +31,10 @@ const Pulls: NextPage = () => {
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
       },
-      {
-        onError: () => enqueueSnackbar("pull.index error"),
-      }
+      { onError: () => enqueueSnackbar("pull.index error") }
     ),
     search = trpc.search.pull.useMutation({
-      onError: () => {
-        enqueueSnackbar("music.search error");
-      },
+      onError: () => enqueueSnackbar("music.search error"),
     });
   if (!music.data || !pullsData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
@@ -46,14 +42,11 @@ const Pulls: NextPage = () => {
     <MusicLayout data={musicData} query={query} activeTab="pullrequests">
       <IndexLayout<Pull>
         meta={pullsData.meta}
-        newRoute={{
-          pathname: "/musics/[id]/pulls/new",
-          query: { id },
-        }}
+        newRoute={{ pathname: "/musics/[id]/pulls/new", query: { id } }}
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
-          getOptionLabel: (option) => option.title,
+          getOptionLabel: ({ title }) => title,
           textFieldProps: {
             onChange: ({ currentTarget: { value } }) =>
               search.mutate({

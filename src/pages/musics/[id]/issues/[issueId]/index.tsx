@@ -34,9 +34,7 @@ const Issue: NextPage = () => {
           comments: { where: { unionType: "Issue" }, include: { user: true } },
         },
       },
-      {
-        onError: () => enqueueSnackbar("music.show error"),
-      }
+      { onError: () => enqueueSnackbar("music.show error") }
     );
   if (!music.data || !issue.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];

@@ -12,6 +12,7 @@ import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
 import setLocale from "../../../helpers/locale";
+import { isAuth } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
   albumShowQuery,
@@ -74,7 +75,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
-          if (status === "authenticated")
+          if (isAuth(status))
             update.mutate({
               ...query,
               data: {

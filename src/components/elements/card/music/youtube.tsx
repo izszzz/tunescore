@@ -16,16 +16,16 @@ import type {
 import ResourceIcon from "../../icon/resource";
 import SquareCard from "../square";
 
-interface MusicYoutubeCardProps<T> {
+interface YoutubeMusicCardProps<T> {
   data: T;
   size: "small" | "large";
   onClick: (value: T) => void;
 }
-function MusicYoutubeCard<T extends SearchResult | Video | undefined>({
+function YoutubeMusicCard<T extends SearchResult | Video | undefined>({
   data,
   size,
   onClick,
-}: MusicYoutubeCardProps<T>) {
+}: YoutubeMusicCardProps<T>) {
   if (size === "small")
     return (
       <Tooltip
@@ -88,4 +88,4 @@ function MusicYoutubeCard<T extends SearchResult | Video | undefined>({
   return <></>;
 }
 
-export default MusicYoutubeCard;
+export default YoutubeMusicCard;

@@ -44,4 +44,21 @@ export const spotifyRouter = router({
         ? spotify.getTrack(input).then(({ body }) => body)
         : undefined;
     }),
+  searchArtists: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const spotify = await authorized(ctx.session);
+      return spotify.searchArtists(input).then(({ body }) => {
+        const keys = Object.keys(body);
+        return body[keys[0] as keyof SpotifyApi.SearchResponse];
+      });
+    }),
+  findUniqueArtist: publicProcedure
+    .input(z.string().nullish())
+    .query(async ({ ctx, input }) => {
+      const spotify = await authorized(ctx.session);
+      return input
+        ? spotify.getArtist(input).then(({ body }) => body)
+        : undefined;
+    }),
 });

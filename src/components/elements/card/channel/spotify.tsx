@@ -8,42 +8,26 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import CloseIconButton from "../../button/icon/close";
-import ResourceIcon from "../../icon/resource";
 import SquareCard from "../square";
 
-interface SpotifyMusicCardProps {
-  data: SpotifyApi.TrackObjectFull;
+interface SpotifyArtistCardProps {
+  data: SpotifyApi.ArtistObjectFull;
   size: "small" | "large";
-  onClick?: (value: SpotifyApi.TrackObjectFull) => void;
+  onClick?: (value: SpotifyApi.ArtistObjectFull) => void;
 }
-const SpotifyMusicCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
+const SpotifyArtistCard = ({ size, data, onClick }: SpotifyArtistCardProps) => {
   if (size === "small")
     return (
-      <Tooltip
-        title={
-          <>
-            <Typography variant="subtitle1">{data.name}</Typography>
-            <Typography variant="caption">
-              <ResourceIcon resource="ALBUM" fontSize="inherit" />{" "}
-              {data.album.name}
-            </Typography>
-            <br />
-            <Typography variant="caption">
-              <ResourceIcon resource="BAND" fontSize="inherit" />{" "}
-              {data.artists[0]?.name}
-            </Typography>
-          </>
-        }
-      >
+      <Tooltip title={<Typography variant="subtitle1">{data.name}</Typography>}>
         <Box>
           <SquareCard
-            resource="MUSIC"
+            resource="ARTIST"
             title={
               <Typography variant="caption" display="block" noWrap>
                 {data.name}
               </Typography>
             }
-            image={data.album.images[1]?.url || ""}
+            image={data.images[1]?.url || ""}
             size="100px"
             onClick={() => onClick && onClick(data)}
           />
@@ -57,17 +41,11 @@ const SpotifyMusicCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
           <CardMedia
             component="img"
             sx={{ width: 100, height: "auto", borderRadius: "3px" }}
-            image={data.album.images[1]?.url || ""}
+            image={data.images[1]?.url || ""}
             alt="Live from space album cover"
           />
         </CardContent>
         <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
-          <Box>
-            <Typography variant="h6">{data.name}</Typography>
-            <Typography variant="caption">{data.album.name}</Typography>
-            <br />
-            <Typography variant="caption">{data.artists[0]?.name}</Typography>
-          </Box>
           <Box display="flex" alignItems="center">
             <CloseIconButton onClick={() => onClick && onClick(data)} />
           </Box>
@@ -77,4 +55,4 @@ const SpotifyMusicCard = ({ size, data, onClick }: SpotifyMusicCardProps) => {
   return <></>;
 };
 
-export default SpotifyMusicCard;
+export default SpotifyArtistCard;

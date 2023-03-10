@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import MusicListItem from "../../components/elements/list/item/music";
 import MusicLists from "../../components/elements/list/music";
 import DefaultIndexLayout from "../../components/layouts/index/default";
+import { searchMutate } from "../../helpers";
 import setLocale from "../../helpers/locale";
 import { musicPaginationQuery } from "../../paths/musics";
 import { trpc } from "../../utils/trpc";
@@ -33,10 +34,7 @@ const Musics: NextPage = () => {
         renderOption: (_props, option) => <MusicListItem data={option} dense />,
         getOptionLabel: ({ title }) => setLocale(title, router),
         onInputChange: (_e, value) => {
-          search.mutate({
-            where: { title: { is: { [router.locale]: { contains: value } } } },
-            take: 10,
-          });
+          search.mutate(searchMutate(router, "title", value));
         },
       }}
     >

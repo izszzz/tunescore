@@ -14,7 +14,6 @@ import { appWithTranslation } from "next-i18next";
 import { DefaultSeo } from "next-seo";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { SnackbarProvider } from "notistack";
-import { RecoilRoot } from "recoil";
 import { useDarkMode } from "usehooks-ts";
 
 import "../styles/globals.css";
@@ -41,48 +40,46 @@ const MyApp: AppType<{ session: Session | null }> = ({
   }, [isDarkMode]);
 
   return (
-    <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={3}>
-          <SessionProvider session={session}>
-            <NiceModal.Provider>
-              <QueryClientProvider client={queryClient}>
-                <Head>
-                  <title>tunescore</title>
-                </Head>
-                <GoogleAnalytics trackPageViews />
-                <DefaultSeo
-                  defaultTitle="tunescore"
-                  description="Music Score Web Site"
-                  openGraph={{
-                    type: "website",
-                    title: "tunescore",
-                    description: "Music Score Web Site",
-                    site_name: "tunescore",
-                    url: "https://tunescore.dev",
-                    images: [
-                      {
-                        url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
-                        width: 1000,
-                        height: 1000,
-                        alt: "Og Image Alt",
-                        type: "image/png",
-                      },
-                    ],
-                  }}
-                  twitter={{ site: "@hakei_prod", cardType: "summary" }}
-                />
-                <CssBaseline />
-                <ModalsProvider>
-                  <Component {...pageProps} />
-                </ModalsProvider>
-                <ReactQueryDevtools initialIsOpen={false} />
-              </QueryClientProvider>
-            </NiceModal.Provider>
-          </SessionProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </RecoilRoot>
+    <ThemeProvider theme={theme}>
+      <SnackbarProvider maxSnack={3}>
+        <SessionProvider session={session}>
+          <NiceModal.Provider>
+            <QueryClientProvider client={queryClient}>
+              <Head>
+                <title>tunescore</title>
+              </Head>
+              <GoogleAnalytics trackPageViews />
+              <DefaultSeo
+                defaultTitle="tunescore"
+                description="Music Score Web Site"
+                openGraph={{
+                  type: "website",
+                  title: "tunescore",
+                  description: "Music Score Web Site",
+                  site_name: "tunescore",
+                  url: "https://tunescore.dev",
+                  images: [
+                    {
+                      url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
+                      width: 1000,
+                      height: 1000,
+                      alt: "Og Image Alt",
+                      type: "image/png",
+                    },
+                  ],
+                }}
+                twitter={{ site: "@hakei_prod", cardType: "summary" }}
+              />
+              <CssBaseline />
+              <ModalsProvider>
+                <Component {...pageProps} />
+              </ModalsProvider>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          </NiceModal.Provider>
+        </SessionProvider>
+      </SnackbarProvider>
+    </ThemeProvider>
   );
 };
 

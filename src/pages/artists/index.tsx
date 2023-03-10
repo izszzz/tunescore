@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import ArtistLists from "../../components/elements/list/artist";
 import ArtistListItem from "../../components/elements/list/item/artist";
 import IndexLayout from "../../components/layouts/index/default";
+import { searchMutate } from "../../helpers";
 import setLocale from "../../helpers/locale";
 import { artistPaginationQuery } from "../../paths/artists";
 import { trpc } from "../../utils/trpc";
@@ -26,16 +27,11 @@ const Artists: NextPage = () => {
       searchAutocompleteProps={{
         options: search.data || [],
         loading: search.isLoading,
-        renderOption: (_props, option) => (
-          <ArtistListItem data={option} dense />
-        ),
+        renderOption: (_props, data) => <ArtistListItem data={data} dense />,
         getOptionLabel: ({ name }) => setLocale(name, router),
         textFieldProps: {
           onChange: ({ currentTarget: { value } }) =>
-            search.mutate({
-              where: { name: { is: { [router.locale]: { contains: value } } } },
-              take: 10,
-            }),
+            search.mutate(searchMutate(router, "name", value)),
         },
       }}
     >

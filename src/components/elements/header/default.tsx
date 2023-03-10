@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
 
+import { searchMutate } from "../../../helpers";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import LocaleAutocomplete from "../autocomplete/locale";
@@ -56,20 +57,11 @@ const DefaultHeader = () => {
               size="small"
               options={search.data || []}
               loading={search.isLoading}
-              getOptionLabel={(option) => setLocale(option.title, router)}
+              getOptionLabel={({ title }) => setLocale(title, router)}
               onInputChange={(_e, inputValue) =>
-                search.mutate({
-                  where: {
-                    title: {
-                      is: { [router.locale]: { contains: inputValue } },
-                    },
-                  },
-                  take: 10,
-                })
+                search.mutate(searchMutate(router, "title", inputValue))
               }
-              textFieldProps={{
-                onKeyDown: handleKeyDown,
-              }}
+              textFieldProps={{ onKeyDown: handleKeyDown }}
               fullWidth
             />
           </Grid>

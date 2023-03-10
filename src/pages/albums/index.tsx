@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import AlbumLists from "../../components/elements/list/album";
 import AlbumListItem from "../../components/elements/list/item/album";
 import IndexLayout from "../../components/layouts/index/default";
+import { searchMutate } from "../../helpers";
 import setLocale from "../../helpers/locale";
 import { albumPaginationQuery } from "../../paths/albums";
 import { trpc } from "../../utils/trpc";
@@ -30,10 +31,7 @@ const Albums: NextPage = () => {
         getOptionLabel: ({ title }) => setLocale(title, router),
         textFieldProps: {
           onChange: ({ currentTarget: { value: v } }) =>
-            search.mutate({
-              where: { title: { is: { [router.locale]: { contains: v } } } },
-              take: 10,
-            }),
+            search.mutate(searchMutate(router, "title", v)),
         },
       }}
     >

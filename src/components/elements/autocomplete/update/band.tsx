@@ -4,6 +4,7 @@ import type { Band } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
+import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
 
@@ -20,29 +21,17 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const search = trpc.search.band.useMutation({
-    onError: () => {
-      enqueueSnackbar("band.search error");
-    },
+    onError: () => enqueueSnackbar("band.search error"),
   });
   return (
     <UpdateAutocomplete<Band, T>
       {...props}
       options={search.data || []}
-      getOptionLabel={(option) => setLocale(option.name, router)}
+      getOptionLabel={({ name }) => setLocale(name, router)}
       onInputChange={(_e, value) =>
-        search.mutate({
-          where: {
-            name: {
-              is: { [router.locale]: { contains: value } },
-            },
-          },
-          take: 10,
-        })
+        search.mutate(searchMutate(router, "name", value))
       }
-      textFieldProps={{
-        label: "band",
-        margin: "dense",
-      }}
+      textFieldProps={{ label: "band", margin: "dense" }}
     />
   );
 }

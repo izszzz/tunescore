@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import BandLists from "../../components/elements/list/band";
 import BandListItem from "../../components/elements/list/item/band";
 import DefaultIndexLayout from "../../components/layouts/index/default";
+import { searchMutate } from "../../helpers";
 import setLocale from "../../helpers/locale";
 import { bandPaginationQuery } from "../../paths/bands";
 import { trpc } from "../../utils/trpc";
@@ -30,10 +31,7 @@ const Bands: NextPage = () => {
         getOptionLabel: ({ name }) => setLocale(name, router),
         textFieldProps: {
           onChange: ({ currentTarget: { value } }) =>
-            search.mutate({
-              where: { name: { is: { [router.locale]: { contains: value } } } },
-              take: 10,
-            }),
+            search.mutate(searchMutate(router, "name", value)),
         },
       }}
     >

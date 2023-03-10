@@ -4,6 +4,7 @@ import type { Album } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
+import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
 import ResourceIcon from "../../icon/resource";
@@ -21,30 +22,18 @@ const AlbumUpdateAutocomplete = ({
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.album.useMutation({
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
+    onError: () => enqueueSnackbar("artist.search error"),
   });
   return (
     <UpdateAutocomplete<Album, true>
       options={search.data || []}
       loading={search.isLoading}
-      getOptionLabel={(option) => setLocale(option.title, router)}
+      getOptionLabel={({ title }) => setLocale(title, router)}
       ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}
       onInputChange={(_e, value) =>
-        search.mutate({
-          where: {
-            title: {
-              is: { [router.locale]: { contains: value } },
-            },
-          },
-          take: 10,
-        })
+        search.mutate(searchMutate(router, "title", value))
       }
-      textFieldProps={{
-        label: "albums",
-        margin: "dense",
-      }}
+      textFieldProps={{ label: "albums", margin: "dense" }}
       multiple
       {...props}
     />

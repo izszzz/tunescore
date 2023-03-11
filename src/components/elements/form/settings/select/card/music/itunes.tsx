@@ -1,6 +1,6 @@
+import type { ItunesMusic } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
-import type { ItunesMusic } from "../../../../../../../helpers/itunes";
 import { itunes } from "../../../../../../../server/common/itunes";
 import MusicItunesCard from "../../../../../card/music/itunes";
 import ItunesSelectForm from "../itunes";

@@ -1,8 +1,8 @@
 import React from "react";
 
+import type { ItunesAlbum } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
-import type { ItunesAlbum } from "../../../../../../../helpers/itunes";
 import { itunes } from "../../../../../../../server/common/itunes";
 import ItunesAlbumCard from "../../../../../card/album/itunes";
 import ItunesSelectForm from "../itunes";

@@ -1,5 +1,6 @@
 import React from "react";
 
+import type { ItunesMusic } from "@izszzz/itunes-search-api";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,7 +9,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { match } from "ts-pattern";
 
-import type { ItunesMusic } from "../../../../helpers/itunes";
 import CloseIconButton from "../../button/icon/close";
 import ResourceIcon from "../../icon/resource";
 import SquareCard from "../square";

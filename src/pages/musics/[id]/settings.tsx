@@ -75,7 +75,8 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update success");
       },
       onError: () => enqueueSnackbar("music.update error"),
-    });
+    }),
+    context = trpc.useContext();
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];
@@ -215,16 +216,32 @@ const SettingsMusic: NextPage = () => {
         <SpotifyMusicSelectForm
           term={setLocale(musicData.title, router)}
           streamingLink={musicData.link?.streaming}
-          onSelect={({ id, album: { images } }) =>
-            update.mutate({
+          onSelect={async (item) => {
+            const album = await context.client.album.findFirstAlbum.query({
+              where: {
+                link: {
+                  is: {
+                    streaming: {
+                      is: {
+                        spotify: { is: { id: { equals: item.album.id } } },
+                      },
+                    },
+                  },
+                },
+              },
+            });
+            await update.mutate({
               ...query,
-              ...selectSpotifyMutate({
-                link: data.link,
-                id,
-                images: [images[2]?.url, images[1]?.url, images[0]?.url],
-              }),
-            })
-          }
+              data: {
+                ...selectSpotifyMutate({
+                  link: data.link,
+                  id: item.id,
+                  images: [],
+                }).data,
+                albums: { connect: { id: album?.id } },
+              },
+            });
+          }}
           onRemove={() =>
             update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
           }

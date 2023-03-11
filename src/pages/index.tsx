@@ -33,6 +33,7 @@ const Home: NextPage = () => {
   });
   return (
     <DefaultSingleColumnLayout>
+      {" "}
       <Grid container spacing={1} my={3}>
         {musics.data?.data.map((music) => (
           <Grid

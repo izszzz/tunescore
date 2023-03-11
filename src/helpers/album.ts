@@ -23,9 +23,9 @@ type Data = Prisma.AlbumGetPayload<AlbumListArgsType>;
 
 export const getAlbumOwner = (data: Data, router: NextRouter) =>
   match(data)
-    .with({ band: P.select(P.not(P.nullish)) }, (band) => ({
+    .with({ band: P.select(P.not(P.nullish)) }, ({ id, name }) => ({
       type: "BAND" as const,
-      owner: { id: band.id, name: setLocale(band.name, router) },
+      owner: { id, name: setLocale(name, router) },
     }))
     .with({ artists: P.select(P.not(P.nullish)) }, (artists) =>
       isNonEmpty(artists)

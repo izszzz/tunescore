@@ -12,7 +12,6 @@ const YoutubeButton = ({ href }: { href: string }) => (
       color="error"
       target="blank"
       href={href}
-      // "https://www.youtube.com/channel/"
     >
       <YoutubeIcon />
     </IconButton>

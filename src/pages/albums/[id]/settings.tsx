@@ -5,7 +5,6 @@ import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import * as R from "remeda";
 
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
@@ -75,40 +74,37 @@ const AlbumSettings: NextPage = () => {
         onSelect={async ({ id, images }) => {
           const spotifyAlbum =
             await context.client.spotify.findUniqueAlbum.query(id);
-          const musics = await Promise.all(
-            spotifyAlbum?.tracks.items.map(async (track) => {
-              const music = await context.client.music.findFirstMusic.query({
-                where: {
-                  link: {
-                    is: {
-                      streaming: {
-                        is: {
-                          spotify: { is: { id: { equals: track.id } } },
-                        },
+          spotifyAlbum?.tracks.items.map(async (track) => {
+            const music = await context.client.music.findFirstMusic.query({
+              where: {
+                link: {
+                  is: {
+                    streaming: {
+                      is: {
+                        spotify: { is: { id: { equals: track.id } } },
                       },
                     },
                   },
                 },
-              });
-              if (music) {
-                if (!music.albumIDs.includes(data.id))
-                  update.mutate({
-                    ...query,
-                    data: { musics: { connect: { id: music.id } } },
-                  });
-              } else {
-                return {
+              },
+            });
+            if (music) {
+              if (!music.albumIDs.includes(data.id))
+                update.mutate({
+                  ...query,
+                  data: { musics: { connect: { id: music.id } } },
+                });
+            } else {
+              await context.client.music.createOneMusic.mutate({
+                data: {
                   type: "COPY" as const,
                   visibility: "PUBLIC" as const,
                   title: { ja: track.name, en: track.name },
                   albums: { connect: { id: data.id } },
                   link: { streaming: { spotify: { id: track.id } } },
-                };
-              }
-            }) || []
-          );
-          await context.client.music.createManyMusic.mutate({
-            data: R.compact(musics),
+                },
+              });
+            }
           });
           await update.mutate({
             ...query,

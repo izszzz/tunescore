@@ -13,9 +13,7 @@ const Markdown = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
 });
 interface CommentCardProps {
-  data: Prisma.CommentGetPayload<{
-    include: { user: typeof userArgs };
-  }>;
+  data: Prisma.CommentGetPayload<{ include: { user: typeof userArgs } }>;
 }
 const CommentCard = ({ data: { body, user } }: CommentCardProps) => (
   <Box display="flex">

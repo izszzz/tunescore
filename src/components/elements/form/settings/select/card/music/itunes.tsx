@@ -2,7 +2,8 @@ import type { ItunesMusic } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
 import { itunes } from "../../../../../../../server/common/itunes";
-import MusicItunesCard from "../../../../../card/music/itunes";
+import MusicItunesCard from "../../../../../card/itunes/music";
+import MusicItunesSquareCard from "../../../../../card/square/itunes/music";
 import ItunesSelectForm from "../itunes";
 
 interface MusicItunesSelectFormProps {
@@ -21,10 +22,10 @@ const MusicItunesSelectForm = ({
     search={itunes.searchMusics}
     lookup={itunes.lookupMusic}
     largeCard={(value) =>
-      value && <MusicItunesCard size="large" data={value} onClick={onRemove} />
+      value && <MusicItunesCard data={value} onClick={onRemove} />
     }
     smallCard={(value) => (
-      <MusicItunesCard size="small" data={value} onClick={onSelect} />
+      <MusicItunesSquareCard data={value} onClick={onSelect} />
     )}
   />
 );

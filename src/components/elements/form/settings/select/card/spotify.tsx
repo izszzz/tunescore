@@ -14,7 +14,7 @@ interface SpotifySelectFormProps<Value, Options>
     "largeCard" | "smallCard"
   > {
   streamingLink: StreamingLink | null | undefined;
-  lookup: Value | undefined;
+  lookup: Value | null | undefined;
   search: Options[];
 }
 function SpotifySelectForm<
@@ -42,12 +42,7 @@ function SpotifySelectForm<
       search={search}
       largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{
-        item: true,
-        xs: 6,
-        sm: 4,
-        md: 2,
-      }}
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

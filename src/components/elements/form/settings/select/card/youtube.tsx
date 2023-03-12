@@ -34,20 +34,14 @@ function YoutubeSelectForm<T extends Video | Channel>({
   lookup,
 }: YoutubeSelectFormProps<T>) {
   const { data } = trpc.youtube.search.useQuery({ term, type });
-  if (!data) return <>loading</>;
   return (
     <CardSelectForm<T | undefined, SearchResult[]>
       link={streamingLink?.youtube}
       lookup={lookup}
-      search={data.items}
+      search={data?.items || []}
       largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{
-        item: true,
-        xs: 6,
-        sm: 4,
-        md: 4,
-      }}
+      gridProps={{ item: true, xs: 6, sm: 4, md: 4 }}
       tablePaginationProps={{
         count: 0,
         rowsPerPage: 0,

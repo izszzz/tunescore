@@ -4,7 +4,8 @@ import type { ItunesAlbum } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
 import { itunes } from "../../../../../../../server/common/itunes";
-import ItunesAlbumCard from "../../../../../card/album/itunes";
+import AlbumItunesCard from "../../../../../card/itunes/album";
+import AlbumItunesSquareCard from "../../../../../card/square/itunes/album";
 import ItunesSelectForm from "../itunes";
 
 interface ItunesAlbumSelectFormProps {
@@ -23,10 +24,10 @@ const ItunesAlbumSelectForm = ({
     search={itunes.searchAlbums}
     lookup={itunes.lookupAlbum}
     largeCard={(value) =>
-      value && <ItunesAlbumCard size="large" data={value} onClick={onRemove} />
+      value && <AlbumItunesCard data={value} onClick={onRemove} />
     }
     smallCard={(value) => (
-      <ItunesAlbumCard size="small" data={value} onClick={onSelect} />
+      <AlbumItunesSquareCard data={value} onClick={onSelect} />
     )}
   />
 );

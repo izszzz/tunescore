@@ -14,7 +14,7 @@ export interface CardSelectFormProps<Value, Options extends unknown[]> {
   largeCard: (value: Value | undefined) => React.ReactNode;
   smallCard: (value: Options[0]) => React.ReactNode;
   search: Options | undefined;
-  lookup: Value | undefined;
+  lookup: Value | null | undefined;
 }
 function CardSelectForm<Value, Options extends unknown[] = []>({
   link,
@@ -28,7 +28,7 @@ function CardSelectForm<Value, Options extends unknown[] = []>({
   const [options, setOptions] = useState<Options>();
   const [value, setValue] = useState<Value>();
   useEffect(() => {
-    if (link?.id) setValue(lookup);
+    if (link?.id && lookup) setValue(lookup);
     else {
       setOptions(search);
       setValue(undefined);

@@ -122,17 +122,15 @@ const ArtistSettings: NextPage = () => {
         term={setLocale(data.name, router)}
         streamingLink={data.link?.streaming}
         onSelect={(value) =>
-          value?.id &&
-          data.link &&
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
               link: data.link,
-              id: value.id?.channelId,
+              id: value?.id?.channelId,
               images: [
-                value.snippet?.thumbnails?.standard?.url,
-                value.snippet?.thumbnails?.medium?.url,
-                value.snippet?.thumbnails?.high?.url,
+                value?.snippet?.thumbnails?.standard?.url,
+                value?.snippet?.thumbnails?.medium?.url,
+                value?.snippet?.thumbnails?.high?.url,
               ],
             }),
           })

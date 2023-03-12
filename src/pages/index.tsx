@@ -2,10 +2,10 @@ import Grid from "@mui/material/Unstable_Grid2";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 
-import SquareAlbumCard from "../components/elements/card/square/album";
-import SquareArtistCard from "../components/elements/card/square/artist";
-import SquareBandCard from "../components/elements/card/square/band";
-import SquareMusicCard from "../components/elements/card/square/music";
+import AlbumDefaultSquareCard from "../components/elements/card/square/default/album";
+import ArtistDefaultSquareCard from "../components/elements/card/square/default/artist";
+import BandDefaultSquareCard from "../components/elements/card/square/default/band";
+import MusicDefaultSquareCard from "../components/elements/card/square/default/music";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { albumListArgs } from "../helpers/album";
 import { artistListArgs } from "../helpers/artist";
@@ -33,7 +33,6 @@ const Home: NextPage = () => {
   });
   return (
     <DefaultSingleColumnLayout>
-      {" "}
       <Grid container spacing={1} my={3}>
         {musics.data?.data.map((music) => (
           <Grid
@@ -45,7 +44,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <SquareMusicCard data={music} />
+            <MusicDefaultSquareCard data={music} />
           </Grid>
         ))}
         {albums.data?.data.map((album) => (
@@ -58,7 +57,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <SquareAlbumCard data={album} />
+            <AlbumDefaultSquareCard data={album} />
           </Grid>
         ))}
         {artists.data?.data.map((artist) => (
@@ -71,7 +70,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <SquareArtistCard data={artist} />
+            <ArtistDefaultSquareCard data={artist} />
           </Grid>
         ))}
         {bands.data?.data.map((band) => (
@@ -84,7 +83,7 @@ const Home: NextPage = () => {
             display="flex"
             justifyContent="center"
           >
-            <SquareBandCard data={band} />
+            <BandDefaultSquareCard data={band} />
           </Grid>
         ))}
       </Grid>

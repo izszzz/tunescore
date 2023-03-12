@@ -1,7 +1,8 @@
 import type { StreamingLink } from "@prisma/client";
 
 import { trpc } from "../../../../../../../utils/trpc";
-import SpotifyAlbumCard from "../../../../../card/album/spotify";
+import AlbumSpotifyCard from "../../../../../card/spotify/album";
+import AlbumSpotifySquareCard from "../../../../../card/square/spotify/album";
 import SpotifySelectForm from "../spotify";
 
 interface SpotifyAlbumSelectFormProps {
@@ -20,19 +21,16 @@ const SpotifyAlbumSelectForm = ({
       streamingLink?.spotify?.id
     ),
     { data: searchData } = trpc.spotify.searchAlbums.useQuery(term);
-  if (!data) return <></>;
   return (
     <SpotifySelectForm
       streamingLink={streamingLink}
       lookup={data}
       search={(searchData?.items as SpotifyApi.AlbumObjectFull[]) || []}
       largeCard={(value) =>
-        value && (
-          <SpotifyAlbumCard size="large" data={value} onClick={onRemove} />
-        )
+        value && <AlbumSpotifyCard data={value} onClick={onRemove} />
       }
       smallCard={(value) => (
-        <SpotifyAlbumCard size="small" data={value} onClick={onSelect} />
+        <AlbumSpotifySquareCard data={value} onClick={onSelect} />
       )}
     />
   );

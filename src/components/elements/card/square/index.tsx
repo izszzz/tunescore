@@ -4,27 +4,19 @@ import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useDarkMode } from "usehooks-ts";
 
-import ResourceIcon from "../../icon/resource";
-import type { ResourceIconProps } from "../../icon/resource";
 import Image from "../../image";
 
 export interface SquareCardProps {
   title: string | React.ReactNode;
   image: string | null | undefined;
   size: string;
-  resource: ResourceIconProps["resource"];
+  icon: React.ReactNode;
   onClick?: () => void;
 }
-const SquareCard = ({
-  title,
-  image,
-  size,
-  resource,
-  onClick,
-}: SquareCardProps) => {
+const SquareCard = ({ title, image, size, icon, onClick }: SquareCardProps) => {
   const { isDarkMode } = useDarkMode();
   return (
-    <Box width={size} onClick={() => onClick && onClick()}>
+    <Box width={size} onClick={onClick}>
       <CardActionArea sx={{ borderRadius: "5px" }}>
         {image ? (
           <Image
@@ -43,10 +35,7 @@ const SquareCard = ({
             bgcolor={isDarkMode ? "grey.800" : "grey.300"}
             borderRadius="5px"
           >
-            <ResourceIcon
-              resource={resource}
-              sx={{ fontSize: "60px", color: "grey" }}
-            />
+            {icon}
           </Box>
         )}
       </CardActionArea>

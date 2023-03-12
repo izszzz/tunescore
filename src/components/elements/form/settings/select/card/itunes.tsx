@@ -50,12 +50,7 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
       search={results}
       largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{
-        item: true,
-        xs: 6,
-        sm: 4,
-        md: 2,
-      }}
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

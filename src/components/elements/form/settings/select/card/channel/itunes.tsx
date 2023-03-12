@@ -4,7 +4,8 @@ import type { ItunesArtist } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
 import { itunes } from "../../../../../../../server/common/itunes";
-import ItunesChannelCard from "../../../../../card/channel/itunes";
+import ChannelItunesCard from "../../../../../card/itunes/channel";
+import ChannelItunesSquareCard from "../../../../../card/square/itunes/channel";
 import ItunesSelectForm from "../itunes";
 
 interface ItunesArtistSelectFormProps {
@@ -23,12 +24,10 @@ const ItunesArtistSelectForm = ({
     search={itunes.searchArtists}
     lookup={itunes.lookupArtist}
     largeCard={(value) =>
-      value && (
-        <ItunesChannelCard size="large" data={value} onClick={onRemove} />
-      )
+      value && <ChannelItunesCard data={value} onClick={onRemove} />
     }
     smallCard={(value) => (
-      <ItunesChannelCard size="small" data={value} onClick={onSelect} />
+      <ChannelItunesSquareCard data={value} onClick={onSelect} />
     )}
   />
 );

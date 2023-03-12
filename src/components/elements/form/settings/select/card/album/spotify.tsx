@@ -20,6 +20,7 @@ const SpotifyAlbumSelectForm = ({
       streamingLink?.spotify?.id
     ),
     { data: searchData } = trpc.spotify.searchAlbums.useQuery(term);
+  if (!data) return <></>;
   return (
     <SpotifySelectForm
       streamingLink={streamingLink}

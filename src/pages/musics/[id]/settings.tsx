@@ -13,7 +13,6 @@ import DangerAlert from "../../../components/elements/alert/delete";
 import AlbumUpdateAutocomplete from "../../../components/elements/autocomplete/update/album";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
-import SpotifyButton from "../../../components/elements/button/providers/spotify";
 import ArtistsUpdateForm from "../../../components/elements/form/settings/artists";
 import MusicItunesSelectForm from "../../../components/elements/form/settings/select/card/music/itunes";
 import SpotifyMusicSelectForm from "../../../components/elements/form/settings/select/card/music/spotify";
@@ -51,6 +50,7 @@ const SettingsMusic: NextPage = () => {
     router = useRouter<"/musics/[id]">(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
+    context = trpc.useContext(),
     { id } = router.query,
     currentUserId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
@@ -75,8 +75,7 @@ const SettingsMusic: NextPage = () => {
         enqueueSnackbar("music.update success");
       },
       onError: () => enqueueSnackbar("music.update error"),
-    }),
-    context = trpc.useContext();
+    });
 
   if (!data || !userData) return <></>;
   const musicData = data as MusicLayoutProps["data"];
@@ -212,43 +211,39 @@ const SettingsMusic: NextPage = () => {
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 
-      {session?.user?.providers.includes("spotify") ? (
-        <SpotifyMusicSelectForm
-          term={setLocale(musicData.title, router)}
-          streamingLink={musicData.link?.streaming}
-          onSelect={async (item) => {
-            const album = await context.client.album.findFirstAlbum.query({
-              where: {
-                link: {
-                  is: {
-                    streaming: {
-                      is: {
-                        spotify: { is: { id: { equals: item.album.id } } },
-                      },
+      <SpotifyMusicSelectForm
+        term={setLocale(musicData.title, router)}
+        streamingLink={musicData.link?.streaming}
+        onSelect={async (item) => {
+          const album = await context.client.album.findFirstAlbum.query({
+            where: {
+              link: {
+                is: {
+                  streaming: {
+                    is: {
+                      spotify: { is: { id: { equals: item.album.id } } },
                     },
                   },
                 },
               },
-            });
-            await update.mutate({
-              ...query,
-              data: {
-                ...selectSpotifyMutate({
-                  link: data.link,
-                  id: item.id,
-                  images: [],
-                }).data,
-                albums: { connect: { id: album?.id } },
-              },
-            });
-          }}
-          onRemove={() =>
-            update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
-          }
-        />
-      ) : (
-        <SpotifyButton />
-      )}
+            },
+          });
+          await update.mutate({
+            ...query,
+            data: {
+              ...selectSpotifyMutate({
+                link: data.link,
+                id: item.id,
+                images: [],
+              }).data,
+              albums: { connect: { id: album?.id } },
+            },
+          });
+        }}
+        onRemove={() =>
+          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
+        }
+      />
 
       <Typography variant="h4">iTunes</Typography>
       <Divider />

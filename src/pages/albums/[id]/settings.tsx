@@ -5,6 +5,7 @@ import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import * as R from "remeda";
 
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
@@ -29,17 +30,18 @@ import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const AlbumSettings: NextPage = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter<"/albums/[id]">();
-  const query = albumShowQuery({ router, session: useSession().data });
-  const { data } = trpc.album.findUniqueAlbum.useQuery(query);
-  const update = trpc.album.updateOneAlbum.useMutation({
-    onSuccess: (data) =>
-      queryClient.setQueryData(
-        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
-        data
-      ),
-  });
+  const queryClient = useQueryClient(),
+    router = useRouter<"/albums/[id]">(),
+    context = trpc.useContext(),
+    query = albumShowQuery({ router, session: useSession().data }),
+    { data } = trpc.album.findUniqueAlbum.useQuery(query),
+    update = trpc.album.updateOneAlbum.useMutation({
+      onSuccess: (data) =>
+        queryClient.setQueryData(
+          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          data
+        ),
+    });
   if (!data) return <></>;
   const title = setLocale(data.title, router);
   const albumData = data as AlbumLayoutProps["data"];
@@ -70,16 +72,53 @@ const AlbumSettings: NextPage = () => {
       <SpotifyAlbumSelectForm
         term={title}
         streamingLink={data.link?.streaming}
-        onSelect={({ id, images }) =>
-          update.mutate({
+        onSelect={async ({ id, images }) => {
+          const spotifyAlbum =
+            await context.client.spotify.findUniqueAlbum.query(id);
+          const musics = await Promise.all(
+            spotifyAlbum?.tracks.items.map(async (track) => {
+              const music = await context.client.music.findFirstMusic.query({
+                where: {
+                  link: {
+                    is: {
+                      streaming: {
+                        is: {
+                          spotify: { is: { id: { equals: track.id } } },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+              if (music) {
+                if (!music.albumIDs.includes(data.id))
+                  update.mutate({
+                    ...query,
+                    data: { musics: { connect: { id: music.id } } },
+                  });
+              } else {
+                return {
+                  type: "COPY" as const,
+                  visibility: "PUBLIC" as const,
+                  title: { ja: track.name, en: track.name },
+                  albums: { connect: { id: data.id } },
+                  link: { streaming: { spotify: { id: track.id } } },
+                };
+              }
+            }) || []
+          );
+          await context.client.music.createManyMusic.mutate({
+            data: R.compact(musics),
+          });
+          await update.mutate({
             ...query,
             ...selectSpotifyMutate({
               link: data.link,
               id,
               images: [images[2]?.url, images[1]?.url, images[0]?.url],
             }),
-          })
-        }
+          });
+        }}
         onRemove={() =>
           update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
         }

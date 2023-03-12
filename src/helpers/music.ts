@@ -55,6 +55,7 @@ export const musicListArgs = (session: SessionArg) =>
     include: {
       participations: participatedArtistArgs(session),
       bookmarks: bookmarkArgs({ type: "Music", session }),
+      albums: true,
       band: true,
       user: userArgs,
       _count: { select: { bookmarks: true } },

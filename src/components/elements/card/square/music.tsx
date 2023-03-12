@@ -20,15 +20,12 @@ interface SquareMusicCardProps {
     include: {
       user: typeof userArgs;
       band: true;
+      albums: true;
       participations: {
         include: { artist: true; roleMap: { include: { role: true } } };
       };
       bookmarks: true;
-      _count: {
-        select: {
-          bookmarks: true;
-        };
-      };
+      _count: { select: { bookmarks: true } };
     };
   }>;
 }
@@ -56,7 +53,19 @@ const SquareMusicCard = ({ data }: SquareMusicCardProps) => {
           {owner && <IndexChip label={owner.name} resource={type} />}
         </>
       }
-      image={getImage(data.link?.streaming, 200, { square: true })}
+      image={
+        data.link?.streaming &&
+        getImage(
+          {
+            ...data.link?.streaming,
+            spotify:
+              data.albums.find((album) => !!album.link?.streaming?.spotify)
+                ?.link?.streaming?.spotify || null,
+          },
+          200,
+          { square: true }
+        )
+      }
       onClick={() =>
         router.push({ pathname: "/musics/[id]", query: { id: data.id } })
       }

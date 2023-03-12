@@ -87,7 +87,18 @@ const MusicLayout = ({
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={setLocale(data.title, router)}
-                src={getImage(data.link?.streaming, 80) || ""}
+                src={
+                  getImage(
+                    {
+                      ...data.link?.streaming,
+                      spotify:
+                        data.albums.find(
+                          (album) => !!album.link?.streaming?.spotify
+                        )?.link?.streaming?.spotify || null,
+                    },
+                    80
+                  ) || ""
+                }
               />
             </Box>
           )}

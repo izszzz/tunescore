@@ -1,6 +1,9 @@
 import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
+import { useSession } from "next-auth/react";
+
+import SpotifyButton from "../../../../button/providers/spotify";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -30,6 +33,8 @@ function SpotifySelectForm<
   largeCard,
   smallCard,
 }: SpotifySelectFormProps<Value, Options>) {
+  const { data: session } = useSession();
+  if (!session?.user?.providers.includes("spotify")) return <SpotifyButton />;
   return (
     <CardSelectForm<Value, Options[]>
       link={streamingLink?.spotify}

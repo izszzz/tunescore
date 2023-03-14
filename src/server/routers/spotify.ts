@@ -57,7 +57,7 @@ export const spotifyRouter = router({
             music = await prisma.music.create({
               data: {
                 type: "COPY",
-                visibility: "PUBLIC",
+                visibillity: "PUBLIC",
                 title: { ja: item.name, en: item.name },
               },
             });

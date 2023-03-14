@@ -98,7 +98,7 @@ const AlbumSettings: NextPage = () => {
               await context.client.music.createOneMusic.mutate({
                 data: {
                   type: "COPY" as const,
-                  visibility: "PUBLIC" as const,
+                  visibillity: "PUBLIC" as const,
                   title: { ja: track.name, en: track.name },
                   albums: { connect: { id: data.id } },
                   link: { streaming: { spotify: { id: track.id } } },

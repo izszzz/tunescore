@@ -10,7 +10,7 @@ export const MusicFactory = prisma.music.create({
   data: {
     title: { ja: "曲", en: "music" },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
     price: 0,
     lyric: `
     a
@@ -39,7 +39,7 @@ export const PaidMusicFactory = prisma.music.create({
   data: {
     title: { ja: "有料", en: "Paid" },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
     price: 100,
   },
 });
@@ -51,7 +51,7 @@ export const OriginalMusicFactory = prisma.music.create({
       ja: "オリジナル曲",
     },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -62,7 +62,7 @@ export const CopyMusicFactory = prisma.music.create({
       ja: "コピー曲",
     },
     type: "COPY",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -74,7 +74,7 @@ export const ScoreMusicFactory = prisma.music.create({
     },
     score: "3.3 3.2 3.4",
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -84,7 +84,7 @@ export const JapaneseMusic = prisma.music.create({
       ja: "日本語のみ",
     },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -94,7 +94,7 @@ export const EnglishMusic = prisma.music.create({
       en: "Only English",
     },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -105,7 +105,7 @@ export const LongTitleMusic = prisma.music.create({
       en: "a".repeat(100),
     },
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
   },
 });
 
@@ -117,7 +117,7 @@ export const MusicOwendByUser = async () =>
         en: "Owned by User",
       },
       type: "ORIGINAL",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       user: {
         connect: { id: (await UserFactory).id },
       },
@@ -132,7 +132,7 @@ export const MusicOwendByComposer = async () =>
         en: "Owned by Compsoer",
       },
       type: "COPY",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       participations: {
         create: {
           artist: {
@@ -165,7 +165,7 @@ export const MusicOwendByLyrist = async () =>
         en: "Owned by Lyrist",
       },
       type: "COPY",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       participations: {
         create: {
           artist: {
@@ -197,7 +197,7 @@ export const MusicOwendByBand = async () =>
         en: "Owned by Band",
       },
       type: "COPY",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       band: {
         connect: { id: (await BandFactory).id },
       },
@@ -212,7 +212,7 @@ export const ItunesMusic = async () =>
         en: "iTunes Music",
       },
       type: "COPY",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       link: {
         streaming: {
           youtube: null,
@@ -242,7 +242,7 @@ export const YoutubeMusic = async () =>
         en: "Youtube Music",
       },
       type: "COPY",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       link: {
         streaming: {
           youtube: {

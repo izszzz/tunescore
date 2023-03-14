@@ -111,10 +111,11 @@ model VerificationToken {
 model Music {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   type MusicType
+  visibillity Visibillity
+  isrc String?
   title Locale
   score String?
   lyric String?
-  visibility Visibility
   price Int?
   link LinkList?
 
@@ -432,7 +433,7 @@ enum NotificationUnionType {
   Comment
 }
 
-enum Visibility {
+enum Visibillity {
   PUBLIC
   PRIVATE
 }

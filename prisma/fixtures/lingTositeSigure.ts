@@ -29,7 +29,7 @@ const abnormalize = async () =>
   await prisma.music.create({
     data: {
       title: { ja: "abnormalize", en: "abnormalize" },
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       type: "COPY",
       participations: await participations(),
     },
@@ -39,7 +39,7 @@ const beautifulCircus = async () =>
   await prisma.music.create({
     data: {
       title: { ja: "Beautiful Circus", en: "Beautiful Circus" },
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       type: "COPY",
       participations: await participations(),
     },

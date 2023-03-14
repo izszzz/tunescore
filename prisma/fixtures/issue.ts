@@ -9,7 +9,7 @@ export const IssueFactory = async () =>
     data: {
       title: { ja: "Pull", en: "Pull" },
       type: "ORIGINAL",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       issues: {
         create: [
           {

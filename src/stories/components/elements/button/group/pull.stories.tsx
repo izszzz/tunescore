@@ -23,7 +23,7 @@ Default.args = {
       id: "1",
       type: "ORIGINAL",
       score: "",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       lyric: "",
       price: 0,
       link: null,

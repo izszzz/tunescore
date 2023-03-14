@@ -19,7 +19,7 @@ const firstDeath = async () =>
   await prisma.music.create({
     data: {
       title: { ja: "first death", en: "first death" },
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       type: "COPY",
       link: {
         streaming: {

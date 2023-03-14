@@ -16,7 +16,7 @@ Original.args = {
   data: {
     id: "1",
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
     lyric: "",
     score: "",
     price: 0,
@@ -40,7 +40,7 @@ Copy.args = {
   data: {
     id: "1",
     type: "COPY",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
     lyric: "",
     score: "",
     price: 0,

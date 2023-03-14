@@ -35,7 +35,9 @@
   "dependencies": {
     "@coderline/alphatab": "^1.2.3",
     "@ebay/nice-modal-react": "^1.2.8",
+    "@emotion/cache": "^11.10.5",
     "@emotion/react": "^11.10.4",
+    "@emotion/server": "^11.10.0",
     "@emotion/style": "^0.8.0",
     "@emotion/styled": "^11.10.4",
     "@fontsource/roboto": "^4.5.8",
@@ -78,7 +80,6 @@
     "nextjs-routes": "^1.0.1",
     "node-diff3": "^3.1.2",
     "notistack": "^2.0.8",
-    "prisma-custom-models-generator": "^0.1.0",
     "prisma-pagination": "^0.2.3",
     "prisma-trpc-generator": "^1.0.2",
     "prisma-trpc-shield-generator": "^0.1.0",

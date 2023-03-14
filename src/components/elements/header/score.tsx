@@ -40,7 +40,6 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
   return (
     <Header
       position="fixed"
-      color="primary"
       sx={{
         top: "auto",
         bottom: 0,

@@ -14,6 +14,7 @@ const Template: ComponentStory<typeof MusicListItem> = (args) => (
 export const Original = Template.bind({});
 Original.args = {
   data: {
+    isrc: null,
     id: "1",
     type: "ORIGINAL",
     visibillity: "PUBLIC",
@@ -32,12 +33,14 @@ Original.args = {
     band: null,
     bookmarks: [],
     albumIDs: [],
+    albums: [],
   },
 };
 
 export const Copy = Template.bind({});
 Copy.args = {
   data: {
+    isrc: null,
     id: "1",
     type: "COPY",
     visibillity: "PUBLIC",
@@ -56,5 +59,6 @@ Copy.args = {
     band: null,
     bookmarks: [],
     albumIDs: [],
+    albums: [],
   },
 };

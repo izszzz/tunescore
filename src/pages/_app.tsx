@@ -2,11 +2,12 @@
 import { useEffect } from "react";
 
 import NiceModal from "@ebay/nice-modal-react";
+import type { EmotionCache } from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import type { AppType } from "next/app";
+import type { AppProps, AppType } from "next/app";
 import Head from "next/head";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -22,17 +23,20 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import ModalsProvider from "../providers/modals";
+import CustomThemeProvider from "../providers/theme";
+import { createEmotionCache } from "../utils/emotion";
 import { trpc } from "../utils/trpc";
 
-const MyApp: AppType<{ session: Session | null }> = ({
+export interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+const clientSideEmotionCache = createEmotionCache();
+const MyApp: AppType<MyAppProps & { session: Session | null }> = ({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { session, emotionCache = clientSideEmotionCache, ...pageProps },
 }) => {
-  const queryClient = new QueryClient();
-  const { isDarkMode } = useDarkMode();
-  const theme = createTheme({
-    palette: { mode: isDarkMode ? "dark" : "light" },
-  });
+  const queryClient = new QueryClient(),
+    { isDarkMode } = useDarkMode();
   useEffect(() => {
     isDarkMode
       ? document.documentElement.setAttribute("data-color-mode", "dark")
@@ -40,46 +44,52 @@ const MyApp: AppType<{ session: Session | null }> = ({
   }, [isDarkMode]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider maxSnack={3}>
-        <SessionProvider session={session}>
-          <NiceModal.Provider>
-            <QueryClientProvider client={queryClient}>
-              <Head>
-                <title>tunescore</title>
-              </Head>
-              <GoogleAnalytics trackPageViews />
-              <DefaultSeo
-                defaultTitle="tunescore"
-                description="Music Score Web Site"
-                openGraph={{
-                  type: "website",
-                  title: "tunescore",
-                  description: "Music Score Web Site",
-                  site_name: "tunescore",
-                  url: "https://tunescore.dev",
-                  images: [
-                    {
-                      url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
-                      width: 1000,
-                      height: 1000,
-                      alt: "Og Image Alt",
-                      type: "image/png",
-                    },
-                  ],
-                }}
-                twitter={{ site: "@hakei_prod", cardType: "summary" }}
-              />
-              <CssBaseline />
-              <ModalsProvider>
-                <Component {...pageProps} />
-              </ModalsProvider>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          </NiceModal.Provider>
-        </SessionProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+    <CacheProvider value={emotionCache}>
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
+          <Head>
+            <title>tunescore</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1, width=device-width"
+            />
+          </Head>
+          <GoogleAnalytics trackPageViews />
+          <DefaultSeo
+            defaultTitle="tunescore"
+            description="Music Score Web Site"
+            openGraph={{
+              type: "website",
+              title: "tunescore",
+              description: "Music Score Web Site",
+              site_name: "tunescore",
+              url: "https://tunescore.dev",
+              images: [
+                {
+                  url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
+                  width: 1000,
+                  height: 1000,
+                  alt: "Og Image Alt",
+                  type: "image/png",
+                },
+              ],
+            }}
+            twitter={{ site: "@hakei_prod", cardType: "summary" }}
+          />
+          <CustomThemeProvider>
+            <CssBaseline />
+            <SnackbarProvider maxSnack={3}>
+              <NiceModal.Provider>
+                <ModalsProvider>
+                  <Component {...pageProps} />
+                </ModalsProvider>
+              </NiceModal.Provider>
+            </SnackbarProvider>
+          </CustomThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </SessionProvider>
+    </CacheProvider>
   );
 };
 

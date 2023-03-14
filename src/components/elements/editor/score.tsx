@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Editor from "@monaco-editor/react";
 import Box from "@mui/material/Box";
 import Split from "split.js";
+import { useDebouncedCallback } from "use-debounce";
 
 import Score from "../../layouts/score";
 import type { EditorHeaderProps } from "../header/editor";
@@ -21,14 +22,14 @@ const ScoreEditor = ({
   ...props
 }: ScoreEditorProps) => {
   const [value, setValue] = useState(defaultValue),
+    split = useRef<Split.Instance>(),
     handleResolve = () => onResolve && setValue(onResolve()),
-    handleChange = (value: string | undefined) => value && setValue(value);
+    handleChange = (value: string | undefined) => value && setValue(value),
+    debounced = useDebouncedCallback(handleChange, 500);
   useEffect(() => {
-    Split(["#editor", "#score"], { sizes: [50, 50] });
+    if (!split.current)
+      split.current = Split(["#editor", "#score"], { sizes: [50, 50] });
   }, []);
-  useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
 
   return (
     <>
@@ -43,7 +44,7 @@ const ScoreEditor = ({
             value={value}
             height="90vh"
             defaultLanguage="javascript"
-            onChange={handleChange}
+            onChange={debounced}
           />
         </div>
         <div id="score">

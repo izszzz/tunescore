@@ -63,6 +63,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     });
   };
   useEffect(() => {
+    if (apiRef.current) return;
     const settings = {
       // file: "https://www.alphatab.net/files/canon.gp",
       player: {
@@ -72,12 +73,11 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
         // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
       },
     };
-    if (mainRef.current) {
+    if (mainRef.current)
       apiRef.current = new window.alphaTab.AlphaTabApi(
         mainRef.current,
         settings
       );
-    }
     apiRef.current?.scoreLoaded.on((score) => {
       setTracks(score.tracks);
     });

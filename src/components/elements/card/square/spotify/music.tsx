@@ -31,7 +31,7 @@ const MusicSpotifySquareCard = ({ data, onClick }: MusicSpotifyCardProps) => (
             {data.name}
           </Typography>
         }
-        onClick={() => onClick && onClick(data)}
+        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

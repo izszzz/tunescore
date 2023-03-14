@@ -17,7 +17,7 @@ const ToggleIconButton = ({
   onClick,
   ...props
 }: ToggleIconButtonProps) => (
-  <IconButton {...props} onClick={() => onClick && onClick(value)}>
+  <IconButton {...props} onClick={onClick && (() => onClick(value))}>
     {value ? onIcon : offIcon}
   </IconButton>
 );

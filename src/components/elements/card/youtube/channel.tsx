@@ -15,7 +15,7 @@ const ChannelYoutubeCard = ({
   <IndexCard
     title={data?.snippet?.title || ""}
     image={data?.snippet?.thumbnails?.medium?.url || ""}
-    onClose={() => onClick && onClick(data)}
+    onClose={() => onClick?.(data)}
   />
 );
 

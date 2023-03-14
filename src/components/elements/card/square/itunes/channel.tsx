@@ -12,7 +12,7 @@ const ChannelItunesSquareCard = ({ data, onClick }: ChannelItunesCardProps) => (
     }
     image={null}
     size="100px"
-    onClick={() => onClick && onClick(data)}
+    onClick={() => onClick?.(data)}
   />
 );
 

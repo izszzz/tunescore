@@ -31,7 +31,7 @@ const MusicItunesSquareCard = ({ data, onClick }: MusicItunesCardProps) => (
         }
         image={data.artworkUrl100}
         size="100px"
-        onClick={() => onClick && onClick(data)}
+        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

@@ -19,7 +19,7 @@ const MusicItunesCard = ({ data, onClick }: MusicItunesCardProps) => (
         <Typography variant="caption">{data.artistName}</Typography>
       </>
     }
-    onClose={() => onClick && onClick(data)}
+    onClose={() => onClick?.(data)}
   />
 );
 

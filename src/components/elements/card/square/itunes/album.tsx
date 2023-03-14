@@ -29,7 +29,7 @@ const AlbumItunesSquareCard = ({ data, onClick }: AlbumItunesCardProps) => (
       }
       image={data.artworkUrl100}
       size="100px"
-      onClick={() => onClick && onClick(data)}
+      onClick={() => onClick?.(data)}
     />
   </Tooltip>
 );

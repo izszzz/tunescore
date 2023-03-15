@@ -30,9 +30,7 @@ const AlbumUpdateAutocomplete = ({
       loading={search.isLoading}
       getOptionLabel={({ title }) => setLocale(title, router)}
       ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}
-      onInputChange={(_e, value) =>
-        search.mutate(searchMutate(router, "title", value))
-      }
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, "title", v))}
       textFieldProps={{ label: "albums", margin: "dense" }}
       multiple
       {...props}

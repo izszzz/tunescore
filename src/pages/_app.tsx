@@ -15,6 +15,7 @@ import { appWithTranslation } from "next-i18next";
 import { DefaultSeo } from "next-seo";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { SnackbarProvider } from "notistack";
+import { RecoilRoot } from "recoil";
 import { useDarkMode } from "usehooks-ts";
 
 import "../styles/globals.css";
@@ -38,56 +39,59 @@ const MyApp: AppType<MyAppProps & { session: Session | null }> = ({
   const queryClient = new QueryClient(),
     { isDarkMode } = useDarkMode();
   useEffect(() => {
-    isDarkMode
-      ? document.documentElement.setAttribute("data-color-mode", "dark")
-      : document.documentElement.setAttribute("data-color-mode", "light");
+    document.documentElement.setAttribute(
+      "data-color-mode",
+      isDarkMode ? "dark" : "light"
+    );
   }, [isDarkMode]);
 
   return (
     <CacheProvider value={emotionCache}>
       <SessionProvider session={session}>
-        <QueryClientProvider client={queryClient}>
-          <Head>
-            <title>tunescore</title>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
+        <RecoilRoot>
+          <QueryClientProvider client={queryClient}>
+            <Head>
+              <title>tunescore</title>
+              <meta
+                name="viewport"
+                content="initial-scale=1, width=device-width"
+              />
+            </Head>
+            <GoogleAnalytics trackPageViews />
+            <DefaultSeo
+              defaultTitle="tunescore"
+              description="Music Score Web Site"
+              openGraph={{
+                type: "website",
+                title: "tunescore",
+                description: "Music Score Web Site",
+                site_name: "tunescore",
+                url: "https://tunescore.dev",
+                images: [
+                  {
+                    url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
+                    width: 1000,
+                    height: 1000,
+                    alt: "Og Image Alt",
+                    type: "image/png",
+                  },
+                ],
+              }}
+              twitter={{ site: "@hakei_prod", cardType: "summary" }}
             />
-          </Head>
-          <GoogleAnalytics trackPageViews />
-          <DefaultSeo
-            defaultTitle="tunescore"
-            description="Music Score Web Site"
-            openGraph={{
-              type: "website",
-              title: "tunescore",
-              description: "Music Score Web Site",
-              site_name: "tunescore",
-              url: "https://tunescore.dev",
-              images: [
-                {
-                  url: "https://tunescore.dev/images/dark/logo_1000x1000.png",
-                  width: 1000,
-                  height: 1000,
-                  alt: "Og Image Alt",
-                  type: "image/png",
-                },
-              ],
-            }}
-            twitter={{ site: "@hakei_prod", cardType: "summary" }}
-          />
-          <CustomThemeProvider>
-            <CssBaseline />
-            <SnackbarProvider maxSnack={3}>
-              <NiceModal.Provider>
-                <ModalsProvider>
-                  <Component {...pageProps} />
-                </ModalsProvider>
-              </NiceModal.Provider>
-            </SnackbarProvider>
-          </CustomThemeProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+            <CustomThemeProvider>
+              <CssBaseline />
+              <SnackbarProvider maxSnack={3}>
+                <NiceModal.Provider>
+                  <ModalsProvider>
+                    <Component {...pageProps} />
+                  </ModalsProvider>
+                </NiceModal.Provider>
+              </SnackbarProvider>
+            </CustomThemeProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </RecoilRoot>
       </SessionProvider>
     </CacheProvider>
   );

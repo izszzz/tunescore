@@ -9,38 +9,25 @@ import ResourceIcon from "../../icon/resource";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-
 export type RoleUpdateAutocompleteProps = Pick<
   UpdateAutocompleteProps<Role, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
 const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.search.tag.useMutation({
-    onError: () => {
-      enqueueSnackbar("tag.search error");
-    },
-  });
+  const { enqueueSnackbar } = useSnackbar(),
+    search = trpc.search.tag.useMutation({
+      onError: () => enqueueSnackbar("tag.search error"),
+    });
   return (
     <UpdateAutocomplete<Role, true>
       {...props}
       options={search.data || []}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={({ name }) => name}
       ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
       onInputChange={(_e, value) =>
-        search.mutate({
-          where: {
-            name: {
-              contains: value,
-            },
-          },
-          take: 10,
-        })
+        search.mutate({ where: { name: { contains: value } } })
       }
-      textFieldProps={{
-        label: "tag",
-        margin: "dense",
-      }}
+      textFieldProps={{ label: "tag", margin: "dense" }}
       multiple
     />
   );

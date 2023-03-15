@@ -1,9 +1,9 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
 import React, { useState } from "react";
-import { useToggle } from "react-use";
 
 import type { AlphaTabApi } from "@coderline/alphatab";
+import { useToggle } from "usehooks-ts";
 
 import PlayButton from "../../music-mateial-ui/button/icon/toggle/play";
 import VolumeSliderInput from "../../music-mateial-ui/input/slider/volume";

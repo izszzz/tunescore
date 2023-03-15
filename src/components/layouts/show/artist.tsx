@@ -20,7 +20,7 @@ import type {
   artistShowQuery,
 } from "../../../paths/artists/[id]";
 import { trpc } from "../../../utils/trpc";
-import ResourceIconButton from "../../elements/button/icon/resource";
+import ArtistIconButton from "../../elements/button/icon/artist";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -67,10 +67,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <ResourceIconButton
-            resource="ARTIST"
-            onClick={() => router.push("/artists")}
-          />
+          <ArtistIconButton onClick={() => router.push("/artists")} />
           <Typography variant="h5">{name}</Typography>
           {image && (
             <Box display="flex" justifyContent="center" pl={3}>

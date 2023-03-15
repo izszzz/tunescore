@@ -19,7 +19,7 @@ const AlbumSpotifyCard = ({ data, onClick }: AlbumSpotifyCardProps) => (
         <Typography variant="caption">{data.label}</Typography>
       </>
     }
-    onClose={() => onClick && onClick(data)}
+    onClose={() => onClick?.(data)}
   />
 );
 

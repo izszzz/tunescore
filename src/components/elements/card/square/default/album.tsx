@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -10,8 +11,8 @@ import { getAlbumOwner } from "../../../../../helpers/album";
 import type { AlbumListArgsType } from "../../../../../helpers/album";
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
-import IndexChip from "../../../chip";
 import BookmarkChip from "../../../chip/bookmark";
+import ResourceIcon from "../../../icon/resource";
 import AlbumSquareCard from "../album";
 
 interface AlbumDefaultSquareCardProps {
@@ -37,7 +38,9 @@ const AlbumDefaultSquareCard = ({ data }: AlbumDefaultSquareCardProps) => {
               />
             </Box>
           </Box>
-          {owner && <IndexChip label={owner.name} resource={type} />}
+          {owner && (
+            <Chip label={owner.name} icon={<ResourceIcon type={type} />} />
+          )}
         </>
       }
       image={getImage(data.link?.streaming, 200)}

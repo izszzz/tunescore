@@ -1,10 +1,9 @@
 import React from "react";
 
-import IndexChip from ".";
-import type { IndexChipProps } from ".";
+import Person from "@mui/icons-material/Person";
+import type { ChipProps } from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 
-const ArtistChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="ARTIST" />
-);
+const ArtistChip = (props: ChipProps) => <Chip {...props} icon={<Person />} />;
 
 export default ArtistChip;

@@ -18,7 +18,7 @@ const AlbumItunesCard = ({ data, onClick }: AlbumItunesCardProps) => (
         <Typography variant="caption">{data.artistName}</Typography>
       </>
     }
-    onClose={() => onClick && onClick(data)}
+    onClose={() => onClick?.(data)}
   />
 );
 export default AlbumItunesCard;

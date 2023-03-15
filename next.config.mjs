@@ -13,6 +13,7 @@ import { env } from "./src/env/server.mjs";
  * @constraint {{import('next').NextConfig}}
  * @type {import('next-i18next').UserConfig}
  */
+
 function defineNextConfig(config) {
   return withRoutes()(removeImports()(config));
 }

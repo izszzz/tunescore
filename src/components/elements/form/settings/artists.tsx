@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Person from "@mui/icons-material/Person";
 import SendIcon from "@mui/icons-material/Send";
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
@@ -17,7 +18,6 @@ import { handleChangeAutocomplete } from "../../autocomplete/update";
 import RoleUpdateAutocomplete from "../../autocomplete/update/role";
 import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
 import CloseIconButton from "../../button/icon/close";
-import ResourceIcon from "../../icon/resource";
 import ArtistListItem from "../../list/item/artist";
 
 interface ArtistsUpdateFormProps<T> {
@@ -80,8 +80,8 @@ function ArtistsUpdateForm({
               options={search.data || []}
               loading={loading}
               textFieldProps={{ label: "artist" }}
-              getOptionLabel={(option) => setLocale(option.name, router)}
-              ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
+              getOptionLabel={({ name }) => setLocale(name, router)}
+              ChipProps={{ icon: <Person /> }}
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),
               })}

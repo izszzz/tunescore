@@ -22,7 +22,7 @@ function MusicYoutubeCard<T extends SearchResult | Video | undefined>({
       title={data?.snippet?.title || ""}
       image={data?.snippet?.thumbnails?.medium?.url || ""}
       body={<Typography>{data?.snippet?.channelTitle}</Typography>}
-      onClose={() => onClick && onClick(data)}
+      onClose={() => onClick?.(data)}
     />
   );
 }

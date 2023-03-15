@@ -3,6 +3,10 @@ import { useCallback, useState } from "react";
 import type { YouTubeEvent, YouTubePlayer } from "react-youtube";
 import YouTube from "react-youtube";
 
+import { useRecoilState } from "recoil";
+
+import { ambientState } from "../../../../atoms/ambient";
+
 import styles from "./styles.module.css";
 
 export type RecursiveVoid = (func: RecursiveVoid) => void;
@@ -12,8 +16,9 @@ export type Props = {
 };
 
 const YoutubeAmbient = ({ videoId }: Props) => {
-  const [videoPlayer, setVideoPlayer] = useState<YouTubePlayer>();
-  const [ambilightPlayer, setAmbilightPlayer] = useState<YouTubePlayer>();
+  const [videoPlayer, setVideoPlayer] = useState<YouTubePlayer>(),
+    [ambilightPlayer, setAmbilightPlayer] = useState<YouTubePlayer>(),
+    [ambient] = useRecoilState(ambientState);
 
   const videoStateChange = useCallback(
     async (event: YouTubeEvent<number>) => {
@@ -73,17 +78,19 @@ const YoutubeAmbient = ({ videoId }: Props) => {
             onStateChange={videoStateChange}
             opts={{ width: "100%", height: "100%" }}
           />
-          <YouTube
-            className={styles.ambilight}
-            videoId={videoId}
-            onReady={(e) => {
-              setAmbilightPlayer(e.target);
-              e.target.mute();
-              optimizeAmbilight();
-            }}
-            onStateChange={ambilightStateChange}
-            opts={{ width: "100%", height: "100%" }}
-          />
+          {ambient && (
+            <YouTube
+              className={styles.ambilight}
+              videoId={videoId}
+              onReady={(e) => {
+                setAmbilightPlayer(e.target);
+                e.target.mute();
+                optimizeAmbilight();
+              }}
+              onStateChange={ambilightStateChange}
+              opts={{ width: "100%", height: "100%" }}
+            />
+          )}
         </div>
       </div>
     </div>

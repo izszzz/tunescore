@@ -19,7 +19,7 @@ const ChannelSpotifySquareCard = ({
         }
         image={data.images[1]?.url || ""}
         size="100px"
-        onClick={() => onClick && onClick(data)}
+        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

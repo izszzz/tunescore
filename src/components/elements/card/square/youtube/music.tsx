@@ -34,7 +34,7 @@ function MusicYoutubeSquareCard<T extends SearchResult | Video | undefined>({
           }
           image={data?.snippet?.thumbnails?.medium?.url}
           size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
-          onClick={() => onClick && onClick(data)}
+          onClick={() => onClick?.(data)}
         />
       </Box>
     </Tooltip>

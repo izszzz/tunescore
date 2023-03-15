@@ -1,5 +1,6 @@
 import React from "react";
 
+import AlbumIcon from "@mui/icons-material/Album";
 import type { Album } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -7,7 +8,6 @@ import { useSnackbar } from "notistack";
 import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
@@ -29,10 +29,8 @@ const AlbumUpdateAutocomplete = ({
       options={search.data || []}
       loading={search.isLoading}
       getOptionLabel={({ title }) => setLocale(title, router)}
-      ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}
-      onInputChange={(_e, value) =>
-        search.mutate(searchMutate(router, "title", value))
-      }
+      ChipProps={{ icon: <AlbumIcon /> }}
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, "title", v))}
       textFieldProps={{ label: "albums", margin: "dense" }}
       multiple
       {...props}

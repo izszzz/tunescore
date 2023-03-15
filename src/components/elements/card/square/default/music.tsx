@@ -1,6 +1,7 @@
 import React from "react";
 
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -10,8 +11,8 @@ import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
 import { getMusicOwner } from "../../../../../helpers/music";
 import type { userArgs } from "../../../../../helpers/user";
-import IndexChip from "../../../chip";
 import BookmarkChip from "../../../chip/bookmark";
+import ResourceIcon from "../../../icon/resource";
 import MusicSquareCard from "../music";
 
 interface MusicDefaultSquareCardProps {
@@ -49,7 +50,9 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
               />
             </Box>
           </Box>
-          {owner && <IndexChip label={owner.name} resource={type} />}
+          {owner && (
+            <Chip label={owner.name} icon={<ResourceIcon type={type} />} />
+          )}
         </>
       }
       image={

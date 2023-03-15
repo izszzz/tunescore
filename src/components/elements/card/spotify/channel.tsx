@@ -9,7 +9,7 @@ const ChannelSpotifyCard = ({ data, onClick }: ChannelSpotifyCardProps) => (
   <IndexCard
     image={data.images[1]?.url}
     title={data.name}
-    onClose={() => onClick && onClick(data)}
+    onClose={() => onClick?.(data)}
   />
 );
 

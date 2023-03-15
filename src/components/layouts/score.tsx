@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useToggle } from "react-use";
 
 import type { AlphaTabApi, model } from "@coderline/alphatab";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,6 +10,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import { isNonEmpty } from "ts-array-length";
+import { useToggle } from "usehooks-ts";
 
 import ScoreHeader from "../elements/header/score";
 import VolumeSliderInput from "../music-mateial-ui/input/slider/volume";
@@ -63,6 +63,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     });
   };
   useEffect(() => {
+    if (apiRef.current) return;
     const settings = {
       // file: "https://www.alphatab.net/files/canon.gp",
       player: {
@@ -72,12 +73,11 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
         // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
       },
     };
-    if (mainRef.current) {
+    if (mainRef.current)
       apiRef.current = new window.alphaTab.AlphaTabApi(
         mainRef.current,
         settings
       );
-    }
     apiRef.current?.scoreLoaded.on((score) => {
       setTracks(score.tracks);
     });

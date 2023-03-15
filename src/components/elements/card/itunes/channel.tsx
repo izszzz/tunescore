@@ -8,7 +8,7 @@ export interface ChannelItunesCardProps {
 }
 
 const ChannelItunesCard = ({ data, onClick }: ChannelItunesCardProps) => (
-  <IndexCard title={data.artistName} onClose={() => onClick && onClick(data)} />
+  <IndexCard title={data.artistName} onClose={() => onClick?.(data)} />
 );
 
 export default ChannelItunesCard;

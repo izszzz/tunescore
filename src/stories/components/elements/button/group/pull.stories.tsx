@@ -21,9 +21,10 @@ Default.args = {
     status: "OPEN",
     music: {
       id: "1",
+      isrc: null,
       type: "ORIGINAL",
       score: "",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       lyric: "",
       price: 0,
       link: null,

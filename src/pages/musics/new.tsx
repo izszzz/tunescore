@@ -134,7 +134,7 @@ const NewMusic: NextPage = () => {
             <Box mb={3}>
               <RadioButtonGroup
                 label="visibillity"
-                name="visibility"
+                name="visibillity"
                 options={[
                   { id: "PUBLIC", label: "public" },
                   { id: "PRIVATE", label: "private" },

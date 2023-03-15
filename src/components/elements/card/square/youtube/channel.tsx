@@ -17,9 +17,9 @@ function ChannelYoutubeSquareCard<
           {data?.snippet?.title}
         </Typography>
       }
-      image={data?.snippet?.thumbnails?.medium?.url || ""}
+      image={data?.snippet?.thumbnails?.medium?.url}
       size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
-      onClick={() => onClick && onClick(data)}
+      onClick={() => onClick?.(data)}
     />
   );
 }

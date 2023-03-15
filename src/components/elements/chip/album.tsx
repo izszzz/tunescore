@@ -1,10 +1,9 @@
 import React from "react";
 
-import IndexChip from ".";
-import type { IndexChipProps } from ".";
+import Album from "@mui/icons-material/Album";
+import type { ChipProps } from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 
-const AlbumChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="ALBUM" />
-);
+const AlbumChip = (props: ChipProps) => <Chip {...props} icon={<Album />} />;
 
 export default AlbumChip;

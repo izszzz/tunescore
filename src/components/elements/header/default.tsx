@@ -14,10 +14,9 @@ import { match } from "ts-pattern";
 import { searchMutate } from "../../../helpers";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
-import LocaleAutocomplete from "../autocomplete/locale";
 import SearchAutocomplete from "../autocomplete/search";
 import CartIconButton from "../button/icon/cart";
-import ThemeToggleButton from "../button/icon/toggle/theme";
+import SettingsIconButton from "../button/icon/settings";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
@@ -28,6 +27,7 @@ const DefaultHeader = () => {
   const session = useSession(),
     router = useRouter(),
     { show } = useModal("auth-dialog"),
+    { show: showSettings } = useModal("settings-dialog"),
     search = trpc.search.music.useMutation(),
     handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter")
@@ -73,9 +73,8 @@ const DefaultHeader = () => {
               alignItems="center"
               justifyContent="right"
             >
-              <LocaleAutocomplete />
-              <ThemeToggleButton />
               <PlusMenuManager />
+              <SettingsIconButton onClick={() => showSettings()} />
               {match(session)
                 .with({ status: "loading" }, () => <CircularProgress />)
                 .with({ status: "unauthenticated" }, () => (

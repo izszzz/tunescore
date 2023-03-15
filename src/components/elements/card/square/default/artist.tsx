@@ -1,6 +1,8 @@
 import React from "react";
 
+import Person from "@mui/icons-material/Person";
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -9,7 +11,6 @@ import { isNonEmpty } from "ts-array-length";
 import type { ArtistListArgsType } from "../../../../../helpers/artist";
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
-import IndexChip from "../../../chip";
 import BookmarkChip from "../../../chip/bookmark";
 import ArtistSquareCard from "../artist";
 
@@ -36,9 +37,9 @@ const ArtistDefaultSquareCard = ({ data }: DefaultArtistSquareCardProps) => {
             </Box>
           </Box>
           {isNonEmpty(data.bands) && (
-            <IndexChip
+            <Chip
               label={setLocale(data.bands[0].name, router)}
-              resource="BAND"
+              icon={<Person />}
             />
           )}
         </>

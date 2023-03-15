@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
+import LocalOffer from "@mui/icons-material/LocalOffer";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
@@ -10,7 +11,6 @@ import FlagIconButton from "../../elements/button/icon/flag";
 import type { BookmarkToggleIconButtonProps } from "../../elements/button/icon/toggle/bookmark";
 import BookmarkToggleButton from "../../elements/button/icon/toggle/bookmark";
 import DefaultHeader from "../../elements/header/default";
-import ResourceIcon from "../../elements/icon/resource";
 
 import ShowLayout from "./";
 import type { ShowLayoutProps } from "./";
@@ -51,7 +51,7 @@ const DefaultShowLayout = ({
             {tagMaps.map((tagMap) => (
               <Chip
                 key={tagMap.id}
-                icon={<ResourceIcon resource="TAG" />}
+                icon={<LocalOffer />}
                 label={tagMap.tag.name}
                 variant="outlined"
                 size="small"

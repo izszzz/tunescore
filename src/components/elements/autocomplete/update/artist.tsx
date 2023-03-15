@@ -1,5 +1,6 @@
 import React from "react";
 
+import Person from "@mui/icons-material/Person";
 import type { Artist } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -7,7 +8,6 @@ import { useSnackbar } from "notistack";
 import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
@@ -33,10 +33,8 @@ const ArtistUpdateAutocomplete = ({
       options={search.data || []}
       loading={search.isLoading}
       getOptionLabel={({ name }) => setLocale(name, router)}
-      ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
-      onInputChange={(_e, value) =>
-        search.mutate(searchMutate(router, "name", value))
-      }
+      ChipProps={{ icon: <Person /> }}
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, "name", v))}
       textFieldProps={{ label, margin: "dense" }}
       multiple
       {...props}

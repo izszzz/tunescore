@@ -18,7 +18,7 @@ import type {
   albumShowQuery,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
-import ResourceIconButton from "../../elements/button/icon/resource";
+import AlbumIconButton from "../../elements/button/icon/album";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
@@ -62,10 +62,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <ResourceIconButton
-            resource="ALBUM"
-            onClick={() => router.push("/albums")}
-          />
+          <AlbumIconButton onClick={() => router.push("/albums")} />
           <Typography variant="h5">{setLocale(data.title, router)}</Typography>
         </>
       }

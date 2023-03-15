@@ -1,10 +1,10 @@
 import React from "react";
 
-import IndexChip from ".";
-import type { IndexChipProps } from ".";
+import MusicNote from "@mui/icons-material/MusicNote";
+import type { ChipProps } from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 
-const MusicChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="MUSIC" />
+const MusicChip = (props: ChipProps) => (
+  <Chip {...props} icon={<MusicNote />} />
 );
-
 export default MusicChip;

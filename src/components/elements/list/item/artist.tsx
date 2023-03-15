@@ -24,10 +24,7 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
     name = setLocale(data.name, router);
   return (
     <ListItem
-      route={{
-        pathname: "/artists/[id]",
-        query: { id: data.id },
-      }}
+      route={{ pathname: "/artists/[id]", query: { id: data.id } }}
       icon={<Person />}
       listItemTextProps={{
         primary: name,

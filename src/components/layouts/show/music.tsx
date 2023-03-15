@@ -24,7 +24,7 @@ import type {
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
-import ResourceIconButton from "../../elements/button/icon/resource";
+import MusicIconButton from "../../elements/button/icon/music";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -73,10 +73,7 @@ const MusicLayout = ({
       tabs={tabs}
       title={
         <>
-          <ResourceIconButton
-            resource="MUSIC"
-            onClick={() => router.push("/musics")}
-          />
+          <MusicIconButton onClick={() => router.push("/musics")} />
           <MusicTitle data={data} />
           <Box ml={3}>
             <Chip label={data.type} size="small" />

@@ -1,8 +1,10 @@
 import Add from "@mui/icons-material/Add";
+import Album from "@mui/icons-material/Album";
+import Group from "@mui/icons-material/Group";
+import MusicNote from "@mui/icons-material/MusicNote";
+import Person from "@mui/icons-material/Person";
 import IconButton from "@mui/material/IconButton";
 import router from "next/router";
-
-import ResourceIcon from "../icon/resource";
 
 import MenuListItem from "./item";
 
@@ -19,7 +21,7 @@ const PlusMenuManager = () => (
     {(handleClose) => [
       <MenuListItem
         key="music"
-        icon={<ResourceIcon resource="MUSIC" />}
+        icon={<MusicNote />}
         onClick={() => {
           handleClose();
           router.push("/musics/new");
@@ -29,7 +31,7 @@ const PlusMenuManager = () => (
       </MenuListItem>,
       <MenuListItem
         key="artist"
-        icon={<ResourceIcon resource="ARTIST" />}
+        icon={<Person />}
         onClick={() => {
           handleClose();
           router.push("/artists/new");
@@ -39,7 +41,7 @@ const PlusMenuManager = () => (
       </MenuListItem>,
       <MenuListItem
         key="band"
-        icon={<ResourceIcon resource="BAND" />}
+        icon={<Group />}
         onClick={() => {
           handleClose();
           router.push("/bands/new");
@@ -49,7 +51,7 @@ const PlusMenuManager = () => (
       </MenuListItem>,
       <MenuListItem
         key="album"
-        icon={<ResourceIcon resource="ALBUM" />}
+        icon={<Album />}
         onClick={() => {
           handleClose();
           router.push("/albums/new");

@@ -1,10 +1,10 @@
 import React from "react";
 
+import LocalOffer from "@mui/icons-material/LocalOffer";
 import type { Role } from "@prisma/client";
 import { useSnackbar } from "notistack";
 
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
@@ -23,7 +23,7 @@ const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
       {...props}
       options={search.data || []}
       getOptionLabel={({ name }) => name}
-      ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
+      ChipProps={{ size: "small", icon: <LocalOffer /> }}
       onInputChange={(_e, value) =>
         search.mutate({ where: { name: { contains: value } } })
       }

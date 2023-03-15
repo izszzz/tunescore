@@ -20,7 +20,7 @@ import type {
   bandShowQuery,
 } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
-import ResourceIconButton from "../../elements/button/icon/resource";
+import BandIconButton from "../../elements/button/icon/band";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -67,10 +67,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       activeTab={activeTab}
       title={
         <>
-          <ResourceIconButton
-            resource="BAND"
-            onClick={() => router.push("/bands")}
-          />
+          <BandIconButton onClick={() => router.push("/bands")} />
           <Typography variant="h5">{name}</Typography>
           {data.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>

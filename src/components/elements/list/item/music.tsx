@@ -12,8 +12,8 @@ import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
 import type { MusicListArgsType } from "../../../../helpers/music";
-import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
+import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -38,10 +38,7 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   return (
     <ListItem
       {...props}
-      route={{
-        pathname: "/musics/[id]",
-        query: { id: data.id },
-      }}
+      route={{ pathname: "/musics/[id]", query: { id: data.id } }}
       icon={<MusicNote />}
       listItemTextProps={{
         primary: title,
@@ -75,7 +72,9 @@ const Owner = ({ data }: Omit<MusicListItemProps, "children">) => {
   const router = useRouter();
   const { type, owner } = getMusicOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;
-  return <IndexChip resource={type} label={owner.name} size="small" />;
+  return (
+    <Chip icon={<ResourceIcon type={type} />} label={owner.name} size="small" />
+  );
 };
 
 export default MusicListItem;

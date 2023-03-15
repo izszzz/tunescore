@@ -1,10 +1,11 @@
 import React from "react";
 
-import IndexChip from "./";
-import type { IndexChipProps } from "./";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import type { ChipProps } from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 
-const BandChip = (props: Omit<IndexChipProps, "resource">) => (
-  <IndexChip {...props} resource="USER" />
+const BandChip = (props: ChipProps) => (
+  <Chip {...props} icon={<AccountCircle />} />
 );
 
 export default BandChip;

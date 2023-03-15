@@ -1,10 +1,10 @@
 import React from "react";
 
+import LocalOffer from "@mui/icons-material/LocalOffer";
 import type { Tag } from "@prisma/client";
 import { useSnackbar } from "notistack";
 
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
@@ -16,17 +16,15 @@ type TagUpdateAutocomplete = Pick<
 const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.tag.useMutation({
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
+    onError: () => enqueueSnackbar("artist.search error"),
   });
   return (
     <UpdateAutocomplete<Tag, true>
       {...props}
       options={search.data || []}
       loading={search.isLoading}
-      getOptionLabel={(option) => option.name}
-      ChipProps={{ size: "small", icon: <ResourceIcon resource="TAG" /> }}
+      getOptionLabel={({ name }) => name}
+      ChipProps={{ size: "small", icon: <LocalOffer /> }}
       textFieldProps={{
         label: "tags",
         margin: "dense",

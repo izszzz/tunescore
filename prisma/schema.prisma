@@ -141,6 +141,7 @@ model Music {
 
 model Album {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
+  upc String?
   title Locale
   link LinkList?
 

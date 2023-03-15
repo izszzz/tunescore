@@ -236,6 +236,7 @@ const SettingsMusic: NextPage = () => {
                 id: item.id,
                 images: [],
               }).data,
+              isrc: item.external_ids.isrc,
               albums: { connect: { id: album?.id } },
             },
           });

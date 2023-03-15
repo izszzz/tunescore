@@ -58,6 +58,7 @@ export const spotifyRouter = router({
               data: {
                 type: "COPY",
                 visibillity: "PUBLIC",
+                isrc: item.external_ids.isrc,
                 title: { ja: item.name, en: item.name },
               },
             });
@@ -82,10 +83,16 @@ export const spotifyRouter = router({
                 data: { musics: { connect: { id: music.id } } },
               });
           } else {
+            const {
+              body: {
+                external_ids: { upc },
+              },
+            } = await spotify.getAlbum(item.album.id);
             album = await prisma.album.create({
               data: {
                 title: { ja: item.album.name, en: item.album.name },
                 musics: { connect: { id: music.id } },
+                upc,
                 link: {
                   streaming: {
                     spotify: {

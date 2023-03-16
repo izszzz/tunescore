@@ -1,5 +1,7 @@
 import type { NextRouter } from "next/router";
 
+import { env } from "../env/client.mjs";
+
 export const selectBandMutate = (id: string | undefined) => ({
     data: { band: { connect: { id } } },
   }),
@@ -8,5 +10,5 @@ export const selectBandMutate = (id: string | undefined) => ({
     where: {
       resource: { name: { is: { [router.locale]: { contains: value } } } },
     },
-    take: 10,
+    take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
   });

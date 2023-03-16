@@ -65,6 +65,7 @@ export const spotifyRouter = router({
                   create: {
                     name: { ja: item.name, en: item.name },
                     unionType: "Music",
+                    link: { streaming: { spotify: { id: item.id } } },
                   },
                 },
               },

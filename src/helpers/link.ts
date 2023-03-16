@@ -39,18 +39,16 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     name: string;
     images: (string | null | undefined)[];
   }) => ({
-    data: {
-      link: {
-        streaming: {
-          ...link?.streaming,
-          [name]: {
-            id,
-            image: {
-              size: {
-                small: images[0],
-                medium: images[1],
-                large: images[2],
-              },
+    link: {
+      streaming: {
+        ...link?.streaming,
+        [name]: {
+          id,
+          image: {
+            size: {
+              small: images[0],
+              medium: images[1],
+              large: images[2],
             },
           },
         },

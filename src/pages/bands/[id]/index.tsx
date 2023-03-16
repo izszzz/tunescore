@@ -15,10 +15,11 @@ const Band: NextPage = () => {
   const path = bandShowQuery({ router, session: useSession().data });
   const { data } = trpc.band.findUniqueBand.useQuery(path);
   if (!data) return <></>;
-  const bandData = data as BandLayoutProps["data"];
+  const bandData = data as BandLayoutProps["data"],
+    { resource } = bandData;
   return (
     <BandLayout data={bandData} query={path} activeTab="info">
-      {data.link && <LinkButtons data={data.link} type="Band" />}
+      {resource.link && <LinkButtons data={resource.link} type="Band" />}
       <MusicLists data={bandData.musics} />
       <ArtistLists data={bandData.artists} />
     </BandLayout>

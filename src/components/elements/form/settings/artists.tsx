@@ -80,7 +80,9 @@ function ArtistsUpdateForm({
               options={search.data || []}
               loading={loading}
               textFieldProps={{ label: "artist" }}
-              getOptionLabel={({ name }) => setLocale(name, router)}
+              getOptionLabel={({ resource: { name } }) =>
+                setLocale(name, router)
+              }
               ChipProps={{ icon: <Person /> }}
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),

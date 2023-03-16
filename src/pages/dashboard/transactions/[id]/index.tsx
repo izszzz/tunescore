@@ -22,7 +22,7 @@ const Transaction: NextPage = () => {
       <Typography variant="h5">Data</Typography>
       <Typography>{format(data.createdAt, "yyyy-MM-dd HH:mm:ss")}</Typography>
       <Typography>
-        {data.music ? setLocale(data.music.title, router) : ""}
+        {data.music ? setLocale(data.music.resource.name, router) : ""}
       </Typography>
       {data.music && <MusicListItem data={data.music} />}
       <Typography>amount : {data.amount}</Typography>

@@ -16,10 +16,11 @@ const Artist: NextPage = () => {
   const query = artistShowQuery({ router, session: useSession().data });
   const { data } = trpc.artist.findUniqueArtist.useQuery(query);
   if (!data) return <></>;
-  const artistData = data as ArtistLayoutProps["data"];
+  const artistData = data as ArtistLayoutProps["data"],
+    { resource } = artistData;
   return (
     <ArtistLayout data={artistData} query={query} activeTab="info">
-      {data.link && <LinkButtons data={data.link} type="Album" />}
+      {resource.link && <LinkButtons data={resource.link} type="Album" />}
       <BandLists data={artistData.bands} />
       <ParticipationLists data={artistData.participations}>
         {(participation, data) => (

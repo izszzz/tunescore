@@ -28,13 +28,13 @@ const AlbumDefaultSquareCard = ({ data }: AlbumDefaultSquareCardProps) => {
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6" noWrap>
-              {setLocale(data.title, router)}
+              {setLocale(data.resource.name, router)}
             </Typography>
             <Box display="flex" alignItems="center">
               <BookmarkChip
-                label={data._count.bookmarks}
+                label={data.resource._count.bookmarks}
                 size="small"
-                bookmarked={isNonEmpty(data.bookmarks)}
+                bookmarked={isNonEmpty(data.resource.bookmarks)}
               />
             </Box>
           </Box>
@@ -43,7 +43,7 @@ const AlbumDefaultSquareCard = ({ data }: AlbumDefaultSquareCardProps) => {
           )}
         </>
       }
-      image={getImage(data.link?.streaming, 200)}
+      image={getImage(data.resource.link?.streaming, 200)}
       onClick={() =>
         router.push({ pathname: "/albums/[id]", query: { id: data.id } })
       }

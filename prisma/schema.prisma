@@ -6,12 +6,12 @@ generator client {
 }
 
 generator trpc {
-  provider       = "prisma-trpc-generator"
-  withMiddleware = false
-  withShield     = true
-  contextPath    = "../src/server/context"
-  isGenerateSelect   = true
-  isGenerateInclude  = true
+  provider          = "prisma-trpc-generator"
+  withMiddleware    = false
+  withShield        = true
+  contextPath       = "../src/server/context"
+  isGenerateSelect  = true
+  isGenerateInclude = true
 }
 
 // generator erd {
@@ -56,46 +56,47 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
   stripeCustomerId String?
-  point         Int   @default(0)
+  point            Int       @default(0)
 
   accounts      Account[]
   sessions      Session[]
   musics        Music[]
   issues        Issue[]
-  pulls  Pull[]
-  comments Comment[]
-  bookmarks Bookmark[]
-  notifications Notification[] 
-  carts Cart[]
-  transactions Transaction[] 
-  reports Report[]
+  pulls         Pull[]
+  comments      Comment[]
+  bookmarks     Bookmark[]
+  notifications Notification[]
+  carts         Cart[]
+  transactions  Transaction[]
+  reports       Report[]
 
   followers Follow[] @relation("UserFollower")
   following Follow[] @relation("UserFollowing")
-  reported Report[] @relation("ReportedUser")
+  reported  Report[] @relation("ReportedUser")
 
-  opponents Vote[] @relation("Opponents",fields: [opponentIDs], references: [id])
+  opponents   Vote[]   @relation("Opponents", fields: [opponentIDs], references: [id])
   opponentIDs String[] @db.ObjectId
 
-  proponents Vote[] @relation("Proponents", fields: [proponentIDs], references: [id])
+  proponents   Vote[]   @relation("Proponents", fields: [proponentIDs], references: [id])
   proponentIDs String[] @db.ObjectId
 }
 
 model Follow {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   notifications Notification[] @relation("FollowNotification")
 
-  follower User @relation("UserFollower", fields: [followerId], references: [id])
+  follower   User   @relation("UserFollower", fields: [followerId], references: [id])
   followerId String @db.ObjectId
 
-  following User @relation("UserFollowing", fields: [followingId], references: [id])
+  following   User   @relation("UserFollowing", fields: [followingId], references: [id])
   followingId String @db.ObjectId
+
   @@unique([followerId, followingId])
 }
 
@@ -108,16 +109,31 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Music {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  type MusicType
-  visibillity Visibillity
-  isrc String?
-  title Locale
-  score String?
-  lyric String?
-  price Int?
+model Resource {
+  id   String    @id @default(auto()) @map("_id") @db.ObjectId
+  name Locale
   link LinkList?
+  unionType ResourceUnionType
+  bookmarks Bookmark[]
+  tagMaps   TagMap[]
+
+  music  Music?  @relation("MusicResource")
+  band   Band?   @relation("BandResource")
+  album  Album?  @relation("AlbumResource")
+  artist Artist? @relation("ArtistResource")
+}
+
+model Music {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  type        MusicType
+  visibillity Visibillity
+  isrc        String?
+  score       String?
+  lyric       String?
+  price       Int?
+
+  resource   Resource @relation("MusicResource", fields: [resourceId], references: [id])
+  resourceId String   @unique @db.ObjectId
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
@@ -125,163 +141,148 @@ model Music {
   band   Band?   @relation(fields: [bandId], references: [id])
   bandId String? @db.ObjectId
 
-  albums Album[] @relation("AlbumMusics", fields: [albumIDs], references: [id])
+  albums   Album[]  @relation("AlbumMusics", fields: [albumIDs], references: [id])
   albumIDs String[] @db.ObjectId
 
   participations Participation[]
-  issues Issue[]
-  pulls Pull[]
-  carts Cart[]
-  transactions Transaction[]
-
-  bookmarks Bookmark[] @relation("MusicBookmark")
-  tagMaps TagMap[] @relation("MusicTagMap")
-  reports Report[] @relation("ReportedMusic")
+  issues         Issue[]
+  pulls          Pull[]
+  carts          Cart[]
+  transactions   Transaction[]
+  reports   Report[]   @relation("ReportedMusic")
 }
 
 model Album {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
   upc String?
-  title Locale
-  link LinkList?
 
-  band Band? @relation(fields: [bandId], references: [id])
+  resource   Resource @relation("AlbumResource", fields: [resourceId], references: [id])
+  resourceId String   @unique @db.ObjectId
+
+  band   Band?   @relation(fields: [bandId], references: [id])
   bandId String? @db.ObjectId
 
-  musics Music[] @relation("AlbumMusics", fields: [musicIDs], references: [id])
+  musics   Music[]  @relation("AlbumMusics", fields: [musicIDs], references: [id])
   musicIDs String[] @db.ObjectId
 
-  artists Artist[] @relation("ArtistAlbums",fields: [artistIDs], references: [id])
+  artists   Artist[] @relation("ArtistAlbums", fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
-
-  bookmarks Bookmark[] @relation("AlbumBookmark")
-  tagMaps TagMap[] @relation("AlbumTagMap")
 }
 
 model Artist {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Locale
-  link LinkList?
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  bands  Band[] @relation(fields: [bandIDs], references: [id])
+  resource   Resource @relation("ArtistResource", fields: [resourceId], references: [id])
+  resourceId String   @unique @db.ObjectId
+
+  bands   Band[]   @relation(fields: [bandIDs], references: [id])
   bandIDs String[] @db.ObjectId
 
-  albums Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
-  albumIDs          String[] @db.ObjectId
+  albums   Album[]  @relation("ArtistAlbums", fields: [albumIDs], references: [id])
+  albumIDs String[] @db.ObjectId
 
   participations Participation[]
-
-  bookmarks Bookmark[] @relation("ArtistBookmark")
-  tagMaps TagMap[] @relation("ArtistTagMap")
 }
 
 model Band {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Locale
-  link LinkList?
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  artists Artist[] @relation(fields: [artistIDs], references: [id])
+  resource   Resource @relation("BandResource", fields: [resourceId], references: [id])
+  resourceId String   @unique @db.ObjectId
+
+  artists   Artist[] @relation(fields: [artistIDs], references: [id])
   artistIDs String[] @db.ObjectId
 
   musics Music[]
   albums Album[]
-
-  bookmarks Bookmark[] @relation("BandBookmark")
-  tagMaps TagMap[] @relation("BandTagMap")
 }
 
 model Issue {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  body String
+  id     String      @id @default(auto()) @map("_id") @db.ObjectId
+  title  String
+  body   String
   status IssueStatus @default(OPEN)
 
   comments Comment[] @relation("IssueComment")
 
-  music Music   @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
 
-  user User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 }
 
 model Pull {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  body String
-  score PullScore
+  id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  title  String
+  body   String
+  score  PullScore
   status PullStatus @default(DRAFT)
-  vote Vote?
+  vote   Vote?
 
   comments Comment[] @relation("PullComment")
 
-  music Music   @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
 
-  user User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 }
 
 model Vote {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
   start DateTime @default(now())
-  end DateTime
+  end   DateTime
 
-  proponents User[] @relation("Proponents", fields: [proponentIDs], references: [id])
+  proponents   User[]   @relation("Proponents", fields: [proponentIDs], references: [id])
   proponentIDs String[] @db.ObjectId
 
-  opponents User[] @relation("Opponents", fields: [opponentIDs], references: [id])
+  opponents   User[]   @relation("Opponents", fields: [opponentIDs], references: [id])
   opponentIDs String[] @db.ObjectId
 
-  pull Pull @relation(fields: [pullId], references: [id])
-  pullId String @db.ObjectId @unique
+  pull   Pull   @relation(fields: [pullId], references: [id])
+  pullId String @unique @db.ObjectId
 }
 
 model Comment {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   body String
 
-  pull Pull? @relation("PullComment", fields: [unionId], references: [id])
+  pull  Pull?  @relation("PullComment", fields: [unionId], references: [id])
   issue Issue? @relation("IssueComment", fields: [unionId], references: [id])
 
-  user User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
   notifications Notification[] @relation("CommentNotification")
 
-  unionId String @db.ObjectId
-  unionType CommentUnionType 
+  unionId   String           @db.ObjectId
+  unionType CommentUnionType
 }
 
 model Bookmark {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   notifications Notification[] @relation("BookmarkNotification")
 
-  music Music? @relation("MusicBookmark", fields: [unionId], references: [id])
-  band Band? @relation("BandBookmark",fields: [unionId], references: [id])
-  album Album? @relation("AlbumBookmark",fields: [unionId], references: [id])
-  artist Artist? @relation("ArtistBookmark",fields: [unionId], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id])
+  resourceId String @db.ObjectId
 
-  user User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
-
-  unionId String @db.ObjectId
-  unionType BookmarkUnionType 
-
-  @@unique([unionId, unionType, userId])
 }
 
 model Participation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  artist Artist @relation(fields: [artistId], references: [id])
+  artist   Artist @relation(fields: [artistId], references: [id])
   artistId String @db.ObjectId
 
-  music Music @relation(fields: [musicId], references:[id])
+  music   Music  @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
 
   roleMap RoleMap[]
+
   @@unique([artistId, musicId])
 }
 
@@ -293,98 +294,101 @@ model Role {
 }
 
 model RoleMap {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  role Role @relation(fields:[roleId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
   roleId String @db.ObjectId
 
-  participation Participation @relation(fields: [participationId], references: [id])
-  participationId String @db.ObjectId
+  participation   Participation @relation(fields: [participationId], references: [id])
+  participationId String        @db.ObjectId
+  @@unique([roleId, participationId])
 }
 
 model Tag {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  
-  name String  @unique
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name   String   @unique
   tagMap TagMap[]
 }
 
 model TagMap {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  tag Tag @relation(fields:[tagId], references: [id])
+  tag   Tag    @relation(fields: [tagId], references: [id])
   tagId String @db.ObjectId
 
-  music Music? @relation("MusicTagMap", fields: [unionId], references: [id])
-  band Band? @relation("BandTagMap",fields: [unionId], references: [id])
-  album Album? @relation("AlbumTagMap",fields: [unionId], references: [id])
-  artist Artist? @relation("ArtistTagMap",fields: [unionId], references: [id])
-
-  unionId String @db.ObjectId
-  unionType TagMapUnionType 
-
-  @@unique([unionId, tagId, unionType])
+  resource Resource @relation(fields: [resourceId], references: [id])
+  resourceId String @db.ObjectId
+  @@unique([tagId, resourceId])
 }
 
 model Notification {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   bookmarked Bookmark? @relation("BookmarkNotification", fields: [unionId], references: [id])
-  followed Follow? @relation("FollowNotification", fields:[unionId], references: [id])
-  commented Comment? @relation("CommentNotification", fields: [unionId], references:[id])
+  followed   Follow?   @relation("FollowNotification", fields: [unionId], references: [id])
+  commented  Comment?  @relation("CommentNotification", fields: [unionId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
-  unionId String @db.ObjectId
+  unionId   String                @db.ObjectId
   unionType NotificationUnionType
 
   createdAt DateTime @default(now())
-  readAt DateTime @default(now())
+  readAt    DateTime @default(now())
 }
 
 model Cart {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
-  music Music @relation(fields: [musicId], references:[id])
+  music   Music  @relation(fields: [musicId], references: [id])
   musicId String @db.ObjectId
+
   @@unique([userId, musicId])
 }
 
-model Transaction{
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+model Transaction {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  type TransactionType
+  type   TransactionType
   amount Int
 
   stripePaymentIntentId String?
 
-  music Music? @relation(fields: [musicId], references:[id])
+  music   Music?  @relation(fields: [musicId], references: [id])
   musicId String? @db.ObjectId
 
-  user User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
 
   createdAt DateTime @default(now())
 }
 
 model Report {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   type ReportType
   body String
 
-  reportedUser User? @relation("ReportedUser", fields: [unionId], references: [id])
+  reportedUser  User?  @relation("ReportedUser", fields: [unionId], references: [id])
   reportedMusic Music? @relation("ReportedMusic", fields: [unionId], references: [id])
 
   unionType ReportUnionType
-  unionId String @db.ObjectId
+  unionId   String          @db.ObjectId
 
-  user User? @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String? @db.ObjectId
+}
+
+enum ResourceUnionType {
+  Music
+  Artist
+  Album
+  Band
 }
 
 enum ReportUnionType {
@@ -394,7 +398,7 @@ enum ReportUnionType {
   Album
   Band
 }
-  
+
 enum ReportType {
   COPYRIGHT
   GARBAGE
@@ -407,20 +411,6 @@ enum TransactionType {
   WITHDRAW
   REWARD
   DONATE
-}
-
-enum TagMapUnionType {
-  Music
-  Band
-  Artist
-  Album
-}
-
-enum BookmarkUnionType {
-  Music
-  Band
-  Artist
-  Album
 }
 
 enum CommentUnionType {
@@ -459,7 +449,7 @@ enum IssueStatus {
 
 type PullScore {
   original String
-  changed String
+  changed  String
 }
 
 type Locale {
@@ -469,22 +459,22 @@ type Locale {
 
 type LinkList {
   streaming StreamingLink?
-  account AccountLink?
+  account   AccountLink?
 }
 
 type StreamingLink {
   youtube Link?
   spotify Link?
-  itunes Link?
+  itunes  Link?
 }
 
 type AccountLink {
-  twitter String?
+  twitter   String?
   wikipedia String?
 }
 
 type Link {
-  id String?
+  id    String?
   image Image?
 }
 
@@ -493,7 +483,7 @@ type Image {
 }
 
 type ImageSize {
-  small String?
+  small  String?
   medium String?
-  large String?
+  large  String?
 }

@@ -15,7 +15,7 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import type { Music } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import axios from "axios";
 import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -34,7 +34,9 @@ import { trpc } from "../../utils/trpc";
 const NewMusic: NextPage = () => {
   const router = useRouter(),
     [loading, setLoading] = useState(false),
-    formContext = useForm<Music>({ defaultValues: { price: 0 } }),
+    formContext = useForm<
+      Prisma.MusicGetPayload<{ include: { resource: true } }>
+    >({ defaultValues: { price: 0 } }),
     { show } = useModal("auth-dialog"),
     { t } = useTranslation(),
     { data: session, status } = useSession(),
@@ -46,18 +48,20 @@ const NewMusic: NextPage = () => {
     } = formContext,
     type = watch("type"),
     create = trpc.music.createOneMusic.useMutation({
-      onSuccess: () => {
-        router.push("/musics");
-        enqueueSnackbar("music.create success");
-      },
+      onSuccess: ({ id }) =>
+        router.push({ pathname: "/musics/[id]", query: { id } }),
       onError: () => enqueueSnackbar("music.create fail"),
     }),
-    handleSubmit = (data: Music) => {
+    handleSubmit = ({
+      resource,
+      ...music
+    }: Prisma.MusicGetPayload<{ include: { resource: true } }>) => {
       if (isAuth(status))
         create.mutate({
           data: {
-            ...data,
-            price: Number(data.price),
+            ...music,
+            resource: { create: { ...resource, unionType: "Music" } },
+            price: Number(music.price),
             user: { connect: { id: getCurrentUserId(session) } },
           },
         });
@@ -111,6 +115,7 @@ const NewMusic: NextPage = () => {
         setValue("score", exporter.ToTex());
       }
     };
+
   return (
     <NewLayout>
       <Box my={3}>
@@ -144,7 +149,7 @@ const NewMusic: NextPage = () => {
               />
             </Box>
             <TextFieldElement
-              name={"title." + router.locale}
+              name={"resource.name." + router.locale}
               label="Title"
               margin="dense"
               required

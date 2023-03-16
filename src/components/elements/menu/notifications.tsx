@@ -28,12 +28,15 @@ const NotificationsMenuManager = () => {
                 .with(
                   {
                     unionType: "Bookmark",
-                    bookmarked: { music: P.select("music", P.not(P.nullish)) },
+                    bookmarked: {
+                      resource: P.select("resource", P.not(P.nullish)),
+                    },
                     user: P.select("user", P.not(P.nullish)),
                   },
-                  ({ music, user }) => (
+                  ({ resource, user }) => (
                     <BookmarkMenuListItem onClick={handleClose}>
-                      {setLocale(music.title, router)} bookmarked by {user.name}
+                      {setLocale(resource.name, router)} bookmarked by{" "}
+                      {user.name}
                     </BookmarkMenuListItem>
                   )
                 )

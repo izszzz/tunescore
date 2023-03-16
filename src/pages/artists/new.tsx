@@ -2,7 +2,7 @@ import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import type { Artist } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -16,10 +16,20 @@ const NewArtist: NextPage = () => {
     { status } = useSession(),
     { show } = useModal("auth-dialog"),
     create = trpc.artist.createOneArtist.useMutation({
-      onSuccess: () => router.push("/artists"),
+      onSuccess: ({ id }) =>
+        router.push({ pathname: "/artists/[id]", query: { id } }),
     });
-  const handleSubmit = (data: Artist) => {
-    if (isAuth(status)) create.mutate({ data });
+  const handleSubmit = ({
+    resource,
+    ...artist
+  }: Prisma.ArtistGetPayload<{ include: { resource: true } }>) => {
+    if (isAuth(status))
+      create.mutate({
+        data: {
+          ...artist,
+          resource: { create: { ...resource, unionType: "Artist" } },
+        },
+      });
     else show();
   };
   return (

@@ -16,10 +16,11 @@ const Album: NextPage = () => {
   const path = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(path);
   if (!data) return <></>;
-  const albumData = data as AlbumLayoutProps["data"];
+  const albumData = data as AlbumLayoutProps["data"],
+    { resource } = albumData;
   return (
     <AlbumLayout data={albumData} query={path} activeTab="info">
-      {data.link && <LinkButtons data={data.link} type="Album" />}
+      {resource.link && <LinkButtons data={resource.link} type="Album" />}
 
       {albumData.band && <BandLists data={[albumData.band]} />}
 

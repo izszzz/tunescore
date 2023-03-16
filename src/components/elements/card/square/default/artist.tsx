@@ -26,25 +26,25 @@ const ArtistDefaultSquareCard = ({ data }: DefaultArtistSquareCardProps) => {
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6" noWrap>
-              {setLocale(data.name, router)}
+              {setLocale(data.resource.name, router)}
             </Typography>
             <Box display="flex" alignItems="center">
               <BookmarkChip
-                label={data._count.bookmarks}
+                label={data.resource._count.bookmarks}
                 size="small"
-                bookmarked={isNonEmpty(data.bookmarks)}
+                bookmarked={isNonEmpty(data.resource.bookmarks)}
               />
             </Box>
           </Box>
           {isNonEmpty(data.bands) && (
             <Chip
-              label={setLocale(data.bands[0].name, router)}
+              label={setLocale(data.bands[0].resource.name, router)}
               icon={<Person />}
             />
           )}
         </>
       }
-      image={getImage(data.link?.streaming, 200, { square: true })}
+      image={getImage(data.resource.link?.streaming, 200, { square: true })}
       onClick={() =>
         router.push({ pathname: "/artists/[id]", query: { id: data.id } })
       }

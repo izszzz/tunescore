@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Button from "@mui/material/Button";
@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import type { ResourceUnionType } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
@@ -15,6 +16,7 @@ import { searchMutate } from "../../../helpers";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
 import SearchAutocomplete from "../autocomplete/search";
+import ResourceToggleGroupButton from "../button/group/toggle/resource";
 import CartIconButton from "../button/icon/cart";
 import SettingsIconButton from "../button/icon/settings";
 import AvatarMenuManager from "../menu/avatar";
@@ -24,7 +26,8 @@ import PlusMenuManager from "../menu/plus";
 import Header from ".";
 
 const DefaultHeader = () => {
-  const session = useSession(),
+  const [type, setType] = useState<ResourceUnionType[]>(["Music"]),
+    session = useSession(),
     router = useRouter(),
     { show } = useModal("auth-dialog"),
     { show: showSettings } = useModal("settings-dialog"),
@@ -34,12 +37,24 @@ const DefaultHeader = () => {
         router.replace({
           pathname: "/search",
           query: {
-            type: "music",
+            type: type,
             page: String(1),
             q: String((e.target as HTMLInputElement).value),
           },
         });
-    };
+    },
+    handleChange = (
+      _e: React.MouseEvent<HTMLElement, MouseEvent>,
+      value: ResourceUnionType[]
+    ) => setType(value);
+  useEffect(() => {
+    if (router.query.type)
+      setType(
+        Array.isArray(router.query.type)
+          ? (router.query.type as ResourceUnionType[])
+          : [router.query.type as ResourceUnionType]
+      );
+  }, [router.query.type]);
   return (
     <>
       <Header>
@@ -53,14 +68,19 @@ const DefaultHeader = () => {
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />
           <Grid item xs={5} display="flex" alignItems="center">
+            <ResourceToggleGroupButton
+              size="small"
+              value={type}
+              onChange={handleChange}
+            />
             <SearchAutocomplete
               size="small"
               options={search.data || []}
               loading={search.isLoading}
-              getOptionLabel={({ title }) => setLocale(title, router)}
-              onInputChange={(_e, inputValue) =>
-                search.mutate(searchMutate(router, "title", inputValue))
+              getOptionLabel={({ resource: { name } }) =>
+                setLocale(name, router)
               }
+              onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
               textFieldProps={{ onKeyDown: handleKeyDown }}
               fullWidth
             />

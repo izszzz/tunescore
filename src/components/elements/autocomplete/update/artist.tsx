@@ -1,7 +1,7 @@
 import React from "react";
 
 import Person from "@mui/icons-material/Person";
-import type { Artist } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
@@ -12,6 +12,7 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
+type Artist = Prisma.ArtistGetPayload<{ include: { resource: true } }>;
 interface ArtistUpdateAutocomplete
   extends Pick<
     UpdateAutocompleteProps<Artist, true, undefined, undefined>,
@@ -32,9 +33,9 @@ const ArtistUpdateAutocomplete = ({
     <UpdateAutocomplete<Artist, true>
       options={search.data || []}
       loading={search.isLoading}
-      getOptionLabel={({ name }) => setLocale(name, router)}
+      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       ChipProps={{ icon: <Person /> }}
-      onInputChange={(_e, v) => search.mutate(searchMutate(router, "name", v))}
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
       textFieldProps={{ label, margin: "dense" }}
       multiple
       {...props}

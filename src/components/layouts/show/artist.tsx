@@ -17,7 +17,7 @@ import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   ArtistShowArgsType,
-  artistShowQuery,
+  ArtistShowQueryType,
 } from "../../../paths/artists/[id]";
 import { trpc } from "../../../utils/trpc";
 import ArtistIconButton from "../../elements/button/icon/artist";
@@ -30,11 +30,13 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface ArtistLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.ArtistGetPayload<ArtistShowArgsType>;
-  query: ReturnType<typeof artistShowQuery>;
+  query: ArtistShowQueryType;
   activeTab: "info" | "settings";
 }
 const ArtistLayout: React.FC<ArtistLayoutProps> = ({
-  data,
+  data: {
+    resource: { bookmarks, tagMaps, ...resource },
+  },
   query,
   activeTab,
   children,
@@ -54,9 +56,9 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("artist.update error"),
     }),
-    name = setLocale(data.name, router),
+    name = setLocale(resource.name, router),
     { id } = router.query,
-    image = getImage(data.link?.streaming, 80, { channel: true }),
+    image = getImage(resource.link?.streaming, 80, { channel: true }),
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/artists/[id]" },
       { label: "settings", pathname: "/artists/[id]/settings" },
@@ -67,7 +69,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <ArtistIconButton onClick={() => router.push("/artists")} />
+          <ArtistIconButton />
           <Typography variant="h5">{name}</Typography>
           {image && (
             <Box display="flex" justifyContent="center" pl={3}>
@@ -81,21 +83,19 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
           )}
         </>
       }
-      tagMaps={data.tagMaps}
+      tagMaps={tagMaps}
       reportButtonProps={{ unionType: "Artist", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
+        value: isNonEmpty(bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Artist",
-                  session,
-                }),
+                resource: {
+                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
+                },
               },
             });
           else show();

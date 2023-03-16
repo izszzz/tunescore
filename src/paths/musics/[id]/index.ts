@@ -3,8 +3,8 @@ import type { NextRouter } from "next/router";
 
 import { albumListArgs } from "../../../helpers/album";
 import { bandListArgs } from "../../../helpers/band";
-import { bookmarkArgs } from "../../../helpers/bookmark";
 import { participatedArtistArgs } from "../../../helpers/participation";
+import { resourceArgs } from "../../../helpers/resource";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere, userArgs } from "../../../helpers/user";
 
@@ -45,7 +45,11 @@ const musicShowArgs = (session: SessionArg) =>
         where: { type: "PURCHASE" as const, user: userWhere(session) },
       },
       carts: { where: { user: userWhere(session) } },
-      bookmarks: bookmarkArgs({ type: "Music", session }),
-      tagMaps: { include: { tag: true } },
+      resource: {
+        include: {
+          ...resourceArgs(session).include,
+          tagMaps: { include: { tag: true } },
+        },
+      },
     },
   });

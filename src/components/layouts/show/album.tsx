@@ -15,7 +15,7 @@ import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
-  albumShowQuery,
+  AlbumShowQueryType,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 import AlbumIconButton from "../../elements/button/icon/album";
@@ -27,11 +27,13 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowQuery>;
+  query: AlbumShowQueryType;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
-  data,
+  data: {
+    resource: { bookmarks, tagMaps, ...resource },
+  },
   query,
   activeTab,
   children,
@@ -62,25 +64,25 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       tabs={tabs}
       title={
         <>
-          <AlbumIconButton onClick={() => router.push("/albums")} />
-          <Typography variant="h5">{setLocale(data.title, router)}</Typography>
+          <AlbumIconButton />
+          <Typography variant="h5">
+            {setLocale(resource.name, router)}
+          </Typography>
         </>
       }
-      tagMaps={data.tagMaps}
+      tagMaps={tagMaps}
       reportButtonProps={{ unionType: "Album", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
+        value: isNonEmpty(bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Album",
-                  session,
-                }),
+                resource: {
+                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
+                },
               },
             });
           else show();

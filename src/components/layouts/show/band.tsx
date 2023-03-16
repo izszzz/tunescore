@@ -17,7 +17,7 @@ import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   BandShowArgsType,
-  bandShowQuery,
+  BandShowQueryType,
 } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
 import BandIconButton from "../../elements/button/icon/band";
@@ -30,12 +30,14 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<BandShowArgsType>;
-  query: ReturnType<typeof bandShowQuery>;
+  query: BandShowQueryType;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
-  data,
+  data: {
+    resource: { bookmarks, tagMaps, ...resource },
+  },
   query,
   activeTab,
   children,
@@ -55,7 +57,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("band.update error"),
     }),
-    name = setLocale(data.name, router),
+    name = setLocale(resource.name, router),
     { id } = router.query,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/bands/[id]" },
@@ -67,35 +69,33 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       activeTab={activeTab}
       title={
         <>
-          <BandIconButton onClick={() => router.push("/bands")} />
+          <BandIconButton />
           <Typography variant="h5">{name}</Typography>
-          {data.link?.streaming && (
+          {resource.link?.streaming && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image
                 style={{ borderRadius: 5 }}
                 height="80"
                 alt={name}
-                src={getImage(data.link.streaming, 80) || undefined}
+                src={getImage(resource.link.streaming, 80) || undefined}
               />
             </Box>
           )}
         </>
       }
-      tagMaps={data.tagMaps}
+      tagMaps={tagMaps}
       reportButtonProps={{ unionType: "Band", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
+        value: isNonEmpty(bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))
             update.mutate({
               ...query,
               data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Band",
-                  session,
-                }),
+                resource: {
+                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
+                },
               },
             });
           else show();

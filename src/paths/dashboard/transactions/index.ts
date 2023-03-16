@@ -20,5 +20,5 @@ export const transactionsPaginationQuery = ({
       ],
     },
   },
-  options: { page: (router.query.page as string) || 0, perPage: 12 },
+  options: { page: (router.query.page as string) || 0 },
 });

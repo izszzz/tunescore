@@ -6,8 +6,9 @@ import type { MusicListArgsType } from "../../../helpers/music";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere } from "../../../helpers/user";
 
-export type UserRepositoriesGetPayload =
-  Prisma.UserGetPayload<MusicListArgsType>;
+export type UserRepositoriesGetPayload = Prisma.UserGetPayload<{
+  include: { musics: MusicListArgsType };
+}>;
 
 export const userRepositoriesQuery = ({
   router,
@@ -30,5 +31,5 @@ export const userRepositoriesQuery = ({
       user: userWhere(session),
     },
   },
-  options: { page: (router.query.page as string) || 0, perPage: 12 },
+  options: { page: (router.query.page as string) || 0 },
 });

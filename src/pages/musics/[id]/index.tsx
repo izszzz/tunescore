@@ -42,7 +42,8 @@ const Music: NextPage = () => {
       onError: () => enqueueSnackbar("cart.create error"),
     });
   if (!data) return <></>;
-  const musicData = data as MusicLayoutProps["data"];
+  const musicData = data as MusicLayoutProps["data"],
+    { resource } = musicData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="info">
       <ActionButton
@@ -58,10 +59,10 @@ const Music: NextPage = () => {
         }
       />
 
-      {data.link && <LinkButtons data={data.link} type="Music" />}
+      {resource.link && <LinkButtons data={resource.link} type="Music" />}
 
-      {data.link?.streaming?.youtube?.id && (
-        <YoutubeAmbient videoId={data.link.streaming.youtube.id} />
+      {resource.link?.streaming?.youtube?.id && (
+        <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />
       )}
 
       {musicData.pulls.map((pull) => (

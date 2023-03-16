@@ -119,24 +119,15 @@ const AlbumSettings: NextPage = () => {
           });
           await update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectSpotifyMutate({
-                  link: resource.link,
-                  id,
-                  images: [images[2]?.url, images[1]?.url, images[0]?.url],
-                }),
-              },
-            },
+            ...selectSpotifyMutate({
+              link: resource.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           });
         }}
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              resource: { update: removeSpotifyMutate(resource.link) },
-            },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
       />
 
@@ -145,31 +136,24 @@ const AlbumSettings: NextPage = () => {
 
       <ItunesAlbumSelectForm
         term={title}
-        streamingLink={albumData.resource.link?.streaming}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectItunesMutate({
-                  link: albumData.resource.link,
-                  id: convertAffiliateLink(value.collectionViewUrl).toString(),
-                  images: [
-                    value.artworkUrl30,
-                    value.artworkUrl60,
-                    value.artworkUrl100,
-                  ],
-                }),
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.collectionViewUrl).toString(),
+              images: [
+                value.artworkUrl30,
+                value.artworkUrl60,
+                value.artworkUrl100,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeItunesMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -183,26 +167,19 @@ const AlbumSettings: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectYoutubeMutate({
-                  link: resource.link,
-                  id: value.id?.videoId,
-                  images: [
-                    value.snippet?.thumbnails?.standard?.url,
-                    value.snippet?.thumbnails?.medium?.url,
-                    value.snippet?.thumbnails?.high?.url,
-                  ],
-                }),
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value.id?.videoId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeYoutubeMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
       />
     </AlbumLayout>

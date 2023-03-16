@@ -112,22 +112,15 @@ const BandSettings: NextPage = () => {
         onSelect={({ id, images }) =>
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectSpotifyMutate({
-                  link: resource.link,
-                  id,
-                  images: [images[2]?.url, images[1]?.url, images[0]?.url],
-                }),
-              },
-            },
+            ...selectSpotifyMutate({
+              link: resource.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeSpotifyMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
       />
       <Typography variant="h4">iTunes</Typography>
@@ -140,22 +133,15 @@ const BandSettings: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectItunesMutate({
-                  link: resource.link,
-                  id: convertAffiliateLink(value.artistLinkUrl).toString(),
-                  images: [],
-                }),
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.artistLinkUrl).toString(),
+              images: [],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeItunesMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -168,26 +154,19 @@ const BandSettings: NextPage = () => {
         onSelect={(value) =>
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectYoutubeMutate({
-                  link: resource.link,
-                  id: value?.id?.channelId,
-                  images: [
-                    value?.snippet?.thumbnails?.standard?.url,
-                    value?.snippet?.thumbnails?.medium?.url,
-                    value?.snippet?.thumbnails?.high?.url,
-                  ],
-                }),
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value?.id?.channelId,
+              images: [
+                value?.snippet?.thumbnails?.standard?.url,
+                value?.snippet?.thumbnails?.medium?.url,
+                value?.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeYoutubeMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
       />
     </BandLayout>

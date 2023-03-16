@@ -84,23 +84,16 @@ const ArtistSettings: NextPage = () => {
         term={setLocale(resource.name, router)}
         streamingLink={resource.link?.streaming}
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeSpotifyMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
         onSelect={({ id, images }) =>
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectSpotifyMutate({
-                  link: resource.link,
-                  id,
-                  images: [images[2]?.url, images[1]?.url, images[0]?.url],
-                }),
-              },
-            },
+            ...selectSpotifyMutate({
+              link: resource.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
           })
         }
       />
@@ -115,21 +108,17 @@ const ArtistSettings: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectItunesMutate({
-                  link: resource.link,
-                  id: convertAffiliateLink(value.artistLinkUrl).toString(),
-                  images: [],
-                }),
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.artistLinkUrl).toString(),
+              images: [],
+            }),
           })
         }
         onRemove={() =>
           update.mutate({
             ...query,
-            data: { resource: { update: removeItunesMutate(resource.link) } },
+            ...removeItunesMutate(resource.link),
           })
         }
       />

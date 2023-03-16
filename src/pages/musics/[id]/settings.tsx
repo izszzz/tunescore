@@ -217,7 +217,7 @@ const SettingsMusic: NextPage = () => {
                   link: resource.link,
                   id: item.id,
                   images: [],
-                }),
+                }).data.resource.update,
               },
               isrc: item.external_ids.isrc,
               albums: { connect: { id: album?.id } },
@@ -225,10 +225,7 @@ const SettingsMusic: NextPage = () => {
           });
         }}
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeSpotifyMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
       />
 
@@ -242,26 +239,19 @@ const SettingsMusic: NextPage = () => {
           value &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectItunesMutate({
-                  link: resource.link,
-                  id: convertAffiliateLink(value.trackViewUrl).toString(),
-                  images: [
-                    value.artworkUrl30,
-                    value.artworkUrl60,
-                    value.artworkUrl100,
-                  ],
-                }),
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.trackViewUrl).toString(),
+              images: [
+                value.artworkUrl30,
+                value.artworkUrl60,
+                value.artworkUrl100,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeItunesMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 

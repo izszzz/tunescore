@@ -34,7 +34,13 @@ const musicShowArgs = (session: SessionArg) =>
     include: {
       user: userArgs,
       band: bandListArgs(session),
-      albums: albumListArgs(session),
+      albums: {
+        where: {
+          resource: { link: { isNot: { streaming: { spotify: null } } } },
+        },
+        ...albumListArgs(session),
+        take: 1,
+      },
       participations: participatedArtistArgs(session),
       pulls: {
         ...pullShowArgs(session),

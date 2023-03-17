@@ -41,22 +41,16 @@ const NotificationsMenuManager = () => {
                   )
                 )
                 .with(
-                  {
-                    unionType: "Follow",
-                    user: P.select("user", P.not(P.nullish)),
-                  },
-                  ({ user }) => (
+                  { unionType: "Follow", user: P.select(P.not(P.nullish)) },
+                  (user) => (
                     <FollowMenuListItem onClick={handleClose}>
                       followed by {user.name}
                     </FollowMenuListItem>
                   )
                 )
                 .with(
-                  {
-                    unionType: "Comment",
-                    user: P.select("user", P.not(P.nullish)),
-                  },
-                  ({ user }) => (
+                  { unionType: "Comment", user: P.select(P.not(P.nullish)) },
+                  (user) => (
                     <CommentMenuListItem onClick={handleClose}>
                       commented by {user.name}
                     </CommentMenuListItem>

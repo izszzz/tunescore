@@ -86,19 +86,12 @@ const BandSettings: NextPage = () => {
         loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { resource: { update: selectTags(details?.option.id) } },
-            }),
+            update.mutate({ ...query, ...selectTags(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             details &&
             update.mutate({
               ...query,
-              data: {
-                resource: {
-                  update: removeTags(details?.option.id, resource.id),
-                },
-              },
+              ...removeTags(details.option.id, resource.id),
             }),
         }}
       />

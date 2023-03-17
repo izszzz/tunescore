@@ -92,11 +92,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
           if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                resource: {
-                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
-                },
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },

@@ -92,11 +92,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
           if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                resource: {
-                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
-                },
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },

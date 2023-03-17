@@ -94,9 +94,7 @@ const MusicLayout = ({
                     {
                       ...resource.link?.streaming,
                       spotify:
-                        albums.find(
-                          ({ resource: { link } }) => !!link?.streaming?.spotify
-                        )?.resource.link?.streaming?.spotify || null,
+                        albums[0]?.resource.link?.streaming?.spotify || null,
                     },
                     80
                   ) || ""

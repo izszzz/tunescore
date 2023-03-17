@@ -116,10 +116,7 @@ const ArtistSettings: NextPage = () => {
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            ...removeItunesMutate(resource.link),
-          })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -132,26 +129,19 @@ const ArtistSettings: NextPage = () => {
         onSelect={(value) =>
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectYoutubeMutate({
-                  link: resource.link,
-                  id: value?.id?.channelId,
-                  images: [
-                    value?.snippet?.thumbnails?.standard?.url,
-                    value?.snippet?.thumbnails?.medium?.url,
-                    value?.snippet?.thumbnails?.high?.url,
-                  ],
-                }),
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value?.id?.channelId,
+              images: [
+                value?.snippet?.thumbnails?.standard?.url,
+                value?.snippet?.thumbnails?.medium?.url,
+                value?.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeYoutubeMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
       />
     </ArtistLayout>

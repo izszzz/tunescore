@@ -21,10 +21,7 @@ interface MusicDefaultSquareCardProps {
 const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
   const router = useRouter(),
     { type, owner } = getMusicOwner(data, router),
-    {
-      id,
-      resource: { name },
-    } = data;
+    { id } = data;
   return (
     <MusicSquareCard
       size="200px"
@@ -32,7 +29,7 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6" noWrap>
-              {setLocale(name, router)}
+              {setLocale(data.resource.name, router)}
             </Typography>
             <Box display="flex" alignItems="center">
               <BookmarkChip
@@ -52,10 +49,7 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         getImage(
           {
             ...data.resource.link?.streaming,
-            spotify:
-              data.albums.find(
-                (album) => !!album.resource.link?.streaming?.spotify
-              )?.resource.link?.streaming?.spotify || null,
+            spotify: data.albums[0]?.resource.link?.streaming?.spotify || null,
           },
           200,
           { square: true }

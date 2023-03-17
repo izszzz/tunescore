@@ -79,11 +79,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
           if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                resource: {
-                  update: { bookmarks: bookmarkMutate({ bookmarks, session }) },
-                },
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },

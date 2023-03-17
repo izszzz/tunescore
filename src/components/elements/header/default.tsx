@@ -37,7 +37,7 @@ const DefaultHeader = () => {
         router.replace({
           pathname: "/search",
           query: {
-            type: type,
+            type,
             page: String(1),
             q: String((e.target as HTMLInputElement).value),
           },

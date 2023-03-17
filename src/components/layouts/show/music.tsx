@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
+import MusicNote from "@mui/icons-material/MusicNote";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
@@ -24,7 +25,6 @@ import type {
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
-import MusicIconButton from "../../elements/button/icon/music";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -60,25 +60,24 @@ const MusicLayout = ({
       onError: () => enqueueSnackbar("music.update error"),
     }),
     { id } = router.query,
+    { type, albums, resource } = data,
+    { bookmarks } = resource,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/musics/[id]" },
       { label: "issues", pathname: "/musics/[id]/issues" },
       { label: "pullrequests", pathname: "/musics/[id]/pulls" },
       { label: "settings", pathname: "/musics/[id]/settings" },
-    ],
-    {
-      type,
-      albums,
-      resource: { tagMaps, bookmarks, ...resource },
-    } = data;
+    ];
 
   return (
     <DefaultShowLayout
       activeTab={activeTab}
       tabs={tabs}
+      resource={resource}
+      unionType="Music"
+      icon={<MusicNote />}
       title={
         <>
-          <MusicIconButton />
           <MusicTitle data={data} />
           <Box ml={3}>
             <Chip label={type} size="small" />
@@ -104,10 +103,7 @@ const MusicLayout = ({
           )}
         </>
       }
-      tagMaps={tagMaps}
-      reportButtonProps={{ unionType: "Music", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))

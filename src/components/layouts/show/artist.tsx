@@ -1,27 +1,20 @@
 import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Person from "@mui/icons-material/Person";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
-import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getImage } from "../../../helpers/image";
-import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   ArtistShowArgsType,
   ArtistShowQueryType,
 } from "../../../paths/artists/[id]";
 import { trpc } from "../../../utils/trpc";
-import ArtistIconButton from "../../elements/button/icon/artist";
-import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
@@ -34,15 +27,12 @@ export interface ArtistLayoutProps
   activeTab: "info" | "settings";
 }
 const ArtistLayout: React.FC<ArtistLayoutProps> = ({
-  data: {
-    resource: { bookmarks, tagMaps, ...resource },
-  },
+  data: { resource },
   query,
   activeTab,
   children,
 }) => {
-  const router = useRouter<"/artists/[id]">(),
-    { data: session, status } = useSession(),
+  const { data: session, status } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
     { show } = useModal("auth-modal"),
@@ -56,9 +46,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("artist.update error"),
     }),
-    name = setLocale(resource.name, router),
-    { id } = router.query,
-    image = getImage(resource.link?.streaming, 80, { channel: true }),
+    { bookmarks } = resource,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/artists/[id]" },
       { label: "settings", pathname: "/artists/[id]/settings" },
@@ -66,27 +54,11 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   return (
     <DefaultShowLayout
       activeTab={activeTab}
+      resource={resource}
+      unionType="Artist"
       tabs={tabs}
-      title={
-        <>
-          <ArtistIconButton />
-          <Typography variant="h5">{name}</Typography>
-          {image && (
-            <Box display="flex" justifyContent="center" pl={3}>
-              <Image
-                style={{ borderRadius: 5 }}
-                height="80"
-                alt={name}
-                src={image}
-              />
-            </Box>
-          )}
-        </>
-      }
-      tagMaps={tagMaps}
-      reportButtonProps={{ unionType: "Artist", id }}
+      icon={<Person />}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))

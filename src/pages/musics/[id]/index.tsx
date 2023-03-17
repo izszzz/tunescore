@@ -10,7 +10,6 @@ import { match, P } from "ts-pattern";
 
 import Article from "../../../components/elements/article";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
-import LinkButtons from "../../../components/elements/button/link";
 import CartLoadingButton from "../../../components/elements/button/loading/cart";
 import VoteCard from "../../../components/elements/card/vote";
 import AlbumLists from "../../../components/elements/list/album";
@@ -58,8 +57,6 @@ const Music: NextPage = () => {
           })
         }
       />
-
-      {resource.link && <LinkButtons data={resource.link} type="Music" />}
 
       {resource.link?.streaming?.youtube?.id && (
         <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />

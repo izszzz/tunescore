@@ -15,9 +15,13 @@ export const libraryPaginationQuery = ({
     where: (router.query.q as string)
       ? {
           music: {
-            title: {
-              is: {
-                [router.locale]: { contains: (router.query.q as string) || "" },
+            resource: {
+              name: {
+                is: {
+                  [router.locale]: {
+                    contains: (router.query.q as string) || "",
+                  },
+                },
               },
             },
           },
@@ -27,5 +31,5 @@ export const libraryPaginationQuery = ({
       music: musicListArgs(session),
     },
   }),
-  options: { page: (router.query.page as string) || 0, perPage: 12 },
+  options: { page: (router.query.page as string) || 0 },
 });

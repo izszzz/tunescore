@@ -42,18 +42,22 @@ const AlbumSettings: NextPage = () => {
         ),
     });
   if (!data) return <></>;
-  const title = setLocale(data.title, router);
-  const albumData = data as AlbumLayoutProps["data"];
+  const albumData = data as AlbumLayoutProps["data"],
+    { resource } = albumData,
+    title = setLocale(resource.name, router);
   return (
     <AlbumLayout data={albumData} query={query} activeTab="settings">
       <SingleForm
         data={albumData}
         loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ title }) =>
-            update.mutate({ ...query, data: { title } }),
+          onSuccess: ({ resource: { name } }) =>
+            update.mutate({
+              ...query,
+              data: { resource: { update: { name } } },
+            }),
         }}
-        textFieldElementProps={{ name: `title.${router.locale}` }}
+        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         value={albumData.band}
@@ -70,18 +74,20 @@ const AlbumSettings: NextPage = () => {
 
       <SpotifyAlbumSelectForm
         term={title}
-        streamingLink={data.link?.streaming}
+        streamingLink={resource.link?.streaming}
         onSelect={async ({ id, images }) => {
           const spotifyAlbum =
             await context.client.spotify.findUniqueAlbum.query(id);
           spotifyAlbum?.tracks.items.map(async (track) => {
             const music = await context.client.music.findFirstMusic.query({
               where: {
-                link: {
-                  is: {
-                    streaming: {
-                      is: {
-                        spotify: { is: { id: { equals: track.id } } },
+                resource: {
+                  link: {
+                    is: {
+                      streaming: {
+                        is: {
+                          spotify: { is: { id: { equals: track.id } } },
+                        },
                       },
                     },
                   },
@@ -99,9 +105,14 @@ const AlbumSettings: NextPage = () => {
                 data: {
                   type: "COPY" as const,
                   visibillity: "PUBLIC" as const,
-                  title: { ja: track.name, en: track.name },
+                  resource: {
+                    create: {
+                      name: { ja: track.name, en: track.name },
+                      unionType: "Music",
+                      link: { streaming: { spotify: { id: track.id } } },
+                    },
+                  },
                   albums: { connect: { id: data.id } },
-                  link: { streaming: { spotify: { id: track.id } } },
                 },
               });
             }
@@ -109,14 +120,14 @@ const AlbumSettings: NextPage = () => {
           await update.mutate({
             ...query,
             ...selectSpotifyMutate({
-              link: data.link,
+              link: resource.link,
               id,
               images: [images[2]?.url, images[1]?.url, images[0]?.url],
             }),
           });
         }}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
       />
 
@@ -125,13 +136,13 @@ const AlbumSettings: NextPage = () => {
 
       <ItunesAlbumSelectForm
         term={title}
-        streamingLink={data.link?.streaming}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: data.link,
+              link: resource.link,
               id: convertAffiliateLink(value.collectionViewUrl).toString(),
               images: [
                 value.artworkUrl30,
@@ -142,7 +153,7 @@ const AlbumSettings: NextPage = () => {
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(data.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -151,13 +162,13 @@ const AlbumSettings: NextPage = () => {
 
       <MusicYoutubeSelectForm
         term={title}
-        streamingLink={data.link?.streaming}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
-              link: data.link,
+              link: resource.link,
               id: value.id?.videoId,
               images: [
                 value.snippet?.thumbnails?.standard?.url,
@@ -168,7 +179,7 @@ const AlbumSettings: NextPage = () => {
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
       />
     </AlbumLayout>

@@ -18,54 +18,51 @@ export type Props = {
 const YoutubeAmbient = ({ videoId }: Props) => {
   const [videoPlayer, setVideoPlayer] = useState<YouTubePlayer>(),
     [ambilightPlayer, setAmbilightPlayer] = useState<YouTubePlayer>(),
-    [ambient] = useRecoilState(ambientState);
-
-  const videoStateChange = useCallback(
-    async (event: YouTubeEvent<number>) => {
-      switch (event.data) {
-        case YouTube.PlayerState.PLAYING:
-          ambilightPlayer?.seekTo(
-            (await videoPlayer?.getCurrentTime()) || 0,
-            true
-          );
-          ambilightPlayer?.playVideo();
-          break;
-        case YouTube.PlayerState.PAUSED:
-          ambilightPlayer?.seekTo(
-            (await videoPlayer?.getCurrentTime()) || 0,
-            true
-          );
-          ambilightPlayer?.pauseVideo();
-          break;
+    [ambient] = useRecoilState(ambientState),
+    videoStateChange = useCallback(
+      async (event: YouTubeEvent<number>) => {
+        switch (event.data) {
+          case YouTube.PlayerState.PLAYING:
+            ambilightPlayer?.seekTo(
+              (await videoPlayer?.getCurrentTime()) || 0,
+              true
+            );
+            ambilightPlayer?.playVideo();
+            break;
+          case YouTube.PlayerState.PAUSED:
+            ambilightPlayer?.seekTo(
+              (await videoPlayer?.getCurrentTime()) || 0,
+              true
+            );
+            ambilightPlayer?.pauseVideo();
+            break;
+        }
+      },
+      [ambilightPlayer, videoPlayer]
+    ),
+    optimizeAmbilight = useCallback(async () => {
+      const qualityLevels: string[] = [
+        ...((await ambilightPlayer?.getAvailableQualityLevels()) || []),
+      ];
+      ambilightPlayer?.mute();
+      if (qualityLevels && qualityLevels.length && qualityLevels.length > 0) {
+        qualityLevels.reverse();
+        const lowestLevel =
+          qualityLevels[qualityLevels.findIndex((q) => q !== "auto")];
+        if (lowestLevel) ambilightPlayer?.setPlaybackQuality(lowestLevel);
       }
-    },
-    [ambilightPlayer, videoPlayer]
-  );
-
-  const optimizeAmbilight = useCallback(async () => {
-    const qualityLevels: string[] = [
-      ...((await ambilightPlayer?.getAvailableQualityLevels()) || []),
-    ];
-    ambilightPlayer?.mute();
-    if (qualityLevels && qualityLevels.length && qualityLevels.length > 0) {
-      qualityLevels.reverse();
-      const lowestLevel =
-        qualityLevels[qualityLevels.findIndex((q) => q !== "auto")];
-      if (lowestLevel) ambilightPlayer?.setPlaybackQuality(lowestLevel);
-    }
-  }, [ambilightPlayer]);
-
-  const ambilightStateChange = useCallback(
-    (event: YouTubeEvent<number>) => {
-      switch (event.data) {
-        case YouTube.PlayerState.BUFFERING:
-        case YouTube.PlayerState.PLAYING:
-          optimizeAmbilight();
-          break;
-      }
-    },
-    [optimizeAmbilight]
-  );
+    }, [ambilightPlayer]),
+    ambilightStateChange = useCallback(
+      (event: YouTubeEvent<number>) => {
+        switch (event.data) {
+          case YouTube.PlayerState.BUFFERING:
+          case YouTube.PlayerState.PLAYING:
+            optimizeAmbilight();
+            break;
+        }
+      },
+      [optimizeAmbilight]
+    );
 
   return (
     <div className={styles.videoWrapper}>

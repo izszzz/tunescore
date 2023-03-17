@@ -2,8 +2,8 @@ import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
 
 import { artistListArgs } from "../../../helpers/artist";
-import { bookmarkArgs } from "../../../helpers/bookmark";
 import { musicListArgs } from "../../../helpers/music";
+import { resourceArgs } from "../../../helpers/resource";
 import type { SessionArg } from "../../../helpers/user";
 
 export type BandShowArgsType = ReturnType<typeof bandShowArgs>;
@@ -26,7 +26,11 @@ const bandShowArgs = (session: SessionArg) =>
     include: {
       artists: artistListArgs(session),
       musics: musicListArgs(session),
-      bookmarks: bookmarkArgs({ type: "Band", session }),
-      tagMaps: { include: { tag: true } },
+      resource: {
+        include: {
+          ...resourceArgs(session).include,
+          tagMaps: { include: { tag: true } },
+        },
+      },
     },
   });

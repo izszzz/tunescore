@@ -23,15 +23,16 @@ export interface MusicListItemProps extends ListItemProps {
 }
 const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter(),
-    title = setLocale(data.title, router),
+    title = setLocale(data.resource.name, router),
     image =
-      data.link?.streaming &&
+      data.resource.link?.streaming &&
       getImage(
         {
-          ...data.link?.streaming,
+          ...data.resource.link?.streaming,
           spotify:
-            data.albums.find((album) => !!album.link?.streaming?.spotify)?.link
-              ?.streaming?.spotify || null,
+            data.albums.find(
+              (album) => !!album.resource.link?.streaming?.spotify
+            )?.resource.link?.streaming?.spotify || null,
         },
         60
       );
@@ -46,9 +47,9 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
           <Stack direction="row" spacing={1} component="span">
             <Owner data={data} />
             <BookmarkChip
-              label={data._count.bookmarks}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
             <Chip label={data.type} size="small" component="span" />
           </Stack>

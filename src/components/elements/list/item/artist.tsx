@@ -21,7 +21,7 @@ export interface ArtistListItemProps extends ListItemProps {
 }
 const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
   const router = useRouter(),
-    name = setLocale(data.name, router);
+    name = setLocale(data.resource.name, router);
   return (
     <ListItem
       route={{ pathname: "/artists/[id]", query: { id: data.id } }}
@@ -32,24 +32,24 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
           <Stack direction="row" spacing={1} component="span">
             {isNonEmpty(data.bands) && (
               <BandChip
-                label={setLocale(data.bands[0].name, router)}
+                label={setLocale(data.bands[0].resource.name, router)}
                 size="small"
               />
             )}
             <BookmarkChip
-              label={data._count.bookmarks}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
           </Stack>
         ),
       }}
     >
-      {data.link?.streaming && (
+      {data.resource.link?.streaming && (
         <Image
           height="60"
           alt={name}
-          src={getImage(data.link.streaming, 60) || undefined}
+          src={getImage(data.resource.link.streaming, 60) || undefined}
           style={{ borderRadius: 3 }}
         />
       )}

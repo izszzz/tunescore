@@ -13,5 +13,5 @@ export const followingPath = ({
     where: { followingId: id },
     ...followArgs,
   },
-  options: { page: 0, perPage: 12 },
+  options: { page: 0 },
 });

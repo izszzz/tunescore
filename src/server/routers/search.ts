@@ -14,6 +14,7 @@ import { albumListArgs } from "../../helpers/album";
 import { artistListArgs } from "../../helpers/artist";
 import { bandListArgs } from "../../helpers/band";
 import { musicListArgs } from "../../helpers/music";
+import { resourceListArgs } from "../../helpers/resource";
 import { transactionArgs } from "../../helpers/transaction";
 import { publicProcedure, router } from "../trpc";
 
@@ -74,54 +75,7 @@ export const searchRouter = router({
     .mutation(async ({ ctx, input }) => {
       return ctx.prisma.bookmark.findMany({
         ...input,
-        include: {
-          music: {
-            include: {
-              user: true,
-              band: true,
-              bookmarks: true,
-              _count: {
-                select: {
-                  bookmarks: true,
-                },
-              },
-            },
-          },
-          album: {
-            include: {
-              band: true,
-              _count: {
-                select: {
-                  musics: true,
-                  bookmarks: true,
-                  artists: true,
-                },
-              },
-            },
-          },
-          band: {
-            include: {
-              _count: {
-                select: {
-                  bookmarks: true,
-                  artists: true,
-                  musics: true,
-                  albums: true,
-                },
-              },
-            },
-          },
-          artist: {
-            include: {
-              bands: true,
-              _count: {
-                select: {
-                  bookmarks: true,
-                },
-              },
-            },
-          },
-        },
+        include: { resource: resourceListArgs(ctx.session) },
       });
     }),
 });

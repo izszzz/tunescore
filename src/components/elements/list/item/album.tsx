@@ -22,7 +22,7 @@ export interface AlbumListItemProps extends ListItemProps {
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const router = useRouter();
-  const title = setLocale(data.title, router);
+  const title = setLocale(data.resource.name, router);
   return (
     <ListItem
       route={{
@@ -35,9 +35,9 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         secondary: (
           <Stack direction="row" spacing={1} component="span">
             <BookmarkChip
-              label={data._count.bookmarks}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
             <MusicChip label={data._count.musics} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
@@ -45,11 +45,11 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         ),
       }}
     >
-      {data.link?.streaming && (
+      {data.resource.link?.streaming && (
         <Image
           height="60"
           alt={title}
-          src={getImage(data.link.streaming, 60) || ""}
+          src={getImage(data.resource.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />
       )}

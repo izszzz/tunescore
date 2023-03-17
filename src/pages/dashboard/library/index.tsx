@@ -34,13 +34,13 @@ const Library: NextPage = () => {
           renderOption: (_props, option) =>
             option.music && <MusicListItem data={option.music} dense />,
           getOptionLabel: ({ music }) =>
-            music ? setLocale(music.title, router) : "",
-          onInputChange: (_e, inputValue) => {
+            music ? setLocale(music.resource.name, router) : "",
+          onInputChange: (_e, v) => {
             search.mutate({
               where: {
                 music: {
-                  title: {
-                    is: { [router.locale]: { contains: inputValue } },
+                  resource: {
+                    name: { is: { [router.locale]: { contains: v } } },
                   },
                 },
               },

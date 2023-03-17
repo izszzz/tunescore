@@ -1,24 +1,20 @@
 import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
-import Typography from "@mui/material/Typography";
+import Album from "@mui/icons-material/Album";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
-import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
-  albumShowQuery,
+  AlbumShowQueryType,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
-import AlbumIconButton from "../../elements/button/icon/album";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
@@ -27,17 +23,16 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowQuery>;
+  query: AlbumShowQueryType;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
-  data,
+  data: { resource },
   query,
   activeTab,
   children,
 }) => {
-  const router = useRouter<"/albums/[id]">(),
-    queryClient = useQueryClient(),
+  const queryClient = useQueryClient(),
     { show } = useModal("auth-modal"),
     { data: session, status } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
@@ -51,7 +46,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("album.update error"),
     }),
-    { id } = router.query,
+    { bookmarks } = resource,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/albums/[id]" },
       { label: "settings", pathname: "/albums/[id]/settings" },
@@ -60,28 +55,16 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
     <DefaultShowLayout
       activeTab={activeTab}
       tabs={tabs}
-      title={
-        <>
-          <AlbumIconButton onClick={() => router.push("/albums")} />
-          <Typography variant="h5">{setLocale(data.title, router)}</Typography>
-        </>
-      }
-      tagMaps={data.tagMaps}
-      reportButtonProps={{ unionType: "Album", id }}
+      resource={resource}
+      unionType="Album"
+      icon={<Album />}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Album",
-                  session,
-                }),
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },

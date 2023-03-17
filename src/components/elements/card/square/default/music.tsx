@@ -9,30 +9,19 @@ import { isNonEmpty } from "ts-array-length";
 
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
+import type { MusicListArgsType } from "../../../../../helpers/music";
 import { getMusicOwner } from "../../../../../helpers/music";
-import type { userArgs } from "../../../../../helpers/user";
 import BookmarkChip from "../../../chip/bookmark";
 import ResourceIcon from "../../../icon/resource";
 import MusicSquareCard from "../music";
 
 interface MusicDefaultSquareCardProps {
-  data: Prisma.MusicGetPayload<{
-    include: {
-      user: typeof userArgs;
-      band: true;
-      albums: true;
-      participations: {
-        include: { artist: true; roleMap: { include: { role: true } } };
-      };
-      bookmarks: true;
-      _count: { select: { bookmarks: true } };
-    };
-  }>;
+  data: Prisma.MusicGetPayload<MusicListArgsType>;
 }
 const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
   const router = useRouter(),
     { type, owner } = getMusicOwner(data, router),
-    { id, title } = data;
+    { id } = data;
   return (
     <MusicSquareCard
       size="200px"
@@ -40,13 +29,13 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6" noWrap>
-              {setLocale(title, router)}
+              {setLocale(data.resource.name, router)}
             </Typography>
             <Box display="flex" alignItems="center">
               <BookmarkChip
-                label={data._count.bookmarks}
+                label={data.resource._count.bookmarks}
                 size="small"
-                bookmarked={isNonEmpty(data.bookmarks)}
+                bookmarked={isNonEmpty(data.resource.bookmarks)}
               />
             </Box>
           </Box>
@@ -56,13 +45,11 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         </>
       }
       image={
-        data.link?.streaming &&
+        data.resource.link?.streaming &&
         getImage(
           {
-            ...data.link?.streaming,
-            spotify:
-              data.albums.find((album) => !!album.link?.streaming?.spotify)
-                ?.link?.streaming?.spotify || null,
+            ...data.resource.link?.streaming,
+            spotify: data.albums[0]?.resource.link?.streaming?.spotify || null,
           },
           200,
           { square: true }

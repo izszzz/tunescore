@@ -36,6 +36,12 @@ import {
   isSelf,
   redirectToSignIn,
 } from "../../../helpers/user";
+import {
+  removeRole,
+  removeTags,
+  selectRole,
+  selectTags,
+} from "../../../paths/bands/[id]/settings";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import {
   createParticipations,
@@ -60,10 +66,7 @@ const SettingsMusic: NextPage = () => {
       include: { accounts: true },
     }),
     destroy = trpc.music.deleteOneMusic.useMutation({
-      onSuccess: () => {
-        enqueueSnackbar("music.destroy success");
-        router.push("/musics");
-      },
+      onSuccess: () => enqueueSnackbar("music.destroy success"),
       onError: () => enqueueSnackbar("music.destroy error"),
     }),
     update = trpc.music.updateOneMusic.useMutation({
@@ -78,7 +81,8 @@ const SettingsMusic: NextPage = () => {
     });
 
   if (!data || !userData) return <></>;
-  const musicData = data as MusicLayoutProps["data"];
+  const musicData = data as MusicLayoutProps["data"],
+    { resource } = musicData;
   return (
     <MusicLayout data={musicData} query={query} activeTab="settings">
       <Typography variant="h4">Info</Typography>
@@ -87,8 +91,11 @@ const SettingsMusic: NextPage = () => {
         data={musicData}
         loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ title }) =>
-            update.mutate({ ...query, data: { title } }),
+          onSuccess: ({ resource: { name } }) =>
+            update.mutate({
+              ...query,
+              data: { resource: { update: { name } } },
+            }),
         }}
         textFieldElementProps={{ name: `title.${router.locale}` }}
       />
@@ -112,38 +119,15 @@ const SettingsMusic: NextPage = () => {
         }}
       />
       <TagUpdateAutocomplete
-        value={musicData.tagMaps.map((tagMap) => tagMap.tag)}
+        value={resource.tagMaps.map((tagMap) => tagMap.tag)}
         loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  create: {
-                    tag: { connect: { id: details.option.id } },
-                    unionType: "Music",
-                  },
-                },
-              },
-            }),
+            update.mutate({ ...query, ...selectTags(details.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  delete: {
-                    unionId_tagId_unionType: {
-                      unionType: "Music",
-                      unionId: id,
-                      tagId: details.option.id,
-                    },
-                  },
-                },
-              },
-            }),
+            update.mutate({ ...query, ...removeTags(details.option.id, id) }),
         }}
       />
       <ArtistsUpdateForm
@@ -162,28 +146,15 @@ const SettingsMusic: NextPage = () => {
               details &&
               update.mutate({
                 ...query,
-                data: {
-                  tagMaps: {
-                    create: {
-                      tag: { connect: { id: details.option.id } },
-                      unionType: "Music",
-                    },
-                  },
-                },
+                data: { resource: { update: selectRole(details.option.id) } },
               }),
             onRemove: (_e, _v, _r, details) =>
               details &&
               update.mutate({
                 ...query,
                 data: {
-                  tagMaps: {
-                    delete: {
-                      unionId_tagId_unionType: {
-                        unionType: "Music",
-                        unionId: id,
-                        tagId: details.option.id,
-                      },
-                    },
+                  resource: {
+                    update: removeRole(details.option.id, resource.id),
                   },
                 },
               }),
@@ -212,16 +183,18 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <SpotifyMusicSelectForm
-        term={setLocale(musicData.title, router)}
-        streamingLink={musicData.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onSelect={async (item) => {
           const album = await context.client.album.findFirstAlbum.query({
             where: {
-              link: {
-                is: {
-                  streaming: {
-                    is: {
-                      spotify: { is: { id: { equals: item.album.id } } },
+              resource: {
+                link: {
+                  is: {
+                    streaming: {
+                      is: {
+                        spotify: { is: { id: { equals: item.album.id } } },
+                      },
                     },
                   },
                 },
@@ -231,17 +204,20 @@ const SettingsMusic: NextPage = () => {
           await update.mutate({
             ...query,
             data: {
-              ...selectSpotifyMutate({
-                link: data.link,
-                id: item.id,
-                images: [],
-              }).data,
+              resource: {
+                update: selectSpotifyMutate({
+                  link: resource.link,
+                  id: item.id,
+                  images: [],
+                }).data.resource.update,
+              },
+              isrc: item.external_ids.isrc,
               albums: { connect: { id: album?.id } },
             },
           });
         }}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
       />
 
@@ -249,14 +225,14 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicItunesSelectForm
-        term={setLocale(musicData.title, router)}
-        streamingLink={musicData.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: data.link,
+              link: resource.link,
               id: convertAffiliateLink(value.trackViewUrl).toString(),
               images: [
                 value.artworkUrl30,
@@ -267,7 +243,7 @@ const SettingsMusic: NextPage = () => {
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(data.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -275,26 +251,33 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        term={setLocale(musicData.title, router)}
-        streamingLink={musicData.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value?.id &&
-          musicData.link &&
+          resource.link &&
           update.mutate({
             ...query,
-            ...selectYoutubeMutate({
-              link: data.link,
-              id: value.id?.videoId,
-              images: [
-                value.snippet?.thumbnails?.standard?.url,
-                value.snippet?.thumbnails?.medium?.url,
-                value.snippet?.thumbnails?.high?.url,
-              ],
-            }),
+            data: {
+              resource: {
+                update: selectYoutubeMutate({
+                  link: resource.link,
+                  id: value.id?.videoId,
+                  images: [
+                    value.snippet?.thumbnails?.standard?.url,
+                    value.snippet?.thumbnails?.medium?.url,
+                    value.snippet?.thumbnails?.high?.url,
+                  ],
+                }),
+              },
+            },
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
+          update.mutate({
+            ...query,
+            data: { resource: { update: removeYoutubeMutate(resource.link) } },
+          })
         }
       />
       <Typography variant="h4">Danger Zone</Typography>

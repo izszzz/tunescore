@@ -28,32 +28,29 @@ const NotificationsMenuManager = () => {
                 .with(
                   {
                     unionType: "Bookmark",
-                    bookmarked: { music: P.select("music", P.not(P.nullish)) },
+                    bookmarked: {
+                      resource: P.select("resource", P.not(P.nullish)),
+                    },
                     user: P.select("user", P.not(P.nullish)),
                   },
-                  ({ music, user }) => (
+                  ({ resource, user }) => (
                     <BookmarkMenuListItem onClick={handleClose}>
-                      {setLocale(music.title, router)} bookmarked by {user.name}
+                      {setLocale(resource.name, router)} bookmarked by{" "}
+                      {user.name}
                     </BookmarkMenuListItem>
                   )
                 )
                 .with(
-                  {
-                    unionType: "Follow",
-                    user: P.select("user", P.not(P.nullish)),
-                  },
-                  ({ user }) => (
+                  { unionType: "Follow", user: P.select(P.not(P.nullish)) },
+                  (user) => (
                     <FollowMenuListItem onClick={handleClose}>
                       followed by {user.name}
                     </FollowMenuListItem>
                   )
                 )
                 .with(
-                  {
-                    unionType: "Comment",
-                    user: P.select("user", P.not(P.nullish)),
-                  },
-                  ({ user }) => (
+                  { unionType: "Comment", user: P.select(P.not(P.nullish)) },
+                  (user) => (
                     <CommentMenuListItem onClick={handleClose}>
                       commented by {user.name}
                     </CommentMenuListItem>

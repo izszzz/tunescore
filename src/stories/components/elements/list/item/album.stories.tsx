@@ -15,17 +15,23 @@ export const Default = Template.bind({});
 Default.args = {
   data: {
     id: "1",
-    title: { ja: "アルバムリストアイテム", en: "AlbumListItem" },
-    link: null,
+    resource: {
+      id: "",
+      name: { ja: "アルバムリストアイテム", en: "AlbumListItem" },
+      link: null,
+      unionType: "Album",
+      bookmarks: [],
+      _count: { bookmarks: 3 },
+    },
+    resourceId: "",
+    upc: "",
     band: null,
     bandId: "",
     _count: {
       musics: 1,
-      bookmarks: 2,
       artists: 3,
     },
     artists: [],
-    bookmarks: [],
     musicIDs: [],
     artistIDs: [],
   },

@@ -49,16 +49,21 @@ const ArtistSettings: NextPage = () => {
   });
 
   if (!data) return <></>;
-  const artistData = data as ArtistLayoutProps["data"];
+  const artistData = data as ArtistLayoutProps["data"],
+    { resource } = artistData;
   return (
     <ArtistLayout data={artistData} query={query} activeTab="settings">
       <SingleForm
         data={artistData}
         loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ name }) => update.mutate({ ...query, data: { name } }),
+          onSuccess: ({ resource: { name } }) =>
+            update.mutate({
+              ...query,
+              data: { resource: { update: { name } } },
+            }),
         }}
-        textFieldElementProps={{ name: `name.${router.locale}` }}
+        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         value={artistData.bands}
@@ -76,16 +81,16 @@ const ArtistSettings: NextPage = () => {
       <Divider />
 
       <SpotifyArtistSelectForm
-        term={setLocale(data.name, router)}
-        streamingLink={data.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(data.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
         onSelect={({ id, images }) =>
           update.mutate({
             ...query,
             ...selectSpotifyMutate({
-              link: data.link,
+              link: resource.link,
               id,
               images: [images[2]?.url, images[1]?.url, images[0]?.url],
             }),
@@ -97,21 +102,21 @@ const ArtistSettings: NextPage = () => {
       <Divider />
 
       <ItunesArtistSelectForm
-        term={setLocale(data.name, router)}
-        streamingLink={data.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: data.link,
+              link: resource.link,
               id: convertAffiliateLink(value.artistLinkUrl).toString(),
               images: [],
             }),
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(data.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
         }
       />
 
@@ -119,13 +124,13 @@ const ArtistSettings: NextPage = () => {
       <Divider />
 
       <ChannelYoutubeSelectForm
-        term={setLocale(data.name, router)}
-        streamingLink={data.link?.streaming}
+        term={setLocale(resource.name, router)}
+        streamingLink={resource.link?.streaming}
         onSelect={(value) =>
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
-              link: data.link,
+              link: resource.link,
               id: value?.id?.channelId,
               images: [
                 value?.snippet?.thumbnails?.standard?.url,
@@ -136,7 +141,7 @@ const ArtistSettings: NextPage = () => {
           })
         }
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(data.link) })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
       />
     </ArtistLayout>

@@ -6,19 +6,33 @@ export const selectArtists = (id: string | undefined) => ({
   }),
   selectTags = (id: string | undefined) => ({
     data: {
-      tagMaps: {
-        create: { tag: { connect: { id } }, unionType: "Music" as const },
+      resource: {
+        update: { tagMaps: { create: { tag: { connect: { id } } } } },
       },
     },
   }),
-  removeTags = (id: string, unionId: string) => ({
+  removeTags = (id: string, resourceId: string) => ({
     data: {
-      tagMaps: {
-        delete: {
-          unionId_tagId_unionType: {
-            unionType: "Music" as const,
-            unionId,
-            tagId: id,
+      resource: {
+        update: {
+          tagMaps: { delete: { tagId_resourceId: { resourceId, tagId: id } } },
+        },
+      },
+    },
+  }),
+  selectRole = (id: string) => ({
+    data: {
+      resource: {
+        update: { roleMaps: { create: { role: { connect: { id } } } } },
+      },
+    },
+  }),
+  removeRole = (id: string, resourceId: string) => ({
+    data: {
+      resource: {
+        update: {
+          roleMaps: {
+            delete: { roleId_resourceId: { resourceId, roleId: id } },
           },
         },
       },

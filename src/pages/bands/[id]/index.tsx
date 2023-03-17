@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import LinkButtons from "../../../components/elements/button/link";
 import ArtistLists from "../../../components/elements/list/artist";
 import MusicLists from "../../../components/elements/list/music";
 import BandLayout from "../../../components/layouts/show/band";
@@ -18,7 +17,6 @@ const Band: NextPage = () => {
   const bandData = data as BandLayoutProps["data"];
   return (
     <BandLayout data={bandData} query={path} activeTab="info">
-      {data.link && <LinkButtons data={data.link} type="Band" />}
       <MusicLists data={bandData.musics} />
       <ArtistLists data={bandData.artists} />
     </BandLayout>

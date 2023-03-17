@@ -1,10 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-import { AlbumFactory } from "./album";
-import { ArtistFactory } from "./artist";
-import { BandFactory } from "./band";
-import { MusicFactory } from "./music";
-
 const prisma = new PrismaClient();
 
 export const UserFactory = prisma.user.create({ data: { name: "user" } });
@@ -40,20 +35,36 @@ export const BookmarksUserFactory = async () =>
       bookmarks: {
         create: [
           {
-            music: { connect: { id: (await MusicFactory).id } },
-            unionType: "Music",
+            resource: {
+              create: {
+                name: { en: "Bookmark Music" },
+                unionType: "Music",
+              },
+            },
           },
           {
-            album: { connect: { id: (await AlbumFactory).id } },
-            unionType: "Album",
+            resource: {
+              create: {
+                name: { en: "Bookmark Album" },
+                unionType: "Album",
+              },
+            },
           },
           {
-            band: { connect: { id: (await BandFactory).id } },
-            unionType: "Band",
+            resource: {
+              create: {
+                name: { en: "Bookmark Band" },
+                unionType: "Band",
+              },
+            },
           },
           {
-            artist: { connect: { id: (await ArtistFactory).id } },
-            unionType: "Artist",
+            resource: {
+              create: {
+                name: { en: "Bookmark Artist" },
+                unionType: "Artist",
+              },
+            },
           },
         ],
       },

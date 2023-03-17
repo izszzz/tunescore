@@ -5,9 +5,14 @@ const prisma = new PrismaClient();
 export const LingTositeSigure = async () =>
   await prisma.band.create({
     data: {
-      name: {
-        ja: "凛として時雨",
-        en: "Ling tosite Sigure",
+      resource: {
+        create: {
+          name: {
+            ja: "凛として時雨",
+            en: "Ling tosite Sigure",
+          },
+          unionType: "Band",
+        },
       },
       artists: {
         connect: [
@@ -28,7 +33,12 @@ export const LingTositeSigure = async () =>
 const abnormalize = async () =>
   await prisma.music.create({
     data: {
-      title: { ja: "abnormalize", en: "abnormalize" },
+      resource: {
+        create: {
+          name: { ja: "abnormalize", en: "abnormalize" },
+          unionType: "Music",
+        },
+      },
       visibillity: "PUBLIC",
       type: "COPY",
       participations: await participations(),
@@ -38,7 +48,12 @@ const abnormalize = async () =>
 const beautifulCircus = async () =>
   await prisma.music.create({
     data: {
-      title: { ja: "Beautiful Circus", en: "Beautiful Circus" },
+      resource: {
+        create: {
+          name: { ja: "Beautiful Circus", en: "Beautiful Circus" },
+          unionType: "Music",
+        },
+      },
       visibillity: "PUBLIC",
       type: "COPY",
       participations: await participations(),
@@ -124,36 +139,47 @@ const participations = async () => ({
 
 const tk = prisma.artist.create({
   data: {
-    name: {
-      ja: "TK",
-      en: "TK",
+    resource: {
+      create: {
+        name: { ja: "TK", en: "TK" },
+        unionType: "Artist",
+      },
     },
   },
 });
 
 const miyoko = prisma.artist.create({
   data: {
-    name: {
-      ja: "345",
-      en: "345",
+    resource: {
+      create: {
+        name: { ja: "345", en: "345" },
+        unionType: "Artist",
+      },
     },
   },
 });
 
 const nakano = prisma.artist.create({
   data: {
-    name: {
-      ja: "ピエール中野",
-      en: "pierre nakano",
+    resource: {
+      create: {
+        name: {
+          ja: "ピエール中野",
+          en: "pierre nakano",
+        },
+        unionType: "Artist",
+      },
     },
   },
 });
 
 const imperfect = prisma.album.create({
   data: {
-    title: {
-      ja: "i'mperfect",
-      en: "i'mperfect",
+    resource: {
+      create: {
+        name: { ja: "i'mperfect", en: "i'mperfect" },
+        unionType: "Album",
+      },
     },
   },
 });

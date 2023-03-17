@@ -40,16 +40,20 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     images: (string | null | undefined)[];
   }) => ({
     data: {
-      link: {
-        streaming: {
-          ...link?.streaming,
-          [name]: {
-            id,
-            image: {
-              size: {
-                small: images[0],
-                medium: images[1],
-                large: images[2],
+      resource: {
+        update: {
+          link: {
+            streaming: {
+              ...link?.streaming,
+              [name]: {
+                id,
+                image: {
+                  size: {
+                    small: images[0],
+                    medium: images[1],
+                    large: images[2],
+                  },
+                },
               },
             },
           },
@@ -64,7 +68,13 @@ export const createLink = (baseURL: string, path: string, id: string) =>
   selectItunesMutate = ({ ...args }: SelectLinkMutateArgs) =>
     selectLinkMutate({ name: "itunes", ...args }),
   removeLinkMutate = (link: LinkList | null, name: string) => ({
-    data: { link: { streaming: { ...link?.streaming, [name]: undefined } } },
+    data: {
+      resource: {
+        update: {
+          link: { streaming: { ...link?.streaming, [name]: undefined } },
+        },
+      },
+    },
   }),
   removeSpotifyMutate = (link: LinkList | null) =>
     removeLinkMutate(link, "spotify"),

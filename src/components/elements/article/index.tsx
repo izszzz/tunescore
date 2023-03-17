@@ -3,7 +3,7 @@ import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
 import { useToggle } from "usehooks-ts";
 
-import ExpandToggleButton from "../button/toggle/read";
+import ExpandToggleButton from "../button/icon/toggle/read";
 
 interface Article {
   text: string;

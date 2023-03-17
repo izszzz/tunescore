@@ -40,11 +40,13 @@ export const spotifyRouter = router({
             where: {
               albums: {
                 some: {
-                  link: {
-                    is: {
-                      streaming: {
-                        is: {
-                          spotify: { is: { id: { equals: item.album.id } } },
+                  resource: {
+                    link: {
+                      is: {
+                        streaming: {
+                          is: {
+                            spotify: { is: { id: { equals: item.album.id } } },
+                          },
                         },
                       },
                     },
@@ -58,17 +60,26 @@ export const spotifyRouter = router({
               data: {
                 type: "COPY",
                 visibillity: "PUBLIC",
-                title: { ja: item.name, en: item.name },
+                isrc: item.external_ids.isrc,
+                resource: {
+                  create: {
+                    name: { ja: item.name, en: item.name },
+                    unionType: "Music",
+                    link: { streaming: { spotify: { id: item.id } } },
+                  },
+                },
               },
             });
           // find or create album
           let album = await prisma.album.findFirst({
             where: {
-              link: {
-                is: {
-                  streaming: {
-                    is: {
-                      spotify: { is: { id: { equals: item.album.id } } },
+              resource: {
+                link: {
+                  is: {
+                    streaming: {
+                      is: {
+                        spotify: { is: { id: { equals: item.album.id } } },
+                      },
                     },
                   },
                 },
@@ -82,24 +93,35 @@ export const spotifyRouter = router({
                 data: { musics: { connect: { id: music.id } } },
               });
           } else {
+            const {
+              body: {
+                external_ids: { upc },
+              },
+            } = await spotify.getAlbum(item.album.id);
             album = await prisma.album.create({
               data: {
-                title: { ja: item.album.name, en: item.album.name },
-                musics: { connect: { id: music.id } },
-                link: {
-                  streaming: {
-                    spotify: {
-                      id: item.album.id,
-                      image: {
-                        size: {
-                          small: item.album.images[2]?.url,
-                          medium: item.album.images[1]?.url,
-                          large: item.album.images[0]?.url,
+                resource: {
+                  create: {
+                    name: { ja: item.album.name, en: item.album.name },
+                    unionType: "Album",
+                    link: {
+                      streaming: {
+                        spotify: {
+                          id: item.album.id,
+                          image: {
+                            size: {
+                              small: item.album.images[2]?.url,
+                              medium: item.album.images[1]?.url,
+                              large: item.album.images[0]?.url,
+                            },
+                          },
                         },
                       },
                     },
                   },
                 },
+                musics: { connect: { id: music.id } },
+                upc,
               },
             });
             await prisma.album.update({

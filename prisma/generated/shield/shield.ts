@@ -1,5 +1,6 @@
 import { shield, allow } from 'trpc-shield';
-import { Context } from '../../../src/server/context';
+
+import type { Context } from '../../../src/server/context';
 
 export const permissions = shield<Context>({
   query: {
@@ -17,6 +18,7 @@ export const permissions = shield<Context>({
     aggregateParticipation: allow,
     aggregatePull: allow,
     aggregateReport: allow,
+    aggregateResource: allow,
     aggregateRole: allow,
     aggregateRoleMap: allow,
     aggregateSession: allow,
@@ -40,6 +42,7 @@ export const permissions = shield<Context>({
     findFirstParticipation: allow,
     findFirstPull: allow,
     findFirstReport: allow,
+    findFirstResource: allow,
     findFirstRole: allow,
     findFirstRoleMap: allow,
     findFirstSession: allow,
@@ -63,6 +66,7 @@ export const permissions = shield<Context>({
     findManyParticipation: allow,
     findManyPull: allow,
     findManyReport: allow,
+    findManyResource: allow,
     findManyRole: allow,
     findManyRoleMap: allow,
     findManySession: allow,
@@ -86,6 +90,7 @@ export const permissions = shield<Context>({
     findUniqueParticipation: allow,
     findUniquePull: allow,
     findUniqueReport: allow,
+    findUniqueResource: allow,
     findUniqueRole: allow,
     findUniqueRoleMap: allow,
     findUniqueSession: allow,
@@ -109,6 +114,7 @@ export const permissions = shield<Context>({
     groupByParticipation: allow,
     groupByPull: allow,
     groupByReport: allow,
+    groupByResource: allow,
     groupByRole: allow,
     groupByRoleMap: allow,
     groupBySession: allow,
@@ -134,6 +140,7 @@ export const permissions = shield<Context>({
     createOneParticipation: allow,
     createOnePull: allow,
     createOneReport: allow,
+    createOneResource: allow,
     createOneRole: allow,
     createOneRoleMap: allow,
     createOneSession: allow,
@@ -157,6 +164,7 @@ export const permissions = shield<Context>({
     deleteManyParticipation: allow,
     deleteManyPull: allow,
     deleteManyReport: allow,
+    deleteManyResource: allow,
     deleteManyRole: allow,
     deleteManyRoleMap: allow,
     deleteManySession: allow,
@@ -180,6 +188,7 @@ export const permissions = shield<Context>({
     deleteOneParticipation: allow,
     deleteOnePull: allow,
     deleteOneReport: allow,
+    deleteOneResource: allow,
     deleteOneRole: allow,
     deleteOneRoleMap: allow,
     deleteOneSession: allow,
@@ -203,6 +212,7 @@ export const permissions = shield<Context>({
     updateManyParticipation: allow,
     updateManyPull: allow,
     updateManyReport: allow,
+    updateManyResource: allow,
     updateManyRole: allow,
     updateManyRoleMap: allow,
     updateManySession: allow,
@@ -226,6 +236,7 @@ export const permissions = shield<Context>({
     updateOneParticipation: allow,
     updateOnePull: allow,
     updateOneReport: allow,
+    updateOneResource: allow,
     updateOneRole: allow,
     updateOneRoleMap: allow,
     updateOneSession: allow,
@@ -249,6 +260,7 @@ export const permissions = shield<Context>({
     upsertOneParticipation: allow,
     upsertOnePull: allow,
     upsertOneReport: allow,
+    upsertOneResource: allow,
     upsertOneRole: allow,
     upsertOneRoleMap: allow,
     upsertOneSession: allow,

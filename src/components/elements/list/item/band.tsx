@@ -24,8 +24,8 @@ export interface BandListItemProps extends ListItemProps {
 
 const BandListItem = ({ data }: BandListItemProps) => {
   const router = useRouter(),
-    name = setLocale(data.name, router),
-    image = getImage(data.link?.streaming, 60);
+    name = setLocale(data.resource.name, router),
+    image = getImage(data.resource.link?.streaming, 60);
   return (
     <ListItem
       route={{ pathname: "/bands/[id]", query: { id: data.id } }}
@@ -38,9 +38,9 @@ const BandListItem = ({ data }: BandListItemProps) => {
             <AlbumChip label={data._count.albums} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
             <BookmarkChip
-              label={data._count.bookmarks}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
           </Stack>
         ),

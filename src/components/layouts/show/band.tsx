@@ -1,27 +1,20 @@
 import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Group from "@mui/icons-material/Group";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
-import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import { getImage } from "../../../helpers/image";
-import setLocale from "../../../helpers/locale";
 import { isAuth } from "../../../helpers/user";
 import type {
   BandShowArgsType,
-  bandShowQuery,
+  BandShowQueryType,
 } from "../../../paths/bands/[id]";
 import { trpc } from "../../../utils/trpc";
-import BandIconButton from "../../elements/button/icon/band";
-import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
@@ -30,18 +23,17 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface BandLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.BandGetPayload<BandShowArgsType>;
-  query: ReturnType<typeof bandShowQuery>;
+  query: BandShowQueryType;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
-  data,
+  data: { resource },
   query,
   activeTab,
   children,
 }) => {
-  const router = useRouter<"/bands/[id]">(),
-    { show } = useModal("auth-modal"),
+  const { show } = useModal("auth-modal"),
     { data: session, status } = useSession(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
@@ -55,8 +47,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       },
       onError: () => enqueueSnackbar("band.update error"),
     }),
-    name = setLocale(data.name, router),
-    { id } = router.query,
+    { bookmarks } = resource,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/bands/[id]" },
       { label: "settings", pathname: "/bands/[id]/settings" },
@@ -64,39 +55,17 @@ const BandLayout: React.FC<BandLayoutProps> = ({
   return (
     <DefaultShowLayout
       tabs={tabs}
+      resource={resource}
       activeTab={activeTab}
-      title={
-        <>
-          <BandIconButton onClick={() => router.push("/bands")} />
-          <Typography variant="h5">{name}</Typography>
-          {data.link?.streaming && (
-            <Box display="flex" justifyContent="center" pl={3}>
-              <Image
-                style={{ borderRadius: 5 }}
-                height="80"
-                alt={name}
-                src={getImage(data.link.streaming, 80) || undefined}
-              />
-            </Box>
-          )}
-        </>
-      }
-      tagMaps={data.tagMaps}
-      reportButtonProps={{ unionType: "Band", id }}
+      unionType="Band"
+      icon={<Group />}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
           if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Band",
-                  session,
-                }),
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },

@@ -47,12 +47,12 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
       }}
     >
       {children}
-      <PlayButton value={played} onClick={handlePlay} />
+      <PlayButton onClick={handlePlay} value={played} />
       <VolumeSliderInput
         muted={muted}
-        volume={masterVolume}
         onMute={handleMute}
         onVolume={handleVolume}
+        volume={masterVolume}
       />
     </Header>
   );

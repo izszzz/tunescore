@@ -19,22 +19,22 @@ interface ScoreButtonGroupProps {
 const ScoreButtonGroup = ({ watch, edit, loading }: ScoreButtonGroupProps) => {
   const router = useRouter();
   return (
-    <ButtonGroup fullWidth disableElevation>
+    <ButtonGroup disableElevation fullWidth>
       {watch.hidden || (
         <LoadingButton
           {...watch.buttonProps}
-          variant="outlined"
           loading={loading}
           onClick={() => router.push(watch.route)}
+          variant="outlined"
         >
           Watch Score
         </LoadingButton>
       )}
       {edit.hidden || (
         <LoadingButton
-          variant="outlined"
           loading={loading}
           onClick={() => router.push(edit.route)}
+          variant="outlined"
         >
           Edit Score
         </LoadingButton>

@@ -24,12 +24,11 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
     name = setLocale(data.resource.name, router);
   return (
     <ListItem
-      route={{ pathname: "/artists/[id]", query: { id: data.id } }}
       icon={<Person />}
       listItemTextProps={{
         primary: name,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             {isNonEmpty(data.bands) && (
               <BandChip
                 label={setLocale(data.bands[0].resource.name, router)}
@@ -37,18 +36,19 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
               />
             )}
             <BookmarkChip
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
               label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
           </Stack>
         ),
       }}
+      route={{ pathname: "/artists/[id]", query: { id: data.id } }}
     >
       {data.resource.link?.streaming && (
         <Image
-          height="60"
           alt={name}
+          height="60"
           src={getImage(data.resource.link.streaming, 60) || undefined}
           style={{ borderRadius: 3 }}
         />

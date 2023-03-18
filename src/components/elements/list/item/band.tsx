@@ -28,26 +28,26 @@ const BandListItem = ({ data }: BandListItemProps) => {
     image = getImage(data.resource.link?.streaming, 60);
   return (
     <ListItem
-      route={{ pathname: "/bands/[id]", query: { id: data.id } }}
       icon={<Group />}
       listItemTextProps={{
         primary: name,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <MusicChip label={data._count.musics} size="small" />
             <AlbumChip label={data._count.albums} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
             <BookmarkChip
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
               label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
           </Stack>
         ),
       }}
+      route={{ pathname: "/bands/[id]", query: { id: data.id } }}
     >
       {image && (
-        <Image height="60" alt={name} src={image} style={{ borderRadius: 3 }} />
+        <Image alt={name} height="60" src={image} style={{ borderRadius: 3 }} />
       )}
     </ListItem>
   );

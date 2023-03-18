@@ -8,8 +8,6 @@ export interface AlbumSpotifyCardProps {
 
 const AlbumSpotifyCard = ({ data, onClick }: AlbumSpotifyCardProps) => (
   <IndexCard
-    image={data.images[1]?.url}
-    title={data.name}
     body={
       <>
         <Typography variant="caption">
@@ -19,7 +17,9 @@ const AlbumSpotifyCard = ({ data, onClick }: AlbumSpotifyCardProps) => (
         <Typography variant="caption">{data.label}</Typography>
       </>
     }
+    image={data.images[1]?.url}
     onClose={() => onClick?.(data)}
+    title={data.name}
   />
 );
 

@@ -12,7 +12,7 @@ const ThemeToggleButton = () => {
   const handleClick = () => toggle();
 
   return (
-    <IconButton sx={{ ml: 1 }} onClick={handleClick}>
+    <IconButton onClick={handleClick} sx={{ ml: 1 }}>
       {theme.palette.mode === "dark" ? (
         <Brightness7Icon />
       ) : (

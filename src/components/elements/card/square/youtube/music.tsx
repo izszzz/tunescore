@@ -27,14 +27,14 @@ function MusicYoutubeSquareCard<T extends SearchResult | Video | undefined>({
     >
       <Box>
         <MusicSquareCard
+          image={data?.snippet?.thumbnails?.medium?.url}
+          onClick={() => onClick?.(data)}
+          size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
           title={
-            <Typography variant="caption" display="block" noWrap>
+            <Typography display="block" noWrap variant="caption">
               {data?.snippet?.title}
             </Typography>
           }
-          image={data?.snippet?.thumbnails?.medium?.url}
-          size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
-          onClick={() => onClick?.(data)}
         />
       </Box>
     </Tooltip>

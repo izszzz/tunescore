@@ -6,7 +6,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 const OrderLoadingButton = (props: Omit<LoadingButtonProps, "startIcon">) => {
   return (
-    <LoadingButton {...props} startIcon={<PaidIcon />} disableElevation>
+    <LoadingButton {...props} disableElevation startIcon={<PaidIcon />}>
       order
     </LoadingButton>
   );

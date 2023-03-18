@@ -24,16 +24,12 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
   } = useRouter<"/musics/[id]">();
   return (
     <ListItem
-      route={{
-        pathname: "/musics/[id]/issues/[issueId]",
-        query: { id, issueId: data.id },
-      }}
       icon={<StatusIcon resource={data.status} />}
       listItemTextProps={{
         primary: data.title,
         secondary: (
-          <Box display="flex" alignItems="center">
-            <Typography mr={1} variant="body2" color="text.subprimary">
+          <Box alignItems="center" display="flex">
+            <Typography color="text.subprimary" mr={1} variant="body2">
               created by {data.user.name}
             </Typography>
             <Avatar
@@ -42,6 +38,10 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
             />
           </Box>
         ),
+      }}
+      route={{
+        pathname: "/musics/[id]/issues/[issueId]",
+        query: { id, issueId: data.id },
       }}
     />
   );

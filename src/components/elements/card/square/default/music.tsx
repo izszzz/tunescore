@@ -24,26 +24,6 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
     { id } = data;
   return (
     <MusicSquareCard
-      size="200px"
-      title={
-        <>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6" noWrap>
-              {setLocale(data.resource.name, router)}
-            </Typography>
-            <Box display="flex" alignItems="center">
-              <BookmarkChip
-                label={data.resource._count.bookmarks}
-                size="small"
-                bookmarked={isNonEmpty(data.resource.bookmarks)}
-              />
-            </Box>
-          </Box>
-          {owner && (
-            <Chip label={owner.name} icon={<ResourceIcon type={type} />} />
-          )}
-        </>
-      }
       image={
         data.resource.link?.streaming &&
         getImage(
@@ -56,6 +36,26 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         )
       }
       onClick={() => router.push({ pathname: "/musics/[id]", query: { id } })}
+      size="200px"
+      title={
+        <>
+          <Box display="flex" justifyContent="space-between">
+            <Typography noWrap variant="h6">
+              {setLocale(data.resource.name, router)}
+            </Typography>
+            <Box alignItems="center" display="flex">
+              <BookmarkChip
+                bookmarked={isNonEmpty(data.resource.bookmarks)}
+                label={data.resource._count.bookmarks}
+                size="small"
+              />
+            </Box>
+          </Box>
+          {owner && (
+            <Chip icon={<ResourceIcon type={type} />} label={owner.name} />
+          )}
+        </>
+      }
     />
   );
 };

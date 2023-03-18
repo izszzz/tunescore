@@ -5,14 +5,14 @@ import ArtistSquareCard from "../artist";
 
 const ChannelItunesSquareCard = ({ data, onClick }: ChannelItunesCardProps) => (
   <ArtistSquareCard
+    image={null}
+    onClick={() => onClick?.(data)}
+    size="100px"
     title={
-      <Typography variant="caption" display="block" noWrap>
+      <Typography display="block" noWrap variant="caption">
         {data.artistName}
       </Typography>
     }
-    image={null}
-    size="100px"
-    onClick={() => onClick?.(data)}
   />
 );
 

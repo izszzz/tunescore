@@ -53,8 +53,8 @@ const MyApp: AppType<MyAppProps & { session: Session | null }> = ({
             <Head>
               <title>tunescore</title>
               <meta
-                name="viewport"
                 content="initial-scale=1, width=device-width"
+                name="viewport"
               />
             </Head>
             <GoogleAnalytics trackPageViews />

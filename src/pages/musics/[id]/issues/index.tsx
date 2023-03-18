@@ -37,7 +37,7 @@ const Issues: NextPage = () => {
   if (!music.data || !issueData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
       <IndexLayout
         meta={issueData.meta}
         newRoute={{

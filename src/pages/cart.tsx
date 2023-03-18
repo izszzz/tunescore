@@ -74,11 +74,11 @@ const Cart: NextPage = () => {
       />
       {data.reduce((sum, data) => sum + (data.price || 0), 0)}
       <Button
+        disableElevation
+        disabled={!isNonEmpty(data)}
+        fullWidth
         onClick={() => router.push("/pay")}
         variant="contained"
-        disabled={!isNonEmpty(data)}
-        disableElevation
-        fullWidth
       >
         {t("order")}
       </Button>

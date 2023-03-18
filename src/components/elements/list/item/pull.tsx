@@ -23,16 +23,12 @@ const PullListItem = ({ data }: PullListItemProps) => {
   } = useRouter<"/musics/[id]">();
   return (
     <ListItem
-      route={{
-        pathname: "/musics/[id]/pulls/[pullId]",
-        query: { id, pullId: data.id },
-      }}
       icon={<PullStatusIcon status={data.status} />}
       listItemTextProps={{
         primary: data.title,
         secondary: (
-          <Box display="flex" alignItems="center">
-            <Typography mr={1} variant="body2" color="text.subprimary">
+          <Box alignItems="center" display="flex">
+            <Typography color="text.subprimary" mr={1} variant="body2">
               created by {data.user.name}
             </Typography>
             <Avatar
@@ -41,6 +37,10 @@ const PullListItem = ({ data }: PullListItemProps) => {
             />
           </Box>
         ),
+      }}
+      route={{
+        pathname: "/musics/[id]/pulls/[pullId]",
+        query: { id, pullId: data.id },
       }}
     />
   );

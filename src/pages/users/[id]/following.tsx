@@ -25,7 +25,7 @@ const UserFollowers: NextPage = () => {
   if (!data || !followData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="">
+    <UserLayout activeTab="" data={userData} query={query}>
       <IndexLayout
         meta={followData.meta}
         searchAutocompleteProps={{

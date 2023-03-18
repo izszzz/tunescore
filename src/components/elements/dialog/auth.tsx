@@ -10,7 +10,7 @@ import ProviderButtons from "../button/providers";
 const AuthDialog = create(() => {
   const { visible, hide } = useModal();
   return (
-    <Dialog open={visible} onClose={hide}>
+    <Dialog onClose={hide} open={visible}>
       <DialogTitle>Sign In</DialogTitle>
       <DialogActions>
         <ProviderButtons />

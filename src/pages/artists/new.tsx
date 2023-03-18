@@ -36,18 +36,18 @@ const NewArtist: NextPage = () => {
     <NewLayout>
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement
-          name={"name." + router.locale}
+          fullWidth
           label="Name"
           margin="dense"
-          fullWidth
+          name={"name." + router.locale}
           required
         />
         <LoadingButton
-          type="submit"
-          variant="contained"
+          disableElevation
           disabled={create.isLoading}
           fullWidth
-          disableElevation
+          type="submit"
+          variant="contained"
         >
           submit
         </LoadingButton>

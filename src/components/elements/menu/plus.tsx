@@ -20,8 +20,8 @@ const PlusMenuManager = () => (
   >
     {(handleClose) => [
       <MenuListItem
-        key="music"
         icon={<MusicNote />}
+        key="music"
         onClick={() => {
           handleClose();
           router.push("/musics/new");
@@ -30,8 +30,8 @@ const PlusMenuManager = () => (
         Music
       </MenuListItem>,
       <MenuListItem
-        key="artist"
         icon={<Person />}
+        key="artist"
         onClick={() => {
           handleClose();
           router.push("/artists/new");
@@ -40,8 +40,8 @@ const PlusMenuManager = () => (
         Artist
       </MenuListItem>,
       <MenuListItem
-        key="band"
         icon={<Group />}
+        key="band"
         onClick={() => {
           handleClose();
           router.push("/bands/new");
@@ -50,8 +50,8 @@ const PlusMenuManager = () => (
         Band
       </MenuListItem>,
       <MenuListItem
-        key="album"
         icon={<Album />}
+        key="album"
         onClick={() => {
           handleClose();
           router.push("/albums/new");

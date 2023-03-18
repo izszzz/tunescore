@@ -52,10 +52,9 @@ const ArtistSettings: NextPage = () => {
   const artistData = data as ArtistLayoutProps["data"],
     { resource } = artistData;
   return (
-    <ArtistLayout data={artistData} query={query} activeTab="settings">
+    <ArtistLayout activeTab="settings" data={artistData} query={query}>
       <SingleForm
         data={artistData}
-        loading={update.isLoading}
         formContainerProps={{
           onSuccess: ({ resource: { name } }) =>
             update.mutate({
@@ -63,26 +62,25 @@ const ArtistSettings: NextPage = () => {
               data: { resource: { update: { name } } },
             }),
         }}
+        loading={update.isLoading}
         textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
-        value={artistData.bands}
         loading={update.isLoading}
+        multiple
         onChange={{
           onSelect: (_e, _v, _r, details) =>
             update.mutate({ ...query, ...selectBands(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             update.mutate({ ...query, ...removeBands(details?.option.id) }),
         }}
-        multiple
+        value={artistData.bands}
       />
 
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 
       <SpotifyArtistSelectForm
-        term={setLocale(resource.name, router)}
-        streamingLink={resource.link?.streaming}
         onRemove={() =>
           update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
         }
@@ -96,14 +94,17 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
       />
 
       <Typography variant="h4">iTunes</Typography>
       <Divider />
 
       <ItunesArtistSelectForm
-        term={setLocale(resource.name, router)}
-        streamingLink={resource.link?.streaming}
+        onRemove={() =>
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+        }
         onSelect={(value) =>
           value &&
           update.mutate({
@@ -115,17 +116,17 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
-        onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
-        }
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
       />
 
       <Typography variant="h4">Youtube</Typography>
       <Divider />
 
       <ChannelYoutubeSelectForm
-        term={setLocale(resource.name, router)}
-        streamingLink={resource.link?.streaming}
+        onRemove={() =>
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+        }
         onSelect={(value) =>
           update.mutate({
             ...query,
@@ -140,9 +141,8 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
-        onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
-        }
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
       />
     </ArtistLayout>
   );

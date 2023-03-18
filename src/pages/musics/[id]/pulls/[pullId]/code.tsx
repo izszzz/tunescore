@@ -30,11 +30,11 @@ const Code: NextPage = () => {
   const musicData = music.data as MusicLayoutProps["data"],
     pullData = pull.data as PullLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout query={pullQuery} data={pullData} activeTab="code">
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
+      <PullLayout activeTab="code" data={pullData} query={pullQuery}>
         <ReactDiffViewer
-          oldValue={pullData.score.original}
           newValue={pullData.score.changed}
+          oldValue={pullData.score.original}
         />
       </PullLayout>
     </MusicLayout>

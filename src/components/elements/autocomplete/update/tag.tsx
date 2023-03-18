@@ -21,17 +21,17 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   return (
     <UpdateAutocomplete<Tag, true>
       {...props}
-      options={search.data || []}
-      loading={search.isLoading}
-      getOptionLabel={({ name }) => name}
       ChipProps={{ size: "small", icon: <LocalOffer /> }}
+      getOptionLabel={({ name }) => name}
+      loading={search.isLoading}
+      multiple
+      options={search.data || []}
       textFieldProps={{
         label: "tags",
         margin: "dense",
         onChange: ({ currentTarget: { value } }) =>
           search.mutate({ where: { name: { contains: value } }, take: 10 }),
       }}
-      multiple
     />
   );
 };

@@ -38,11 +38,11 @@ const Pull: NextPage = () => {
     pullData = pull.data as PullLayoutProps["data"],
     { id, title, body, comments } = pullData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout query={pullQuery} data={pullData} activeTab="conversation">
-        <ArticleCard title={title} body={body} />
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
+      <PullLayout activeTab="conversation" data={pullData} query={pullQuery}>
+        <ArticleCard body={body} title={title} />
         {comments.map((comment) => (
-          <CommentCard key={comment.id} data={comment} />
+          <CommentCard data={comment} key={comment.id} />
         ))}
         <CommentForm
           formContainerProps={{

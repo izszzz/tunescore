@@ -49,31 +49,31 @@ const VoteCard = ({
     <Card {...props}>
       <CardContent>
         <Typography variant="h5">{data.title}</Typography>
-        <Typography variant="caption" color="text.secondary">
-          <Typography variant="body1" component="span">
+        <Typography color="text.secondary" variant="caption">
+          <Typography component="span" variant="body1">
             {duration?.days}
           </Typography>{" "}
           Days
-          <Typography variant="body1" component="span">
+          <Typography component="span" variant="body1">
             {duration?.hours}
           </Typography>{" "}
           Hours
-          <Typography variant="body1" component="span">
+          <Typography component="span" variant="body1">
             {duration?.minutes}
           </Typography>{" "}
           Minutes
-          <Typography variant="body1" component="span">
+          <Typography component="span" variant="body1">
             {duration?.seconds}
           </Typography>{" "}
           Seconds
         </Typography>
-        <Box display="flex" alignItems="center" width="100%">
+        <Box alignItems="center" display="flex" width="100%">
           <IconButton {...goodIconButtonProps}>
             <ThumbUpIcon />
           </IconButton>
           {data.vote?._count.proponents}
           <Box sx={{ width: "100%", mr: 1 }}>
-            <LinearProgress variant="determinate" value={80} />
+            <LinearProgress value={80} variant="determinate" />
           </Box>
           {data.vote?._count.opponents}
           <IconButton {...badIconButtonProps}>

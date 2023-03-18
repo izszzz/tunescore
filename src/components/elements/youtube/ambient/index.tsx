@@ -70,15 +70,14 @@ const YoutubeAmbient = ({ videoId }: Props) => {
         <div className={styles.aspectRatio}>
           <YouTube
             className={styles.ambilightVideo}
-            videoId={videoId}
             onReady={(e) => setVideoPlayer(e.target)}
             onStateChange={videoStateChange}
             opts={{ width: "100%", height: "100%" }}
+            videoId={videoId}
           />
           {ambient && (
             <YouTube
               className={styles.ambilight}
-              videoId={videoId}
               onReady={(e) => {
                 setAmbilightPlayer(e.target);
                 e.target.mute();
@@ -86,6 +85,7 @@ const YoutubeAmbient = ({ videoId }: Props) => {
               }}
               onStateChange={ambilightStateChange}
               opts={{ width: "100%", height: "100%" }}
+              videoId={videoId}
             />
           )}
         </div>

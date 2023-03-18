@@ -47,18 +47,18 @@ const VolumeSliderInput: React.FC<VolumeProps> = ({
   return (
     <ToggleButton
       className={className}
-      value=""
-      selected={muted}
       onChange={handleMute}
+      selected={muted}
+      value=""
     >
-      <Box width={200} display="flex" alignItems="center">
-        <VolumeIcon value={volume} muted={muted} />
+      <Box alignItems="center" display="flex" width={200}>
+        <VolumeIcon muted={muted} value={volume} />
         <Slider
           className={className}
           disabled={muted}
-          value={volume}
-          onClick={handleClickValue}
           onChange={onVolume}
+          onClick={handleClickValue}
+          value={volume}
         />
       </Box>
     </ToggleButton>

@@ -9,9 +9,6 @@ export interface MusicSpotifyCardProps {
 
 const MusicSpotifyCard = ({ data, onClick }: MusicSpotifyCardProps) => (
   <IndexCard
-    title={data.name}
-    image={data.album.images[1]?.url}
-    onClose={() => onClick?.(data)}
     body={
       <>
         <Typography variant="caption">{data.album.name}</Typography>
@@ -19,6 +16,9 @@ const MusicSpotifyCard = ({ data, onClick }: MusicSpotifyCardProps) => (
         <Typography variant="caption">{data.artists[0]?.name}</Typography>
       </>
     }
+    image={data.album.images[1]?.url}
+    onClose={() => onClick?.(data)}
+    title={data.name}
   />
 );
 

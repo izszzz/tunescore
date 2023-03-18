@@ -21,11 +21,11 @@ const ItunesArtistSelectForm = ({
 }: ItunesArtistSelectFormProps) => (
   <ItunesSelectForm<ItunesArtist>
     {...props}
-    search={itunes.searchArtists}
-    lookup={itunes.lookupArtist}
     largeCard={(value) =>
       value && <ChannelItunesCard data={value} onClick={onRemove} />
     }
+    lookup={itunes.lookupArtist}
+    search={itunes.searchArtists}
     smallCard={(value) => (
       <ChannelItunesSquareCard data={value} onClick={onSelect} />
     )}

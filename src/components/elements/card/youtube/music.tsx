@@ -19,10 +19,10 @@ function MusicYoutubeCard<T extends SearchResult | Video | undefined>({
 }: MusicYoutubeCardProps<T>) {
   return (
     <IndexCard
-      title={data?.snippet?.title || ""}
-      image={data?.snippet?.thumbnails?.medium?.url || ""}
       body={<Typography>{data?.snippet?.channelTitle}</Typography>}
+      image={data?.snippet?.thumbnails?.medium?.url || ""}
       onClose={() => onClick?.(data)}
+      title={data?.snippet?.title || ""}
     />
   );
 }

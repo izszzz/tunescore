@@ -54,10 +54,6 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
   return (
     <DefaultShowLayout
       activeTab={activeTab}
-      tabs={tabs}
-      resource={resource}
-      type="Album"
-      icon={<Album />}
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,
         onClick: () => {
@@ -69,6 +65,10 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
           else show();
         },
       }}
+      icon={<Album />}
+      resource={resource}
+      tabs={tabs}
+      type="Album"
     >
       {children}
     </DefaultShowLayout>

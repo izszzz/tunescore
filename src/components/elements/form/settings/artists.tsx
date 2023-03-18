@@ -60,11 +60,11 @@ function ArtistsUpdateForm({
             />
           </Grid>
           <Grid
-            item
-            xs={1}
-            display="flex"
             alignItems="center"
+            display="flex"
+            item
             justifyContent="center"
+            xs={1}
           >
             <CloseIconButton
               disabled={loading}
@@ -74,31 +74,31 @@ function ArtistsUpdateForm({
         </Grid>
       ))}
       <Box>
-        <Grid container spacing={1} my={1}>
+        <Grid container my={1} spacing={1}>
           <Grid item xs={10}>
             <SearchAutocomplete
-              options={search.data || []}
-              loading={loading}
-              textFieldProps={{ label: "artist" }}
+              ChipProps={{ icon: <Person /> }}
               getOptionLabel={({ resource: { name } }) =>
                 setLocale(name, router)
               }
-              ChipProps={{ icon: <Person /> }}
+              loading={loading}
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),
               })}
+              options={search.data || []}
+              textFieldProps={{ label: "artist" }}
             />
           </Grid>
-          <Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
+          <Grid alignItems="stretch" item style={{ display: "flex" }} xs={2}>
             <LoadingButton
               {...loadingButtonProps}
-              loading={search.isLoading || loading}
-              type="button"
-              variant="outlined"
               disabled={!artist}
-              onClick={() => loadingButtonProps.onClick(artist)}
               endIcon={<SendIcon />}
               fullWidth
+              loading={search.isLoading || loading}
+              onClick={() => loadingButtonProps.onClick(artist)}
+              type="button"
+              variant="outlined"
             >
               Update
             </LoadingButton>

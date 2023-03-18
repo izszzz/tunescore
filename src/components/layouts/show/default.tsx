@@ -58,11 +58,11 @@ const DefaultShowLayout = ({
       title={
         <Box mx={3}>
           <Box
-            display="flex"
             alignItems="center"
+            display="flex"
             justifyContent="space-between"
           >
-            <Box display="flex" alignItems="center">
+            <Box alignItems="center" display="flex">
               <IconButton
                 onClick={() =>
                   router.push({ pathname: "/search", query: { type } })
@@ -78,10 +78,10 @@ const DefaultShowLayout = ({
                   {image && (
                     <Box display="flex" justifyContent="center" pl={3}>
                       <Image
-                        style={{ borderRadius: 5 }}
-                        height="80"
                         alt={name}
+                        height="80"
                         src={image}
+                        style={{ borderRadius: 5 }}
                       />
                     </Box>
                   )}
@@ -99,15 +99,15 @@ const DefaultShowLayout = ({
           <Stack direction="row" spacing={1}>
             {resource.tagMaps.map((tagMap) => (
               <Chip
-                key={tagMap.id}
                 icon={<LocalOffer />}
+                key={tagMap.id}
                 label={tagMap.tag.name}
-                variant="outlined"
                 size="small"
+                variant="outlined"
               />
             ))}
           </Stack>
-          {resource.link && <LinkButtons type={type} data={resource.link} />}
+          {resource.link && <LinkButtons data={resource.link} type={type} />}
         </Box>
       }
     />

@@ -10,8 +10,6 @@ export interface MusicItunesCardProps {
 
 const MusicItunesCard = ({ data, onClick }: MusicItunesCardProps) => (
   <IndexCard
-    title={data.trackCensoredName}
-    image={data.artworkUrl100}
     body={
       <>
         <Typography variant="caption">{data.collectionCensoredName}</Typography>
@@ -19,7 +17,9 @@ const MusicItunesCard = ({ data, onClick }: MusicItunesCardProps) => (
         <Typography variant="caption">{data.artistName}</Typography>
       </>
     }
+    image={data.artworkUrl100}
     onClose={() => onClick?.(data)}
+    title={data.trackCensoredName}
   />
 );
 

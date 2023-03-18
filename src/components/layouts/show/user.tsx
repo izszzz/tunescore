@@ -64,20 +64,20 @@ const UserLayout: React.FC<UserLayoutProps> = ({
     ];
   return (
     <ShowLayout
-      tabs={tabs}
       activeTab={activeTab}
       header={<DefaultHeader />}
+      tabs={tabs}
       title={
         <>
           <Box
-            display="flex"
-            justifyContent="center"
             alignItems="center"
+            display="flex"
             flexDirection="column"
+            justifyContent="center"
           >
             <Avatar
-              sx={{ height: "70px", width: "70px" }}
               src={data.image || ""}
+              sx={{ height: "70px", width: "70px" }}
             />
             <Typography variant="h5">{data.name}</Typography>
           </Box>
@@ -88,13 +88,13 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               />
               <LoadingButton
                 loading={update.isLoading}
-                variant={followed ? "outlined" : "contained"}
                 onClick={() =>
                   update.mutate({
                     ...query,
                     data: { followers: followMutate({ data, session }) },
                   })
                 }
+                variant={followed ? "outlined" : "contained"}
               >
                 {followed ? "unfollow" : "follow"}
               </LoadingButton>

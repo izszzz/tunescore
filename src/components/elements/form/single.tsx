@@ -32,24 +32,24 @@ function SingleForm<T extends FieldValues>({
   }, [router.locale, formContext, data]);
   return (
     <FormContainer {...formContainerProps} formContext={formContext}>
-      <Grid container spacing={1} my={1} direction={direction}>
+      <Grid container direction={direction} my={1} spacing={1}>
         <Grid item xs={10}>
           <TextFieldElement
             {...textFieldElementProps}
-            label={textFieldElementProps.name}
             disabled={loading}
             fullWidth
+            label={textFieldElementProps.name}
             multiline={direction === "column"}
           />
         </Grid>
-        <Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
+        <Grid alignItems="stretch" item style={{ display: "flex" }} xs={2}>
           <LoadingButton
-            type="submit"
-            variant="outlined"
             disabled={loading || !formContext.formState.isDirty}
-            loading={loading}
             endIcon={<SendIcon />}
             fullWidth
+            loading={loading}
+            type="submit"
+            variant="outlined"
           >
             Update
           </LoadingButton>

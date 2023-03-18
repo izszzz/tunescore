@@ -21,32 +21,32 @@ const ArtistDefaultSquareCard = ({ data }: DefaultArtistSquareCardProps) => {
   const router = useRouter();
   return (
     <ArtistSquareCard
+      image={getImage(data.resource.link?.streaming, 200, { square: true })}
+      onClick={() =>
+        router.push({ pathname: "/artists/[id]", query: { id: data.id } })
+      }
       size="200px"
       title={
         <>
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6" noWrap>
+            <Typography noWrap variant="h6">
               {setLocale(data.resource.name, router)}
             </Typography>
-            <Box display="flex" alignItems="center">
+            <Box alignItems="center" display="flex">
               <BookmarkChip
+                bookmarked={isNonEmpty(data.resource.bookmarks)}
                 label={data.resource._count.bookmarks}
                 size="small"
-                bookmarked={isNonEmpty(data.resource.bookmarks)}
               />
             </Box>
           </Box>
           {isNonEmpty(data.bands) && (
             <Chip
-              label={setLocale(data.bands[0].resource.name, router)}
               icon={<Person />}
+              label={setLocale(data.bands[0].resource.name, router)}
             />
           )}
         </>
-      }
-      image={getImage(data.resource.link?.streaming, 200, { square: true })}
-      onClick={() =>
-        router.push({ pathname: "/artists/[id]", query: { id: data.id } })
       }
     />
   );

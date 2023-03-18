@@ -24,14 +24,14 @@ const MusicItunesSquareCard = ({ data, onClick }: MusicItunesCardProps) => (
   >
     <Box>
       <MusicSquareCard
+        image={data.artworkUrl100}
+        onClick={() => onClick?.(data)}
+        size="100px"
         title={
-          <Typography variant="caption" display="block" noWrap>
+          <Typography display="block" noWrap variant="caption">
             {data.trackCensoredName}
           </Typography>
         }
-        image={data.artworkUrl100}
-        size="100px"
-        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

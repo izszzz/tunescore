@@ -44,10 +44,10 @@ function CardSelectForm<Value, Options extends unknown[] = []>({
             {options?.map((option, i) => (
               <Grid
                 {...gridProps}
-                item
-                key={i}
                 display="flex"
+                item
                 justifyContent="center"
+                key={i}
               >
                 {smallCard(option)}
               </Grid>

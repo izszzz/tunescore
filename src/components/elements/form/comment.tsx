@@ -17,11 +17,11 @@ const CommentForm = ({ formContainerProps, loading }: CommentFormProps) => {
     <FormContainer {...formContainerProps} defaultValues={{ body: "" }}>
       <Controller name="body" render={({ field }) => <MDEditor {...field} />} />
       <LoadingButton
-        type="submit"
-        loading={loading}
-        variant="contained"
-        fullWidth
         disableElevation
+        fullWidth
+        loading={loading}
+        type="submit"
+        variant="contained"
       >
         Submit
       </LoadingButton>

@@ -35,16 +35,16 @@ const ScoreEditor = ({
     <>
       <EditorHeader
         {...props}
-        onSave={() => onSave(value)}
         onResolve={handleResolve}
+        onSave={() => onSave(value)}
       />
       <Box display="flex" flexDirection="row">
         <div id="editor">
           <Editor
-            value={value}
-            height="90vh"
             defaultLanguage="javascript"
+            height="90vh"
             onChange={debounced}
+            value={value}
           />
         </div>
         <div id="score">

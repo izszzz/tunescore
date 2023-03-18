@@ -54,10 +54,6 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
   return (
     <DefaultShowLayout
       activeTab={activeTab}
-      resource={resource}
-      type="Artist"
-      tabs={tabs}
-      icon={<Person />}
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,
         onClick: () => {
@@ -69,6 +65,10 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
           else show();
         },
       }}
+      icon={<Person />}
+      resource={resource}
+      tabs={tabs}
+      type="Artist"
     >
       {children}
     </DefaultShowLayout>

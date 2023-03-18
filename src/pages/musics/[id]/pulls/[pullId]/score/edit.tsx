@@ -85,8 +85,8 @@ const PullScoreEdit: NextPage = () => {
       }}
       conflict={conflict}
       defaultValue={pullData.score.changed}
-      onSave={handleSave}
       onResolve={handleResolve}
+      onSave={handleSave}
     />
   );
 };

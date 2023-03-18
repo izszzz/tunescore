@@ -62,19 +62,19 @@ const NewPull: NextPage = () => {
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
       <FormContainer onSuccess={handleSubmit}>
-        <TextFieldElement name="title" margin="dense" fullWidth />
+        <TextFieldElement fullWidth margin="dense" name="title" />
         <Controller
           name="body"
           render={({ field }) => <MDEditor {...field} />}
         />
         <LoadingButton
-          type="submit"
-          loading={create.isLoading}
-          variant="contained"
-          fullWidth
           disableElevation
+          fullWidth
+          loading={create.isLoading}
+          type="submit"
+          variant="contained"
         >
           Submit
         </LoadingButton>

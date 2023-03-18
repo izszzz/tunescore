@@ -39,27 +39,27 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   return (
     <ListItem
       {...props}
-      route={{ pathname: "/musics/[id]", query: { id: data.id } }}
       icon={<MusicNote />}
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <Owner data={data} />
             <BookmarkChip
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
               label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
-            <Chip label={data.type} size="small" component="span" />
+            <Chip component="span" label={data.type} size="small" />
           </Stack>
         ),
       }}
+      route={{ pathname: "/musics/[id]", query: { id: data.id } }}
     >
       {image && (
         <Image
-          height="60"
           alt={title}
+          height="60"
           src={image}
           style={{ borderRadius: 3 }}
         />

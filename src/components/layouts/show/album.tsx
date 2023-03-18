@@ -56,7 +56,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
       activeTab={activeTab}
       tabs={tabs}
       resource={resource}
-      unionType="Album"
+      type="Album"
       icon={<Album />}
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,

@@ -74,7 +74,7 @@ const MusicLayout = ({
       activeTab={activeTab}
       tabs={tabs}
       resource={resource}
-      unionType="Music"
+      type="Music"
       icon={<MusicNote />}
       title={
         <>
@@ -93,7 +93,7 @@ const MusicLayout = ({
                     {
                       ...resource.link?.streaming,
                       spotify:
-                        albums[0]?.resource.link?.streaming?.spotify || null,
+                        albums[0]?.resource.link?.streaming?.spotify ?? null,
                     },
                     80
                   ) || ""

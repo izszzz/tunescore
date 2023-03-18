@@ -25,7 +25,7 @@ import type { ShowLayoutProps } from "./";
 
 export interface DefaultShowLayoutProps extends Omit<ShowLayoutProps, "title"> {
   bookmarkToggleButtonProps: Omit<BookmarkToggleIconButtonProps, "value">;
-  unionType: ResourceUnionType;
+  type: ResourceUnionType;
   resource: Prisma.ResourceGetPayload<{
     include: {
       tagMaps: { include: { tag: true } };
@@ -39,7 +39,7 @@ export interface DefaultShowLayoutProps extends Omit<ShowLayoutProps, "title"> {
 const DefaultShowLayout = ({
   bookmarkToggleButtonProps,
   resource,
-  unionType,
+  type,
   title,
   icon,
   ...props
@@ -56,62 +56,59 @@ const DefaultShowLayout = ({
       {...props}
       header={<DefaultHeader />}
       title={
-        title ?? (
-          <Box mx={3}>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Box display="flex" alignItems="center">
-                <IconButton
-                  onClick={() =>
-                    router.push({
-                      pathname: "/search",
-                      query: { type: unionType },
-                    })
-                  }
-                >
-                  {icon}
-                </IconButton>
-                <Typography variant="h5">
-                  {setLocale(resource.name, router)}
-                </Typography>
-                {image && (
-                  <Box display="flex" justifyContent="center" pl={3}>
-                    <Image
-                      style={{ borderRadius: 5 }}
-                      height="80"
-                      alt={name}
-                      src={image}
-                    />
-                  </Box>
-                )}
-              </Box>
-              <Box>
-                <BookmarkToggleButton
-                  {...bookmarkToggleButtonProps}
-                  value={isNonEmpty(resource.bookmarks)}
-                />
-                <FlagIconButton onClick={() => show({ unionType, id })} />
-              </Box>
+        <Box mx={3}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box display="flex" alignItems="center">
+              <IconButton
+                onClick={() =>
+                  router.push({ pathname: "/search", query: { type } })
+                }
+              >
+                {icon}
+              </IconButton>
+              {title ?? (
+                <>
+                  <Typography variant="h5">
+                    {setLocale(resource.name, router)}
+                  </Typography>
+                  {image && (
+                    <Box display="flex" justifyContent="center" pl={3}>
+                      <Image
+                        style={{ borderRadius: 5 }}
+                        height="80"
+                        alt={name}
+                        src={image}
+                      />
+                    </Box>
+                  )}
+                </>
+              )}
             </Box>
-            <Stack direction="row" spacing={1}>
-              {resource.tagMaps.map((tagMap) => (
-                <Chip
-                  key={tagMap.id}
-                  icon={<LocalOffer />}
-                  label={tagMap.tag.name}
-                  variant="outlined"
-                  size="small"
-                />
-              ))}
-            </Stack>
-            {resource.link && (
-              <LinkButtons type={unionType} data={resource.link} />
-            )}
+            <Box>
+              <BookmarkToggleButton
+                {...bookmarkToggleButtonProps}
+                value={isNonEmpty(resource.bookmarks)}
+              />
+              <FlagIconButton onClick={() => show({ unionType: type, id })} />
+            </Box>
           </Box>
-        )
+          <Stack direction="row" spacing={1}>
+            {resource.tagMaps.map((tagMap) => (
+              <Chip
+                key={tagMap.id}
+                icon={<LocalOffer />}
+                label={tagMap.tag.name}
+                variant="outlined"
+                size="small"
+              />
+            ))}
+          </Stack>
+          {resource.link && <LinkButtons type={type} data={resource.link} />}
+        </Box>
       }
     />
   );

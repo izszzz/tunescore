@@ -55,7 +55,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
     <DefaultShowLayout
       activeTab={activeTab}
       resource={resource}
-      unionType="Artist"
+      type="Artist"
       tabs={tabs}
       icon={<Person />}
       bookmarkToggleButtonProps={{

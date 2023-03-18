@@ -57,7 +57,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
       tabs={tabs}
       resource={resource}
       activeTab={activeTab}
-      unionType="Band"
+      type="Band"
       icon={<Group />}
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,

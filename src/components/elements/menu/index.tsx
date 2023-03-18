@@ -26,8 +26,8 @@ const MenuManager = ({
       <Menu
         {...menuProps}
         anchorEl={anchorEl}
-        open={open}
         onClose={handleClose}
+        open={open}
       >
         {children(handleClose)}
       </Menu>

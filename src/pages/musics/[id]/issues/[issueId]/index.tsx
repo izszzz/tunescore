@@ -43,10 +43,10 @@ const Issue: NextPage = () => {
   }>;
   const { title, body, comments } = issueData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
-      <ArticleCard title={title} body={body} />
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
+      <ArticleCard body={body} title={title} />
       {comments.map((comment) => (
-        <CommentCard key={comment.id} data={comment} />
+        <CommentCard data={comment} key={comment.id} />
       ))}
       <CommentForm
         formContainerProps={{

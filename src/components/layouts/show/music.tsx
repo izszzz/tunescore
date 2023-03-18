@@ -72,37 +72,6 @@ const MusicLayout = ({
   return (
     <DefaultShowLayout
       activeTab={activeTab}
-      tabs={tabs}
-      resource={resource}
-      unionType="Music"
-      icon={<MusicNote />}
-      title={
-        <>
-          <MusicTitle data={data} />
-          <Box ml={3}>
-            <Chip label={type} size="small" />
-          </Box>
-          {resource.link?.streaming && (
-            <Box display="flex" justifyContent="center" pl={3}>
-              <Image
-                style={{ borderRadius: 5 }}
-                height="80"
-                alt={setLocale(resource.name, router)}
-                src={
-                  getImage(
-                    {
-                      ...resource.link?.streaming,
-                      spotify:
-                        albums[0]?.resource.link?.streaming?.spotify || null,
-                    },
-                    80
-                  ) || ""
-                }
-              />
-            </Box>
-          )}
-        </>
-      }
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,
         onClick: () => {
@@ -138,6 +107,37 @@ const MusicLayout = ({
           else show();
         },
       }}
+      icon={<MusicNote />}
+      resource={resource}
+      tabs={tabs}
+      title={
+        <>
+          <MusicTitle data={data} />
+          <Box ml={3}>
+            <Chip label={type} size="small" />
+          </Box>
+          {resource.link?.streaming && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              <Image
+                alt={setLocale(resource.name, router)}
+                height="80"
+                src={
+                  getImage(
+                    {
+                      ...resource.link?.streaming,
+                      spotify:
+                        albums[0]?.resource.link?.streaming?.spotify ?? null,
+                    },
+                    80
+                  ) || ""
+                }
+                style={{ borderRadius: 5 }}
+              />
+            </Box>
+          )}
+        </>
+      }
+      type="Music"
     >
       {resource.name[router.locale as keyof Locale] === null && <LocaleAlert />}
       {children}

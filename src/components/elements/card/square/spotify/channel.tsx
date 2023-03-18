@@ -12,14 +12,14 @@ const ChannelSpotifySquareCard = ({
   <Tooltip title={<Typography variant="subtitle1">{data.name}</Typography>}>
     <Box>
       <ArtistSquareCard
+        image={data.images[1]?.url || ""}
+        onClick={() => onClick?.(data)}
+        size="100px"
         title={
-          <Typography variant="caption" display="block" noWrap>
+          <Typography display="block" noWrap variant="caption">
             {data.name}
           </Typography>
         }
-        image={data.images[1]?.url || ""}
-        size="100px"
-        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

@@ -19,7 +19,7 @@ const Search: NextPage = () => {
   return (
     <DefaultSingleColumnLayout contained>
       {data?.data.map((data, i) => (
-        <ResourceListItem key={i} data={data} />
+        <ResourceListItem data={data} key={i} />
       ))}
     </DefaultSingleColumnLayout>
   );

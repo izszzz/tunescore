@@ -27,7 +27,7 @@ const PaymentStripeForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <Button type="submit" variant="contained" fullWidth>
+      <Button fullWidth type="submit" variant="contained">
         Submit
       </Button>
     </form>

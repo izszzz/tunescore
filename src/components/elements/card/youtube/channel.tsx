@@ -13,9 +13,9 @@ const ChannelYoutubeCard = ({
   onClick,
 }: ChannelYoutubeCardProps<SearchResult | Channel | undefined>) => (
   <IndexCard
-    title={data?.snippet?.title || ""}
     image={data?.snippet?.thumbnails?.medium?.url || ""}
     onClose={() => onClick?.(data)}
+    title={data?.snippet?.title || ""}
   />
 );
 

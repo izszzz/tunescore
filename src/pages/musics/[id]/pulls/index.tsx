@@ -39,7 +39,7 @@ const Pulls: NextPage = () => {
   if (!music.data || !pullsData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
       <IndexLayout<Pull>
         meta={pullsData.meta}
         newRoute={{ pathname: "/musics/[id]/pulls/new", query: { id } }}

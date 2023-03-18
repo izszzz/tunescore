@@ -17,16 +17,16 @@ const Home: NextPage = () => {
     });
   return (
     <DefaultSingleColumnLayout>
-      <Grid container spacing={1} my={3}>
+      <Grid container my={3} spacing={1}>
         {data?.data.map((data) => (
           <Grid
-            key={data.id}
-            xs={6}
-            sm={4}
-            md={2}
-            px={2}
             display="flex"
             justifyContent="center"
+            key={data.id}
+            md={2}
+            px={2}
+            sm={4}
+            xs={6}
           >
             <ResourceDefaultSquareCard data={data} />
           </Grid>

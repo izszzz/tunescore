@@ -35,7 +35,7 @@ const ReportDialog = create<ReportDialogProps>(({ unionType, unionId }) => {
     setValue("unionId", unionId);
   }, [unionId, unionType, setValue]);
   return (
-    <Dialog open={visible} onClose={hide}>
+    <Dialog onClose={hide} open={visible}>
       <DialogTitle>Report</DialogTitle>
       <FormContainer
         formContext={formContext}
@@ -64,13 +64,13 @@ const ReportDialog = create<ReportDialogProps>(({ unionType, unionId }) => {
               required
             />
           </Box>
-          <TextFieldElement name="body" label="body" multiline required />
+          <TextFieldElement label="body" multiline name="body" required />
         </DialogContent>
         <DialogActions>
           <LoadingButton
             disabled={!isDirty || !isValid}
-            loading={create.isLoading}
             fullWidth
+            loading={create.isLoading}
           >
             submit
           </LoadingButton>

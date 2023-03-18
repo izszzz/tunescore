@@ -8,8 +8,8 @@ export interface ChannelSpotifyCardProps {
 const ChannelSpotifyCard = ({ data, onClick }: ChannelSpotifyCardProps) => (
   <IndexCard
     image={data.images[1]?.url}
-    title={data.name}
     onClose={() => onClick?.(data)}
+    title={data.name}
   />
 );
 

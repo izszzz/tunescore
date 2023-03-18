@@ -35,9 +35,6 @@ const LocaleAutocomplete = (
       formContext={formContext}
     >
       <AutocompleteElement
-        name="locale"
-        label="Locale"
-        options={locales as (keyof Locale)[]}
         autocompleteProps={{
           ...props,
           fullWidth: true,
@@ -47,6 +44,9 @@ const LocaleAutocomplete = (
             handleChange(details?.option),
           isOptionEqualToValue: (option, value) => option === value,
         }}
+        label="Locale"
+        name="locale"
+        options={locales as (keyof Locale)[]}
       />
     </FormContainer>
   );

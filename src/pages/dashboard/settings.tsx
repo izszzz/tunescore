@@ -23,10 +23,10 @@ const Dashboard: NextPage = () => {
 
       <SingleForm
         data={data}
-        loading={update.isLoading}
         formContainerProps={{
           onSuccess: ({ name }) => update.mutate({ name }),
         }}
+        loading={update.isLoading}
         textFieldElementProps={{ name: "name" }}
       />
 

@@ -25,30 +25,30 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const title = setLocale(data.resource.name, router);
   return (
     <ListItem
-      route={{
-        pathname: "/albums/[id]",
-        query: { id: data.id },
-      }}
       icon={<Album />}
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <BookmarkChip
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
               label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
             />
             <MusicChip label={data._count.musics} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
           </Stack>
         ),
       }}
+      route={{
+        pathname: "/albums/[id]",
+        query: { id: data.id },
+      }}
     >
       {data.resource.link?.streaming && (
         <Image
-          height="60"
           alt={title}
+          height="60"
           src={getImage(data.resource.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />

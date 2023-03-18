@@ -132,8 +132,8 @@ const NewMusic: NextPage = () => {
                   { id: "ORIGINAL", label: "original" },
                   { id: "COPY", label: "copy" },
                 ]}
-                row
                 required
+                row
               />
             </Box>
             <Box mb={3}>
@@ -144,26 +144,26 @@ const NewMusic: NextPage = () => {
                   { id: "PUBLIC", label: "public" },
                   { id: "PRIVATE", label: "private" },
                 ]}
-                row
                 required
+                row
               />
             </Box>
             <TextFieldElement
-              name={"resource.name." + router.locale}
+              fullWidth
               label="Title"
               margin="dense"
+              name={"resource.name." + router.locale}
               required
-              fullWidth
             />
             <br />
             {type === "ORIGINAL" && (
               <TextFieldElement
-                label="price"
-                name="price"
-                margin="dense"
-                type="number"
-                required
                 fullWidth
+                label="price"
+                margin="dense"
+                name="price"
+                required
+                type="number"
               />
             )}
 
@@ -172,20 +172,20 @@ const NewMusic: NextPage = () => {
             </Alert>
 
             <Dropzone
-              maxFiles={2}
               accept={{
                 "image/*": [".jpg", ".png", ".pdf"],
                 "text/*": [".gp", ".mxl"],
               }}
+              maxFiles={2}
               onDrop={handleDrag}
             />
 
             <LoadingButton
-              type="submit"
-              variant="contained"
+              disableElevation
               disabled={!isDirty || !isValid || create.isLoading || loading}
               fullWidth
-              disableElevation
+              type="submit"
+              variant="contained"
             >
               {t("submit")}
             </LoadingButton>

@@ -18,7 +18,7 @@ const SettingsDialog = create(() => {
   const { visible, hide } = useModal(),
     [ambient, setAmbient] = useRecoilState(ambientState);
   return (
-    <Dialog open={visible} onClose={hide}>
+    <Dialog onClose={hide} open={visible}>
       <DialogTitle>Settings</DialogTitle>
       <DialogContent>
         <DialogActions>

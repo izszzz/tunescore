@@ -24,7 +24,7 @@ const User: NextPage = () => {
   if (!data || !musicData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="repositories">
+    <UserLayout activeTab="repositories" data={userData} query={query}>
       <IndexLayout
         meta={musicData.meta}
         searchAutocompleteProps={{

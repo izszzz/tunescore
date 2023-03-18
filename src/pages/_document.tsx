@@ -21,7 +21,7 @@ function MyDocument({ emotionStyleTags }: MyDocumentProps) {
           src="https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/alphaTab.js"
           strategy="beforeInteractive"
         />
-        <meta name="emotion-insertion-point" content="" />
+        <meta content="" name="emotion-insertion-point" />
         {emotionStyleTags}
       </Head>
       <body>
@@ -61,10 +61,10 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   const emotionStyles = extractCriticalToChunks(initialProps.html);
   const emotionStyleTags = emotionStyles.styles.map((style) => (
     <style
+      dangerouslySetInnerHTML={{ __html: style.css }}
       data-emotion={`${style.key} ${style.ids.join(" ")}`}
       key={style.key}
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: style.css }}
     />
   ));
 

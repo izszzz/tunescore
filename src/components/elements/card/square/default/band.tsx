@@ -19,27 +19,27 @@ const BandDefaultSquareCard = ({ data }: BandDefaultSquareCardProps) => {
   const router = useRouter();
   return (
     <BandSquareCard
-      size="200px"
-      title={
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="h6" noWrap>
-            {setLocale(data.resource.name, router)}
-          </Typography>
-          <Box display="flex" alignItems="center">
-            <BookmarkChip
-              label={data.resource._count.bookmarks}
-              size="small"
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
-            />
-          </Box>
-        </Box>
-      }
       image={getImage(data.resource.link?.streaming, 200, {
         square: true,
         channel: true,
       })}
       onClick={() =>
         router.push({ pathname: "/bands/[id]", query: { id: data.id } })
+      }
+      size="200px"
+      title={
+        <Box display="flex" justifyContent="space-between">
+          <Typography noWrap variant="h6">
+            {setLocale(data.resource.name, router)}
+          </Typography>
+          <Box alignItems="center" display="flex">
+            <BookmarkChip
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
+              label={data.resource._count.bookmarks}
+              size="small"
+            />
+          </Box>
+        </Box>
       }
     />
   );

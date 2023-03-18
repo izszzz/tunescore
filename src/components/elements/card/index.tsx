@@ -16,7 +16,7 @@ const IndexCard = ({ title, body, image, onClose }: IndexCardProps) => (
   <Card sx={{ display: "flex" }}>
     <CardContent>
       {image && (
-        <CardMedia component="img" sx={{ borderRadius: "3px" }} image={image} />
+        <CardMedia component="img" image={image} sx={{ borderRadius: "3px" }} />
       )}
     </CardContent>
     <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
@@ -26,7 +26,7 @@ const IndexCard = ({ title, body, image, onClose }: IndexCardProps) => (
 
         <br />
       </Box>
-      <Box display="flex" alignItems="center">
+      <Box alignItems="center" display="flex">
         <CloseIconButton onClick={onClose} />
       </Box>
     </CardContent>

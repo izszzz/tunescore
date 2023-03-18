@@ -60,16 +60,16 @@ const Issues: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
-      <FormContainer onSuccess={handleSubmit} formContext={formContext}>
-        <TextFieldElement name="title" margin="dense" fullWidth />
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
+      <FormContainer formContext={formContext} onSuccess={handleSubmit}>
+        <TextFieldElement fullWidth margin="dense" name="title" />
         <Controller
           name="body"
           render={({ field }) => <MDEditor {...field} />}
         />
         <LoadingButton
-          type="submit"
           loading={create.isLoading}
+          type="submit"
           variant="contained"
         >
           Submit

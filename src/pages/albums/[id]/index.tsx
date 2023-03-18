@@ -17,7 +17,7 @@ const Album: NextPage = () => {
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];
   return (
-    <AlbumLayout data={albumData} query={path} activeTab="info">
+    <AlbumLayout activeTab="info" data={albumData} query={path}>
       {albumData.band && <BandLists data={[albumData.band]} />}
 
       <MusicLists data={albumData.musics} />

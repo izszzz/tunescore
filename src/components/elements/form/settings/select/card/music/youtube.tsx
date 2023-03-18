@@ -27,15 +27,15 @@ const MusicYoutubeSelectForm = ({
   return (
     <YoutubeSelectForm
       {...props}
-      streamingLink={streamingLink}
-      type="video"
-      lookup={data?.items?.[0]}
       largeCard={(value) =>
         value && <MusicYoutubeCard data={value} onClick={onRemove} />
       }
+      lookup={data?.items?.[0]}
       smallCard={(value) => (
         <MusicYoutubeSquareCard data={value} onClick={onSelect} />
       )}
+      streamingLink={streamingLink}
+      type="video"
     />
   );
 };

@@ -15,7 +15,7 @@ const Article = ({ text }: Article) => {
       <Collapse collapsedSize={200} in={on}>
         <Typography component="pre">{text}</Typography>
       </Collapse>
-      <ExpandToggleButton value={on} onClick={toggle} />
+      <ExpandToggleButton onClick={toggle} value={on} />
     </Box>
   );
 };

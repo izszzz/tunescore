@@ -10,15 +10,15 @@ export interface AlbumItunesCardProps {
 
 const AlbumItunesCard = ({ data, onClick }: AlbumItunesCardProps) => (
   <IndexCard
-    title={data.collectionCensoredName}
-    image={data.artworkUrl100}
     body={
       <>
         <Typography variant="caption">{data.collectionCensoredName}</Typography>
         <Typography variant="caption">{data.artistName}</Typography>
       </>
     }
+    image={data.artworkUrl100}
     onClose={() => onClick?.(data)}
+    title={data.collectionCensoredName}
   />
 );
 export default AlbumItunesCard;

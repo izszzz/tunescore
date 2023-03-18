@@ -37,18 +37,18 @@ const NewAlbum: NextPage = () => {
       <p>new album</p>
       <FormContainer onSuccess={handleSubmit}>
         <TextFieldElement
-          name={"title." + router.locale}
+          fullWidth
           label="Title"
           margin="dense"
-          fullWidth
+          name={"title." + router.locale}
           required
         />
         <LoadingButton
-          type="submit"
-          variant="contained"
+          disableElevation
           disabled={create.isLoading}
           fullWidth
-          disableElevation
+          type="submit"
+          variant="contained"
         >
           submit
         </LoadingButton>

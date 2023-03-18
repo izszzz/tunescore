@@ -13,24 +13,24 @@ export interface UserListItemProps {
 }
 const UserListItem = ({ data }: UserListItemProps) => (
   <ListItem
-    route={{
-      pathname: "/users/[id]",
-      query: { id: data.id },
-    }}
     icon={<Avatar alt={data.name || ""} src={data.image || ""} />}
     listItemTextProps={{
       primary: data.name,
       secondary: (
         <Typography
-          sx={{ display: "inline" }}
-          component="span"
-          variant="body2"
           color="text.primary"
+          component="span"
+          sx={{ display: "inline" }}
+          variant="body2"
         >
           following : {data._count.following} / followers :{" "}
           {data._count.followers}
         </Typography>
       ),
+    }}
+    route={{
+      pathname: "/users/[id]",
+      query: { id: data.id },
     }}
   />
 );

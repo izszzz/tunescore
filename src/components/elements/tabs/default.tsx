@@ -29,11 +29,11 @@ const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
           <Tab
             key={i}
             {...tab}
-            value={tab.label}
             onClick={() => {
               if (tab.label === "settings" && !isAuth(status)) return show();
               router.push({ pathname, query: router.query });
             }}
+            value={tab.label}
           />
         ))}
       </Tabs>

@@ -13,7 +13,6 @@ const LocaleAlert = () => {
 
   return (
     <Alert
-      severity="warning"
       action={
         <Button
           onClick={() => {
@@ -24,6 +23,7 @@ const LocaleAlert = () => {
           Add Locale
         </Button>
       }
+      severity="warning"
     >
       <AlertTitle>Not Found your langage </AlertTitle>
       please register

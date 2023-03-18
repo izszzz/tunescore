@@ -30,7 +30,7 @@ const UserBookmarks: NextPage = () => {
   if (!data || !bookmarkData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="bookmarks">
+    <UserLayout activeTab="bookmarks" data={userData} query={query}>
       <IndexLayout
         meta={bookmarkData.meta}
         searchAutocompleteProps={{
@@ -49,7 +49,7 @@ const UserBookmarks: NextPage = () => {
         }}
       >
         {bookmarkData.data.map((bookmark) => (
-          <ResourceListItem key={bookmark.id} data={bookmark.resource} />
+          <ResourceListItem data={bookmark.resource} key={bookmark.id} />
         ))}
       </IndexLayout>
     </UserLayout>

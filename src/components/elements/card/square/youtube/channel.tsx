@@ -12,14 +12,14 @@ function ChannelYoutubeSquareCard<
 >({ data, onClick }: ChannelYoutubeCardProps<T>) {
   return (
     <ArtistSquareCard
+      image={data?.snippet?.thumbnails?.medium?.url}
+      onClick={() => onClick?.(data)}
+      size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
       title={
-        <Typography variant="caption" display="block" noWrap>
+        <Typography display="block" noWrap variant="caption">
           {data?.snippet?.title}
         </Typography>
       }
-      image={data?.snippet?.thumbnails?.medium?.url}
-      size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
-      onClick={() => onClick?.(data)}
     />
   );
 }

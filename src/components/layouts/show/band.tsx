@@ -54,11 +54,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
     ];
   return (
     <DefaultShowLayout
-      tabs={tabs}
-      resource={resource}
       activeTab={activeTab}
-      unionType="Band"
-      icon={<Group />}
       bookmarkToggleButtonProps={{
         disabled: update.isLoading,
         onClick: () => {
@@ -70,6 +66,10 @@ const BandLayout: React.FC<BandLayoutProps> = ({
           else show();
         },
       }}
+      icon={<Group />}
+      resource={resource}
+      tabs={tabs}
+      type="Band"
     >
       {children}
     </DefaultShowLayout>

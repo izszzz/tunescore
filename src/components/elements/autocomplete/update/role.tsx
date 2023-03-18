@@ -21,14 +21,14 @@ const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
   return (
     <UpdateAutocomplete<Role, true>
       {...props}
-      options={search.data || []}
-      getOptionLabel={({ name }) => name}
       ChipProps={{ size: "small", icon: <LocalOffer /> }}
+      getOptionLabel={({ name }) => name}
+      multiple
       onInputChange={(_e, value) =>
         search.mutate({ where: { name: { contains: value } } })
       }
+      options={search.data || []}
       textFieldProps={{ label: "tag", margin: "dense" }}
-      multiple
     />
   );
 };

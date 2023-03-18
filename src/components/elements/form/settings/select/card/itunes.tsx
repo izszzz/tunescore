@@ -45,12 +45,12 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   }, [lookup, search, streamingLink?.itunes?.id, term]);
   return (
     <CardSelectForm<T, ItunesResponse<T>["results"]>
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
+      largeCard={largeCard}
       link={streamingLink?.itunes}
       lookup={result}
       search={results}
-      largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AppleIcon from "../../icon/itunes";
 const AppleButton = ({ href }: { href: string }) => (
   <Tooltip title="Apple Music">
-    <IconButton component={Link} color="error" target="blank" href={href}>
+    <IconButton color="error" component={Link} href={href} target="blank">
       <AppleIcon />
     </IconButton>
   </Tooltip>

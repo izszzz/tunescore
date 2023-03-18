@@ -37,12 +37,12 @@ function SpotifySelectForm<
   if (!session?.user?.providers.includes("spotify")) return <SpotifyButton />;
   return (
     <CardSelectForm<Value, Options[]>
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
+      largeCard={largeCard}
       link={streamingLink?.spotify}
       lookup={lookup}
       search={search}
-      largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

@@ -27,9 +27,9 @@ function BandUpdateAutocomplete<T extends boolean | undefined = false>({
   return (
     <UpdateAutocomplete<Band, T>
       {...props}
-      options={search.data || []}
       getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       onInputChange={(_e, value) => search.mutate(searchMutate(router, value))}
+      options={search.data || []}
       textFieldProps={{ label: "band", margin: "dense" }}
     />
   );

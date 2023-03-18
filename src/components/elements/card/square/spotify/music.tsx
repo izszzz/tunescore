@@ -25,13 +25,13 @@ const MusicSpotifySquareCard = ({ data, onClick }: MusicSpotifyCardProps) => (
     <Box>
       <MusicSquareCard
         image={data.album.images[1]?.url}
+        onClick={() => onClick?.(data)}
         size="100px"
         title={
-          <Typography variant="caption" display="block" noWrap>
+          <Typography display="block" noWrap variant="caption">
             {data.name}
           </Typography>
         }
-        onClick={() => onClick?.(data)}
       />
     </Box>
   </Tooltip>

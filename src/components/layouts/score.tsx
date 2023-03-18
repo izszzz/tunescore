@@ -92,9 +92,8 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     apiRef.current?.tex(value);
   }, [value]);
   return (
-    <Box width="100%" sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} width="100%">
       <Drawer
-        variant="persistent"
         anchor="left"
         open={open}
         sx={{
@@ -105,15 +104,16 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
             boxSizing: "border-box",
           },
         }}
+        variant="persistent"
       >
-        <List sx={{ width: "100%" }} disablePadding>
+        <List disablePadding sx={{ width: "100%" }}>
           {tracks.map((track, index) => (
             <Track
-              track={track}
               activeTracks={activeTracks}
               apiRef={apiRef}
               key={index}
               onClick={handleTrackClick}
+              track={track}
             />
           ))}
         </List>
@@ -166,9 +166,9 @@ const Track = ({ apiRef, track, activeTracks, onClick }: TrackProps) => {
         secondary={
           <VolumeSliderInput
             muted={muted}
-            volume={masterVolume}
             onMute={handleMute}
             onVolume={handleVolume}
+            volume={masterVolume}
           />
         }
       />

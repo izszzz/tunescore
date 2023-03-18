@@ -27,13 +27,13 @@ const AlbumUpdateAutocomplete = ({
     });
   return (
     <UpdateAutocomplete<Album, true>
-      options={search.data || []}
-      loading={search.isLoading}
-      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       ChipProps={{ icon: <AlbumIcon /> }}
-      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
-      textFieldProps={{ label: "albums", margin: "dense" }}
+      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
+      loading={search.isLoading}
       multiple
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+      options={search.data || []}
+      textFieldProps={{ label: "albums", margin: "dense" }}
       {...props}
     />
   );

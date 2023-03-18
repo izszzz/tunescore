@@ -9,19 +9,19 @@ interface DeleteAlertProps {
 }
 const DeleteAlert = ({ loadingButtonProps }: DeleteAlertProps) => (
   <Alert
-    variant="outlined"
-    severity="error"
     action={
       <LoadingButton
         {...loadingButtonProps}
-        type="button"
-        variant="contained"
         color="error"
         disableElevation
+        type="button"
+        variant="contained"
       >
         Delete
       </LoadingButton>
     }
+    severity="error"
+    variant="outlined"
   >
     This is a warning alert
   </Alert>

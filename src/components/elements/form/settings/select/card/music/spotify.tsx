@@ -23,15 +23,15 @@ const SpotifyMusicSelectForm = ({
     { data: searchData } = trpc.spotify.searchTracks.useQuery(term);
   return (
     <SpotifySelectForm
-      streamingLink={streamingLink}
-      lookup={data}
-      search={(searchData?.items as SpotifyApi.TrackObjectFull[]) || []}
       largeCard={(value) =>
         value && <MusicSpotifyCard data={value} onClick={onRemove} />
       }
+      lookup={data}
+      search={(searchData?.items as SpotifyApi.TrackObjectFull[]) || []}
       smallCard={(value) => (
         <MusicSpotifySquareCard data={value} onClick={onSelect} />
       )}
+      streamingLink={streamingLink}
     />
   );
 };

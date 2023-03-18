@@ -19,8 +19,8 @@ const BookmarkToggleButton = ({
     <Box display="inline">
       <ToggleIconButton
         {...props}
-        onIcon={<BookmarkIcon color="primary" />}
         offIcon={<BookmarkBorderIcon />}
+        onIcon={<BookmarkIcon color="primary" />}
       />
     </Box>
   </Tooltip>

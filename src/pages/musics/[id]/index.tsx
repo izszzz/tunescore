@@ -44,7 +44,7 @@ const Music: NextPage = () => {
   const musicData = data as MusicLayoutProps["data"],
     { resource } = musicData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="info">
+    <MusicLayout activeTab="info" data={musicData} query={query}>
       <ActionButton
         data={musicData}
         loading={create.isLoading}
@@ -65,9 +65,9 @@ const Music: NextPage = () => {
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
           <VoteCard
+            badIconButtonProps={{ disabled: true }}
             data={pull}
             goodIconButtonProps={{ disabled: true }}
-            badIconButtonProps={{ disabled: true }}
           />
         </Box>
       ))}
@@ -102,21 +102,21 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       () => (
         <CartLoadingButton
           disabled={isNonEmpty(data.carts)}
+          fullWidth
           loading={loading}
           onClick={onAddCart}
-          fullWidth
         />
       )
     )
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup
-        watch={{
-          route: { pathname: "/musics/[id]/score", query: { id } },
-          buttonProps: { disabled: !score },
-        }}
         edit={{
           route: { pathname: "/musics/[id]/score/edit", query: { id } },
           hidden: !(data.type === "ORIGINAL" && isSelf(session, { user })),
+        }}
+        watch={{
+          route: { pathname: "/musics/[id]/score", query: { id } },
+          buttonProps: { disabled: !score },
         }}
       />
     ));

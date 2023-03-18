@@ -31,13 +31,13 @@ const ArtistUpdateAutocomplete = ({
   });
   return (
     <UpdateAutocomplete<Artist, true>
-      options={search.data || []}
-      loading={search.isLoading}
-      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       ChipProps={{ icon: <Person /> }}
-      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
-      textFieldProps={{ label, margin: "dense" }}
+      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
+      loading={search.isLoading}
       multiple
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+      options={search.data || []}
+      textFieldProps={{ label, margin: "dense" }}
       {...props}
     />
   );

@@ -17,7 +17,7 @@ const Artist: NextPage = () => {
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"];
   return (
-    <ArtistLayout data={artistData} query={query} activeTab="info">
+    <ArtistLayout activeTab="info" data={artistData} query={query}>
       <BandLists data={artistData.bands} />
       <ParticipationLists data={artistData.participations}>
         {(participation, data) => (

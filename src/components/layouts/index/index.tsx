@@ -63,13 +63,13 @@ function IndexLayout<T>({
                 }}
               />
             </Grid>
-            <Grid item xs={1} display="flex" alignItems="stretch">
+            <Grid alignItems="stretch" display="flex" item xs={1}>
               {newRoute && (
                 <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={handleClick}
                   fullWidth
+                  onClick={handleClick}
+                  startIcon={<AddIcon />}
+                  variant="outlined"
                 >
                   New
                 </Button>
@@ -80,10 +80,10 @@ function IndexLayout<T>({
         {children}
         <Box display="flex" justifyContent="center">
           <Pagination
-            page={meta.currentPage}
             count={meta.lastPage}
-            variant="outlined"
             onChange={handleChange}
+            page={meta.currentPage}
+            variant="outlined"
           />
         </Box>
       </Box>

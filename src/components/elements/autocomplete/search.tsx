@@ -38,12 +38,12 @@ function SearchAutocomplete<
   return (
     <Autocomplete
       {...props}
+      fullWidth
       loading={loading || debounced.isPending()}
       onInputChange={debounced}
       renderInput={(params) => (
         <TextField {...params} {...textFieldProps} variant="outlined" />
       )}
-      fullWidth
     />
   );
 }

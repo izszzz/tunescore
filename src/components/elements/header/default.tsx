@@ -59,39 +59,39 @@ const DefaultHeader = () => {
     <>
       <Header>
         <Typography
-          variant="h4"
-          sx={{ flexGrow: 1, cursor: "pointer" }}
           onClick={() => router.push("/")}
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+          variant="h4"
         >
           tunescore
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />
-          <Grid item xs={5} display="flex" alignItems="center">
+          <Grid alignItems="center" display="flex" item xs={5}>
             <ResourceToggleGroupButton
+              onChange={handleChange}
               size="small"
               value={type}
-              onChange={handleChange}
             />
             <SearchAutocomplete
-              size="small"
-              options={search.data || []}
-              loading={search.isLoading}
+              fullWidth
               getOptionLabel={({ resource: { name } }) =>
                 setLocale(name, router)
               }
+              loading={search.isLoading}
               onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+              options={search.data || []}
+              size="small"
               textFieldProps={{ onKeyDown: handleKeyDown }}
-              fullWidth
             />
           </Grid>
           <Grid item xs={3} />
           <Grid item xs={3}>
             <Stack
-              direction="row"
-              spacing={2}
               alignItems="center"
+              direction="row"
               justifyContent="right"
+              spacing={2}
             >
               <PlusMenuManager />
               <SettingsIconButton onClick={() => showSettings()} />
@@ -99,9 +99,9 @@ const DefaultHeader = () => {
                 .with({ status: "loading" }, () => <CircularProgress />)
                 .with({ status: "unauthenticated" }, () => (
                   <Button
-                    variant="contained"
-                    onClick={() => show()}
                     disableElevation
+                    onClick={() => show()}
+                    variant="contained"
                   >
                     SignIn
                   </Button>

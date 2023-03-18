@@ -27,15 +27,15 @@ const ChannelYoutubeSelectForm = ({
   return (
     <YoutubeSelectForm
       {...props}
-      type="channel"
-      streamingLink={streamingLink}
-      lookup={data?.items?.[0]}
       largeCard={(value) =>
         value && <ChannelYoutubeCard data={value} onClick={onRemove} />
       }
+      lookup={data?.items?.[0]}
       smallCard={(value) => (
         <ChannelYoutubeSquareCard data={value} onClick={onSelect} />
       )}
+      streamingLink={streamingLink}
+      type="channel"
     />
   );
 };

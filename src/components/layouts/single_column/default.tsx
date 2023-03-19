@@ -1,5 +1,6 @@
 import React from "react";
 
+import Footer from "../../elements/footer";
 import DefaultHeader from "../../elements/header/default";
 
 import SingleColumnLayout from "./index";
@@ -17,6 +18,7 @@ const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnLayoutProps> = ({
   return (
     <SingleColumnLayout
       contained={contained}
+      footer={<Footer />}
       header={
         <>
           <DefaultHeader />

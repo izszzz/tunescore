@@ -252,29 +252,22 @@ const SettingsMusic: NextPage = () => {
 
       <MusicYoutubeSelectForm
         onRemove={() =>
-          update.mutate({
-            ...query,
-            data: { resource: { update: removeYoutubeMutate(resource.link) } },
-          })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
         }
         onSelect={(value) =>
           value?.id &&
           resource.link &&
           update.mutate({
             ...query,
-            data: {
-              resource: {
-                update: selectYoutubeMutate({
-                  link: resource.link,
-                  id: value.id?.videoId,
-                  images: [
-                    value.snippet?.thumbnails?.standard?.url,
-                    value.snippet?.thumbnails?.medium?.url,
-                    value.snippet?.thumbnails?.high?.url,
-                  ],
-                }),
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value.id?.videoId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
         streamingLink={resource.link?.streaming}

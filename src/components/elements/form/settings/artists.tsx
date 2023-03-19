@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import Person from "@mui/icons-material/Person";
 import SendIcon from "@mui/icons-material/Send";
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
@@ -17,7 +18,6 @@ import { handleChangeAutocomplete } from "../../autocomplete/update";
 import RoleUpdateAutocomplete from "../../autocomplete/update/role";
 import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
 import CloseIconButton from "../../button/icon/close";
-import ResourceIcon from "../../icon/resource";
 import ArtistListItem from "../../list/item/artist";
 
 interface ArtistsUpdateFormProps<T> {
@@ -42,9 +42,7 @@ function ArtistsUpdateForm({
     [artist, setArtist] = useState<Artist>(),
     router = useRouter(),
     search = trpc.search.artist.useMutation({
-      onError: () => {
-        enqueueSnackbar("artist.search error");
-      },
+      onError: () => enqueueSnackbar("artist.search error"),
     });
 
   return (
@@ -62,11 +60,11 @@ function ArtistsUpdateForm({
             />
           </Grid>
           <Grid
-            item
-            xs={1}
-            display="flex"
             alignItems="center"
+            display="flex"
+            item
             justifyContent="center"
+            xs={1}
           >
             <CloseIconButton
               disabled={loading}
@@ -76,29 +74,31 @@ function ArtistsUpdateForm({
         </Grid>
       ))}
       <Box>
-        <Grid container spacing={1} my={1}>
+        <Grid container my={1} spacing={1}>
           <Grid item xs={10}>
             <SearchAutocomplete
-              options={search.data || []}
+              ChipProps={{ icon: <Person /> }}
+              getOptionLabel={({ resource: { name } }) =>
+                setLocale(name, router)
+              }
               loading={loading}
-              textFieldProps={{ label: "artist" }}
-              getOptionLabel={(option) => setLocale(option.name, router)}
-              ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),
               })}
+              options={search.data || []}
+              textFieldProps={{ label: "artist" }}
             />
           </Grid>
-          <Grid item xs={2} alignItems="stretch" style={{ display: "flex" }}>
+          <Grid alignItems="stretch" item style={{ display: "flex" }} xs={2}>
             <LoadingButton
               {...loadingButtonProps}
-              loading={search.isLoading || loading}
-              type="button"
-              variant="outlined"
               disabled={!artist}
-              onClick={() => loadingButtonProps.onClick(artist)}
               endIcon={<SendIcon />}
               fullWidth
+              loading={search.isLoading || loading}
+              onClick={() => loadingButtonProps.onClick(artist)}
+              type="button"
+              variant="outlined"
             >
               Update
             </LoadingButton>

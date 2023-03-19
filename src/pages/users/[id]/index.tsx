@@ -9,13 +9,13 @@ import { trpc } from "../../../utils/trpc";
 
 const User: NextPage = () => {
   const { data: session } = useSession(),
-    router = useRouter(),
+    router = useRouter<"/users/[id]">(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query);
   if (!data) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="info">
+    <UserLayout activeTab="info" data={userData} query={query}>
       {session?.user?.id === data.id && <p>aaa</p>}
     </UserLayout>
   );

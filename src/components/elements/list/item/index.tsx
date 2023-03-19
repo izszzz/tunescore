@@ -25,16 +25,16 @@ const ListItem = ({
   return (
     <MuiListItem
       {...props}
-      onClick={() => router.push(route)}
-      divider
       disablePadding
+      divider
+      onClick={() => router.push(route)}
     >
       <ListItemButton>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText
           {...listItemTextProps}
           primary={
-            <Typography variant="h6" mr={3} noWrap>
+            <Typography mr={3} noWrap variant="h6">
               {listItemTextProps.primary}
             </Typography>
           }

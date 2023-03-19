@@ -11,15 +11,14 @@ import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
 import MusicLayout from "../../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
-import { getRouterIssueId } from "../../../../../helpers/router";
 import type { userArgs } from "../../../../../helpers/user";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Issue: NextPage = () => {
-  const router = useRouter(),
-    issueId = getRouterIssueId(router),
+  const router = useRouter<"/musics/[id]/issues/[issueId]">(),
+    { issueId } = router.query,
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
     userId = getCurrentUserId(session),
@@ -35,9 +34,7 @@ const Issue: NextPage = () => {
           comments: { where: { unionType: "Issue" }, include: { user: true } },
         },
       },
-      {
-        onError: () => enqueueSnackbar("music.show error"),
-      }
+      { onError: () => enqueueSnackbar("music.show error") }
     );
   if (!music.data || !issue.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
@@ -46,10 +43,10 @@ const Issue: NextPage = () => {
   }>;
   const { title, body, comments } = issueData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
-      <ArticleCard title={title} body={body} />
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
+      <ArticleCard body={body} title={title} />
       {comments.map((comment) => (
-        <CommentCard key={comment.id} data={comment} />
+        <CommentCard data={comment} key={comment.id} />
       ))}
       <CommentForm
         formContainerProps={{

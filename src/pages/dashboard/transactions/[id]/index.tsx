@@ -6,14 +6,11 @@ import { useRouter } from "next/router";
 import MusicListItem from "../../../../components/elements/list/item/music";
 import DashboardLayout from "../../../../components/layouts/dashboard";
 import setLocale from "../../../../helpers/locale";
-import { getRouterId } from "../../../../helpers/router";
 import { trpc } from "../../../../utils/trpc";
 
 const Transaction: NextPage = () => {
-  const router = useRouter(),
-    { data } = trpc.currentUser.findUniqueTransaction.useQuery(
-      getRouterId(router)
-    ),
+  const router = useRouter<"/dashboard/transactions/[id]">(),
+    { data } = trpc.currentUser.findUniqueTransaction.useQuery(router.query.id),
     { data: stripeData } = trpc.stripe.paymentIntent.useQuery(
       data?.stripePaymentIntentId
     );
@@ -25,7 +22,7 @@ const Transaction: NextPage = () => {
       <Typography variant="h5">Data</Typography>
       <Typography>{format(data.createdAt, "yyyy-MM-dd HH:mm:ss")}</Typography>
       <Typography>
-        {data.music ? setLocale(data.music.title, router) : ""}
+        {data.music ? setLocale(data.music.resource.name, router) : ""}
       </Typography>
       {data.music && <MusicListItem data={data.music} />}
       <Typography>amount : {data.amount}</Typography>

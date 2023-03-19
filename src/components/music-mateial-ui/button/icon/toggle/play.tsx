@@ -11,8 +11,8 @@ const PlayButton = (
 ) => (
   <ToggleIconButton
     {...props}
-    onIcon={<PlayArrowIcon />}
     offIcon={<PauseIcon />}
+    onIcon={<PlayArrowIcon />}
   />
 );
 

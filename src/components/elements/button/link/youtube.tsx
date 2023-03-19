@@ -8,10 +8,10 @@ import YoutubeIcon from "../../icon/youtube";
 const YoutubeButton = ({ href }: { href: string }) => (
   <Tooltip title="Youtube">
     <IconButton
-      component={Link}
       color="error"
+      component={Link}
+      href={href}
       target="blank"
-      href={"https://www.youtube.com/channel/" + href}
     >
       <YoutubeIcon />
     </IconButton>

@@ -12,8 +12,8 @@ import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
 import type { MusicListArgsType } from "../../../../helpers/music";
-import IndexChip from "../../chip";
 import BookmarkChip from "../../chip/bookmark";
+import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
 
 import ListItem from ".";
@@ -22,36 +22,45 @@ export interface MusicListItemProps extends ListItemProps {
   data: Prisma.MusicGetPayload<MusicListArgsType>;
 }
 const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
-  const router = useRouter();
-  const title = setLocale(data.title, router);
+  const router = useRouter(),
+    title = setLocale(data.resource.name, router),
+    image =
+      data.resource.link?.streaming &&
+      getImage(
+        {
+          ...data.resource.link?.streaming,
+          spotify:
+            data.albums.find(
+              (album) => !!album.resource.link?.streaming?.spotify
+            )?.resource.link?.streaming?.spotify || null,
+        },
+        60
+      );
   return (
     <ListItem
       {...props}
-      route={{
-        pathname: "/musics/[id]",
-        query: { id: data.id },
-      }}
       icon={<MusicNote />}
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <Owner data={data} />
             <BookmarkChip
-              label={data._count.bookmarks}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
             />
-            <Chip label={data.type} size="small" component="span" />
+            <Chip component="span" label={data.type} size="small" />
           </Stack>
         ),
       }}
+      route={{ pathname: "/musics/[id]", query: { id: data.id } }}
     >
-      {data.link?.streaming && (
+      {image && (
         <Image
-          height="60"
           alt={title}
-          src={getImage(data.link.streaming, 60) || ""}
+          height="60"
+          src={image}
           style={{ borderRadius: 3 }}
         />
       )}
@@ -64,7 +73,9 @@ const Owner = ({ data }: Omit<MusicListItemProps, "children">) => {
   const router = useRouter();
   const { type, owner } = getMusicOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;
-  return <IndexChip resource={type} label={owner.name} size="small" />;
+  return (
+    <Chip icon={<ResourceIcon type={type} />} label={owner.name} size="small" />
+  );
 };
 
 export default MusicListItem;

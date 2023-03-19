@@ -1,4 +1,5 @@
-import type { GetRouterArg } from "../../../helpers/router";
+import type { NextRouter } from "next/router";
+
 import { transactionArgs } from "../../../helpers/transaction";
 import type { SessionArg } from "../../../helpers/user";
 import { getCurrentUserId } from "../../../helpers/user";
@@ -7,7 +8,7 @@ export const transactionsPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => ({
   args: {
@@ -19,5 +20,5 @@ export const transactionsPaginationQuery = ({
       ],
     },
   },
-  options: { page: (router.query.page as string) || 0, perPage: 12 },
+  options: { page: (router.query.page as string) || 0 },
 });

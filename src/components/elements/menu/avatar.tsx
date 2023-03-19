@@ -14,8 +14,8 @@ import MenuListItem from "./item";
 import MenuManager from ".";
 
 const AvatarMenuManager = () => {
-  const { data } = useSession();
-  const id = getCurrentUserId(data);
+  const { data } = useSession(),
+    id = getCurrentUserId(data);
   return (
     <MenuManager
       button={(handleOpen) => (
@@ -26,22 +26,18 @@ const AvatarMenuManager = () => {
     >
       {(handleClose) => [
         <MenuListItem
-          key="profile"
           icon={<AccountBox />}
+          key="profile"
           onClick={() => {
             handleClose();
-            id &&
-              router.push({
-                pathname: `/users/[id]`,
-                query: { id },
-              });
+            id && router.push({ pathname: `/users/[id]`, query: { id } });
           }}
         >
           Profile
         </MenuListItem>,
         <MenuListItem
-          key="dashboard"
           icon={<Dashboard />}
+          key="dashboard"
           onClick={() => {
             handleClose();
             router.push(`/dashboard`);

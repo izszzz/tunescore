@@ -4,7 +4,10 @@ import * as R from "remeda";
 export const getImage = (
   streamingLink: StreamingLink | null | undefined,
   size: number,
-  options: { square: boolean } = { square: false }
+  options: {
+    square?: boolean;
+    channel?: boolean;
+  } = { square: false, channel: false }
 ) => {
   if (!streamingLink) return null;
   const images = R.pipe(
@@ -18,10 +21,16 @@ export const getImage = (
   const result = R.pipe(
     images,
     R.map(({ key, size }) => {
-      if (R.equals(key, "itunes")) return shapeImageSize(size, [30, 60, 100]);
-      if (R.equals(key, "youtube") && !options.square)
-        return shapeImageSize(size, [90, 180, 360]);
-      if (R.equals(key, "spotify")) return shapeImageSize(size, [64, 300, 640]);
+      if (R.equals(key, "itunes") && !options.channel)
+        return shapeImageSize(size, [30, 60, 100]);
+      if (R.equals(key, "youtube")) {
+        if (options.channel) return shapeImageSize(size, [88, 240, 800]);
+        if (!options.square) return shapeImageSize(size, [90, 180, 360]);
+      }
+      if (R.equals(key, "spotify")) {
+        if (options.channel) return shapeImageSize(size, [160, 320, 640]);
+        return shapeImageSize(size, [64, 300, 640]);
+      }
     }),
     R.flatten(),
     R.compact,

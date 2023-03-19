@@ -3,9 +3,10 @@ import React from "react";
 import type { StreamingLink } from "@prisma/client";
 
 import { trpc } from "../../../../../../../utils/trpc";
-import MusicYoutubeCard from "../../../../../card/music/youtube";
+import MusicYoutubeSquareCard from "../../../../../card/square/youtube/music";
+import MusicYoutubeCard from "../../../../../card/youtube/music";
 import YoutubeSelectForm from "../youtube";
-import type { SearchResult, Video } from "../youtube";
+import type { SearchResult } from "../youtube";
 
 interface MusicYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
@@ -24,19 +25,17 @@ const MusicYoutubeSelectForm = ({
     streamingLink?.youtube?.id
   );
   return (
-    <YoutubeSelectForm<Video>
+    <YoutubeSelectForm
       {...props}
+      largeCard={(value) =>
+        value && <MusicYoutubeCard data={value} onClick={onRemove} />
+      }
+      lookup={data?.items?.[0]}
+      smallCard={(value) => (
+        <MusicYoutubeSquareCard data={value} onClick={onSelect} />
+      )}
       streamingLink={streamingLink}
       type="video"
-      lookup={data?.items?.[0]}
-      largeCard={(value) =>
-        value && (
-          <MusicYoutubeCard size="large" data={value} onClick={onRemove} />
-        )
-      }
-      smallCard={(value) => (
-        <MusicYoutubeCard size="small" data={value} onClick={onSelect} />
-      )}
     />
   );
 };

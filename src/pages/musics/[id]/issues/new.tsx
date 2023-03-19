@@ -19,8 +19,7 @@ import { useSnackbar } from "notistack";
 
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getRouterId } from "../../../../helpers/router";
-import { getCurrentUserId } from "../../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
@@ -28,16 +27,14 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
   const formContext = useForm<Issue>(),
     { enqueueSnackbar } = useSnackbar(),
-    router = useRouter(),
+    router = useRouter<"/musics/[id]">(),
     { data: session, status } = useSession(),
-    id = getRouterId(router),
+    { id } = router.query,
     { show } = useModal("auth-dialog"),
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     create = trpc.issue.createOneIssue.useMutation({
       onSuccess: () =>
@@ -50,7 +47,7 @@ const Issues: NextPage = () => {
       },
     }),
     handleSubmit = (data: Issue) => {
-      if (status === "authenticated")
+      if (isAuth(status))
         create.mutate({
           data: {
             ...data,
@@ -63,16 +60,16 @@ const Issues: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
-      <FormContainer onSuccess={handleSubmit} formContext={formContext}>
-        <TextFieldElement name="title" margin="dense" fullWidth />
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
+      <FormContainer formContext={formContext} onSuccess={handleSubmit}>
+        <TextFieldElement fullWidth margin="dense" name="title" />
         <Controller
           name="body"
           render={({ field }) => <MDEditor {...field} />}
         />
         <LoadingButton
-          type="submit"
           loading={create.isLoading}
+          type="submit"
           variant="contained"
         >
           Submit

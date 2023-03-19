@@ -43,18 +43,18 @@ const PullButton = ({
   if (!isSelf(session, data)) return <></>;
   return match(data)
     .with({ status: "DRAFT" }, () => (
-      <PullOpenButton loading={loading} onClick={onOpen} fullWidth />
+      <PullOpenButton fullWidth loading={loading} onClick={onOpen} />
     ))
     .with({ status: "MERGE" }, () => (
-      <Button variant="outlined" color="secondary" disabled fullWidth>
+      <Button color="secondary" disabled fullWidth variant="outlined">
         MERGED
       </Button>
     ))
     .with({ music: { type: "ORIGINAL" }, status: "OPEN" }, () => (
       <ButtonGroup fullWidth>
         <PullMergeButton
-          loading={loading}
           disabled={conflict || !diff}
+          loading={loading}
           onClick={onMerge}
         />
         <PullCloseButton loading={loading} onClick={onClose} />
@@ -66,9 +66,9 @@ const PullButton = ({
         return (
           <ButtonGroup fullWidth>
             <VoteCreateButton
-              loading={loading}
               conflict={conflict}
               diff={diff}
+              loading={loading}
               onClick={onVote}
             />
             <PullCloseButton loading={loading} onClick={onClose} />
@@ -79,8 +79,8 @@ const PullButton = ({
         return (
           <ButtonGroup fullWidth>
             <PullMergeButton
-              loading={loading}
               disabled={conflict || !diff}
+              loading={loading}
               onClick={onMerge}
             />
             <PullCloseButton loading={loading} onClick={onClose} />
@@ -94,14 +94,14 @@ const PullButton = ({
         !!data.vote?.proponents.length || !!data.vote?.opponents.length;
       return (
         <VoteCard
+          badIconButtonProps={{ disabled: voted, onClick: () => onBad() }}
           data={data}
           goodIconButtonProps={{ disabled: voted, onClick: () => onGood() }}
-          badIconButtonProps={{ disabled: voted, onClick: () => onBad() }}
         />
       );
     })
     .with({ status: "CLOSE" }, () => (
-      <PullDraftButton loading={loading} onClick={onDraft} fullWidth />
+      <PullDraftButton fullWidth loading={loading} onClick={onDraft} />
     ))
     .exhaustive();
 };
@@ -153,8 +153,8 @@ const VoteCreateButton = ({
 }: LoadingButtonProps & { conflict: boolean; diff: boolean }) => (
   <DefaultButton
     color="success"
-    startIcon={<PullStatusIcon status="VOTE" />}
     disabled={conflict || !diff}
+    startIcon={<PullStatusIcon status="VOTE" />}
     {...props}
   >
     {conflict ? "conflict" : !diff ? "no diff" : "vote"}

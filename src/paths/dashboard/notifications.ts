@@ -1,34 +1,37 @@
-import type { GetRouterArg } from "../../helpers/router";
+import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
+
 import type { SessionArg } from "../../helpers/user";
 import { userArgs, getCurrentUserId } from "../../helpers/user";
 
 export type NotificationArgsType = typeof notificationArgs;
 export const notificationArgs = {
-  include: {
-    bookmarked: { include: { music: true } },
-    user: userArgs,
-  },
+  include: { bookmarked: { include: { resource: true } }, user: userArgs },
 };
 export const notificationPaginationQuery = ({
   router,
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter;
   session: SessionArg;
 }) => {
   const id = getCurrentUserId(session);
   return {
-    args: {
+    args: Prisma.validator<Prisma.NotificationFindManyArgs>()({
       ...notificationArgs,
       where: {
         OR: [
-          { bookmarked: { music: { user: { id } } } },
+          {
+            bookmarked: {
+              resource: { unionType: "Music", music: { user: { id } } },
+            },
+          },
           { followed: { follower: { id } } },
           { commented: { issue: { id } } },
           { commented: { pull: { id } } },
         ],
       },
-    },
-    options: { page: (router.query.page as string) || 0, perPage: 12 },
+    }),
+    options: { page: (router.query.page as string) || 0 },
   };
 };

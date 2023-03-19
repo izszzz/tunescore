@@ -7,26 +7,38 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import DeleteAlert from "../../../components/elements/alert/delete";
 import ArtistUpdateAutocomplete from "../../../components/elements/autocomplete/update/artist";
 import TagUpdateAutocomplete from "../../../components/elements/autocomplete/update/tag";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
+import SpotifyArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/spotify";
 import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
-import SingleRowForm from "../../../components/elements/form/single_row";
+import SingleForm from "../../../components/elements/form/single";
 import BandLayout from "../../../components/layouts/show/band";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import {
+  removeItunesMutate,
+  removeSpotifyMutate,
+  removeYoutubeMutate,
+  selectItunesMutate,
+  selectSpotifyMutate,
+  selectYoutubeMutate,
+} from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
 import { redirectToSignIn } from "../../../helpers/user";
 import { bandShowQuery } from "../../../paths/bands/[id]";
+import {
+  removeArtists,
+  removeTags,
+  selectArtists,
+  selectTags,
+} from "../../../paths/bands/[id]/settings";
 import { trpc } from "../../../utils/trpc";
 
 const BandSettings: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/bands/[id]">(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    id = getRouterId(router),
     query = bandShowQuery({ router, session: useSession().data }),
     { data } = trpc.band.findUniqueBand.useQuery(query),
     update = trpc.band.updateOneBand.useMutation({
@@ -37,159 +49,118 @@ const BandSettings: NextPage = () => {
         );
         enqueueSnackbar("band.update success");
       },
-      onError: () => {
-        enqueueSnackbar("band.update error");
-      },
-    }),
-    destroy = trpc.band.deleteOneBand.useMutation({
-      onSuccess: () => {
-        enqueueSnackbar("band.destroy success");
-      },
+      onError: () => enqueueSnackbar("band.update error"),
     });
   if (!data) return <></>;
-  const bandData = data as BandLayoutProps["data"];
+  const bandData = data as BandLayoutProps["data"],
+    {
+      resource: { tagMaps, ...resource },
+    } = bandData;
   return (
-    <BandLayout data={bandData} query={query} activeTab="settings">
-      <SingleRowForm
+    <BandLayout activeTab="settings" data={bandData} query={query}>
+      <SingleForm
         data={bandData}
-        loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ name }) => update.mutate({ ...query, data: { name } }),
+          onSuccess: ({ resource: { name } }) =>
+            update.mutate({
+              ...query,
+              data: { resource: { update: { name } } },
+            }),
         }}
-        textFieldElementProps={{
-          name: "name",
-        }}
+        loading={update.isLoading}
+        textFieldElementProps={{ name: `name.${router.locale}` }}
       />
       <ArtistUpdateAutocomplete
-        value={bandData.artists}
-        loading={update.isLoading}
         label="artists"
+        loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { artists: { connect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...selectArtists(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { artists: { disconnect: { id: details?.option.id } } },
-            }),
+            update.mutate({ ...query, ...removeArtists(details?.option.id) }),
         }}
+        value={bandData.artists}
       />
       <TagUpdateAutocomplete
-        value={bandData.tagMaps.map((tagMap) => tagMap.tag)}
         loading={update.isLoading}
         onChange={{
           onSelect: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({
-              ...query,
-              data: {
-                tagMaps: {
-                  create: {
-                    tag: { connect: { id: details.option.id } },
-                    unionType: "Music",
-                  },
-                },
-              },
-            }),
+            update.mutate({ ...query, ...selectTags(details?.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             details &&
             update.mutate({
               ...query,
-              data: {
-                tagMaps: {
-                  delete: {
-                    unionId_tagId_unionType: {
-                      unionType: "Music",
-                      unionId: id,
-                      tagId: details.option.id,
-                    },
-                  },
-                },
-              },
+              ...removeTags(details.option.id, resource.id),
             }),
         }}
+        value={tagMaps.map((tagMap) => tagMap.tag)}
       />
+
+      <Typography variant="h4">Spotify</Typography>
+      <Divider />
+
+      <SpotifyArtistSelectForm
+        onRemove={() =>
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
+        }
+        onSelect={({ id, images }) =>
+          update.mutate({
+            ...query,
+            ...selectSpotifyMutate({
+              link: resource.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
+          })
+        }
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
+      />
+      <Typography variant="h4">iTunes</Typography>
+      <Divider />
+
       <ItunesArtistSelectForm
-        term={setLocale(data.name, router)}
-        streamingLink={data.link?.streaming}
+        onRemove={() =>
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+        }
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  itunes: {
-                    id: convertAffiliateLink(value.artistLinkUrl).toString(),
-                  },
-                },
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.artistLinkUrl).toString(),
+              images: [],
+            }),
           })
         }
-        onRemove={() =>
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
-              },
-            },
-          })
-        }
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
       />
 
       <Typography variant="h4">Youtube</Typography>
       <Divider />
 
       <ChannelYoutubeSelectForm
-        term={setLocale(data.name, router)}
-        streamingLink={data.link?.streaming}
-        onSelect={(value) =>
-          value?.id &&
-          data.link &&
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link.streaming,
-                  youtube: {
-                    id: value.id.channelId,
-                    image: {
-                      size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
-                        medium: value.snippet?.thumbnails?.medium?.url,
-                        large: value.snippet?.thumbnails?.high?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          })
-        }
         onRemove={() =>
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+        }
+        onSelect={(value) =>
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, youtube: undefined },
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value?.id?.channelId,
+              images: [
+                value?.snippet?.thumbnails?.standard?.url,
+                value?.snippet?.thumbnails?.medium?.url,
+                value?.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
-      />
-
-      <DeleteAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
+        streamingLink={resource.link?.streaming}
+        term={setLocale(resource.name, router)}
       />
     </BandLayout>
   );

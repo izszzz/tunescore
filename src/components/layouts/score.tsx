@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useToggle } from "react-use";
 
 import type { AlphaTabApi, model } from "@coderline/alphatab";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,6 +10,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import { isNonEmpty } from "ts-array-length";
+import { useToggle } from "usehooks-ts";
 
 import ScoreHeader from "../elements/header/score";
 import VolumeSliderInput from "../music-mateial-ui/input/slider/volume";
@@ -63,6 +63,7 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     });
   };
   useEffect(() => {
+    if (apiRef.current) return;
     const settings = {
       // file: "https://www.alphatab.net/files/canon.gp",
       player: {
@@ -72,12 +73,11 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
         // scrollElement: wrapper.querySelector('.at-viewport') // this is the element to scroll during playback
       },
     };
-    if (mainRef.current) {
+    if (mainRef.current)
       apiRef.current = new window.alphaTab.AlphaTabApi(
         mainRef.current,
         settings
       );
-    }
     apiRef.current?.scoreLoaded.on((score) => {
       setTracks(score.tracks);
     });
@@ -92,9 +92,8 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     apiRef.current?.tex(value);
   }, [value]);
   return (
-    <Box width="100%" sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} width="100%">
       <Drawer
-        variant="persistent"
         anchor="left"
         open={open}
         sx={{
@@ -105,15 +104,16 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
             boxSizing: "border-box",
           },
         }}
+        variant="persistent"
       >
-        <List sx={{ width: "100%" }} disablePadding>
+        <List disablePadding sx={{ width: "100%" }}>
           {tracks.map((track, index) => (
             <Track
-              track={track}
               activeTracks={activeTracks}
               apiRef={apiRef}
               key={index}
               onClick={handleTrackClick}
+              track={track}
             />
           ))}
         </List>
@@ -166,9 +166,9 @@ const Track = ({ apiRef, track, activeTracks, onClick }: TrackProps) => {
         secondary={
           <VolumeSliderInput
             muted={muted}
-            volume={masterVolume}
             onMute={handleMute}
             onVolume={handleVolume}
+            volume={masterVolume}
           />
         }
       />

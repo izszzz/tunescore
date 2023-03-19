@@ -20,7 +20,7 @@ import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Pull: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
     userId = getCurrentUserId(session),
@@ -31,18 +31,18 @@ const Pull: NextPage = () => {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
-      onError: () => enqueueSnackbar("music.show error"),
+      onError: () => enqueueSnackbar("pull.show error"),
     });
   if (!music.data || !pull.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as PullLayoutProps["data"];
-  const { id, title, body, comments } = pullData;
+  const musicData = music.data as MusicLayoutProps["data"],
+    pullData = pull.data as PullLayoutProps["data"],
+    { id, title, body, comments } = pullData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout query={pullQuery} data={pullData} activeTab="conversation">
-        <ArticleCard title={title} body={body} />
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
+      <PullLayout activeTab="conversation" data={pullData} query={pullQuery}>
+        <ArticleCard body={body} title={title} />
         {comments.map((comment) => (
-          <CommentCard key={comment.id} data={comment} />
+          <CommentCard data={comment} key={comment.id} />
         ))}
         <CommentForm
           formContainerProps={{

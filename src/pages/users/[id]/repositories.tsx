@@ -13,7 +13,7 @@ import { userRepositoriesQuery } from "../../../paths/users/[id]/repositories";
 import { trpc } from "../../../utils/trpc";
 
 const User: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/users/[id]">(),
     { data: session } = useSession(),
     search = trpc.search.music.useMutation(),
     query = userShowQuery({ session, router }),
@@ -24,24 +24,23 @@ const User: NextPage = () => {
   if (!data || !musicData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="repositories">
+    <UserLayout activeTab="repositories" data={userData} query={query}>
       <IndexLayout
         meta={musicData.meta}
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
-          getOptionLabel: (option) => setLocale(option.title, router),
-          onInputChange: (_e, inputValue) => {
+          getOptionLabel: ({ resource: { name } }) => setLocale(name, router),
+          onInputChange: (_e, v) =>
             search.mutate({
               where: {
-                title: {
-                  is: { [router.locale as string]: { contains: inputValue } },
+                resource: {
+                  name: { is: { [router.locale]: { contains: v } } },
                 },
                 user: { id: getCurrentUserId(session) },
               },
               take: 10,
-            });
-          },
+            }),
         }}
       >
         <MusicLists data={musicData.data} />

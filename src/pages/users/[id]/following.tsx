@@ -8,14 +8,13 @@ import UserLists from "../../../components/elements/list/user";
 import IndexLayout from "../../../components/layouts/index";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
-import { getRouterId } from "../../../helpers/router";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { followingPath } from "../../../paths/users/[id]/following";
 import { trpc } from "../../../utils/trpc";
 
 const UserFollowers: NextPage = () => {
-  const router = useRouter(),
-    id = getRouterId(router),
+  const router = useRouter<"/users/[id]">(),
+    { id } = router.query,
     { data: session } = useSession(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query),
@@ -26,7 +25,7 @@ const UserFollowers: NextPage = () => {
   if (!data || !followData) return <></>;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
-    <UserLayout query={query} data={userData} activeTab="">
+    <UserLayout activeTab="" data={userData} query={query}>
       <IndexLayout
         meta={followData.meta}
         searchAutocompleteProps={{
@@ -34,12 +33,9 @@ const UserFollowers: NextPage = () => {
           loading: search.isLoading,
           getOptionLabel: (option) => option.name || "",
           textFieldProps: {
-            onChange: (e) =>
+            onChange: ({ currentTarget: { value: v } }) =>
               search.mutate({
-                where: {
-                  followingId: id,
-                  follower: { name: { contains: e.currentTarget.value } },
-                },
+                where: { followingId: id, follower: { name: { contains: v } } },
                 take: 10,
               }),
           },

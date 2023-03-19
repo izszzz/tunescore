@@ -65,7 +65,7 @@ function UpdateAutocomplete<
         DisableClearable,
         FreeSolo
       >({
-        onClear: () => onClear && onClear(),
+        onClear,
         onSelect: (_e, _v, _r, details) =>
           onSelect && onSelect(_e, _v, _r, details),
         onRemove: (_e, _v, _r, details) =>

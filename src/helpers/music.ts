@@ -3,18 +3,21 @@ import type { NextRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
-import { bookmarkArgs } from "./bookmark";
 import setLocale from "./locale";
 import { participatedArtistArgs } from "./participation";
+import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 import { userArgs } from "./user";
 
 type Data = Prisma.MusicGetPayload<{
   include: {
-    band: true;
+    band: { include: { resource: true } };
     user: typeof userArgs;
     participations: {
-      include: { artist: true; roleMap: { include: { role: true } } };
+      include: {
+        artist: { include: { resource: true } };
+        roleMap: { include: { role: true } };
+      };
     };
   };
 }>;
@@ -26,7 +29,7 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
     )
     .with(
       { type: "COPY", band: P.select(P.not(P.nullish)) },
-      ({ id, name }) => ({
+      ({ id, resource: { name } }) => ({
         type: "BAND" as const,
         owner: { id, name: setLocale(name, router) },
       })
@@ -42,7 +45,7 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
               type: "ARTIST" as const,
               owner: {
                 id: participations[0].artist.id,
-                name: setLocale(participations[0].artist.name, router),
+                name: setLocale(participations[0].artist.resource.name, router),
               },
             }
           : { type: "ARTIST" as const, owner: null }
@@ -54,9 +57,9 @@ export const musicListArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {
       participations: participatedArtistArgs(session),
-      bookmarks: bookmarkArgs({ type: "Music", session }),
-      band: true,
+      albums: { include: { resource: true } },
+      band: { include: { resource: true } },
+      resource: resourceArgs(session),
       user: userArgs,
-      _count: { select: { bookmarks: true } },
     },
   });

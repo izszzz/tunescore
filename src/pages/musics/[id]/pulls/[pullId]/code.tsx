@@ -15,30 +15,26 @@ import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Code: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     query = musicShowQuery({ router, session: useSession().data }),
     pullQuery = pullShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     });
   if (!music.data || !pull.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
-  const pullData = pull.data as PullLayoutProps["data"];
+  const musicData = music.data as MusicLayoutProps["data"],
+    pullData = pull.data as PullLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
-      <PullLayout query={pullQuery} data={pullData} activeTab="code">
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
+      <PullLayout activeTab="code" data={pullData} query={pullQuery}>
         <ReactDiffViewer
-          oldValue={pullData.score.original}
           newValue={pullData.score.changed}
+          oldValue={pullData.score.original}
         />
       </PullLayout>
     </MusicLayout>

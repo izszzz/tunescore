@@ -30,11 +30,11 @@ const EditorHeader = ({
           <ArrowBackIosIcon />
         </IconButton>
         {conflict && (
-          <Button variant="outlined" onClick={onResolve}>
+          <Button onClick={onResolve} variant="outlined">
             Resolve Conflict
           </Button>
         )}
-        <Button variant="outlined" endIcon={<CloudDoneIcon />} onClick={onSave}>
+        <Button endIcon={<CloudDoneIcon />} onClick={onSave} variant="outlined">
           Save
         </Button>
       </Header>

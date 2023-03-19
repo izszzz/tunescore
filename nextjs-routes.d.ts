@@ -6,9 +6,9 @@
 // prettier-ignore
 declare module "nextjs-routes" {
   export type Route =
+    | StaticRoute<"/about">
     | DynamicRoute<"/albums/[id]", { "id": string }>
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
-    | StaticRoute<"/albums">
     | StaticRoute<"/albums/new">
     | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
@@ -16,12 +16,10 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/api/trpc/[trpc]", { "trpc": string }>
     | DynamicRoute<"/artists/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]/settings", { "id": string }>
-    | StaticRoute<"/artists">
     | StaticRoute<"/artists/new">
     | StaticRoute<"/auth/signin">
     | DynamicRoute<"/bands/[id]", { "id": string }>
     | DynamicRoute<"/bands/[id]/settings", { "id": string }>
-    | StaticRoute<"/bands">
     | StaticRoute<"/bands/new">
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
@@ -45,7 +43,6 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/musics/[id]/score/edit", { "id": string }>
     | DynamicRoute<"/musics/[id]/score", { "id": string }>
     | DynamicRoute<"/musics/[id]/settings", { "id": string }>
-    | StaticRoute<"/musics">
     | StaticRoute<"/musics/new">
     | StaticRoute<"/pay">
     | StaticRoute<"/search">

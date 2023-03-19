@@ -30,20 +30,20 @@ function SearchAutocomplete<
 }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
   type InputChangeParamters = Parameters<NonNullable<typeof onInputChange>>;
   const handleInputChange = (
-    e: InputChangeParamters[0],
-    value: InputChangeParamters[1],
-    reason: InputChangeParamters[2]
-  ) => onInputChange && onInputChange(e, value, reason);
-  const debounced = useDebouncedCallback(handleInputChange, 500);
+      e: InputChangeParamters[0],
+      value: InputChangeParamters[1],
+      reason: InputChangeParamters[2]
+    ) => onInputChange?.(e, value, reason),
+    debounced = useDebouncedCallback(handleInputChange, 500);
   return (
     <Autocomplete
       {...props}
+      fullWidth
       loading={loading || debounced.isPending()}
       onInputChange={debounced}
       renderInput={(params) => (
         <TextField {...params} {...textFieldProps} variant="outlined" />
       )}
-      fullWidth
     />
   );
 }

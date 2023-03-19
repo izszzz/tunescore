@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
 import ScoreEditor from "../../../../components/elements/editor/score";
-import { getRouterId } from "../../../../helpers/router";
 import { trpc } from "../../../../utils/trpc";
 
 const ScoreEdit: NextPage = () => {
-  const router = useRouter();
-  const id = getRouterId(router);
+  const {
+    query: { id },
+  } = useRouter<"/musics/[id]/score">();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = trpc.music.findUniqueMusic.useQuery(
     { where: { id } },
@@ -24,10 +24,7 @@ const ScoreEdit: NextPage = () => {
       }}
       defaultValue={data.score || ""}
       onSave={(value) =>
-        update.mutate({
-          where: { id },
-          data: { score: value },
-        })
+        update.mutate({ where: { id }, data: { score: value } })
       }
     />
   );

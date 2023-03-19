@@ -1,15 +1,19 @@
 import type { Prisma } from "@prisma/client";
 
+import type { LinkType } from "../../../../helpers/link";
+import { getSpotifyLink, getYoutubeLink } from "../../../../helpers/link";
+
 import AppleButton from "./itunes";
 import SpotifyButton from "./spotify";
 import YoutubeButton from "./youtube";
 
-interface LinkProps {
+interface LinkButtonsProps {
   data: Prisma.LinkListGetPayload<{
     include: { streaming: true; account: true };
   }>;
+  type: LinkType;
 }
-const LinkButtons = ({ data }: LinkProps) => {
+const LinkButtons = ({ data, type }: LinkButtonsProps) => {
   if (!data.streaming) return <></>;
   const {
     streaming: { youtube, itunes, spotify },
@@ -18,8 +22,8 @@ const LinkButtons = ({ data }: LinkProps) => {
   return (
     <>
       {itunes?.id && <AppleButton href={itunes.id} />}
-      {spotify?.id && <SpotifyButton href={spotify.id} />}
-      {youtube?.id && <YoutubeButton href={youtube.id} />}
+      {spotify?.id && <SpotifyButton href={getSpotifyLink(type, spotify.id)} />}
+      {youtube?.id && <YoutubeButton href={getYoutubeLink(type, youtube.id)} />}
     </>
   );
 };

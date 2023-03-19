@@ -13,6 +13,7 @@ import type { PaginatedResult } from "prisma-pagination";
 
 import SearchAutocomplete from "../../../components/elements/autocomplete/search";
 import type { SearchAutocompleteProps } from "../../../components/elements/autocomplete/search";
+import { isAuth } from "../../../helpers/user";
 import SingleColumnLayout from "../single_column";
 import type { SingleColumnLayoutProps } from "../single_column";
 
@@ -45,7 +46,7 @@ function IndexLayout<T>({
     }
   };
   const handleClick = () => {
-    if (status === "authenticated") newRoute && router.push(newRoute);
+    if (isAuth(status)) newRoute && router.push(newRoute);
     else show();
   };
   return (
@@ -62,13 +63,13 @@ function IndexLayout<T>({
                 }}
               />
             </Grid>
-            <Grid item xs={1} display="flex" alignItems="stretch">
+            <Grid alignItems="stretch" display="flex" item xs={1}>
               {newRoute && (
                 <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={handleClick}
                   fullWidth
+                  onClick={handleClick}
+                  startIcon={<AddIcon />}
+                  variant="outlined"
                 >
                   New
                 </Button>
@@ -79,10 +80,10 @@ function IndexLayout<T>({
         {children}
         <Box display="flex" justifyContent="center">
           <Pagination
-            page={meta.currentPage}
             count={meta.lastPage}
-            variant="outlined"
             onChange={handleChange}
+            page={meta.currentPage}
+            variant="outlined"
           />
         </Box>
       </Box>

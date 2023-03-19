@@ -22,18 +22,14 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
   const router = useRouter();
   return (
     <ListItem
-      route={{
-        pathname: "/dashboard/transactions/[id]",
-        query: { id: data.id },
-      }}
       icon={<AttachMoney />}
       listItemTextProps={{
         primary: `${data.type} ${
-          data.music ? setLocale(data.music.title, router) : ""
+          data.music ? setLocale(data.music.resource.name, router) : ""
         }`,
         secondary: (
-          <Box display="flex" alignItems="center" component="span">
-            <Typography mr={1} variant="body2" color="text.subprimary">
+          <Box alignItems="center" component="span" display="flex">
+            <Typography color="text.subprimary" mr={1} variant="body2">
               created by {data.user.name}
             </Typography>
             <Avatar
@@ -43,6 +39,10 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
             />
           </Box>
         ),
+      }}
+      route={{
+        pathname: "/dashboard/transactions/[id]",
+        query: { id: data.id },
       }}
     />
   );

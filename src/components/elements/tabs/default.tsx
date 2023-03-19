@@ -8,28 +8,32 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import type { Route } from "nextjs-routes";
 
+import { isAuth } from "../../../helpers/user";
+
 export interface DefaultTabsProps {
   value: string;
-  tabs: { label: string; href: Route; disabled?: boolean }[];
+  tabs: {
+    label: "info" | "settings" | string;
+    pathname: Route["pathname"];
+    disabled?: boolean;
+  }[];
 }
 const DefaultTabs = ({ value, tabs }: DefaultTabsProps) => {
   const router = useRouter(),
     { status } = useSession(),
     { show } = useModal("auth-dialog");
-
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Tabs value={value}>
-        {tabs.map(({ href, ...tab }, i) => (
+        {tabs.map(({ pathname, ...tab }, i) => (
           <Tab
             key={i}
             {...tab}
-            value={tab.label}
             onClick={() => {
-              if (tab.label === "settings" && status === "unauthenticated")
-                return show();
-              router.push(href);
+              if (tab.label === "settings" && !isAuth(status)) return show();
+              router.push({ pathname, query: router.query });
             }}
+            value={tab.label}
           />
         ))}
       </Tabs>

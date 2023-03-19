@@ -1,3 +1,4 @@
+import withMDX from "@next/mdx";
 import removeImports from "next-remove-imports";
 import withRoutes from "nextjs-routes/config";
 
@@ -13,8 +14,22 @@ import { env } from "./src/env/server.mjs";
  * @constraint {{import('next').NextConfig}}
  * @type {import('next-i18next').UserConfig}
  */
+
 function defineNextConfig(config) {
-  return withRoutes()(removeImports()(config));
+  return withRoutes()(
+    withMDX({
+      extension: /\.mdx?$/,
+      options: {
+        // If you use remark-gfm, you'll need to use next.config.mjs
+        // as the package is ESM only
+        // https://github.com/remarkjs/remark-gfm#install
+        remarkPlugins: [],
+        rehypePlugins: [],
+        // If you use `MDXProvider`, uncomment the following line.
+        // providerImportSource: "@mdx-js/react",
+      },
+    })(removeImports()(config))
+  );
 }
 
 export default defineNextConfig({

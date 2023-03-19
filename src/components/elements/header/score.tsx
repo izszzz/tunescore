@@ -1,9 +1,9 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
 import React, { useState } from "react";
-import { useToggle } from "react-use";
 
 import type { AlphaTabApi } from "@coderline/alphatab";
+import { useToggle } from "usehooks-ts";
 
 import PlayButton from "../../music-mateial-ui/button/icon/toggle/play";
 import VolumeSliderInput from "../../music-mateial-ui/input/slider/volume";
@@ -40,7 +40,6 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
   return (
     <Header
       position="fixed"
-      color="primary"
       sx={{
         top: "auto",
         bottom: 0,
@@ -48,12 +47,12 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
       }}
     >
       {children}
-      <PlayButton value={played} onClick={handlePlay} />
+      <PlayButton onClick={handlePlay} value={played} />
       <VolumeSliderInput
         muted={muted}
-        volume={masterVolume}
         onMute={handleMute}
         onVolume={handleVolume}
+        volume={masterVolume}
       />
     </Header>
   );

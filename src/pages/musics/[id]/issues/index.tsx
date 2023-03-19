@@ -7,19 +7,16 @@ import IssueLists from "../../../../components/elements/list/issue";
 import IndexLayout from "../../../../components/layouts/index";
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getRouterId } from "../../../../helpers/router";
 import { userArgs } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar(),
-    router = useRouter(),
-    id = getRouterId(router),
+    router = useRouter<"/musics/[id]">(),
+    { id } = router.query,
     query = musicShowQuery({ router, session: useSession().data }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     { data: issueData } = trpc.pagination.issue.useQuery(
       {
@@ -32,21 +29,15 @@ const Issues: NextPage = () => {
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },
       },
-      {
-        onError: () => {
-          enqueueSnackbar("music.show error");
-        },
-      }
+      { onError: () => enqueueSnackbar("music.show error") }
     ),
     search = trpc.search.issue.useMutation({
-      onError: () => {
-        enqueueSnackbar("music.search error");
-      },
+      onError: () => enqueueSnackbar("music.search error"),
     });
   if (!music.data || !issueData) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="issues">
+    <MusicLayout activeTab="issues" data={musicData} query={query}>
       <IndexLayout
         meta={issueData.meta}
         newRoute={{
@@ -58,12 +49,9 @@ const Issues: NextPage = () => {
           loading: search.isLoading,
           getOptionLabel: (option) => option.title,
           textFieldProps: {
-            onChange: (e) =>
+            onChange: ({ currentTarget: { value } }) =>
               search.mutate({
-                where: {
-                  title: { contains: e.currentTarget.value },
-                  music: { id },
-                },
+                where: { title: { contains: value }, music: { id } },
                 take: 10,
               }),
           },

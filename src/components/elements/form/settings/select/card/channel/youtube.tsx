@@ -3,9 +3,10 @@ import React from "react";
 import type { StreamingLink } from "@prisma/client";
 
 import { trpc } from "../../../../../../../utils/trpc";
-import ChannelYoutubeCard from "../../../../../card/channel/youtube";
+import ChannelYoutubeSquareCard from "../../../../../card/square/youtube/channel";
+import ChannelYoutubeCard from "../../../../../card/youtube/channel";
 import YoutubeSelectForm from "../youtube";
-import type { SearchResult, Channel } from "../youtube";
+import type { SearchResult } from "../youtube";
 
 interface ChannelYoutubeSelectFormProps {
   streamingLink: StreamingLink | null | undefined;
@@ -20,22 +21,21 @@ const ChannelYoutubeSelectForm = ({
   onRemove,
   ...props
 }: ChannelYoutubeSelectFormProps) => {
-  const { data } = trpc.youtube.channel.useQuery(streamingLink?.youtube?.id);
-  if (!data) return <>loading</>;
+  const { data } = trpc.youtube.findUniqueChannel.useQuery(
+    streamingLink?.youtube?.id
+  );
   return (
-    <YoutubeSelectForm<Channel>
+    <YoutubeSelectForm
       {...props}
-      type="channel"
-      streamingLink={streamingLink}
-      lookup={data?.items?.[0]}
       largeCard={(value) =>
-        value && (
-          <ChannelYoutubeCard size="large" data={value} onClick={onRemove} />
-        )
+        value && <ChannelYoutubeCard data={value} onClick={onRemove} />
       }
+      lookup={data?.items?.[0]}
       smallCard={(value) => (
-        <ChannelYoutubeCard size="small" data={value} onClick={onSelect} />
+        <ChannelYoutubeSquareCard data={value} onClick={onSelect} />
       )}
+      streamingLink={streamingLink}
+      type="channel"
     />
   );
 };

@@ -1,36 +1,46 @@
 import { Prisma } from "@prisma/client";
+import type { NextRouter } from "next/router";
 
 import { albumListArgs } from "../../../helpers/album";
 import { bandListArgs } from "../../../helpers/band";
-import { bookmarkArgs } from "../../../helpers/bookmark";
 import { participatedArtistArgs } from "../../../helpers/participation";
-import { getRouterId } from "../../../helpers/router";
-import type { GetRouterArg } from "../../../helpers/router";
+import { resourceArgs } from "../../../helpers/resource";
 import type { SessionArg } from "../../../helpers/user";
 import { userWhere, userArgs } from "../../../helpers/user";
 
 import { pullShowArgs } from "./pulls/[pullId]";
 
 export type MusicShowQueryType = ReturnType<typeof musicShowQuery>;
+export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
 export const musicShowQuery = ({
-  router,
+  router: {
+    query: { id },
+  },
   session,
 }: {
-  router: GetRouterArg;
+  router: NextRouter<
+    | "/musics/[id]"
+    | "/musics/[id]/issues/[issueId]"
+    | "/musics/[id]/pulls/[pullId]"
+  >;
   session: SessionArg;
 }) =>
   Prisma.validator<Prisma.MusicFindUniqueArgs>()({
-    where: { id: getRouterId(router) },
+    where: { id },
     ...musicShowArgs(session),
   });
-
-export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
 const musicShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {
       user: userArgs,
       band: bandListArgs(session),
-      albums: albumListArgs(session),
+      albums: {
+        where: {
+          resource: { link: { isNot: { streaming: { spotify: null } } } },
+        },
+        ...albumListArgs(session),
+        take: 1,
+      },
       participations: participatedArtistArgs(session),
       pulls: {
         ...pullShowArgs(session),
@@ -41,7 +51,11 @@ const musicShowArgs = (session: SessionArg) =>
         where: { type: "PURCHASE" as const, user: userWhere(session) },
       },
       carts: { where: { user: userWhere(session) } },
-      bookmarks: bookmarkArgs({ type: "Music", session }),
-      tagMaps: { include: { tag: true } },
+      resource: {
+        include: {
+          ...resourceArgs(session).include,
+          tagMaps: { include: { tag: true } },
+        },
+      },
     },
   });

@@ -43,26 +43,26 @@ const CreditStripeForm = () => {
     <Box my={3}>
       <Grid container my={3} spacing={3}>
         {paymentMethods.map((paymentMethod) => (
-          <Grid key={paymentMethod.id} item xs={6}>
+          <Grid item key={paymentMethod.id} xs={6}>
             <CreditCard data={paymentMethod} />
           </Grid>
         ))}
       </Grid>
       {createSetupIntent.data?.client_secret ? (
         <Elements
-          stripe={stripePromise}
           options={{
             clientSecret: createSetupIntent.data.client_secret,
           }}
+          stripe={stripePromise}
         >
           <PaymentStripeForm />
         </Elements>
       ) : (
         <Button
-          variant="contained"
-          onClick={() => createSetupIntent.mutate()}
-          fullWidth
           disableElevation
+          fullWidth
+          onClick={() => createSetupIntent.mutate()}
+          variant="contained"
         >
           Add Credit Card
         </Button>

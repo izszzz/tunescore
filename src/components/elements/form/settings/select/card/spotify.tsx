@@ -1,42 +1,48 @@
 import React from "react";
 
 import type { StreamingLink } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
-import { trpc } from "../../../../../../utils/trpc";
+import SpotifyButton from "../../../../button/providers/spotify";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
 
-interface SpotifySelectFormProps<T>
+interface SpotifySelectFormProps<Value, Options>
   extends Pick<
-    CardSelectFormProps<T, SpotifyApi.PagingObject<T>["items"]>,
+    CardSelectFormProps<Value, SpotifyApi.PagingObject<Options>["items"]>,
     "largeCard" | "smallCard"
   > {
   streamingLink: StreamingLink | null | undefined;
-  term: string;
-  lookup: T | undefined;
+  lookup: Value | null | undefined;
+  search: Options[];
 }
-function SpotifySelectForm<T extends SpotifyApi.TrackObjectFull>({
+function SpotifySelectForm<
+  Value extends
+    | SpotifyApi.SingleTrackResponse
+    | SpotifyApi.SingleArtistResponse
+    | SpotifyApi.SingleAlbumResponse,
+  Options extends
+    | SpotifyApi.TrackObjectFull
+    | SpotifyApi.ArtistObjectFull
+    | SpotifyApi.AlbumObjectFull
+>({
   streamingLink,
-  term,
+  lookup,
+  search,
   largeCard,
   smallCard,
-  lookup,
-}: SpotifySelectFormProps<T>) {
-  const { data } = trpc.spotify.searchTracks.useQuery(term);
+}: SpotifySelectFormProps<Value, Options>) {
+  const { data: session } = useSession();
+  if (!session?.user?.providers.includes("spotify")) return <SpotifyButton />;
   return (
-    <CardSelectForm<T, SpotifyApi.PagingObject<T>["items"]>
+    <CardSelectForm<Value, Options[]>
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
+      largeCard={largeCard}
       link={streamingLink?.spotify}
       lookup={lookup}
-      search={data?.items as T[]}
-      largeCard={largeCard}
+      search={search}
       smallCard={smallCard}
-      gridProps={{
-        item: true,
-        xs: 6,
-        sm: 4,
-        md: 2,
-      }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

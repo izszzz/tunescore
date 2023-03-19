@@ -22,34 +22,34 @@ export interface AlbumListItemProps extends ListItemProps {
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const router = useRouter();
-  const title = setLocale(data.title, router);
+  const title = setLocale(data.resource.name, router);
   return (
     <ListItem
-      route={{
-        pathname: "/albums/[id]",
-        query: { id: data.id },
-      }}
       icon={<Album />}
       listItemTextProps={{
         primary: title,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <BookmarkChip
-              label={data._count.bookmarks}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
             />
             <MusicChip label={data._count.musics} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
           </Stack>
         ),
       }}
+      route={{
+        pathname: "/albums/[id]",
+        query: { id: data.id },
+      }}
     >
-      {data.link?.streaming && (
+      {data.resource.link?.streaming && (
         <Image
-          height="60"
           alt={title}
-          src={getImage(data.link.streaming, 60) || ""}
+          height="60"
+          src={getImage(data.resource.link.streaming, 60) || ""}
           style={{ borderRadius: 3 }}
         />
       )}

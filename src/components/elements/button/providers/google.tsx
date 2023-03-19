@@ -7,9 +7,9 @@ import GoogleIcon from "../../icon/google";
 const GoogleButton = (props: ButtonProps) => (
   <Button
     {...props}
-    variant="outlined"
-    startIcon={<GoogleIcon />}
     onClick={async () => await signIn("google")}
+    startIcon={<GoogleIcon />}
+    variant="outlined"
   >
     Login with Google
   </Button>

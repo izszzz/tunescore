@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
+import MusicNote from "@mui/icons-material/MusicNote";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
@@ -17,15 +18,13 @@ import { match } from "ts-pattern";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicOwner } from "../../../helpers/music";
-import { getRouterId } from "../../../helpers/router";
-import { getCurrentUserId } from "../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
   MusicShowQueryType,
 } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
-import ResourceIconButton from "../../elements/button/icon/resource";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
@@ -45,102 +44,102 @@ const MusicLayout = ({
   activeTab,
   children,
 }: MusicLayoutProps) => {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  const { show } = useModal("auth-dialog");
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const id = getRouterId(router);
-  const update = trpc.music.updateOneMusic.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData(
-        getQueryKey(trpc.music.findUniqueMusic, query, "query"),
-        data
-      );
-      enqueueSnackbar("music.update success");
-    },
-    onError: () => enqueueSnackbar("music.update error"),
-  });
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      { label: "info", href: { pathname: "/musics/[id]", query: { id } } },
-      {
-        label: "issues",
-        href: { pathname: "/musics/[id]/issues", query: { id } },
+  const router = useRouter<"/musics/[id]">(),
+    { data: session, status } = useSession(),
+    { show } = useModal("auth-dialog"),
+    queryClient = useQueryClient(),
+    { enqueueSnackbar } = useSnackbar(),
+    update = trpc.music.updateOneMusic.useMutation({
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          data
+        );
+        enqueueSnackbar("music.update success");
       },
-      {
-        label: "pullrequests",
-        href: { pathname: "/musics/[id]/pulls", query: { id } },
-      },
-      {
-        label: "settings",
-        href: { pathname: "/musics/[id]/settings", query: { id } },
-      },
-    ],
-    [id]
-  );
+      onError: () => enqueueSnackbar("music.update error"),
+    }),
+    { id } = router.query,
+    { type, albums, resource } = data,
+    { bookmarks } = resource,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/musics/[id]" },
+      { label: "issues", pathname: "/musics/[id]/issues" },
+      { label: "pullrequests", pathname: "/musics/[id]/pulls" },
+      { label: "settings", pathname: "/musics/[id]/settings" },
+    ];
 
   return (
     <DefaultShowLayout
       activeTab={activeTab}
-      tabs={tabs}
-      title={
-        <>
-          <ResourceIconButton
-            resource="MUSIC"
-            onClick={() => router.push("/musics")}
-          />
-          <MusicTitle data={data} />
-          <Box ml={3}>
-            <Chip label={data.type} size="small" />
-          </Box>
-          {data.link?.streaming && (
-            <Box display="flex" justifyContent="center" pl={3}>
-              <Image
-                style={{ borderRadius: 5 }}
-                height="80"
-                alt={setLocale(data.title, router)}
-                src={getImage(data.link?.streaming, 80) || ""}
-              />
-            </Box>
-          )}
-        </>
-      }
-      tagMaps={data.tagMaps}
-      reportButtonProps={{ unionType: "Music", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
-          if (status === "authenticated")
+          if (isAuth(status))
             update.mutate({
               ...query,
               data: {
-                bookmarks: isNonEmpty(data.bookmarks)
-                  ? { delete: { id: data.bookmarks[0].id } }
-                  : {
-                      create: {
-                        unionType: "Music",
-                        user: { connect: { id: getCurrentUserId(session) } },
-                        ...(data.type === "ORIGINAL" && data.user
-                          ? {
-                              notifications: {
-                                create: {
-                                  unionType: "Bookmark",
-                                  user: { connect: { id } },
-                                },
-                              },
-                            }
-                          : {}),
-                      },
-                    },
+                resource: {
+                  update: {
+                    bookmarks: isNonEmpty(bookmarks)
+                      ? { delete: { id: bookmarks[0].id } }
+                      : {
+                          create: {
+                            user: {
+                              connect: { id: getCurrentUserId(session) },
+                            },
+                            ...(data.type === "ORIGINAL" && data.user
+                              ? {
+                                  notifications: {
+                                    create: {
+                                      unionType: "Bookmark",
+                                      user: { connect: { id } },
+                                    },
+                                  },
+                                }
+                              : {}),
+                          },
+                        },
+                  },
+                },
               },
             });
           else show();
         },
       }}
+      icon={<MusicNote />}
+      resource={resource}
+      tabs={tabs}
+      title={
+        <>
+          <MusicTitle data={data} />
+          <Box ml={3}>
+            <Chip label={type} size="small" />
+          </Box>
+          {resource.link?.streaming && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              <Image
+                alt={setLocale(resource.name, router)}
+                height="80"
+                src={
+                  getImage(
+                    {
+                      ...resource.link?.streaming,
+                      spotify:
+                        albums[0]?.resource.link?.streaming?.spotify ?? null,
+                    },
+                    80
+                  ) || ""
+                }
+                style={{ borderRadius: 5 }}
+              />
+            </Box>
+          )}
+        </>
+      }
+      type="Music"
     >
-      {data.title[router.locale as keyof Locale] === null && <LocaleAlert />}
+      {resource.name[router.locale as keyof Locale] === null && <LocaleAlert />}
       {children}
     </DefaultShowLayout>
   );
@@ -153,7 +152,7 @@ const MusicTitle = ({ data }: MusicTitleProps) => {
   const router = useRouter();
   return (
     <Typography variant="h5">
-      <Owner data={data} /> {setLocale(data.title, router)}
+      <Owner data={data} /> {setLocale(data.resource.name, router)}
     </Typography>
   );
 };

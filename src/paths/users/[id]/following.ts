@@ -1,11 +1,17 @@
-import { followArgs } from "../../../helpers/follow";
-import { getRouterId } from "../../../helpers/router";
-import type { GetRouterArg } from "../../../helpers/router";
+import type { NextRouter } from "next/router";
 
-export const followingPath = ({ router }: { router: GetRouterArg }) => ({
+import { followArgs } from "../../../helpers/follow";
+
+export const followingPath = ({
+  router: {
+    query: { id },
+  },
+}: {
+  router: NextRouter<"/users/[id]">;
+}) => ({
   args: {
-    where: { followingId: getRouterId(router) },
+    where: { followingId: id },
     ...followArgs,
   },
-  options: { page: 0, perPage: 12 },
+  options: { page: 0 },
 });

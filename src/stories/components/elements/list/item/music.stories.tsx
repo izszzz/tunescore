@@ -14,45 +14,57 @@ const Template: ComponentStory<typeof MusicListItem> = (args) => (
 export const Original = Template.bind({});
 Original.args = {
   data: {
+    isrc: null,
     id: "1",
     type: "ORIGINAL",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
+    lyric: "",
     score: "",
     price: 0,
-    title: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
-    link: null,
-    _count: {
-      bookmarks: 2,
+    resource: {
+      id: "",
+      name: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
+      link: null,
+      unionType: "Music",
+      bookmarks: [],
+      _count: { bookmarks: 3 },
     },
+    resourceId: "",
     userId: "",
     bandId: "",
     user: null,
     participations: [],
     band: null,
-    bookmarks: [],
     albumIDs: [],
+    albums: [],
   },
 };
 
 export const Copy = Template.bind({});
 Copy.args = {
   data: {
+    isrc: null,
     id: "1",
     type: "COPY",
-    visibility: "PUBLIC",
+    visibillity: "PUBLIC",
+    lyric: "",
     score: "",
     price: 0,
-    title: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
-    link: null,
-    _count: {
-      bookmarks: 2,
+    resource: {
+      id: "",
+      name: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
+      link: null,
+      unionType: "Music",
+      bookmarks: [],
+      _count: { bookmarks: 3 },
     },
+    resourceId: "",
     userId: "",
     bandId: "",
     user: null,
     participations: [],
     band: null,
-    bookmarks: [],
     albumIDs: [],
+    albums: [],
   },
 };

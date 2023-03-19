@@ -9,20 +9,15 @@ import * as Diff3 from "node-diff3";
 import { useSnackbar } from "notistack";
 
 import ScoreEditor from "../../../../../../components/elements/editor/score";
-import { getRouterId, getRouterPullId } from "../../../../../../helpers/router";
 import { trpc } from "../../../../../../utils/trpc";
 
 const PullScoreEdit: NextPage = () => {
   const [conflict, setConflict] = useState(false),
-    router = useRouter(),
-    id = getRouterId(router),
-    pullId = getRouterPullId(router),
+    router = useRouter<"/musics/[id]/pulls/[pullId]/score/edit">(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    query = {
-      where: { id: pullId },
-      include: { music: true },
-    },
+    { id, pullId } = router.query,
+    query = { where: { id: pullId }, include: { music: true } },
     { data } = trpc.pull.findUniquePull.useQuery(query),
     update = trpc.pull.updateOnePull.useMutation({
       onSuccess: () => {
@@ -32,6 +27,7 @@ const PullScoreEdit: NextPage = () => {
         );
         enqueueSnackbar("pull.update success");
       },
+      onError: () => enqueueSnackbar("pull.update error"),
     });
   useEffect(() => {
     if (!data) return;
@@ -89,8 +85,8 @@ const PullScoreEdit: NextPage = () => {
       }}
       conflict={conflict}
       defaultValue={pullData.score.changed}
-      onSave={handleSave}
       onResolve={handleResolve}
+      onSave={handleSave}
     />
   );
 };

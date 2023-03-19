@@ -8,8 +8,8 @@ import { useSnackbar } from "notistack";
 import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
+import Article from "../../../components/elements/article";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
-import LinkButtons from "../../../components/elements/button/link";
 import CartLoadingButton from "../../../components/elements/button/loading/cart";
 import VoteCard from "../../../components/elements/card/vote";
 import AlbumLists from "../../../components/elements/list/album";
@@ -19,13 +19,12 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
-import { getRouterId } from "../../../helpers/router";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Music: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]">(),
     queryClient = useQueryClient(),
     { data: session } = useSession(),
     query = musicShowQuery({ router, session }),
@@ -42,9 +41,10 @@ const Music: NextPage = () => {
       onError: () => enqueueSnackbar("cart.create error"),
     });
   if (!data) return <></>;
-  const musicData = data as MusicLayoutProps["data"];
+  const musicData = data as MusicLayoutProps["data"],
+    { resource } = musicData;
   return (
-    <MusicLayout data={musicData} query={query} activeTab="info">
+    <MusicLayout activeTab="info" data={musicData} query={query}>
       <ActionButton
         data={musicData}
         loading={create.isLoading}
@@ -52,27 +52,27 @@ const Music: NextPage = () => {
           create.mutate({
             data: {
               user: { connect: { id: getCurrentUserId(session) } },
-              music: { connect: { id: getRouterId(router) } },
+              music: { connect: { id: router.query.id } },
             },
           })
         }
       />
 
-      {data.link && <LinkButtons data={data.link} />}
-
-      {data.link?.streaming?.youtube?.id && (
-        <YoutubeAmbient videoId={data.link.streaming.youtube.id} />
+      {resource.link?.streaming?.youtube?.id && (
+        <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />
       )}
 
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
           <VoteCard
+            badIconButtonProps={{ disabled: true }}
             data={pull}
             goodIconButtonProps={{ disabled: true }}
-            badIconButtonProps={{ disabled: true }}
           />
         </Box>
       ))}
+
+      {musicData.lyric && <Article text={musicData.lyric} />}
 
       {musicData.band && <BandLists data={[musicData.band]} />}
       <ParticipationLists data={musicData.participations}>
@@ -102,21 +102,21 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
       () => (
         <CartLoadingButton
           disabled={isNonEmpty(data.carts)}
+          fullWidth
           loading={loading}
           onClick={onAddCart}
-          fullWidth
         />
       )
     )
     .otherwise(({ id, score, user }) => (
       <ScoreButtonGroup
-        watch={{
-          route: { pathname: "/musics/[id]/score", query: { id } },
-          buttonProps: { disabled: !score },
-        }}
         edit={{
           route: { pathname: "/musics/[id]/score/edit", query: { id } },
           hidden: !(data.type === "ORIGINAL" && isSelf(session, { user })),
+        }}
+        watch={{
+          route: { pathname: "/musics/[id]/score", query: { id } },
+          buttonProps: { disabled: !score },
         }}
       />
     ));

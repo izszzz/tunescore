@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Button from "@mui/material/Button";
@@ -7,16 +7,18 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import type { ResourceUnionType } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
 
+import { searchMutate } from "../../../helpers";
 import setLocale from "../../../helpers/locale";
 import { trpc } from "../../../utils/trpc";
-import LocaleAutocomplete from "../autocomplete/locale";
 import SearchAutocomplete from "../autocomplete/search";
+import ResourceToggleGroupButton from "../button/group/toggle/resource";
 import CartIconButton from "../button/icon/cart";
-import ThemeToggleButton from "../button/icon/toggle/theme";
+import SettingsIconButton from "../button/icon/settings";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
@@ -24,75 +26,82 @@ import PlusMenuManager from "../menu/plus";
 import Header from ".";
 
 const DefaultHeader = () => {
-  const session = useSession(),
+  const [type, setType] = useState<ResourceUnionType[]>(["Music"]),
+    session = useSession(),
     router = useRouter(),
     { show } = useModal("auth-dialog"),
+    { show: showSettings } = useModal("settings-dialog"),
     search = trpc.search.music.useMutation(),
     handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter")
         router.replace({
           pathname: "/search",
           query: {
-            type: "music",
+            type,
             page: String(1),
             q: String((e.target as HTMLInputElement).value),
           },
         });
-    };
+    },
+    handleChange = (
+      _e: React.MouseEvent<HTMLElement, MouseEvent>,
+      value: ResourceUnionType[]
+    ) => setType(value);
+  useEffect(() => {
+    if (router.query.type)
+      setType(
+        Array.isArray(router.query.type)
+          ? (router.query.type as ResourceUnionType[])
+          : [router.query.type as ResourceUnionType]
+      );
+  }, [router.query.type]);
   return (
     <>
       <Header>
         <Typography
-          variant="h4"
-          sx={{ flexGrow: 1, cursor: "pointer" }}
           onClick={() => router.push("/")}
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+          variant="h4"
         >
           tunescore
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />
-          <Grid item xs={5} display="flex" alignItems="center">
-            <SearchAutocomplete
+          <Grid alignItems="center" display="flex" item xs={5}>
+            <ResourceToggleGroupButton
+              onChange={handleChange}
               size="small"
-              options={search.data || []}
-              loading={search.isLoading}
-              getOptionLabel={(option) => setLocale(option.title, router)}
-              onInputChange={(_e, inputValue) =>
-                search.mutate({
-                  where: {
-                    title: {
-                      is: {
-                        [router.locale as string]: { contains: inputValue },
-                      },
-                    },
-                  },
-                  take: 10,
-                })
-              }
-              textFieldProps={{
-                onKeyDown: handleKeyDown,
-              }}
+              value={type}
+            />
+            <SearchAutocomplete
               fullWidth
+              getOptionLabel={({ resource: { name } }) =>
+                setLocale(name, router)
+              }
+              loading={search.isLoading}
+              onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+              options={search.data || []}
+              size="small"
+              textFieldProps={{ onKeyDown: handleKeyDown }}
             />
           </Grid>
           <Grid item xs={3} />
           <Grid item xs={3}>
             <Stack
-              direction="row"
-              spacing={2}
               alignItems="center"
+              direction="row"
               justifyContent="right"
+              spacing={2}
             >
-              <LocaleAutocomplete />
-              <ThemeToggleButton />
               <PlusMenuManager />
+              <SettingsIconButton onClick={() => showSettings()} />
               {match(session)
                 .with({ status: "loading" }, () => <CircularProgress />)
                 .with({ status: "unauthenticated" }, () => (
                   <Button
-                    variant="contained"
-                    onClick={() => show()}
                     disableElevation
+                    onClick={() => show()}
+                    variant="contained"
                   >
                     SignIn
                   </Button>

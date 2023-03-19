@@ -23,38 +23,31 @@ export interface BandListItemProps extends ListItemProps {
 }
 
 const BandListItem = ({ data }: BandListItemProps) => {
-  const router = useRouter();
-  const name = setLocale(data.name, router);
+  const router = useRouter(),
+    name = setLocale(data.resource.name, router),
+    image = getImage(data.resource.link?.streaming, 60);
   return (
     <ListItem
-      route={{
-        pathname: "/bands/[id]",
-        query: { id: data.id },
-      }}
       icon={<Group />}
       listItemTextProps={{
         primary: name,
         secondary: (
-          <Stack direction="row" spacing={1} component="span">
+          <Stack component="span" direction="row" spacing={1}>
             <MusicChip label={data._count.musics} size="small" />
             <AlbumChip label={data._count.albums} size="small" />
             <ArtistChip label={data._count.artists} size="small" />
             <BookmarkChip
-              label={data._count.bookmarks}
+              bookmarked={isNonEmpty(data.resource.bookmarks)}
+              label={data.resource._count.bookmarks}
               size="small"
-              bookmarked={isNonEmpty(data.bookmarks)}
             />
           </Stack>
         ),
       }}
+      route={{ pathname: "/bands/[id]", query: { id: data.id } }}
     >
-      {data.link?.streaming && (
-        <Image
-          height="60"
-          alt={name}
-          src={getImage(data.link.streaming, 60) || undefined}
-          style={{ borderRadius: 3 }}
-        />
+      {image && (
+        <Image alt={name} height="60" src={image} style={{ borderRadius: 3 }} />
       )}
     </ListItem>
   );

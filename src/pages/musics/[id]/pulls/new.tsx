@@ -17,24 +17,21 @@ import "@uiw/react-markdown-preview/markdown.css";
 
 import MusicLayout from "../../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
-import { getRouterId } from "../../../../helpers/router";
-import { getCurrentUserId } from "../../../../helpers/user";
+import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
-  const router = useRouter(),
+  const router = useRouter<"/musics/[id]">(),
     { enqueueSnackbar } = useSnackbar(),
     { data: session, status } = useSession(),
     { show } = useModal("auth-dialog"),
-    id = getRouterId(router),
+    { id } = router.query,
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     music = trpc.music.findUniqueMusic.useQuery(query, {
-      onError: () => {
-        enqueueSnackbar("music.show error");
-      },
+      onError: () => enqueueSnackbar("music.show error"),
     }),
     create = trpc.pull.createOnePull.useMutation({
       onSuccess: (data) =>
@@ -45,7 +42,7 @@ const NewPull: NextPage = () => {
       onError: (error) => console.log(error),
     });
   const handleSubmit = (data: Pull) => {
-    if (status === "authenticated")
+    if (isAuth(status))
       create.mutate({
         data: {
           ...data,
@@ -65,19 +62,19 @@ const NewPull: NextPage = () => {
   if (!music.data) return <></>;
   const musicData = music.data as MusicLayoutProps["data"];
   return (
-    <MusicLayout data={musicData} query={query} activeTab="pullrequests">
+    <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
       <FormContainer onSuccess={handleSubmit}>
-        <TextFieldElement name="title" margin="dense" fullWidth />
+        <TextFieldElement fullWidth margin="dense" name="title" />
         <Controller
           name="body"
           render={({ field }) => <MDEditor {...field} />}
         />
         <LoadingButton
-          type="submit"
-          loading={create.isLoading}
-          variant="contained"
-          fullWidth
           disableElevation
+          fullWidth
+          loading={create.isLoading}
+          type="submit"
+          variant="contained"
         >
           Submit
         </LoadingButton>

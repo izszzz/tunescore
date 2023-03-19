@@ -25,13 +25,13 @@ const NotificationMenuList = ({
             {
               unionType: "Bookmark",
               bookmarked: {
-                music: P.select("music", P.not(P.nullish)),
+                resource: P.select("resource", P.not(P.nullish)),
               },
               user: P.select("user", P.not(P.nullish)),
             },
-            ({ music, user }) => (
+            ({ resource: { name }, user }) => (
               <BookmarkMenuListItem>
-                {setLocale(music.title, router)} bookmarked by {user.name}
+                {setLocale(name, router)} bookmarked by {user.name}
               </BookmarkMenuListItem>
             )
           )

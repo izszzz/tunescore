@@ -15,7 +15,7 @@ import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import type { Music } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import axios from "axios";
 import type { GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -28,13 +28,15 @@ import { match, P } from "ts-pattern";
 import Dropzone from "../../components/elements/form/dropzone";
 import NewLayout from "../../components/layouts/new";
 import AlphaTexExporter from "../../helpers/AlphaTexExporter";
-import { getCurrentUserId } from "../../helpers/user";
+import { isAuth, getCurrentUserId } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const NewMusic: NextPage = () => {
   const router = useRouter(),
     [loading, setLoading] = useState(false),
-    formContext = useForm<Music>({ defaultValues: { price: 0 } }),
+    formContext = useForm<
+      Prisma.MusicGetPayload<{ include: { resource: true } }>
+    >({ defaultValues: { price: 0 } }),
     { show } = useModal("auth-dialog"),
     { t } = useTranslation(),
     { data: session, status } = useSession(),
@@ -46,20 +48,20 @@ const NewMusic: NextPage = () => {
     } = formContext,
     type = watch("type"),
     create = trpc.music.createOneMusic.useMutation({
-      onSuccess: () => {
-        router.push("/musics");
-        enqueueSnackbar("music.create success");
-      },
-      onError: () => {
-        enqueueSnackbar("music.create fail");
-      },
+      onSuccess: ({ id }) =>
+        router.push({ pathname: "/musics/[id]", query: { id } }),
+      onError: () => enqueueSnackbar("music.create fail"),
     }),
-    handleSubmit = (data: Music) => {
-      if (status === "authenticated")
+    handleSubmit = ({
+      resource,
+      ...music
+    }: Prisma.MusicGetPayload<{ include: { resource: true } }>) => {
+      if (isAuth(status))
         create.mutate({
           data: {
-            ...data,
-            price: Number(data.price),
+            ...music,
+            resource: { create: { ...resource, unionType: "Music" } },
+            price: Number(music.price),
             user: { connect: { id: getCurrentUserId(session) } },
           },
         });
@@ -113,6 +115,7 @@ const NewMusic: NextPage = () => {
         setValue("score", exporter.ToTex());
       }
     };
+
   return (
     <NewLayout>
       <Box my={3}>
@@ -129,38 +132,38 @@ const NewMusic: NextPage = () => {
                   { id: "ORIGINAL", label: "original" },
                   { id: "COPY", label: "copy" },
                 ]}
-                row
                 required
+                row
               />
             </Box>
             <Box mb={3}>
               <RadioButtonGroup
                 label="visibillity"
-                name="visibility"
+                name="visibillity"
                 options={[
                   { id: "PUBLIC", label: "public" },
                   { id: "PRIVATE", label: "private" },
                 ]}
-                row
                 required
+                row
               />
             </Box>
             <TextFieldElement
-              name={"title." + router.locale}
+              fullWidth
               label="Title"
               margin="dense"
+              name={"resource.name." + router.locale}
               required
-              fullWidth
             />
             <br />
             {type === "ORIGINAL" && (
               <TextFieldElement
-                label="price"
-                name="price"
-                margin="dense"
-                type="number"
-                required
                 fullWidth
+                label="price"
+                margin="dense"
+                name="price"
+                required
+                type="number"
               />
             )}
 
@@ -169,20 +172,20 @@ const NewMusic: NextPage = () => {
             </Alert>
 
             <Dropzone
-              maxFiles={2}
               accept={{
                 "image/*": [".jpg", ".png", ".pdf"],
                 "text/*": [".gp", ".mxl"],
               }}
+              maxFiles={2}
               onDrop={handleDrag}
             />
 
             <LoadingButton
-              type="submit"
-              variant="contained"
+              disableElevation
               disabled={!isDirty || !isValid || create.isLoading || loading}
               fullWidth
-              disableElevation
+              type="submit"
+              variant="contained"
             >
               {t("submit")}
             </LoadingButton>

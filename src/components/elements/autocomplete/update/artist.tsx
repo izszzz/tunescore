@@ -1,16 +1,18 @@
 import React from "react";
 
-import type { Artist } from "@prisma/client";
+import Person from "@mui/icons-material/Person";
+import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
+import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
+type Artist = Prisma.ArtistGetPayload<{ include: { resource: true } }>;
 interface ArtistUpdateAutocomplete
   extends Pick<
     UpdateAutocompleteProps<Artist, true, undefined, undefined>,
@@ -25,31 +27,17 @@ const ArtistUpdateAutocomplete = ({
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const search = trpc.search.artist.useMutation({
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
+    onError: () => enqueueSnackbar("artist.search error"),
   });
   return (
     <UpdateAutocomplete<Artist, true>
-      options={search.data || []}
+      ChipProps={{ icon: <Person /> }}
+      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       loading={search.isLoading}
-      getOptionLabel={(option) => setLocale(option.name, router)}
-      ChipProps={{ icon: <ResourceIcon resource="ARTIST" /> }}
-      onInputChange={(_e, value) =>
-        search.mutate({
-          where: {
-            name: {
-              is: { [router.locale]: { contains: value } },
-            },
-          },
-          take: 10,
-        })
-      }
-      textFieldProps={{
-        label,
-        margin: "dense",
-      }}
       multiple
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+      options={search.data || []}
+      textFieldProps={{ label, margin: "dense" }}
       {...props}
     />
   );

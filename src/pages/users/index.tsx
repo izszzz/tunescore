@@ -16,17 +16,11 @@ const Users: NextPage = () => {
         where: {
           name: { contains: (router.query.q as string) || "" },
         },
-        include: {
-          _count: userCount,
-        },
+        include: { _count: userCount },
       },
-      options: { page: (router.query.page as string) || 0, perPage: 12 },
+      options: { page: (router.query.page as string) || 0 },
     },
-    {
-      onError: () => {
-        enqueueSnackbar("user.index error");
-      },
-    }
+    { onError: () => enqueueSnackbar("user.index error") }
   );
   if (!data) return <></>;
   return (

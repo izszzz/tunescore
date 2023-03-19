@@ -11,13 +11,13 @@ import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Album: NextPage = () => {
-  const router = useRouter();
+  const router = useRouter<"/albums/[id]">();
   const path = albumShowQuery({ router, session: useSession().data });
   const { data } = trpc.album.findUniqueAlbum.useQuery(path);
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"];
   return (
-    <AlbumLayout data={albumData} query={path} activeTab="info">
+    <AlbumLayout activeTab="info" data={albumData} query={path}>
       {albumData.band && <BandLists data={[albumData.band]} />}
 
       <MusicLists data={albumData.musics} />

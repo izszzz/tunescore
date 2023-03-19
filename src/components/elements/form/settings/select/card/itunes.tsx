@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import type { StreamingLink } from "@prisma/client";
-
 import type {
-  ItunesResponse,
-  BaseSearchParams,
   BaseLookupParams,
-  ItunesMusic,
-  ItunesArtist,
+  BaseSearchParams,
   ItunesAlbum,
-  Itunes,
-} from "../../../../../../helpers/itunes";
+  ItunesArtist,
+  ItunesMusic,
+  ItunesResponse,
+} from "@izszzz/itunes-search-api";
+import type { StreamingLink } from "@prisma/client";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -23,8 +21,8 @@ interface ItunesSelectFormProps<
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  search: (params: BaseSearchParams) => ReturnType<typeof Itunes.search<T>>;
-  lookup: (params: BaseLookupParams) => ReturnType<typeof Itunes.lookup<T>>;
+  search: (params: BaseSearchParams) => Promise<ItunesResponse<T>>;
+  lookup: (params: BaseLookupParams) => Promise<ItunesResponse<T>>;
 }
 function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   streamingLink,
@@ -47,17 +45,12 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   }, [lookup, search, streamingLink?.itunes?.id, term]);
   return (
     <CardSelectForm<T, ItunesResponse<T>["results"]>
+      gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
+      largeCard={largeCard}
       link={streamingLink?.itunes}
       lookup={result}
       search={results}
-      largeCard={largeCard}
       smallCard={smallCard}
-      gridProps={{
-        item: true,
-        xs: 6,
-        sm: 4,
-        md: 2,
-      }}
       tablePaginationProps={{
         count: 100,
         rowsPerPage: 12,

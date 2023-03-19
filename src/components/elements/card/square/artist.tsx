@@ -1,56 +1,12 @@
-import React from "react";
+import PersonIcon from "@mui/icons-material/Person";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import type { Prisma } from "@prisma/client";
-import { useRouter } from "next/router";
-import { isNonEmpty } from "ts-array-length";
-
-import type { ArtistListArgsType } from "../../../../helpers/artist";
-import { getImage } from "../../../../helpers/image";
-import setLocale from "../../../../helpers/locale";
-import IndexChip from "../../chip";
-import BookmarkChip from "../../chip/bookmark";
-
+import type { SquareCardProps } from ".";
 import SquareCard from ".";
 
-interface SquareArtistCardProps {
-  data: Prisma.ArtistGetPayload<ArtistListArgsType>;
-}
-const SquareArtistCard = ({ data }: SquareArtistCardProps) => {
-  const router = useRouter();
-  return (
-    <SquareCard
-      resource="ARTIST"
-      size="200px"
-      title={
-        <>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6" noWrap>
-              {setLocale(data.name, router)}
-            </Typography>
-            <Box display="flex" alignItems="center">
-              <BookmarkChip
-                label={data._count.bookmarks}
-                size="small"
-                bookmarked={isNonEmpty(data.bookmarks)}
-              />
-            </Box>
-          </Box>
-          {isNonEmpty(data.bands) && (
-            <IndexChip
-              label={setLocale(data.bands[0].name, router)}
-              resource="BAND"
-            />
-          )}
-        </>
-      }
-      image={getImage(data.link?.streaming, 200, { square: true })}
-      onClick={() =>
-        router.push({ pathname: "/artists/[id]", query: { id: data.id } })
-      }
-    />
-  );
-};
-
-export default SquareArtistCard;
+const ArtistSquareCard = (props: Omit<SquareCardProps, "icon">) => (
+  <SquareCard
+    {...props}
+    icon={<PersonIcon sx={{ fontSize: "60px", color: "grey" }} />}
+  />
+);
+export default ArtistSquareCard;

@@ -22,48 +22,48 @@ const DashboardMenu = ({ active }: DashboardMenuProps) => (
   <MenuList>
     <MenuListItem
       icon={<Home />}
-      selected={active === "home"}
       onClick={() => router.push("/dashboard")}
+      selected={active === "home"}
     >
       Home
     </MenuListItem>
 
     <MenuListItem
       icon={<Book />}
-      selected={active === "library"}
       onClick={() => router.push("/dashboard/library")}
+      selected={active === "library"}
     >
       Library
     </MenuListItem>
 
     <MenuListItem
       icon={<AttachMoney />}
-      selected={active === "transactions"}
       onClick={() => router.push("/dashboard/transactions")}
+      selected={active === "transactions"}
     >
       Transaction
     </MenuListItem>
 
     <MenuListItem
       icon={<CreditCard />}
-      selected={active === "credits"}
       onClick={() => router.push("/dashboard/credits")}
+      selected={active === "credits"}
     >
       Credit Card
     </MenuListItem>
 
     <MenuListItem
       icon={<Notifications />}
-      selected={active === "notifications"}
       onClick={() => router.push("/dashboard/notifications")}
+      selected={active === "notifications"}
     >
       Notifications
     </MenuListItem>
 
     <MenuListItem
       icon={<Settings />}
-      selected={active === "settings"}
       onClick={() => router.push("/dashboard/settings")}
+      selected={active === "settings"}
     >
       Settings
     </MenuListItem>

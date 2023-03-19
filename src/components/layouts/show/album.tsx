@@ -1,24 +1,20 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
-import Typography from "@mui/material/Typography";
+import Album from "@mui/icons-material/Album";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
-import { isNonEmpty } from "ts-array-length";
 
 import { bookmarkMutate } from "../../../helpers/bookmark";
-import setLocale from "../../../helpers/locale";
-import { getRouterId } from "../../../helpers/router";
+import { isAuth } from "../../../helpers/user";
 import type {
   AlbumShowArgsType,
-  albumShowQuery,
+  AlbumShowQueryType,
 } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
-import ResourceIconButton from "../../elements/button/icon/resource";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import DefaultShowLayout from "./default";
@@ -27,20 +23,18 @@ import type { DefaultShowLayoutProps } from "./default";
 export interface AlbumLayoutProps
   extends Pick<DefaultShowLayoutProps, "children"> {
   data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
-  query: ReturnType<typeof albumShowQuery>;
+  query: AlbumShowQueryType;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
-  data,
+  data: { resource },
   query,
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
+  const queryClient = useQueryClient(),
     { show } = useModal("auth-modal"),
-    id = getRouterId(router),
     { data: session, status } = useSession(),
-    queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
     update = trpc.album.updateOneAlbum.useMutation({
       onSuccess: (data) => {
@@ -51,59 +45,30 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         enqueueSnackbar("album.update success");
       },
       onError: () => enqueueSnackbar("album.update error"),
-    });
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "info",
-        href: {
-          pathname: "/albums/[id]",
-          query: { id },
-        },
-      },
-      {
-        label: "settings",
-        href: {
-          pathname: "/albums/[id]/settings",
-          query: { id },
-        },
-      },
-    ],
-    [id]
-  );
+    }),
+    { bookmarks } = resource,
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/albums/[id]" },
+      { label: "settings", pathname: "/albums/[id]/settings" },
+    ];
   return (
     <DefaultShowLayout
       activeTab={activeTab}
-      tabs={tabs}
-      title={
-        <>
-          <ResourceIconButton
-            resource="ALBUM"
-            onClick={() => router.push("/albums")}
-          />
-          <Typography variant="h5">{setLocale(data.title, router)}</Typography>
-        </>
-      }
-      tagMaps={data.tagMaps}
-      reportButtonProps={{ unionType: "Album", id }}
       bookmarkToggleButtonProps={{
-        value: isNonEmpty(data.bookmarks),
         disabled: update.isLoading,
         onClick: () => {
-          if (status === "authenticated")
+          if (isAuth(status))
             update.mutate({
               ...query,
-              data: {
-                bookmarks: bookmarkMutate({
-                  bookmarks: data.bookmarks,
-                  unionType: "Album",
-                  session,
-                }),
-              },
+              ...bookmarkMutate({ bookmarks, session }),
             });
           else show();
         },
       }}
+      icon={<Album />}
+      resource={resource}
+      tabs={tabs}
+      type="Album"
     >
       {children}
     </DefaultShowLayout>

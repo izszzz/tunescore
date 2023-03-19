@@ -7,10 +7,10 @@ import SpotifyIcon from "../../icon/spotify";
 const SpotifyButton = (props: ButtonProps) => (
   <Button
     {...props}
-    variant="outlined"
-    startIcon={<SpotifyIcon />}
-    onClick={async () => signIn("spotify")}
     color="success"
+    onClick={async () => signIn("spotify")}
+    startIcon={<SpotifyIcon />}
+    variant="outlined"
   >
     Login with Spotify
   </Button>

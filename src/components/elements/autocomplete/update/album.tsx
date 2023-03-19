@@ -1,16 +1,18 @@
 import React from "react";
 
-import type { Album } from "@prisma/client";
+import AlbumIcon from "@mui/icons-material/Album";
+import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
+import { searchMutate } from "../../../../helpers";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
-import ResourceIcon from "../../icon/resource";
 
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
+type Album = Prisma.AlbumGetPayload<{ include: { resource: true } }>;
 type AlbumUpdateAutocompleteProps = Pick<
   UpdateAutocompleteProps<Album, true, undefined, undefined>,
   "onChange" | "loading" | "value"
@@ -18,34 +20,20 @@ type AlbumUpdateAutocompleteProps = Pick<
 const AlbumUpdateAutocomplete = ({
   ...props
 }: AlbumUpdateAutocompleteProps) => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.search.album.useMutation({
-    onError: () => {
-      enqueueSnackbar("artist.search error");
-    },
-  });
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    search = trpc.search.album.useMutation({
+      onError: () => enqueueSnackbar("artist.search error"),
+    });
   return (
     <UpdateAutocomplete<Album, true>
-      options={search.data || []}
+      ChipProps={{ icon: <AlbumIcon /> }}
+      getOptionLabel={({ resource: { name } }) => setLocale(name, router)}
       loading={search.isLoading}
-      getOptionLabel={(option) => setLocale(option.title, router)}
-      ChipProps={{ icon: <ResourceIcon resource="ALBUM" /> }}
-      onInputChange={(_e, value) =>
-        search.mutate({
-          where: {
-            title: {
-              is: { [router.locale]: { contains: value } },
-            },
-          },
-          take: 10,
-        })
-      }
-      textFieldProps={{
-        label: "albums",
-        margin: "dense",
-      }}
       multiple
+      onInputChange={(_e, v) => search.mutate(searchMutate(router, v))}
+      options={search.data || []}
+      textFieldProps={{ label: "albums", margin: "dense" }}
       {...props}
     />
   );

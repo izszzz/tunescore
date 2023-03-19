@@ -1,153 +1,186 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import DeleteAlert from "../../../components/elements/alert/delete";
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
+import SpotifyAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/spotify";
 import MusicYoutubeSelectForm from "../../../components/elements/form/settings/select/card/music/youtube";
-import SingleRowForm from "../../../components/elements/form/single_row";
+import SingleForm from "../../../components/elements/form/single";
 import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
+import { clearBandMutate, selectBandMutate } from "../../../helpers";
 import { convertAffiliateLink } from "../../../helpers/itunes";
+import {
+  removeItunesMutate,
+  removeSpotifyMutate,
+  removeYoutubeMutate,
+  selectItunesMutate,
+  selectSpotifyMutate,
+  selectYoutubeMutate,
+} from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
 import { albumShowQuery } from "../../../paths/albums/[id]";
 import { trpc } from "../../../utils/trpc";
 
-const Album: NextPage = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const query = albumShowQuery({ router, session: useSession().data });
-  const { data } = trpc.album.findUniqueAlbum.useQuery(query);
-  const update = trpc.album.updateOneAlbum.useMutation({
-    onSuccess: (data) => {
-      queryClient.setQueryData([["album", "findUniqueAlbum"], query], data);
-    },
-  });
-  const destroy = trpc.album.deleteOneAlbum.useMutation();
+const AlbumSettings: NextPage = () => {
+  const queryClient = useQueryClient(),
+    router = useRouter<"/albums/[id]">(),
+    context = trpc.useContext(),
+    query = albumShowQuery({ router, session: useSession().data }),
+    { data } = trpc.album.findUniqueAlbum.useQuery(query),
+    update = trpc.album.updateOneAlbum.useMutation({
+      onSuccess: (data) =>
+        queryClient.setQueryData(
+          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          data
+        ),
+    });
   if (!data) return <></>;
-  const title = setLocale(data.title, router);
-  const albumData = data as AlbumLayoutProps["data"];
+  const albumData = data as AlbumLayoutProps["data"],
+    { resource } = albumData,
+    title = setLocale(resource.name, router);
   return (
-    <AlbumLayout data={albumData} query={query} activeTab="settings">
-      <SingleRowForm
+    <AlbumLayout activeTab="settings" data={albumData} query={query}>
+      <SingleForm
         data={albumData}
-        loading={update.isLoading}
         formContainerProps={{
-          onSuccess: ({ title }) =>
-            update.mutate({ ...query, data: { title } }),
+          onSuccess: ({ resource: { name } }) =>
+            update.mutate({
+              ...query,
+              data: { resource: { update: { name } } },
+            }),
         }}
-        textFieldElementProps={{
-          name: "title",
-        }}
+        loading={update.isLoading}
+        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
-        value={albumData.band}
         loading={update.isLoading}
         onChange={{
-          onClear: () =>
-            update.mutate({
-              ...query,
-              data: { band: { disconnect: true } },
-            }),
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({
-              ...query,
-              data: { band: { connect: { id: details?.option.id } } },
-            }),
+          onClear: () => update.mutate({ ...query, ...clearBandMutate }),
+          onSelect: (_e, _v, _r, d) =>
+            update.mutate({ ...query, ...selectBandMutate(d?.option.id) }),
         }}
+        value={albumData.band}
       />
-      <ItunesAlbumSelectForm
-        term={title}
-        streamingLink={data.link?.streaming}
-        onSelect={(value) =>
-          value &&
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link?.streaming,
-                  itunes: {
-                    id: convertAffiliateLink(
-                      value.collectionViewUrl
-                    ).toString(),
-                    image: {
-                      size: {
-                        small: value.artworkUrl30,
-                        medium: value.artworkUrl60,
-                        large: value.artworkUrl100,
+
+      <Typography variant="h4">Spotify</Typography>
+      <Divider />
+
+      <SpotifyAlbumSelectForm
+        onRemove={() =>
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
+        }
+        onSelect={async ({ id, images }) => {
+          const spotifyAlbum =
+            await context.client.spotify.findUniqueAlbum.query(id);
+          spotifyAlbum?.tracks.items.map(async (track) => {
+            const music = await context.client.music.findFirstMusic.query({
+              where: {
+                resource: {
+                  link: {
+                    is: {
+                      streaming: {
+                        is: {
+                          spotify: { is: { id: { equals: track.id } } },
+                        },
                       },
                     },
                   },
                 },
               },
-            },
-          })
-        }
+            });
+            if (music) {
+              if (!music.albumIDs.includes(data.id))
+                update.mutate({
+                  ...query,
+                  data: { musics: { connect: { id: music.id } } },
+                });
+            } else {
+              await context.client.music.createOneMusic.mutate({
+                data: {
+                  type: "COPY" as const,
+                  visibillity: "PUBLIC" as const,
+                  resource: {
+                    create: {
+                      name: { ja: track.name, en: track.name },
+                      unionType: "Music",
+                      link: { streaming: { spotify: { id: track.id } } },
+                    },
+                  },
+                  albums: { connect: { id: data.id } },
+                },
+              });
+            }
+          });
+          await update.mutate({
+            ...query,
+            ...selectSpotifyMutate({
+              link: resource.link,
+              id,
+              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+            }),
+          });
+        }}
+        streamingLink={resource.link?.streaming}
+        term={title}
+      />
+
+      <Typography variant="h4">iTunes</Typography>
+      <Divider />
+
+      <ItunesAlbumSelectForm
         onRemove={() =>
+          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+        }
+        onSelect={(value) =>
+          value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, itunes: undefined },
-              },
-            },
+            ...selectItunesMutate({
+              link: resource.link,
+              id: convertAffiliateLink(value.collectionViewUrl).toString(),
+              images: [
+                value.artworkUrl30,
+                value.artworkUrl60,
+                value.artworkUrl100,
+              ],
+            }),
           })
         }
+        streamingLink={resource.link?.streaming}
+        term={title}
       />
 
       <Typography variant="h4">Youtube</Typography>
       <Divider />
 
       <MusicYoutubeSelectForm
-        term={title}
-        streamingLink={data.link?.streaming}
-        onSelect={(value) =>
-          value?.id &&
-          data.link &&
-          update.mutate({
-            ...query,
-            data: {
-              link: {
-                streaming: {
-                  ...data.link.streaming,
-                  youtube: {
-                    id: value.id.videoId,
-                    image: {
-                      size: {
-                        small: value.snippet?.thumbnails?.standard?.url,
-                        medium: value.snippet?.thumbnails?.medium?.url,
-                        large: value.snippet?.thumbnails?.high?.url,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          })
-        }
         onRemove={() =>
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+        }
+        onSelect={(value) =>
+          value &&
           update.mutate({
             ...query,
-            data: {
-              link: {
-                streaming: { ...data.link?.streaming, youtube: undefined },
-              },
-            },
+            ...selectYoutubeMutate({
+              link: resource.link,
+              id: value.id?.videoId,
+              images: [
+                value.snippet?.thumbnails?.standard?.url,
+                value.snippet?.thumbnails?.medium?.url,
+                value.snippet?.thumbnails?.high?.url,
+              ],
+            }),
           })
         }
-      />
-
-      <DeleteAlert
-        loadingButtonProps={{
-          onClick: () => destroy.mutate({ ...query }),
-          loading: destroy.isLoading,
-        }}
+        streamingLink={resource.link?.streaming}
+        term={title}
       />
     </AlbumLayout>
   );
@@ -158,4 +191,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: {}, redirect };
 };
 
-export default Album;
+export default AlbumSettings;

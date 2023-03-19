@@ -27,11 +27,11 @@ const OrderForm = () => {
       <MusicLists data={data} />
       {data.reduce((sum, data) => sum + (data.price || 0), 0)}
       <OrderLoadingButton
-        type="submit"
-        variant="contained"
-        loading={createPaymentIntent.isLoading}
         disableElevation
         fullWidth
+        loading={createPaymentIntent.isLoading}
+        type="submit"
+        variant="contained"
       />
     </FormContainer>
   );

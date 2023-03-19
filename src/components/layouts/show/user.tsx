@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -15,7 +15,6 @@ import { useSnackbar } from "notistack";
 import { isNonEmpty } from "ts-array-length";
 
 import { followMutate } from "../../../helpers/follow";
-import { getRouterId } from "../../../helpers/router";
 import { isSelf } from "../../../helpers/user";
 import type {
   UserShowArgsType,
@@ -41,13 +40,11 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   activeTab,
   children,
 }) => {
-  const router = useRouter(),
+  const router = useRouter<"/users/[id]">(),
+    queryClient = useQueryClient(),
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
-    queryClient = useQueryClient(),
     { show } = useModal("report-dialog"),
-    id = getRouterId(router),
-    followed = isNonEmpty(data.followers),
     update = trpc.user.updateOneUser.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -57,37 +54,30 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         enqueueSnackbar("user.update success");
       },
       onError: () => enqueueSnackbar("user.update error"),
-    });
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      { label: "info", href: { pathname: "/users/[id]", query: { id } } },
-      {
-        label: "bookmarks",
-        href: { pathname: "/users/[id]/bookmarks", query: { id } },
-      },
-      {
-        label: "repositories",
-        href: { pathname: "/users/[id]/repositories", query: { id } },
-      },
-    ],
-    [id]
-  );
+    }),
+    { id } = router.query,
+    followed = isNonEmpty(data.followers),
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "info", pathname: "/users/[id]" },
+      { label: "bookmarks", pathname: "/users/[id]/bookmarks" },
+      { label: "repositories", pathname: "/users/[id]/repositories" },
+    ];
   return (
     <ShowLayout
-      tabs={tabs}
       activeTab={activeTab}
       header={<DefaultHeader />}
+      tabs={tabs}
       title={
         <>
           <Box
-            display="flex"
-            justifyContent="center"
             alignItems="center"
+            display="flex"
             flexDirection="column"
+            justifyContent="center"
           >
             <Avatar
-              sx={{ height: "70px", width: "70px" }}
               src={data.image || ""}
+              sx={{ height: "70px", width: "70px" }}
             />
             <Typography variant="h5">{data.name}</Typography>
           </Box>
@@ -98,13 +88,13 @@ const UserLayout: React.FC<UserLayoutProps> = ({
               />
               <LoadingButton
                 loading={update.isLoading}
-                variant={followed ? "outlined" : "contained"}
                 onClick={() =>
                   update.mutate({
-                    where: { id },
+                    ...query,
                     data: { followers: followMutate({ data, session }) },
                   })
                 }
+                variant={followed ? "outlined" : "contained"}
               >
                 {followed ? "unfollow" : "follow"}
               </LoadingButton>

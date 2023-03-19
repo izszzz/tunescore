@@ -10,10 +10,10 @@ const CartLoadingButton = ({
 }: Omit<LoadingButtonProps, "startIcon">) => (
   <LoadingButton
     {...props}
-    startIcon={<ShoppingCartIcon />}
-    disabled={disabled}
-    variant={disabled ? "outlined" : "contained"}
     disableElevation
+    disabled={disabled}
+    startIcon={<ShoppingCartIcon />}
+    variant={disabled ? "outlined" : "contained"}
   >
     {disabled ? "カートに入っています" : "カートに入れる"}
   </LoadingButton>

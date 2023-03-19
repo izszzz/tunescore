@@ -1,7 +1,8 @@
 import type { StreamingLink } from "@prisma/client";
 
 import { trpc } from "../../../../../../../utils/trpc";
-import MusicSpotifyCard from "../../../../../card/music/spotify";
+import MusicSpotifyCard from "../../../../../card/spotify/music";
+import MusicSpotifySquareCard from "../../../../../card/square/spotify/music";
 import SpotifySelectForm from "../spotify";
 
 interface SpotifyMusicSelectFormProps {
@@ -12,26 +13,25 @@ interface SpotifyMusicSelectFormProps {
 }
 const SpotifyMusicSelectForm = ({
   streamingLink,
+  term,
   onSelect,
   onRemove,
-  ...props
 }: SpotifyMusicSelectFormProps) => {
   const { data } = trpc.spotify.findUniqueTrack.useQuery(
-    streamingLink?.spotify?.id
-  );
+      streamingLink?.spotify?.id
+    ),
+    { data: searchData } = trpc.spotify.searchTracks.useQuery(term);
   return (
-    <SpotifySelectForm<SpotifyApi.SingleTrackResponse>
-      {...props}
-      streamingLink={streamingLink}
-      lookup={data}
+    <SpotifySelectForm
       largeCard={(value) =>
-        value && (
-          <MusicSpotifyCard size="large" data={value} onClick={onRemove} />
-        )
+        value && <MusicSpotifyCard data={value} onClick={onRemove} />
       }
+      lookup={data}
+      search={(searchData?.items as SpotifyApi.TrackObjectFull[]) || []}
       smallCard={(value) => (
-        <MusicSpotifyCard size="small" data={value} onClick={onSelect} />
+        <MusicSpotifySquareCard data={value} onClick={onSelect} />
       )}
+      streamingLink={streamingLink}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -13,7 +13,6 @@ import { useSession } from "next-auth/react";
 import * as Diff3 from "node-diff3";
 import { useSnackbar } from "notistack";
 
-import { getRouterId, getRouterPullId } from "../../../helpers/router";
 import { getCurrentUserId } from "../../../helpers/user";
 import type {
   PullShowArgsType,
@@ -41,12 +40,11 @@ const PullLayout: React.FC<PullLayoutProps> = ({
 }) => {
   const [conflict, setConflict] = useState(false),
     [diff, setDiff] = useState(false),
-    { enqueueSnackbar } = useSnackbar(),
-    router = useRouter(),
-    { data: session } = useSession(),
+    router = useRouter<"/musics/[id]/pulls/[pullId]">(),
     queryClient = useQueryClient(),
-    id = getRouterId(router),
-    pullId = getRouterPullId(router),
+    { enqueueSnackbar } = useSnackbar(),
+    { data: session } = useSession(),
+    { id, pullId } = router.query,
     agenda = trpc.agenda.create.useMutation(),
     update = trpc.pull.updateOnePull.useMutation({
       onSuccess: (data) => {
@@ -68,26 +66,11 @@ const PullLayout: React.FC<PullLayoutProps> = ({
         enqueueSnackbar("pull.create success");
       },
       onError: () => enqueueSnackbar("pull.create error"),
-    });
-  const tabs: DefaultTabsProps["tabs"] = useMemo(
-    () => [
-      {
-        label: "conversation",
-        href: {
-          pathname: "/musics/[id]/pulls/[pullId]",
-          query: { id, pullId },
-        },
-      },
-      {
-        label: "code",
-        href: {
-          pathname: "/musics/[id]/pulls/[pullId]/code",
-          query: { id, pullId },
-        },
-      },
-    ],
-    [id, pullId]
-  );
+    }),
+    tabs: DefaultTabsProps["tabs"] = [
+      { label: "conversation", pathname: "/musics/[id]/pulls/[pullId]" },
+      { label: "code", pathname: "/musics/[id]/pulls/[pullId]/code" },
+    ];
   const handleUpdate = (
       input: Omit<Parameters<typeof update.mutate>[0], "where">
     ) => update.mutate({ ...input, ...query }),
@@ -128,51 +111,33 @@ const PullLayout: React.FC<PullLayoutProps> = ({
 
   return (
     <ShowLayout
-      contained={false}
       activeTab={activeTab}
+      contained={false}
       tabs={tabs}
       title={
         <>
-          <Box display="flex" alignItems="center">
+          <Box alignItems="center" display="flex">
             <Avatar src={data.user.image || ""} />
-            <Typography variant="h4" ml={3}>
+            <Typography ml={3} variant="h4">
               {data.title}
             </Typography>
           </Box>
           <Link
             href={{
               pathname: "/users/[id]",
-              query: { id: data.user.id as string },
+              query: { id: data.user.id },
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary">
+            <Typography color="text.secondary" variant="subtitle2">
               {data.user.name}
             </Typography>
           </Link>
           <Box my={3}>
             <PullButton
-              data={data}
               conflict={conflict}
+              data={data}
               diff={diff}
               loading={update.isLoading}
-              onOpen={handleOpen}
-              onClose={handleClose}
-              onMerge={handleMerge}
-              onDraft={handleDraft}
-              onVote={handleVote}
-              onGood={() =>
-                handleUpdate({
-                  data: {
-                    vote: {
-                      update: {
-                        proponents: {
-                          connect: { id: getCurrentUserId(session) },
-                        },
-                      },
-                    },
-                  },
-                })
-              }
               onBad={() =>
                 handleUpdate({
                   data: {
@@ -186,20 +151,38 @@ const PullLayout: React.FC<PullLayoutProps> = ({
                   },
                 })
               }
+              onClose={handleClose}
+              onDraft={handleDraft}
+              onGood={() =>
+                handleUpdate({
+                  data: {
+                    vote: {
+                      update: {
+                        proponents: {
+                          connect: { id: getCurrentUserId(session) },
+                        },
+                      },
+                    },
+                  },
+                })
+              }
+              onMerge={handleMerge}
+              onOpen={handleOpen}
+              onVote={handleVote}
             />
           </Box>
           <ScoreButtonGroup
-            loading={update.isLoading}
-            watch={{
+            edit={{
               route: {
-                pathname: "/musics/[id]/pulls/[pullId]/score",
+                pathname: "/musics/[id]/pulls/[pullId]/score/edit",
                 query: { id, pullId },
               },
               hidden: false,
             }}
-            edit={{
+            loading={update.isLoading}
+            watch={{
               route: {
-                pathname: "/musics/[id]/pulls/[pullId]/score/edit",
+                pathname: "/musics/[id]/pulls/[pullId]/score",
                 query: { id, pullId },
               },
               hidden: false,

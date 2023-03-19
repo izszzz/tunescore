@@ -7,9 +7,11 @@ const prisma = new PrismaClient();
 export const PullFactory = async () =>
   await prisma.music.create({
     data: {
-      title: { ja: "Pull", en: "Pull" },
+      resource: {
+        create: { name: { ja: "Pull", en: "Pull" }, unionType: "Music" },
+      },
       type: "ORIGINAL",
-      visibility: "PUBLIC",
+      visibillity: "PUBLIC",
       pulls: {
         create: [
           {

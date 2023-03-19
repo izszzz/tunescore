@@ -6,7 +6,7 @@ erDiagram
 CONSUME CONSUME
 CONTRIBUTE CONTRIBUTE
         }
-    
+
 
 
         PointType {
@@ -17,7 +17,7 @@ Album Album
 Pull Pull
 Issue Issue
         }
-    
+
 
 
         ResourceType {
@@ -26,14 +26,14 @@ Band Band
 Artist Artist
 Album Album
         }
-    
+
 
 
         CommentType {
             Pull Pull
 Issue Issue
         }
-    
+
 
 
         NotificationType {
@@ -41,21 +41,21 @@ Issue Issue
 Bookmark Bookmark
 Comment Comment
         }
-    
+
 
 
         Visibility {
             PUBLIC PUBLIC
 PRIVATE PRIVATE
         }
-    
+
 
 
         MusicType {
             ORIGINAL ORIGINAL
 COPY COPY
         }
-    
+
 
 
         PullStatus {
@@ -65,19 +65,19 @@ VOTE VOTE
 CLOSE CLOSE
 MERGE MERGE
         }
-    
+
 
 
         IssueStatus {
             OPEN OPEN
 CLOSE CLOSE
         }
-    
+
   Account {
-    String id PK 
-    String type  
-    String provider  
-    String providerAccountId  
+    String id PK
+    String type
+    String provider
+    String providerAccountId
     String refresh_token  "nullable"
     String access_token  "nullable"
     Int expires_at  "nullable"
@@ -86,194 +86,194 @@ CLOSE CLOSE
     String id_token  "nullable"
     String session_state  "nullable"
     }
-  
+
 
   Session {
-    String z_id PK 
-    String sessionToken  
-    DateTime expires  
+    String z_id PK
+    String sessionToken
+    DateTime expires
     }
-  
+
 
   User {
-    String z_id PK 
+    String z_id PK
     String name  "nullable"
     String email  "nullable"
     DateTime emailVerified  "nullable"
     String image  "nullable"
     String stripeCustomerId  "nullable"
     }
-  
+
 
   Follow {
-    String z_id PK 
+    String z_id PK
     }
-  
+
 
   VerificationToken {
-    String z_id PK 
-    String identifier  
-    String token  
-    DateTime expires  
+    String z_id PK
+    String identifier
+    String token
+    DateTime expires
     }
-  
+
 
   Music {
-    String z_id PK 
-    MusicType type  
+    String z_id PK
+    MusicType type
     String score  "nullable"
-    Visibility visibility  
+    Visibility visibillity
     Int price  "nullable"
     }
-  
+
 
   Album {
-    String z_id PK 
+    String z_id PK
     }
-  
+
 
   Artist {
-    String z_id PK 
+    String z_id PK
     }
-  
+
 
   Band {
-    String z_id PK 
+    String z_id PK
     }
-  
+
 
   Issue {
-    String id PK 
-    String title  
-    String body  
-    IssueStatus status  
+    String id PK
+    String title
+    String body
+    IssueStatus status
     }
-  
+
 
   Pull {
-    String id PK 
-    String title  
-    String body  
-    PullStatus status  
+    String id PK
+    String title
+    String body
+    PullStatus status
     }
-  
+
 
   Vote {
-    String id PK 
-    DateTime start  
-    DateTime end  
-    Int good  
-    Int bad  
+    String id PK
+    DateTime start
+    DateTime end
+    Int good
+    Int bad
     }
-  
+
 
   Comment {
-    String id PK 
-    String body  
-    CommentType resourceType  
+    String id PK
+    String body
+    CommentType resourceType
     }
-  
+
 
   Bookmark {
-    String id PK 
-    ResourceType resourceType  
+    String id PK
+    ResourceType resourceType
     }
-  
+
 
   Participation {
-    String id PK 
+    String id PK
     }
-  
+
 
   Role {
-    String id PK 
-    String name  
+    String id PK
+    String name
     }
-  
+
 
   RoleMap {
-    String id PK 
+    String id PK
     }
-  
+
 
   Tag {
-    String id PK 
-    String name  
+    String id PK
+    String name
     }
-  
+
 
   TagMap {
-    String id PK 
-    ResourceType resourceType  
+    String id PK
+    ResourceType resourceType
     }
-  
+
 
   Notification {
-    String id PK 
-    NotificationType resourceType  
-    DateTime createdAt  
-    DateTime readAt  
+    String id PK
+    NotificationType resourceType
+    DateTime createdAt
+    DateTime readAt
     }
-  
+
 
   Cart {
-    String z_id PK 
+    String z_id PK
     }
-  
+
 
   Point {
-    String z_id PK 
-    Int amount  
-    PointActionType actionType  
-    PointType resourceType  
-    DateTime createdAt  
+    String z_id PK
+    Int amount
+    PointActionType actionType
+    PointType resourceType
+    DateTime createdAt
     }
-  
+
 
   PullScore {
-    String original  
-    String changed  
+    String original
+    String changed
     }
-  
+
 
   Locale {
     String ja  "nullable"
     String en  "nullable"
     }
-  
+
 
   LinkList {
 
     }
-  
+
 
   StreamingLink {
 
     }
-  
+
 
   AccountLink {
     String twitter  "nullable"
     String wikipedia  "nullable"
     }
-  
+
 
   Link {
     String id  "nullable"
     }
-  
+
 
   Image {
 
     }
-  
+
 
   ImageSize {
     String small  "nullable"
     String medium  "nullable"
     String large  "nullable"
     }
-  
+
     Account o{--|| User : "user"
     Session o{--|| User : "user"
     User o{--}o Vote : "votes"
@@ -281,7 +281,7 @@ CLOSE CLOSE
     Follow o{--|| User : "following"
     Music o|--|| MusicType : "enum:type"
     Music o|--|| Locale : "title"
-    Music o|--|| Visibility : "enum:visibility"
+    Music o|--|| Visibility : "enum:visibillity"
     Music o|--|o LinkList : "link"
     Music o{--|o User : "user"
     Music o{--|o Band : "band"

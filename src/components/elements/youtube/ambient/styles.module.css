@@ -16,8 +16,11 @@
 .ambilightVideo {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
   aspect-ratio: 16 / 9;
+}
+
+.ambilightVideo iframe {
+  border-radius: 10px;
 }
 
 .ambilight {

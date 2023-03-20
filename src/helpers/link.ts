@@ -1,17 +1,16 @@
-import type { LinkList } from "@prisma/client";
+import type { LinkList, ResourceUnionType } from "@prisma/client";
 import { match, P } from "ts-pattern";
 
-export type LinkType = "Music" | "Album" | "Artist" | "Band";
-
+type LinkListType = LinkList | null;
 export interface SelectLinkMutateArgs {
-  link: LinkList | null;
+  link: LinkListType;
   id: string | null | undefined;
   images: (string | null | undefined)[];
 }
 
 export const createLink = (baseURL: string, path: string, id: string) =>
     `${baseURL}${path}${id}`,
-  getYoutubeLink = (type: LinkType, id: string) =>
+  getYoutubeLink = (type: ResourceUnionType, id: string) =>
     createLink(
       "https://www.youtube.com",
       match(type)
@@ -20,7 +19,7 @@ export const createLink = (baseURL: string, path: string, id: string) =>
         .exhaustive(),
       id
     ),
-  getSpotifyLink = (type: LinkType, id: string) =>
+  getSpotifyLink = (type: ResourceUnionType, id: string) =>
     createLink(
       "https://open.spotify.com",
       match(type)
@@ -67,7 +66,7 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     selectLinkMutate({ name: "youtube", ...args }),
   selectItunesMutate = ({ ...args }: SelectLinkMutateArgs) =>
     selectLinkMutate({ name: "itunes", ...args }),
-  removeLinkMutate = (link: LinkList | null, name: string) => ({
+  removeLinkMutate = (link: LinkListType, name: string) => ({
     data: {
       resource: {
         update: {
@@ -76,9 +75,8 @@ export const createLink = (baseURL: string, path: string, id: string) =>
       },
     },
   }),
-  removeSpotifyMutate = (link: LinkList | null) =>
+  removeSpotifyMutate = (link: LinkListType) =>
     removeLinkMutate(link, "spotify"),
-  removeItunesMutate = (link: LinkList | null) =>
-    removeLinkMutate(link, "itunes"),
-  removeYoutubeMutate = (link: LinkList | null) =>
+  removeItunesMutate = (link: LinkListType) => removeLinkMutate(link, "itunes"),
+  removeYoutubeMutate = (link: LinkListType) =>
     removeLinkMutate(link, "youtube");

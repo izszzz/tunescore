@@ -21,4 +21,24 @@ export const resourceListArgs = (session: SessionArg) => ({
       bookmarks: bookmarkArgs(session),
       _count: { select: { bookmarks: true } },
     },
-  });
+  }),
+  getResourceByLinkIdQuery = (name: string, ids: string[]) => ({
+    where: {
+      resource: {
+        link: {
+          is: {
+            streaming: {
+              is: {
+                OR: ids.map((id) => ({
+                  [name]: { is: { id: { equals: id } } },
+                })),
+              },
+            },
+          },
+        },
+      },
+    },
+    include: { resource: true },
+  }),
+  getResourceBySpotifyIdQuery = (id: string[]) =>
+    getResourceByLinkIdQuery("spotify", id);

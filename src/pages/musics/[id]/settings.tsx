@@ -31,11 +31,7 @@ import {
   selectYoutubeMutate,
 } from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
-import {
-  getCurrentUserId,
-  isSelf,
-  redirectToSignIn,
-} from "../../../helpers/user";
+import { isSelf, redirectToSignIn } from "../../../helpers/user";
 import {
   removeRole,
   removeTags,
@@ -58,13 +54,8 @@ const SettingsMusic: NextPage = () => {
     { enqueueSnackbar } = useSnackbar(),
     context = trpc.useContext(),
     { id } = router.query,
-    currentUserId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     { data } = trpc.music.findUniqueMusic.useQuery(query),
-    { data: userData } = trpc.user.findUniqueUser.useQuery({
-      where: { id: currentUserId },
-      include: { accounts: true },
-    }),
     destroy = trpc.music.deleteOneMusic.useMutation({
       onSuccess: () => enqueueSnackbar("music.destroy success"),
       onError: () => enqueueSnackbar("music.destroy error"),
@@ -80,7 +71,7 @@ const SettingsMusic: NextPage = () => {
       onError: () => enqueueSnackbar("music.update error"),
     });
 
-  if (!data || !userData) return <></>;
+  if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"],
     { resource } = musicData;
   return (
@@ -97,7 +88,7 @@ const SettingsMusic: NextPage = () => {
             }),
         }}
         loading={update.isLoading}
-        textFieldElementProps={{ name: `title.${router.locale}` }}
+        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         loading={update.isLoading}
@@ -144,19 +135,12 @@ const SettingsMusic: NextPage = () => {
           onChange: {
             onSelect: (_e, _v, _r, details) =>
               details &&
-              update.mutate({
-                ...query,
-                data: { resource: { update: selectRole(details.option.id) } },
-              }),
+              update.mutate({ ...query, ...selectRole(details.option.id) }),
             onRemove: (_e, _v, _r, details) =>
               details &&
               update.mutate({
                 ...query,
-                data: {
-                  resource: {
-                    update: removeRole(details.option.id, resource.id),
-                  },
-                },
+                ...removeRole(details.option.id, resource.id),
               }),
           },
         }}
@@ -205,13 +189,11 @@ const SettingsMusic: NextPage = () => {
           await update.mutate({
             ...query,
             data: {
-              resource: {
-                update: selectSpotifyMutate({
-                  link: resource.link,
-                  id: item.id,
-                  images: [],
-                }).data.resource.update,
-              },
+              ...selectSpotifyMutate({
+                link: resource.link,
+                id: item.id,
+                images: [],
+              }).data,
               isrc: item.external_ids.isrc,
               albums: { connect: { id: album?.id } },
             },

@@ -9,6 +9,7 @@ import type {
   ItunesResponse,
 } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
+import type { AxiosResponse } from "axios";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -21,8 +22,12 @@ interface ItunesSelectFormProps<
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  search: (params: BaseSearchParams) => Promise<ItunesResponse<T>>;
-  lookup: (params: BaseLookupParams) => Promise<ItunesResponse<T>>;
+  search: (
+    params: BaseSearchParams
+  ) => Promise<AxiosResponse<ItunesResponse<T>>>;
+  lookup: (
+    params: BaseLookupParams
+  ) => Promise<AxiosResponse<ItunesResponse<T>>>;
 }
 function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   streamingLink,
@@ -37,11 +42,11 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   useEffect(() => {
     if (streamingLink?.itunes?.id) {
       const id = new URL(streamingLink.itunes.id).pathname.split("/")[4];
-      if (id) lookup({ id }).then((res) => setResult(res.results[0]));
+      if (id) lookup({ id }).then(({ data }) => setResult(data.results[0]));
     }
-    search({ term, offset: 0, limit: 12 }).then(({ results }) =>
-      setResults(results)
-    );
+    search({ term, offset: 0, limit: 12 }).then(({ data }) => {
+      setResults(data.results);
+    });
   }, [lookup, search, streamingLink?.itunes?.id, term]);
   return (
     <CardSelectForm<T, ItunesResponse<T>["results"]>

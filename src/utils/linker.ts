@@ -1,3 +1,4 @@
+import type { ItunesResponse } from "@izszzz/itunes-search-api";
 import type { Prisma, StreamingLink } from "@prisma/client";
 import * as R from "remeda";
 import type SpotifyWebApi from "spotify-web-api-node";
@@ -131,6 +132,23 @@ export class Linker {
       albumMusics.map((albumMusic) => prisma.resource.update(albumMusic))
     );
   }
+  createTagsByItunes = async (
+    prisma: Context["prisma"],
+    data: ItunesResponse<unknown & { primaryGenreName: string }>
+  ) => {
+    const tags = data.results.map((item) => item.primaryGenreName);
+    const existedTags = await prisma.tag.findMany({
+        where: { OR: tags.map((tag) => ({ name: tag })) },
+      }),
+      notExistedTags = [...new Set(tags)].filter(
+        (tag) => !existedTags.find(({ name }) => name === tag)
+      );
+    await prisma.tag.createMany({
+      data: notExistedTags.map((tag) => ({
+        name: tag,
+      })),
+    });
+  };
 }
 const getExistedResources = async (
     prisma: Context["prisma"],

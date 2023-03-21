@@ -6,6 +6,7 @@ import { mergeRouters, router } from "../trpc";
 
 import { agendaRouter } from "./agenda";
 import { currentUserRouter } from "./currentUser";
+import { itunesRouter } from "./itunes";
 import { paginationRouter } from "./pagination";
 import { searchRouter } from "./search";
 import { spotifyRouter } from "./spotify";
@@ -20,6 +21,7 @@ export const appRouter = mergeRouters(
     stripe: stripeRouter,
     youtube: youtubeRouter,
     spotify: spotifyRouter,
+    itunes: itunesRouter,
     agenda: agendaRouter,
   }),
   generatedRouter

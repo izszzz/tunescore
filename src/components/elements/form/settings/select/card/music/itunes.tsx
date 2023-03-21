@@ -1,7 +1,7 @@
 import type { ItunesMusic } from "@izszzz/itunes-search-api";
 import type { StreamingLink } from "@prisma/client";
 
-import { itunes } from "../../../../../../../server/common/itunes";
+import { trpc } from "../../../../../../../utils/trpc";
 import MusicItunesCard from "../../../../../card/itunes/music";
 import MusicItunesSquareCard from "../../../../../card/square/itunes/music";
 import ItunesSelectForm from "../itunes";
@@ -13,21 +13,29 @@ interface MusicItunesSelectFormProps {
   onRemove: () => void;
 }
 const MusicItunesSelectForm = ({
+  streamingLink,
+  term,
   onSelect,
   onRemove,
-  ...props
-}: MusicItunesSelectFormProps) => (
-  <ItunesSelectForm<ItunesMusic>
-    {...props}
-    largeCard={(value) =>
-      value && <MusicItunesCard data={value} onClick={onRemove} />
-    }
-    lookup={itunes.lookupMusic}
-    search={itunes.searchMusics}
-    smallCard={(value) => (
-      <MusicItunesSquareCard data={value} onClick={onSelect} />
-    )}
-  />
-);
+}: MusicItunesSelectFormProps) => {
+  const { data } = trpc.itunes.findUniqueMusic.useQuery(
+      streamingLink?.itunes?.id
+    ),
+    { data: searchData } = trpc.itunes.searchMusics.useQuery(term);
+  return (
+    <ItunesSelectForm<ItunesMusic>
+      largeCard={(value) =>
+        value && <MusicItunesCard data={value} onClick={onRemove} />
+      }
+      lookup={data}
+      search={searchData}
+      smallCard={(value) => (
+        <MusicItunesSquareCard data={value} onClick={onSelect} />
+      )}
+      streamingLink={streamingLink}
+      term={term}
+    />
+  );
+};
 
 export default MusicItunesSelectForm;

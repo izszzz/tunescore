@@ -48,8 +48,8 @@ export class Linker {
             );
           if (music && album)
             return {
-              where: { id: music.id },
-              data: { albums: { connect: { id: album.id } } },
+              where: { id: music.music?.id },
+              data: { albums: { connect: { id: album.album?.id } } },
             };
         }),
         R.compact
@@ -114,13 +114,21 @@ export class Linker {
           if (album)
             return {
               where: { id: album.id },
-              data: { musics: { connect: musics.map(({ id }) => ({ id })) } },
+              data: {
+                album: {
+                  update: {
+                    musics: {
+                      connect: musics.map(({ music }) => ({ id: music?.id })),
+                    },
+                  },
+                },
+              },
             };
         }),
         R.compact
       );
     prisma.$transaction(
-      albumMusics.map((albumMusic) => prisma.album.update(albumMusic))
+      albumMusics.map((albumMusic) => prisma.resource.update(albumMusic))
     );
   }
 }

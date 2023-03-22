@@ -1,6 +1,5 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma, ResourceUnionType } from "@prisma/client";
 
-import type { ResourceUnionType } from "../../../../helpers/link";
 import { getSpotifyLink, getYoutubeLink } from "../../../../helpers/link";
 
 import AppleButton from "./itunes";

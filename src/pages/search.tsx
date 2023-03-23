@@ -12,9 +12,10 @@ import { trpc } from "../utils/trpc";
 const Search: NextPage = () => {
   const { data: session } = useSession(),
     router = useRouter(),
-    { data } = trpc.pagination.resource.useQuery(
-      resourcePaginationQuery({ router, session })
-    );
+    { data } = trpc.pagination.resource.useQuery({
+      ...resourcePaginationQuery({ router, session }),
+      options: { perPage: 100 },
+    });
 
   return (
     <DefaultSingleColumnLayout contained>

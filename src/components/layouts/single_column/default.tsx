@@ -14,21 +14,19 @@ const DefaultSingleColumnLayout: React.FC<DefaultSingleColumnLayoutProps> = ({
   subHeader,
   contained,
   children,
-}) => {
-  return (
-    <SingleColumnLayout
-      contained={contained}
-      footer={<Footer />}
-      header={
-        <>
-          <DefaultHeader />
-          {subHeader}
-        </>
-      }
-    >
-      {children}
-    </SingleColumnLayout>
-  );
-};
+}) => (
+  <SingleColumnLayout
+    contained={contained}
+    footer={<Footer />}
+    header={
+      <>
+        <DefaultHeader />
+        {subHeader}
+      </>
+    }
+  >
+    {children}
+  </SingleColumnLayout>
+);
 
 export default DefaultSingleColumnLayout;

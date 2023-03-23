@@ -6,7 +6,13 @@ import { useRouter } from "next/router";
 const Footer = () => {
   const router = useRouter();
   return (
-    <Box component="footer" display="flex" justifyContent="center" my={3}>
+    <Box
+      component="footer"
+      display="flex"
+      justifyContent="center"
+      mb={3}
+      mt="auto"
+    >
       <Stack direction="row" spacing={2}>
         <Typography onClick={() => router.push("/about")}>
           hakei prod.

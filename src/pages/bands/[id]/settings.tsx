@@ -68,7 +68,7 @@ const BandSettings: NextPage = () => {
             }),
         }}
         loading={update.isLoading}
-        textFieldElementProps={{ name: `name.${router.locale}` }}
+        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
       />
       <ArtistUpdateAutocomplete
         label="artists"

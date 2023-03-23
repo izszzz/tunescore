@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import { authorized } from "../../helpers/spotify";
+import { Linker } from "../../utils/linker";
 import { publicProcedure, router } from "../trpc";
 
+const linker = new Linker();
 export const spotifyRouter = router({
   search: publicProcedure
     .input(
@@ -30,108 +32,13 @@ export const spotifyRouter = router({
   searchTracks: publicProcedure
     .input(z.string())
     .query(async ({ ctx: { session, prisma }, input }) => {
-      const spotify = await authorized(session);
-      return spotify.searchTracks(input).then(({ body }) => {
-        const data =
-          body[Object.keys(body)[0] as keyof SpotifyApi.TrackSearchResponse];
-        data?.items.map(async (item) => {
-          // find or create music
-          let music = await prisma.music.findFirst({
-            where: {
-              albums: {
-                some: {
-                  resource: {
-                    link: {
-                      is: {
-                        streaming: {
-                          is: {
-                            spotify: { is: { id: { equals: item.album.id } } },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          });
-          if (!music)
-            music = await prisma.music.create({
-              data: {
-                type: "COPY",
-                visibillity: "PUBLIC",
-                isrc: item.external_ids.isrc,
-                resource: {
-                  create: {
-                    name: { ja: item.name, en: item.name },
-                    unionType: "Music",
-                    link: { streaming: { spotify: { id: item.id } } },
-                  },
-                },
-              },
-            });
-          // find or create album
-          let album = await prisma.album.findFirst({
-            where: {
-              resource: {
-                link: {
-                  is: {
-                    streaming: {
-                      is: {
-                        spotify: { is: { id: { equals: item.album.id } } },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          });
-          if (album) {
-            if (!album.musicIDs.includes(music.id))
-              prisma.album.update({
-                where: { id: music.id },
-                data: { musics: { connect: { id: music.id } } },
-              });
-          } else {
-            const {
-              body: {
-                external_ids: { upc },
-              },
-            } = await spotify.getAlbum(item.album.id);
-            album = await prisma.album.create({
-              data: {
-                resource: {
-                  create: {
-                    name: { ja: item.album.name, en: item.album.name },
-                    unionType: "Album",
-                    link: {
-                      streaming: {
-                        spotify: {
-                          id: item.album.id,
-                          image: {
-                            size: {
-                              small: item.album.images[2]?.url,
-                              medium: item.album.images[1]?.url,
-                              large: item.album.images[0]?.url,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                musics: { connect: { id: music.id } },
-                upc,
-              },
-            });
-            await prisma.album.update({
-              where: { id: music.id },
-              data: { musics: { connect: { id: music.id } } },
-            });
-          }
-        });
-        return data;
-      });
+      const spotify = await authorized(session),
+        data = await spotify
+          .searchTracks(input)
+          .then(({ body }) => body.tracks);
+      if (!data) return null;
+      linker.searchedSpotifyTracks(prisma, spotify, data);
+      return data;
     }),
   findUniqueTrack: publicProcedure
     .input(z.string().nullish())
@@ -143,12 +50,7 @@ export const spotifyRouter = router({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const spotify = await authorized(ctx.session);
-      return spotify
-        .searchArtists(input)
-        .then(
-          ({ body }) =>
-            body[Object.keys(body)[0] as keyof SpotifyApi.ArtistSearchResponse]
-        );
+      return spotify.searchArtists(input).then(({ body }) => body.artists);
     }),
   findUniqueArtist: publicProcedure
     .input(z.string().nullish())
@@ -158,14 +60,15 @@ export const spotifyRouter = router({
     }),
   searchAlbums: publicProcedure
     .input(z.string())
-    .query(async ({ ctx, input }) => {
-      const spotify = await authorized(ctx.session);
-      return spotify
-        .searchAlbums(input)
-        .then(
-          ({ body }) =>
-            body[Object.keys(body)[0] as keyof SpotifyApi.AlbumSearchResponse]
-        );
+    .query(async ({ ctx: { session, prisma }, input }) => {
+      const spotify = await authorized(session),
+        ids = await spotify
+          .searchAlbums(input)
+          .then(({ body }) => body.albums?.items.map(({ id }) => id));
+      if (!ids) return null;
+      const data = await spotify.getAlbums(ids).then(({ body }) => body.albums);
+      linker.searchedSpotifyAlbums(prisma, spotify, data);
+      return data;
     }),
   findUniqueAlbum: publicProcedure
     .input(z.string().nullish())

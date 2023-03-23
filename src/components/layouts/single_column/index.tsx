@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 export interface SingleColumnLayoutProps {
@@ -11,23 +12,12 @@ const SingleColumnLayout: React.FC<SingleColumnLayoutProps> = ({
   footer,
   children,
   contained,
-}) => {
-  return (
-    <>
-      {header}
-      {contained ? (
-        <Container>
-          {children}
-          {footer}
-        </Container>
-      ) : (
-        <>
-          {children}
-          {footer}
-        </>
-      )}
-    </>
-  );
-};
+}) => (
+  <Box display="flex" flexDirection="column" minHeight="100vh">
+    {header}
+    {contained ? <Container>{children}</Container> : children}
+    {footer}
+  </Box>
+);
 
 export default SingleColumnLayout;

@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import type {
-  BaseLookupParams,
-  BaseSearchParams,
   ItunesAlbum,
   ItunesArtist,
   ItunesMusic,
@@ -21,35 +19,23 @@ interface ItunesSelectFormProps<
   > {
   streamingLink: StreamingLink | null | undefined;
   term: string;
-  search: (params: BaseSearchParams) => Promise<ItunesResponse<T>>;
-  lookup: (params: BaseLookupParams) => Promise<ItunesResponse<T>>;
+  search: ItunesResponse<T> | null | undefined;
+  lookup: ItunesResponse<T> | null | undefined;
 }
 function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
   streamingLink,
-  term,
   largeCard,
   smallCard,
   search,
   lookup,
 }: ItunesSelectFormProps<T>) {
-  const [results, setResults] = useState<T[]>();
-  const [result, setResult] = useState<T>();
-  useEffect(() => {
-    if (streamingLink?.itunes?.id) {
-      const id = new URL(streamingLink.itunes.id).pathname.split("/")[4];
-      if (id) lookup({ id }).then((res) => setResult(res.results[0]));
-    }
-    search({ term, offset: 0, limit: 12 }).then(({ results }) =>
-      setResults(results)
-    );
-  }, [lookup, search, streamingLink?.itunes?.id, term]);
   return (
     <CardSelectForm<T, ItunesResponse<T>["results"]>
       gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       largeCard={largeCard}
       link={streamingLink?.itunes}
-      lookup={result}
-      search={results}
+      lookup={lookup?.results[0]}
+      search={search?.results}
       smallCard={smallCard}
       tablePaginationProps={{
         count: 100,

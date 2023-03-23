@@ -27,7 +27,7 @@ const SpotifyAlbumSelectForm = ({
         value && <AlbumSpotifyCard data={value} onClick={onRemove} />
       }
       lookup={data}
-      search={(searchData?.items as SpotifyApi.AlbumObjectFull[]) || []}
+      search={searchData || []}
       smallCard={(value) => (
         <AlbumSpotifySquareCard data={value} onClick={onSelect} />
       )}

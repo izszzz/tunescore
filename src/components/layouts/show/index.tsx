@@ -2,6 +2,7 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 
+import Footer from "../../elements/footer";
 import DefaultTabs from "../../elements/tabs/default";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 import SingleColumnLayout from "../single_column";
@@ -22,6 +23,7 @@ const ShowLayout = ({
 }: ShowLayoutProps) => (
   <SingleColumnLayout
     contained={contained}
+    footer={<Footer />}
     header={
       <>
         {header}

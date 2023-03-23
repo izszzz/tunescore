@@ -73,6 +73,7 @@ const YoutubeAmbient = ({ videoId }: Props) => {
             onReady={(e) => setVideoPlayer(e.target)}
             onStateChange={videoStateChange}
             opts={{ width: "100%", height: "100%" }}
+            style={{ borderRadius: 10 }}
             videoId={videoId}
           />
           {ambient && (

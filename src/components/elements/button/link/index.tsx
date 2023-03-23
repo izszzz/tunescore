@@ -1,6 +1,5 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma, ResourceUnionType } from "@prisma/client";
 
-import type { LinkType } from "../../../../helpers/link";
 import { getSpotifyLink, getYoutubeLink } from "../../../../helpers/link";
 
 import AppleButton from "./itunes";
@@ -11,7 +10,7 @@ interface LinkButtonsProps {
   data: Prisma.LinkListGetPayload<{
     include: { streaming: true; account: true };
   }>;
-  type: LinkType;
+  type: ResourceUnionType;
 }
 const LinkButtons = ({ data, type }: LinkButtonsProps) => {
   if (!data.streaming) return <></>;

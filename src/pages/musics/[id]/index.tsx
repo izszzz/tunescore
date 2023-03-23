@@ -45,21 +45,25 @@ const Music: NextPage = () => {
     { resource } = musicData;
   return (
     <MusicLayout activeTab="info" data={musicData} query={query}>
-      <ActionButton
-        data={musicData}
-        loading={create.isLoading}
-        onAddCart={() =>
-          create.mutate({
-            data: {
-              user: { connect: { id: getCurrentUserId(session) } },
-              music: { connect: { id: router.query.id } },
-            },
-          })
-        }
-      />
+      <Box mb={2}>
+        <ActionButton
+          data={musicData}
+          loading={create.isLoading}
+          onAddCart={() =>
+            create.mutate({
+              data: {
+                user: { connect: { id: getCurrentUserId(session) } },
+                music: { connect: { id: router.query.id } },
+              },
+            })
+          }
+        />
+      </Box>
 
       {resource.link?.streaming?.youtube?.id && (
-        <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />
+        <Box mb={2}>
+          <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />
+        </Box>
       )}
 
       {musicData.pulls.map((pull) => (

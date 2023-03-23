@@ -17,6 +17,7 @@ import FlagIconButton from "../../elements/button/icon/flag";
 import type { BookmarkToggleIconButtonProps } from "../../elements/button/icon/toggle/bookmark";
 import BookmarkToggleButton from "../../elements/button/icon/toggle/bookmark";
 import LinkButtons from "../../elements/button/link";
+import Footer from "../../elements/footer";
 import DefaultHeader from "../../elements/header/default";
 import Image from "../../elements/image";
 
@@ -54,6 +55,7 @@ const DefaultShowLayout = ({
   return (
     <ShowLayout
       {...props}
+      footer={<Footer />}
       header={<DefaultHeader />}
       title={
         <Box mx={3}>

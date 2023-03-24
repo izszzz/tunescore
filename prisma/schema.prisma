@@ -8,10 +8,10 @@ generator client {
 generator trpc {
   provider          = "prisma-trpc-generator"
   withMiddleware    = false
-  withShield        = true
   contextPath       = "../src/server/context"
   isGenerateSelect  = true
   isGenerateInclude = true
+  generateModelActions = "aggregate,count,create,createMany,delete,deleteMany,findFirst,findFirstOrThrow,findMany,findUnique,findUniqueOrThrow,groupBy,update,updateMany,upsert"
 }
 
 // generator erd {

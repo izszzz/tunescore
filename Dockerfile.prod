@@ -23,6 +23,18 @@ RUN \
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS nextJsBuilder
 ARG DATABASE_URL
+ARG DISCORD_CLIENT_ID
+ARG DISCORD_CLIENT_SECRET
+ARG GOOGLE_API_KEY
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG NEXT_PUBLIC_STRIPE_CLIENT_ID
+ARG NEXTAUTH_SECRET
+ARG SPOTIFY_CLIENT_ID
+ARG SPOTIFY_CLIENT_SECRET
+ARG STRIPE_CLIENT_ID
+ARG STRIPE_CLIENT_SECRET
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -39,7 +51,6 @@ RUN \
 FROM --platform=linux/amd64 node:16-alpine3.17 AS runner
 WORKDIR /app
 ENV NODE_ENV production
-
 
 RUN apk update && apk add git openjdk11 tesseract-ocr-data-rus
 RUN addgroup --system --gid 1001 nodejs

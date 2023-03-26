@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ThemeProvider } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
 
 interface CustomThemeProvider {

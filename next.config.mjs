@@ -38,14 +38,20 @@ export default defineNextConfig({
   output: "standalone",
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
   i18n: nextI18NextConfig.i18n,
-  webpackDevMiddleware: (config) => {
-    config.watchOptions = {
-      poll: 5000,
-      aggregateTimeout: 300,
-    };
-    return config;
-  },
   eslint: {
-    dirs: ["src/"],
+    ignoreDuringBuilds: true,
+  },
+  experimental: {
+    modularizeImports: {
+      "@mui/material": {
+        transform: "@mui/material/{{member}}",
+      },
+      "@mui/lab": {
+        transform: "@mui/lab/{{member}}",
+      },
+      "@mui/icons-material/?(((\\w*)?/?)*)": {
+        transform: "@mui/icons-material/{{ matches.[1] }}/{{member}}",
+      },
+    },
   },
 });

@@ -1,6 +1,7 @@
 ##### DEPENDENCIES
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS deps
+ENV NODE_ENV development
 RUN apk add --no-cache libc6-compat openssl1.1-compat
 WORKDIR /app
 
@@ -21,7 +22,8 @@ RUN \
 
 ##### BUILDER
 
-FROM --platform=linux/amd64 node:16-alpine3.17 AS nextJsBuilder
+FROM --platform=linux/amd64 node:16-alpine3.17 AS builder
+ENV NODE_ENV development 
 ARG DATABASE_URL
 ARG DISCORD_CLIENT_ID
 ARG DISCORD_CLIENT_SECRET
@@ -39,6 +41,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+RUN npx prisma db push
 RUN \
  if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn build; \
  elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run build; \
@@ -56,26 +59,21 @@ RUN apk update && apk add git openjdk11 tesseract-ocr-data-rus
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-ENV GRADLE_OPTS -Xmx1g -Dorg.gradle.daemon=true
-RUN git clone https://github.com/Audiveris/audiveris.git
-RUN cd audiveris && \
-    ./gradlew build && \
-    tar -xf build/distributions/Audiveris-5.2.5.tar
+# RUN git clone https://github.com/Audiveris/audiveris.git
+# RUN cd audiveris && \
+#     ./gradlew build --stacktrace && \
+#     tar -xf build/distributions/Audiveris-5.2.5.tar
 
-COPY prisma ./
-COPY package.json package-lock.json ./
-COPY ./.env ./
-COPY ./.env.production ./
 COPY ./.env.production.local ./
 
-COPY --from=nextJsBuilder /app/next.config.mjs ./
-COPY --from=nextJsBuilder /app/public ./public
-COPY --from=nextJsBuilder /app/package.json ./package.json
+COPY --from=builder /app/next.config.mjs ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
-COPY --from=nextJsBuilder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=nextJsBuilder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-COPY audiveris/build ./audiveris/build
+# COPY audiveris/build ./audiveris/build
 
 
 USER nextjs

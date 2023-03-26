@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.16.3-focal
+FROM mcr.microsoft.com/playwright
 
 ENV PWUSER pwuser
 
@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y sudo curl git openjdk-11-jdk tesseract-ocr-rus && \
     usermod -aG sudo $PWUSER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
-    npm i -g npm && \
+    npm i && \
     npx playwright install-deps
 
 RUN curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash

@@ -14,8 +14,8 @@ export const albumListArgs = (session: SessionArg) =>
     include: {
       _count: { select: { artists: true, musics: true } },
       resource: resourceArgs(session),
-      band: { include: { resource: true } },
-      artists: { include: { resource: true } },
+      band: { include: { resource: { include: { name: true } } } },
+      artists: { include: { resource: { include: { name: true } } } },
     },
   });
 
@@ -23,13 +23,10 @@ type Data = Prisma.AlbumGetPayload<AlbumListArgsType>;
 
 export const getAlbumOwner = (data: Data, router: NextRouter) =>
   match(data)
-    .with(
-      { band: P.select(P.not(P.nullish)) },
-      ({ id, resource: { name } }) => ({
-        type: "BAND" as const,
-        owner: { id, name: setLocale(name, router) },
-      })
-    )
+    .with({ band: P.select(P.not(P.nullish)) }, ({ id, resource }) => ({
+      type: "BAND" as const,
+      owner: { id, name: setLocale(resource?.name, router) },
+    }))
     .with({ artists: P.select(P.not(P.nullish)) }, (artists) =>
       isNonEmpty(artists)
         ? {

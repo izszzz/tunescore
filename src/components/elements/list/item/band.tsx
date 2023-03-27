@@ -25,7 +25,7 @@ export interface BandListItemProps extends ListItemProps {
 const BandListItem = ({ data }: BandListItemProps) => {
   const router = useRouter(),
     name = setLocale(data.resource.name, router),
-    image = getImage(data.resource.link?.streaming, 60);
+    image = getImage(data.resource.links, 60);
   return (
     <ListItem
       icon={<Group />}

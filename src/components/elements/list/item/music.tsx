@@ -24,18 +24,13 @@ export interface MusicListItemProps extends ListItemProps {
 const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter(),
     title = setLocale(data.resource.name, router),
-    image =
-      data.resource.link?.streaming &&
-      getImage(
-        {
-          ...data.resource.link?.streaming,
-          spotify:
-            data.albums.find(
-              (album) => !!album.resource.link?.streaming?.spotify
-            )?.resource.link?.streaming?.spotify || null,
-        },
-        60
-      );
+    image = getImage(
+      {
+        ...data.resource.links,
+        ...data.albums[0]?.resource.links,
+      },
+      60
+    );
   return (
     <ListItem
       {...props}

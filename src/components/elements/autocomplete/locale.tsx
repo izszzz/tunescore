@@ -24,7 +24,7 @@ const LocaleAutocomplete = (
 ) => {
   const formContext = useForm<{ locale: keyof Locale }>();
   const { locale, locales, ...router } = useRouter();
-  const handleChange = (lang: keyof Locale | undefined) =>
+  const handleChange = (lang: keyof Omit<Locale, "resourceId"> | undefined) =>
     lang && router.push({ query: router.query }, undefined, { locale: lang });
   useEffect(() => {
     if (locale) formContext.reset({ locale: locale as keyof Locale });

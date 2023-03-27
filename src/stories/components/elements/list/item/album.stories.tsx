@@ -17,8 +17,12 @@ Default.args = {
     id: "1",
     resource: {
       id: "",
-      name: { ja: "アルバムリストアイテム", en: "AlbumListItem" },
-      link: null,
+      name: {
+        ja: "アルバムリストアイテム",
+        en: "AlbumListItem",
+        resourceId: "",
+      },
+      links: [],
       unionType: "Album",
       bookmarks: [],
       _count: { bookmarks: 3 },
@@ -32,7 +36,5 @@ Default.args = {
       artists: 3,
     },
     artists: [],
-    musicIDs: [],
-    artistIDs: [],
   },
 };

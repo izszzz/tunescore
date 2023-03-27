@@ -1,35 +1,29 @@
-import type { ImageSize, StreamingLink } from "@prisma/client";
+import type { Link } from "@prisma/client";
 import * as R from "remeda";
+import { isNonEmpty } from "ts-array-length";
 
 export const getImage = (
-  streamingLink: StreamingLink | null | undefined,
+  links: Link[],
   size: number,
   options: {
     square?: boolean;
     channel?: boolean;
   } = { square: false, channel: false }
 ) => {
-  if (!streamingLink) return null;
-  const images = R.pipe(
-    streamingLink,
-    R.toPairs,
-    R.map(([key, val]) => {
-      if (val?.image?.size) return { key, size: val?.image?.size };
-    }),
-    R.compact
-  );
+  if (!isNonEmpty(links)) return null;
   const result = R.pipe(
-    images,
-    R.map(({ key, size }) => {
-      if (R.equals(key, "itunes") && !options.channel)
-        return shapeImageSize(size, [30, 60, 100]);
-      if (R.equals(key, "youtube")) {
-        if (options.channel) return shapeImageSize(size, [88, 240, 800]);
-        if (!options.square) return shapeImageSize(size, [90, 180, 360]);
+    links,
+    R.map((link) => {
+      const { type } = link;
+      if (R.equals(type, "iTunes") && !options.channel)
+        return shapeImageSize(link, [30, 60, 100]);
+      if (R.equals(type, "Youtube")) {
+        if (options.channel) return shapeImageSize(link, [88, 240, 800]);
+        if (!options.square) return shapeImageSize(link, [90, 180, 360]);
       }
-      if (R.equals(key, "spotify")) {
-        if (options.channel) return shapeImageSize(size, [160, 320, 640]);
-        return shapeImageSize(size, [64, 300, 640]);
+      if (R.equals(type, "Spotify")) {
+        if (options.channel) return shapeImageSize(link, [160, 320, 640]);
+        return shapeImageSize(link, [64, 300, 640]);
       }
     }),
     R.flatten(),
@@ -40,9 +34,9 @@ export const getImage = (
   return result?.image;
 };
 
-const shapeImageSize = (size: ImageSize, sizes: number[]) =>
+const shapeImageSize = ({ small, medium, large }: Link, sizes: number[]) =>
   R.pipe(
-    size,
+    { small, medium, large },
     R.toPairs,
     R.map(([key, image]) => {
       if (!sizes[0] || !sizes[1] || !sizes[2]) return;

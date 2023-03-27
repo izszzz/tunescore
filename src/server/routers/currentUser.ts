@@ -42,7 +42,10 @@ export const currentUserRouter = router({
   findManyNotification: shieldedProcedure.query(async ({ ctx }) => {
     const id = getCurrentUserId(ctx.session);
     return ctx.prisma.notification.findMany({
-      include: { bookmarked: { include: { resource: true } }, user: userArgs },
+      include: {
+        bookmarked: { include: { resource: { include: { name: true } } } },
+        user: userArgs,
+      },
       where: {
         OR: [
           {

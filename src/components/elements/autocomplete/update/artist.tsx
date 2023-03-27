@@ -12,7 +12,9 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-type Artist = Prisma.ArtistGetPayload<{ include: { resource: true } }>;
+type Artist = Prisma.ArtistGetPayload<{
+  include: { resource: { include: { name: true } } };
+}>;
 interface ArtistUpdateAutocomplete
   extends Pick<
     UpdateAutocompleteProps<Artist, true, undefined, undefined>,

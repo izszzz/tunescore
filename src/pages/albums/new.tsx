@@ -40,7 +40,7 @@ const NewAlbum: NextPage = () => {
           fullWidth
           label="Title"
           margin="dense"
-          name={"title." + router.locale}
+          name={"resource.name.create." + router.locale}
           required
         />
         <LoadingButton

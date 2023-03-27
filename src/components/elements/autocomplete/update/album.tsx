@@ -12,7 +12,9 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-type Album = Prisma.AlbumGetPayload<{ include: { resource: true } }>;
+type Album = Prisma.AlbumGetPayload<{
+  include: { resource: { include: { name: true } } };
+}>;
 type AlbumUpdateAutocompleteProps = Pick<
   UpdateAutocompleteProps<Album, true, undefined, undefined>,
   "onChange" | "loading" | "value"

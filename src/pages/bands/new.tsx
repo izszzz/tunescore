@@ -39,7 +39,7 @@ const NewBand: NextPage = () => {
           fullWidth
           label="Name"
           margin="dense"
-          name={"name." + router.locale}
+          name={"resource.name.create." + router.locale}
           required
         />
         <br />

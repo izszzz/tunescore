@@ -10,7 +10,7 @@ const Score: NextPage = () => {
       where: { id: router.query.pullId },
     });
   if (!data) return <></>;
-  return <ScoreLayout value={data.score.changed} />;
+  return <ScoreLayout value={data.changed} />;
 };
 
 export default Score;

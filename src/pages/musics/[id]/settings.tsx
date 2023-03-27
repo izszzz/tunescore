@@ -82,9 +82,10 @@ const SettingsMusic: NextPage = () => {
         data={musicData}
         formContainerProps={{
           onSuccess: ({ resource: { name } }) =>
+            name &&
             update.mutate({
               ...query,
-              data: { resource: { update: { name } } },
+              data: { resource: { update: { name: { update: name } } } },
             }),
         }}
         loading={update.isLoading}
@@ -167,20 +168,18 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <SpotifyMusicSelectForm
+        link={resource.links.find(({ type }) => type === "Spotify")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
         }
         onSelect={async (item) => {
           const album = await context.client.album.findFirstAlbum.query({
             where: {
               resource: {
-                link: {
-                  is: {
-                    streaming: {
-                      is: {
-                        spotify: { is: { id: { equals: item.album.id } } },
-                      },
-                    },
+                links: {
+                  every: {
+                    type: "Spotify",
+                    linkId: item.album.id,
                   },
                 },
               },
@@ -189,17 +188,12 @@ const SettingsMusic: NextPage = () => {
           await update.mutate({
             ...query,
             data: {
-              ...selectSpotifyMutate({
-                link: resource.link,
-                id: item.id,
-                images: [],
-              }).data,
+              ...selectSpotifyMutate({ id: item.id, images: [] }).data,
               isrc: item.external_ids.isrc,
               albums: { connect: { id: album?.id } },
             },
           });
         }}
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
 
@@ -207,15 +201,15 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicItunesSelectForm
+        link={resource.links.find(({ type }) => type === "iTunes")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
         }
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: resource.link,
               id: convertAffiliateLink(value.trackViewUrl).toString(),
               images: [
                 value.artworkUrl30,
@@ -225,7 +219,6 @@ const SettingsMusic: NextPage = () => {
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
 
@@ -233,26 +226,24 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
+        link={resource.links.find(({ type }) => type === "YouTube")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
         }
         onSelect={(value) =>
-          value?.id &&
-          resource.link &&
+          value?.id?.videoId &&
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
-              link: resource.link,
-              id: value.id?.videoId,
+              id: value.id.videoId,
               images: [
-                value.snippet?.thumbnails?.standard?.url,
-                value.snippet?.thumbnails?.medium?.url,
-                value.snippet?.thumbnails?.high?.url,
+                value.snippet?.thumbnails?.standard?.url ?? null,
+                value.snippet?.thumbnails?.medium?.url ?? null,
+                value.snippet?.thumbnails?.high?.url ?? null,
               ],
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
       <Typography variant="h4">Danger Zone</Typography>

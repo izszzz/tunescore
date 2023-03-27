@@ -83,7 +83,7 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       handleUpdate({
         data: {
           status: "MERGE",
-          music: { update: { score: data.score.changed } },
+          music: { update: { score: data.changed } },
         },
       }),
     handleVote = () => {
@@ -102,12 +102,12 @@ const PullLayout: React.FC<PullLayoutProps> = ({
   useEffect(() => {
     const merged = Diff3.mergeDiff3(
       data.music.score || "",
-      data.score.original,
-      data.score.changed
+      data.original,
+      data.changed
     );
     setConflict(merged.conflict);
-    setDiff(data.score.original !== data.score.changed);
-  }, [data.music.score, data.score.changed, data.score.original]);
+    setDiff(data.original !== data.changed);
+  }, [data.music.score, data.changed, data.original]);
 
   return (
     <ShowLayout

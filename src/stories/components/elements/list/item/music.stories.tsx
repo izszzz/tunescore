@@ -23,8 +23,12 @@ Original.args = {
     price: 0,
     resource: {
       id: "",
-      name: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
-      link: null,
+      name: {
+        ja: "ミュージックリストアイテム",
+        en: "MusicListItem",
+        resourceId: "",
+      },
+      links: [],
       unionType: "Music",
       bookmarks: [],
       _count: { bookmarks: 3 },
@@ -35,7 +39,6 @@ Original.args = {
     user: null,
     participations: [],
     band: null,
-    albumIDs: [],
     albums: [],
   },
 };
@@ -52,8 +55,12 @@ Copy.args = {
     price: 0,
     resource: {
       id: "",
-      name: { ja: "ミュージックリストアイテム", en: "MusicListItem" },
-      link: null,
+      name: {
+        ja: "ミュージックリストアイテム",
+        en: "MusicListItem",
+        resourceId: "",
+      },
+      links: [],
       unionType: "Music",
       bookmarks: [],
       _count: { bookmarks: 3 },
@@ -64,7 +71,6 @@ Copy.args = {
     user: null,
     participations: [],
     band: null,
-    albumIDs: [],
     albums: [],
   },
 };

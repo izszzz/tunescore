@@ -21,7 +21,7 @@ const ArtistDefaultSquareCard = ({ data }: DefaultArtistSquareCardProps) => {
   const router = useRouter();
   return (
     <ArtistSquareCard
-      image={getImage(data.resource.link?.streaming, 200, { square: true })}
+      image={getImage(data.resource.links, 200, { square: true })}
       onClick={() =>
         router.push({ pathname: "/artists/[id]", query: { id: data.id } })
       }

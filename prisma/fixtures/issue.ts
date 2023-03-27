@@ -9,7 +9,7 @@ export const IssueFactory = async () =>
     data: {
       resource: {
         create: {
-          name: { ja: "Issue", en: "Issue" },
+          name: { create: { ja: "Issue", en: "Issue" } },
           unionType: "Music",
         },
       },

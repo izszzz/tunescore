@@ -28,12 +28,12 @@ function CardSelectForm<Value, Options extends unknown[] = []>({
   const [options, setOptions] = useState<Options>();
   const [value, setValue] = useState<Value>();
   useEffect(() => {
-    if (link?.id && lookup) setValue(lookup);
+    if (link?.linkId && lookup) setValue(lookup);
     else {
       setOptions(search);
       setValue(undefined);
     }
-  }, [link?.id, lookup, search]);
+  }, [link?.linkId, lookup, search]);
   return (
     <Box my={2}>
       {value ? (

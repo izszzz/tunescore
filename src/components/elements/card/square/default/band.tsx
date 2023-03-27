@@ -19,7 +19,7 @@ const BandDefaultSquareCard = ({ data }: BandDefaultSquareCardProps) => {
   const router = useRouter();
   return (
     <BandSquareCard
-      image={getImage(data.resource.link?.streaming, 200, {
+      image={getImage(data.resource.links, 200, {
         square: true,
         channel: true,
       })}

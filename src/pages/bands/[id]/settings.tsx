@@ -62,9 +62,10 @@ const BandSettings: NextPage = () => {
         data={bandData}
         formContainerProps={{
           onSuccess: ({ resource: { name } }) =>
+            name &&
             update.mutate({
               ...query,
-              data: { resource: { update: { name } } },
+              data: { resource: { update: { name: { update: name } } } },
             }),
         }}
         loading={update.isLoading}
@@ -100,41 +101,43 @@ const BandSettings: NextPage = () => {
       <Divider />
 
       <SpotifyArtistSelectForm
+        link={resource.links.find(({ type }) => type === "Spotify")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
         }
         onSelect={({ id, images }) =>
           update.mutate({
             ...query,
             ...selectSpotifyMutate({
-              link: resource.link,
               id,
-              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+              images: [
+                images[2]?.url ?? null,
+                images[1]?.url ?? null,
+                images[0]?.url ?? null,
+              ],
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
       <Typography variant="h4">iTunes</Typography>
       <Divider />
 
       <ItunesArtistSelectForm
+        link={resource.links.find(({ type }) => type === "iTunes")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
         }
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: resource.link,
               id: convertAffiliateLink(value.artistLinkUrl).toString(),
               images: [],
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
 
@@ -142,24 +145,24 @@ const BandSettings: NextPage = () => {
       <Divider />
 
       <ChannelYoutubeSelectForm
+        link={resource.links.find(({ type }) => type === "YouTube")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
         }
         onSelect={(value) =>
+          value?.id?.channelId &&
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
-              link: resource.link,
-              id: value?.id?.channelId,
+              id: value.id.channelId,
               images: [
-                value?.snippet?.thumbnails?.standard?.url,
-                value?.snippet?.thumbnails?.medium?.url,
-                value?.snippet?.thumbnails?.high?.url,
+                value?.snippet?.thumbnails?.standard?.url ?? null,
+                value?.snippet?.thumbnails?.medium?.url ?? null,
+                value?.snippet?.thumbnails?.high?.url ?? null,
               ],
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={setLocale(resource.name, router)}
       />
     </BandLayout>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { StreamingLink } from "@prisma/client";
+import type { Link } from "@prisma/client";
 import type { youtube_v3 } from "googleapis";
 
 import { trpc } from "../../../../../../utils/trpc";
@@ -19,14 +19,14 @@ interface YoutubeSelectFormProps<T>
     CardSelectFormProps<T, SearchResult[]>,
     "largeCard" | "smallCard"
   > {
-  streamingLink: StreamingLink | null | undefined;
+  link: Link | undefined;
   term: string;
   type: "video" | "channel";
   lookup: T | undefined;
 }
 
 function YoutubeSelectForm<T extends Video | Channel>({
-  streamingLink,
+  link,
   term,
   type,
   largeCard,
@@ -38,7 +38,7 @@ function YoutubeSelectForm<T extends Video | Channel>({
     <CardSelectForm<T | undefined, SearchResult[]>
       gridProps={{ item: true, xs: 6, sm: 4, md: 4 }}
       largeCard={largeCard}
-      link={streamingLink?.youtube}
+      link={link}
       lookup={lookup}
       search={data?.items || []}
       smallCard={smallCard}

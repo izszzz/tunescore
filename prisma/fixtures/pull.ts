@@ -8,7 +8,10 @@ export const PullFactory = async () =>
   await prisma.music.create({
     data: {
       resource: {
-        create: { name: { ja: "Pull", en: "Pull" }, unionType: "Music" },
+        create: {
+          name: { create: { ja: "Pull", en: "Pull" } },
+          unionType: "Music",
+        },
       },
       type: "ORIGINAL",
       visibillity: "PUBLIC",
@@ -18,10 +21,8 @@ export const PullFactory = async () =>
             title: "DRAFT",
             body: "DRAFT",
             status: "DRAFT",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },
@@ -30,10 +31,8 @@ export const PullFactory = async () =>
             title: "OPEN",
             body: "OPEN",
             status: "OPEN",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },
@@ -42,10 +41,8 @@ export const PullFactory = async () =>
             title: "VOTE",
             body: "VOTE",
             status: "VOTE",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },
@@ -54,10 +51,8 @@ export const PullFactory = async () =>
             title: "CLOSE",
             body: "CLOSE",
             status: "CLOSE",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },
@@ -66,10 +61,8 @@ export const PullFactory = async () =>
             title: "MERGE",
             body: "MERGE",
             status: "MERGE",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },
@@ -78,10 +71,8 @@ export const PullFactory = async () =>
             title: "Comment",
             body: "Comment",
             status: "DRAFT",
-            score: {
-              original: "",
-              changed: "",
-            },
+            original: "",
+            changed: "",
             user: {
               connect: { id: (await UserFactory).id },
             },

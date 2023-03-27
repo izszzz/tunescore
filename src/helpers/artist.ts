@@ -7,7 +7,7 @@ export type ArtistListArgsType = ReturnType<typeof artistListArgs>;
 export const artistListArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.ArtistArgs>()({
     include: {
-      bands: { include: { resource: true } },
+      bands: { include: { resource: { include: { name: true } } } },
       resource: resourceArgs(session),
     },
   });

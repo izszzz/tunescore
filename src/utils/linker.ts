@@ -1,5 +1,5 @@
 import type { ItunesResponse } from "@izszzz/itunes-search-api";
-import type { Prisma, StreamingLink } from "@prisma/client";
+import type { Prisma, LinkType } from "@prisma/client";
 import * as R from "remeda";
 import type SpotifyWebApi from "spotify-web-api-node";
 
@@ -17,7 +17,10 @@ export class Linker {
       ),
       notExistedTracks = data.items.filter(
         ({ id }) =>
-          !existedMusics.find(({ link }) => link?.streaming?.spotify?.id === id)
+          !existedMusics.find(
+            ({ links }) =>
+              links?.find(({ type }) => type === "Spotify")?.linkId === id
+          )
       ),
       createdMusics = await createMusicsBySpotify(prisma, notExistedTracks),
       existedAlbums = await getExistedAlbumsBySpotifyId(
@@ -29,7 +32,8 @@ export class Linker {
         .filter(
           ({ id }) =>
             !existedAlbums.find(
-              ({ link }) => link?.streaming?.spotify?.id === id
+              ({ links }) =>
+                links?.find(({ type }) => type === "Spotify")?.linkId === id
             )
         ),
       notExistedAlbums = notExistedTrackAlbums.length
@@ -42,10 +46,14 @@ export class Linker {
         data.items,
         R.map((track) => {
           const music = [...existedMusics, ...createdMusics].find(
-              ({ link }) => link?.streaming?.spotify?.id === track.id
+              ({ links }) =>
+                links?.find(({ type }) => type === "Spotify")?.linkId ===
+                track.id
             ),
             album = [...existedAlbums, ...createdAlbums].find(
-              ({ link }) => link?.streaming?.spotify?.id === track.album.id
+              ({ links }) =>
+                links?.find(({ type }) => type === "Spotify")?.linkId ===
+                track.album.id
             );
           if (music && album)
             return {
@@ -70,7 +78,10 @@ export class Linker {
       ),
       notExistedAlbums = data.filter(
         ({ id }) =>
-          !existedAlbums.find(({ link }) => link?.streaming?.spotify?.id === id)
+          !existedAlbums.find(
+            ({ links }) =>
+              links?.find(({ type }) => type === "Spotify")?.linkId === id
+          )
       ),
       createdAlbums = await createdAlbumsBySpotify(prisma, notExistedAlbums),
       existedMusics = await getExistedMusicsBySpotifyId(
@@ -82,7 +93,8 @@ export class Linker {
         .filter(
           ({ id }) =>
             !existedMusics.find(
-              ({ link }) => link?.streaming?.spotify?.id === id
+              ({ links }) =>
+                links?.find(({ type }) => type === "Spotify")?.linkId === id
             )
         ),
       i = ~~(notExistedAlbumMusics.length / 50),
@@ -105,12 +117,15 @@ export class Linker {
         data,
         R.map(({ id, tracks }) => {
           const album = [...existedAlbums, ...createdAlbums].find(
-              ({ link }) => link?.streaming?.spotify?.id === id
+              ({ links }) =>
+                links?.find(({ type }) => type === "Spotify")?.linkId === id
             ),
-            musics = [...existedMusics, ...createdMusics].filter(({ link }) =>
+            musics = [...existedMusics, ...createdMusics].filter(({ links }) =>
               tracks.items
                 .map(({ id }) => id)
-                .includes(link?.streaming?.spotify?.id || "")
+                .includes(
+                  links?.find(({ type }) => type === "Spotify")?.linkId || ""
+                )
             );
           if (album)
             return {
@@ -152,21 +167,17 @@ export class Linker {
 }
 const getExistedResources = async (
     prisma: Context["prisma"],
-    name: keyof StreamingLink,
+    type: LinkType,
     ids: string[],
     include: Prisma.ResourceInclude
   ) =>
     await prisma.resource.findMany({
       where: {
-        link: {
-          is: {
-            streaming: {
-              is: {
-                OR: ids.map((id) => ({
-                  [name]: { is: { id: { equals: id } } },
-                })),
-              },
-            },
+        links: {
+          every: {
+            OR: ids.map((id) => ({
+              linkId: id,
+            })),
           },
         },
       },
@@ -176,7 +187,7 @@ const getExistedResources = async (
     prisma: Context["prisma"],
     ids: string[],
     include: Prisma.ResourceInclude
-  ) => getExistedResources(prisma, "spotify", ids, include),
+  ) => getExistedResources(prisma, "Spotify", ids, include),
   getExistedMusicsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
     getExistedResourceBySpotifyId(prisma, ids, { music: true }),
   getExistedAlbumsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
@@ -189,9 +200,9 @@ const getExistedResources = async (
       tracks.map((item) =>
         prisma.resource.create({
           data: {
-            name: { ja: item.name, en: item.name },
+            name: { create: { ja: item.name, en: item.name } },
             unionType: "Music",
-            link: { streaming: { spotify: { id: item.id } } },
+            links: { create: { type: "Spotify", linkId: item.id } },
             music: {
               create: {
                 type: "COPY",
@@ -200,7 +211,7 @@ const getExistedResources = async (
               },
             },
           },
-          include: { music: true },
+          include: { music: true, links: true },
         })
       )
     ),
@@ -212,20 +223,15 @@ const getExistedResources = async (
       albums.map((album) =>
         prisma.resource.create({
           data: {
-            name: { ja: album.name, en: album.name },
+            name: { create: { ja: album.name, en: album.name } },
             unionType: "Album",
-            link: {
-              streaming: {
-                spotify: {
-                  id: album.id,
-                  image: {
-                    size: {
-                      small: album.images[2]?.url,
-                      medium: album.images[1]?.url,
-                      large: album.images[0]?.url,
-                    },
-                  },
-                },
+            links: {
+              create: {
+                type: "Spotify",
+                linkId: album.id,
+                small: album.images[2]?.url,
+                medium: album.images[1]?.url,
+                large: album.images[0]?.url,
               },
             },
             album: {
@@ -234,7 +240,7 @@ const getExistedResources = async (
               },
             },
           },
-          include: { album: true },
+          include: { album: true, links: true },
         })
       )
     );

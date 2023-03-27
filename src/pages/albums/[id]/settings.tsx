@@ -1,5 +1,6 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import type { GetServerSideProps, NextPage } from "next";
@@ -51,9 +52,10 @@ const AlbumSettings: NextPage = () => {
         data={albumData}
         formContainerProps={{
           onSuccess: ({ resource: { name } }) =>
+            name &&
             update.mutate({
               ...query,
-              data: { resource: { update: { name } } },
+              data: { resource: { update: { name: { update: name } } } },
             }),
         }}
         loading={update.isLoading}
@@ -73,30 +75,20 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <SpotifyAlbumSelectForm
+        link={resource.links.find(({ type }) => type === "Spotify")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.link) })
+          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
         }
         onSelect={async ({ id, images }) => {
           const spotifyAlbum =
             await context.client.spotify.findUniqueAlbum.query(id);
           spotifyAlbum?.tracks.items.map(async (track) => {
-            const music = await context.client.music.findFirstMusic.query({
-              where: {
-                resource: {
-                  link: {
-                    is: {
-                      streaming: {
-                        is: {
-                          spotify: { is: { id: { equals: track.id } } },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            });
+            const music = (await context.client.music.findFirstMusic.query({
+              where: { resource: { links: { every: { linkId: track.id } } } },
+              include: { albums: true },
+            })) as Prisma.MusicGetPayload<{ include: { albums: true } }>;
             if (music) {
-              if (!music.albumIDs.includes(data.id))
+              if (!music.albums.map(({ id }) => id).includes(data.id))
                 update.mutate({
                   ...query,
                   data: { musics: { connect: { id: music.id } } },
@@ -108,9 +100,9 @@ const AlbumSettings: NextPage = () => {
                   visibillity: "PUBLIC" as const,
                   resource: {
                     create: {
-                      name: { ja: track.name, en: track.name },
+                      name: { create: { ja: track.name, en: track.name } },
                       unionType: "Music",
-                      link: { streaming: { spotify: { id: track.id } } },
+                      links: { create: { type: "Spotify", linkId: track.id } },
                     },
                   },
                   albums: { connect: { id: data.id } },
@@ -121,13 +113,15 @@ const AlbumSettings: NextPage = () => {
           await update.mutate({
             ...query,
             ...selectSpotifyMutate({
-              link: resource.link,
               id,
-              images: [images[2]?.url, images[1]?.url, images[0]?.url],
+              images: [
+                images[2]?.url ?? null,
+                images[1]?.url ?? null,
+                images[0]?.url ?? null,
+              ],
             }),
           });
         }}
-        streamingLink={resource.link?.streaming}
         term={title}
       />
 
@@ -135,15 +129,15 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <ItunesAlbumSelectForm
+        link={resource.links.find(({ type }) => type === "iTunes")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.link) })
+          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
         }
         onSelect={(value) =>
           value &&
           update.mutate({
             ...query,
             ...selectItunesMutate({
-              link: resource.link,
               id: convertAffiliateLink(value.collectionViewUrl).toString(),
               images: [
                 value.artworkUrl30,
@@ -153,7 +147,6 @@ const AlbumSettings: NextPage = () => {
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={title}
       />
 
@@ -161,25 +154,24 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
+        link={resource.links.find(({ type }) => type === "YouTube")}
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.link) })
+          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
         }
         onSelect={(value) =>
-          value &&
+          value?.id?.videoId &&
           update.mutate({
             ...query,
             ...selectYoutubeMutate({
-              link: resource.link,
-              id: value.id?.videoId,
+              id: value.id.videoId,
               images: [
-                value.snippet?.thumbnails?.standard?.url,
-                value.snippet?.thumbnails?.medium?.url,
-                value.snippet?.thumbnails?.high?.url,
+                value.snippet?.thumbnails?.standard?.url ?? null,
+                value.snippet?.thumbnails?.medium?.url ?? null,
+                value.snippet?.thumbnails?.high?.url ?? null,
               ],
             }),
           })
         }
-        streamingLink={resource.link?.streaming}
         term={title}
       />
     </AlbumLayout>

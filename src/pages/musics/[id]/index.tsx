@@ -42,7 +42,8 @@ const Music: NextPage = () => {
     });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"],
-    { resource } = musicData;
+    { resource } = musicData,
+    youtube = resource.links.find(({ type }) => type === "YouTube");
   return (
     <MusicLayout activeTab="info" data={musicData} query={query}>
       <Box mb={2}>
@@ -60,12 +61,11 @@ const Music: NextPage = () => {
         />
       </Box>
 
-      {resource.link?.streaming?.youtube?.id && (
+      {youtube && (
         <Box mb={2}>
-          <YoutubeAmbient videoId={resource.link.streaming.youtube.id} />
+          <YoutubeAmbient videoId={youtube.linkId} />{" "}
         </Box>
       )}
-
       {musicData.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
           <VoteCard

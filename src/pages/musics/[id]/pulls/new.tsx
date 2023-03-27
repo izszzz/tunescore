@@ -46,12 +46,8 @@ const NewPull: NextPage = () => {
       create.mutate({
         data: {
           ...data,
-          score: {
-            set: {
-              original: music.data?.score || "",
-              changed: music.data?.score || "",
-            },
-          },
+          original: music.data?.score || "",
+          changed: music.data?.score || "",
           status: "DRAFT",
           music: { connect: { id } },
           user: { connect: { id: userId } },

@@ -17,15 +17,17 @@ Default.args = {
     id: "1",
     resource: {
       id: "",
-      name: { ja: "アーティストリストアイテム", en: "ArtistListItem" },
-      link: null,
+      name: {
+        ja: "アーティストリストアイテム",
+        en: "ArtistListItem",
+        resourceId: "",
+      },
+      links: [],
       unionType: "Artist",
       bookmarks: [],
       _count: { bookmarks: 3 },
     },
     resourceId: "",
     bands: [],
-    bandIDs: [],
-    albumIDs: [],
   },
 };

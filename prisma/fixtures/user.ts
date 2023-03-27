@@ -37,7 +37,7 @@ export const BookmarksUserFactory = async () =>
           {
             resource: {
               create: {
-                name: { en: "Bookmark Music" },
+                name: { create: { en: "Bookmark Music" } },
                 unionType: "Music",
               },
             },
@@ -45,7 +45,7 @@ export const BookmarksUserFactory = async () =>
           {
             resource: {
               create: {
-                name: { en: "Bookmark Album" },
+                name: { create: { en: "Bookmark Album" } },
                 unionType: "Album",
               },
             },
@@ -53,7 +53,7 @@ export const BookmarksUserFactory = async () =>
           {
             resource: {
               create: {
-                name: { en: "Bookmark Band" },
+                name: { create: { en: "Bookmark Band" } },
                 unionType: "Band",
               },
             },
@@ -61,7 +61,7 @@ export const BookmarksUserFactory = async () =>
           {
             resource: {
               create: {
-                name: { en: "Bookmark Artist" },
+                name: { create: { en: "Bookmark Artist" } },
                 unionType: "Artist",
               },
             },

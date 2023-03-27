@@ -29,6 +29,8 @@ export interface DefaultShowLayoutProps extends Omit<ShowLayoutProps, "title"> {
   type: ResourceUnionType;
   resource: Prisma.ResourceGetPayload<{
     include: {
+      name: true;
+      links: true;
       tagMaps: { include: { tag: true } };
       bookmarks: true;
     };
@@ -51,7 +53,7 @@ const DefaultShowLayout = ({
       query: { id },
     } = router,
     name = setLocale(resource.name, router),
-    image = getImage(resource.link?.streaming, 80, { channel: true });
+    image = getImage(resource.links, 80, { channel: true });
   return (
     <ShowLayout
       {...props}
@@ -109,7 +111,7 @@ const DefaultShowLayout = ({
               />
             ))}
           </Stack>
-          {resource.link && <LinkButtons data={resource.link} type={type} />}
+          <LinkButtons data={resource.links} type={type} />
         </Box>
       }
     />

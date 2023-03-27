@@ -33,8 +33,8 @@ const Code: NextPage = () => {
     <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
       <PullLayout activeTab="code" data={pullData} query={pullQuery}>
         <ReactDiffViewer
-          newValue={pullData.score.changed}
-          oldValue={pullData.score.original}
+          newValue={pullData.changed}
+          oldValue={pullData.original}
         />
       </PullLayout>
     </MusicLayout>

@@ -152,7 +152,7 @@ const NewMusic: NextPage = () => {
               fullWidth
               label="Title"
               margin="dense"
-              name={"resource.name." + router.locale}
+              name={"resource.name.create." + router.locale}
               required
             />
             <br />

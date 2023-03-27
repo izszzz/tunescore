@@ -45,14 +45,12 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
       }}
       route={{ pathname: "/artists/[id]", query: { id: data.id } }}
     >
-      {data.resource.link?.streaming && (
-        <Image
-          alt={name}
-          height="60"
-          src={getImage(data.resource.link.streaming, 60) || undefined}
-          style={{ borderRadius: 3 }}
-        />
-      )}
+      <Image
+        alt={name}
+        height="60"
+        src={getImage(data.resource.links, 60) || undefined}
+        style={{ borderRadius: 3 }}
+      />
       {children}
     </ListItem>
   );

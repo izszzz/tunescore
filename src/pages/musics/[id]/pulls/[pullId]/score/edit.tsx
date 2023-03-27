@@ -36,8 +36,8 @@ const PullScoreEdit: NextPage = () => {
     }>;
     const merged = Diff3.mergeDiff3(
       encodeURIComponent(pullData.music.score || ""),
-      encodeURIComponent(pullData.score.original),
-      encodeURIComponent(pullData.score.changed),
+      encodeURIComponent(pullData.original),
+      encodeURIComponent(pullData.changed),
       {
         label: {
           a: "current",
@@ -53,8 +53,8 @@ const PullScoreEdit: NextPage = () => {
   const handleResolve = () => {
       const merged = Diff3.mergeDiff3(
         encodeURIComponent(pullData.music.score || ""),
-        encodeURIComponent(pullData.score.original),
-        encodeURIComponent(pullData.score.changed),
+        encodeURIComponent(pullData.original),
+        encodeURIComponent(pullData.changed),
         {
           label: {
             a: "current",
@@ -69,12 +69,8 @@ const PullScoreEdit: NextPage = () => {
       update.mutate({
         where: { id: pullId },
         data: {
-          score: {
-            update: {
-              changed: value,
-              ...(conflict ? { original: pullData.music.score || "" } : {}),
-            },
-          },
+          changed: value,
+          ...(conflict ? { original: pullData.music.score || "" } : {}),
         },
       });
   return (
@@ -84,7 +80,7 @@ const PullScoreEdit: NextPage = () => {
         query: { id, pullId },
       }}
       conflict={conflict}
-      defaultValue={pullData.score.changed}
+      defaultValue={pullData.changed}
       onResolve={handleResolve}
       onSave={handleSave}
     />

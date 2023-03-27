@@ -11,11 +11,11 @@ import { userArgs } from "./user";
 
 type Data = Prisma.MusicGetPayload<{
   include: {
-    band: { include: { resource: true } };
+    band: { include: { resource: { include: { name: true } } } };
     user: typeof userArgs;
     participations: {
       include: {
-        artist: { include: { resource: true } };
+        artist: { include: { resource: { include: { name: true } } } };
         roleMap: { include: { role: true } };
       };
     };
@@ -57,8 +57,8 @@ export const musicListArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {
       participations: participatedArtistArgs(session),
-      albums: { include: { resource: true } },
-      band: { include: { resource: true } },
+      albums: { include: { resource: { include: { links: true } } } },
+      band: { include: { resource: { include: { name: true } } } },
       resource: resourceArgs(session),
       user: userArgs,
     },

@@ -23,7 +23,7 @@ const AlbumDefaultSquareCard = ({ data }: AlbumDefaultSquareCardProps) => {
   const { type, owner } = getAlbumOwner(data, router);
   return (
     <AlbumSquareCard
-      image={getImage(data.resource.link?.streaming, 200)}
+      image={getImage(data.resource.links, 200)}
       onClick={() =>
         router.push({ pathname: "/albums/[id]", query: { id: data.id } })
       }

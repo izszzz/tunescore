@@ -6,7 +6,7 @@ import type {
   ItunesMusic,
   ItunesResponse,
 } from "@izszzz/itunes-search-api";
-import type { StreamingLink } from "@prisma/client";
+import type { Link } from "@prisma/client";
 
 import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
@@ -17,13 +17,13 @@ interface ItunesSelectFormProps<
     CardSelectFormProps<T, ItunesResponse<T>["results"]>,
     "largeCard" | "smallCard"
   > {
-  streamingLink: StreamingLink | null | undefined;
+  link: Link | undefined;
   term: string;
   search: ItunesResponse<T> | null | undefined;
   lookup: ItunesResponse<T> | null | undefined;
 }
 function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
-  streamingLink,
+  link,
   largeCard,
   smallCard,
   search,
@@ -33,7 +33,7 @@ function ItunesSelectForm<T extends ItunesMusic | ItunesArtist | ItunesAlbum>({
     <CardSelectForm<T, ItunesResponse<T>["results"]>
       gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       largeCard={largeCard}
-      link={streamingLink?.itunes}
+      link={link}
       lookup={lookup?.results[0]}
       search={search?.results}
       smallCard={smallCard}

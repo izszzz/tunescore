@@ -36,7 +36,7 @@ const musicShowArgs = (session: SessionArg) =>
       band: bandListArgs(session),
       albums: {
         where: {
-          resource: { link: { isNot: { streaming: { spotify: null } } } },
+          resource: { links: { every: { type: "Spotify" } } },
         },
         ...albumListArgs(session),
         take: 1,

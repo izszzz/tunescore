@@ -116,18 +116,14 @@ const MusicLayout = ({
           <Box ml={3}>
             <Chip label={type} size="small" />
           </Box>
-          {resource.link?.streaming && (
+          {isNonEmpty(resource.links) && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image
                 alt={setLocale(resource.name, router)}
                 height="80"
                 src={
                   getImage(
-                    {
-                      ...resource.link?.streaming,
-                      spotify:
-                        albums[0]?.resource.link?.streaming?.spotify ?? null,
-                    },
+                    { ...resource.links, ...albums[0]?.resource.links },
                     80
                   ) || ""
                 }
@@ -139,7 +135,9 @@ const MusicLayout = ({
       }
       type="Music"
     >
-      {resource.name[router.locale as keyof Locale] === null && <LocaleAlert />}
+      {resource.name?.[router.locale as keyof Locale] === null && (
+        <LocaleAlert />
+      )}
       {children}
     </DefaultShowLayout>
   );

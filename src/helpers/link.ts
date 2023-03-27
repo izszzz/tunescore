@@ -1,11 +1,9 @@
-import type { LinkList, ResourceUnionType } from "@prisma/client";
+import type { LinkType, ResourceUnionType } from "@prisma/client";
 import { match, P } from "ts-pattern";
 
-type LinkListType = LinkList | null;
 export interface SelectLinkMutateArgs {
-  link: LinkListType;
-  id: string | null | undefined;
-  images: (string | null | undefined)[];
+  id: string;
+  images: (string | null)[];
 }
 
 export const createLink = (baseURL: string, path: string, id: string) =>
@@ -30,30 +28,23 @@ export const createLink = (baseURL: string, path: string, id: string) =>
       id
     ),
   selectLinkMutate = ({
-    link,
-    name,
+    type,
     id,
     images,
   }: SelectLinkMutateArgs & {
-    name: string;
-    images: (string | null | undefined)[];
+    type: LinkType;
+    images: (string | null)[];
   }) => ({
     data: {
       resource: {
         update: {
-          link: {
-            streaming: {
-              ...link?.streaming,
-              [name]: {
-                id,
-                image: {
-                  size: {
-                    small: images[0],
-                    medium: images[1],
-                    large: images[2],
-                  },
-                },
-              },
+          links: {
+            create: {
+              type,
+              linkId: id,
+              small: images[0],
+              medium: images[1],
+              large: images[2],
             },
           },
         },
@@ -61,22 +52,25 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     },
   }),
   selectSpotifyMutate = ({ ...args }: SelectLinkMutateArgs) =>
-    selectLinkMutate({ name: "spotify", ...args }),
+    selectLinkMutate({ type: "Spotify", ...args }),
   selectYoutubeMutate = ({ ...args }: SelectLinkMutateArgs) =>
-    selectLinkMutate({ name: "youtube", ...args }),
+    selectLinkMutate({ type: "YouTube", ...args }),
   selectItunesMutate = ({ ...args }: SelectLinkMutateArgs) =>
-    selectLinkMutate({ name: "itunes", ...args }),
-  removeLinkMutate = (link: LinkListType, name: string) => ({
+    selectLinkMutate({ type: "iTunes", ...args }),
+  removeLinkMutate = (type: LinkType, resourceId: string) => ({
     data: {
       resource: {
         update: {
-          link: { streaming: { ...link?.streaming, [name]: undefined } },
+          links: {
+            delete: { type_resourceId: { type, resourceId } },
+          },
         },
       },
     },
   }),
-  removeSpotifyMutate = (link: LinkListType) =>
-    removeLinkMutate(link, "spotify"),
-  removeItunesMutate = (link: LinkListType) => removeLinkMutate(link, "itunes"),
-  removeYoutubeMutate = (link: LinkListType) =>
-    removeLinkMutate(link, "youtube");
+  removeSpotifyMutate = (resourceId: string) =>
+    removeLinkMutate("Spotify", resourceId),
+  removeItunesMutate = (resourceId: string) =>
+    removeLinkMutate("iTunes", resourceId),
+  removeYoutubeMutate = (resourceId: string) =>
+    removeLinkMutate("YouTube", resourceId);

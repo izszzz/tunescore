@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { StreamingLink } from "@prisma/client";
+import type { Link } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
 import SpotifyButton from "../../../../button/providers/spotify";
@@ -13,7 +13,7 @@ interface SpotifySelectFormProps<Value, Options>
     CardSelectFormProps<Value, SpotifyApi.PagingObject<Options>["items"]>,
     "largeCard" | "smallCard"
   > {
-  streamingLink: StreamingLink | null | undefined;
+  link: Link | undefined;
   lookup: Value | null | undefined;
   search: Options[];
 }
@@ -27,7 +27,7 @@ function SpotifySelectForm<
     | SpotifyApi.ArtistObjectFull
     | SpotifyApi.AlbumObjectFull
 >({
-  streamingLink,
+  link,
   lookup,
   search,
   largeCard,
@@ -39,7 +39,7 @@ function SpotifySelectForm<
     <CardSelectForm<Value, Options[]>
       gridProps={{ item: true, xs: 6, sm: 4, md: 2 }}
       largeCard={largeCard}
-      link={streamingLink?.spotify}
+      link={link}
       lookup={lookup}
       search={search}
       smallCard={smallCard}

@@ -24,17 +24,14 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
     { id } = data;
   return (
     <MusicSquareCard
-      image={
-        data.resource.link?.streaming &&
-        getImage(
-          {
-            ...data.resource.link?.streaming,
-            spotify: data.albums[0]?.resource.link?.streaming?.spotify || null,
-          },
-          200,
-          { square: true }
-        )
-      }
+      image={getImage(
+        {
+          ...data.resource.links,
+          ...data.albums[0]?.resource.links,
+        },
+        200,
+        { square: true }
+      )}
       onClick={() => router.push({ pathname: "/musics/[id]", query: { id } })}
       size="200px"
       title={

@@ -17,7 +17,8 @@ Default.args = {
     id: "",
     title: "",
     body: "",
-    score: { original: "", changed: "" },
+    original: "",
+    changed: "",
     status: "OPEN",
     music: {
       id: "1",
@@ -30,7 +31,6 @@ Default.args = {
       resourceId: "",
       userId: "",
       bandId: "",
-      albumIDs: [],
       pulls: [],
       _count: { pulls: 0 },
     },

@@ -31,11 +31,11 @@ export const agendaRouter = router({
 
       const merged = Diff3.mergeDiff3(
         pull.music.score || "",
-        pull.score.original,
-        pull.score.changed
+        pull.original,
+        pull.changed
       );
 
-      if (pull.score.original === pull.score.changed)
+      if (pull.original === pull.changed)
         throw new TRPCError({ code: "BAD_REQUEST", message: "no diff" });
 
       if (merged.conflict)
@@ -64,7 +64,7 @@ export const agendaRouter = router({
             proponents > opponents
               ? {
                   status: "MERGE",
-                  music: { update: { score: pull.score.changed } },
+                  music: { update: { score: pull.changed } },
                 }
               : {
                   status: "CLOSE",

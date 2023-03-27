@@ -39,7 +39,7 @@ const NewArtist: NextPage = () => {
           fullWidth
           label="Name"
           margin="dense"
-          name={"name." + router.locale}
+          name={"resource.name.create." + router.locale}
           required
         />
         <LoadingButton

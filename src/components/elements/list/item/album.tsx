@@ -45,14 +45,12 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         query: { id: data.id },
       }}
     >
-      {data.resource.link?.streaming && (
-        <Image
-          alt={title}
-          height="60"
-          src={getImage(data.resource.link.streaming, 60) || ""}
-          style={{ borderRadius: 3 }}
-        />
-      )}
+      <Image
+        alt={title}
+        height="60"
+        src={getImage(data.resource.links, 60) || ""}
+        style={{ borderRadius: 3 }}
+      />
     </ListItem>
   );
 };

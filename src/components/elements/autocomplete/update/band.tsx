@@ -11,7 +11,9 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-type Band = Prisma.BandGetPayload<{ include: { resource: true } }>;
+type Band = Prisma.BandGetPayload<{
+  include: { resource: { include: { name: true } } };
+}>;
 type BandUpdateAutocomplete<T extends boolean | undefined = false> = Pick<
   UpdateAutocompleteProps<Band, T, undefined, undefined>,
   "onChange" | "loading" | "value" | "multiple"

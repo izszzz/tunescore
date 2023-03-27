@@ -8,8 +8,10 @@ export const LingTositeSigure = async () =>
       resource: {
         create: {
           name: {
-            ja: "凛として時雨",
-            en: "Ling tosite Sigure",
+            create: {
+              ja: "凛として時雨",
+              en: "Ling tosite Sigure",
+            },
           },
           unionType: "Band",
         },
@@ -35,7 +37,7 @@ const abnormalize = async () =>
     data: {
       resource: {
         create: {
-          name: { ja: "abnormalize", en: "abnormalize" },
+          name: { create: { ja: "abnormalize", en: "abnormalize" } },
           unionType: "Music",
         },
       },
@@ -50,7 +52,7 @@ const beautifulCircus = async () =>
     data: {
       resource: {
         create: {
-          name: { ja: "Beautiful Circus", en: "Beautiful Circus" },
+          name: { create: { ja: "Beautiful Circus", en: "Beautiful Circus" } },
           unionType: "Music",
         },
       },
@@ -141,7 +143,7 @@ const tk = prisma.artist.create({
   data: {
     resource: {
       create: {
-        name: { ja: "TK", en: "TK" },
+        name: { create: { ja: "TK", en: "TK" } },
         unionType: "Artist",
       },
     },
@@ -152,7 +154,7 @@ const miyoko = prisma.artist.create({
   data: {
     resource: {
       create: {
-        name: { ja: "345", en: "345" },
+        name: { create: { ja: "345", en: "345" } },
         unionType: "Artist",
       },
     },
@@ -164,8 +166,10 @@ const nakano = prisma.artist.create({
     resource: {
       create: {
         name: {
-          ja: "ピエール中野",
-          en: "pierre nakano",
+          create: {
+            ja: "ピエール中野",
+            en: "pierre nakano",
+          },
         },
         unionType: "Artist",
       },
@@ -177,7 +181,7 @@ const imperfect = prisma.album.create({
   data: {
     resource: {
       create: {
-        name: { ja: "i'mperfect", en: "i'mperfect" },
+        name: { create: { ja: "i'mperfect", en: "i'mperfect" } },
         unionType: "Album",
       },
     },

@@ -18,10 +18,8 @@ Open.args = {
     title: "OPEN",
     body: "aaa",
     status: "OPEN",
-    score: {
-      original: "",
-      changed: "",
-    },
+    original: "",
+    changed: "",
     user: {
       id: "1",
       name: "user",
@@ -45,10 +43,8 @@ Close.args = {
     title: "OPEN",
     body: "aaa",
     status: "CLOSE",
-    score: {
-      original: "",
-      changed: "",
-    },
+    original: "",
+    changed: "",
     user: {
       id: "1",
       name: "user",
@@ -72,10 +68,8 @@ Merge.args = {
     title: "Merge",
     body: "aaa",
     status: "MERGE",
-    score: {
-      original: "",
-      changed: "",
-    },
+    original: "",
+    changed: "",
     user: {
       id: "1",
       name: "user",
@@ -98,10 +92,8 @@ Draft.args = {
     title: "Merge",
     body: "aaa",
     status: "DRAFT",
-    score: {
-      original: "",
-      changed: "",
-    },
+    original: "",
+    changed: "",
     user: {
       id: "1",
       name: "user",

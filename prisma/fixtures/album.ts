@@ -8,7 +8,10 @@ const prisma = new PrismaClient();
 export const AlbumFactory = prisma.album.create({
   data: {
     resource: {
-      create: { name: { ja: "アルバム", en: "Album" }, unionType: "Album" },
+      create: {
+        name: { create: { ja: "アルバム", en: "Album" } },
+        unionType: "Album",
+      },
     },
   },
 });
@@ -17,7 +20,7 @@ export const LongTitleAlbumFactory = prisma.album.create({
   data: {
     resource: {
       create: {
-        name: { ja: "あ".repeat(100), en: "a".repeat(100) },
+        name: { create: { ja: "あ".repeat(100), en: "a".repeat(100) } },
         unionType: "Album",
       },
     },
@@ -30,8 +33,7 @@ export const AlbumOwnedByBand = async () =>
       resource: {
         create: {
           name: {
-            ja: "バンドのアルバム",
-            en: "album owned by band",
+            create: { ja: "バンドのアルバム", en: "album owned by band" },
           },
           unionType: "Album",
         },
@@ -46,8 +48,10 @@ export const AlbumOwnedByArtist = async () =>
       resource: {
         create: {
           name: {
-            ja: "アーティストのアルバム",
-            en: "artist owned by band",
+            create: {
+              ja: "アーティストのアルバム",
+              en: "artist owned by band",
+            },
           },
           unionType: "Album",
         },
@@ -62,8 +66,10 @@ export const AlbumHasMusics = async () =>
       resource: {
         create: {
           name: {
-            ja: "曲をもつアルバム",
-            en: "album has musics",
+            create: {
+              ja: "曲をもつアルバム",
+              en: "album has musics",
+            },
           },
           unionType: "Album",
         },

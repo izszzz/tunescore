@@ -6,7 +6,10 @@ import { userArgs, getCurrentUserId } from "../../helpers/user";
 
 export type NotificationArgsType = typeof notificationArgs;
 export const notificationArgs = {
-  include: { bookmarked: { include: { resource: true } }, user: userArgs },
+  include: {
+    bookmarked: { include: { resource: { include: { name: true } } } },
+    user: userArgs,
+  },
 };
 export const notificationPaginationQuery = ({
   router,

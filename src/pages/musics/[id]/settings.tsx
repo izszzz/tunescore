@@ -118,9 +118,9 @@ const SettingsMusic: NextPage = () => {
             update.mutate({ ...query, ...selectTags(details.option.id) }),
           onRemove: (_e, _v, _r, details) =>
             details &&
-            update.mutate({ ...query, ...removeTags(details.option.id, id) }),
+            update.mutate({ ...query, ...removeTags(details.option.id) }),
         }}
-        value={resource.tagMaps.map((tagMap) => tagMap.tag)}
+        value={resource.tags}
       />
       <ArtistsUpdateForm
         data={musicData.participations}

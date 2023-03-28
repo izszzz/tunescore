@@ -31,7 +31,7 @@ export interface DefaultShowLayoutProps extends Omit<ShowLayoutProps, "title"> {
     include: {
       name: true;
       links: true;
-      tagMaps: { include: { tag: true } };
+      tags: true;
       bookmarks: true;
     };
   }>;
@@ -101,11 +101,11 @@ const DefaultShowLayout = ({
             </Box>
           </Box>
           <Stack direction="row" spacing={1}>
-            {resource.tagMaps.map((tagMap) => (
+            {resource.tags.map((tag) => (
               <Chip
                 icon={<LocalOffer />}
-                key={tagMap.id}
-                label={tagMap.tag.name}
+                key={tag.id}
+                label={tag.name}
                 size="small"
                 variant="outlined"
               />

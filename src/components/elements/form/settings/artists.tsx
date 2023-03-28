@@ -56,7 +56,7 @@ function ArtistsUpdateForm({
             <RoleUpdateAutocomplete
               {...roleUpdateAutocompleteProps}
               loading={loading}
-              value={participation.roleMap.map((roleMap) => roleMap.role)}
+              value={participation.roles}
             />
           </Grid>
           <Grid

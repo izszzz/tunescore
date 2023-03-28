@@ -38,31 +38,38 @@ import {
 
 const prisma = new PrismaClient();
 async function main() {
-  await prisma.tag.createMany({
-    data: [
-      { name: "Rock" },
-      { name: "Metal" },
-      { name: "Punk" },
-      { name: "J-pop" },
-      { name: "Jazz" },
-    ],
-  });
+  try {
+    await prisma.tag.createMany({
+      data: [
+        { name: "Rock" },
+        { name: "Metal" },
+        { name: "Punk" },
+        { name: "J-pop" },
+        { name: "Jazz" },
+      ],
+    });
+  } catch {
+    console.log();
+  }
 
-  await prisma.role.createMany({
-    data: [
-      { name: "Composer" },
-      { name: "Lyrist" },
-      { name: "Arranger" },
-      { name: "Vocal" },
-      { name: "Guitar" },
-      { name: "Bass" },
-      { name: "Drum" },
-      { name: "Piano" },
-      { name: "Mix" },
-      { name: "Mastering" },
-    ],
-  });
-
+  try {
+    await prisma.role.createMany({
+      data: [
+        { name: "Composer" },
+        { name: "Lyrist" },
+        { name: "Arranger" },
+        { name: "Vocal" },
+        { name: "Guitar" },
+        { name: "Bass" },
+        { name: "Drum" },
+        { name: "Piano" },
+        { name: "Mix" },
+        { name: "Mastering" },
+      ],
+    });
+  } catch {
+    console.log();
+  }
   // User
   await UserFactory;
   await LongNameUserFactory;

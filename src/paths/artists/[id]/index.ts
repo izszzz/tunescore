@@ -29,7 +29,7 @@ const artistShowArgs = (session: SessionArg) =>
       resource: {
         include: {
           ...resourceArgs(session).include,
-          tagMaps: { include: { tag: true } },
+          tags: true,
         },
       },
     },

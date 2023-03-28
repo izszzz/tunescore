@@ -66,73 +66,53 @@ const participations = async () => ({
   create: [
     {
       artist: { connect: { id: (await tk).id } },
-      roleMap: {
-        create: [
+      roles: {
+        connect: [
           {
-            role: {
-              connect: {
-                id: (
-                  await prisma.role.findUnique({
-                    where: { name: "Composer" },
-                  })
-                )?.id,
-              },
-            },
+            id: (
+              await prisma.role.findUnique({
+                where: { name: "Composer" },
+              })
+            )?.id,
           },
           {
-            role: {
-              connect: {
-                id: (
-                  await prisma.role.findUnique({
-                    where: { name: "Lyrist" },
-                  })
-                )?.id,
-              },
-            },
+            id: (
+              await prisma.role.findUnique({
+                where: { name: "Lyrist" },
+              })
+            )?.id,
           },
           {
-            role: {
-              connect: {
-                id: (
-                  await prisma.role.findUnique({
-                    where: { name: "Vocal" },
-                  })
-                )?.id,
-              },
-            },
+            id: (
+              await prisma.role.findUnique({
+                where: { name: "Vocal" },
+              })
+            )?.id,
           },
         ],
       },
     },
     {
       artist: { connect: { id: (await miyoko).id } },
-      roleMap: {
-        create: {
-          role: {
-            connect: {
-              id: (
-                await prisma.role.findUnique({
-                  where: { name: "Bass" },
-                })
-              )?.id,
-            },
-          },
+      roles: {
+        connect: {
+          id: (
+            await prisma.role.findUnique({
+              where: { name: "Bass" },
+            })
+          )?.id,
         },
       },
     },
     {
       artist: { connect: { id: (await nakano).id } },
-      roleMap: {
-        create: {
-          role: {
-            connect: {
-              id: (
-                await prisma.role.findUnique({
-                  where: { name: "Drum" },
-                })
-              )?.id,
-            },
-          },
+      roles: {
+        connect: {
+          id: (
+            await prisma.role.findUnique({
+              where: { name: "Drum" },
+            })
+          )?.id,
         },
       },
     },

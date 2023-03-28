@@ -160,18 +160,14 @@ export const MusicOwendByComposer = async () =>
           artist: {
             connect: { id: (await ArtistFactory).id },
           },
-          roleMap: {
-            create: {
-              role: {
-                connect: {
-                  id: (
-                    await prisma.role.findUnique({
-                      where: { name: "Compsoer" },
-                    })
-                  )?.id,
-                  name: "Composer",
-                },
-              },
+          roles: {
+            connect: {
+              id: (
+                await prisma.role.findUnique({
+                  where: { name: "Compsoer" },
+                })
+              )?.id,
+              name: "Composer",
             },
           },
         },
@@ -195,17 +191,13 @@ export const MusicOwendByLyrist = async () =>
           artist: {
             connect: { id: (await ArtistFactory).id },
           },
-          roleMap: {
-            create: {
-              role: {
-                connect: {
-                  id: (
-                    await prisma.role.findUnique({
-                      where: { name: "Lyrist" },
-                    })
-                  )?.id,
-                },
-              },
+          roles: {
+            connect: {
+              id: (
+                await prisma.role.findUnique({
+                  where: { name: "Lyrist" },
+                })
+              )?.id,
             },
           },
         },

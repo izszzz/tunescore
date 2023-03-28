@@ -112,7 +112,7 @@ model Resource {
   links      Link[]
   unionType ResourceUnionType
   bookmarks Bookmark[]
-  tagMaps   TagMap[]
+  tags   Tag[]
 
   music  Music?  @relation("MusicResource")
   band   Band?   @relation("BandResource")
@@ -252,19 +252,18 @@ model Vote {
 }
 
 model Comment {
-  id   String @id @default(uuid()) @map("_id")
+  id   String @id @default(uuid())
   body String
+  unionType CommentUnionType
 
-  pull  Pull?  @relation("PullComment", fields: [unionId], references: [id], map: "comment_pull")
-  issue Issue? @relation("IssueComment", fields: [unionId], references: [id], map: "comment_issue")
+  pull  Pull?  @relation("PullComment", fields: [unionId], references: [id], map: "comment_pull_fk")
+  issue Issue? @relation("IssueComment", fields: [unionId], references: [id], map: "comment_issue_fk")
+  unionId   String
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
   notifications Notification[] @relation("CommentNotification")
-
-  unionId   String
-  unionType CommentUnionType
 }
 
 model Bookmark {
@@ -288,7 +287,7 @@ model Participation {
   music   Music  @relation(fields: [musicId], references: [id])
   musicId String
 
-  roleMap RoleMap[]
+  roles Role[]
 
   @@unique([artistId, musicId])
 }
@@ -297,38 +296,14 @@ model Role {
   id   String @id @default(uuid())
   name String @unique
 
-  roleMap RoleMap[]
-}
-
-model RoleMap {
-  id String @id @default(uuid())
-
-  role   Role   @relation(fields: [roleId], references: [id])
-  roleId String
-
-  participation   Participation @relation(fields: [participationId], references: [id])
-  participationId String
-
-  @@unique([roleId, participationId])
+  participations Participation[]
 }
 
 model Tag {
   id String @id @default(uuid())
 
   name   String   @unique
-  tagMap TagMap[]
-}
-
-model TagMap {
-  id String @id @default(uuid())
-
-  tag   Tag    @relation(fields: [tagId], references: [id])
-  tagId String
-
-  resource   Resource @relation(fields: [resourceId], references: [id])
-  resourceId String
-
-  @@unique([tagId, resourceId])
+  resource Resource[]
 }
 
 model Notification {

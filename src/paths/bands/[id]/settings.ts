@@ -7,15 +7,15 @@ export const selectArtists = (id: string | undefined) => ({
   selectTags = (id: string | undefined) => ({
     data: {
       resource: {
-        update: { tagMaps: { create: { tag: { connect: { id } } } } },
+        update: { tag: { connect: { id } } },
       },
     },
   }),
-  removeTags = (id: string, resourceId: string) => ({
+  removeTags = (id: string) => ({
     data: {
       resource: {
         update: {
-          tagMaps: { delete: { tagId_resourceId: { resourceId, tagId: id } } },
+          tags: { disconnect: { id } },
         },
       },
     },

@@ -25,10 +25,10 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
   return (
     <MusicSquareCard
       image={getImage(
-        {
-          ...data.resource.links,
-          ...data.albums[0]?.resource.links,
-        },
+        [
+          ...data.resource.links.filter(({ type }) => type !== "Spotify"),
+          ...(data.albums[0]?.resource.links ?? []),
+        ],
         200,
         { square: true }
       )}

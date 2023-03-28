@@ -25,10 +25,10 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter(),
     title = setLocale(data.resource.name, router),
     image = getImage(
-      {
-        ...data.resource.links,
-        ...data.albums[0]?.resource.links,
-      },
+      [
+        ...data.resource.links.filter(({ type }) => type !== "Spotify"),
+        ...(data.albums[0]?.resource.links ?? []),
+      ],
       60
     );
   return (

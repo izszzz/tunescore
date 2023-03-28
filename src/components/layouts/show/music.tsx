@@ -123,7 +123,12 @@ const MusicLayout = ({
                 height="80"
                 src={
                   getImage(
-                    { ...resource.links, ...albums[0]?.resource.links },
+                    [
+                      ...resource.links.filter(
+                        ({ type }) => type !== "Spotify"
+                      ),
+                      ...(albums[0]?.resource.links ?? []),
+                    ],
                     80
                   ) || ""
                 }

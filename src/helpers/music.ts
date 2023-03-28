@@ -16,7 +16,7 @@ type Data = Prisma.MusicGetPayload<{
     participations: {
       include: {
         artist: { include: { resource: { include: { name: true } } } };
-        roleMap: { include: { role: true } };
+        roles: true;
       };
     };
   };
@@ -57,7 +57,19 @@ export const musicListArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {
       participations: participatedArtistArgs(session),
-      albums: { include: { resource: { include: { links: true } } } },
+      albums: {
+        where: {
+          resource: {
+            links: {
+              some: { type: "Spotify" },
+            },
+          },
+        },
+        include: {
+          resource: { include: { links: { where: { type: "Spotify" } } } },
+        },
+        take: 1,
+      },
       band: { include: { resource: { include: { name: true } } } },
       resource: resourceArgs(session),
       user: userArgs,

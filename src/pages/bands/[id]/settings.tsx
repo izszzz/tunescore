@@ -54,7 +54,7 @@ const BandSettings: NextPage = () => {
   if (!data) return <></>;
   const bandData = data as BandLayoutProps["data"],
     {
-      resource: { tagMaps, ...resource },
+      resource: { tags, ...resource },
     } = bandData;
   return (
     <BandLayout activeTab="settings" data={bandData} query={query}>
@@ -91,10 +91,10 @@ const BandSettings: NextPage = () => {
             details &&
             update.mutate({
               ...query,
-              ...removeTags(details.option.id, resource.id),
+              ...removeTags(details.option.id),
             }),
         }}
-        value={tagMaps.map((tagMap) => tagMap.tag)}
+        value={tags}
       />
 
       <Typography variant="h4">Spotify</Typography>

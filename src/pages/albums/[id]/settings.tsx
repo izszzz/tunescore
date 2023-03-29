@@ -17,6 +17,9 @@ import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { clearBandMutate, selectBandMutate } from "../../../helpers";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import {
+  findLinkItunes,
+  findLinkSpotify,
+  findLinkYoutube,
   removeItunesMutate,
   removeSpotifyMutate,
   removeYoutubeMutate,
@@ -75,7 +78,7 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <SpotifyAlbumSelectForm
-        link={resource.links.find(({ type }) => type === "Spotify")}
+        link={findLinkSpotify(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
         }
@@ -84,7 +87,7 @@ const AlbumSettings: NextPage = () => {
             await context.client.spotify.findUniqueAlbum.query(id);
           spotifyAlbum?.tracks.items.map(async (track) => {
             const music = (await context.client.music.findFirstMusic.query({
-              where: { resource: { links: { every: { linkId: track.id } } } },
+              where: { resource: { links: { some: { linkId: track.id } } } },
               include: { albums: true },
             })) as Prisma.MusicGetPayload<{ include: { albums: true } }>;
             if (music) {
@@ -129,7 +132,7 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <ItunesAlbumSelectForm
-        link={resource.links.find(({ type }) => type === "iTunes")}
+        link={findLinkItunes(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeItunesMutate(resource.id) })
         }
@@ -154,7 +157,7 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        link={resource.links.find(({ type }) => type === "YouTube")}
+        link={findLinkYoutube(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
         }

@@ -19,6 +19,7 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import { findLinkYoutube } from "../../../helpers/link";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
@@ -43,7 +44,7 @@ const Music: NextPage = () => {
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"],
     { resource } = musicData,
-    youtube = resource.links.find(({ type }) => type === "YouTube");
+    youtube = findLinkYoutube(resource.links);
   return (
     <MusicLayout activeTab="info" data={musicData} query={query}>
       <Box mb={2}>

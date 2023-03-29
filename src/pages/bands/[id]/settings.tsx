@@ -17,6 +17,9 @@ import BandLayout from "../../../components/layouts/show/band";
 import type { BandLayoutProps } from "../../../components/layouts/show/band";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import {
+  findLinkItunes,
+  findLinkSpotify,
+  findLinkYoutube,
   removeItunesMutate,
   removeSpotifyMutate,
   removeYoutubeMutate,
@@ -101,7 +104,7 @@ const BandSettings: NextPage = () => {
       <Divider />
 
       <SpotifyArtistSelectForm
-        link={resource.links.find(({ type }) => type === "Spotify")}
+        link={findLinkSpotify(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
         }
@@ -124,7 +127,7 @@ const BandSettings: NextPage = () => {
       <Divider />
 
       <ItunesArtistSelectForm
-        link={resource.links.find(({ type }) => type === "iTunes")}
+        link={findLinkItunes(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeItunesMutate(resource.id) })
         }
@@ -145,7 +148,7 @@ const BandSettings: NextPage = () => {
       <Divider />
 
       <ChannelYoutubeSelectForm
-        link={resource.links.find(({ type }) => type === "YouTube")}
+        link={findLinkYoutube(resource.links)}
         onRemove={() =>
           update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
         }

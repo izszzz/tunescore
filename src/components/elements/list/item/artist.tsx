@@ -21,6 +21,7 @@ export interface ArtistListItemProps extends ListItemProps {
 }
 const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
   const router = useRouter(),
+    image = getImage(data.resource.links, 60),
     name = setLocale(data.resource.name, router);
   return (
     <ListItem
@@ -45,12 +46,9 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
       }}
       route={{ pathname: "/artists/[id]", query: { id: data.id } }}
     >
-      <Image
-        alt={name}
-        height="60"
-        src={getImage(data.resource.links, 60) || undefined}
-        style={{ borderRadius: 3 }}
-      />
+      {image && (
+        <Image alt={name} height="60" src={image} style={{ borderRadius: 3 }} />
+      )}
       {children}
     </ListItem>
   );

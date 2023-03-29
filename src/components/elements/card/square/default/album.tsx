@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import { getAlbumOwner } from "../../../../../helpers/album";
-import type { AlbumListArgsType } from "../../../../../helpers/album";
+import type { ResourceAlbumListArgsType } from "../../../../../helpers/album";
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
 import BookmarkChip from "../../../chip/bookmark";
@@ -16,28 +16,27 @@ import ResourceIcon from "../../../icon/resource";
 import AlbumSquareCard from "../album";
 
 interface AlbumDefaultSquareCardProps {
-  data: Prisma.AlbumGetPayload<AlbumListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceAlbumListArgsType>;
 }
 const AlbumDefaultSquareCard = ({ data }: AlbumDefaultSquareCardProps) => {
-  const router = useRouter();
-  const { type, owner } = getAlbumOwner(data, router);
+  const router = useRouter(),
+    { type, owner } = getAlbumOwner(data, router),
+    { id, links, name, bookmarks, _count } = data;
   return (
     <AlbumSquareCard
-      image={getImage(data.resource.links, 200)}
-      onClick={() =>
-        router.push({ pathname: "/albums/[id]", query: { id: data.id } })
-      }
+      image={getImage(links, 200)}
+      onClick={() => router.push({ pathname: "/albums/[id]", query: { id } })}
       size="200px"
       title={
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography noWrap variant="h6">
-              {setLocale(data.resource.name, router)}
+              {setLocale(name, router)}
             </Typography>
             <Box alignItems="center" display="flex">
               <BookmarkChip
-                bookmarked={isNonEmpty(data.resource.bookmarks)}
-                label={data.resource._count.bookmarks}
+                bookmarked={isNonEmpty(bookmarks)}
+                label={_count.bookmarks}
                 size="small"
               />
             </Box>

@@ -13,13 +13,14 @@ import { trpc } from "../../../utils/trpc";
 const Artist: NextPage = () => {
   const router = useRouter<"/artists/[id]">();
   const query = artistShowQuery({ router, session: useSession().data });
-  const { data } = trpc.artist.findUniqueArtist.useQuery(query);
+  const { data } = trpc.resource.findUniqueResource.useQuery(query);
   if (!data) return <></>;
-  const artistData = data as ArtistLayoutProps["data"];
+  const artistData = data as ArtistLayoutProps["data"],
+    { artist } = artistData;
   return (
     <ArtistLayout activeTab="info" data={artistData} query={query}>
-      <BandLists data={artistData.bands} />
-      <ParticipationLists data={artistData.participations}>
+      <BandLists data={artist?.bands ?? []} />
+      <ParticipationLists data={artist?.participations ?? []}>
         {(participation, data) => (
           <MusicListItem data={data.music}>{participation}</MusicListItem>
         )}

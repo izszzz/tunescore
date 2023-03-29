@@ -20,7 +20,7 @@ const Code: NextPage = () => {
     { enqueueSnackbar } = useSnackbar(),
     query = musicShowQuery({ router, session: useSession().data }),
     pullQuery = pullShowQuery({ router, session }),
-    music = trpc.music.findUniqueMusic.useQuery(query, {
+    music = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {

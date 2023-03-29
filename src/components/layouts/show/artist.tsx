@@ -17,17 +17,17 @@ import type {
 import { trpc } from "../../../utils/trpc";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
-import DefaultShowLayout from "./default";
-import type { DefaultShowLayoutProps } from "./default";
+import DefaultShowLayout from "./resource";
+import type { ResourceShowLayoutProps } from "./resource";
 
 export interface ArtistLayoutProps
-  extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.ArtistGetPayload<ArtistShowArgsType>;
+  extends Pick<ResourceShowLayoutProps, "children"> {
+  data: Prisma.ResourceGetPayload<ArtistShowArgsType>;
   query: ArtistShowQueryType;
   activeTab: "info" | "settings";
 }
 const ArtistLayout: React.FC<ArtistLayoutProps> = ({
-  data: { resource },
+  data,
   query,
   activeTab,
   children,
@@ -36,17 +36,17 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
     { enqueueSnackbar } = useSnackbar(),
     queryClient = useQueryClient(),
     { show } = useModal("auth-modal"),
-    update = trpc.artist.updateOneArtist.useMutation({
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
-          getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
         enqueueSnackbar("artist.update success");
       },
       onError: () => enqueueSnackbar("artist.update error"),
     }),
-    { bookmarks } = resource,
+    { bookmarks } = data,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/artists/[id]" },
       { label: "settings", pathname: "/artists/[id]/settings" },
@@ -66,7 +66,7 @@ const ArtistLayout: React.FC<ArtistLayoutProps> = ({
         },
       }}
       icon={<Person />}
-      resource={resource}
+      resource={data}
       tabs={tabs}
       type="Artist"
     >

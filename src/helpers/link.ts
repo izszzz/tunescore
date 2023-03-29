@@ -41,17 +41,13 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     images: (string | null)[];
   }) => ({
     data: {
-      resource: {
-        update: {
-          links: {
-            create: {
-              type,
-              linkId: id,
-              small: images[0],
-              medium: images[1],
-              large: images[2],
-            },
-          },
+      links: {
+        create: {
+          type,
+          linkId: id,
+          small: images[0],
+          medium: images[1],
+          large: images[2],
         },
       },
     },
@@ -64,12 +60,8 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     selectLinkMutate({ type: "iTunes", ...args }),
   removeLinkMutate = (type: LinkType, resourceId: string) => ({
     data: {
-      resource: {
-        update: {
-          links: {
-            delete: { type_resourceId: { type, resourceId } },
-          },
-        },
+      links: {
+        delete: { type_resourceId: { type, resourceId } },
       },
     },
   }),

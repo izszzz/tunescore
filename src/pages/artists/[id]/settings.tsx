@@ -31,7 +31,10 @@ import {
 import setLocale from "../../../helpers/locale";
 import { redirectToSignIn } from "../../../helpers/user";
 import { artistShowQuery } from "../../../paths/artists/[id]";
-import { removeBands, selectBands } from "../../../paths/artists/[id]/settings";
+import {
+  removeArtistBand,
+  selectArtistBand,
+} from "../../../paths/artists/[id]/settings";
 import { trpc } from "../../../utils/trpc";
 
 const ArtistSettings: NextPage = () => {
@@ -39,11 +42,11 @@ const ArtistSettings: NextPage = () => {
   const router = useRouter<"/artists/[id]">();
   const { enqueueSnackbar } = useSnackbar();
   const query = artistShowQuery({ router, session: useSession().data });
-  const { data } = trpc.artist.findUniqueArtist.useQuery(query);
-  const update = trpc.artist.updateOneArtist.useMutation({
+  const { data } = trpc.resource.findUniqueResource.useQuery(query);
+  const update = trpc.resource.updateOneResource.useMutation({
     onSuccess: (data) => {
       queryClient.setQueryData(
-        getQueryKey(trpc.artist.findUniqueArtist, query, "query"),
+        getQueryKey(trpc.resource.findUniqueResource, query, "query"),
         data
       );
       enqueueSnackbar("artist.update success");
@@ -53,18 +56,15 @@ const ArtistSettings: NextPage = () => {
 
   if (!data) return <></>;
   const artistData = data as ArtistLayoutProps["data"],
-    { resource } = artistData;
+    { artist, links, id, name } = artistData;
   return (
     <ArtistLayout activeTab="settings" data={artistData} query={query}>
       <SingleForm
         data={artistData}
         formContainerProps={{
-          onSuccess: ({ resource: { name } }) =>
+          onSuccess: ({ name }) =>
             name &&
-            update.mutate({
-              ...query,
-              data: { resource: { update: { name: { update: name } } } },
-            }),
+            update.mutate({ ...query, data: { name: { update: name } } }),
         }}
         loading={update.isLoading}
         textFieldElementProps={{ name: `resource.name.${router.locale}` }}
@@ -73,22 +73,20 @@ const ArtistSettings: NextPage = () => {
         loading={update.isLoading}
         multiple
         onChange={{
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({ ...query, ...selectBands(details?.option.id) }),
-          onRemove: (_e, _v, _r, details) =>
-            update.mutate({ ...query, ...removeBands(details?.option.id) }),
+          onSelect: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...selectArtistBand(d.option.id) }),
+          onRemove: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...removeArtistBand(d.option.id) }),
         }}
-        value={artistData.bands}
+        value={artist?.bands}
       />
 
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 
       <SpotifyArtistSelectForm
-        link={findLinkSpotify(resource.links)}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
-        }
+        link={findLinkSpotify(links)}
+        onRemove={() => update.mutate({ ...query, ...removeSpotifyMutate(id) })}
         onSelect={({ id, images }) =>
           update.mutate({
             ...query,
@@ -102,17 +100,15 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
 
       <Typography variant="h4">iTunes</Typography>
       <Divider />
 
       <ItunesArtistSelectForm
-        link={findLinkItunes(resource.links)}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
-        }
+        link={findLinkItunes(links)}
+        onRemove={() => update.mutate({ ...query, ...removeItunesMutate(id) })}
         onSelect={(value) =>
           value &&
           update.mutate({
@@ -123,17 +119,15 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
 
       <Typography variant="h4">Youtube</Typography>
       <Divider />
 
       <ChannelYoutubeSelectForm
-        link={findLinkYoutube(resource.links)}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
-        }
+        link={findLinkYoutube(links)}
+        onRemove={() => update.mutate({ ...query, ...removeYoutubeMutate(id) })}
         onSelect={(value) =>
           value?.id?.channelId &&
           update.mutate({
@@ -148,7 +142,7 @@ const ArtistSettings: NextPage = () => {
             }),
           })
         }
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
     </ArtistLayout>
   );

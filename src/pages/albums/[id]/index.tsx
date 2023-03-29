@@ -13,16 +13,18 @@ import { trpc } from "../../../utils/trpc";
 const Album: NextPage = () => {
   const router = useRouter<"/albums/[id]">();
   const path = albumShowQuery({ router, session: useSession().data });
-  const { data } = trpc.album.findUniqueAlbum.useQuery(path);
+  const { data } = trpc.resource.findUniqueResource.useQuery(path);
   if (!data) return <></>;
-  const albumData = data as AlbumLayoutProps["data"];
+  const albumData = data as AlbumLayoutProps["data"],
+    { album } = albumData;
+
   return (
     <AlbumLayout activeTab="info" data={albumData} query={path}>
-      {albumData.band && <BandLists data={[albumData.band]} />}
+      {album?.band && <BandLists data={[album.band]} />}
 
-      <MusicLists data={albumData.musics} />
+      <MusicLists data={album?.musics ?? []} />
 
-      <ArtistLists data={albumData.artists} />
+      <ArtistLists data={album?.artists ?? []} />
     </AlbumLayout>
   );
 };

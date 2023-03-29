@@ -4,10 +4,9 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 
 export type BandListArgsType = ReturnType<typeof bandListArgs>;
-export const bandListArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.BandArgs>()({
+export type ResourceBandListArgsType = ReturnType<typeof resourceBandListArgs>;
+export const bandArgs = Prisma.validator<Prisma.BandArgs>()({
     include: {
-      resource: resourceArgs(session),
       _count: {
         select: {
           artists: true,
@@ -16,4 +15,12 @@ export const bandListArgs = (session: SessionArg) =>
         },
       },
     },
-  });
+  }),
+  bandListArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.BandArgs>()({
+      include: { resource: resourceArgs(session), ...bandArgs.include },
+    }),
+  resourceBandListArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.ResourceArgs>()({
+      include: { ...resourceArgs(session).include, band: bandArgs },
+    });

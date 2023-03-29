@@ -15,8 +15,8 @@ import type { ParticipatedArtistArgs } from "../../../../helpers/participation";
 import { trpc } from "../../../../utils/trpc";
 import SearchAutocomplete from "../../autocomplete/search";
 import { handleChangeAutocomplete } from "../../autocomplete/update";
-import RoleUpdateAutocomplete from "../../autocomplete/update/role";
-import type { RoleUpdateAutocompleteProps } from "../../autocomplete/update/role";
+import ParticipationUpdateAutocomplete from "../../autocomplete/update/participation";
+import type { ParticipationUpdateAutocompleteProps } from "../../autocomplete/update/participation";
 import CloseIconButton from "../../button/icon/close";
 import ArtistListItem from "../../list/item/artist";
 
@@ -26,14 +26,17 @@ interface ArtistsUpdateFormProps<T> {
   loadingButtonProps: Omit<LoadingButtonProps, "onClick"> & {
     onClick: (value: Artist | undefined) => void;
   };
-  roleUpdateAutocompleteProps: RoleUpdateAutocompleteProps;
+  participationUpdateAutocompleteProps: Omit<
+    ParticipationUpdateAutocompleteProps,
+    "participationId"
+  >;
   onDestroy: (value: T) => void;
 }
 function ArtistsUpdateForm({
   data,
   loading,
   loadingButtonProps,
-  roleUpdateAutocompleteProps,
+  participationUpdateAutocompleteProps,
   onDestroy,
 }: ArtistsUpdateFormProps<
   Prisma.ParticipationGetPayload<ParticipatedArtistArgs>
@@ -53,10 +56,14 @@ function ArtistsUpdateForm({
             <ArtistListItem data={participation.artist} />
           </Grid>
           <Grid item xs={3}>
-            <RoleUpdateAutocomplete
-              {...roleUpdateAutocompleteProps}
+            <ParticipationUpdateAutocomplete
+              {...participationUpdateAutocompleteProps}
               loading={loading}
-              value={participation.roles}
+              participationId={participation.id}
+              value={participation.roles.map((role) => ({
+                ...role,
+                participationId: participation.id,
+              }))}
             />
           </Grid>
           <Grid

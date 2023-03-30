@@ -13,7 +13,7 @@ interface LinkButtonsProps {
   type: ResourceUnionType;
 }
 const LinkButtons = ({ data, type }: LinkButtonsProps) => {
-  if (isNonEmpty(data)) return <></>;
+  if (!isNonEmpty(data)) return <></>;
   return (
     <>
       {data.map((link) =>

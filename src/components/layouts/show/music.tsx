@@ -28,12 +28,12 @@ import LocaleAlert from "../../elements/alert/locale";
 import Image from "../../elements/image";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
-import DefaultShowLayout from "./default";
-import type { DefaultShowLayoutProps } from "./default";
+import DefaultShowLayout from "./resource";
+import type { ResourceShowLayoutProps } from "./resource";
 
 export interface MusicLayoutProps
-  extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.MusicGetPayload<MusicShowArgsType>;
+  extends Pick<ResourceShowLayoutProps, "children"> {
+  data: Prisma.ResourceGetPayload<MusicShowArgsType>;
   query: MusicShowQueryType;
   activeTab: "info" | "issues" | "pullrequests" | "settings";
 }
@@ -49,10 +49,10 @@ const MusicLayout = ({
     { show } = useModal("auth-dialog"),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    update = trpc.music.updateOneMusic.useMutation({
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
-          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
         enqueueSnackbar("music.update success");
@@ -60,8 +60,7 @@ const MusicLayout = ({
       onError: () => enqueueSnackbar("music.update error"),
     }),
     { id } = router.query,
-    { type, albums, resource } = data,
-    { bookmarks } = resource,
+    { music, bookmarks } = data,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/musics/[id]" },
       { label: "issues", pathname: "/musics/[id]/issues" },
@@ -79,55 +78,49 @@ const MusicLayout = ({
             update.mutate({
               ...query,
               data: {
-                resource: {
-                  update: {
-                    bookmarks: isNonEmpty(bookmarks)
-                      ? { delete: { id: bookmarks[0].id } }
-                      : {
-                          create: {
-                            user: {
-                              connect: { id: getCurrentUserId(session) },
-                            },
-                            ...(data.type === "ORIGINAL" && data.user
-                              ? {
-                                  notifications: {
-                                    create: {
-                                      unionType: "Bookmark",
-                                      user: { connect: { id } },
-                                    },
-                                  },
-                                }
-                              : {}),
-                          },
+                bookmarks: isNonEmpty(bookmarks)
+                  ? { delete: { id: bookmarks[0].id } }
+                  : {
+                      create: {
+                        user: {
+                          connect: { id: getCurrentUserId(session) },
                         },
-                  },
-                },
+                        ...(music?.type === "ORIGINAL" && music?.user
+                          ? {
+                              notifications: {
+                                create: {
+                                  unionType: "Bookmark",
+                                  user: { connect: { id } },
+                                },
+                              },
+                            }
+                          : {}),
+                      },
+                    },
               },
             });
           else show();
         },
       }}
       icon={<MusicNote />}
-      resource={resource}
+      resource={data}
       tabs={tabs}
       title={
         <>
           <MusicTitle data={data} />
           <Box ml={3}>
-            <Chip label={type} size="small" />
+            <Chip label={music?.type} size="small" />
           </Box>
-          {isNonEmpty(resource.links) && (
+          {isNonEmpty(data.links) && (
             <Box display="flex" justifyContent="center" pl={3}>
               <Image
-                alt={setLocale(resource.name, router)}
+                alt={setLocale(data.name, router)}
                 height="80"
                 src={
                   getImage(
                     [
-                      ...resource.links.filter(
-                        ({ type }) => type !== "Spotify"
-                      ),
-                      ...(albums[0]?.resource.links ?? []),
+                      ...data.links.filter(({ type }) => type !== "Spotify"),
+                      ...(music?.albums[0]?.resource.links ?? []),
                     ],
                     80
                   ) || ""
@@ -140,9 +133,7 @@ const MusicLayout = ({
       }
       type="Music"
     >
-      {resource.name?.[router.locale as keyof Locale] === null && (
-        <LocaleAlert />
-      )}
+      {data?.name?.[router.locale as keyof Locale] === null && <LocaleAlert />}
       {children}
     </DefaultShowLayout>
   );
@@ -155,7 +146,7 @@ const MusicTitle = ({ data }: MusicTitleProps) => {
   const router = useRouter();
   return (
     <Typography variant="h5">
-      <Owner data={data} /> {setLocale(data.resource.name, router)}
+      <Owner data={data} /> {setLocale(data?.name, router)}
     </Typography>
   );
 };
@@ -168,7 +159,7 @@ const Owner = ({ data }: OwnerProps) => {
     "/users/[id]" | "/bands/[id]" | "/artists/[id]"
   >("/users/[id]");
   const router = useRouter();
-  const { type, owner } = getMusicOwner(data, router);
+  const { type, owner } = getMusicOwner(data.music, router);
   useEffect(() => {
     setPathname(
       match(type)

@@ -12,13 +12,14 @@ import { trpc } from "../../../utils/trpc";
 const Band: NextPage = () => {
   const router = useRouter<"/bands/[id]">();
   const path = bandShowQuery({ router, session: useSession().data });
-  const { data } = trpc.band.findUniqueBand.useQuery(path);
+  const { data } = trpc.resource.findUniqueResource.useQuery(path);
   if (!data) return <></>;
-  const bandData = data as BandLayoutProps["data"];
+  const bandData = data as BandLayoutProps["data"],
+    { band } = bandData;
   return (
     <BandLayout activeTab="info" data={bandData} query={path}>
-      <MusicLists data={bandData.musics} />
-      <ArtistLists data={bandData.artists} />
+      <MusicLists data={band?.musics || []} />
+      <ArtistLists data={band?.artists || []} />
     </BandLayout>
   );
 };

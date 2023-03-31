@@ -1,6 +1,10 @@
-export const selectBands = (id: string | undefined) => ({
-    data: { bands: { connect: { id } } },
+export const selectArtistBand = (id: string) => ({
+    data: {
+      artist: { update: { bands: { connect: { id } } } },
+    },
   }),
-  removeBands = (id: string | undefined) => ({
-    data: { bands: { disconnect: { id } } },
+  removeArtistBand = (id: string) => ({
+    data: {
+      artist: { update: { bands: { disconnect: { id } } } },
+    },
   });

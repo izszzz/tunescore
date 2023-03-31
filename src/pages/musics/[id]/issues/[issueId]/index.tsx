@@ -24,7 +24,7 @@ const Issue: NextPage = () => {
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
     create = trpc.comment.createOneComment.useMutation(),
-    music = trpc.music.findUniqueMusic.useQuery(query, {
+    music = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     issue = trpc.issue.findUniqueIssue.useQuery(

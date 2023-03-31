@@ -16,18 +16,18 @@ import ResourceIcon from "../../../icon/resource";
 import MusicSquareCard from "../music";
 
 interface MusicDefaultSquareCardProps {
-  data: Prisma.MusicGetPayload<MusicListArgsType>;
+  data: Prisma.ResourceGetPayload<MusicListArgsType>;
 }
 const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
   const router = useRouter(),
-    { type, owner } = getMusicOwner(data, router),
-    { id } = data;
+    { type, owner } = getMusicOwner(data?.music, router),
+    { id, links, name, bookmarks, music, _count } = data;
   return (
     <MusicSquareCard
       image={getImage(
         [
-          ...data.resource.links.filter(({ type }) => type !== "Spotify"),
-          ...(data.albums[0]?.resource.links ?? []),
+          ...links.filter(({ type }) => type !== "Spotify"),
+          ...(music?.albums[0]?.resource.links ?? []),
         ],
         200,
         { square: true }
@@ -38,12 +38,12 @@ const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography noWrap variant="h6">
-              {setLocale(data.resource.name, router)}
+              {setLocale(name, router)}
             </Typography>
             <Box alignItems="center" display="flex">
               <BookmarkChip
-                bookmarked={isNonEmpty(data.resource.bookmarks)}
-                label={data.resource._count.bookmarks}
+                bookmarked={isNonEmpty(bookmarks)}
+                label={_count.bookmarks}
                 size="small"
               />
             </Box>

@@ -21,10 +21,11 @@ import Footer from "../../elements/footer";
 import DefaultHeader from "../../elements/header/default";
 import Image from "../../elements/image";
 
-import ShowLayout from "./";
-import type { ShowLayoutProps } from "./";
+import ShowLayout from ".";
+import type { ShowLayoutProps } from ".";
 
-export interface DefaultShowLayoutProps extends Omit<ShowLayoutProps, "title"> {
+export interface ResourceShowLayoutProps
+  extends Omit<ShowLayoutProps, "title"> {
   bookmarkToggleButtonProps: Omit<BookmarkToggleIconButtonProps, "value">;
   type: ResourceUnionType;
   resource: Prisma.ResourceGetPayload<{
@@ -46,7 +47,7 @@ const DefaultShowLayout = ({
   title,
   icon,
   ...props
-}: DefaultShowLayoutProps) => {
+}: ResourceShowLayoutProps) => {
   const router = useRouter(),
     { show } = useModal("report-dialog"),
     {

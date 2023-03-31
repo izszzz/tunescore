@@ -30,7 +30,7 @@ const NewPull: NextPage = () => {
     { id } = router.query,
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
-    music = trpc.music.findUniqueMusic.useQuery(query, {
+    music = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     create = trpc.pull.createOnePull.useMutation({
@@ -41,13 +41,16 @@ const NewPull: NextPage = () => {
         }),
       onError: (error) => console.log(error),
     });
+
+  if (!music.data) return <></>;
+  const musicData = music.data as MusicLayoutProps["data"];
   const handleSubmit = (data: Pull) => {
     if (isAuth(status))
       create.mutate({
         data: {
           ...data,
-          original: music.data?.score || "",
-          changed: music.data?.score || "",
+          original: musicData?.music?.score ?? "",
+          changed: musicData?.music?.score ?? "",
           status: "DRAFT",
           music: { connect: { id } },
           user: { connect: { id: userId } },
@@ -55,8 +58,6 @@ const NewPull: NextPage = () => {
       });
     else show();
   };
-  if (!music.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
   return (
     <MusicLayout activeTab="pullrequests" data={musicData} query={query}>
       <FormContainer onSuccess={handleSubmit}>

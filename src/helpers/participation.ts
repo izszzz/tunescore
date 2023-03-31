@@ -8,10 +8,7 @@ export type ParticipatedArtistArgs = ReturnType<typeof participatedArtistArgs>;
 export type ParticipatedMusicArgs = ReturnType<typeof participatedMusicArgs>;
 export const participatedArtistArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.ParticipationArgs>()({
-    include: {
-      artist: artistListArgs(session),
-      roles: true,
-    },
+    include: { artist: artistListArgs(session), roles: true },
   });
 export const participatedMusicArgs = (session: SessionArg) => ({
   include: {

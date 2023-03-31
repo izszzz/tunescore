@@ -8,21 +8,29 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 
 export type AlbumListArgsType = ReturnType<typeof albumListArgs>;
+export type ResourceAlbumListArgsType = ReturnType<
+  typeof resourceAlbumListArgs
+>;
+type Data = Prisma.ResourceGetPayload<ResourceAlbumListArgsType>;
 
-export const albumListArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.AlbumArgs>()({
+export const albumArgs = Prisma.validator<Prisma.AlbumArgs>()({
     include: {
       _count: { select: { artists: true, musics: true } },
-      resource: resourceArgs(session),
       band: { include: { resource: { include: { name: true } } } },
       artists: { include: { resource: { include: { name: true } } } },
     },
-  });
+  }),
+  albumListArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.AlbumArgs>()({
+      include: { ...albumArgs.include, resource: resourceArgs(session) },
+    }),
+  resourceAlbumListArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.ResourceArgs>()({
+      include: { ...resourceArgs(session).include, album: albumArgs },
+    });
 
-type Data = Prisma.AlbumGetPayload<AlbumListArgsType>;
-
-export const getAlbumOwner = (data: Data, router: NextRouter) =>
-  match(data)
+export const getAlbumOwner = (data: Data | null, router: NextRouter) =>
+  match(data?.album)
     .with({ band: P.select(P.not(P.nullish)) }, ({ id, resource }) => ({
       type: "BAND" as const,
       owner: { id, name: setLocale(resource?.name, router) },

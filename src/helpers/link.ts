@@ -1,4 +1,4 @@
-import type { LinkType, ResourceUnionType } from "@prisma/client";
+import type { Link, LinkType, ResourceUnionType } from "@prisma/client";
 import { match, P } from "ts-pattern";
 
 export interface SelectLinkMutateArgs {
@@ -8,7 +8,7 @@ export interface SelectLinkMutateArgs {
 
 export const createLink = (baseURL: string, path: string, id: string) =>
     `${baseURL}${path}${id}`,
-  getYoutubeLink = (type: ResourceUnionType, id: string) =>
+  getYoutubeURL = (type: ResourceUnionType, id: string) =>
     createLink(
       "https://www.youtube.com",
       match(type)
@@ -17,7 +17,7 @@ export const createLink = (baseURL: string, path: string, id: string) =>
         .exhaustive(),
       id
     ),
-  getSpotifyLink = (type: ResourceUnionType, id: string) =>
+  getSpotifyURL = (type: ResourceUnionType, id: string) =>
     createLink(
       "https://open.spotify.com",
       match(type)
@@ -27,6 +27,11 @@ export const createLink = (baseURL: string, path: string, id: string) =>
         .exhaustive(),
       id
     ),
+  findLink = (links: Link[], linkType: LinkType) =>
+    links.find(({ type }) => type === linkType),
+  findLinkSpotify = (links: Link[]) => findLink(links, "Spotify"),
+  findLinkItunes = (links: Link[]) => findLink(links, "iTunes"),
+  findLinkYoutube = (links: Link[]) => findLink(links, "YouTube"),
   selectLinkMutate = ({
     type,
     id,
@@ -36,17 +41,13 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     images: (string | null)[];
   }) => ({
     data: {
-      resource: {
-        update: {
-          links: {
-            create: {
-              type,
-              linkId: id,
-              small: images[0],
-              medium: images[1],
-              large: images[2],
-            },
-          },
+      links: {
+        create: {
+          type,
+          linkId: id,
+          small: images[0],
+          medium: images[1],
+          large: images[2],
         },
       },
     },
@@ -59,12 +60,8 @@ export const createLink = (baseURL: string, path: string, id: string) =>
     selectLinkMutate({ type: "iTunes", ...args }),
   removeLinkMutate = (type: LinkType, resourceId: string) => ({
     data: {
-      resource: {
-        update: {
-          links: {
-            delete: { type_resourceId: { type, resourceId } },
-          },
-        },
+      links: {
+        delete: { type_resourceId: { type, resourceId } },
       },
     },
   }),

@@ -23,6 +23,9 @@ import type { MusicLayoutProps } from "../../../components/layouts/show/music";
 import { clearBandMutate, selectBandMutate } from "../../../helpers";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import {
+  findLinkItunes,
+  findLinkSpotify,
+  findLinkYoutube,
   removeItunesMutate,
   removeSpotifyMutate,
   removeYoutubeMutate,
@@ -34,9 +37,9 @@ import setLocale from "../../../helpers/locale";
 import { isSelf, redirectToSignIn } from "../../../helpers/user";
 import {
   removeRole,
-  removeTags,
+  removeTag,
   selectRole,
-  selectTags,
+  selectTag,
 } from "../../../paths/bands/[id]/settings";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import {
@@ -53,17 +56,16 @@ const SettingsMusic: NextPage = () => {
     { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     context = trpc.useContext(),
-    { id } = router.query,
     query = musicShowQuery({ router, session }),
-    { data } = trpc.music.findUniqueMusic.useQuery(query),
-    destroy = trpc.music.deleteOneMusic.useMutation({
+    { data } = trpc.resource.findUniqueResource.useQuery(query),
+    destroy = trpc.resource.deleteOneResource.useMutation({
       onSuccess: () => enqueueSnackbar("music.destroy success"),
       onError: () => enqueueSnackbar("music.destroy error"),
     }),
-    update = trpc.music.updateOneMusic.useMutation({
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData<typeof data>(
-          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
         enqueueSnackbar("music.update success");
@@ -73,7 +75,7 @@ const SettingsMusic: NextPage = () => {
 
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"],
-    { resource } = musicData;
+    { music, tags, links, name, id } = musicData;
   return (
     <MusicLayout activeTab="settings" data={musicData} query={query}>
       <Typography variant="h4">Info</Typography>
@@ -81,12 +83,9 @@ const SettingsMusic: NextPage = () => {
       <SingleForm
         data={musicData}
         formContainerProps={{
-          onSuccess: ({ resource: { name } }) =>
+          onSuccess: ({ name }) =>
             name &&
-            update.mutate({
-              ...query,
-              data: { resource: { update: { name: { update: name } } } },
-            }),
+            update.mutate({ ...query, data: { name: { update: name } } }),
         }}
         loading={update.isLoading}
         textFieldElementProps={{ name: `resource.name.${router.locale}` }}
@@ -96,52 +95,54 @@ const SettingsMusic: NextPage = () => {
         onChange={{
           onClear: () => update.mutate({ ...query, ...clearBandMutate }),
           onSelect: (_e, _v, _r, d) =>
-            update.mutate({ ...query, ...selectBandMutate(d?.option.id) }),
+            d && update.mutate({ ...query, ...selectBandMutate(d.option.id) }),
         }}
-        value={musicData.band}
+        value={music?.band}
       />
       <AlbumUpdateAutocomplete
         loading={update.isLoading}
         onChange={{
-          onRemove: (_e, _v, _r, details) =>
-            update.mutate({ ...query, ...removeAlbums(details?.option.id) }),
-          onSelect: (_e, _v, _r, details) =>
-            update.mutate({ ...query, ...selectAlbums(details?.option.id) }),
+          onRemove: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...removeAlbums(d.option.id) }),
+          onSelect: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...selectAlbums(d.option.id) }),
         }}
-        value={musicData.albums}
+        value={music?.albums}
       />
       <TagUpdateAutocomplete
         loading={update.isLoading}
         onChange={{
-          onSelect: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({ ...query, ...selectTags(details.option.id) }),
-          onRemove: (_e, _v, _r, details) =>
-            details &&
-            update.mutate({ ...query, ...removeTags(details.option.id) }),
+          onSelect: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...selectTag(d.option.id) }),
+          onRemove: (_e, _v, _r, d) =>
+            d && update.mutate({ ...query, ...removeTag(d.option.id) }),
         }}
-        value={resource.tags}
+        value={tags}
       />
       <ArtistsUpdateForm
-        data={musicData.participations}
+        data={music?.participations ?? []}
         loading={update.isLoading}
         loadingButtonProps={{
           onClick: (data) =>
-            data && update.mutate({ ...query, ...createParticipations(id) }),
+            data &&
+            update.mutate({ ...query, ...createParticipations(data.id) }),
         }}
         onDestroy={({ id }) =>
           update.mutate({ ...query, ...destroyParticipations(id) })
         }
-        roleUpdateAutocompleteProps={{
+        participationUpdateAutocompleteProps={{
           onChange: {
-            onSelect: (_e, _v, _r, details) =>
-              details &&
-              update.mutate({ ...query, ...selectRole(details.option.id) }),
-            onRemove: (_e, _v, _r, details) =>
-              details &&
+            onSelect: (_e, _v, _r, d) =>
+              d &&
               update.mutate({
                 ...query,
-                ...removeRole(details.option.id, resource.id),
+                ...selectRole(d.option.id, d.option.participationId),
+              }),
+            onRemove: (_e, _v, _r, d) =>
+              d &&
+              update.mutate({
+                ...query,
+                ...removeRole(d.option.id, d.option.participationId),
               }),
           },
         }}
@@ -155,8 +156,11 @@ const SettingsMusic: NextPage = () => {
             data={musicData}
             direction="column"
             formContainerProps={{
-              onSuccess: ({ lyric }) =>
-                update.mutate({ ...query, data: { lyric } }),
+              onSuccess: ({ music }) =>
+                update.mutate({
+                  ...query,
+                  data: { music: { update: { lyric: music?.lyric } } },
+                }),
             }}
             loading={update.isLoading}
             textFieldElementProps={{ name: "lyric" }}
@@ -168,10 +172,8 @@ const SettingsMusic: NextPage = () => {
       <Divider />
 
       <SpotifyMusicSelectForm
-        link={resource.links.find(({ type }) => type === "Spotify")}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
-        }
+        link={findLinkSpotify(links)}
+        onRemove={() => update.mutate({ ...query, ...removeSpotifyMutate(id) })}
         onSelect={async (item) => {
           const album = await context.client.album.findFirstAlbum.query({
             where: {
@@ -188,23 +190,25 @@ const SettingsMusic: NextPage = () => {
           await update.mutate({
             ...query,
             data: {
+              music: {
+                update: {
+                  isrc: item.external_ids.isrc,
+                  albums: { connect: { id: album?.id } },
+                },
+              },
               ...selectSpotifyMutate({ id: item.id, images: [] }).data,
-              isrc: item.external_ids.isrc,
-              albums: { connect: { id: album?.id } },
             },
           });
         }}
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
 
       <Typography variant="h4">iTunes</Typography>
       <Divider />
 
       <MusicItunesSelectForm
-        link={resource.links.find(({ type }) => type === "iTunes")}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
-        }
+        link={findLinkItunes(links)}
+        onRemove={() => update.mutate({ ...query, ...removeItunesMutate(id) })}
         onSelect={(value) =>
           value &&
           update.mutate({
@@ -219,17 +223,15 @@ const SettingsMusic: NextPage = () => {
             }),
           })
         }
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
 
       <Typography variant="h4">Youtube</Typography>
       <Divider />
 
       <MusicYoutubeSelectForm
-        link={resource.links.find(({ type }) => type === "YouTube")}
-        onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
-        }
+        link={findLinkYoutube(links)}
+        onRemove={() => update.mutate({ ...query, ...removeYoutubeMutate(id) })}
         onSelect={(value) =>
           value?.id?.videoId &&
           update.mutate({
@@ -244,12 +246,12 @@ const SettingsMusic: NextPage = () => {
             }),
           })
         }
-        term={setLocale(resource.name, router)}
+        term={setLocale(name, router)}
       />
       <Typography variant="h4">Danger Zone</Typography>
       <Divider />
 
-      {data.type === "ORIGINAL" && isSelf(session, musicData) && (
+      {music?.type === "ORIGINAL" && isSelf(session, music) && (
         <DangerAlert
           loadingButtonProps={{
             loading: destroy.isLoading,

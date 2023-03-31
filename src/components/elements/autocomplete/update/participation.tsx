@@ -9,17 +9,21 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-export type RoleUpdateAutocompleteProps = Pick<
-  UpdateAutocompleteProps<Role, true, undefined, undefined>,
+type CustomRole = Role & { participationId: string };
+export type ParticipationUpdateAutocompleteProps = Pick<
+  UpdateAutocompleteProps<CustomRole, true, undefined, undefined>,
   "onChange" | "loading" | "value"
->;
-const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
+> & { participationId: string };
+const ParticipationUpdateAutocomplete = ({
+  participationId,
+  ...props
+}: ParticipationUpdateAutocompleteProps) => {
   const { enqueueSnackbar } = useSnackbar(),
-    search = trpc.search.tag.useMutation({
-      onError: () => enqueueSnackbar("tag.search error"),
+    search = trpc.search.role.useMutation({
+      onError: () => enqueueSnackbar("role.search error"),
     });
   return (
-    <UpdateAutocomplete<Role, true>
+    <UpdateAutocomplete<CustomRole, true>
       {...props}
       ChipProps={{ size: "small", icon: <LocalOffer /> }}
       getOptionLabel={({ name }) => name}
@@ -27,10 +31,10 @@ const RoleUpdateAutocomplete = (props: RoleUpdateAutocompleteProps) => {
       onInputChange={(_e, value) =>
         search.mutate({ where: { name: { contains: value } } })
       }
-      options={search.data || []}
+      options={search.data?.map((role) => ({ ...role, participationId })) ?? []}
       textFieldProps={{ label: "tag", margin: "dense" }}
     />
   );
 };
 
-export default RoleUpdateAutocomplete;
+export default ParticipationUpdateAutocomplete;

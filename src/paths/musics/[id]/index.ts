@@ -25,36 +25,35 @@ export const musicShowQuery = ({
   >;
   session: SessionArg;
 }) =>
-  Prisma.validator<Prisma.MusicFindUniqueArgs>()({
+  Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
     where: { id },
     ...musicShowArgs(session),
   });
 const musicShowArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.MusicArgs>()({
+  Prisma.validator<Prisma.ResourceArgs>()({
     include: {
-      user: userArgs,
-      band: bandListArgs(session),
-      albums: {
-        where: {
-          resource: { links: { every: { type: "Spotify" } } },
-        },
-        ...albumListArgs(session),
-        take: 1,
-      },
-      participations: participatedArtistArgs(session),
-      pulls: {
-        ...pullShowArgs(session),
-        where: { status: "VOTE" as const },
-        take: 3,
-      },
-      transactions: {
-        where: { type: "PURCHASE" as const, user: userWhere(session) },
-      },
-      carts: { where: { user: userWhere(session) } },
-      resource: {
+      ...resourceArgs(session).include,
+      music: {
         include: {
-          ...resourceArgs(session).include,
-          tags: true,
+          user: userArgs,
+          band: bandListArgs(session),
+          albums: {
+            where: {
+              resource: { links: { every: { type: "Spotify" } } },
+            },
+            ...albumListArgs(session),
+            take: 1,
+          },
+          participations: participatedArtistArgs(session),
+          pulls: {
+            ...pullShowArgs(session),
+            where: { status: "VOTE" as const },
+            take: 3,
+          },
+          transactions: {
+            where: { type: "PURCHASE" as const, user: userWhere(session) },
+          },
+          carts: { where: { user: userWhere(session) } },
         },
       },
     },

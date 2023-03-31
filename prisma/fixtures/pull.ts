@@ -67,19 +67,25 @@ export const PullFactory = async () =>
               connect: { id: (await UserFactory).id },
             },
           },
-          // {
-          //   title: "Comment",
-          //   body: "Comment",
-          //   status: "DRAFT",
-          //   original: "",
-          //   changed: "",
-          //   user: {
-          //     connect: { id: (await UserFactory).id },
-          //   },
-          //   comments: {
-          //     connect: { id: (await PullComment()).id },
-          //   },
-          // },
+          {
+            title: "Comment",
+            body: "Comment",
+            status: "DRAFT",
+            original: "",
+            changed: "",
+            user: {
+              connect: { id: (await UserFactory).id },
+            },
+            comments: {
+              create: {
+                body: "Body",
+                user: {
+                  connect: { id: (await UserFactory).id },
+                },
+                unionType: "Pull",
+              },
+            },
+          },
         ],
       },
     },

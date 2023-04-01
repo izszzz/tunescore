@@ -34,7 +34,7 @@ const Cart: NextPage = () => {
         data={data}
         listItem={(props) => (
           <MusicListItem
-            data={props}
+            data={{ ...props.resource, music: props }}
             secondaryAction={
               <IconButton
                 edge="end"

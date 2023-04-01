@@ -11,7 +11,6 @@ generator trpc {
   contextPath          = "../src/server/context"
   isGenerateSelect     = true
   isGenerateInclude    = true
-  generateModelActions = "aggregate,count,create,createMany,delete,deleteMany,findFirst,findFirstOrThrow,findMany,findUnique,findUniqueOrThrow,groupBy,update,updateMany,upsert"
 }
 
 // generator erd {

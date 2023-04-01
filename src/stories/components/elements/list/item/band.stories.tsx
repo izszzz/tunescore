@@ -15,23 +15,24 @@ export const Default = Template.bind({});
 Default.args = {
   data: {
     id: "1",
-    resource: {
-      id: "",
-      name: {
-        ja: "バンドリストアイテム",
-        en: "BandListItem",
-        resourceId: "",
-      },
-      links: [],
-      unionType: "Artist",
-      bookmarks: [],
-      _count: { bookmarks: 3 },
+    name: {
+      ja: "バンドリストアイテム",
+      en: "BandListItem",
+      resourceId: "",
     },
-    resourceId: "",
-    _count: {
-      musics: 0,
-      artists: 0,
-      albums: 0,
+    tags: [],
+    links: [],
+    unionType: "Artist",
+    bookmarks: [],
+    _count: { bookmarks: 3 },
+    band: {
+      id: "",
+      resourceId: "",
+      _count: {
+        musics: 0,
+        artists: 0,
+        albums: 0,
+      },
     },
   },
 };

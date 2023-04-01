@@ -32,7 +32,12 @@ const Library: NextPage = () => {
           options: search.data || [],
           loading: search.isLoading,
           renderOption: (_props, option) =>
-            option.music && <MusicListItem data={option.music} dense />,
+            option.music && (
+              <MusicListItem
+                data={{ ...option.music.resource, music: option.music }}
+                dense
+              />
+            ),
           getOptionLabel: ({ music }) =>
             music ? setLocale(music.resource.name, router) : "",
           onInputChange: (_e, v) => {
@@ -52,7 +57,10 @@ const Library: NextPage = () => {
         <MusicLists
           data={R.pipe(
             transactionData,
-            R.map((data) => data.music),
+            R.map(
+              (data) =>
+                data.music && { ...data.music.resource, music: data.music }
+            ),
             R.compact
           )}
         />

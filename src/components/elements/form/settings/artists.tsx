@@ -53,7 +53,12 @@ function ArtistsUpdateForm({
       {data.map((participation) => (
         <Grid container key={participation.id}>
           <Grid item xs={8}>
-            <ArtistListItem data={participation.artist} />
+            <ArtistListItem
+              data={{
+                ...participation.artist.resource,
+                artist: participation.artist,
+              }}
+            />
           </Grid>
           <Grid item xs={3}>
             <ParticipationUpdateAutocomplete

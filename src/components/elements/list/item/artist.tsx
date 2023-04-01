@@ -7,7 +7,7 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
-import type { ArtistListArgsType } from "../../../../helpers/artist";
+import type { ResourceArtistListArgsType } from "../../../../helpers/artist";
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import BandChip from "../../chip/band";
@@ -17,12 +17,12 @@ import Image from "../../image";
 import ListItem from ".";
 
 export interface ArtistListItemProps extends ListItemProps {
-  data: Prisma.ArtistGetPayload<ArtistListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceArtistListArgsType>;
 }
 const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
   const router = useRouter(),
-    image = getImage(data.resource.links, 60),
-    name = setLocale(data.resource.name, router);
+    image = getImage(data.links, 60),
+    name = setLocale(data.name, router);
   return (
     <ListItem
       icon={<Person />}
@@ -30,15 +30,15 @@ const ArtistListItem = ({ data, children }: ArtistListItemProps) => {
         primary: name,
         secondary: (
           <Stack component="span" direction="row" spacing={1}>
-            {isNonEmpty(data.bands) && (
+            {data.artist && isNonEmpty(data.artist.bands) && (
               <BandChip
-                label={setLocale(data.bands[0].resource.name, router)}
+                label={setLocale(data.artist.bands[0].resource.name, router)}
                 size="small"
               />
             )}
             <BookmarkChip
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
-              label={data.resource._count.bookmarks}
+              bookmarked={isNonEmpty(data.bookmarks)}
+              label={data._count.bookmarks}
               size="small"
             />
           </Stack>

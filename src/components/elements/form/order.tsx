@@ -24,7 +24,9 @@ const OrderForm = () => {
           label: <CreditCard data={paymentMethod} />,
         }))}
       />
-      <MusicLists data={data} />
+      <MusicLists
+        data={data.map(({ resource, ...music }) => ({ ...resource, music }))}
+      />
       {data.reduce((sum, data) => sum + (data.price || 0), 0)}
       <OrderLoadingButton
         disableElevation

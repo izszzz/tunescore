@@ -79,13 +79,26 @@ const Music: NextPage = () => {
 
       {music?.lyric && <Article text={music.lyric} />}
 
-      {music?.band && <BandLists data={[music.band]} />}
+      {music?.band && (
+        <BandLists data={[{ ...music.band.resource, band: music.band }]} />
+      )}
       <ParticipationLists data={music?.participations ?? []}>
         {(participation, data) => (
-          <ArtistListItem data={data?.artist}>{participation}</ArtistListItem>
+          <ArtistListItem
+            data={{ ...data.artist.resource, artist: data.artist }}
+          >
+            {participation}
+          </ArtistListItem>
         )}
       </ParticipationLists>
-      <AlbumLists data={music?.albums ?? []} />
+      <AlbumLists
+        data={
+          music?.albums.map(({ resource, ...album }) => ({
+            ...resource,
+            album,
+          })) ?? []
+        }
+      />
     </MusicLayout>
   );
 };

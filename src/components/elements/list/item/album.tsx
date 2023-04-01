@@ -7,7 +7,7 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
-import type { AlbumListArgsType } from "../../../../helpers/album";
+import type { ResourceAlbumListArgsType } from "../../../../helpers/album";
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import ArtistChip from "../../chip/artist";
@@ -18,11 +18,11 @@ import Image from "../../image";
 import ListItem from ".";
 
 export interface AlbumListItemProps extends ListItemProps {
-  data: Prisma.AlbumGetPayload<AlbumListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceAlbumListArgsType>;
 }
 const AlbumListItem = ({ data }: AlbumListItemProps) => {
   const router = useRouter();
-  const title = setLocale(data.resource.name, router);
+  const title = setLocale(data.name, router);
   return (
     <ListItem
       icon={<Album />}
@@ -31,12 +31,12 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
         secondary: (
           <Stack component="span" direction="row" spacing={1}>
             <BookmarkChip
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
-              label={data.resource._count.bookmarks}
+              bookmarked={isNonEmpty(data.bookmarks)}
+              label={data._count.bookmarks}
               size="small"
             />
-            <MusicChip label={data._count.musics} size="small" />
-            <ArtistChip label={data._count.artists} size="small" />
+            <MusicChip label={data.album?._count.musics} size="small" />
+            <ArtistChip label={data.album?._count.artists} size="small" />
           </Stack>
         ),
       }}
@@ -48,7 +48,7 @@ const AlbumListItem = ({ data }: AlbumListItemProps) => {
       <Image
         alt={title}
         height="60"
-        src={getImage(data.resource.links, 60) || ""}
+        src={getImage(data.links, 60) || ""}
         style={{ borderRadius: 3 }}
       />
     </ListItem>

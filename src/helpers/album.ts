@@ -8,6 +8,7 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 
 export type AlbumListArgsType = ReturnType<typeof albumListArgs>;
+export type AlbumArgsType = typeof albumArgs;
 export type ResourceAlbumListArgsType = ReturnType<
   typeof resourceAlbumListArgs
 >;

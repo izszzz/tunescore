@@ -4,6 +4,7 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 
 export type ArtistListArgsType = ReturnType<typeof artistListArgs>;
+export type ArtistArgsType = typeof artistArgs;
 export type ResourceArtistListArgsType = ReturnType<
   typeof resourceArtistListArgs
 >;

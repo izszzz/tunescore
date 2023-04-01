@@ -24,7 +24,9 @@ const Transaction: NextPage = () => {
       <Typography>
         {data.music ? setLocale(data.music.resource.name, router) : ""}
       </Typography>
-      {data.music && <MusicListItem data={data.music} />}
+      {data.music && (
+        <MusicListItem data={{ ...data.music.resource, music: data.music }} />
+      )}
       <Typography>amount : {data.amount}</Typography>
 
       <Typography variant="h5">Stripe</Typography>

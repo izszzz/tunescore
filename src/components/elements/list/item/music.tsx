@@ -11,7 +11,7 @@ import { isNonEmpty } from "ts-array-length";
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicOwner } from "../../../../helpers/music";
-import type { MusicListArgsType } from "../../../../helpers/music";
+import type { ResourceMusicListArgsType } from "../../../../helpers/music";
 import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
 import Image from "../../image";
@@ -19,15 +19,15 @@ import Image from "../../image";
 import ListItem from ".";
 
 export interface MusicListItemProps extends ListItemProps {
-  data: Prisma.MusicGetPayload<MusicListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceMusicListArgsType>;
 }
 const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
   const router = useRouter(),
-    title = setLocale(data.resource.name, router),
+    title = setLocale(data.name, router),
     image = getImage(
       [
-        ...data.resource.links.filter(({ type }) => type !== "Spotify"),
-        ...(data.albums[0]?.resource.links ?? []),
+        ...data.links.filter(({ type }) => type !== "Spotify"),
+        ...(data.music?.albums[0]?.resource.links ?? []),
       ],
       60
     );
@@ -41,11 +41,11 @@ const MusicListItem = ({ data, children, ...props }: MusicListItemProps) => {
           <Stack component="span" direction="row" spacing={1}>
             <Owner data={data} />
             <BookmarkChip
-              bookmarked={isNonEmpty(data.resource.bookmarks)}
-              label={data.resource._count.bookmarks}
+              bookmarked={isNonEmpty(data.bookmarks)}
+              label={data._count.bookmarks}
               size="small"
             />
-            <Chip component="span" label={data.type} size="small" />
+            <Chip component="span" label={data.music?.type} size="small" />
           </Stack>
         ),
       }}

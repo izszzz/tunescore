@@ -12,17 +12,16 @@ interface ResourceListItemProps {
 }
 const ResourceListItem = ({ data }: ResourceListItemProps) =>
   match(data)
-    .with({ unionType: "Music", music: P.select(P.not(P.nullish)) }, (data) => (
+    .with({ unionType: "Music", music: P.not(P.nullish) }, (data) => (
       <MusicListItem data={data} />
     ))
-    .with({ unionType: "Album", album: P.select(P.not(P.nullish)) }, (data) => (
+    .with({ unionType: "Album", album: P.not(P.nullish) }, (data) => (
       <AlbumListItem data={data} />
     ))
-    .with(
-      { unionType: "Artist", artist: P.select(P.not(P.nullish)) },
-      (data) => <ArtistListItem data={data} />
-    )
-    .with({ unionType: "Band", band: P.select(P.not(P.nullish)) }, (data) => (
+    .with({ unionType: "Artist", artist: P.not(P.nullish) }, (data) => (
+      <ArtistListItem data={data} />
+    ))
+    .with({ unionType: "Band", band: P.not(P.nullish) }, (data) => (
       <BandListItem data={data} />
     ))
     .otherwise(() => <></>);

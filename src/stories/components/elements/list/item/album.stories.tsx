@@ -14,27 +14,28 @@ const Template: ComponentStory<typeof AlbumListItem> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   data: {
-    id: "1",
-    resource: {
-      id: "",
-      name: {
-        ja: "アルバムリストアイテム",
-        en: "AlbumListItem",
-        resourceId: "",
+    id: "",
+    name: {
+      ja: "アルバムリストアイテム",
+      en: "AlbumListItem",
+      resourceId: "",
+    },
+    tags: [],
+    links: [],
+    unionType: "Album",
+    bookmarks: [],
+    _count: { bookmarks: 3 },
+    album: {
+      id: "1",
+      resourceId: "",
+      upc: "",
+      band: null,
+      bandId: "",
+      _count: {
+        musics: 1,
+        artists: 3,
       },
-      links: [],
-      unionType: "Album",
-      bookmarks: [],
-      _count: { bookmarks: 3 },
+      artists: [],
     },
-    resourceId: "",
-    upc: "",
-    band: null,
-    bandId: "",
-    _count: {
-      musics: 1,
-      artists: 3,
-    },
-    artists: [],
   },
 };

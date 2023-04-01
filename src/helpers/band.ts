@@ -4,6 +4,7 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 
 export type BandListArgsType = ReturnType<typeof bandListArgs>;
+export type BandArgsType = typeof bandArgs;
 export type ResourceBandListArgsType = ReturnType<typeof resourceBandListArgs>;
 export const bandArgs = Prisma.validator<Prisma.BandArgs>()({
     include: {

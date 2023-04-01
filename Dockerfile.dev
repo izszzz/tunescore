@@ -19,6 +19,7 @@ RUN sudo chown -R $PWUSER:$PWUSER /home/$PWUSER/app
 
 COPY --chown=$PWUSER:$PWUSER . .
 
+RUN npx prisma generate
 RUN cd audiveris && \
     git config --global --add safe.directory /home/pwuser/app/audiveris && \
     ./gradlew build && \

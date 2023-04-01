@@ -32,7 +32,10 @@ const ReportDialog = create<ReportDialogProps>(({ unionType, unionId }) => {
     create = trpc.report.createOneReport.useMutation();
   useEffect(() => {
     setValue("unionType", unionType);
-    setValue("unionId", unionId);
+    match(unionType)
+      .with("User", () => setValue("reportedUserId", unionId))
+      .with("Music", () => setValue("reportedMusicId", unionId))
+      .otherwise(() => "");
   }, [unionId, unionType, setValue]);
   return (
     <Dialog onClose={hide} open={visible}>

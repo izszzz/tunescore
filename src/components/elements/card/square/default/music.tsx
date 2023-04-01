@@ -9,18 +9,18 @@ import { isNonEmpty } from "ts-array-length";
 
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
-import type { MusicListArgsType } from "../../../../../helpers/music";
+import type { ResourceMusicListArgsType } from "../../../../../helpers/music";
 import { getMusicOwner } from "../../../../../helpers/music";
 import BookmarkChip from "../../../chip/bookmark";
 import ResourceIcon from "../../../icon/resource";
 import MusicSquareCard from "../music";
 
 interface MusicDefaultSquareCardProps {
-  data: Prisma.ResourceGetPayload<MusicListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceMusicListArgsType>;
 }
 const MusicDefaultSquareCard = ({ data }: MusicDefaultSquareCardProps) => {
   const router = useRouter(),
-    { type, owner } = getMusicOwner(data?.music, router),
+    { type, owner } = getMusicOwner(data, router),
     { id, links, name, bookmarks, music, _count } = data;
   return (
     <MusicSquareCard

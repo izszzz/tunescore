@@ -9,20 +9,9 @@ import { resourceArgs } from "./resource";
 import type { SessionArg } from "./user";
 import { userArgs } from "./user";
 
-type Data = Prisma.MusicGetPayload<{
-  include: {
-    band: { include: { resource: { include: { name: true } } } };
-    user: typeof userArgs;
-    participations: {
-      include: {
-        artist: { include: { resource: { include: { name: true } } } };
-        roles: true;
-      };
-    };
-  };
-}>;
+type Data = Prisma.ResourceGetPayload<ResourceMusicListArgsType>;
 export const getMusicOwner = (data: Data | null, router: NextRouter) =>
-  match(data)
+  match(data?.music)
     .with(
       { type: "ORIGINAL", user: P.select(P.not(P.nullish)) },
       ({ id, name }) => ({ type: "USER" as const, owner: { id, name } })
@@ -53,6 +42,10 @@ export const getMusicOwner = (data: Data | null, router: NextRouter) =>
     .otherwise(() => ({ type: "NONE" as const, owner: null }));
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
+export type MusicArgsType = ReturnType<typeof musicArgs>;
+export type ResourceMusicListArgsType = ReturnType<
+  typeof resourceMusicListArgs
+>;
 export const musicArgs = (session: SessionArg) =>
     Prisma.validator<Prisma.MusicArgs>()({
       include: {

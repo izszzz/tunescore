@@ -43,7 +43,12 @@ const User: NextPage = () => {
             }),
         }}
       >
-        <MusicLists data={musicData.data} />
+        <MusicLists
+          data={musicData.data.map(({ resource, ...music }) => ({
+            ...resource,
+            music,
+          }))}
+        />
       </IndexLayout>
     </UserLayout>
   );

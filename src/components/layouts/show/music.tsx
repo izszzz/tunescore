@@ -159,7 +159,7 @@ const Owner = ({ data }: OwnerProps) => {
     "/users/[id]" | "/bands/[id]" | "/artists/[id]"
   >("/users/[id]");
   const router = useRouter();
-  const { type, owner } = getMusicOwner(data.music, router);
+  const { type, owner } = getMusicOwner(data, router);
   useEffect(() => {
     setPathname(
       match(type)

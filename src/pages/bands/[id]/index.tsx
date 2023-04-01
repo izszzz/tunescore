@@ -18,8 +18,22 @@ const Band: NextPage = () => {
     { band } = bandData;
   return (
     <BandLayout activeTab="info" data={bandData} query={path}>
-      <MusicLists data={band?.musics || []} />
-      <ArtistLists data={band?.artists || []} />
+      <MusicLists
+        data={
+          band?.musics.map(({ resource, ...music }) => ({
+            ...resource,
+            music,
+          })) ?? []
+        }
+      />
+      <ArtistLists
+        data={
+          band?.artists.map(({ resource, ...artist }) => ({
+            ...resource,
+            artist,
+          })) ?? []
+        }
+      />
     </BandLayout>
   );
 };

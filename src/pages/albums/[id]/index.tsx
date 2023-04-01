@@ -20,11 +20,27 @@ const Album: NextPage = () => {
 
   return (
     <AlbumLayout activeTab="info" data={albumData} query={path}>
-      {album?.band && <BandLists data={[album.band]} />}
+      {album?.band && (
+        <BandLists data={[{ ...album.band.resource, band: album.band }]} />
+      )}
 
-      <MusicLists data={album?.musics ?? []} />
+      <MusicLists
+        data={
+          album?.musics.map(({ resource, ...music }) => ({
+            ...resource,
+            music,
+          })) ?? []
+        }
+      />
 
-      <ArtistLists data={album?.artists ?? []} />
+      <ArtistLists
+        data={
+          album?.artists.map(({ resource, ...artist }) => ({
+            ...resource,
+            artist,
+          })) ?? []
+        }
+      />
     </AlbumLayout>
   );
 };

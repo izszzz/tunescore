@@ -19,10 +19,19 @@ const Artist: NextPage = () => {
     { artist } = artistData;
   return (
     <ArtistLayout activeTab="info" data={artistData} query={query}>
-      <BandLists data={artist?.bands ?? []} />
+      <BandLists
+        data={
+          artist?.bands.map(({ resource, ...band }) => ({
+            ...resource,
+            band,
+          })) ?? []
+        }
+      />
       <ParticipationLists data={artist?.participations ?? []}>
         {(participation, data) => (
-          <MusicListItem data={data.music}>{participation}</MusicListItem>
+          <MusicListItem data={{ ...data.music.resource, music: data.music }}>
+            {participation}
+          </MusicListItem>
         )}
       </ParticipationLists>
     </ArtistLayout>

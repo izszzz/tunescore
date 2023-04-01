@@ -49,24 +49,30 @@ RUN \
  else echo "Lockfile not found." && exit 1; \
  fi
 
+FROM --platform=linux/amd64 adoptopenjdk/openjdk11:slim AS audiverisBuilder
+WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y git
+COPY ./.git ./.git
+COPY ./audiveris ./audiveris
+RUN cd audiveris && \
+    ./gradlew build && \
+    tar -xf build/distributions/Audiveris-5.2.5.tar
+
+
 ##### RUNNER
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
-# openjdk11 tesseract-ocr-data-rus
-RUN apk update && apk add git 
+RUN apk update && apk add openjdk11
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# RUN git clone https://github.com/Audiveris/audiveris.git
-# RUN cd audiveris && \
-#     ./gradlew build --stacktrace && \
-#     tar -xf build/distributions/Audiveris-5.2.5.tar
-
 COPY ./.env.production.local ./
 
+COPY --from=audiverisBuilder /app/audiveris ./audiveris
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public

@@ -19,6 +19,7 @@ import ParticipationLists from "../../../components/elements/list/participation"
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import { findLinkYoutube } from "../../../helpers/link";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
@@ -29,11 +30,11 @@ const Music: NextPage = () => {
     { data: session } = useSession(),
     query = musicShowQuery({ router, session }),
     { enqueueSnackbar } = useSnackbar(),
-    { data } = trpc.music.findUniqueMusic.useQuery(query),
+    { data } = trpc.resource.findUniqueResource.useQuery(query),
     create = trpc.cart.createOneCart.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData<typeof data>(
-          getQueryKey(trpc.music.findUniqueMusic, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           (prev) => prev && { ...prev, carts: [data] }
         );
         enqueueSnackbar("cart.create success");
@@ -42,8 +43,8 @@ const Music: NextPage = () => {
     });
   if (!data) return <></>;
   const musicData = data as MusicLayoutProps["data"],
-    { resource } = musicData,
-    youtube = resource.links.find(({ type }) => type === "YouTube");
+    { music } = musicData,
+    youtube = findLinkYoutube(musicData.links);
   return (
     <MusicLayout activeTab="info" data={musicData} query={query}>
       <Box mb={2}>
@@ -63,10 +64,10 @@ const Music: NextPage = () => {
 
       {youtube && (
         <Box mb={2}>
-          <YoutubeAmbient videoId={youtube.linkId} />{" "}
+          <YoutubeAmbient videoId={youtube.linkId} />
         </Box>
       )}
-      {musicData.pulls.map((pull) => (
+      {music?.pulls.map((pull) => (
         <Box key={pull.id} mb={2}>
           <VoteCard
             badIconButtonProps={{ disabled: true }}
@@ -76,15 +77,15 @@ const Music: NextPage = () => {
         </Box>
       ))}
 
-      {musicData.lyric && <Article text={musicData.lyric} />}
+      {music?.lyric && <Article text={music.lyric} />}
 
-      {musicData.band && <BandLists data={[musicData.band]} />}
-      <ParticipationLists data={musicData.participations}>
+      {music?.band && <BandLists data={[music.band]} />}
+      <ParticipationLists data={music?.participations ?? []}>
         {(participation, data) => (
-          <ArtistListItem data={data.artist}>{participation}</ArtistListItem>
+          <ArtistListItem data={data?.artist}>{participation}</ArtistListItem>
         )}
       </ParticipationLists>
-      <AlbumLists data={musicData.albums} />
+      <AlbumLists data={music?.albums ?? []} />
     </MusicLayout>
   );
 };
@@ -96,14 +97,14 @@ interface ActionButtonProps {
 }
 const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
   const { data: session } = useSession();
-  return match(data)
+  return match(data.music)
     .with(
       {
         type: "ORIGINAL",
         price: P.when((price) => price || 0 > 0),
         transactions: P.when((transactions) => !isNonEmpty(transactions)),
       },
-      () => (
+      (data) => (
         <CartLoadingButton
           disabled={isNonEmpty(data.carts)}
           fullWidth
@@ -112,15 +113,23 @@ const ActionButton = ({ data, loading, onAddCart }: ActionButtonProps) => {
         />
       )
     )
-    .otherwise(({ id, score, user }) => (
+    .otherwise((data) => (
       <ScoreButtonGroup
         edit={{
-          route: { pathname: "/musics/[id]/score/edit", query: { id } },
-          hidden: !(data.type === "ORIGINAL" && isSelf(session, { user })),
+          route: {
+            pathname: "/musics/[id]/score/edit",
+            query: { id: data?.id ?? "" },
+          },
+          hidden: !(
+            data?.type === "ORIGINAL" && isSelf(session, { user: data?.user })
+          ),
         }}
         watch={{
-          route: { pathname: "/musics/[id]/score", query: { id } },
-          buttonProps: { disabled: !score },
+          route: {
+            pathname: "/musics/[id]/score",
+            query: { id: data?.id ?? "" },
+          },
+          buttonProps: { disabled: !data?.score },
         }}
       />
     ));

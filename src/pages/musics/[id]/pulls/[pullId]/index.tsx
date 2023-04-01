@@ -27,7 +27,7 @@ const Pull: NextPage = () => {
     create = trpc.comment.createOneComment.useMutation(),
     query = musicShowQuery({ router, session }),
     pullQuery = pullShowQuery({ router, session }),
-    music = trpc.music.findUniqueMusic.useQuery(query, {
+    music = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {

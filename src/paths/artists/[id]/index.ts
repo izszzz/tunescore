@@ -17,19 +17,18 @@ export const artistShowQuery = ({
   router: NextRouter<"/artists/[id]">;
   session: SessionArg;
 }) =>
-  Prisma.validator<Prisma.ArtistFindUniqueArgs>()({
+  Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
     where: { id },
     ...artistShowArgs(session),
   });
 const artistShowArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.ArtistArgs>()({
+  Prisma.validator<Prisma.ResourceArgs>()({
     include: {
-      bands: bandListArgs(session),
-      participations: participatedMusicArgs(session),
-      resource: {
+      ...resourceArgs(session).include,
+      artist: {
         include: {
-          ...resourceArgs(session).include,
-          tags: true,
+          bands: bandListArgs(session),
+          participations: participatedMusicArgs(session),
         },
       },
     },

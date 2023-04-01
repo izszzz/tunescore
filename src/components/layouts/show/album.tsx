@@ -17,17 +17,17 @@ import type {
 import { trpc } from "../../../utils/trpc";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
-import DefaultShowLayout from "./default";
-import type { DefaultShowLayoutProps } from "./default";
+import DefaultShowLayout from "./resource";
+import type { ResourceShowLayoutProps } from "./resource";
 
 export interface AlbumLayoutProps
-  extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.AlbumGetPayload<AlbumShowArgsType>;
+  extends Pick<ResourceShowLayoutProps, "children"> {
+  data: Prisma.ResourceGetPayload<AlbumShowArgsType>;
   query: AlbumShowQueryType;
   activeTab: "info" | "settings";
 }
 const AlbumLayout: React.FC<AlbumLayoutProps> = ({
-  data: { resource },
+  data,
   query,
   activeTab,
   children,
@@ -36,17 +36,17 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
     { show } = useModal("auth-modal"),
     { data: session, status } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
-    update = trpc.album.updateOneAlbum.useMutation({
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
-          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
         enqueueSnackbar("album.update success");
       },
       onError: () => enqueueSnackbar("album.update error"),
     }),
-    { bookmarks } = resource,
+    { bookmarks } = data,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/albums/[id]" },
       { label: "settings", pathname: "/albums/[id]/settings" },
@@ -66,7 +66,7 @@ const AlbumLayout: React.FC<AlbumLayoutProps> = ({
         },
       }}
       icon={<Album />}
-      resource={resource}
+      resource={data}
       tabs={tabs}
       type="Album"
     >

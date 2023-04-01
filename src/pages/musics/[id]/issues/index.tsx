@@ -15,7 +15,7 @@ const Issues: NextPage = () => {
     router = useRouter<"/musics/[id]">(),
     { id } = router.query,
     query = musicShowQuery({ router, session: useSession().data }),
-    music = trpc.music.findUniqueMusic.useQuery(query, {
+    music = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     { data: issueData } = trpc.pagination.issue.useQuery(

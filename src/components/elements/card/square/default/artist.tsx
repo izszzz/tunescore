@@ -8,42 +8,41 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
-import type { ArtistListArgsType } from "../../../../../helpers/artist";
+import type { ResourceArtistListArgsType } from "../../../../../helpers/artist";
 import { getImage } from "../../../../../helpers/image";
 import setLocale from "../../../../../helpers/locale";
 import BookmarkChip from "../../../chip/bookmark";
 import ArtistSquareCard from "../artist";
 
 interface DefaultArtistSquareCardProps {
-  data: Prisma.ArtistGetPayload<ArtistListArgsType>;
+  data: Prisma.ResourceGetPayload<ResourceArtistListArgsType>;
 }
 const ArtistDefaultSquareCard = ({ data }: DefaultArtistSquareCardProps) => {
-  const router = useRouter();
+  const router = useRouter(),
+    { id, links, name, bookmarks, artist, _count } = data;
   return (
     <ArtistSquareCard
-      image={getImage(data.resource.links, 200, { square: true })}
-      onClick={() =>
-        router.push({ pathname: "/artists/[id]", query: { id: data.id } })
-      }
+      image={getImage(links, 200, { square: true })}
+      onClick={() => router.push({ pathname: "/artists/[id]", query: { id } })}
       size="200px"
       title={
         <>
           <Box display="flex" justifyContent="space-between">
             <Typography noWrap variant="h6">
-              {setLocale(data.resource.name, router)}
+              {setLocale(name, router)}
             </Typography>
             <Box alignItems="center" display="flex">
               <BookmarkChip
-                bookmarked={isNonEmpty(data.resource.bookmarks)}
-                label={data.resource._count.bookmarks}
+                bookmarked={isNonEmpty(bookmarks)}
+                label={_count.bookmarks}
                 size="small"
               />
             </Box>
           </Box>
-          {isNonEmpty(data.bands) && (
+          {artist && isNonEmpty(artist.bands) && (
             <Chip
               icon={<Person />}
-              label={setLocale(data.bands[0].resource.name, router)}
+              label={setLocale(artist.bands[0].resource.name, router)}
             />
           )}
         </>

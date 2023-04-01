@@ -32,22 +32,22 @@ export const IssueFactory = async () =>
               connect: { id: (await UserFactory).id },
             },
           },
-          // {
-          //   title: "Comment",
-          //   body: "Comment",
-          //   user: {
-          //     connect: { id: (await UserFactory).id },
-          //   },
-          //   comments: {
-          //     create: {
-          //       body: "Body",
-          //       user: {
-          //         connect: { id: (await UserFactory).id },
-          //       },
-          //       unionType: "Issue",
-          //     },
-          //   },
-          // },
+          {
+            title: "Comment",
+            body: "Comment",
+            user: {
+              connect: { id: (await UserFactory).id },
+            },
+            comments: {
+              create: {
+                body: "Body",
+                user: {
+                  connect: { id: (await UserFactory).id },
+                },
+                unionType: "Issue",
+              },
+            },
+          },
         ],
       },
     },

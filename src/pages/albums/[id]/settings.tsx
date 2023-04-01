@@ -17,6 +17,9 @@ import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { clearBandMutate, selectBandMutate } from "../../../helpers";
 import { convertAffiliateLink } from "../../../helpers/itunes";
 import {
+  findLinkItunes,
+  findLinkSpotify,
+  findLinkYoutube,
   removeItunesMutate,
   removeSpotifyMutate,
   removeYoutubeMutate,
@@ -34,29 +37,26 @@ const AlbumSettings: NextPage = () => {
     router = useRouter<"/albums/[id]">(),
     context = trpc.useContext(),
     query = albumShowQuery({ router, session: useSession().data }),
-    { data } = trpc.album.findUniqueAlbum.useQuery(query),
-    update = trpc.album.updateOneAlbum.useMutation({
+    { data } = trpc.resource.findUniqueResource.useQuery(query),
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) =>
         queryClient.setQueryData(
-          getQueryKey(trpc.album.findUniqueAlbum, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         ),
     });
   if (!data) return <></>;
   const albumData = data as AlbumLayoutProps["data"],
-    { resource } = albumData,
-    title = setLocale(resource.name, router);
+    { album } = albumData,
+    title = setLocale(albumData.name, router);
   return (
     <AlbumLayout activeTab="settings" data={albumData} query={query}>
       <SingleForm
         data={albumData}
         formContainerProps={{
-          onSuccess: ({ resource: { name } }) =>
+          onSuccess: ({ name }) =>
             name &&
-            update.mutate({
-              ...query,
-              data: { resource: { update: { name: { update: name } } } },
-            }),
+            update.mutate({ ...query, data: { name: { update: name } } }),
         }}
         loading={update.isLoading}
         textFieldElementProps={{ name: `resource.name.${router.locale}` }}
@@ -68,30 +68,34 @@ const AlbumSettings: NextPage = () => {
           onSelect: (_e, _v, _r, d) =>
             update.mutate({ ...query, ...selectBandMutate(d?.option.id) }),
         }}
-        value={albumData.band}
+        value={album?.band}
       />
 
       <Typography variant="h4">Spotify</Typography>
       <Divider />
 
       <SpotifyAlbumSelectForm
-        link={resource.links.find(({ type }) => type === "Spotify")}
+        link={findLinkSpotify(albumData.links)}
         onRemove={() =>
-          update.mutate({ ...query, ...removeSpotifyMutate(resource.id) })
+          update.mutate({ ...query, ...removeSpotifyMutate(albumData.id) })
         }
         onSelect={async ({ id, images }) => {
           const spotifyAlbum =
             await context.client.spotify.findUniqueAlbum.query(id);
           spotifyAlbum?.tracks.items.map(async (track) => {
             const music = (await context.client.music.findFirstMusic.query({
-              where: { resource: { links: { every: { linkId: track.id } } } },
+              where: { resource: { links: { some: { linkId: track.id } } } },
               include: { albums: true },
             })) as Prisma.MusicGetPayload<{ include: { albums: true } }>;
             if (music) {
               if (!music.albums.map(({ id }) => id).includes(data.id))
                 update.mutate({
                   ...query,
-                  data: { musics: { connect: { id: music.id } } },
+                  data: {
+                    album: {
+                      update: { musics: { connect: { id: music.id } } },
+                    },
+                  },
                 });
             } else {
               await context.client.music.createOneMusic.mutate({
@@ -129,9 +133,9 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <ItunesAlbumSelectForm
-        link={resource.links.find(({ type }) => type === "iTunes")}
+        link={findLinkItunes(albumData.links)}
         onRemove={() =>
-          update.mutate({ ...query, ...removeItunesMutate(resource.id) })
+          update.mutate({ ...query, ...removeItunesMutate(albumData.id) })
         }
         onSelect={(value) =>
           value &&
@@ -154,9 +158,9 @@ const AlbumSettings: NextPage = () => {
       <Divider />
 
       <MusicYoutubeSelectForm
-        link={resource.links.find(({ type }) => type === "YouTube")}
+        link={findLinkYoutube(albumData.links)}
         onRemove={() =>
-          update.mutate({ ...query, ...removeYoutubeMutate(resource.id) })
+          update.mutate({ ...query, ...removeYoutubeMutate(albumData.id) })
         }
         onSelect={(value) =>
           value?.id?.videoId &&

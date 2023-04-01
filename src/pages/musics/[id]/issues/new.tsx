@@ -33,7 +33,7 @@ const Issues: NextPage = () => {
     { show } = useModal("auth-dialog"),
     userId = getCurrentUserId(session),
     query = musicShowQuery({ router, session }),
-    { data } = trpc.music.findUniqueMusic.useQuery(query, {
+    { data } = trpc.resource.findUniqueResource.useQuery(query, {
       onError: () => enqueueSnackbar("music.show error"),
     }),
     create = trpc.issue.createOneIssue.useMutation({

@@ -256,9 +256,10 @@ model Comment {
   body String
   unionType CommentUnionType
 
-  pull  Pull?  @relation("PullComment", fields: [unionId], references: [id], map: "comment_pull_fk")
-  issue Issue? @relation("IssueComment", fields: [unionId], references: [id], map: "comment_issue_fk")
-  unionId   String
+  pull  Pull?  @relation("PullComment", fields: [pullId], references: [id])
+  issue Issue? @relation("IssueComment", fields: [issueId], references: [id])
+  pullId String?
+  issueId String?
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -309,14 +310,16 @@ model Tag {
 model Notification {
   id String @id @default(uuid())
 
-  bookmarked Bookmark? @relation("BookmarkNotification", fields: [unionId], references: [id], map: "notification_bookmarked")
-  followed   Follow?   @relation("FollowNotification", fields: [unionId], references: [id], map: "notification_followed")
-  commented  Comment?  @relation("CommentNotification", fields: [unionId], references: [id], map: "notification_commented")
+  bookmarked Bookmark? @relation("BookmarkNotification", fields: [bookmarkId], references: [id])
+  bookmarkId String?
+  followed   Follow?   @relation("FollowNotification", fields: [followedId], references: [id])
+  followedId String?
+  commented  Comment?  @relation("CommentNotification", fields: [commentedId], references: [id])
+  commentedId String?
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  unionId   String
   unionType NotificationUnionType
 
   createdAt DateTime @default(now())
@@ -358,11 +361,12 @@ model Report {
   type ReportType
   body String
 
-  reportedUser  User?  @relation("ReportedUser", fields: [unionId], references: [id], map: "report_user")
-  reportedMusic Music? @relation("ReportedMusic", fields: [unionId], references: [id], map: "report_music")
+  reportedUser  User?  @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  reportedUserId String?
+  reportedMusic Music? @relation("ReportedMusic", fields: [reportedMusicId], references: [id])
+  reportedMusicId String?
 
   unionType ReportUnionType
-  unionId   String
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?

@@ -16,10 +16,8 @@ export const bookmarkMutate = ({
   session: SessionArg;
 }) => ({
   data: {
-    resource: {
-      update: isNonEmpty(bookmarks)
-        ? { delete: { id: bookmarks[0].id } }
-        : { create: { user: { connect: { id: getCurrentUserId(session) } } } },
-    },
+    bookmarks: isNonEmpty(bookmarks)
+      ? { delete: { id: bookmarks[0].id } }
+      : { create: { user: { connect: { id: getCurrentUserId(session) } } } },
   },
 });

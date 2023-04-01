@@ -1,38 +1,34 @@
 export const selectArtists = (id: string | undefined) => ({
-    data: { artists: { connect: { id } } },
+    data: { band: { update: { artists: { connect: { id } } } } },
   }),
   removeArtists = (id: string | undefined) => ({
-    data: { artists: { disconnect: { id } } },
+    data: { band: { update: { artists: { disconnect: { id } } } } },
   }),
-  selectTags = (id: string | undefined) => ({
+  selectTag = (id: string) => ({ data: { tags: { connect: { id } } } }),
+  removeTag = (id: string) => ({ data: { tags: { disconnect: { id } } } }),
+  selectRole = (id: string, participationId: string) => ({
     data: {
-      resource: {
-        update: { tag: { connect: { id } } },
-      },
-    },
-  }),
-  removeTags = (id: string) => ({
-    data: {
-      resource: {
+      music: {
         update: {
-          tags: { disconnect: { id } },
+          participations: {
+            update: {
+              where: { id: participationId },
+              data: { roles: { connect: { id } } },
+            },
+          },
         },
       },
     },
   }),
-  selectRole = (id: string) => ({
+  removeRole = (id: string, participationId: string) => ({
     data: {
-      resource: {
-        update: { roleMaps: { create: { role: { connect: { id } } } } },
-      },
-    },
-  }),
-  removeRole = (id: string, resourceId: string) => ({
-    data: {
-      resource: {
+      music: {
         update: {
-          roleMaps: {
-            delete: { roleId_resourceId: { resourceId, roleId: id } },
+          participations: {
+            update: {
+              where: { id: participationId },
+              data: { roles: { disconnect: { id } } },
+            },
           },
         },
       },

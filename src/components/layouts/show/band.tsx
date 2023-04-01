@@ -17,18 +17,18 @@ import type {
 import { trpc } from "../../../utils/trpc";
 import type { DefaultTabsProps } from "../../elements/tabs/default";
 
-import DefaultShowLayout from "./default";
-import type { DefaultShowLayoutProps } from "./default";
+import DefaultShowLayout from "./resource";
+import type { ResourceShowLayoutProps } from "./resource";
 
 export interface BandLayoutProps
-  extends Pick<DefaultShowLayoutProps, "children"> {
-  data: Prisma.BandGetPayload<BandShowArgsType>;
+  extends Pick<ResourceShowLayoutProps, "children"> {
+  data: Prisma.ResourceGetPayload<BandShowArgsType>;
   query: BandShowQueryType;
   activeTab: "info" | "settings";
 }
 
 const BandLayout: React.FC<BandLayoutProps> = ({
-  data: { resource },
+  data,
   query,
   activeTab,
   children,
@@ -37,17 +37,17 @@ const BandLayout: React.FC<BandLayoutProps> = ({
     { data: session, status } = useSession(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    update = trpc.band.updateOneBand.useMutation({
+    update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
-          getQueryKey(trpc.band.findUniqueBand, query, "query"),
+          getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
         enqueueSnackbar("band.update success");
       },
       onError: () => enqueueSnackbar("band.update error"),
     }),
-    { bookmarks } = resource,
+    { bookmarks } = data,
     tabs: DefaultTabsProps["tabs"] = [
       { label: "info", pathname: "/bands/[id]" },
       { label: "settings", pathname: "/bands/[id]/settings" },
@@ -67,7 +67,7 @@ const BandLayout: React.FC<BandLayoutProps> = ({
         },
       }}
       icon={<Group />}
-      resource={resource}
+      resource={data}
       tabs={tabs}
       type="Band"
     >

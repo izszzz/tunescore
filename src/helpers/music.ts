@@ -21,7 +21,7 @@ type Data = Prisma.MusicGetPayload<{
     };
   };
 }>;
-export const getMusicOwner = (data: Data, router: NextRouter) =>
+export const getMusicOwner = (data: Data | null, router: NextRouter) =>
   match(data)
     .with(
       { type: "ORIGINAL", user: P.select(P.not(P.nullish)) },
@@ -53,25 +53,39 @@ export const getMusicOwner = (data: Data, router: NextRouter) =>
     .otherwise(() => ({ type: "NONE" as const, owner: null }));
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
-export const musicListArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.MusicArgs>()({
-    include: {
-      participations: participatedArtistArgs(session),
-      albums: {
-        where: {
-          resource: {
-            links: {
-              some: { type: "Spotify" },
+export const musicArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.MusicArgs>()({
+      include: {
+        participations: participatedArtistArgs(session),
+        albums: {
+          where: {
+            resource: {
+              links: {
+                some: { type: "Spotify" },
+              },
             },
           },
+          include: {
+            resource: { include: { links: { where: { type: "Spotify" } } } },
+          },
+          take: 1,
         },
-        include: {
-          resource: { include: { links: { where: { type: "Spotify" } } } },
-        },
-        take: 1,
+        band: { include: { resource: { include: { name: true } } } },
+        user: userArgs,
       },
-      band: { include: { resource: { include: { name: true } } } },
-      resource: resourceArgs(session),
-      user: userArgs,
+    }),
+  musicListArgs = (session: SessionArg) =>
+    Prisma.validator<Prisma.MusicArgs>()({
+      include: {
+        ...musicArgs(session).include,
+        resource: resourceArgs(session),
+      },
+    });
+
+export const resourceMusicListArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.ResourceArgs>()({
+    include: {
+      ...resourceArgs(session).include,
+      music: musicArgs(session),
     },
   });

@@ -52,7 +52,7 @@ const NewPull: NextPage = () => {
           original: musicData?.music?.score ?? "",
           changed: musicData?.music?.score ?? "",
           status: "DRAFT",
-          music: { connect: { id } },
+          music: { connect: { id: musicData.music?.id } },
           user: { connect: { id: userId } },
         },
       });

@@ -92,7 +92,11 @@ const ScoreLayout = ({ value }: ScoreLayoutProps) => {
     apiRef.current?.tex(value);
   }, [value]);
   return (
-    <Box sx={{ display: "flex" }} width="100%">
+    <Box
+      minHeight="100vh"
+      sx={{ display: "flex", bgcolor: "white" }}
+      width="100%"
+    >
       <Drawer
         anchor="left"
         open={open}

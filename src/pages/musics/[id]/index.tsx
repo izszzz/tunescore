@@ -55,7 +55,7 @@ const Music: NextPage = () => {
             create.mutate({
               data: {
                 user: { connect: { id: getCurrentUserId(session) } },
-                music: { connect: { id: router.query.id } },
+                music: { connect: { id: music?.id } },
               },
             })
           }

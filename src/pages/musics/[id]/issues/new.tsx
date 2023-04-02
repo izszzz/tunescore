@@ -51,7 +51,7 @@ const Issues: NextPage = () => {
         create.mutate({
           data: {
             ...data,
-            music: { connect: { id } },
+            music: { connect: { id: data.musicId } },
             user: { connect: { id: userId } },
           },
         });

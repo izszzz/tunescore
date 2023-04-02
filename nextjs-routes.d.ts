@@ -9,18 +9,15 @@ declare module "nextjs-routes" {
     | StaticRoute<"/about">
     | DynamicRoute<"/albums/[id]", { "id": string }>
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
-    | StaticRoute<"/albums/new">
     | StaticRoute<"/api/audiveris">
     | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
     | StaticRoute<"/api/restricted">
     | DynamicRoute<"/api/trpc/[trpc]", { "trpc": string }>
     | DynamicRoute<"/artists/[id]", { "id": string }>
     | DynamicRoute<"/artists/[id]/settings", { "id": string }>
-    | StaticRoute<"/artists/new">
     | StaticRoute<"/auth/signin">
     | DynamicRoute<"/bands/[id]", { "id": string }>
     | DynamicRoute<"/bands/[id]/settings", { "id": string }>
-    | StaticRoute<"/bands/new">
     | StaticRoute<"/cart">
     | StaticRoute<"/dashboard/credits">
     | StaticRoute<"/dashboard">
@@ -43,7 +40,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/musics/[id]/score/edit", { "id": string }>
     | DynamicRoute<"/musics/[id]/score", { "id": string }>
     | DynamicRoute<"/musics/[id]/settings", { "id": string }>
-    | StaticRoute<"/musics/new">
+    | StaticRoute<"/new">
     | StaticRoute<"/pay">
     | StaticRoute<"/search">
     | StaticRoute<"/thanks">

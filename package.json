@@ -84,7 +84,7 @@
     "react-diff-viewer-continued": "^3.2.5",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
-    "react-hook-form": "^7.36.1",
+    "react-hook-form": "^8.0.0-alpha.4",
     "react-hook-form-mui": "^5.7.2",
     "react-i18next": "^12.1.4",
     "react-icons": "^4.6.0",

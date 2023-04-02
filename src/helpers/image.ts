@@ -15,13 +15,13 @@ export const getImage = (
     links,
     R.map((link) => {
       const { type } = link;
-      if (R.equals(type, "iTunes") && !options.channel)
+      if (type === "iTunes" && !options.channel)
         return shapeImageSize(link, [30, 60, 100]);
-      if (R.equals(type, "Youtube")) {
+      if (type === "YouTube") {
         if (options.channel) return shapeImageSize(link, [88, 240, 800]);
         if (!options.square) return shapeImageSize(link, [90, 180, 360]);
       }
-      if (R.equals(type, "Spotify")) {
+      if (type === "Spotify") {
         if (options.channel) return shapeImageSize(link, [160, 320, 640]);
         return shapeImageSize(link, [64, 300, 640]);
       }

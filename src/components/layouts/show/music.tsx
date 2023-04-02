@@ -123,7 +123,7 @@ const MusicLayout = ({
                       ...(music?.albums[0]?.resource.links ?? []),
                     ],
                     80
-                  ) || ""
+                  ) ?? ""
                 }
                 style={{ borderRadius: 5 }}
               />

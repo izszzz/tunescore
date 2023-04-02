@@ -2,9 +2,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import BandLists from "../../../components/elements/list/band";
-import MusicListItem from "../../../components/elements/list/item/music";
+import ResourceListItem from "../../../components/elements/list/item/resource";
 import ParticipationLists from "../../../components/elements/list/participation";
+import ResourceLists from "../../../components/elements/list/resource";
 import ArtistLayout from "../../../components/layouts/show/artist";
 import type { ArtistLayoutProps } from "../../../components/layouts/show/artist";
 import { artistShowQuery } from "../../../paths/artists/[id]";
@@ -19,7 +19,7 @@ const Artist: NextPage = () => {
     { artist } = artistData;
   return (
     <ArtistLayout activeTab="info" data={artistData} query={query}>
-      <BandLists
+      <ResourceLists
         data={
           artist?.bands.map(({ resource, ...band }) => ({
             ...resource,
@@ -29,9 +29,11 @@ const Artist: NextPage = () => {
       />
       <ParticipationLists data={artist?.participations ?? []}>
         {(participation, data) => (
-          <MusicListItem data={{ ...data.music.resource, music: data.music }}>
+          <ResourceListItem
+            data={{ ...data.music.resource, music: data.music }}
+          >
             {participation}
-          </MusicListItem>
+          </ResourceListItem>
         )}
       </ParticipationLists>
     </ArtistLayout>

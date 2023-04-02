@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import MusicNote from "@mui/icons-material/MusicNote";
@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import type { Locale, Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
@@ -17,7 +16,8 @@ import { match } from "ts-pattern";
 
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
-import { getMusicOwner } from "../../../helpers/music";
+import { getMusicLinks } from "../../../helpers/music";
+import { getOwner } from "../../../helpers/resource";
 import { getCurrentUserId, isAuth } from "../../../helpers/user";
 import type {
   MusicShowArgsType,
@@ -116,15 +116,7 @@ const MusicLayout = ({
               <Image
                 alt={setLocale(data.name, router)}
                 height="80"
-                src={
-                  getImage(
-                    [
-                      ...data.links.filter(({ type }) => type !== "Spotify"),
-                      ...(music?.albums[0]?.resource.links ?? []),
-                    ],
-                    80
-                  ) ?? ""
-                }
+                src={getImage(getMusicLinks(data), 80) ?? ""}
                 style={{ borderRadius: 5 }}
               />
             </Box>
@@ -155,32 +147,27 @@ interface OwnerProps {
   data: MusicTitleProps["data"];
 }
 const Owner = ({ data }: OwnerProps) => {
-  const [pathname, setPathname] = useState<
-    "/users/[id]" | "/bands/[id]" | "/artists/[id]"
-  >("/users/[id]");
-  const router = useRouter();
-  const { type, owner } = getMusicOwner(data, router);
-  useEffect(() => {
-    setPathname(
-      match(type)
-        .with("USER", () => "/users/[id]" as const)
-        .with("BAND", () => "/bands/[id]" as const)
-        .with("ARTIST", () => "/artists/[id]" as const)
-        .with("NONE", () => "/users/[id]" as const)
-        .exhaustive()
-    );
-  }, [type]);
+  const router = useRouter(),
+    { type, owner } = getOwner(data, router);
   if (type === "NONE" || owner === null) return <></>;
   return (
     <>
-      <Link href={{ pathname, query: { id: owner.id } }}>
-        <Box
-          component="a"
-          sx={{ cursor: "pointer", textDecoration: "underline" }}
-        >
-          {owner.name}
-        </Box>
-      </Link>{" "}
+      <Box
+        component="a"
+        onClick={() =>
+          router.push({
+            pathname: match(type)
+              .with("User", () => "/users/[id]" as const)
+              .with("Band", () => "/bands/[id]" as const)
+              .with("Artist", () => "/artists/[id]" as const)
+              .exhaustive(),
+            query: { id: owner.id },
+          })
+        }
+        sx={{ cursor: "pointer", textDecoration: "underline" }}
+      >
+        {owner.name}
+      </Box>
       /
     </>
   );

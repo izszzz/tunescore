@@ -67,7 +67,7 @@ const ArtistSettings: NextPage = () => {
             update.mutate({ ...query, data: { name: { update: name } } }),
         }}
         loading={update.isLoading}
-        textFieldElementProps={{ name: `resource.name.${router.locale}` }}
+        textFieldElementProps={{ name: `name.${router.locale}` }}
       />
       <BandUpdateAutocomplete
         loading={update.isLoading}

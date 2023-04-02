@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import ResourceLists from "../../../components/elements/list/resource";
+import MusicLists from "../../../components/elements/list/music";
 import IndexLayout from "../../../components/layouts/index";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import UserLayout from "../../../components/layouts/show/user";
@@ -43,7 +43,7 @@ const User: NextPage = () => {
             }),
         }}
       >
-        <ResourceLists
+        <MusicLists
           data={musicData.data.map(({ resource, ...music }) => ({
             ...resource,
             music,

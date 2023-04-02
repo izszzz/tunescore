@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import ResourceListItem from "../../../../components/elements/list/item/resource";
+import MusicListItem from "../../../../components/elements/list/item/music";
 import DashboardLayout from "../../../../components/layouts/dashboard";
 import setLocale from "../../../../helpers/locale";
 import { trpc } from "../../../../utils/trpc";
@@ -25,9 +25,7 @@ const Transaction: NextPage = () => {
         {data.music ? setLocale(data.music.resource.name, router) : ""}
       </Typography>
       {data.music && (
-        <ResourceListItem
-          data={{ ...data.music.resource, music: data.music }}
-        />
+        <MusicListItem data={{ ...data.music.resource, music: data.music }} />
       )}
       <Typography>amount : {data.amount}</Typography>
 

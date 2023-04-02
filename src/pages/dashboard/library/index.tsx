@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import * as R from "remeda";
 
-import ResourceListItem from "../../../components/elements/list/item/resource";
-import ResourceLists from "../../../components/elements/list/resource";
+import MusicListItem from "../../../components/elements/list/item/music";
+import MusicLists from "../../../components/elements/list/music";
 import DashboardLayout from "../../../components/layouts/dashboard";
 import IndexLayout from "../../../components/layouts/index";
 import setLocale from "../../../helpers/locale";
@@ -33,7 +33,7 @@ const Library: NextPage = () => {
           loading: search.isLoading,
           renderOption: (_props, option) =>
             option.music && (
-              <ResourceListItem
+              <MusicListItem
                 data={{ ...option.music.resource, music: option.music }}
                 dense
               />
@@ -54,7 +54,7 @@ const Library: NextPage = () => {
           },
         }}
       >
-        <ResourceLists
+        <MusicLists
           data={R.pipe(
             transactionData,
             R.map(

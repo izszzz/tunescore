@@ -59,7 +59,6 @@ RUN cd audiveris && \
     ./gradlew build && \
     tar -xf build/distributions/Audiveris-5.2.5.tar
 
-
 ##### RUNNER
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS runner

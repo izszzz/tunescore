@@ -109,7 +109,7 @@ const AlbumSettings: NextPage = () => {
                       links: { create: { type: "Spotify", linkId: track.id } },
                     },
                   },
-                  albums: { connect: { id: data.id } },
+                  albums: { connect: { id: album?.id } },
                 },
               });
             }

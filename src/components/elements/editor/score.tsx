@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import Box from "@mui/material/Box";
 import Split from "split.js";
 import { useDebouncedCallback } from "use-debounce";
+import { useDarkMode } from "usehooks-ts";
 
 import Score from "../../layouts/score";
 import type { EditorHeaderProps } from "../header/editor";
@@ -23,6 +24,7 @@ const ScoreEditor = ({
 }: ScoreEditorProps) => {
   const [value, setValue] = useState(defaultValue),
     split = useRef<Split.Instance>(),
+    { isDarkMode } = useDarkMode(),
     handleResolve = () => onResolve && setValue(onResolve()),
     handleChange = (value: string | undefined) => value && setValue(value),
     debounced = useDebouncedCallback(handleChange, 500);
@@ -44,6 +46,7 @@ const ScoreEditor = ({
             defaultLanguage="javascript"
             height="90vh"
             onChange={debounced}
+            theme={isDarkMode ? "vs-dark" : "vs-light"}
             value={value}
           />
         </div>

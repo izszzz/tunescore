@@ -2,9 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import ArtistLists from "../../../components/elements/list/artist";
-import BandLists from "../../../components/elements/list/band";
-import MusicLists from "../../../components/elements/list/music";
+import ResourceLists from "../../../components/elements/list/resource";
 import AlbumLayout from "../../../components/layouts/show/album";
 import type { AlbumLayoutProps } from "../../../components/layouts/show/album";
 import { albumShowQuery } from "../../../paths/albums/[id]";
@@ -21,10 +19,10 @@ const Album: NextPage = () => {
   return (
     <AlbumLayout activeTab="info" data={albumData} query={path}>
       {album?.band && (
-        <BandLists data={[{ ...album.band.resource, band: album.band }]} />
+        <ResourceLists data={[{ ...album.band.resource, band: album.band }]} />
       )}
 
-      <MusicLists
+      <ResourceLists
         data={
           album?.musics.map(({ resource, ...music }) => ({
             ...resource,
@@ -33,7 +31,7 @@ const Album: NextPage = () => {
         }
       />
 
-      <ArtistLists
+      <ResourceLists
         data={
           album?.artists.map(({ resource, ...artist }) => ({
             ...resource,

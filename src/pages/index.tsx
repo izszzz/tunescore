@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-import ResourceDefaultSquareCard from "../components/elements/card/square/default/resource";
+import ResourceSquareCard from "../components/elements/card/square/resource";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { resourcePaginationQuery } from "../paths/search";
 import { trpc } from "../utils/trpc";
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
             sm={4}
             xs={6}
           >
-            <ResourceDefaultSquareCard data={data} />
+            <ResourceSquareCard data={data} />
           </Grid>
         ))}
       </Grid>

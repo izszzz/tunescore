@@ -13,7 +13,7 @@ import { useSnackbar } from "notistack";
 import { isNonEmpty } from "ts-array-length";
 
 import Lists from "../components/elements/list";
-import ResourceListItem from "../components/elements/list/item/resource";
+import MusicListItem from "../components/elements/list/item/music";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { getCurrentUserId, redirectToSignIn } from "../helpers/user";
 import { trpc } from "../utils/trpc";
@@ -33,7 +33,7 @@ const Cart: NextPage = () => {
       <Lists
         data={data}
         listItem={(props) => (
-          <ResourceListItem
+          <MusicListItem
             data={{ ...props.resource, music: props }}
             secondaryAction={
               <IconButton

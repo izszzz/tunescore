@@ -5,7 +5,7 @@ import router from "next/router";
 import { trpc } from "../../../utils/trpc";
 import OrderLoadingButton from "../button/loading/order";
 import CreditCard from "../card/credit";
-import ResourceLists from "../list/resource";
+import MusicLists from "../list/music";
 
 const OrderForm = () => {
   const { data: paymentMethods } = trpc.stripe.paymentMethods.useQuery(),
@@ -24,7 +24,7 @@ const OrderForm = () => {
           label: <CreditCard data={paymentMethod} />,
         }))}
       />
-      <ResourceLists
+      <MusicLists
         data={data.map(({ resource, ...music }) => ({ ...resource, music }))}
       />
       {data.reduce((sum, data) => sum + (data.price || 0), 0)}

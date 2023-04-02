@@ -18,7 +18,7 @@ import { handleChangeAutocomplete } from "../../autocomplete/update";
 import ParticipationUpdateAutocomplete from "../../autocomplete/update/participation";
 import type { ParticipationUpdateAutocompleteProps } from "../../autocomplete/update/participation";
 import CloseIconButton from "../../button/icon/close";
-import ResourceListItem from "../../list/item/resource";
+import ArtistListItem from "../../list/item/artist";
 
 interface ArtistsUpdateFormProps<T> {
   data: T[];
@@ -53,7 +53,7 @@ function ArtistsUpdateForm({
       {data.map((participation) => (
         <Grid container key={participation.id}>
           <Grid item xs={8}>
-            <ResourceListItem
+            <ArtistListItem
               data={{
                 ...participation.artist.resource,
                 artist: participation.artist,

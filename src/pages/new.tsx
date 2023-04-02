@@ -16,7 +16,8 @@ import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
 
 import MusicNewForm from "../components/elements/form/new/music";
-import NewLayout from "../components/layouts/new";
+import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
+import { getResourceShowPathname } from "../helpers/resource";
 import { isAuth } from "../helpers/user";
 import { trpc } from "../utils/trpc";
 
@@ -33,12 +34,7 @@ const New: NextPage = () => {
     create = trpc.resource.createOneResource.useMutation({
       onSuccess: ({ id }) =>
         router.push({
-          pathname: match(unionType)
-            .with("Music", () => "/musics/[id]" as const)
-            .with("Artist", () => "/artists/[id]" as const)
-            .with("Album", () => "/albums/[id]" as const)
-            .with("Band", () => "/bands/[id]" as const)
-            .exhaustive(),
+          pathname: getResourceShowPathname(unionType),
           query: { id },
         }),
       onError: () => enqueueSnackbar("resource.create fail"),
@@ -48,7 +44,7 @@ const New: NextPage = () => {
       else show();
     };
   return (
-    <NewLayout>
+    <DefaultSingleColumnLayout contained>
       <Box my={3}>
         <FormContainer formContext={formContext} onSuccess={handleSubmit}>
           <Box mb={3}>
@@ -93,7 +89,7 @@ const New: NextPage = () => {
           </Box>
         </FormContainer>
       </Box>
-    </NewLayout>
+    </DefaultSingleColumnLayout>
   );
 };
 

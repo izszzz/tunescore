@@ -12,10 +12,9 @@ import Article from "../../../components/elements/article";
 import ScoreButtonGroup from "../../../components/elements/button/group/score";
 import CartLoadingButton from "../../../components/elements/button/loading/cart";
 import VoteCard from "../../../components/elements/card/vote";
-import AlbumLists from "../../../components/elements/list/album";
-import BandLists from "../../../components/elements/list/band";
-import ArtistListItem from "../../../components/elements/list/item/artist";
+import ResourceListItem from "../../../components/elements/list/item/resource";
 import ParticipationLists from "../../../components/elements/list/participation";
+import ResourceLists from "../../../components/elements/list/resource";
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import MusicLayout from "../../../components/layouts/show/music";
 import type { MusicLayoutProps } from "../../../components/layouts/show/music";
@@ -80,18 +79,18 @@ const Music: NextPage = () => {
       {music?.lyric && <Article text={music.lyric} />}
 
       {music?.band && (
-        <BandLists data={[{ ...music.band.resource, band: music.band }]} />
+        <ResourceLists data={[{ ...music.band.resource, band: music.band }]} />
       )}
       <ParticipationLists data={music?.participations ?? []}>
         {(participation, data) => (
-          <ArtistListItem
+          <ResourceListItem
             data={{ ...data.artist.resource, artist: data.artist }}
           >
             {participation}
-          </ArtistListItem>
+          </ResourceListItem>
         )}
       </ParticipationLists>
-      <AlbumLists
+      <ResourceLists
         data={
           music?.albums.map(({ resource, ...album }) => ({
             ...resource,

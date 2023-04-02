@@ -15,7 +15,7 @@ import AlphaTexExporter from "../../../../helpers/AlphaTexExporter";
 import Dropzone from "../dropzone";
 
 interface NewForm {
-  formContext: UseFormReturn<Prisma.ResourceCreateInput, any>;
+  formContext: UseFormReturn<Prisma.ResourceCreateInput>;
 }
 const MusicNewForm = ({ formContext }: NewForm) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar(),

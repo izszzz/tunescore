@@ -17,10 +17,8 @@ import "@uiw/react-markdown-preview/markdown.css";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
-import MusicLayout from "../../../../components/layouts/show/music";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import ResourceShowLayout from "../../../../components/layouts/show/resource";
 import { getCurrentUserId, isAuth } from "../../../../helpers/user";
-import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
@@ -32,10 +30,6 @@ const Issues: NextPage = () => {
     { id } = router.query,
     { show } = useModal("auth-dialog"),
     userId = getCurrentUserId(session),
-    query = musicShowQuery({ router, session }),
-    { data } = trpc.resource.findUniqueResource.useQuery(query, {
-      onError: () => enqueueSnackbar("music.show error"),
-    }),
     create = trpc.issue.createOneIssue.useMutation({
       onSuccess: () =>
         router.push({
@@ -57,25 +51,25 @@ const Issues: NextPage = () => {
         });
       else show();
     };
-  if (!data) return <></>;
-  const musicData = data as MusicLayoutProps["data"];
   return (
-    <MusicLayout activeTab="issues" data={musicData} query={query}>
-      <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-        <TextFieldElement fullWidth margin="dense" name="title" />
-        <Controller
-          name="body"
-          render={({ field }) => <MDEditor {...field} />}
-        />
-        <LoadingButton
-          loading={create.isLoading}
-          type="submit"
-          variant="contained"
-        >
-          Submit
-        </LoadingButton>
-      </FormContainer>
-    </MusicLayout>
+    <ResourceShowLayout activeTab="issues">
+      {() => (
+        <FormContainer formContext={formContext} onSuccess={handleSubmit}>
+          <TextFieldElement fullWidth margin="dense" name="title" />
+          <Controller
+            name="body"
+            render={({ field }) => <MDEditor {...field} />}
+          />
+          <LoadingButton
+            loading={create.isLoading}
+            type="submit"
+            variant="contained"
+          >
+            Submit
+          </LoadingButton>
+        </FormContainer>
+      )}
+    </ResourceShowLayout>
   );
 };
 

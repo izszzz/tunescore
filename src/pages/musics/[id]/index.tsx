@@ -16,20 +16,19 @@ import ResourceListItem from "../../../components/elements/list/item/resource";
 import ParticipationLists from "../../../components/elements/list/participation";
 import ResourceLists from "../../../components/elements/list/resource";
 import YoutubeAmbient from "../../../components/elements/youtube/ambient";
-import MusicLayout from "../../../components/layouts/show/music";
-import type { MusicLayoutProps } from "../../../components/layouts/show/music";
+import type { ResourceData } from "../../../components/layouts/show/resource";
+import ResourceShowLayout from "../../../components/layouts/show/resource";
 import { findLinkYoutube } from "../../../helpers/link";
+import { resourceShowQuery } from "../../../helpers/resource";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
-import { musicShowQuery } from "../../../paths/musics/[id]";
 import { trpc } from "../../../utils/trpc";
 
 const Music: NextPage = () => {
   const router = useRouter<"/musics/[id]">(),
     queryClient = useQueryClient(),
     { data: session } = useSession(),
-    query = musicShowQuery({ router, session }),
+    query = resourceShowQuery({ router, session }),
     { enqueueSnackbar } = useSnackbar(),
-    { data } = trpc.resource.findUniqueResource.useQuery(query),
     create = trpc.cart.createOneCart.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData<typeof data>(
@@ -40,70 +39,76 @@ const Music: NextPage = () => {
       },
       onError: () => enqueueSnackbar("cart.create error"),
     });
-  if (!data) return <></>;
-  const musicData = data as MusicLayoutProps["data"],
-    { music } = musicData,
-    youtube = findLinkYoutube(musicData.links);
   return (
-    <MusicLayout activeTab="info" data={musicData} query={query}>
-      <Box mb={2}>
-        <ActionButton
-          data={musicData}
-          loading={create.isLoading}
-          onAddCart={() =>
-            create.mutate({
-              data: {
-                user: { connect: { id: getCurrentUserId(session) } },
-                music: { connect: { id: music?.id } },
-              },
-            })
-          }
-        />
-      </Box>
+    <ResourceShowLayout activeTab="info">
+      {(data) => {
+        const { music } = data,
+          youtube = findLinkYoutube(data.links);
+        return (
+          <>
+            <Box mb={2}>
+              <ActionButton
+                data={data}
+                loading={create.isLoading}
+                onAddCart={() =>
+                  create.mutate({
+                    data: {
+                      user: { connect: { id: getCurrentUserId(session) } },
+                      music: { connect: { id: music?.id } },
+                    },
+                  })
+                }
+              />
+            </Box>
 
-      {youtube && (
-        <Box mb={2}>
-          <YoutubeAmbient videoId={youtube.linkId} />
-        </Box>
-      )}
-      {music?.pulls.map((pull) => (
-        <Box key={pull.id} mb={2}>
-          <VoteCard
-            badIconButtonProps={{ disabled: true }}
-            data={pull}
-            goodIconButtonProps={{ disabled: true }}
-          />
-        </Box>
-      ))}
+            {youtube && (
+              <Box mb={2}>
+                <YoutubeAmbient videoId={youtube.linkId} />
+              </Box>
+            )}
+            {music?.pulls.map((pull) => (
+              <Box key={pull.id} mb={2}>
+                <VoteCard
+                  badIconButtonProps={{ disabled: true }}
+                  data={pull}
+                  goodIconButtonProps={{ disabled: true }}
+                />
+              </Box>
+            ))}
 
-      {music?.lyric && <Article text={music.lyric} />}
+            {music?.lyric && <Article text={music.lyric} />}
 
-      {music?.band && (
-        <ResourceLists data={[{ ...music.band.resource, band: music.band }]} />
-      )}
-      <ParticipationLists data={music?.participations ?? []}>
-        {(participation, data) => (
-          <ResourceListItem
-            data={{ ...data.artist.resource, artist: data.artist }}
-          >
-            {participation}
-          </ResourceListItem>
-        )}
-      </ParticipationLists>
-      <ResourceLists
-        data={
-          music?.albums.map(({ resource, ...album }) => ({
-            ...resource,
-            album,
-          })) ?? []
-        }
-      />
-    </MusicLayout>
+            {music?.band && (
+              <ResourceLists
+                data={[{ ...music.band.resource, band: music.band }]}
+              />
+            )}
+            <ParticipationLists data={music?.participations ?? []}>
+              {(participation, data) => (
+                <ResourceListItem
+                  data={{ ...data.artist.resource, artist: data.artist }}
+                >
+                  {participation}
+                </ResourceListItem>
+              )}
+            </ParticipationLists>
+            <ResourceLists
+              data={
+                music?.albums.map(({ resource, ...album }) => ({
+                  ...resource,
+                  album,
+                })) ?? []
+              }
+            />
+          </>
+        );
+      }}
+    </ResourceShowLayout>
   );
 };
 
 interface ActionButtonProps {
-  data: MusicLayoutProps["data"];
+  data: ResourceData;
   loading: boolean;
   onAddCart: () => void;
 }

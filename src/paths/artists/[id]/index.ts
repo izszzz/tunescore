@@ -8,28 +8,10 @@ import type { SessionArg } from "../../../helpers/user";
 
 export type ArtistShowArgsType = ReturnType<typeof artistShowArgs>;
 export type ArtistShowQueryType = ReturnType<typeof artistShowQuery>;
-export const artistShowQuery = ({
-  router: {
-    query: { id },
-  },
-  session,
-}: {
-  router: NextRouter<"/artists/[id]">;
-  session: SessionArg;
-}) =>
-  Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
-    where: { id },
-    ...artistShowArgs(session),
-  });
-const artistShowArgs = (session: SessionArg) =>
-  Prisma.validator<Prisma.ResourceArgs>()({
+export const artistShowArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.ArtistArgs>()({
     include: {
-      ...resourceArgs(session).include,
-      artist: {
-        include: {
-          bands: bandListArgs(session),
-          participations: participatedMusicArgs(session),
-        },
-      },
+      bands: bandListArgs(session),
+      participations: participatedMusicArgs(session),
     },
   });

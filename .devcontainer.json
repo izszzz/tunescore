@@ -27,5 +27,6 @@
       }
     }
   },
-  "shutdownAction": "stopCompose"
+  "shutdownAction": "stopCompose",
+  "mounts": ["target=${containerWorkspaceFolder}/node_modules,type=volume"]
 }

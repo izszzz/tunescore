@@ -1,23 +1,16 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
 import IssueLists from "../../../../components/elements/list/issue";
 import IndexLayout from "../../../../components/layouts/index";
-import MusicLayout from "../../../../components/layouts/show/music";
-import type { MusicLayoutProps } from "../../../../components/layouts/show/music";
+import ResourceShowLayout from "../../../../components/layouts/show/resource";
 import { userArgs } from "../../../../helpers/user";
-import { musicShowQuery } from "../../../../paths/musics/[id]";
 import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar(),
     router = useRouter<"/musics/[id]">(),
     { id } = router.query,
-    query = musicShowQuery({ router, session: useSession().data }),
-    music = trpc.resource.findUniqueResource.useQuery(query, {
-      onError: () => enqueueSnackbar("music.show error"),
-    }),
     { data: issueData } = trpc.pagination.issue.useQuery(
       {
         args: {
@@ -34,32 +27,33 @@ const Issues: NextPage = () => {
     search = trpc.search.issue.useMutation({
       onError: () => enqueueSnackbar("music.search error"),
     });
-  if (!music.data || !issueData) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
+  if (!issueData) return <></>;
   return (
-    <MusicLayout activeTab="issues" data={musicData} query={query}>
-      <IndexLayout
-        meta={issueData.meta}
-        newRoute={{
-          pathname: "/musics/[id]/issues/new",
-          query: { id },
-        }}
-        searchAutocompleteProps={{
-          options: search.data || [],
-          loading: search.isLoading,
-          getOptionLabel: (option) => option.title,
-          textFieldProps: {
-            onChange: ({ currentTarget: { value } }) =>
-              search.mutate({
-                where: { title: { contains: value }, music: { id } },
-                take: 10,
-              }),
-          },
-        }}
-      >
-        <IssueLists data={issueData.data} />
-      </IndexLayout>
-    </MusicLayout>
+    <ResourceShowLayout activeTab="issues">
+      {() => (
+        <IndexLayout
+          meta={issueData.meta}
+          newRoute={{
+            pathname: "/musics/[id]/issues/new",
+            query: { id },
+          }}
+          searchAutocompleteProps={{
+            options: search.data || [],
+            loading: search.isLoading,
+            getOptionLabel: (option) => option.title,
+            textFieldProps: {
+              onChange: ({ currentTarget: { value } }) =>
+                search.mutate({
+                  where: { title: { contains: value }, music: { id } },
+                  take: 10,
+                }),
+            },
+          }}
+        >
+          <IssueLists data={issueData.data} />
+        </IndexLayout>
+      )}
+    </ResourceShowLayout>
   );
 };
 

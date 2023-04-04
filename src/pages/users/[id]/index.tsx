@@ -16,7 +16,7 @@ const User: NextPage = () => {
   const userData = data as unknown as UserLayoutProps["data"];
   return (
     <UserLayout activeTab="info" data={userData} query={query}>
-      {session?.user?.id === data.id && <p>aaa</p>}
+      <></>
     </UserLayout>
   );
 };

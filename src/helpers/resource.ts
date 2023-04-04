@@ -4,16 +4,21 @@ import type { NextRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
 
+import { albumShowArgs } from "../paths/albums/[id]";
+import { artistShowArgs } from "../paths/artists/[id]";
+import { bandShowArgs } from "../paths/bands/[id]";
+import { musicShowArgs } from "../paths/musics/[id]";
+
 import { albumArgs } from "./album";
 import { artistArgs } from "./artist";
 import { bandArgs } from "./band";
 import { bookmarkArgs } from "./bookmark";
 import setLocale from "./locale";
 import { musicArgs } from "./music";
-import type { SessionArg } from "./user";
+import type { SessionArg, userArgs } from "./user";
 
 export type ResourceListArgsType = ReturnType<typeof resourceListArgs>;
-export type ResourceArgsType = ReturnType<typeof resourceArgs>;
+export type ResourceShowQuery = ReturnType<typeof resourceShowQuery>;
 export const resourceListArgs = (session: SessionArg) =>
     Prisma.validator<Prisma.ResourceArgs>()({
       include: {
@@ -34,6 +39,32 @@ export const resourceListArgs = (session: SessionArg) =>
         _count: { select: { bookmarks: true } },
       },
     }),
+  resourceShowQuery = ({
+    router: {
+      query: { id },
+    },
+    session,
+  }: {
+    router: NextRouter<
+      | "/musics/[id]"
+      | "/musics/[id]/issues/[issueId]"
+      | "/musics/[id]/pulls/[pullId]"
+      | "/albums/[id]"
+      | "/artists/[id]"
+      | "/bands/[id]"
+    >;
+    session: SessionArg;
+  }) =>
+    Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
+      where: { id },
+      include: {
+        ...resourceArgs(session).include,
+        music: musicShowArgs(session),
+        band: bandShowArgs(session),
+        artist: artistShowArgs(session),
+        album: albumShowArgs(session),
+      },
+    }),
   getResourceShowPathname = (type: ResourceUnionType) =>
     match(type)
       .with("Music", () => "/musics/[id]" as const)
@@ -42,7 +73,29 @@ export const resourceListArgs = (session: SessionArg) =>
       .with("Band", () => "/bands/[id]" as const)
       .exhaustive(),
   getOwner = (
-    resource: Partial<Prisma.ResourceGetPayload<ResourceListArgsType>>,
+    resource: Prisma.ResourceGetPayload<{
+      include: {
+        music: {
+          include: {
+            user: typeof userArgs;
+            band: { include: { resource: { include: { name: true } } } };
+            participations: {
+              include: {
+                artist: {
+                  include: { resource: { include: { name: true } } };
+                };
+              };
+            };
+          };
+        };
+        album: {
+          include: {
+            band: { include: { resource: { include: { name: true } } } };
+            artists: { include: { resource: { include: { name: true } } } };
+          };
+        };
+      };
+    }>,
     router: NextRouter
   ) =>
     match(resource)
@@ -54,7 +107,7 @@ export const resourceListArgs = (session: SessionArg) =>
           )
           .with(
             { type: "COPY", band: P.select(P.not(P.nullish)) },
-            ({ id, resource: { name } }) => ({
+            ({ resource: { id, name } }) => ({
               type: "Band" as const,
               owner: { id, name: setLocale(name, router) },
             })
@@ -82,16 +135,19 @@ export const resourceListArgs = (session: SessionArg) =>
       )
       .with({ album: P.select(P.not(P.nullish)) }, (data) =>
         match(data)
-          .with({ band: P.select(P.not(P.nullish)) }, ({ id, resource }) => ({
-            type: "Band" as const,
-            owner: { id, name: setLocale(resource?.name, router) },
-          }))
+          .with(
+            { band: P.select(P.not(P.nullish)) },
+            ({ resource: { name, id } }) => ({
+              type: "Band" as const,
+              owner: { id, name: setLocale(name, router) },
+            })
+          )
           .with({ artists: P.select(P.not(P.nullish)) }, (artists) =>
             isNonEmpty(artists)
               ? {
                   type: "Artist" as const,
                   owner: {
-                    id: artists[0].id,
+                    id: artists[0].resource.id,
                     name: setLocale(artists[0].resource.name, router),
                   },
                 }

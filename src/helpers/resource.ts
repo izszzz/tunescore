@@ -18,7 +18,6 @@ import { musicArgs } from "./music";
 import type { SessionArg, userArgs } from "./user";
 
 export type ResourceListArgsType = ReturnType<typeof resourceListArgs>;
-export type ResourceArgsType = ReturnType<typeof resourceArgs>;
 export type ResourceShowQuery = ReturnType<typeof resourceShowQuery>;
 export const resourceListArgs = (session: SessionArg) =>
     Prisma.validator<Prisma.ResourceArgs>()({

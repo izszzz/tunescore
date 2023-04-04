@@ -37,7 +37,7 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import ShowLayout from ".";
 import type { ShowLayoutProps } from ".";
 export type ResourceData = Prisma.ResourceGetPayload<ResourceShowQuery>;
-export interface ResourceShowLayoutProps
+interface ResourceShowLayoutProps
   extends Omit<ShowLayoutProps, "title" | "tabs" | "children"> {
   activeTab: DefaultTabsProps["tabs"][0]["label"];
   children: (data: ResourceData) => React.ReactNode;

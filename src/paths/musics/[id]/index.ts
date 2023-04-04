@@ -8,7 +8,6 @@ import { userWhere, userArgs } from "../../../helpers/user";
 
 import { pullShowArgs } from "./pulls/[pullId]";
 
-export type MusicShowArgsType = ReturnType<typeof musicShowArgs>;
 export const musicShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.MusicArgs>()({
     include: {

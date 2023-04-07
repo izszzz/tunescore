@@ -1,24 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { defineResourceArtistFactory } from "./resource";
 
-const prisma = new PrismaClient();
-export const ArtistFactory = prisma.artist.create({
-  data: {
-    resource: {
-      create: {
-        name: { create: { ja: "アーティスト", en: "artist" } },
-        unionType: "Artist",
-      },
-    },
-  },
-});
-
-export const LongNameArtistFactory = prisma.artist.create({
-  data: {
-    resource: {
-      create: {
-        name: { create: { ja: "あ".repeat(100), en: "a".repeat(100) } },
-        unionType: "Artist",
-      },
-    },
-  },
+export const ArtistFactory = defineResourceArtistFactory({
+  artist: { create: {} },
 });

@@ -14,6 +14,7 @@
 /prisma/db.sqlite-journal
 /prisma/generated/routers
 /prisma/generated/schemas
+/prisma/generated/fabbrica
 
 # next.js
 /.next/

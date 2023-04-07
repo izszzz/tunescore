@@ -1,32 +1,36 @@
 import { PrismaClient } from "@prisma/client";
+import { initialize } from "@quramy/prisma-fabbrica";
 
 import {
-  AlbumFactory,
-  AlbumOwnedByArtist,
-  AlbumOwnedByBand,
-  LongTitleAlbumFactory,
+  AlbumHasMusicsFactory,
+  AlbumOwnedByArtistFactory,
+  AlbumOwnedByBandFactory,
 } from "./fixtures/album";
-import { ArtistFactory, LongNameArtistFactory } from "./fixtures/artist";
-import { BandFactory, LongNameBandFactory } from "./fixtures/band";
+import { ArtistFactory } from "./fixtures/artist";
 import { IssueFactory } from "./fixtures/issue";
 import { LingTositeSigure } from "./fixtures/lingTositeSigure";
 import {
-  CopyMusicFactory,
-  EnglishMusic,
-  ItunesMusic,
-  JapaneseMusic,
-  LongTitleMusic,
+  MusicCopyFactory,
+  MusicEnglishFactory,
+  MusicJapaneseFactory,
   MusicFactory,
-  MusicOwendByBand,
-  MusicOwendByComposer,
-  MusicOwendByLyrist,
-  MusicOwendByUser,
-  OriginalMusicFactory,
-  PaidMusicFactory,
-  ScoreMusicFactory,
-  YoutubeMusic,
+  MusicOwendByBandFactory,
+  MusicOwendByComposerFactory,
+  MusicOwendByLyristFactory,
+  MusicOwendByUserFactory,
+  MusicOriginalFactory,
+  MusicPaidFactory,
+  MusicScoreFactory,
+  MusicYoutubeFactory,
+  MusicItunesFactory,
 } from "./fixtures/music";
 import { PullFactory } from "./fixtures/pull";
+import {
+  ResourceAlbumLongNameFactory,
+  ResourceArtistLongNameFactory,
+  ResourceBandLongNameFactory,
+  ResourceMusicLongNameFactory,
+} from "./fixtures/resource";
 import { TkFromLingTositeSigure } from "./fixtures/tkFromLingTositeSigure";
 import {
   BookmarksUserFactory,
@@ -37,6 +41,7 @@ import {
 } from "./fixtures/user";
 
 const prisma = new PrismaClient();
+initialize({ prisma });
 async function main() {
   try {
     await prisma.tag.createMany({
@@ -78,34 +83,33 @@ async function main() {
   await BookmarksUserFactory();
 
   // Music
-  await MusicFactory;
-  await PaidMusicFactory;
-  await OriginalMusicFactory;
-  await CopyMusicFactory;
-  await ScoreMusicFactory;
-  await JapaneseMusic;
-  await EnglishMusic;
-  await LongTitleMusic;
-  await MusicOwendByUser();
-  await MusicOwendByComposer();
-  await MusicOwendByLyrist();
-  await MusicOwendByBand();
-  await ItunesMusic();
-  await YoutubeMusic();
+  await MusicFactory.create();
+  await MusicPaidFactory.create();
+  await MusicOriginalFactory.create();
+  await MusicCopyFactory.create();
+  await MusicScoreFactory.create();
+  await MusicJapaneseFactory.create();
+  await MusicEnglishFactory.create();
+  await ResourceMusicLongNameFactory.create();
+  await MusicOwendByUserFactory.create();
+  await MusicOwendByComposerFactory.create();
+  await MusicOwendByLyristFactory.create();
+  await MusicOwendByBandFactory.create();
+  await MusicItunesFactory.create();
+  await MusicYoutubeFactory.create();
 
   // Album
-  await AlbumFactory;
-  await LongTitleAlbumFactory;
-  await AlbumOwnedByBand();
-  await AlbumOwnedByArtist();
+  await ResourceAlbumLongNameFactory.create();
+  await AlbumOwnedByBandFactory.create();
+  await AlbumOwnedByArtistFactory.create();
+  await AlbumHasMusicsFactory.create();
 
   // Band
-  await BandFactory;
-  await LongNameBandFactory;
+  await ResourceBandLongNameFactory.create();
 
   // Artist
-  await ArtistFactory;
-  await LongNameArtistFactory;
+  await ArtistFactory.create();
+  await ResourceArtistLongNameFactory.create();
 
   // Pull
   await PullFactory();

@@ -13,10 +13,10 @@ generator trpc {
   isGenerateInclude    = true
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-//   output="../erd.md"
-// }
+generator fabbrica {
+  provider = "prisma-fabbrica"
+  output      = "./generated/fabbrica"
+}
 
 datasource db {
   provider = "postgresql"

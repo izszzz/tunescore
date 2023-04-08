@@ -23,9 +23,7 @@ export const PullFactory = async () =>
             status: "DRAFT",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
           },
           {
             title: "OPEN",
@@ -33,9 +31,7 @@ export const PullFactory = async () =>
             status: "OPEN",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
           },
           {
             title: "VOTE",
@@ -43,9 +39,7 @@ export const PullFactory = async () =>
             status: "VOTE",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
           },
           {
             title: "CLOSE",
@@ -53,9 +47,7 @@ export const PullFactory = async () =>
             status: "CLOSE",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
           },
           {
             title: "MERGE",
@@ -63,9 +55,7 @@ export const PullFactory = async () =>
             status: "MERGE",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
           },
           {
             title: "Comment",
@@ -73,15 +63,11 @@ export const PullFactory = async () =>
             status: "DRAFT",
             original: "",
             changed: "",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
+            user: UserFactory,
             comments: {
               create: {
                 body: "Body",
-                user: {
-                  connect: { id: (await UserFactory).id },
-                },
+                user: UserFactory,
                 unionType: "Pull",
               },
             },

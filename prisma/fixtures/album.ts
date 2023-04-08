@@ -1,86 +1,32 @@
-import { PrismaClient } from "@prisma/client";
-
 import { ArtistFactory } from "./artist";
-import { BandFactory } from "./band";
 import { MusicFactory } from "./music";
+import { defineResourceAlbumFactory } from "./resource";
 
-const prisma = new PrismaClient();
-export const AlbumFactory = prisma.album.create({
-  data: {
-    resource: {
+export const AlbumOwnedByBandFactory = defineResourceAlbumFactory({
+    name: { create: { ja: "バンドのアルバム", en: "album owned by band" } },
+    album: { create: {} },
+  }),
+  AlbumOwnedByArtistFactory = defineResourceAlbumFactory(async () => ({
+    name: {
+      create: { ja: "アーティストのアルバム", en: "artist owned by band" },
+    },
+    album: {
       create: {
-        name: { create: { ja: "アルバム", en: "Album" } },
-        unionType: "Album",
+        artists: {
+          create: await ArtistFactory.buildList(3),
+        },
       },
     },
-  },
-});
-
-export const LongTitleAlbumFactory = prisma.album.create({
-  data: {
-    resource: {
+  })),
+  AlbumHasMusicsFactory = defineResourceAlbumFactory(async () => ({
+    name: {
+      create: { ja: "曲をもつアルバム", en: "album has musics" },
+    },
+    album: {
       create: {
-        name: { create: { ja: "あ".repeat(100), en: "a".repeat(100) } },
-        unionType: "Album",
-      },
-    },
-  },
-});
-
-export const AlbumOwnedByBand = async () =>
-  prisma.album.create({
-    data: {
-      resource: {
-        create: {
-          name: {
-            create: { ja: "バンドのアルバム", en: "album owned by band" },
-          },
-          unionType: "Album",
+        musics: {
+          create: await MusicFactory.buildList(5),
         },
       },
-      band: { connect: { id: (await BandFactory).id } },
     },
-  });
-
-export const AlbumOwnedByArtist = async () =>
-  prisma.album.create({
-    data: {
-      resource: {
-        create: {
-          name: {
-            create: {
-              ja: "アーティストのアルバム",
-              en: "artist owned by band",
-            },
-          },
-          unionType: "Album",
-        },
-      },
-      artists: { connect: { id: (await ArtistFactory).id } },
-    },
-  });
-
-export const AlbumHasMusics = async () =>
-  prisma.album.create({
-    data: {
-      resource: {
-        create: {
-          name: {
-            create: {
-              ja: "曲をもつアルバム",
-              en: "album has musics",
-            },
-          },
-          unionType: "Album",
-        },
-      },
-      musics: {
-        connect: [
-          { id: (await MusicFactory).id },
-          { id: (await MusicFactory).id },
-          { id: (await MusicFactory).id },
-          { id: (await MusicFactory).id },
-        ],
-      },
-    },
-  });
+  }));

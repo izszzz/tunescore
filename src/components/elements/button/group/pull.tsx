@@ -61,33 +61,26 @@ const PullButton = ({
         <PullDraftButton loading={loading} onClick={onDraft} />
       </ButtonGroup>
     ))
-    .with({ music: { type: "COPY" }, status: "OPEN" }, () => {
-      if (data.music.pulls.length >= 5)
-        return (
-          <ButtonGroup fullWidth>
-            <VoteCreateButton
-              conflict={conflict}
-              diff={diff}
-              loading={loading}
-              onClick={onVote}
-            />
-            <PullCloseButton loading={loading} onClick={onClose} />
-            <PullDraftButton loading={loading} onClick={onDraft} />
-          </ButtonGroup>
-        );
-      else
-        return (
-          <ButtonGroup fullWidth>
-            <PullMergeButton
-              disabled={conflict || !diff}
-              loading={loading}
-              onClick={onMerge}
-            />
-            <PullCloseButton loading={loading} onClick={onClose} />
-            <PullDraftButton loading={loading} onClick={onDraft} />
-          </ButtonGroup>
-        );
-    })
+    .with({ music: { type: "COPY" }, status: "OPEN" }, () => (
+      <ButtonGroup fullWidth>
+        {data.music.pulls.length >= 5 ? (
+          <VoteCreateButton
+            conflict={conflict}
+            diff={diff}
+            loading={loading}
+            onClick={onVote}
+          />
+        ) : (
+          <PullMergeButton
+            disabled={conflict || !diff}
+            loading={loading}
+            onClick={onMerge}
+          />
+        )}
+        <PullCloseButton loading={loading} onClick={onClose} />
+        <PullDraftButton loading={loading} onClick={onDraft} />
+      </ButtonGroup>
+    ))
     .with({ music: { type: "ORIGINAL" }, status: "VOTE" }, () => <>vote</>)
     .with({ music: { type: "COPY" }, status: "VOTE" }, () => {
       const voted =

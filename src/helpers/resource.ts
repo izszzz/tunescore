@@ -65,12 +65,13 @@ export const resourceListArgs = (session: SessionArg) =>
         album: albumShowArgs(session),
       },
     }),
-  getResourceShowPathname = (type: ResourceUnionType) =>
+  getResourceShowPathname = (type: ResourceUnionType | "User") =>
     match(type)
       .with("Music", () => "/musics/[id]" as const)
       .with("Artist", () => "/artists/[id]" as const)
       .with("Album", () => "/albums/[id]" as const)
       .with("Band", () => "/bands/[id]" as const)
+      .with("User", () => "/users/[id]" as const)
       .exhaustive(),
   getOwner = (
     resource: Prisma.ResourceGetPayload<{

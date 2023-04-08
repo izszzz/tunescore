@@ -1,5 +1,6 @@
 /src/env/*
 /src/server/db/client.ts
+/src/stories
 /.storybook
 .next/
 node_modules/

@@ -6,14 +6,13 @@ import {
   AlbumOwnedByArtistFactory,
   AlbumOwnedByBandFactory,
 } from "./fixtures/album";
-import { ArtistFactory } from "./fixtures/artist";
-import { IssueFactory } from "./fixtures/issue";
+import { ResourceArtistFactory } from "./fixtures/artist";
 import { LingTositeSigure } from "./fixtures/lingTositeSigure";
 import {
   MusicCopyFactory,
   MusicEnglishFactory,
   MusicJapaneseFactory,
-  MusicFactory,
+  ResourceMusicFactory,
   MusicOwendByBandFactory,
   MusicOwendByComposerFactory,
   MusicOwendByLyristFactory,
@@ -76,14 +75,14 @@ async function main() {
     console.log();
   }
   // User
-  await UserFactory;
-  await LongNameUserFactory;
-  await FollowingUserFactory();
-  await FollowedUserFactory();
-  await BookmarksUserFactory();
+  await UserFactory.create();
+  await LongNameUserFactory.create();
+  await FollowingUserFactory.create();
+  await FollowedUserFactory.create();
+  await BookmarksUserFactory.create();
 
   // Music
-  await MusicFactory.create();
+  await ResourceMusicFactory.create();
   await MusicPaidFactory.create();
   await MusicOriginalFactory.create();
   await MusicCopyFactory.create();
@@ -108,14 +107,14 @@ async function main() {
   await ResourceBandLongNameFactory.create();
 
   // Artist
-  await ArtistFactory.create();
+  await ResourceArtistFactory.create();
   await ResourceArtistLongNameFactory.create();
 
   // Pull
   await PullFactory();
 
   // Issue
-  await IssueFactory();
+  // await IssueFactory();
 
   // Ling tosite Sigure
   await LingTositeSigure();

@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import { defineMusicFactory } from "../generated/fabbrica";
+
 import {
   defineResourceArtistFactory,
   defineResourceBandFactory,
@@ -9,7 +11,14 @@ import { UserFactory } from "./user";
 
 const prisma = new PrismaClient();
 
-export const MusicFactory = defineResourceMusicFactory({
+export const MusicFactory = defineMusicFactory({
+    defaultData: {
+      resource: defineResourceMusicFactory(),
+      type: "ORIGINAL",
+      visibillity: "PUBLIC",
+    },
+  }),
+  ResourceMusicFactory = defineResourceMusicFactory({
     name: { create: { ja: "曲", en: "music" } },
     music: {
       create: {
@@ -101,9 +110,7 @@ export const MusicFactory = defineResourceMusicFactory({
       create: {
         type: "ORIGINAL",
         visibillity: "PUBLIC",
-        user: {
-          connect: { id: (await UserFactory).id },
-        },
+        user: UserFactory,
       },
     },
   })),

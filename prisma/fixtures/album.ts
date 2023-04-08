@@ -1,8 +1,6 @@
-import {
-  defineResourceAlbumFactory,
-  defineResourceArtistFactory,
-  defineResourceMusicFactory,
-} from "./resource";
+import { ArtistFactory } from "./artist";
+import { MusicFactory } from "./music";
+import { defineResourceAlbumFactory } from "./resource";
 
 export const AlbumOwnedByBandFactory = defineResourceAlbumFactory({
     name: { create: { ja: "バンドのアルバム", en: "album owned by band" } },
@@ -15,17 +13,7 @@ export const AlbumOwnedByBandFactory = defineResourceAlbumFactory({
     album: {
       create: {
         artists: {
-          create: [
-            {
-              resource: { create: await defineResourceArtistFactory().build() },
-            },
-            {
-              resource: { create: await defineResourceArtistFactory().build() },
-            },
-            {
-              resource: { create: await defineResourceArtistFactory().build() },
-            },
-          ],
+          create: await ArtistFactory.buildList(3),
         },
       },
     },
@@ -37,32 +25,7 @@ export const AlbumOwnedByBandFactory = defineResourceAlbumFactory({
     album: {
       create: {
         musics: {
-          create: [
-            {
-              resource: { create: await defineResourceMusicFactory().build() },
-              type: "COPY",
-              visibillity: "PUBLIC",
-              price: 0,
-            },
-            {
-              resource: { create: await defineResourceMusicFactory().build() },
-              type: "COPY",
-              visibillity: "PUBLIC",
-              price: 0,
-            },
-            {
-              resource: { create: await defineResourceMusicFactory().build() },
-              type: "COPY",
-              visibillity: "PUBLIC",
-              price: 0,
-            },
-            {
-              resource: { create: await defineResourceMusicFactory().build() },
-              type: "COPY",
-              visibillity: "PUBLIC",
-              price: 0,
-            },
-          ],
+          create: await MusicFactory.buildList(5),
         },
       },
     },

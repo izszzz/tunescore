@@ -16,6 +16,11 @@ module.exports = {
     config.resolve.alias[
       "@tomfreudenberg/next-auth-mock/storybook/preview-mock-auth-states"
     ] = path.resolve(__dirname, "previewMockAuthStates.js");
+    config.module.rules.push({
+      test: /\.mjs$/,
+      include: /node_modules/,
+      type: "javascript/auto",
+    });
     return config;
   },
 };

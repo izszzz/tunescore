@@ -63,7 +63,7 @@ const DefaultHeader = () => {
           sx={{ flexGrow: 1, cursor: "pointer" }}
           variant="h4"
         >
-          tunescore β
+          tunescoreβ
         </Typography>
         <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={1} />

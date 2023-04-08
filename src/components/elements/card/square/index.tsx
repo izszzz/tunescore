@@ -2,22 +2,32 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
+import type { Route } from "nextjs-routes";
 import { useDarkMode } from "usehooks-ts";
 
 import Image from "../../image";
+import { NextLinkComposed } from "../../link";
 
 export interface SquareCardProps {
   title: string | React.ReactNode;
   image: string | null | undefined;
   size: string;
   icon: React.ReactNode;
-  onClick?: () => void;
+  route: Route;
 }
-const SquareCard = ({ title, image, size, icon, onClick }: SquareCardProps) => {
+const SquareCard = ({ title, image, size, icon, route }: SquareCardProps) => {
   const { isDarkMode } = useDarkMode();
   return (
-    <Box onClick={onClick} width={size}>
-      <CardActionArea sx={{ height: size, borderRadius: "5px" }}>
+    <Box
+      color="inherit"
+      component={NextLinkComposed}
+      sx={{
+        textDecoration: "none",
+      }}
+      to={route}
+      width={size}
+    >
+      <CardActionArea sx={{ width: size, height: size, borderRadius: "5px" }}>
         {image ? (
           <>
             <Image

@@ -71,11 +71,7 @@ const ResourceShowLayout = ({
   const resourceData = data as ResourceData,
     { unionType: type, bookmarks, name, links, tags } = resourceData,
     locale = setLocale(name, router),
-    image = getImage(
-      type === "Music" ? getMusicLinks(resourceData) : links,
-      80,
-      { channel: true }
-    );
+    image = getImage(getMusicLinks(resourceData), 80, { channel: true });
 
   return (
     <ShowLayout

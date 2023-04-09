@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -19,6 +19,7 @@ import SearchAutocomplete from "../autocomplete/search";
 import ResourceToggleGroupButton from "../button/group/toggle/resource";
 import CartIconButton from "../button/icon/cart";
 import SettingsIconButton from "../button/icon/settings";
+import { NextLinkComposed } from "../link";
 import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
@@ -59,8 +60,14 @@ const DefaultHeader = () => {
     <>
       <Header>
         <Typography
-          onClick={() => router.push("/")}
-          sx={{ flexGrow: 1, cursor: "pointer" }}
+          component={NextLinkComposed}
+          sx={{
+            flexGrow: 1,
+            cursor: "pointer",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+          to="/"
           variant="h4"
         >
           tunescoreβ
@@ -96,7 +103,9 @@ const DefaultHeader = () => {
               <PlusMenuManager />
               <SettingsIconButton onClick={() => showSettings()} />
               {match(session)
-                .with({ status: "loading" }, () => <CircularProgress />)
+                .with({ status: "loading" }, () => (
+                  <Skeleton height={40} variant="circular" width={40} />
+                ))
                 .with({ status: "unauthenticated" }, () => (
                   <Button
                     disableElevation

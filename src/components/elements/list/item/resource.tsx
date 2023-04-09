@@ -28,9 +28,9 @@ export interface ResourceListItemProps extends ListItemProps {
 }
 const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
   const router = useRouter(),
-    { id, links, unionType, name, bookmarks, _count } = data,
+    { id, unionType, name, bookmarks, _count } = data,
     locale = setLocale(name, router),
-    image = getImage(unionType === "Music" ? getMusicLinks(data) : links, 60),
+    image = getImage(getMusicLinks(data), 60),
     { type, owner } = getOwner(data, router);
   return (
     <ListItem
@@ -84,7 +84,7 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
           </Stack>
         ),
       }}
-      route={{
+      to={{
         pathname: getResourceShowPathname(unionType),
         query: { id },
       }}

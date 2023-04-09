@@ -39,7 +39,7 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
           </Box>
         ),
       }}
-      route={{
+      to={{
         pathname: "/musics/[id]/issues/[issueId]",
         query: { id, issueId: data.id },
       }}

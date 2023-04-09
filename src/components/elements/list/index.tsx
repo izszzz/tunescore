@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import List from "@mui/material/List";
 
-interface ListsProps<T> {
+export interface ListsProps<T> {
   data: T[];
   listItem: (data: T) => React.ReactNode;
 }

@@ -38,7 +38,7 @@ const PullListItem = ({ data }: PullListItemProps) => {
           </Box>
         ),
       }}
-      route={{
+      to={{
         pathname: "/musics/[id]/pulls/[pullId]",
         query: { id, pullId: data.id },
       }}

@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
+import BetaAlert from "../components/elements/alert/beta";
 import CardsLayout from "../components/layouts/cards";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
 import { resourcePaginationQuery } from "../paths/search";
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
     });
   return (
     <DefaultSingleColumnLayout>
+      <BetaAlert />
       <CardsLayout data={data?.data} loading={isLoading} perPage={60} />
     </DefaultSingleColumnLayout>
   );

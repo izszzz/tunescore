@@ -15,7 +15,7 @@ const CardsLayout = ({
   perPage,
   loading,
 }: PropsWithLoading<CardsLayoutProps>) => (
-  <Grid container my={3} rowSpacing={6} spacing={1}>
+  <Grid container my={3} rowSpacing={4} spacing={1}>
     {(loading ? [...Array(perPage)] : data)?.map((data, i) => (
       <Grid
         display="flex"

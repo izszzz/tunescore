@@ -49,7 +49,7 @@ const New: NextPage = () => {
         <FormContainer formContext={formContext} onSuccess={handleSubmit}>
           <Box mb={3}>
             <RadioButtonGroup
-              label="Type"
+              label="type"
               name="unionType"
               options={[
                 { id: "Music", label: "Music" },

@@ -6,7 +6,6 @@
 // prettier-ignore
 declare module "nextjs-routes" {
   export type Route =
-    | StaticRoute<"/about">
     | DynamicRoute<"/albums/[id]", { "id": string }>
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
     | StaticRoute<"/api/audiveris">
@@ -26,6 +25,12 @@ declare module "nextjs-routes" {
     | StaticRoute<"/dashboard/settings">
     | DynamicRoute<"/dashboard/transactions/[id]", { "id": string }>
     | StaticRoute<"/dashboard/transactions">
+    | StaticRoute<"/docs/about">
+    | StaticRoute<"/docs/developer">
+    | StaticRoute<"/docs/getting-started/create-music">
+    | StaticRoute<"/docs/getting-started">
+    | StaticRoute<"/docs/getting-started/write-score">
+    | StaticRoute<"/docs/hakei-prod">
     | StaticRoute<"/">
     | DynamicRoute<"/musics/[id]", { "id": string }>
     | DynamicRoute<"/musics/[id]/issues/[issueId]", { "id": string; "issueId": string }>

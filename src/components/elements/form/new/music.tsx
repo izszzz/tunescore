@@ -71,7 +71,7 @@ const MusicNewForm = ({ formContext }: NewForm) => {
     <>
       <Box mb={3}>
         <RadioButtonGroup
-          label="copywright"
+          label="copyright"
           name="music.create.type"
           options={[
             { id: "ORIGINAL", label: "original" },

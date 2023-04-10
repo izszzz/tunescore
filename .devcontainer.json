@@ -11,7 +11,8 @@
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
         "ms-playwright.playwright",
-        "Prisma.prisma"
+        "Prisma.prisma",
+        "unifiedjs.vscode-mdx"
       ],
       "settings": {
         "editor.codeActionsOnSave": {

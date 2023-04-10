@@ -46,7 +46,6 @@ const ScoreHeader = ({
       sx={{
         top: "auto",
         bottom: 0,
-        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       {children}

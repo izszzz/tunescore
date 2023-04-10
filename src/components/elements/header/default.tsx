@@ -24,9 +24,10 @@ import AvatarMenuManager from "../menu/avatar";
 import NotificationsMenuManager from "../menu/notifications";
 import PlusMenuManager from "../menu/plus";
 
+import type { HeaderProps } from ".";
 import Header from ".";
 
-const DefaultHeader = () => {
+const DefaultHeader = (props: HeaderProps) => {
   const [type, setType] = useState<ResourceUnionType[]>(["Music"]),
     session = useSession(),
     router = useRouter(),
@@ -58,7 +59,7 @@ const DefaultHeader = () => {
   }, [router.query.type]);
   return (
     <>
-      <Header>
+      <Header {...props}>
         <Typography
           component={NextLinkComposed}
           sx={{

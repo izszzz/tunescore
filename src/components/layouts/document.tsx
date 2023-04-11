@@ -34,8 +34,8 @@ const DocumentLayout = () => {
         >
           <Toolbar />
           <List>
-            <ListItemButton component={NextLinkComposed} to="/docs/about">
-              <ListItemText>About</ListItemText>
+            <ListItemButton component={NextLinkComposed} to="/docs">
+              <ListItemText>Document</ListItemText>
             </ListItemButton>
             <ExpandListItem
               open={router.pathname.includes("getting-started")}

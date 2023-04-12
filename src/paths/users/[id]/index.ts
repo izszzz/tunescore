@@ -20,7 +20,7 @@ export const userShowQuery = ({
   });
 
 export type UserShowArgsType = ReturnType<typeof userShowArgs>;
-export const userShowArgs = (session: SessionArg) =>
+const userShowArgs = (session: SessionArg) =>
   Prisma.validator<Prisma.UserArgs>()({
     select: {
       followers: { where: { following: userWhere(session) } },

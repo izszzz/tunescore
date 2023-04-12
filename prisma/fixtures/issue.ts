@@ -1,54 +1,37 @@
-import { PrismaClient } from "@prisma/client";
+import { defineIssueFactory } from "../generated/fabbrica";
 
+import { MusicFactory } from "./music";
 import { UserFactory } from "./user";
 
-const prisma = new PrismaClient();
-
-export const IssueFactory = async () =>
-  await prisma.music.create({
-    data: {
-      resource: {
-        create: {
-          name: { create: { ja: "Issue", en: "Issue" } },
-          unionType: "Music",
-        },
+export const defineIssueUserFactory = (
+    defaultData: Omit<
+      NonNullable<Parameters<typeof defineIssueFactory>[0]>["defaultData"],
+      "user"
+    >
+  ) =>
+    defineIssueFactory({
+      defaultData: {
+        user: UserFactory,
+        music: MusicFactory,
+        ...defaultData,
       },
-      type: "ORIGINAL",
-      visibillity: "PUBLIC",
-      issues: {
-        create: [
-          {
-            title: "OPEN",
-            body: "OPEN",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
-          },
-          {
-            title: "CLOSE",
-            body: "CLOSE",
-            status: "CLOSE",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
-          },
-          {
-            title: "Comment",
-            body: "Comment",
-            user: {
-              connect: { id: (await UserFactory).id },
-            },
-            comments: {
-              create: {
-                body: "Body",
-                user: {
-                  connect: { id: (await UserFactory).id },
-                },
-                unionType: "Issue",
-              },
-            },
-          },
-        ],
+    }),
+  IssueOpenFactory = defineIssueUserFactory({
+    title: "OPEN",
+    body: "OPEN",
+  }),
+  IssueCloseFactory = defineIssueUserFactory({
+    title: "CLOSE",
+    body: "CLOSE",
+  }),
+  IssueHasCommentsFactory = defineIssueUserFactory({
+    title: "Comment",
+    body: "Comment",
+    comments: {
+      create: {
+        body: "Body",
+        user: UserFactory,
+        unionType: "Issue",
       },
     },
   });

@@ -1,12 +1,10 @@
+import type { PropsWithChildren } from "react";
 import React, { useEffect, useState } from "react";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
 
-interface CustomThemeProvider {
-  children: React.ReactNode;
-}
-const CustomThemeProvider = ({ children }: CustomThemeProvider) => {
+const CustomThemeProvider = ({ children }: PropsWithChildren) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -14,9 +12,7 @@ const CustomThemeProvider = ({ children }: CustomThemeProvider) => {
   }, []);
   const { isDarkMode } = useDarkMode();
   const theme = createTheme({
-    palette: {
-      mode: isDarkMode ? "dark" : "light",
-    },
+    palette: { mode: isDarkMode ? "dark" : "light" },
   });
   return mounted ? (
     <ThemeProvider theme={theme}>{children}</ThemeProvider>

@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from "react";
 import React from "react";
 
 import Box from "@mui/material/Box";
@@ -20,7 +21,7 @@ const ShowLayout = ({
   tabs,
   contained = true,
   children,
-}: ShowLayoutProps) => (
+}: PropsWithChildren<ShowLayoutProps>) => (
   <SingleColumnLayout
     contained={contained}
     footer={<Footer />}

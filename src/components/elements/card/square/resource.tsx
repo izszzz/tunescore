@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
@@ -15,6 +14,8 @@ import {
 } from "../../../../helpers/resource";
 import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
+import { NextLinkComposed } from "../../link";
+import EllipsisTypography from "../../typography/ellipsis";
 
 import SquareCard from ".";
 
@@ -23,9 +24,10 @@ interface ResourceSquareCardProps {
 }
 const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
   const router = useRouter(),
-    { id, links, unionType, name, bookmarks, _count } = data,
+    { id, unionType, name, bookmarks, _count } = data,
     { type, owner } = getOwner(data, router),
-    image = getImage(unionType === "Music" ? getMusicLinks(data) : links, 200, {
+    locale = setLocale(name, router),
+    image = getImage(getMusicLinks(data), 200, {
       square: true,
     });
   return (
@@ -37,12 +39,6 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
         />
       }
       image={image}
-      onClick={() =>
-        router.push({
-          pathname: getResourceShowPathname(unionType),
-          query: { id },
-        })
-      }
       size="200px"
       title={
         <>
@@ -51,9 +47,7 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
             display="flex"
             justifyContent="space-between"
           >
-            <Typography noWrap variant="h6">
-              {setLocale(name, router)}
-            </Typography>
+            <EllipsisTypography variant="h6">{locale}</EllipsisTypography>
             <Box alignItems="center" display="flex">
               <BookmarkChip
                 bookmarked={isNonEmpty(bookmarks)}
@@ -63,10 +57,24 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
             </Box>
           </Box>
           {owner && (
-            <Chip icon={<ResourceIcon type={type} />} label={owner.name} />
+            <Chip
+              clickable
+              component={NextLinkComposed}
+              icon={<ResourceIcon type={type} />}
+              label={owner.name}
+              size="small"
+              to={{
+                pathname: getResourceShowPathname(type),
+                query: { id: owner.id },
+              }}
+            />
           )}
         </>
       }
+      to={{
+        pathname: getResourceShowPathname(unionType),
+        query: { id },
+      }}
     />
   );
 };

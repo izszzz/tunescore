@@ -5,7 +5,6 @@ import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 import { P, match } from "ts-pattern";
-import type { Optional } from "utility-types";
 
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
@@ -25,16 +24,13 @@ import Image from "../../image";
 
 import ListItem from ".";
 export interface ResourceListItemProps extends ListItemProps {
-  data: Optional<
-    Prisma.ResourceGetPayload<ResourceListArgsType>,
-    "music" | "album" | "artist" | "band"
-  >;
+  data: Prisma.ResourceGetPayload<ResourceListArgsType>;
 }
 const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
   const router = useRouter(),
-    { id, links, unionType, name, bookmarks, _count } = data,
+    { id, unionType, name, bookmarks, _count } = data,
     locale = setLocale(name, router),
-    image = getImage(unionType === "Music" ? getMusicLinks(data) : links, 60),
+    image = getImage(getMusicLinks(data), 60),
     { type, owner } = getOwner(data, router);
   return (
     <ListItem
@@ -88,7 +84,7 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
           </Stack>
         ),
       }}
-      route={{
+      to={{
         pathname: getResourceShowPathname(unionType),
         query: { id },
       }}

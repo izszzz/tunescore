@@ -1,0 +1,25 @@
+import Image from "next/image";
+import Box from "@mui/material/Box";
+import { useDarkMode } from "usehooks-ts";
+
+export const DynamicImage = () => {
+  const { isDarkMode } = useDarkMode();
+  return (
+    <Box display="flex" justifyContent="center">
+      <Image
+        src={`/images/${
+          isDarkMode ? "dark" : "light"
+        }/logo_typo_transparent_1000x1000.png`}
+        width="600px"
+        height="600px"
+      />
+    </Box>
+
+);
+};
+
+<DynamicImage />
+
+- [WebSite](https://hakeiprod.github.io/)
+- [Twitter](https://twitter.com/hakei_prod)
+- email: hakeiprod@gmail.com

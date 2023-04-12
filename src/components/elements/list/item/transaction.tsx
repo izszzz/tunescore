@@ -40,7 +40,7 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
           </Box>
         ),
       }}
-      route={{
+      to={{
         pathname: "/dashboard/transactions/[id]",
         query: { id: data.id },
       }}

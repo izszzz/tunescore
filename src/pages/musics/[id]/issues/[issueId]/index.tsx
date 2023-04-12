@@ -9,11 +9,9 @@ import { useSnackbar } from "notistack";
 import ArticleCard from "../../../../../components/elements/card/article";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
-import MusicLayout from "../../../../../components/layouts/show/music";
-import type { MusicLayoutProps } from "../../../../../components/layouts/show/music";
+import ResourceShowLayout from "../../../../../components/layouts/show/resource";
 import type { userArgs } from "../../../../../helpers/user";
 import { getCurrentUserId } from "../../../../../helpers/user";
-import { musicShowQuery } from "../../../../../paths/musics/[id]";
 import { trpc } from "../../../../../utils/trpc";
 
 const Issue: NextPage = () => {
@@ -22,11 +20,7 @@ const Issue: NextPage = () => {
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
     userId = getCurrentUserId(session),
-    query = musicShowQuery({ router, session }),
     create = trpc.comment.createOneComment.useMutation(),
-    music = trpc.resource.findUniqueResource.useQuery(query, {
-      onError: () => enqueueSnackbar("music.show error"),
-    }),
     issue = trpc.issue.findUniqueIssue.useQuery(
       {
         where: { id: issueId },
@@ -36,41 +30,44 @@ const Issue: NextPage = () => {
       },
       { onError: () => enqueueSnackbar("music.show error") }
     );
-  if (!music.data || !issue.data) return <></>;
-  const musicData = music.data as MusicLayoutProps["data"];
+  if (!issue.data) return <></>;
   const issueData = issue.data as Prisma.IssueGetPayload<{
     include: { comments: { include: { user: typeof userArgs } } };
   }>;
   const { title, body, comments } = issueData;
   return (
-    <MusicLayout activeTab="issues" data={musicData} query={query}>
-      <ArticleCard body={body} title={title} />
-      {comments.map((comment) => (
-        <CommentCard data={comment} key={comment.id} />
-      ))}
-      <CommentForm
-        formContainerProps={{
-          onSuccess: (data) =>
-            create.mutate({
-              data: {
-                ...data,
-                unionType: "Issue",
-                issue: { connect: { id: issueId } },
-                user: { connect: { id: userId } },
-                notifications: {
-                  create: {
-                    unionType: "Comment",
-                    user: {
-                      connect: { id: userId },
+    <ResourceShowLayout activeTab="issues">
+      {() => (
+        <>
+          <ArticleCard body={body} title={title} />
+          {comments.map((comment) => (
+            <CommentCard data={comment} key={comment.id} />
+          ))}
+          <CommentForm
+            formContainerProps={{
+              onSuccess: (data) =>
+                create.mutate({
+                  data: {
+                    ...data,
+                    unionType: "Issue",
+                    issue: { connect: { id: issueId } },
+                    user: { connect: { id: userId } },
+                    notifications: {
+                      create: {
+                        unionType: "Comment",
+                        user: {
+                          connect: { id: userId },
+                        },
+                      },
                     },
                   },
-                },
-              },
-            }),
-        }}
-        loading={create.isLoading}
-      />
-    </MusicLayout>
+                }),
+            }}
+            loading={create.isLoading}
+          />
+        </>
+      )}
+    </ResourceShowLayout>
   );
 };
 

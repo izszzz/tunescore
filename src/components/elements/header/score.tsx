@@ -1,5 +1,6 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
+import type { PropsWithChildren } from "react";
 import React, { useState } from "react";
 
 import type { AlphaTabApi } from "@coderline/alphatab";
@@ -12,9 +13,11 @@ import Header from ".";
 
 interface ScoreHeaderProps {
   apiRef: React.MutableRefObject<AlphaTabApi | null>;
-  children: React.ReactNode;
 }
-const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
+const ScoreHeader = ({
+  apiRef,
+  children,
+}: PropsWithChildren<ScoreHeaderProps>) => {
   const [masterVolume, setMasterVolume] = useState(100);
   const [muted, toggleMuted] = useToggle(false);
   const [played, togglePlayed] = useToggle(false);
@@ -43,7 +46,6 @@ const ScoreHeader = ({ apiRef, children }: ScoreHeaderProps) => {
       sx={{
         top: "auto",
         bottom: 0,
-        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       {children}

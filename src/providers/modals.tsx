@@ -1,3 +1,5 @@
+import type { PropsWithChildren } from "react";
+
 import { register } from "@ebay/nice-modal-react";
 
 import AuthDialog from "../components/elements/dialog/auth";
@@ -8,9 +10,6 @@ register("auth-dialog", AuthDialog);
 register("report-dialog", ReportDialog);
 register("settings-dialog", SettingsDialog);
 
-interface ModalsProviderProps {
-  children: React.ReactNode;
-}
-const ModalsProvider = ({ children }: ModalsProviderProps) => <>{children}</>;
+const ModalsProvider = ({ children }: PropsWithChildren) => <>{children}</>;
 
 export default ModalsProvider;

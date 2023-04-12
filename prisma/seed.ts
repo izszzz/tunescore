@@ -1,32 +1,35 @@
 import { PrismaClient } from "@prisma/client";
+import { initialize } from "@quramy/prisma-fabbrica";
 
 import {
-  AlbumFactory,
-  AlbumOwnedByArtist,
-  AlbumOwnedByBand,
-  LongTitleAlbumFactory,
+  AlbumHasMusicsFactory,
+  AlbumOwnedByArtistFactory,
+  AlbumOwnedByBandFactory,
 } from "./fixtures/album";
-import { ArtistFactory, LongNameArtistFactory } from "./fixtures/artist";
-import { BandFactory, LongNameBandFactory } from "./fixtures/band";
-import { IssueFactory } from "./fixtures/issue";
+import { ResourceArtistFactory } from "./fixtures/artist";
 import { LingTositeSigure } from "./fixtures/lingTositeSigure";
 import {
-  CopyMusicFactory,
-  EnglishMusic,
-  ItunesMusic,
-  JapaneseMusic,
-  LongTitleMusic,
-  MusicFactory,
-  MusicOwendByBand,
-  MusicOwendByComposer,
-  MusicOwendByLyrist,
-  MusicOwendByUser,
-  OriginalMusicFactory,
-  PaidMusicFactory,
-  ScoreMusicFactory,
-  YoutubeMusic,
+  MusicCopyFactory,
+  MusicEnglishFactory,
+  MusicJapaneseFactory,
+  ResourceMusicFactory,
+  MusicOwendByBandFactory,
+  MusicOwendByComposerFactory,
+  MusicOwendByLyristFactory,
+  MusicOwendByUserFactory,
+  MusicOriginalFactory,
+  MusicPaidFactory,
+  MusicScoreFactory,
+  MusicYoutubeFactory,
+  MusicItunesFactory,
 } from "./fixtures/music";
 import { PullFactory } from "./fixtures/pull";
+import {
+  ResourceAlbumLongNameFactory,
+  ResourceArtistLongNameFactory,
+  ResourceBandLongNameFactory,
+  ResourceMusicLongNameFactory,
+} from "./fixtures/resource";
 import { TkFromLingTositeSigure } from "./fixtures/tkFromLingTositeSigure";
 import {
   BookmarksUserFactory,
@@ -37,6 +40,7 @@ import {
 } from "./fixtures/user";
 
 const prisma = new PrismaClient();
+initialize({ prisma });
 async function main() {
   try {
     await prisma.tag.createMany({
@@ -71,47 +75,46 @@ async function main() {
     console.log();
   }
   // User
-  await UserFactory;
-  await LongNameUserFactory;
-  await FollowingUserFactory();
-  await FollowedUserFactory();
-  await BookmarksUserFactory();
+  await UserFactory.create();
+  await LongNameUserFactory.create();
+  await FollowingUserFactory.create();
+  await FollowedUserFactory.create();
+  await BookmarksUserFactory.create();
 
   // Music
-  await MusicFactory;
-  await PaidMusicFactory;
-  await OriginalMusicFactory;
-  await CopyMusicFactory;
-  await ScoreMusicFactory;
-  await JapaneseMusic;
-  await EnglishMusic;
-  await LongTitleMusic;
-  await MusicOwendByUser();
-  await MusicOwendByComposer();
-  await MusicOwendByLyrist();
-  await MusicOwendByBand();
-  await ItunesMusic();
-  await YoutubeMusic();
+  await ResourceMusicFactory.create();
+  await MusicPaidFactory.create();
+  await MusicOriginalFactory.create();
+  await MusicCopyFactory.create();
+  await MusicScoreFactory.create();
+  await MusicJapaneseFactory.create();
+  await MusicEnglishFactory.create();
+  await ResourceMusicLongNameFactory.create();
+  await MusicOwendByUserFactory.create();
+  await MusicOwendByComposerFactory.create();
+  await MusicOwendByLyristFactory.create();
+  await MusicOwendByBandFactory.create();
+  await MusicItunesFactory.create();
+  await MusicYoutubeFactory.create();
 
   // Album
-  await AlbumFactory;
-  await LongTitleAlbumFactory;
-  await AlbumOwnedByBand();
-  await AlbumOwnedByArtist();
+  await ResourceAlbumLongNameFactory.create();
+  await AlbumOwnedByBandFactory.create();
+  await AlbumOwnedByArtistFactory.create();
+  await AlbumHasMusicsFactory.create();
 
   // Band
-  await BandFactory;
-  await LongNameBandFactory;
+  await ResourceBandLongNameFactory.create();
 
   // Artist
-  await ArtistFactory;
-  await LongNameArtistFactory;
+  await ResourceArtistFactory.create();
+  await ResourceArtistLongNameFactory.create();
 
   // Pull
   await PullFactory();
 
   // Issue
-  await IssueFactory();
+  // await IssueFactory();
 
   // Ling tosite Sigure
   await LingTositeSigure();

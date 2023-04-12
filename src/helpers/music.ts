@@ -49,12 +49,13 @@ export const musicArgs = (session: SessionArg) =>
   getMusicLinks = ({
     links,
     music,
-  }: Optional<
-    Prisma.ResourceGetPayload<ResourceMusicListArgsType>,
-    "music"
-  >) => [
-    ...links.filter(({ type }) => type !== "Spotify"),
-    ...(music?.albums[0]?.resource.links.filter(
-      ({ type }) => type === "Spotify"
-    ) ?? []),
-  ];
+    unionType,
+  }: Optional<Prisma.ResourceGetPayload<ResourceMusicListArgsType>, "music">) =>
+    unionType === "Music"
+      ? [
+          ...links.filter(({ type }) => type !== "Spotify"),
+          ...(music?.albums[0]?.resource.links.filter(
+            ({ type }) => type === "Spotify"
+          ) ?? []),
+        ]
+      : links;

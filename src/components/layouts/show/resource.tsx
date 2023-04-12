@@ -98,7 +98,7 @@ const ResourceShowLayout = ({
                 {match(type)
                   .with("Music", () => (
                     <>
-                      <Owner data={resourceData} /> /
+                      <Owner data={resourceData} />
                     </>
                   ))
                   .with(P.union("Album", "Band", "Artist"), () => <></>)
@@ -161,6 +161,7 @@ const Owner = ({ data }: OwnerProps) => {
     const router = useRouter(),
       { type, owner } = getOwner(data, router);
     if (type === "NONE" || owner === null) return <></>;
+    if (owner.name) return <></>;
     return (
       <Box
         component="a"
@@ -176,7 +177,7 @@ const Owner = ({ data }: OwnerProps) => {
         }
         sx={{ cursor: "pointer", textDecoration: "underline" }}
       >
-        {owner.name}
+        {owner.name} /
       </Box>
     );
   },

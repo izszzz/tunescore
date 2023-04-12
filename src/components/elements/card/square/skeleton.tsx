@@ -1,11 +1,12 @@
 import Skeleton from "@mui/material/Skeleton";
 
-interface SquareCardProps {
-  size: string;
-}
-
-const SkeletonSquareCard = ({ size }: SquareCardProps) => (
-  <Skeleton height={size} variant="rounded" width={size} />
+const SkeletonSquareCard = () => (
+  <Skeleton
+    height="100%"
+    sx={{ aspectRatio: "1 / 1" }}
+    variant="rounded"
+    width="100%"
+  />
 );
 
 export default SkeletonSquareCard;

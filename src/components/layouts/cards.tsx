@@ -15,23 +15,19 @@ const CardsLayout = ({
   perPage,
   loading,
 }: PropsWithLoading<CardsLayoutProps>) => (
-  <Grid container my={3} rowSpacing={4} spacing={1}>
+  <Grid container px={5} rowSpacing={4} spacing={4}>
     {(loading ? [...Array(perPage)] : data)?.map((data, i) => (
       <Grid
+        alignItems="center"
         display="flex"
         item
         justifyContent="center"
         key={i}
         md={2}
-        px={2}
         sm={4}
         xs={6}
       >
-        {loading ? (
-          <SkeletonSquareCard size="200px" />
-        ) : (
-          <ResourceSquareCard data={data} />
-        )}
+        {loading ? <SkeletonSquareCard /> : <ResourceSquareCard data={data} />}
       </Grid>
     ))}
   </Grid>

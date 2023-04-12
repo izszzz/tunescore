@@ -13,19 +13,26 @@ export interface SquareCardProps {
   image: string | null | undefined;
   size: string;
   icon: React.ReactNode;
-  route: Route;
+  to?: Route;
+  onClick?: () => void;
 }
-const SquareCard = ({ title, image, size, icon, route }: SquareCardProps) => {
+const SquareCard = ({
+  title,
+  image,
+  size,
+  icon,
+  onClick,
+  ...props
+}: SquareCardProps) => {
   const { isDarkMode } = useDarkMode();
   return (
     <Box
       color="inherit"
       component={NextLinkComposed}
-      sx={{
-        textDecoration: "none",
-      }}
-      to={route}
+      onClick={() => onClick?.()}
+      sx={{ textDecoration: "none" }}
       width={size}
+      {...props}
     >
       <CardActionArea sx={{ width: size, height: size, borderRadius: "5px" }}>
         {image ? (

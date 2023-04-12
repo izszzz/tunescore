@@ -12,18 +12,18 @@ import { NextLinkComposed } from "../../link";
 interface ListItemProps extends MuiListItemProps {
   icon: React.ReactNode;
   listItemTextProps: ListItemTextProps;
-  route: Route;
+  to?: Route;
 }
 
 const ListItem = ({
   icon,
-  route,
+  to,
   listItemTextProps,
   children,
   ...props
 }: ListItemProps) => (
   <MuiListItem {...props} disablePadding divider>
-    <ListItemButton component={NextLinkComposed} to={route}>
+    <ListItemButton {...(to ? { to, component: NextLinkComposed } : {})}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText
         {...listItemTextProps}

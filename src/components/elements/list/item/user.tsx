@@ -28,7 +28,7 @@ const UserListItem = ({ data }: UserListItemProps) => (
         </Typography>
       ),
     }}
-    route={{
+    to={{
       pathname: "/users/[id]",
       query: { id: data.id },
     }}

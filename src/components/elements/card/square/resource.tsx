@@ -24,10 +24,10 @@ interface ResourceSquareCardProps {
 }
 const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
   const router = useRouter(),
-    { id, links, unionType, name, bookmarks, _count } = data,
+    { id, unionType, name, bookmarks, _count } = data,
     { type, owner } = getOwner(data, router),
     locale = setLocale(name, router),
-    image = getImage(unionType === "Music" ? getMusicLinks(data) : links, 200, {
+    image = getImage(getMusicLinks(data), 200, {
       square: true,
     });
   return (
@@ -39,10 +39,6 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
         />
       }
       image={image}
-      route={{
-        pathname: getResourceShowPathname(unionType),
-        query: { id },
-      }}
       size="200px"
       title={
         <>
@@ -75,6 +71,10 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
           )}
         </>
       }
+      to={{
+        pathname: getResourceShowPathname(unionType),
+        query: { id },
+      }}
     />
   );
 };

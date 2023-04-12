@@ -19,7 +19,6 @@ export interface SquareCardProps {
 const SquareCard = ({
   title,
   image,
-  size,
   icon,
   onClick,
   ...props
@@ -31,32 +30,32 @@ const SquareCard = ({
       component={NextLinkComposed}
       onClick={() => onClick?.()}
       sx={{ textDecoration: "none" }}
-      width={size}
+      width="100%"
       {...props}
     >
-      <CardActionArea sx={{ width: size, height: size, borderRadius: "5px" }}>
-        {image ? (
-          <>
+      <CardActionArea
+        sx={{ borderRadius: "5px", height: "inherit", width: "inherit" }}
+      >
+        <Box
+          alignItems="center"
+          bgcolor={isDarkMode ? "grey.800" : "grey.300"}
+          borderRadius="5px"
+          display="flex"
+          height="100%"
+          justifyContent="center"
+          sx={{ aspectRatio: "1 / 1" }}
+        >
+          {image ? (
             <Image
               alt="image"
               src={image}
               style={{ borderRadius: "5px" }}
-              width={size}
+              width="100%"
             />
-          </>
-        ) : (
-          <Box
-            alignItems="center"
-            bgcolor={isDarkMode ? "grey.800" : "grey.300"}
-            borderRadius="5px"
-            display="flex"
-            height={size}
-            justifyContent="center"
-            width={size}
-          >
-            {icon}
-          </Box>
-        )}
+          ) : (
+            icon
+          )}
+        </Box>
       </CardActionArea>
       {title}
     </Box>

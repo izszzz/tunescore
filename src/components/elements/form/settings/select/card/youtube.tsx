@@ -9,9 +9,7 @@ import CardSelectForm from ".";
 import type { CardSelectFormProps } from ".";
 
 export type Video = youtube_v3.Schema$Video;
-export type VideoList = youtube_v3.Schema$VideoListResponse;
 export type Channel = youtube_v3.Schema$Channel;
-export type ChannelList = youtube_v3.Schema$ChannelListResponse;
 export type SearchResult = youtube_v3.Schema$SearchResult;
 
 interface YoutubeSelectFormProps<T>

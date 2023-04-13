@@ -1,13 +1,11 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
-import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
 import { getImage } from "../../../../helpers/image";
 import setLocale from "../../../../helpers/locale";
 import { getMusicLinks } from "../../../../helpers/music";
-import type { ResourceListArgsType } from "../../../../helpers/resource";
 import {
   getResourceShowPathname,
   getOwner,
@@ -15,12 +13,13 @@ import {
 import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
 import { NextLinkComposed } from "../../link";
+import type { ResourceListItemProps } from "../../list/item/resource";
 import EllipsisTypography from "../../typography/ellipsis";
 
 import SquareCard from ".";
 
 interface ResourceSquareCardProps {
-  data: Prisma.ResourceGetPayload<ResourceListArgsType>;
+  data: ResourceListItemProps["data"];
 }
 const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
   const router = useRouter(),

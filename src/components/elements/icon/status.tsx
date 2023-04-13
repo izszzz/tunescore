@@ -5,7 +5,7 @@ import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import type { SvgIconProps } from "@mui/material/SvgIcon";
 import { match } from "ts-pattern";
 
-export interface StatusProps extends SvgIconProps {
+interface StatusProps extends SvgIconProps {
   resource: "OPEN" | "CLOSE";
 }
 const StatusIcon = ({ resource, ...props }: StatusProps) =>

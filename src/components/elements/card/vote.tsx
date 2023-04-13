@@ -15,7 +15,7 @@ import { intervalToDuration, isPast } from "date-fns";
 
 import type { PullShowArgsType } from "../../../paths/musics/[id]/pulls/[pullId]";
 
-export interface VoteCardProps extends CardProps {
+interface VoteCardProps extends CardProps {
   data: Prisma.PullGetPayload<PullShowArgsType>;
   badIconButtonProps: IconButtonProps;
   goodIconButtonProps: IconButtonProps;

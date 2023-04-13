@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
-export interface SingleColumnLayoutProps {
+export interface SingleColumnLayoutProps extends PropsWithChildren {
   header?: React.ReactNode;
   footer?: React.ReactNode;
   contained?: boolean;
@@ -13,7 +13,7 @@ const SingleColumnLayout = ({
   footer,
   children,
   contained,
-}: PropsWithChildren<SingleColumnLayoutProps>) => (
+}: SingleColumnLayoutProps) => (
   <Box display="flex" flexDirection="column" minHeight="100vh">
     {header}
     {contained ? <Container>{children}</Container> : children}

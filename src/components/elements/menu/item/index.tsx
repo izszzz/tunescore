@@ -3,7 +3,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import type { MenuItemProps } from "@mui/material/MenuItem";
 
-export interface MenuListItemProps extends MenuItemProps {
+interface MenuListItemProps extends MenuItemProps {
   icon: React.ReactNode;
 }
 const MenuListItem = ({ icon, children, ...props }: MenuListItemProps) => (

@@ -16,16 +16,4 @@ export const validator = Prisma.validator<Prisma.MusicUpdateArgs>(),
         update: { participations: { create: { artist: { connect: { id } } } } },
       },
     },
-  }),
-  selectArtistRole = (id: string) => ({
-    data: {
-      music: {
-        update: {
-          roles: { connect: { id } },
-        },
-      },
-    },
-  }),
-  removeArtistRole = (id: string) => ({
-    data: { roles: { disconnect: { id } } },
   });

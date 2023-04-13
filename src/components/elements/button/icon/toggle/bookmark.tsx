@@ -7,10 +7,6 @@ import Tooltip from "@mui/material/Tooltip";
 
 import type { ToggleIconButtonProps } from ".";
 import ToggleIconButton from ".";
-export type BookmarkToggleIconButtonProps = Omit<
-  ToggleIconButtonProps,
-  "onIcon" | "offIcon"
->;
 
 const BookmarkToggleButton = ({
   ...props

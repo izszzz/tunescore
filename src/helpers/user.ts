@@ -6,7 +6,7 @@ import type { useSession } from "next-auth/react";
 import { getSession } from "next-auth/react";
 
 export type SessionArg = Session | null;
-export type Ctx = Parameters<GetServerSideProps>[0];
+type Ctx = Parameters<GetServerSideProps>[0];
 export const authenticateUser = (session: SessionArg) => {
     const user = getCurrentUser(session);
     if (user) return user;
@@ -17,7 +17,6 @@ export const authenticateUser = (session: SessionArg) => {
     if (!getCurrentUser(session))
       return { permanent: true, destination: "/auth/signin" };
   },
-  getCurrentUser = (session: SessionArg) => session?.user,
   getCurrentUserId = (session: SessionArg) => getCurrentUser(session)?.id,
   userCount = Prisma.validator<Prisma.UserCountOutputTypeArgs>()({
     select: { followers: true, following: true },
@@ -41,3 +40,5 @@ export const authenticateUser = (session: SessionArg) => {
   ) => getCurrentUserId(session) === data.user?.id,
   isAuth = (status: ReturnType<typeof useSession>["status"]) =>
     status === "authenticated";
+
+const getCurrentUser = (session: SessionArg) => session?.user;

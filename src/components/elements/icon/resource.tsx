@@ -9,7 +9,7 @@ import type { SvgIconProps } from "@mui/material/SvgIcon";
 import type { ResourceUnionType } from "@prisma/client";
 import { match } from "ts-pattern";
 
-export interface ResourceIconProps extends SvgIconProps {
+interface ResourceIconProps extends SvgIconProps {
   type: ResourceUnionType | "User";
 }
 const ResourceIcon = ({ type, ...props }: ResourceIconProps) =>

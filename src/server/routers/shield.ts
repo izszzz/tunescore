@@ -3,9 +3,7 @@ import { rule, shield } from "trpc-shield";
 import type { Context } from "../context";
 import { middleware, publicProcedure } from "../trpc";
 
-export const isAuthenticated = rule<Context>()(
-  async (ctx) => !!ctx.session?.user
-);
+const isAuthenticated = rule<Context>()(async (ctx) => !!ctx.session?.user);
 
 const permissions = shield<Context>({
   stripe: {

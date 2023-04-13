@@ -9,12 +9,7 @@ import type { AutocompleteValue } from "@mui/material/useAutocomplete";
 import SearchAutocomplete from "../search";
 import type { SearchAutocompleteProps } from "../search";
 
-export type HandleChangeReasonFunction<
-  T,
-  Multiple,
-  DisableClearable,
-  FreeSolo
-> = (
+type HandleChangeReasonFunction<T, Multiple, DisableClearable, FreeSolo> = (
   _e: React.SyntheticEvent,
   _value: AutocompleteValue<T, Multiple, DisableClearable, FreeSolo>,
   reason: AutocompleteChangeReason,

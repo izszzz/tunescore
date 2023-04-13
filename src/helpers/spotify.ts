@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import type { Session } from "next-auth";
-import { z } from "zod";
 
 import { spotify } from "../server/common/spotify";
 import { prisma } from "../server/db/client";
@@ -57,12 +56,12 @@ export const authorized = async (session: Session | null) => {
   return spotify;
 };
 
-export const searchType = z.union([
-  z.literal("album"),
-  z.literal("artist"),
-  z.literal("playlist"),
-  z.literal("track"),
-  z.literal("show"),
-  z.literal("episode"),
-]);
-export type SearchType = z.infer<typeof searchType>;
+// const searchType = z.union([
+//   z.literal("album"),
+//   z.literal("artist"),
+//   z.literal("playlist"),
+//   z.literal("track"),
+//   z.literal("show"),
+//   z.literal("episode"),
+// ]);
+// type SearchType = z.infer<typeof searchType>;

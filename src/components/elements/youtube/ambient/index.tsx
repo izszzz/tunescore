@@ -9,9 +9,7 @@ import { ambientState } from "../../../../atoms/ambient";
 
 import styles from "./styles.module.css";
 
-export type RecursiveVoid = (func: RecursiveVoid) => void;
-
-export type Props = {
+type Props = {
   videoId: string;
 };
 

@@ -3,15 +3,12 @@ import { isNonEmpty } from "ts-array-length";
 
 import type { UserShowArgsType } from "../paths/users/[id]";
 
-import { getCurrentUserId, userArgs, userWhere } from "./user";
+import { getCurrentUserId, userArgs } from "./user";
 import type { SessionArg } from "./user";
 
 export const followArgs = {
   include: { follower: userArgs, following: userArgs },
 };
-export const checkCurrentUserFollowingQuery = (session: SessionArg) => ({
-  where: { following: userWhere(session) },
-});
 export const followMutate = ({
   data,
   session,

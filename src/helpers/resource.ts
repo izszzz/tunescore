@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import type { NextRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 import { match, P } from "ts-pattern";
+import type { Optional } from "utility-types";
 
 import { albumShowArgs } from "../paths/albums/[id]";
 import { artistShowArgs } from "../paths/artists/[id]";
@@ -74,29 +75,32 @@ export const resourceListArgs = (session: SessionArg) =>
       .with("User", () => "/users/[id]" as const)
       .exhaustive(),
   getOwner = (
-    resource: Prisma.ResourceGetPayload<{
-      include: {
-        music: {
-          include: {
-            user: typeof userArgs;
-            band: { include: { resource: { include: { name: true } } } };
-            participations: {
-              include: {
-                artist: {
-                  include: { resource: { include: { name: true } } };
+    resource: Optional<
+      Prisma.ResourceGetPayload<{
+        include: {
+          music: {
+            include: {
+              user: typeof userArgs;
+              band: { include: { resource: { include: { name: true } } } };
+              participations: {
+                include: {
+                  artist: {
+                    include: { resource: { include: { name: true } } };
+                  };
                 };
               };
             };
           };
-        };
-        album: {
-          include: {
-            band: { include: { resource: { include: { name: true } } } };
-            artists: { include: { resource: { include: { name: true } } } };
+          album: {
+            include: {
+              band: { include: { resource: { include: { name: true } } } };
+              artists: { include: { resource: { include: { name: true } } } };
+            };
           };
         };
-      };
-    }>,
+      }>,
+      "album" | "music"
+    >,
     router: NextRouter
   ) =>
     match(resource)

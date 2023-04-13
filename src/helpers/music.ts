@@ -7,10 +7,7 @@ import type { SessionArg } from "./user";
 import { userArgs } from "./user";
 
 export type MusicListArgsType = ReturnType<typeof musicListArgs>;
-export type MusicArgsType = ReturnType<typeof musicArgs>;
-export type ResourceMusicListArgsType = ReturnType<
-  typeof resourceMusicListArgs
->;
+type ResourceMusicListArgsType = ReturnType<typeof resourceMusicListArgs>;
 export const musicArgs = (session: SessionArg) =>
     Prisma.validator<Prisma.MusicArgs>()({
       include: {
@@ -39,13 +36,6 @@ export const musicArgs = (session: SessionArg) =>
         resource: resourceArgs(session),
       },
     }),
-  resourceMusicListArgs = (session: SessionArg) =>
-    Prisma.validator<Prisma.ResourceArgs>()({
-      include: {
-        ...resourceArgs(session).include,
-        music: musicArgs(session),
-      },
-    }),
   getMusicLinks = ({
     links,
     music,
@@ -59,3 +49,11 @@ export const musicArgs = (session: SessionArg) =>
           ) ?? []),
         ]
       : links;
+
+const resourceMusicListArgs = (session: SessionArg) =>
+  Prisma.validator<Prisma.ResourceArgs>()({
+    include: {
+      ...resourceArgs(session).include,
+      music: musicArgs(session),
+    },
+  });

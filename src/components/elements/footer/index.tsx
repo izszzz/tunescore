@@ -14,14 +14,14 @@ const Footer = () => {
       mt="auto"
     >
       <Stack direction="row" spacing={2}>
-        <Typography onClick={() => router.push("/about")}>
+        <Typography onClick={() => router.push("/docs/hakei-prod")}>
           hakei prod.
         </Typography>
         <Typography
-          onClick={() => router.push("/about")}
+          onClick={() => router.push("/docs")}
           sx={{ textDecoration: "underline" }}
         >
-          About
+          Document
         </Typography>
       </Stack>
     </Box>

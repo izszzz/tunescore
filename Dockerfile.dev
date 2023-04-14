@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y sudo curl git openjdk-11-jdk && \ 
     usermod -aG sudo $PWUSER && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
-    npm i --force && \
+    npm ci --force && \
     npx playwright install-deps
 
 RUN curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash

@@ -47,8 +47,8 @@ const audiveris = async (req: NextApiRequest, res: NextApiResponse) => {
       );
 
       return res.status(201).end(alphaTex);
-    } catch {
-      return res.status(500).end("failed");
+    } catch (err) {
+      return res.status(500).end(err);
     } finally {
       // remove cache
       fs.unlinkSync(uploadedFile.filepath);

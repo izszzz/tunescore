@@ -6,7 +6,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import type { LoadingButtonProps } from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import type { Artist, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
@@ -20,6 +20,9 @@ import type { ParticipationUpdateAutocompleteProps } from "../../autocomplete/up
 import CloseIconButton from "../../button/icon/close";
 import ResourceListItem from "../../list/item/resource";
 
+type Artist = Prisma.ArtistGetPayload<{
+  include: { resource: { include: { name: true } } };
+}>;
 interface ArtistsUpdateFormProps<T> {
   data: T[];
   loading: boolean;
@@ -97,6 +100,16 @@ function ArtistsUpdateForm({
               onChange={handleChangeAutocomplete<Artist, false, false, false>({
                 onSelect: (_e, _v, _r, details) => setArtist(details.option),
               })}
+              onInputChange={(_e, value) =>
+                value &&
+                search.mutate({
+                  where: {
+                    resource: {
+                      name: { is: { [router.locale]: { contains: value } } },
+                    },
+                  },
+                })
+              }
               options={search.data || []}
               textFieldProps={{ label: "artist" }}
             />

@@ -52,7 +52,6 @@ const SquareCard = ({
                 alt="image"
                 src={image}
                 style={{
-                  transition: "opacity 0.1s",
                   opacity: 1,
                   borderRadius: "5px",
                 }}

@@ -26,7 +26,9 @@ const Dropzone = (options: DropzoneOptions) => {
     >
       <input {...getInputProps()} />
       <Typography color={handleTheme} textAlign="center" variant="h4">
-        {isDragActive
+        {options.disabled
+          ? "Loading ..."
+          : isDragActive
           ? "Drop the files here ..."
           : `Analysis Score .png .jpg .pdf .gp .mxl`}
       </Typography>

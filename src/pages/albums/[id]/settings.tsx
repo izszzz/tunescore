@@ -2,8 +2,6 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { Prisma } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesAlbumSelectForm from "../../../components/elements/form/settings/select/card/album/itunes";
@@ -24,17 +22,15 @@ import {
   selectYoutubeMutate,
 } from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
-import { resourceShowQuery } from "../../../helpers/resource";
+import { resourceAlbumShowQuery } from "../../../helpers/resource";
 import { redirectToSignIn } from "../../../helpers/user";
 import { trpc } from "../../../utils/trpc";
 
 const AlbumSettings: NextPage = () => {
-  const router = useRouter<"/albums/[id]">(),
-    context = trpc.useContext(),
-    query = resourceShowQuery({ router, session: useSession().data });
+  const context = trpc.useContext();
   return (
-    <SettingsShowLayout>
-      {(data, update) => {
+    <SettingsShowLayout getQuery={resourceAlbumShowQuery}>
+      {({ data, update, router, query }) => {
         const { album, links, id, name } = data,
           locale = setLocale(name, router);
         return (

@@ -2,6 +2,7 @@ import {
   Controller,
   FormContainer,
   TextFieldElement,
+  useForm,
 } from "react-hook-form-mui";
 
 import { useModal } from "@ebay/nice-modal-react";
@@ -14,16 +15,20 @@ import { useSession } from "next-auth/react";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 
+import ScoreDropzone from "../../../../components/elements/form/dropzone/score";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
   const router = useRouter<"/musics/[id]">(),
+    formContext = useForm<Pull>(),
     { data: session, status } = useSession(),
     { show } = useModal("auth-dialog"),
     { id } = router.query,
+    { setValue } = formContext,
     userId = getCurrentUserId(session),
     create = trpc.pull.createOnePull.useMutation({
       onSuccess: (data) =>
@@ -35,7 +40,10 @@ const NewPull: NextPage = () => {
     });
 
   return (
-    <ResourceShowLayout activeTab="pullrequests">
+    <ResourceShowLayout
+      activeTab="pullrequests"
+      getQuery={resourceMusicShowQuery}
+    >
       {(data) => {
         const handleSubmit = (pull: Pull) => {
           if (isAuth(status))
@@ -52,12 +60,13 @@ const NewPull: NextPage = () => {
           else show();
         };
         return (
-          <FormContainer onSuccess={handleSubmit}>
+          <FormContainer formContext={formContext} onSuccess={handleSubmit}>
             <TextFieldElement fullWidth margin="dense" name="title" />
             <Controller
               name="body"
               render={({ field }) => <MDEditor {...field} />}
             />
+            <ScoreDropzone onChange={(value) => setValue("changed", value)} />
             <LoadingButton
               disableElevation
               fullWidth

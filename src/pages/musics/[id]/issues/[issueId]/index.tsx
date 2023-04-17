@@ -10,6 +10,7 @@ import ArticleCard from "../../../../../components/elements/card/article";
 import CommentCard from "../../../../../components/elements/card/comment";
 import CommentForm from "../../../../../components/elements/form/comment";
 import ResourceShowLayout from "../../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../../helpers/resource";
 import type { userArgs } from "../../../../../helpers/user";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { trpc } from "../../../../../utils/trpc";
@@ -36,7 +37,7 @@ const Issue: NextPage = () => {
   }>;
   const { title, body, comments } = issueData;
   return (
-    <ResourceShowLayout activeTab="issues">
+    <ResourceShowLayout activeTab="issues" getQuery={resourceMusicShowQuery}>
       {() => (
         <>
           <ArticleCard body={body} title={title} />

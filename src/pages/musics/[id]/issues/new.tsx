@@ -18,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
@@ -36,9 +37,7 @@ const Issues: NextPage = () => {
           pathname: "/musics/[id]/issues",
           query: { id },
         }),
-      onError: () => {
-        enqueueSnackbar("issue.create error");
-      },
+      onError: () => enqueueSnackbar("issue.create error"),
     }),
     handleSubmit = (data: Issue) => {
       if (isAuth(status))
@@ -52,7 +51,7 @@ const Issues: NextPage = () => {
       else show();
     };
   return (
-    <ResourceShowLayout activeTab="issues">
+    <ResourceShowLayout activeTab="issues" getQuery={resourceMusicShowQuery}>
       {() => (
         <FormContainer formContext={formContext} onSuccess={handleSubmit}>
           <TextFieldElement fullWidth margin="dense" name="title" />

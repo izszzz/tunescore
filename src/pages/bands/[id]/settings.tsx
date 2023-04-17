@@ -22,7 +22,10 @@ import {
   selectYoutubeMutate,
 } from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
-import { resourceShowQuery } from "../../../helpers/resource";
+import {
+  resourceBandShowQuery,
+  resourceShowQuery,
+} from "../../../helpers/resource";
 import { redirectToSignIn } from "../../../helpers/user";
 import {
   removeArtists,
@@ -34,8 +37,8 @@ const BandSettings: NextPage = () => {
     query = resourceShowQuery({ router, session: useSession().data });
 
   return (
-    <SettingsShowLayout>
-      {(data, update) => {
+    <SettingsShowLayout getQuery={resourceBandShowQuery}>
+      {({ data, update, router }) => {
         const { band, links, id, name } = data;
         return (
           <>

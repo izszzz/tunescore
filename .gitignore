@@ -49,3 +49,7 @@ yarn-error.log*
 /playwright/.cache/
 
 /db
+
+# audiveris
+
+/audiveris/Audiveris-*

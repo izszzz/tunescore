@@ -1,4 +1,7 @@
-import { TransactionFindManySchema } from "../../../prisma/generated/schemas";
+import {
+  ResourceFindManySchema,
+  TransactionFindManySchema,
+} from "../../../prisma/generated/schemas";
 import { AlbumFindManySchema } from "../../../prisma/generated/schemas/findManyAlbum.schema";
 import { ArtistFindManySchema } from "../../../prisma/generated/schemas/findManyArtist.schema";
 import { BandFindManySchema } from "../../../prisma/generated/schemas/findManyBand.schema";
@@ -19,6 +22,11 @@ import { transactionArgs } from "../../helpers/transaction";
 import { publicProcedure, router } from "../trpc";
 
 export const searchRouter = router({
+  resource: publicProcedure
+    .input(ResourceFindManySchema)
+    .mutation(async ({ ctx }) =>
+      ctx.prisma.resource.findMany(musicListArgs(ctx.session))
+    ),
   music: publicProcedure
     .input(MusicFindManySchema)
     .mutation(async ({ ctx }) =>

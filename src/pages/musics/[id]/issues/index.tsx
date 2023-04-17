@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 import IssueLists from "../../../../components/elements/list/issue";
 import IndexLayout from "../../../../components/layouts/index";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { userArgs } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
@@ -29,7 +30,7 @@ const Issues: NextPage = () => {
     });
   if (!issueData) return <></>;
   return (
-    <ResourceShowLayout activeTab="issues">
+    <ResourceShowLayout activeTab="issues" getQuery={resourceMusicShowQuery}>
       {() => (
         <IndexLayout
           meta={issueData.meta}

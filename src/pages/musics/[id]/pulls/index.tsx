@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { userArgs } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
@@ -31,7 +32,10 @@ const Pulls: NextPage = () => {
     });
   if (!pullsData) return <></>;
   return (
-    <ResourceShowLayout activeTab="pullrequests">
+    <ResourceShowLayout
+      activeTab="pullrequests"
+      getQuery={resourceMusicShowQuery}
+    >
       {() => (
         <IndexLayout<Pull>
           meta={pullsData.meta}

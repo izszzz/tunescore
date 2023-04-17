@@ -9,6 +9,7 @@ import { useSnackbar } from "notistack";
 import PullLayout from "../../../../../components/layouts/show/pull";
 import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
 import ResourceShowLayout from "../../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../../helpers/resource";
 import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
 
@@ -23,7 +24,10 @@ const Code: NextPage = () => {
   if (!pull.data) return <></>;
   const pullData = pull.data as PullLayoutProps["data"];
   return (
-    <ResourceShowLayout activeTab="pullrequests">
+    <ResourceShowLayout
+      activeTab="pullrequests"
+      getQuery={resourceMusicShowQuery}
+    >
       {() => (
         <PullLayout activeTab="code" data={pullData} query={pullQuery}>
           <ReactDiffViewer

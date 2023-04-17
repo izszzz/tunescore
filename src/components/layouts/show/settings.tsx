@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
+import type { ResourceShowQueryParameter } from "../../../helpers/resource";
 import { resourceShowQuery } from "../../../helpers/resource";
 import { removeTag, selectTag } from "../../../paths/bands/[id]/settings";
 import { trpc } from "../../../utils/trpc";
@@ -13,16 +14,22 @@ import TagUpdateAutocomplete from "../../elements/autocomplete/update/tag";
 import SingleForm from "../../elements/form/single";
 
 import ResourceShowLayout from "./resource";
-import type { ResourceData } from "./resource";
+import type { ResourceData, ResourceShowLayoutProps } from "./resource";
 
 interface SettingsShowLayoutProps {
-  children: (
-    data: ResourceData,
-    update: ReturnType<typeof trpc.resource.updateOneResource.useMutation>
-  ) => React.ReactNode;
+  children: (props: {
+    data: ResourceData;
+    update: ReturnType<typeof trpc.resource.updateOneResource.useMutation>;
+    router: ResourceShowQueryParameter["router"];
+    query: ReturnType<ResourceShowLayoutProps["getQuery"]>;
+  }) => React.ReactNode;
+  getQuery: ResourceShowLayoutProps["getQuery"];
 }
-const SettingsShowLayout = ({ children }: SettingsShowLayoutProps) => {
-  const router = useRouter<"/musics/[id]">(),
+const SettingsShowLayout = ({
+  children,
+  getQuery,
+}: SettingsShowLayoutProps) => {
+  const router = useRouter<ResourceShowQueryParameter["router"]["pathname"]>(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
@@ -33,13 +40,13 @@ const SettingsShowLayout = ({ children }: SettingsShowLayoutProps) => {
           getQueryKey(trpc.resource.findUniqueResource, query, "query"),
           data
         );
-        enqueueSnackbar("music.update success");
+        enqueueSnackbar("update success");
       },
-      onError: () => enqueueSnackbar("music.update error"),
+      onError: () => enqueueSnackbar("update error"),
     });
 
   return (
-    <ResourceShowLayout activeTab="settings">
+    <ResourceShowLayout activeTab="settings" getQuery={getQuery}>
       {(data) => {
         const { tags } = data;
         return (
@@ -67,7 +74,7 @@ const SettingsShowLayout = ({ children }: SettingsShowLayoutProps) => {
               value={tags}
             />
 
-            {children(data, update)}
+            {children({ data, update, router, query })}
           </>
         );
       }}

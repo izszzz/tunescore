@@ -13,6 +13,7 @@ import CommentForm from "../../../../../components/elements/form/comment";
 import type { PullLayoutProps } from "../../../../../components/layouts/show/pull";
 import PullLayout from "../../../../../components/layouts/show/pull";
 import ResourceShowLayout from "../../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../../helpers/resource";
 import { getCurrentUserId } from "../../../../../helpers/user";
 import { pullShowQuery } from "../../../../../paths/musics/[id]/pulls/[pullId]";
 import { trpc } from "../../../../../utils/trpc";
@@ -31,7 +32,10 @@ const Pull: NextPage = () => {
   const pullData = pull.data as PullLayoutProps["data"],
     { id, title, body, comments } = pullData;
   return (
-    <ResourceShowLayout activeTab="pullrequests">
+    <ResourceShowLayout
+      activeTab="pullrequests"
+      getQuery={resourceMusicShowQuery}
+    >
       {() => (
         <PullLayout activeTab="conversation" data={pullData} query={pullQuery}>
           <ArticleCard body={body} title={title} />

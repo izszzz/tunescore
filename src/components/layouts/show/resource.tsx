@@ -20,8 +20,15 @@ import { bookmarkMutate } from "../../../helpers/bookmark";
 import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicLinks } from "../../../helpers/music";
-import type { ResourceShowQuery } from "../../../helpers/resource";
-import { resourceShowQuery, getOwner } from "../../../helpers/resource";
+import type {
+  ResourceShowQuery,
+  ResourceShowQueryParameter,
+  resourceAlbumShowQuery,
+  resourceArtistShowQuery,
+  resourceBandShowQuery,
+  resourceMusicShowQuery,
+} from "../../../helpers/resource";
+import { getOwner } from "../../../helpers/resource";
 import { isAuth } from "../../../helpers/user";
 import { trpc } from "../../../utils/trpc";
 import LocaleAlert from "../../elements/alert/locale";
@@ -37,22 +44,31 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 import ShowLayout from ".";
 import type { ShowLayoutProps } from ".";
 export type ResourceData = Prisma.ResourceGetPayload<ResourceShowQuery>;
-interface ResourceShowLayoutProps
+export interface ResourceShowLayoutProps
   extends Omit<ShowLayoutProps, "title" | "tabs" | "children"> {
   activeTab: DefaultTabsProps["tabs"][0]["label"];
+  getQuery: ({
+    session,
+    router,
+  }: ResourceShowQueryParameter) =>
+    | ReturnType<typeof resourceMusicShowQuery>
+    | ReturnType<typeof resourceAlbumShowQuery>
+    | ReturnType<typeof resourceArtistShowQuery>
+    | ReturnType<typeof resourceBandShowQuery>;
   children: (data: ResourceData) => React.ReactNode;
 }
 
 const ResourceShowLayout = ({
   children,
+  getQuery,
   ...props
 }: ResourceShowLayoutProps) => {
-  const router = useRouter<"/musics/[id]">(),
+  const router = useRouter<ResourceShowQueryParameter["router"]["pathname"]>(),
     { show } = useModal("report-dialog"),
     { data: session, status } = useSession(),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    query = resourceShowQuery({ router, session }),
+    query = getQuery({ router, session }),
     {
       query: { id },
     } = router,

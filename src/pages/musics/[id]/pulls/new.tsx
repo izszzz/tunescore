@@ -17,6 +17,7 @@ import "@uiw/react-markdown-preview/markdown.css";
 
 import ScoreDropzone from "../../../../components/elements/form/dropzone/score";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { getCurrentUserId, isAuth } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
@@ -39,7 +40,10 @@ const NewPull: NextPage = () => {
     });
 
   return (
-    <ResourceShowLayout activeTab="pullrequests">
+    <ResourceShowLayout
+      activeTab="pullrequests"
+      getQuery={resourceMusicShowQuery}
+    >
       {(data) => {
         const handleSubmit = (pull: Pull) => {
           if (isAuth(status))

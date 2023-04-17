@@ -2,9 +2,10 @@ import type { NextPage } from "next";
 
 import ResourceLists from "../../../components/elements/list/resource";
 import ResourceShowLayout from "../../../components/layouts/show/resource";
+import { resourceBandShowQuery } from "../../../helpers/resource";
 
 const Band: NextPage = () => (
-  <ResourceShowLayout activeTab="info">
+  <ResourceShowLayout activeTab="info" getQuery={resourceBandShowQuery}>
     {({ band }) => (
       <>
         <ResourceLists

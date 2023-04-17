@@ -19,7 +19,10 @@ import YoutubeAmbient from "../../../components/elements/youtube/ambient";
 import type { ResourceData } from "../../../components/layouts/show/resource";
 import ResourceShowLayout from "../../../components/layouts/show/resource";
 import { findLinkYoutube } from "../../../helpers/link";
-import { resourceShowQuery } from "../../../helpers/resource";
+import {
+  resourceMusicShowQuery,
+  resourceShowQuery,
+} from "../../../helpers/resource";
 import { getCurrentUserId, isSelf } from "../../../helpers/user";
 import { trpc } from "../../../utils/trpc";
 
@@ -40,7 +43,7 @@ const Music: NextPage = () => {
       onError: () => enqueueSnackbar("cart.create error"),
     });
   return (
-    <ResourceShowLayout activeTab="info">
+    <ResourceShowLayout activeTab="info" getQuery={resourceMusicShowQuery}>
       {(data) => {
         const { music } = data,
           youtube = findLinkYoutube(data.links);

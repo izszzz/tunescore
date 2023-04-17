@@ -3,7 +3,6 @@ import React from "react";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import type { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
@@ -30,7 +29,7 @@ import {
   selectYoutubeMutate,
 } from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
-import { resourceShowQuery } from "../../../helpers/resource";
+import { resourceMusicShowQuery } from "../../../helpers/resource";
 import { isSelf, redirectToSignIn } from "../../../helpers/user";
 import { removeRole, selectRole } from "../../../paths/bands/[id]/settings";
 import {
@@ -42,19 +41,17 @@ import {
 import { trpc } from "../../../utils/trpc";
 
 const SettingsMusic: NextPage = () => {
-  const router = useRouter<"/musics/[id]">(),
-    { data: session } = useSession(),
+  const { data: session } = useSession(),
     { enqueueSnackbar } = useSnackbar(),
     context = trpc.useContext(),
-    query = resourceShowQuery({ router, session }),
     destroy = trpc.resource.deleteOneResource.useMutation({
       onSuccess: () => enqueueSnackbar("music.destroy success"),
       onError: () => enqueueSnackbar("music.destroy error"),
     });
 
   return (
-    <SettingsShowLayout>
-      {(data, update) => {
+    <SettingsShowLayout getQuery={resourceMusicShowQuery}>
+      {({ data, update, router, query }) => {
         const { music, links, name, id } = data;
         return (
           <>

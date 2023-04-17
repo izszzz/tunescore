@@ -20,6 +20,9 @@ import type { SessionArg, userArgs } from "./user";
 
 export type ResourceListArgsType = ReturnType<typeof resourceListArgs>;
 export type ResourceShowQuery = ReturnType<typeof resourceShowQuery>;
+export type ResourceShowQueryParameter = Parameters<
+  typeof resourceShowQuery
+>[0];
 export const resourceListArgs = (session: SessionArg) =>
     Prisma.validator<Prisma.ResourceArgs>()({
       include: {
@@ -64,6 +67,58 @@ export const resourceListArgs = (session: SessionArg) =>
         band: bandShowArgs(session),
         artist: artistShowArgs(session),
         album: albumShowArgs(session),
+      },
+    }),
+  resourceMusicShowQuery = ({
+    router: {
+      query: { id },
+    },
+    session,
+  }: ResourceShowQueryParameter) =>
+    Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
+      where: { id },
+      include: {
+        ...resourceArgs(session).include,
+        music: musicShowArgs(session),
+      },
+    }),
+  resourceAlbumShowQuery = ({
+    router: {
+      query: { id },
+    },
+    session,
+  }: ResourceShowQueryParameter) =>
+    Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
+      where: { id },
+      include: {
+        ...resourceArgs(session).include,
+        album: albumShowArgs(session),
+      },
+    }),
+  resourceArtistShowQuery = ({
+    router: {
+      query: { id },
+    },
+    session,
+  }: ResourceShowQueryParameter) =>
+    Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
+      where: { id },
+      include: {
+        ...resourceArgs(session).include,
+        artist: artistShowArgs(session),
+      },
+    }),
+  resourceBandShowQuery = ({
+    router: {
+      query: { id },
+    },
+    session,
+  }: ResourceShowQueryParameter) =>
+    Prisma.validator<Prisma.ResourceFindUniqueArgs>()({
+      where: { id },
+      include: {
+        ...resourceArgs(session).include,
+        band: bandShowArgs(session),
       },
     }),
   getResourceShowPathname = (type: ResourceUnionType | "User") =>

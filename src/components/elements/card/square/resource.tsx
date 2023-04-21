@@ -38,7 +38,6 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
         />
       }
       image={image}
-      size="200px"
       title={
         <>
           <Box

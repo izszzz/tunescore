@@ -12,7 +12,6 @@ import { NextLinkComposed } from "../../link";
 export interface SquareCardProps {
   title: string | React.ReactNode;
   image: string | null | undefined;
-  size: string;
   icon: React.ReactNode;
   to?: Route;
   onClick?: () => void;
@@ -26,16 +25,12 @@ const SquareCard = ({
 }: SquareCardProps) => {
   const { isDarkMode } = useDarkMode();
   return (
-    <Box
-      color="inherit"
-      component={NextLinkComposed}
-      onClick={() => onClick?.()}
-      sx={{ textDecoration: "none" }}
-      width="100%"
-      {...props}
-    >
+    <Box flex={1} minWidth={0}>
       <CardActionArea
-        sx={{ borderRadius: "5px", height: "inherit", width: "inherit" }}
+        color="inherit"
+        onClick={() => onClick?.()}
+        sx={{ borderRadius: "5px" }}
+        {...{ ...props, ...(props.to ? { component: NextLinkComposed } : {}) }}
       >
         <Fade in={true}>
           <Box
@@ -45,16 +40,13 @@ const SquareCard = ({
             display="flex"
             height="100%"
             justifyContent="center"
-            sx={{ aspectRatio: "1 / 1" }}
+            sx={{ aspectRatio: "1/1" }}
           >
             {image ? (
               <Image
                 alt="image"
                 src={image}
-                style={{
-                  opacity: 1,
-                  borderRadius: "5px",
-                }}
+                style={{ borderRadius: "5px" }}
                 width="100%"
               />
             ) : (
@@ -63,7 +55,7 @@ const SquareCard = ({
           </Box>
         </Fade>
       </CardActionArea>
-      {title}
+      <Box>{title}</Box>
     </Box>
   );
 };

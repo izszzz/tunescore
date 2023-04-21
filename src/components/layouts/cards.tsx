@@ -18,7 +18,6 @@ const CardsLayout = ({
   <Grid container px={5} rowSpacing={4} spacing={4}>
     {(loading ? [...Array(perPage)] : data)?.map((data, i) => (
       <Grid
-        alignItems="center"
         display="flex"
         item
         justifyContent="center"

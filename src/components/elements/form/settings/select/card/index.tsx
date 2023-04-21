@@ -42,13 +42,7 @@ function CardSelectForm<Value, Options extends unknown[] = []>({
         <>
           <Grid container spacing={2}>
             {options?.map((option, i) => (
-              <Grid
-                {...gridProps}
-                display="flex"
-                item
-                justifyContent="center"
-                key={i}
-              >
+              <Grid {...gridProps} item key={i}>
                 {smallCard(option)}
               </Grid>
             ))}

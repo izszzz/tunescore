@@ -11,7 +11,6 @@ const AlbumSpotifySquareCard = ({ data, onClick }: AlbumSpotifyCardProps) => (
       <AlbumSquareCard
         image={data.images[1]?.url || ""}
         onClick={() => onClick?.(data)}
-        size="100px"
         title={
           <Typography display="block" noWrap variant="caption">
             {data.name}

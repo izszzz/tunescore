@@ -16,6 +16,7 @@ generator trpc {
 generator fabbrica {
   provider = "prisma-fabbrica"
   output      = "./generated/fabbrica"
+  tsconfig    = "../../tsconfig.json"
 }
 
 datasource db {
@@ -61,6 +62,7 @@ model User {
   emailVerified    DateTime?
   image            String?
   stripeCustomerId String?
+  role             UserRoleType? @default(User)
   point            Int       @default(0)
 
   accounts      Account[]
@@ -439,4 +441,9 @@ enum LinkType {
   YouTube
   Spotify
   iTunes
+}
+
+enum UserRoleType {
+  Admin
+  User
 }

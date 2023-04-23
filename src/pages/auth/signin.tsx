@@ -22,14 +22,3 @@ const SignIn: NextPage = () => {
 };
 
 export default SignIn;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const redirect = (await redirectToSignIn(ctx)) || {
-    permanent: true,
-    destination: "/",
-  };
-  return {
-    props: {},
-    redirect,
-  };
-};

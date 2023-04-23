@@ -6,6 +6,9 @@
 // prettier-ignore
 declare module "nextjs-routes" {
   export type Route =
+    | DynamicRoute<"/admin/[id]", { "id": string }>
+    | StaticRoute<"/admin">
+    | StaticRoute<"/admin/signin">
     | DynamicRoute<"/albums/[id]", { "id": string }>
     | DynamicRoute<"/albums/[id]/settings", { "id": string }>
     | StaticRoute<"/api/audiveris">

@@ -22,7 +22,10 @@
     "@typescript-eslint/consistent-type-imports": "error",
     "import/no-unused-modules": [
       1,
-      { "unusedExports": true, "ignoreExports": ["./src/pages"] }
+      {
+        "unusedExports": true,
+        "ignoreExports": ["./src/pages", "./src/middleware.ts"]
+      }
     ],
     "react/jsx-sort-props": "warn",
     "import/order": [

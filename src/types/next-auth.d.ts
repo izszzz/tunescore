@@ -1,3 +1,4 @@
+import type { UserRoleType } from "@prisma/client";
 import type { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {
@@ -9,11 +10,13 @@ declare module "next-auth" {
       id: string;
       stripeCustomerId: string;
       providers: string[];
+      role: UserRoleType;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     stripeCustomerId: string;
     providers: string[];
+    role: UserRoleType;
   }
 }

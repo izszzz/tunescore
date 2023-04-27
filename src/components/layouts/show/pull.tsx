@@ -63,9 +63,9 @@ const PullLayout: React.FC<PullLayoutProps> = ({
           getQueryKey(trpc.pull.findUniquePull, query, "query"),
           (prev) => ({ ...(prev as PullLayoutProps["data"]), vote: data })
         );
-        enqueueSnackbar("pull.create success");
+        enqueueSnackbar("vote.create success");
       },
-      onError: () => enqueueSnackbar("pull.create error"),
+      onError: () => enqueueSnackbar("vote.create error"),
     }),
     tabs: DefaultTabsProps["tabs"] = [
       { label: "conversation", pathname: "/musics/[id]/pulls/[pullId]" },

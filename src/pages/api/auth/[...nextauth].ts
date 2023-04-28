@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { Prisma, UserRoleType } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import SpotifyProvider from "next-auth/providers/spotify";
@@ -13,17 +13,18 @@ console.log(env);
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session: async ({ session, user, token }) => {
+    session: async ({ session, token: { user } }) => {
       const data = await prisma.account.findMany({
         where: { user: { id: user.id } },
       });
-      if (token && session.user) session.user.role = token.role as UserRoleType;
-      user.providers = data.map((account) => account.provider);
-      session.user = user;
+      if (user && session.user) {
+        session.user = user;
+        session.user.providers = data.map((account) => account.provider);
+      }
       return session;
     },
-    jwt: async ({ token, user }) => {
-      token.role = user?.role;
+    jwt: ({ token, user }) => {
+      if (user) token.user = user;
       return token;
     },
   },

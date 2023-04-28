@@ -3,11 +3,11 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 generator trpc {
   provider             = "prisma-trpc-generator"
-  withMiddleware       = false
   contextPath          = "../src/server/context"
   isGenerateSelect     = true
   isGenerateInclude    = true

@@ -18,7 +18,7 @@ const Issues: NextPage = () => {
           include: { user: userArgs },
           where: {
             title: { contains: (router.query.q as string) || "" },
-            music: { id },
+            music: { resource: { id } },
           },
         },
         options: { page: (router.query.page as string) || 0, perPage: 12 },

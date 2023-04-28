@@ -45,7 +45,6 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     { enqueueSnackbar } = useSnackbar(),
     { data: session } = useSession(),
     { id, pullId } = router.query,
-    agenda = trpc.agenda.create.useMutation(),
     update = trpc.pull.updateOnePull.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -58,14 +57,13 @@ const PullLayout: React.FC<PullLayoutProps> = ({
     }),
     create = trpc.vote.createOneVote.useMutation({
       onSuccess: (data) => {
-        agenda.mutate(pullId);
         queryClient.setQueryData(
           getQueryKey(trpc.pull.findUniquePull, query, "query"),
           (prev) => ({ ...(prev as PullLayoutProps["data"]), vote: data })
         );
-        enqueueSnackbar("pull.create success");
+        enqueueSnackbar("vote.create success");
       },
-      onError: () => enqueueSnackbar("pull.create error"),
+      onError: () => enqueueSnackbar("vote.create error"),
     }),
     tabs: DefaultTabsProps["tabs"] = [
       { label: "conversation", pathname: "/musics/[id]/pulls/[pullId]" },

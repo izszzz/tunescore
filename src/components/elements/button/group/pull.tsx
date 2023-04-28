@@ -7,6 +7,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import { useSession } from "next-auth/react";
 import { match } from "ts-pattern";
 
+import { env } from "../../../../env/client.mjs";
 import { isSelf } from "../../../../helpers/user";
 import type { PullLayoutProps } from "../../../layouts/show/pull";
 import VoteCard from "../../card/vote";
@@ -63,7 +64,8 @@ const PullButton = ({
     ))
     .with({ music: { type: "COPY" }, status: "OPEN" }, () => (
       <ButtonGroup fullWidth>
-        {data.music.pulls.length >= 5 ? (
+        {data.music.pulls.length >=
+        Number(env.NEXT_PUBLIC_NUMBER_OF_CONTRIBUTORS_VOTING) ? (
           <VoteCreateButton
             conflict={conflict}
             diff={diff}

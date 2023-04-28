@@ -7,7 +7,6 @@ const ChannelItunesSquareCard = ({ data, onClick }: ChannelItunesCardProps) => (
   <ArtistSquareCard
     image={null}
     onClick={() => onClick?.(data)}
-    size="100px"
     title={
       <Typography display="block" noWrap variant="caption">
         {data.artistName}

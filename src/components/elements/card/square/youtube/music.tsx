@@ -29,7 +29,6 @@ function MusicYoutubeSquareCard<T extends SearchResult | Video | undefined>({
         <MusicSquareCard
           image={data?.snippet?.thumbnails?.medium?.url}
           onClick={() => onClick?.(data)}
-          size={String(data?.snippet?.thumbnails?.medium?.width) + "px"}
           title={
             <Typography display="block" noWrap variant="caption">
               {data?.snippet?.title}

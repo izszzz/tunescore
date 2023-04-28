@@ -26,7 +26,6 @@ const MusicItunesSquareCard = ({ data, onClick }: MusicItunesCardProps) => (
       <MusicSquareCard
         image={data.artworkUrl100}
         onClick={() => onClick?.(data)}
-        size="100px"
         title={
           <Typography display="block" noWrap variant="caption">
             {data.trackCensoredName}

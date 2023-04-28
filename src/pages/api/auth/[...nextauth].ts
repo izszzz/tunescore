@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import type { Prisma } from "@prisma/client";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import SpotifyProvider from "next-auth/providers/spotify";
@@ -12,33 +13,38 @@ console.log(env);
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session: async ({ session, user }) => {
+    session: async ({ session, token: { user } }) => {
       const data = await prisma.account.findMany({
         where: { user: { id: user.id } },
       });
-      user.providers = data.map((account) => account.provider);
-      session.user = user;
+      if (user && session.user) {
+        session.user = user;
+        session.user.providers = data.map((account) => account.provider);
+      }
       return session;
+    },
+    jwt: ({ token, user }) => {
+      if (user) token.user = user;
+      return token;
     },
   },
   events: {
     createUser: async ({ user }) => {
       if (user.email) {
-        const customer = await stripe.customers.create({
-          email: user.email,
-        });
-        await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            stripeCustomerId: customer.id,
-          },
-        });
+        const customer = await stripe.customers.create({ email: user.email });
+        const data: Prisma.UserUpdateInput = {};
+
+        data.stripeCustomerId = customer.id;
+        if (user.email === "hakeiprod@gmail.com") data.role = "Admin";
+
+        await prisma.user.update({ where: { id: user.id }, data });
       }
     },
   },
   // Configure one or more authentication providers
+  session: {
+    strategy: "jwt", // See https://next-auth.js.org/configuration/nextjs#caveats, middleware (currently) doesn't support the "database" strategy which is used by default when using an adapter (https://next-auth.js.org/configuration/options#session)
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     // DiscordProvider({

@@ -2,6 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { env } from "../../env/server.mjs";
+import { checkVoteResult, checkVotesResult } from "../../helpers/vote";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -16,12 +17,17 @@ export const prisma =
   }).$extends({
     query: {
       pull: {
-        async findUnique({ model, operation, args, query }) {
-          // set `age` and fill with the rest of `where`
-          if (args.include?.vote) {
-            const data = await query({ ...args, include: { vote: true } });
-            console.log(data);
-          }
+        findUnique({ args, query }) {
+          if (args.include?.vote) checkVoteResult(args.where);
+          return query(args);
+        },
+      },
+      resource: {
+        findUnique({ args, query }) {
+          if (typeof args.include?.music !== "boolean")
+            if (typeof args.include?.music?.include?.pulls !== "boolean")
+              if (args.include?.music?.include?.pulls?.include?.vote)
+                checkVotesResult(args.where);
 
           return query(args);
         },

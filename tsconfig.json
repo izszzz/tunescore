@@ -23,7 +23,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "next-i18next.config.js"
+    "next-i18next.config.js",
+    "cypress/tsconfig.json"
   ],
   "exclude": ["node_modules"],
   "mdx": {

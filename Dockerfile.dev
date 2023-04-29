@@ -1,23 +1,19 @@
-FROM mcr.microsoft.com/playwright
 
-ENV PWUSER pwuser
+FROM cypress/base
+
 
 COPY package*.json ./
 
-RUN apt-get update && \
+RUN mkdir -p /usr/share/man/man1 && \
+    apt-get update && \
     apt-get install -y sudo curl git openjdk-11-jdk && \ 
-    usermod -aG sudo $PWUSER && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' | tee -a /etc/sudoers && \
-    npm ci --force && \
-    npx playwright install-deps
+    npm ci --force 
 
 RUN curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 
-WORKDIR /home/$PWUSER/app
+WORKDIR /app
 
-RUN sudo chown -R $PWUSER:$PWUSER /home/$PWUSER/app
-
-COPY --chown=$PWUSER:$PWUSER . .
+COPY . .
 
 RUN npx prisma generate
 

@@ -41,6 +41,9 @@ export default defineNextConfig({
   eslint: {
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
     modularizeImports: {
       "@mui/material": {

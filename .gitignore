@@ -51,5 +51,7 @@ yarn-error.log*
 /db
 
 # audiveris
-
 /audiveris/Audiveris-*
+
+# cypress
+cypress.env.json

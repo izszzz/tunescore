@@ -16,8 +16,8 @@ services:
     command: bash -c "npm run dev"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - .:/home/pwuser/app
-      - nextjs-node-modules:/home/pwuser/app/node_modules
+      - .:/app
+      - nextjs-node-modules:/app/node_modules
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /mnt/wslg:/mnt/wslg
     ports:

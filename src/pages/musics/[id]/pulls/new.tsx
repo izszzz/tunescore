@@ -7,6 +7,7 @@ import {
 
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
+import Stack from "@mui/material/Stack";
 import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
@@ -51,8 +52,7 @@ const NewPull: NextPage = () => {
               data: {
                 ...pull,
                 original: data?.music?.score ?? "",
-                changed: data?.music?.score ?? "",
-                status: "DRAFT",
+                changed: pull.changed ?? data?.music?.score,
                 music: { connect: { id: data.music?.id } },
                 user: { connect: { id: userId } },
               },
@@ -61,21 +61,35 @@ const NewPull: NextPage = () => {
         };
         return (
           <FormContainer formContext={formContext} onSuccess={handleSubmit}>
-            <TextFieldElement fullWidth margin="dense" name="title" />
-            <Controller
-              name="body"
-              render={({ field }) => <MDEditor {...field} />}
-            />
-            <ScoreDropzone onChange={(value) => setValue("changed", value)} />
-            <LoadingButton
-              disableElevation
-              fullWidth
-              loading={create.isLoading}
-              type="submit"
-              variant="contained"
-            >
-              Submit
-            </LoadingButton>
+            <Stack spacing={3}>
+              <TextFieldElement fullWidth margin="dense" name="title" />
+              <Controller
+                name="body"
+                render={({ field }) => <MDEditor {...field} />}
+              />
+              <ScoreDropzone
+                onChange={(value) =>
+                  value &&
+                  setValue(
+                    "changed",
+                    (data?.music?.score ?? "") +
+                      "\r\n" +
+                      "// LOADED" +
+                      "\r\n" +
+                      value
+                  )
+                }
+              />
+              <LoadingButton
+                disableElevation
+                fullWidth
+                loading={create.isLoading}
+                type="submit"
+                variant="contained"
+              >
+                Submit
+              </LoadingButton>
+            </Stack>
           </FormContainer>
         );
       }}

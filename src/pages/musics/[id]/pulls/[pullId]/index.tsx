@@ -2,6 +2,7 @@ import React from "react";
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import Stack from "@mui/material/Stack";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -38,30 +39,32 @@ const Pull: NextPage = () => {
     >
       {() => (
         <PullLayout activeTab="conversation" data={pullData} query={pullQuery}>
-          <ArticleCard body={body} title={title} />
-          {comments.map((comment) => (
-            <CommentCard data={comment} key={comment.id} />
-          ))}
-          <CommentForm
-            formContainerProps={{
-              onSuccess: (data) =>
-                create.mutate({
-                  data: {
-                    ...data,
-                    unionType: "Pull",
-                    pull: { connect: { id } },
-                    user: { connect: { id: userId } },
-                    notifications: {
-                      create: {
-                        unionType: "Comment",
-                        user: { connect: { id: userId } },
+          <Stack spacing={3}>
+            <ArticleCard body={body} title={title} />
+            {comments.map((comment) => (
+              <CommentCard data={comment} key={comment.id} />
+            ))}
+            <CommentForm
+              formContainerProps={{
+                onSuccess: (data) =>
+                  create.mutate({
+                    data: {
+                      ...data,
+                      unionType: "Pull",
+                      pull: { connect: { id } },
+                      user: { connect: { id: userId } },
+                      notifications: {
+                        create: {
+                          unionType: "Comment",
+                          user: { connect: { id: userId } },
+                        },
                       },
                     },
-                  },
-                }),
-            }}
-            loading={create.isLoading}
-          />
+                  }),
+              }}
+              loading={create.isLoading}
+            />
+          </Stack>
         </PullLayout>
       )}
     </ResourceShowLayout>

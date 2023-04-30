@@ -72,8 +72,11 @@ export const spotifyRouter = router({
     }),
   findUniqueAlbum: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx, input }) => {
-      const spotify = await authorized(ctx.session);
-      return input ? spotify.getAlbum(input).then(({ body }) => body) : null;
+    .query(async ({ ctx: { session, prisma }, input }) => {
+      if (!input) return null;
+      const spotify = await authorized(session),
+        data = await spotify.getAlbum(input).then(({ body }) => body);
+      linker.findedUniqueSpotifyAlbum(prisma, spotify, data);
+      return data;
     }),
 });

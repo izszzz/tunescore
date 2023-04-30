@@ -1,6 +1,5 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import type { Prisma } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
@@ -56,8 +55,8 @@ const AlbumSettings: NextPage = () => (
                 ...removeSpotifyMutate(id),
               })
             }
-            onSelect={async ({ id, images }) => {
-              await update.mutate({
+            onSelect={({ id, images }) =>
+              update.mutate({
                 ...query,
                 ...selectSpotifyMutate({
                   id,
@@ -67,8 +66,8 @@ const AlbumSettings: NextPage = () => (
                     images[0]?.url ?? null,
                   ],
                 }),
-              });
-            }}
+              })
+            }
             term={locale}
           />
 

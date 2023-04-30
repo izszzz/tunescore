@@ -5,18 +5,17 @@
 
 // Cypress E2E Test
 describe("Navigation", () => {
-  it("should navigate to the about page", () => {
+  it("should navigate to the new page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
-
-    // Find a link with an href attribute containing "about" and click it
-    cy.get('a[href*="about"]').click();
-
-    // The new url should include "/about"
-    cy.url().should("include", "/about");
-
-    // The new page should contain an h1 with "About page"
-    cy.get("h1").contains("About Page");
+    cy.get("[data-testid='AddIcon']").click();
+    cy.url().should("include", "/new");
+  });
+  it("should navigate to the cart page", () => {
+    // Start from the index page
+    cy.visit("http://localhost:3000/");
+    cy.get("[data-testid='ShoppingCartIcon']").click();
+    cy.url().should("include", "/cart");
   });
 });
 

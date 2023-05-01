@@ -113,7 +113,7 @@ model Resource {
   links      Link[]
   unionType ResourceUnionType
   bookmarks Bookmark[]
-  tags   Tag[]
+  genres   Genre[]
 
   music  Music?  @relation("MusicResource")
   band   Band?   @relation("BandResource")
@@ -301,7 +301,7 @@ model Role {
   participations Participation[]
 }
 
-model Tag {
+model Genre {
   id String @id @default(uuid())
 
   name   String   @unique

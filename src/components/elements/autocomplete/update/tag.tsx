@@ -1,7 +1,7 @@
 import React from "react";
 
 import LocalOffer from "@mui/icons-material/LocalOffer";
-import type { Tag } from "@prisma/client";
+import type { Genre } from "@prisma/client";
 import { useSnackbar } from "notistack";
 
 import { trpc } from "../../../../utils/trpc";
@@ -9,17 +9,17 @@ import { trpc } from "../../../../utils/trpc";
 import UpdateAutocomplete from ".";
 import type { UpdateAutocompleteProps } from ".";
 
-type TagUpdateAutocomplete = Pick<
-  UpdateAutocompleteProps<Tag, true, undefined, undefined>,
+type GenreUpdateAutocomplete = Pick<
+  UpdateAutocompleteProps<Genre, true, undefined, undefined>,
   "onChange" | "loading" | "value"
 >;
-const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
+const GenreUpdateAutocomplete = (props: GenreUpdateAutocomplete) => {
   const { enqueueSnackbar } = useSnackbar();
-  const search = trpc.search.tag.useMutation({
+  const search = trpc.search.genre.useMutation({
     onError: () => enqueueSnackbar("artist.search error"),
   });
   return (
-    <UpdateAutocomplete<Tag, true>
+    <UpdateAutocomplete<Genre, true>
       {...props}
       ChipProps={{ size: "small", icon: <LocalOffer /> }}
       getOptionLabel={({ name }) => name}
@@ -27,7 +27,7 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
       multiple
       options={search.data || []}
       textFieldProps={{
-        label: "tags",
+        label: "genres",
         margin: "dense",
         onChange: ({ currentTarget: { value } }) =>
           search.mutate({ where: { name: { contains: value } }, take: 10 }),
@@ -36,4 +36,4 @@ const TagUpdateAutocomplete = (props: TagUpdateAutocomplete) => {
   );
 };
 
-export default TagUpdateAutocomplete;
+export default GenreUpdateAutocomplete;

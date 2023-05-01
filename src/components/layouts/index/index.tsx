@@ -17,10 +17,10 @@ import { isAuth } from "../../../helpers/user";
 import SingleColumnLayout from "../single_column";
 import type { SingleColumnLayoutProps } from "../single_column";
 
-export interface IndexLayoutProps<T>
+interface IndexLayoutProps<T>
   extends Pick<SingleColumnLayoutProps, "children" | "header"> {
   newRoute?: Route;
-  meta: PaginatedResult<null>["meta"];
+  meta?: PaginatedResult<null>["meta"];
   searchAutocompleteProps?: SearchAutocompleteProps<T, false, false, false>;
 }
 function IndexLayout<T>({
@@ -32,23 +32,22 @@ function IndexLayout<T>({
 }: IndexLayoutProps<T>) {
   const router = useRouter(),
     { status } = useSession(),
-    { show } = useModal("auth-dialog");
-
-  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    router.query.page = String(value);
-    router.push(router);
-  };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      router.query.page = String(1);
-      router.query.q = String((e.target as HTMLInputElement).value);
+    { show } = useModal("auth-dialog"),
+    handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+      router.query.page = String(value);
       router.push(router);
-    }
-  };
-  const handleClick = () => {
-    if (isAuth(status)) newRoute && router.push(newRoute);
-    else show();
-  };
+    },
+    handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        router.query.page = String(1);
+        router.query.q = String((e.target as HTMLInputElement).value);
+        router.push(router);
+      }
+    },
+    handleClick = () => {
+      if (isAuth(status)) newRoute && router.push(newRoute);
+      else show();
+    };
   return (
     <SingleColumnLayout contained header={header}>
       <Box my={3}>
@@ -80,9 +79,9 @@ function IndexLayout<T>({
         {children}
         <Box display="flex" justifyContent="center">
           <Pagination
-            count={meta.lastPage}
+            count={meta?.lastPage}
             onChange={handleChange}
-            page={meta.currentPage}
+            page={meta?.currentPage}
             variant="outlined"
           />
         </Box>

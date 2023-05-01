@@ -4,8 +4,8 @@ export const selectArtists = (id: string | undefined) => ({
   removeArtists = (id: string | undefined) => ({
     data: { band: { update: { artists: { disconnect: { id } } } } },
   }),
-  selectTag = (id: string) => ({ data: { tags: { connect: { id } } } }),
-  removeTag = (id: string) => ({ data: { tags: { disconnect: { id } } } }),
+  selectTag = (id: string) => ({ data: { genres: { connect: { id } } } }),
+  removeTag = (id: string) => ({ data: { genres: { disconnect: { id } } } }),
   selectRole = (id: string, participationId: string) => ({
     data: {
       music: {

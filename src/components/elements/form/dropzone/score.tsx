@@ -28,9 +28,10 @@ const ScoreDropzone = ({ onChange }: ScoreDropzoneProps) => {
           | ".png"
           | ".pdf"
           | ".gp"
+          | ".xml"
           | ".mxl";
         match(extname)
-          .with(P.union(".gp", ".mxl"), () => {
+          .with(P.union(".gp", ".mxl", ".xml"), () => {
             const reader = new FileReader();
             reader.onload = ({ target }) => {
               const result = target?.result as ArrayBuffer;

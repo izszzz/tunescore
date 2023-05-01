@@ -17,7 +17,7 @@ export const itunesRouter = router({
           offset: 0,
         })
       ).data;
-      linker.createTagsByItunes(prisma, data);
+      linker.createGenresByItunes(prisma, data);
       return data;
     }),
   findUniqueMusic: publicProcedure
@@ -40,7 +40,7 @@ export const itunesRouter = router({
           offset: 0,
         })
       ).data;
-      linker.createTagsByItunes(prisma, data);
+      linker.createGenresByItunes(prisma, data);
       return data;
     }),
   findUniqueArtist: publicProcedure
@@ -63,7 +63,7 @@ export const itunesRouter = router({
           offset: 0,
         })
       ).data;
-      linker.createTagsByItunes(prisma, data);
+      linker.createGenresByItunes(prisma, data);
       return data;
     }),
   findUniqueAlbum: publicProcedure

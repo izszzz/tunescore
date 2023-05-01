@@ -7,6 +7,88 @@ import { findLinkSpotify } from "../helpers/link";
 import type { Context } from "../server/context";
 
 export class Linker {
+  async findedUniqueSpotifyAlbum(
+    prisma: Context["prisma"],
+    spotify: SpotifyWebApi,
+    data: SpotifyApi.SingleAlbumResponse
+  ) {
+    const [resourceAlbum, existedMusics] = await Promise.all([
+        prisma.resource.findFirst({
+          where: {
+            links: {
+              some: {
+                OR: data.tracks.items.map(({ id }) => ({
+                  linkId: id,
+                  type: "Spotify",
+                })),
+              },
+            },
+          },
+        }),
+        getExistedMusicsBySpotifyId(
+          prisma,
+          data.tracks.items.map(({ id }) => id)
+        ),
+      ]),
+      notExistedSimpleTracks = getNotExistedResourcesSpotify(
+        data.tracks.items,
+        existedMusics
+      ),
+      notExistedTracks = notExistedSimpleTracks.length
+        ? await (
+            await spotify.getTracks(notExistedSimpleTracks.map(({ id }) => id))
+          ).body.tracks
+        : [],
+      createdMusics = await createMusicsBySpotify(prisma, notExistedTracks);
+    prisma.resource.update({
+      where: { id: resourceAlbum?.id },
+      data: {
+        genres: {
+          connectOrCreate: data.genres.map((name) => ({
+            where: { name },
+            create: { name },
+          })),
+        },
+        album: {
+          update: {
+            musics: {
+              connect: [...createdMusics, ...existedMusics].map(({ id }) => ({
+                id,
+              })),
+            },
+          },
+        },
+      },
+    });
+  }
+  async findedUniqueSpotifyTrack(
+    prisma: Context["prisma"],
+    data: SpotifyApi.SingleTrackResponse
+  ) {
+    const album = await prisma.album.findFirst({
+      where: {
+        resource: {
+          links: {
+            every: {
+              type: "Spotify",
+              linkId: data.album.id,
+            },
+          },
+        },
+      },
+    });
+    prisma.resource.update({
+      where: { id: data?.id },
+      data: {
+        music: {
+          update: {
+            isrc: data.external_ids.isrc,
+            albums: { connect: { id: album?.id } },
+          },
+        },
+      },
+    });
+  }
   async searchedSpotifyTracks(
     prisma: Context["prisma"],
     spotify: SpotifyWebApi,
@@ -16,29 +98,24 @@ export class Linker {
         prisma,
         data.items.map(({ id }) => id)
       ),
-      notExistedTracks = data.items.filter(
-        ({ id }) =>
-          !existedMusics.find(
-            ({ links }) => links && findLinkSpotify(links)?.linkId === id
-          )
+      notExistedTracks = getNotExistedResourcesSpotify(
+        data.items,
+        existedMusics
       ),
-      createdMusics = await createMusicsBySpotify(prisma, notExistedTracks),
-      existedAlbums = await getExistedAlbumsBySpotifyId(
-        prisma,
-        data.items.map(({ album: { id } }) => id)
-      ),
-      notExistedTrackAlbums = data.items
-        .map(({ album }) => album)
-        .filter(
-          ({ id }) =>
-            !existedAlbums.find(
-              ({ links }) => links && findLinkSpotify(links)?.linkId === id
-            )
+      [createdMusics, existedAlbums] = await Promise.all([
+        createMusicsBySpotify(prisma, notExistedTracks),
+        getExistedAlbumsBySpotifyId(
+          prisma,
+          data.items.map(({ album: { id } }) => id)
         ),
+      ]),
+      notExistedTrackAlbums = getNotExistedResourcesSpotify(
+        data.items.map(({ album }) => album),
+        existedAlbums
+      ),
       notExistedAlbums = notExistedTrackAlbums.length
-        ? await (
-            await spotify.getAlbums(notExistedTrackAlbums.map(({ id }) => id))
-          ).body.albums
+        ? (await spotify.getAlbums(notExistedTrackAlbums.map(({ id }) => id)))
+            .body.albums
         : [],
       createdAlbums = await createdAlbumsBySpotify(prisma, notExistedAlbums),
       musicAlbums = R.pipe(
@@ -60,6 +137,7 @@ export class Linker {
         }),
         R.compact
       );
+    this.createGenresBySpotify(prisma, notExistedAlbums);
     prisma.$transaction(
       musicAlbums.map((musicAlbum) => prisma.music.update(musicAlbum))
     );
@@ -73,33 +151,26 @@ export class Linker {
         prisma,
         data.map(({ id }) => id)
       ),
-      notExistedAlbums = data.filter(
-        ({ id }) =>
-          !existedAlbums.find(
-            ({ links }) => links && findLinkSpotify(links)?.linkId === id
-          )
-      ),
-      createdAlbums = await createdAlbumsBySpotify(prisma, notExistedAlbums),
-      existedMusics = await getExistedMusicsBySpotifyId(
-        prisma,
-        data.flatMap(({ tracks: { items } }) => items).map(({ id }) => id)
-      ),
-      notExistedAlbumMusics = data
-        .flatMap(({ tracks: { items } }) => items)
-        .filter(
-          ({ id }) =>
-            !existedMusics.find(
-              ({ links }) => links && findLinkSpotify(links)?.linkId === id
-            )
+      notExistedAlbums = getNotExistedResourcesSpotify(data, existedAlbums),
+      [createdAlbums, existedMusics] = await Promise.all([
+        createdAlbumsBySpotify(prisma, notExistedAlbums),
+        getExistedMusicsBySpotifyId(
+          prisma,
+          data.flatMap(({ tracks: { items } }) => items).map(({ id }) => id)
         ),
-      i = ~~(notExistedAlbumMusics.length / 50),
-      isSurplus = !!(notExistedAlbumMusics.length % 50),
+      ]),
+      notExistedAlbumTracks = getNotExistedResourcesSpotify(
+        data.flatMap(({ tracks: { items } }) => items),
+        existedMusics
+      ),
+      i = ~~(notExistedAlbumTracks.length / 50),
+      isSurplus = !!(notExistedAlbumTracks.length % 50),
       notExistedMusics = await (
         await Promise.all(
           [...Array.from(Array(isSurplus ? i : i + 1).keys())].map((_, i) =>
             spotify
               .getTracks(
-                notExistedAlbumMusics
+                notExistedAlbumTracks
                   .map(({ id }) => id)
                   .slice(i * 50, (i + 1) * 50)
               )
@@ -135,52 +206,75 @@ export class Linker {
         }),
         R.compact
       );
+    this.createGenresBySpotify(prisma, notExistedAlbums);
     prisma.$transaction(
       albumMusics.map((albumMusic) => prisma.resource.update(albumMusic))
     );
   }
-  createTagsByItunes = async (
+  createGenresByItunes = (
     prisma: Context["prisma"],
     data: ItunesResponse<unknown & { primaryGenreName: string }>
-  ) => {
-    const tags = data.results.map((item) => item.primaryGenreName);
-    const existedTags = await prisma.tag.findMany({
-        where: { OR: tags.map((tag) => ({ name: tag })) },
+  ) =>
+    this.createGenres(
+      prisma,
+      data.results.map((item) => item.primaryGenreName)
+    );
+  createGenresBySpotify = (
+    prisma: Context["prisma"],
+    data: SpotifyApi.AlbumObjectFull[]
+  ) =>
+    this.createGenres(
+      prisma,
+      data.flatMap(({ genres }) => genres)
+    );
+  async createGenres(prisma: Context["prisma"], genres: string[]) {
+    const existedGenres = await prisma.genre.findMany({
+        where: { OR: genres.map((genre) => ({ name: genre })) },
       }),
-      notExistedTags = [...new Set(tags)].filter(
-        (tag) => !existedTags.find(({ name }) => name === tag)
+      notExistedGenres = [...new Set(genres)].filter(
+        (genre) => !existedGenres.find(({ name }) => name === genre)
       );
-    await prisma.tag.createMany({
-      data: notExistedTags.map((tag) => ({ name: tag })),
+    prisma.genre.createMany({
+      data: notExistedGenres.map((genre) => ({ name: genre })),
     });
-  };
+  }
 }
-const getExistedResources = async (
+const getExistedResources = (
     prisma: Context["prisma"],
     type: LinkType,
     ids: string[],
     include: Prisma.ResourceInclude
   ) =>
-    await prisma.resource.findMany({
+    prisma.resource.findMany({
       where: {
         links: { some: { OR: ids.map((id) => ({ linkId: id, type })) } },
       },
       include,
     }),
-  getExistedResourceBySpotifyId = (
+  getExistedResourcesBySpotifyId = (
     prisma: Context["prisma"],
     ids: string[],
     include: Prisma.ResourceInclude
   ) => getExistedResources(prisma, "Spotify", ids, include),
   getExistedMusicsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
-    getExistedResourceBySpotifyId(prisma, ids, { music: true, links: true }),
+    getExistedResourcesBySpotifyId(prisma, ids, { music: true, links: true }),
   getExistedAlbumsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
-    getExistedResourceBySpotifyId(prisma, ids, { album: true, links: true }),
-  createMusicsBySpotify = async (
+    getExistedResourcesBySpotifyId(prisma, ids, { album: true, links: true }),
+  getNotExistedResourcesSpotify = <T>(
+    resources: (T & Record<"id", string>)[],
+    existedResources: Awaited<ReturnType<typeof getExistedResources>>
+  ) =>
+    resources.filter(
+      ({ id }) =>
+        !existedResources.find(
+          ({ links }) => links && findLinkSpotify(links)?.linkId === id
+        )
+    ),
+  createMusicsBySpotify = (
     prisma: Context["prisma"],
     tracks: SpotifyApi.TrackObjectFull[]
   ) =>
-    await prisma.$transaction(
+    prisma.$transaction(
       tracks.map((item) =>
         prisma.resource.create({
           data: {
@@ -199,11 +293,11 @@ const getExistedResources = async (
         })
       )
     ),
-  createdAlbumsBySpotify = async (
+  createdAlbumsBySpotify = (
     prisma: Context["prisma"],
     albums: SpotifyApi.AlbumObjectFull[]
   ) =>
-    await prisma.$transaction(
+    prisma.$transaction(
       albums.map((album) =>
         prisma.resource.create({
           data: {
@@ -222,6 +316,12 @@ const getExistedResources = async (
               create: {
                 upc: album.external_ids.upc,
               },
+            },
+            genres: {
+              connectOrCreate: album.genres.map((name) => ({
+                where: { name },
+                create: { name },
+              })),
             },
           },
           include: { album: true, links: true },

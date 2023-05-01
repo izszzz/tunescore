@@ -134,32 +134,12 @@ const SettingsMusic: NextPage = () => {
               onRemove={() =>
                 update.mutate({ ...query, ...removeSpotifyMutate(id) })
               }
-              onSelect={async (item) => {
-                const album = await context.client.album.findFirstAlbum.query({
-                  where: {
-                    resource: {
-                      links: {
-                        every: {
-                          type: "Spotify",
-                          linkId: item.album.id,
-                        },
-                      },
-                    },
-                  },
-                });
-                await update.mutate({
+              onSelect={(item) =>
+                update.mutate({
                   ...query,
-                  data: {
-                    music: {
-                      update: {
-                        isrc: item.external_ids.isrc,
-                        albums: { connect: { id: album?.id } },
-                      },
-                    },
-                    ...selectSpotifyMutate({ id: item.id, images: [] }).data,
-                  },
-                });
-              }}
+                  data: selectSpotifyMutate({ id: item.id, images: [] }).data,
+                })
+              }
               term={setLocale(name, router)}
             />
 

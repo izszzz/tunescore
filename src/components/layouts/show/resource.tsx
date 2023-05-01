@@ -21,7 +21,7 @@ import { getImage } from "../../../helpers/image";
 import setLocale from "../../../helpers/locale";
 import { getMusicLinks } from "../../../helpers/music";
 import type {
-  ResourceShowQuery,
+  ResourceShowQueryType,
   ResourceShowQueryParameter,
   resourceAlbumShowQuery,
   resourceArtistShowQuery,
@@ -43,7 +43,7 @@ import type { DefaultTabsProps } from "../../elements/tabs/default";
 
 import ShowLayout from ".";
 import type { ShowLayoutProps } from ".";
-export type ResourceData = Prisma.ResourceGetPayload<ResourceShowQuery>;
+export type ResourceData = Prisma.ResourceGetPayload<ResourceShowQueryType>;
 export interface ResourceShowLayoutProps
   extends Omit<ShowLayoutProps, "title" | "tabs" | "children"> {
   activeTab: DefaultTabsProps["tabs"][0]["label"];
@@ -85,7 +85,7 @@ const ResourceShowLayout = ({
     { data } = trpc.resource.findUniqueResource.useQuery(query);
   if (!data) return <></>;
   const resourceData = data as ResourceData,
-    { unionType: type, bookmarks, name, links, tags } = resourceData,
+    { unionType: type, bookmarks, name, links, genres } = resourceData,
     locale = setLocale(name, router),
     image = getImage(getMusicLinks(resourceData), 80, { channel: true });
 
@@ -148,7 +148,7 @@ const ResourceShowLayout = ({
             </Box>
           </Box>
           <Stack direction="row" spacing={1}>
-            {tags.map((tag) => (
+            {genres.map((tag) => (
               <Chip
                 icon={<LocalOffer />}
                 key={tag.id}

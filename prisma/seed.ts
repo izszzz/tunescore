@@ -43,7 +43,7 @@ const prisma = new PrismaClient();
 initialize({ prisma });
 async function main() {
   try {
-    await prisma.tag.createMany({
+    await prisma.genre.createMany({
       data: [
         { name: "Rock" },
         { name: "Metal" },

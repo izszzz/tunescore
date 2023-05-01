@@ -10,7 +10,7 @@ import type { ResourceShowQueryParameter } from "../../../helpers/resource";
 import { resourceShowQuery } from "../../../helpers/resource";
 import { removeTag, selectTag } from "../../../paths/bands/[id]/settings";
 import { trpc } from "../../../utils/trpc";
-import TagUpdateAutocomplete from "../../elements/autocomplete/update/tag";
+import GenreUpdateAutocomplete from "../../elements/autocomplete/update/tag";
 import SingleForm from "../../elements/form/single";
 
 import ResourceShowLayout from "./resource";
@@ -48,7 +48,7 @@ const SettingsShowLayout = ({
   return (
     <ResourceShowLayout activeTab="settings" getQuery={getQuery}>
       {(data) => {
-        const { tags } = data;
+        const { genres } = data;
         return (
           <>
             <Typography variant="h4">Info</Typography>
@@ -63,7 +63,7 @@ const SettingsShowLayout = ({
               loading={update.isLoading}
               textFieldElementProps={{ name: `name.${router.locale}` }}
             />
-            <TagUpdateAutocomplete
+            <GenreUpdateAutocomplete
               loading={update.isLoading}
               onChange={{
                 onSelect: (_e, _v, _r, d) =>
@@ -71,7 +71,7 @@ const SettingsShowLayout = ({
                 onRemove: (_e, _v, _r, d) =>
                   d && update.mutate({ ...query, ...removeTag(d.option.id) }),
               }}
-              value={tags}
+              value={genres}
             />
 
             {children({ data, update, router, query })}

@@ -85,7 +85,7 @@ const ResourceShowLayout = ({
     { data } = trpc.resource.findUniqueResource.useQuery(query);
   if (!data) return <></>;
   const resourceData = data as ResourceData,
-    { unionType: type, bookmarks, name, links, tags } = resourceData,
+    { unionType: type, bookmarks, name, links, genres } = resourceData,
     locale = setLocale(name, router),
     image = getImage(getMusicLinks(resourceData), 80, { channel: true });
 
@@ -148,7 +148,7 @@ const ResourceShowLayout = ({
             </Box>
           </Box>
           <Stack direction="row" spacing={1}>
-            {tags.map((tag) => (
+            {genres.map((tag) => (
               <Chip
                 icon={<LocalOffer />}
                 key={tag.id}

@@ -42,9 +42,12 @@ export const spotifyRouter = router({
     }),
   findUniqueTrack: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx, input }) => {
-      const spotify = await authorized(ctx.session);
-      return input ? spotify.getTrack(input).then(({ body }) => body) : null;
+    .query(async ({ ctx: { session, prisma }, input }) => {
+      if (!input) return null;
+      const spotify = await authorized(session),
+        data = await spotify.getTrack(input).then(({ body }) => body);
+      linker.findedUniqueSpotifyTrack(prisma, data);
+      return data;
     }),
   searchArtists: publicProcedure
     .input(z.string())

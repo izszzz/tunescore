@@ -43,6 +43,12 @@ export class Linker {
     prisma.resource.update({
       where: { id: resourceAlbum?.id },
       data: {
+        genres: {
+          connectOrCreate: data.genres.map((name) => ({
+            where: { name },
+            create: { name },
+          })),
+        },
         album: {
           update: {
             musics: {
@@ -50,6 +56,34 @@ export class Linker {
                 id,
               })),
             },
+          },
+        },
+      },
+    });
+  }
+  async findedUniqueSpotifyTrack(
+    prisma: Context["prisma"],
+    data: SpotifyApi.SingleTrackResponse
+  ) {
+    const album = await prisma.album.findFirst({
+      where: {
+        resource: {
+          links: {
+            every: {
+              type: "Spotify",
+              linkId: data.album.id,
+            },
+          },
+        },
+      },
+    });
+    prisma.resource.update({
+      where: { id: data?.id },
+      data: {
+        music: {
+          update: {
+            isrc: data.external_ids.isrc,
+            albums: { connect: { id: album?.id } },
           },
         },
       },
@@ -282,6 +316,12 @@ const getExistedResources = (
               create: {
                 upc: album.external_ids.upc,
               },
+            },
+            genres: {
+              connectOrCreate: album.genres.map((name) => ({
+                where: { name },
+                create: { name },
+              })),
             },
           },
           include: { album: true, links: true },

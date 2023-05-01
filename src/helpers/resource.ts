@@ -39,7 +39,7 @@ export const resourceListArgs = (session: SessionArg) =>
         name: true,
         bookmarks: bookmarkArgs(session),
         links: true,
-        tags: true,
+        genres: true,
         _count: { select: { bookmarks: true } },
       },
     }),

@@ -1,4 +1,5 @@
 import {
+  GenreFindManySchema,
   ResourceFindManySchema,
   TransactionFindManySchema,
 } from "../../../prisma/generated/schemas";
@@ -11,7 +12,6 @@ import { IssueFindManySchema } from "../../../prisma/generated/schemas/findManyI
 import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
 import { PullFindManySchema } from "../../../prisma/generated/schemas/findManyPull.schema";
 import { RoleFindManySchema } from "../../../prisma/generated/schemas/findManyRole.schema";
-import { TagFindManySchema } from "../../../prisma/generated/schemas/findManyTag.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
 import { albumListArgs } from "../../helpers/album";
 import { artistListArgs } from "../../helpers/artist";
@@ -56,9 +56,9 @@ export const searchRouter = router({
   pull: publicProcedure
     .input(PullFindManySchema)
     .mutation(async ({ ctx, input }) => ctx.prisma.pull.findMany(input)),
-  tag: publicProcedure
-    .input(TagFindManySchema)
-    .mutation(async ({ ctx, input }) => ctx.prisma.tag.findMany(input)),
+  genre: publicProcedure
+    .input(GenreFindManySchema)
+    .mutation(async ({ ctx, input }) => ctx.prisma.genre.findMany(input)),
   role: publicProcedure
     .input(RoleFindManySchema)
     .mutation(async ({ ctx, input }) => ctx.prisma.role.findMany(input)),

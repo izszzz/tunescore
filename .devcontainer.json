@@ -2,7 +2,8 @@
   "name": "NextJS",
   "dockerComposeFile": "./docker-compose.yml",
   "service": "web",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/home/pwuser/app",
+  "remoteUser": "root",
   "customizations": {
     "vscode": {
       "extensions": [

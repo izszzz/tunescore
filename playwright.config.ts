@@ -1,11 +1,15 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
+import * as dotenv from "dotenv";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+dotenv.config({ path: "./.env" });
+dotenv.config({ path: "./.env.local" });
+dotenv.config({ path: "./.env.development.local" });
+dotenv.config({ path: "./.env.development" });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -40,33 +44,31 @@ const config: PlaywrightTestConfig = {
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    storageState: "./tests/e2e/storageState.json",
   },
-
+  globalSetup: "./tests/e2e/global-setup.ts",
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "Desktop Chrome",
       use: {
         ...devices["Desktop Chrome"],
-        launchOptions: {
-          args: ["--disable-blink-features=AutomationControlled"],
-        },
       },
     },
 
-    {
-      name: "firefox",
-      use: {
-        ...devices["Desktop Firefox"],
-      },
-    },
+    // {
+    //   name: "firefox",
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //   },
+    // },
 
-    {
-      name: "webkit",
-      use: {
-        ...devices["Desktop Safari"],
-      },
-    },
+    // {
+    //   name: "webkit",
+    //   use: {
+    //     ...devices["Desktop Safari"],
+    //   },
+    // },
 
     /* Test against mobile viewports. */
     // {

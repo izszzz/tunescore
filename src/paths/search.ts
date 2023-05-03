@@ -30,5 +30,5 @@ export const resourcePaginationQuery = ({
       }),
     },
   },
-  options: { page: (router.query.page as string) || 0 },
+  options: { page: router.query.page as string },
 });

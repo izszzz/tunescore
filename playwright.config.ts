@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "./.envlocal" });
 dotenv.config({ path: "./.env.local" });
 dotenv.config({ path: "./.env.development.local" });
 dotenv.config({ path: "./.env.development" });

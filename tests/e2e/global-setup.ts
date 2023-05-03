@@ -1,7 +1,7 @@
 import path from "path";
 
 import { chromium } from "@playwright/test";
-import * as dotenv from "dotenv";
+import type { JWT } from "next-auth/jwt";
 import { encode, decode } from "next-auth/jwt";
 
 import { env } from "../../src/env/server.mjs";
@@ -14,7 +14,7 @@ async function globalSetup() {
   const data = new Date();
   const sessionToken = "9468389c-ff19-4eb4-bf73-b56516e9b7e8";
   const encryptedCookieValue = await encode({
-    token,
+    token: token as unknown as JWT,
     secret: env.NEXTAUTH_SECRET,
   });
   console.log(

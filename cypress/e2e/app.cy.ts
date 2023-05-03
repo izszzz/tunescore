@@ -7,15 +7,22 @@
 describe("Navigation", () => {
   it("should navigate to the new page", () => {
     // Start from the index page
-    cy.visit("http://localhost:3000/");
+    cy.visit("/");
+    cy.contains("tunescore").should("be.visible");
+  });
+  it("should navigate to the new page", () => {
+    // Start from the index page
+    cy.visit("/");
     cy.get("[data-testid='AddIcon']").click();
     cy.url().should("include", "/new");
+    cy.contains("tunescore").should("be.visible");
   });
   it("should navigate to the cart page", () => {
     // Start from the index page
-    cy.visit("http://localhost:3000/");
+    cy.visit("/");
     cy.get("[data-testid='ShoppingCartIcon']").click();
     cy.url().should("include", "/cart");
+    cy.contains("tunescore").should("be.visible");
   });
 });
 

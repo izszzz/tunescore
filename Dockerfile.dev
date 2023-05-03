@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN mkdir -p /usr/share/man/man1 && \
     apt-get update && \
-    apt-get install -y sudo curl git openjdk-11-jdk && \ 
+    apt-get install -y sudo curl git openjdk-11-jdk libxss1 && \ 
     npm ci --force 
 
 RUN curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash

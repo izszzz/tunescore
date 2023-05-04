@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import * as R from "remeda";
 
+import DefaultHeader from "../../components/elements/header/default";
 import ListItem from "../../components/elements/list/item";
 import IndexLayout from "../../components/layouts/index";
 
@@ -12,6 +13,7 @@ const Admin: NextPage = () => {
   const [options, setOptions] = useState(R.values(Prisma.ModelName));
   return (
     <IndexLayout
+      header={<DefaultHeader />}
       meta={{
         total: 0,
         lastPage: 0,

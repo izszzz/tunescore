@@ -2,30 +2,37 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
-import UserLists from "../../components/elements/list/user";
+import UserListItem from "../../components/elements/list/item/user";
+import IndexLayout from "../../components/layouts/index";
+import ListsLayout from "../../components/layouts/lists";
 import DefaultSingleColumnLayout from "../../components/layouts/single_column/default";
-import { userCount } from "../../helpers/user";
+import { userArgs } from "../../helpers/user";
 import { trpc } from "../../utils/trpc";
 
 const Users: NextPage = () => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const { data } = trpc.pagination.user.useQuery(
-    {
-      args: {
-        where: {
-          name: { contains: (router.query.q as string) || "" },
+  const router = useRouter(),
+    { enqueueSnackbar } = useSnackbar(),
+    { data } = trpc.pagination.user.useQuery(
+      {
+        args: {
+          where: {
+            name: { contains: (router.query.q as string) || "" },
+          },
+          ...userArgs,
         },
-        include: { _count: userCount },
+        options: { page: (router.query.page as string) || 0 },
       },
-      options: { page: (router.query.page as string) || 0 },
-    },
-    { onError: () => enqueueSnackbar("user.index error") }
-  );
-  if (!data) return <></>;
+      { onError: () => enqueueSnackbar("user.index error") }
+    );
   return (
     <DefaultSingleColumnLayout contained>
-      <UserLists data={data.data} />
+      <IndexLayout meta={data?.meta}>
+        <ListsLayout
+          data={data?.data}
+          lists={{ listItem: (data) => <UserListItem data={data} /> }}
+          perPage={60}
+        />
+      </IndexLayout>
     </DefaultSingleColumnLayout>
   );
 };

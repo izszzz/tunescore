@@ -1,5 +1,11 @@
+import type { UserRoleType } from "@prisma/client";
+import type { JWT } from "next-auth/jwt";
+import { encode } from "next-auth/jwt";
 import { v4 as uuidv4 } from "uuid";
-export const token = {
+
+import { env } from "../../../src/env/server.mjs";
+
+const token = {
   name: "hakei prod",
   email: "hakeiprod@gmail.com",
   picture:
@@ -13,7 +19,7 @@ export const token = {
     image:
       "https://lh3.googleusercontent.com/a/AGNmyxYIOkNTLwr51sS34gRr3LNBlywwynKhZypxiZ1v=s96-c",
     stripeCustomerId: null,
-    role: "User",
+    role: "Admin",
     point: 0,
     providers: [],
   },
@@ -21,3 +27,8 @@ export const token = {
   exp: 1685687063,
   jti: uuidv4(),
 };
+export const createToken = (role: UserRoleType = "Admin") =>
+  encode({
+    token: { ...token, role } as unknown as JWT,
+    secret: env.NEXTAUTH_SECRET,
+  });

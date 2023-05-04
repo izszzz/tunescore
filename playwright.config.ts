@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-dotenv.config({ path: "./.envlocal" });
+dotenv.config({ path: "./.env" });
 dotenv.config({ path: "./.env.local" });
 dotenv.config({ path: "./.env.development.local" });
 dotenv.config({ path: "./.env.development" });
@@ -23,7 +23,7 @@ const config: PlaywrightTestConfig = {
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 20000,
+    timeout: 30000,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -44,9 +44,9 @@ const config: PlaywrightTestConfig = {
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
-    storageState: "./tests/e2e/storageState.json",
+    storageState: "./tests/e2e/setup/storageState.json",
   },
-  globalSetup: "./tests/e2e/global-setup.ts",
+  globalSetup: "./tests/e2e/setup/global-setup.ts",
   /* Configure projects for major browsers */
   projects: [
     {

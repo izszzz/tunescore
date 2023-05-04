@@ -81,7 +81,7 @@ function IndexLayout<T>({
           <Pagination
             count={meta?.lastPage}
             onChange={handleChange}
-            page={meta?.currentPage}
+            page={meta?.currentPage ?? 1}
             variant="outlined"
           />
         </Box>

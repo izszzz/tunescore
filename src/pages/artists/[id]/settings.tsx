@@ -2,7 +2,7 @@ import React from "react";
 
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 
 import BandUpdateAutocomplete from "../../../components/elements/autocomplete/update/band";
 import ItunesArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/itunes";
@@ -23,7 +23,6 @@ import {
 } from "../../../helpers/link";
 import setLocale from "../../../helpers/locale";
 import { resourceArtistShowQuery } from "../../../helpers/resource";
-import { redirectToSignIn } from "../../../helpers/user";
 import {
   removeArtistBand,
   selectArtistBand,
@@ -123,9 +122,5 @@ const ArtistSettings: NextPage = () => (
     }}
   </SettingsShowLayout>
 );
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const redirect = await redirectToSignIn(ctx);
-  return { props: {}, redirect };
-};
 
 export default ArtistSettings;

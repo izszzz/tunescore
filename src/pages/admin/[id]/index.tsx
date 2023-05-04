@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import * as R from "remeda";
 
+import DefaultHeader from "../../../components/elements/header/default";
 import { trpc } from "../../../utils/trpc";
 
 const Model: NextPage = () => {
@@ -31,6 +32,7 @@ const Model: NextPage = () => {
   );
   return (
     <Box height="100vh" width="100%">
+      <DefaultHeader />
       <DataGrid
         autoHeight
         checkboxSelection

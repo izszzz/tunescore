@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const BetaAlert = () => {
   const router = useRouter();
   return (
-    <Box mx={5} my={2}>
+    <Box my={2}>
       <Alert severity="error" variant="outlined">
         {router.locale === "ja"
           ? "このサービスはベータ版です。予告なくデータが削除される場合があります。"

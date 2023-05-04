@@ -236,8 +236,8 @@ model Pull {
   music   Music  @relation(fields: [musicId], references: [id])
   musicId String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String?
 }
 
 model Vote {

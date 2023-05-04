@@ -5,11 +5,10 @@ import { trpc } from "../../utils/trpc";
 
 const Dashboard: NextPage = () => {
   const { data } = trpc.currentUser.findCurrentUser.useQuery();
-  if (!data) return <></>;
   return (
     <DashboardLayout>
       <>main</>
-      <>point: {data.point}</>
+      <>point: {data?.point}</>
     </DashboardLayout>
   );
 };

@@ -1,6 +1,6 @@
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -26,7 +26,6 @@ import {
   resourceBandShowQuery,
   resourceShowQuery,
 } from "../../../helpers/resource";
-import { redirectToSignIn } from "../../../helpers/user";
 import {
   removeArtists,
   selectArtists,
@@ -129,11 +128,6 @@ const BandSettings: NextPage = () => {
       }}
     </SettingsShowLayout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const redirect = await redirectToSignIn(ctx);
-  return { props: {}, redirect };
 };
 
 export default BandSettings;

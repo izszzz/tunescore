@@ -1,7 +1,6 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { redirectToSignIn } from "../helpers/user";
 
 const Thanks: NextPage = () => {
   return (
@@ -11,8 +10,4 @@ const Thanks: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const redirect = await redirectToSignIn(ctx);
-  return { props: {}, redirect };
-};
 export default Thanks;

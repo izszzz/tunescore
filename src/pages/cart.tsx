@@ -15,7 +15,7 @@ import { isNonEmpty } from "ts-array-length";
 import Lists from "../components/elements/list";
 import ResourceListItem from "../components/elements/list/item/resource";
 import DefaultSingleColumnLayout from "../components/layouts/single_column/default";
-import { getCurrentUserId, redirectToSignIn } from "../helpers/user";
+import { getCurrentUserId } from "../helpers/user";
 import { trpc } from "../utils/trpc";
 
 const Cart: NextPage = () => {
@@ -86,14 +86,8 @@ const Cart: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const redirect = await redirectToSignIn(ctx);
-  return {
-    props: {
-      ...(await serverSideTranslations(ctx.locale || "", ["common"])),
-    },
-    redirect,
-  };
-};
+export const getServerSideProps: GetServerSideProps = async (ctx) => ({
+  props: await serverSideTranslations(ctx.locale ?? "", ["common"]),
+});
 
 export default Cart;

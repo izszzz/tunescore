@@ -1,6 +1,5 @@
 import { shield, allow } from 'trpc-shield';
-
-import type { Context } from '../../../src/server/context';
+import { Context } from '../../../src/server/context';
 
 export const permissions = shield<Context>({
   query: {

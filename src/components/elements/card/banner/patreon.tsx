@@ -21,7 +21,7 @@ const PatreonBannerCard = () => {
         <Button
           color="primary"
           component="a"
-          href="patreon.com/user?u=89182047"
+          href="https://www.patreon.com/user?u=89182047"
           size="small"
           startIcon={<FaPatreon />}
         >

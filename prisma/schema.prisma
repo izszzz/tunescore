@@ -89,10 +89,10 @@ model Follow {
   id            String         @id @default(uuid())
   notifications Notification[] @relation("FollowNotification")
 
-  follower   User   @relation("UserFollower", fields: [followerId], references: [id])
+  follower   User   @relation("UserFollower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId String
 
-  following   User   @relation("UserFollowing", fields: [followingId], references: [id])
+  following   User   @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
 
   @@unique([followerId, followingId])
@@ -215,7 +215,7 @@ model Issue {
 
   comments Comment[] @relation("IssueComment")
 
-  music   Music  @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id], onDelete: Cascade)
   musicId String
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -233,7 +233,7 @@ model Pull {
 
   comments Comment[] @relation("PullComment")
 
-  music   Music  @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id], onDelete: Cascade)
   musicId String
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -283,10 +283,10 @@ model Bookmark {
 model Participation {
   id String @id @default(uuid())
 
-  artist   Artist @relation(fields: [artistId], references: [id])
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
   artistId String
 
-  music   Music  @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id], onDelete: Cascade)
   musicId String
 
   roles Role[]
@@ -333,7 +333,7 @@ model Cart {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  music   Music  @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id], onDelete: Cascade)
   musicId String
 
   @@unique([userId, musicId])

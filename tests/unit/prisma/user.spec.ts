@@ -1,28 +1,9 @@
 import { expect, test } from "@playwright/test";
-import type { User } from "@prisma/client";
 
 import { prisma } from "../../../src/server/db/client";
 
-import { userFactory } from "./fixtures/user";
-
-const createUser = () => prisma.user.create({ data: userFactory.build() }),
-  shouldDeletedUser = async (id: string | undefined) => {
-    await prisma.user.delete({ where: { id } });
-    const user = await prisma.user.findFirst({ where: { id } });
-    await expect(user).toEqual(null);
-  };
-test.describe.serial("User", async () => {
-  let newUser: User;
-  test("should create new User", async () => {
-    newUser = await createUser();
-    await expect(newUser?.name).toEqual(userFactory.build().name);
-  });
-
-  test("should delete User", () => shouldDeletedUser(newUser?.id));
-});
-
 test("onDelete", async () => {
-  const newUser = await createUser();
+  const newUser = await prisma.user.create({ data: { name: "test" } });
   const music = await prisma.music.create({
     data: {
       type: "ORIGINAL",
@@ -30,11 +11,6 @@ test("onDelete", async () => {
       resource: {
         create: {
           unionType: "Music",
-          bookmarks: {
-            create: {
-              user: { connect: { id: newUser?.id } },
-            },
-          },
         },
       },
     },
@@ -51,6 +27,16 @@ test("onDelete", async () => {
             music: { connect: { id: music?.id } },
           },
         ],
+      },
+      bookmarks: {
+        create: {
+          resource: {
+            create: {
+              unionType: "Music",
+              music: { connect: { id: music?.id } },
+            },
+          },
+        },
       },
       issues: {
         create: [
@@ -85,15 +71,7 @@ test("onDelete", async () => {
           unionType: "Music",
         },
       },
-      followers: {
-        create: {
-          following: {
-            create: {
-              name: "test",
-            },
-          },
-        },
-      },
+      followers: { create: { following: { create: { name: "test" } } } },
       following: {
         create: {
           follower: {
@@ -133,5 +111,9 @@ test("onDelete", async () => {
       },
     },
   });
-  await shouldDeletedUser(newUser?.id);
+
+  await prisma.user.delete({ where: { id: newUser?.id } });
+  await expect(
+    await prisma.user.findFirst({ where: { id: newUser?.id } })
+  ).toEqual(null);
 });

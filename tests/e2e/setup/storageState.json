@@ -2,10 +2,10 @@
   "cookies": [
     {
       "name": "next-auth.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..TOxFRfL5tx_Hr-Ba.PgxmmFJju_dasf67fowzuwgQpZ2sffkTlDqhj3g44SSKWxLaraCETq4CLfJaN1dyNS9NOCbT7uwGjcMFAG6CT6Z4-siEQ7UPo62tEgruHJ3idh1od3GmHkGwPX-Hqyy8wgq5mksYG66_zl5YeFjzw7jBvGwS157faLvyOiDh-wuxXMZPEKcpqPG8O11U4aRlnB6_Ts0m0-R9XefMan9y1bissQSfak-wHEp1YtfEZOKlXo0x3RGsTm92GqwN-N4e-Wv_RMXgiY6bgZYY14FSqB0ZpewD2TC-4qSnO2mZ5WXxOwCuDFHcUE0nhS8NucXyk1OqB9jKiTR0jVTBzFvbuoIPQf3NIU8q2-XkzF1R_fO7E5Xvyo0dh2JPmHTYWmyuVxIPJMKmZHa24kJI-06QEhN8176FZSvdjvIYxHDXmS_qk7VEmVOxvRnfL8YESkCtfDygMSqL7rggCIyGnCIB4iZqZXuNM9qcq6ZdkvTX5mBCFouRyT_8Pdqy94PVCTCAy45C0b7FP8SjkwP9sesmeUjl3VLC0TExP9HsLK-A9r7ydgKFmNN3aXM3Q7P_EhhRJif7GgwpiQd6YOu5rwFoS5QHXf06MYzz4YnCQPFP2-nmTu2dIWC9LfjA6seeRvN8D7r5mIoj4bGrT6_yWWBRGznS2vCWl33lPs8oNVXNsJ8jtx25lT-kDAYcpPzhoB06HeqhB6uL7tICO2QegYNimEpdI31lyYVqQ4c1ImigM4-_Y9WAtdgsWWUdVG67ZA.uNlloPb26RrdonxTw_pPQg",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..5y26AJkEeniAFeZl.zx6SJ8BZVzb3ZWF55OdfbgpuoTBZ54v_C4SJYXIM-0jEvUJyLVXz1qNe5_nv5LCiWY6Z-5np7Q-o5aH8nO_CLqD8Y8jRKv4h2eBWldtGZhswry-3XTXXNbobA5whMaIlAiF6ieb6dGqGm_4hQT_SPHh7_M8q8SwNsPnm2pRp-MeKCnfBgYml3w8_Cv_K9FLW3IslmV7oOVB5F7bzKLwnHtJur--CHtOwbpcKt6NA1zs-BOx0HqKre7ibvdLjEzpD_orGF9oe1sr8ygKQLGkoLPCv_vZ2hSVk6ZiyZYec_ge4EO_HuLHY-af5cl-sH-A54aW3K-sEGX7XGPsIPDmZrgcxo3ObpldFpIkG5Y8pOX89dheuRjBi7vie6SF-paMXJpAtDgABgNnGW_GlH5iqff4WkAhKo-HUv_nO2P6IWTyNaLfsWZfqNDAJ30s4lPgoYVTL-OX_-_2lVDcV0-WFBY9Y5Jkl0DAjtNw97Fo7mWAIqKkTyzDO51RsJMHtJ67JQUHq8rfMvDQqhFkdH40JFudbwKQY7gHwWLiuQqO2ijjGdhbWnfLBY7yc3d4wv1X15GGhby9gSQpvY6ysg4oA2nBGvYDdVgMdT1q9KES-2uAJG47KCFdV4nVx3zppha1zrRK5Es1oeYefSTgg4CdE1yW0XQ0GllUuO5FfXAE8jTjYNiJUrCRZVTm52miFsXZm7rDS_DMpZ_afqL09dzCruoVOG5jNH4pQcV-y1Ypic3rlGj7SDs659I_HGCJ8qA.OeFI0PYHThyurhhDjmYR3Q",
       "domain": "localhost",
       "path": "/",
-      "expires": 1683266572,
+      "expires": 1683278051,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"

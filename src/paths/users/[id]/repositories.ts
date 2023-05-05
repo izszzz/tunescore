@@ -7,9 +7,11 @@ import { userWhere } from "../../../helpers/user";
 export const userRepositoriesQuery = ({
   router,
   session,
+  perPage,
 }: {
   router: NextRouter;
   session: SessionArg;
+  perPage: number;
 }) => ({
   args: {
     ...musicListArgs(session),
@@ -25,5 +27,5 @@ export const userRepositoriesQuery = ({
       user: userWhere(session),
     },
   },
-  options: { page: (router.query.page as string) || 0 },
+  options: { page: router.query.page as string, perPage },
 });

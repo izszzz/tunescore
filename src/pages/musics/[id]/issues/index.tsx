@@ -1,15 +1,19 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import { useRecoilState } from "recoil";
 
+import { perPageState } from "../../../../atoms/perPage";
 import IssueLists from "../../../../components/elements/list/issue";
 import IndexLayout from "../../../../components/layouts/index";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { env } from "../../../../env/client.mjs";
 import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { userArgs } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 const Issues: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar(),
+  const [perPage] = useRecoilState(perPageState),
+    { enqueueSnackbar } = useSnackbar(),
     router = useRouter<"/musics/[id]">(),
     { id } = router.query,
     { data: issueData } = trpc.pagination.issue.useQuery(
@@ -21,7 +25,7 @@ const Issues: NextPage = () => {
             music: { resource: { id } },
           },
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
+        options: { page: router.query.page as string, perPage },
       },
       { onError: () => enqueueSnackbar("music.show error") }
     ),
@@ -46,7 +50,7 @@ const Issues: NextPage = () => {
               onChange: ({ currentTarget: { value } }) =>
                 search.mutate({
                   where: { title: { contains: value }, music: { id } },
-                  take: 10,
+                  take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
                 }),
             },
           }}

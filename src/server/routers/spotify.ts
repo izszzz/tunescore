@@ -34,7 +34,7 @@ export const spotifyRouter = router({
     .query(async ({ ctx: { session, prisma }, input }) => {
       const spotify = await authorized(session),
         data = await spotify
-          .searchTracks(input)
+          .searchTracks(input, { limit: 12, offset: 0 })
           .then(({ body }) => body.tracks);
       if (!data) return null;
       linker.searchedSpotifyTracks(prisma, spotify, data);
@@ -53,7 +53,9 @@ export const spotifyRouter = router({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const spotify = await authorized(ctx.session);
-      return spotify.searchArtists(input).then(({ body }) => body.artists);
+      return spotify
+        .searchArtists(input, { limit: 12, offset: 0 })
+        .then(({ body }) => body.artists);
     }),
   findUniqueArtist: publicProcedure
     .input(z.string().nullish())
@@ -66,7 +68,7 @@ export const spotifyRouter = router({
     .query(async ({ ctx: { session, prisma }, input }) => {
       const spotify = await authorized(session),
         ids = await spotify
-          .searchAlbums(input)
+          .searchAlbums(input, { limit: 12, offset: 0 })
           .then(({ body }) => body.albums?.items.map(({ id }) => id));
       if (!ids) return null;
       const data = await spotify.getAlbums(ids).then(({ body }) => body.albums);

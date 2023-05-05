@@ -2,16 +2,20 @@ import type { Pull } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import { useRecoilState } from "recoil";
 
+import { perPageState } from "../../../../atoms/perPage";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
+import { env } from "../../../../env/client.mjs";
 import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { userArgs } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
 
 const Pulls: NextPage = () => {
-  const router = useRouter<"/musics/[id]">(),
+  const [perPage] = useRecoilState(perPageState),
+    router = useRouter<"/musics/[id]">(),
     { id } = router.query,
     { enqueueSnackbar } = useSnackbar(),
     { data: pullsData } = trpc.pagination.pull.useQuery(
@@ -23,7 +27,7 @@ const Pulls: NextPage = () => {
             music: { resource: { id } },
           },
         },
-        options: { page: (router.query.page as string) || 0, perPage: 12 },
+        options: { page: router.query.page as string, perPage },
       },
       { onError: () => enqueueSnackbar("pull.index error") }
     ),
@@ -48,7 +52,7 @@ const Pulls: NextPage = () => {
               onChange: ({ currentTarget: { value } }) =>
                 search.mutate({
                   where: { title: { contains: value }, music: { id } },
-                  take: 10,
+                  take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
                 }),
             },
           }}

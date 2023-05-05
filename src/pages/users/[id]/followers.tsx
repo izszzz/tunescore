@@ -3,9 +3,13 @@ import React from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useRecoilState } from "recoil";
 
+import { perPageState } from "../../../atoms/perPage";
+import UserListItem from "../../../components/elements/list/item/user";
 import UserLists from "../../../components/elements/list/user";
 import IndexLayout from "../../../components/layouts/index";
+import ListsLayout from "../../../components/layouts/lists";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import { userShowQuery } from "../../../paths/users/[id]";
@@ -13,13 +17,14 @@ import { followersQuery } from "../../../paths/users/[id]/followers";
 import { trpc } from "../../../utils/trpc";
 
 const UserFollowers: NextPage = () => {
-  const { data: session } = useSession(),
+  const [perPage] = useRecoilState(perPageState),
+    { data: session } = useSession(),
     router = useRouter<"/users/[id]">(),
     { id } = router.query,
     query = userShowQuery({ session, router }),
     { data } = trpc.user.findUniqueUser.useQuery(query),
     { data: followData } = trpc.pagination.follow.useQuery(
-      followersQuery({ router })
+      followersQuery({ router, perPage })
     ),
     search = trpc.search.follow.useMutation();
   if (!data || !followData) return <></>;
@@ -41,7 +46,10 @@ const UserFollowers: NextPage = () => {
           },
         }}
       >
-        <UserLists data={followData.data.map((follow) => follow.following)} />
+        <ListsLayout
+          data={followData.data.map((follow) => follow.following)}
+          lists={{ listItem: (data) => <UserListItem data={data} /> }}
+        />
       </IndexLayout>
     </UserLayout>
   );

@@ -17,10 +17,9 @@ import { trpc } from "../utils/trpc";
 const Home: NextPage = () => {
   const { data: session } = useSession(),
     router = useRouter(),
-    { data, isLoading } = trpc.pagination.resource.useQuery({
-      ...resourcePaginationQuery({ router, session }),
-      options: { perPage: 60 },
-    });
+    { data, isLoading } = trpc.pagination.resource.useQuery(
+      resourcePaginationQuery({ router, session, perPage: 60 })
+    );
   return (
     <DefaultSingleColumnLayout>
       <Box px={5}>

@@ -11,6 +11,7 @@ import { trpc } from "../../utils/trpc";
 const Notification: NextPage = () => {
   const { data: session } = useSession(),
     router = useRouter(),
+    // TODO: add perPage
     { data } = trpc.pagination.notification.useQuery(
       notificationPaginationQuery({ router, session })
     );

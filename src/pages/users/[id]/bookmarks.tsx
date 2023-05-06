@@ -11,7 +11,7 @@ import ResourceListItem from "../../../components/elements/list/item/resource";
 import IndexLayout from "../../../components/layouts/index";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
-import { env } from "../../../env/client.mjs";
+import { take } from "../../../consts/prisma";
 import setLocale from "../../../helpers/locale";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { bookmarkQuery } from "../../../paths/users/[id]/bookmark";
@@ -47,7 +47,7 @@ const UserBookmarks: NextPage = () => {
                 where: {
                   resource: { name: { is: { [locale]: { contains: v } } } },
                 },
-                take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
+                take,
               }),
           },
         }}

@@ -8,6 +8,7 @@ import ResourceListItem from "../../../components/elements/list/item/resource";
 import ResourceLists from "../../../components/elements/list/resource";
 import DashboardLayout from "../../../components/layouts/dashboard";
 import IndexLayout from "../../../components/layouts/index";
+import { take } from "../../../consts/prisma";
 import setLocale from "../../../helpers/locale";
 import type { MusicListArgsType } from "../../../helpers/music";
 import { libraryPaginationQuery } from "../../../paths/dashboard/library";
@@ -16,6 +17,7 @@ import { trpc } from "../../../utils/trpc";
 const Library: NextPage = () => {
   const { data: session } = useSession(),
     router = useRouter(),
+    // TODO: add perPage
     { data } = trpc.pagination.transaction.useQuery(
       libraryPaginationQuery({ session, router })
     ),
@@ -49,7 +51,7 @@ const Library: NextPage = () => {
                   },
                 },
               },
-              take: 10,
+              take,
             });
           },
         }}

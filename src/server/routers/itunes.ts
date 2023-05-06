@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { limit } from "../../consts/external";
 import { Linker } from "../../utils/linker";
 import { itunes } from "../common/itunes";
 import { publicProcedure, router } from "../trpc";
@@ -8,7 +9,7 @@ const linker = new Linker(),
   lang = z.union([z.literal("ja_jp"), z.literal("en_us")]),
   searchInput = z.object({ term: z.string(), lang }),
   findUniqueInput = z.object({ id: z.string().nullish(), lang }),
-  baseParams = { limit: 12, offset: 0 },
+  baseParams = { limit, offset: 0 },
   getItunesId = (url: string) => new URL(url).pathname.split("/")[4],
   getItunesTrackId = (url: string) => new URL(url).searchParams.get("i");
 export const itunesRouter = router({

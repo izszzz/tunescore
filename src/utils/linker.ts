@@ -18,15 +18,12 @@ export class Linker {
         where: { links: { some: { linkId: url } } },
         include: { name: true },
       });
-    if (!existedResource?.name?.[locale]) {
-      console.log("aaaaaaaaaaaaaaaa");
-      console.log(existedResource);
+    if (!existedResource?.name?.[locale])
       await prisma.resource.update({
         where: { id: existedResource?.id },
         data: { name: { update: { [locale]: name } } },
         include: { name: true },
       });
-    }
   }
   async findedUniqueSpotifyAlbum(
     spotify: SpotifyWebApi,

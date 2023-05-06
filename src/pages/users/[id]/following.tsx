@@ -11,7 +11,7 @@ import IndexLayout from "../../../components/layouts/index";
 import ListsLayout from "../../../components/layouts/lists";
 import UserLayout from "../../../components/layouts/show/user";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
-import { env } from "../../../env/client.mjs";
+import { take } from "../../../consts/prisma";
 import { userShowQuery } from "../../../paths/users/[id]";
 import { followingPath } from "../../../paths/users/[id]/following";
 import { trpc } from "../../../utils/trpc";
@@ -41,7 +41,7 @@ const UserFollowers: NextPage = () => {
             onChange: ({ currentTarget: { value: v } }) =>
               search.mutate({
                 where: { followingId: id, follower: { name: { contains: v } } },
-                take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
+                take,
               }),
           },
         }}

@@ -8,7 +8,7 @@ import { perPageState } from "../../../../atoms/perPage";
 import PullLists from "../../../../components/elements/list/pull";
 import IndexLayout from "../../../../components/layouts/index";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
-import { env } from "../../../../env/client.mjs";
+import { take } from "../../../../consts/prisma";
 import { resourceMusicShowQuery } from "../../../../helpers/resource";
 import { userArgs } from "../../../../helpers/user";
 import { trpc } from "../../../../utils/trpc";
@@ -52,7 +52,7 @@ const Pulls: NextPage = () => {
               onChange: ({ currentTarget: { value } }) =>
                 search.mutate({
                   where: { title: { contains: value }, music: { id } },
-                  take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
+                  take,
                 }),
             },
           }}

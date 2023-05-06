@@ -4,6 +4,7 @@ import LocalOffer from "@mui/icons-material/LocalOffer";
 import type { Genre } from "@prisma/client";
 import { useSnackbar } from "notistack";
 
+import { args, take } from "../../../../consts/prisma";
 import { trpc } from "../../../../utils/trpc";
 
 import UpdateAutocomplete from ".";
@@ -30,7 +31,10 @@ const GenreUpdateAutocomplete = (props: GenreUpdateAutocomplete) => {
         label: "genres",
         margin: "dense",
         onChange: ({ currentTarget: { value } }) =>
-          search.mutate({ where: { name: { contains: value } }, take: 10 }),
+          search.mutate({
+            where: { name: { contains: value } },
+            take,
+          }),
       }}
     />
   );

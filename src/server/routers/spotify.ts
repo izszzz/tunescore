@@ -1,10 +1,12 @@
 import { z } from "zod";
 
+import { limit } from "../../consts/external";
 import { authorized } from "../../helpers/spotify";
 import { Linker } from "../../utils/linker";
 import { publicProcedure, router } from "../trpc";
 
 const linker = new Linker();
+
 export const spotifyRouter = router({
   search: publicProcedure
     .input(
@@ -34,7 +36,7 @@ export const spotifyRouter = router({
     .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         data = await spotify
-          .searchTracks(input, { limit: 12, offset: 0 })
+          .searchTracks(input, { limit, offset: 0 })
           .then(({ body }) => body.tracks);
       if (!data) return null;
       linker.searchedSpotifyTracks(spotify, data);
@@ -54,7 +56,7 @@ export const spotifyRouter = router({
     .query(async ({ ctx, input }) => {
       const spotify = await authorized(ctx.session);
       return spotify
-        .searchArtists(input, { limit: 12, offset: 0 })
+        .searchArtists(input, { limit, offset: 0 })
         .then(({ body }) => body.artists);
     }),
   findUniqueArtist: publicProcedure
@@ -68,7 +70,7 @@ export const spotifyRouter = router({
     .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         ids = await spotify
-          .searchAlbums(input, { limit: 12, offset: 0 })
+          .searchAlbums(input, { limit, offset: 0 })
           .then(({ body }) => body.albums?.items.map(({ id }) => id));
       if (!ids) return null;
       const data = await spotify.getAlbums(ids).then(({ body }) => body.albums);

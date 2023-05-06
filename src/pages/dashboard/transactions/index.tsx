@@ -11,6 +11,7 @@ import { trpc } from "../../../utils/trpc";
 const Transactions: NextPage = () => {
   const { data: session } = useSession(),
     router = useRouter(),
+    // TODO: add perPage
     { data } = trpc.pagination.transaction.useQuery(
       transactionsPaginationQuery({ session, router })
     );

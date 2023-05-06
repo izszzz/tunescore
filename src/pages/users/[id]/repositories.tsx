@@ -8,7 +8,7 @@ import ResourceLists from "../../../components/elements/list/resource";
 import IndexLayout from "../../../components/layouts/index";
 import type { UserLayoutProps } from "../../../components/layouts/show/user";
 import UserLayout from "../../../components/layouts/show/user";
-import { env } from "../../../env/client.mjs";
+import { take } from "../../../consts/prisma";
 import setLocale from "../../../helpers/locale";
 import { getCurrentUserId } from "../../../helpers/user";
 import { userShowQuery } from "../../../paths/users/[id]";
@@ -43,7 +43,7 @@ const User: NextPage = () => {
                 },
                 user: { id: getCurrentUserId(session) },
               },
-              take: Number(env.NEXT_PUBLIC_DEFAULT_SEARCH_TAKE),
+              take,
             }),
         }}
       >

@@ -4,7 +4,7 @@ import LocalOffer from "@mui/icons-material/LocalOffer";
 import type { Genre } from "@prisma/client";
 import { useSnackbar } from "notistack";
 
-import { args, take } from "../../../../consts/prisma";
+import { take } from "../../../../consts/prisma";
 import { trpc } from "../../../../utils/trpc";
 
 import UpdateAutocomplete from ".";

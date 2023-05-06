@@ -3,6 +3,7 @@ import type { NextRouter } from "next/router";
 
 import type { SessionArg } from "../../helpers/user";
 import { userArgs, getCurrentUserId } from "../../helpers/user";
+import type { WithPerPage } from "../../types";
 
 export type NotificationArgsType = typeof notificationArgs;
 export const notificationArgs = {
@@ -14,10 +15,11 @@ export const notificationArgs = {
 export const notificationPaginationQuery = ({
   router,
   session,
-}: {
+  perPage,
+}: WithPerPage<{
   router: NextRouter;
   session: SessionArg;
-}) => {
+}>) => {
   const id = getCurrentUserId(session);
   return {
     args: Prisma.validator<Prisma.NotificationFindManyArgs>()({
@@ -35,6 +37,6 @@ export const notificationPaginationQuery = ({
         ],
       },
     }),
-    options: { page: (router.query.page as string) || 0 },
+    options: { page: router.query.page as string, perPage },
   };
 };

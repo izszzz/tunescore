@@ -1,14 +1,34 @@
-import type { ItunesResponse } from "@izszzz/itunes-search-api";
+import type { BaseParams, ItunesResponse } from "@izszzz/itunes-search-api";
 import type { Prisma, LinkType } from "@prisma/client";
 import * as R from "remeda";
 import type SpotifyWebApi from "spotify-web-api-node";
 
+import { convertLangToLocale } from "../helpers/itunes";
 import { findLinkSpotify } from "../helpers/link";
-import type { Context } from "../server/context";
+import { prisma } from "../server/db/client";
 
 export class Linker {
+  async findedUniqueItunes(
+    url: string,
+    name: string,
+    lang: NonNullable<BaseParams["lang"]>
+  ) {
+    const locale = convertLangToLocale(lang),
+      existedResource = await prisma.resource.findFirst({
+        where: { links: { some: { linkId: url } } },
+        include: { name: true },
+      });
+    if (!existedResource?.name?.[locale]) {
+      console.log("aaaaaaaaaaaaaaaa");
+      console.log(existedResource);
+      await prisma.resource.update({
+        where: { id: existedResource?.id },
+        data: { name: { update: { [locale]: name } } },
+        include: { name: true },
+      });
+    }
+  }
   async findedUniqueSpotifyAlbum(
-    prisma: Context["prisma"],
     spotify: SpotifyWebApi,
     data: SpotifyApi.SingleAlbumResponse
   ) {
@@ -25,10 +45,7 @@ export class Linker {
             },
           },
         }),
-        getExistedMusicsBySpotifyId(
-          prisma,
-          data.tracks.items.map(({ id }) => id)
-        ),
+        getExistedMusicsBySpotifyId(data.tracks.items.map(({ id }) => id)),
       ]),
       notExistedSimpleTracks = getNotExistedResourcesSpotify(
         data.tracks.items,
@@ -39,7 +56,7 @@ export class Linker {
             await spotify.getTracks(notExistedSimpleTracks.map(({ id }) => id))
           ).body.tracks
         : [],
-      createdMusics = await createMusicsBySpotify(prisma, notExistedTracks);
+      createdMusics = await createMusicsBySpotify(notExistedTracks);
     prisma.resource.update({
       where: { id: resourceAlbum?.id },
       data: {
@@ -61,10 +78,7 @@ export class Linker {
       },
     });
   }
-  async findedUniqueSpotifyTrack(
-    prisma: Context["prisma"],
-    data: SpotifyApi.SingleTrackResponse
-  ) {
+  async findedUniqueSpotifyTrack(data: SpotifyApi.SingleTrackResponse) {
     const album = await prisma.album.findFirst({
       where: {
         resource: {
@@ -90,12 +104,10 @@ export class Linker {
     });
   }
   async searchedSpotifyTracks(
-    prisma: Context["prisma"],
     spotify: SpotifyWebApi,
     data: SpotifyApi.PagingObject<SpotifyApi.TrackObjectFull>
   ) {
     const existedMusics = await getExistedMusicsBySpotifyId(
-        prisma,
         data.items.map(({ id }) => id)
       ),
       notExistedTracks = getNotExistedResourcesSpotify(
@@ -103,11 +115,8 @@ export class Linker {
         existedMusics
       ),
       [createdMusics, existedAlbums] = await Promise.all([
-        createMusicsBySpotify(prisma, notExistedTracks),
-        getExistedAlbumsBySpotifyId(
-          prisma,
-          data.items.map(({ album: { id } }) => id)
-        ),
+        createMusicsBySpotify(notExistedTracks),
+        getExistedAlbumsBySpotifyId(data.items.map(({ album: { id } }) => id)),
       ]),
       notExistedTrackAlbums = getNotExistedResourcesSpotify(
         data.items.map(({ album }) => album),
@@ -117,7 +126,7 @@ export class Linker {
         ? (await spotify.getAlbums(notExistedTrackAlbums.map(({ id }) => id)))
             .body.albums
         : [],
-      createdAlbums = await createdAlbumsBySpotify(prisma, notExistedAlbums),
+      createdAlbums = await createdAlbumsBySpotify(notExistedAlbums),
       musicAlbums = R.pipe(
         data.items,
         R.map((track) => {
@@ -137,25 +146,22 @@ export class Linker {
         }),
         R.compact
       );
-    this.createGenresBySpotify(prisma, notExistedAlbums);
+    this.createGenresBySpotify(notExistedAlbums);
     prisma.$transaction(
       musicAlbums.map((musicAlbum) => prisma.music.update(musicAlbum))
     );
   }
   async searchedSpotifyAlbums(
-    prisma: Context["prisma"],
     spotify: SpotifyWebApi,
     data: SpotifyApi.AlbumObjectFull[]
   ) {
     const existedAlbums = await getExistedAlbumsBySpotifyId(
-        prisma,
         data.map(({ id }) => id)
       ),
       notExistedAlbums = getNotExistedResourcesSpotify(data, existedAlbums),
       [createdAlbums, existedMusics] = await Promise.all([
-        createdAlbumsBySpotify(prisma, notExistedAlbums),
+        createdAlbumsBySpotify(notExistedAlbums),
         getExistedMusicsBySpotifyId(
-          prisma,
           data.flatMap(({ tracks: { items } }) => items).map(({ id }) => id)
         ),
       ]),
@@ -178,7 +184,7 @@ export class Linker {
           )
         )
       ).flat(),
-      createdMusics = await createMusicsBySpotify(prisma, notExistedMusics),
+      createdMusics = await createMusicsBySpotify(notExistedMusics),
       albumMusics = R.pipe(
         data,
         R.map(({ id, tracks }) => {
@@ -206,41 +212,18 @@ export class Linker {
         }),
         R.compact
       );
-    this.createGenresBySpotify(prisma, notExistedAlbums);
+    this.createGenresBySpotify(notExistedAlbums);
     prisma.$transaction(
       albumMusics.map((albumMusic) => prisma.resource.update(albumMusic))
     );
   }
   createGenresByItunes = (
-    prisma: Context["prisma"],
     data: ItunesResponse<unknown & { primaryGenreName: string }>
-  ) =>
-    this.createGenres(
-      prisma,
-      data.results.map((item) => item.primaryGenreName)
-    );
-  createGenresBySpotify = (
-    prisma: Context["prisma"],
-    data: SpotifyApi.AlbumObjectFull[]
-  ) =>
-    this.createGenres(
-      prisma,
-      data.flatMap(({ genres }) => genres)
-    );
-  async createGenres(prisma: Context["prisma"], genres: string[]) {
-    const existedGenres = await prisma.genre.findMany({
-        where: { OR: genres.map((genre) => ({ name: genre })) },
-      }),
-      notExistedGenres = [...new Set(genres)].filter(
-        (genre) => !existedGenres.find(({ name }) => name === genre)
-      );
-    prisma.genre.createMany({
-      data: notExistedGenres.map((genre) => ({ name: genre })),
-    });
-  }
+  ) => createGenres(data.results.map((item) => item.primaryGenreName));
+  createGenresBySpotify = (data: SpotifyApi.AlbumObjectFull[]) =>
+    createGenres(data.flatMap(({ genres }) => genres));
 }
 const getExistedResources = (
-    prisma: Context["prisma"],
     type: LinkType,
     ids: string[],
     include: Prisma.ResourceInclude
@@ -252,14 +235,13 @@ const getExistedResources = (
       include,
     }),
   getExistedResourcesBySpotifyId = (
-    prisma: Context["prisma"],
     ids: string[],
     include: Prisma.ResourceInclude
-  ) => getExistedResources(prisma, "Spotify", ids, include),
-  getExistedMusicsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
-    getExistedResourcesBySpotifyId(prisma, ids, { music: true, links: true }),
-  getExistedAlbumsBySpotifyId = (prisma: Context["prisma"], ids: string[]) =>
-    getExistedResourcesBySpotifyId(prisma, ids, { album: true, links: true }),
+  ) => getExistedResources("Spotify", ids, include),
+  getExistedMusicsBySpotifyId = (ids: string[]) =>
+    getExistedResourcesBySpotifyId(ids, { music: true, links: true }),
+  getExistedAlbumsBySpotifyId = (ids: string[]) =>
+    getExistedResourcesBySpotifyId(ids, { album: true, links: true }),
   getNotExistedResourcesSpotify = <T>(
     resources: (T & Record<"id", string>)[],
     existedResources: Awaited<ReturnType<typeof getExistedResources>>
@@ -270,10 +252,7 @@ const getExistedResources = (
           ({ links }) => links && findLinkSpotify(links)?.linkId === id
         )
     ),
-  createMusicsBySpotify = (
-    prisma: Context["prisma"],
-    tracks: SpotifyApi.TrackObjectFull[]
-  ) =>
+  createMusicsBySpotify = (tracks: SpotifyApi.TrackObjectFull[]) =>
     prisma.$transaction(
       tracks.map((item) =>
         prisma.resource.create({
@@ -293,10 +272,7 @@ const getExistedResources = (
         })
       )
     ),
-  createdAlbumsBySpotify = (
-    prisma: Context["prisma"],
-    albums: SpotifyApi.AlbumObjectFull[]
-  ) =>
+  createdAlbumsBySpotify = (albums: SpotifyApi.AlbumObjectFull[]) =>
     prisma.$transaction(
       albums.map((album) =>
         prisma.resource.create({
@@ -327,4 +303,15 @@ const getExistedResources = (
           include: { album: true, links: true },
         })
       )
-    );
+    ),
+  createGenres = async (genres: string[]) => {
+    const existedGenres = await prisma.genre.findMany({
+        where: { OR: genres.map((genre) => ({ name: genre })) },
+      }),
+      notExistedGenres = [...new Set(genres)].filter(
+        (genre) => !existedGenres.find(({ name }) => name === genre)
+      );
+    prisma.genre.createMany({
+      data: notExistedGenres.map((genre) => ({ name: genre })),
+    });
+  };

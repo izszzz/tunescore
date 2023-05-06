@@ -2,6 +2,7 @@ import type { Link, ResourceUnionType } from "@prisma/client";
 import { isNonEmpty } from "ts-array-length";
 import { match } from "ts-pattern";
 
+import { convertToAffiliateUrl } from "../../../../helpers/itunes";
 import { getSpotifyURL, getYoutubeURL } from "../../../../helpers/link";
 
 import AppleButton from "./itunes";
@@ -19,7 +20,10 @@ const LinkButtons = ({ data, type }: LinkButtonsProps) => {
       {data.map((link) =>
         match(link)
           .with({ type: "iTunes" }, () => (
-            <AppleButton href={link.linkId} key={link.linkId} />
+            <AppleButton
+              href={convertToAffiliateUrl(link.linkId).toString()}
+              key={link.linkId}
+            />
           ))
           .with({ type: "Spotify" }, () => (
             <SpotifyButton

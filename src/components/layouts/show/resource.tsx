@@ -148,11 +148,11 @@ const ResourceShowLayout = ({
             </Box>
           </Box>
           <Stack direction="row" spacing={1}>
-            {genres.map((tag) => (
+            {genres.map((genre) => (
               <Chip
                 icon={<LocalOffer />}
-                key={tag.id}
-                label={tag.name}
+                key={genre.id}
+                label={genre.name}
                 size="small"
                 variant="outlined"
               />

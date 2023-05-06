@@ -31,22 +31,22 @@ export const spotifyRouter = router({
     }),
   searchTracks: publicProcedure
     .input(z.string())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         data = await spotify
           .searchTracks(input, { limit: 12, offset: 0 })
           .then(({ body }) => body.tracks);
       if (!data) return null;
-      linker.searchedSpotifyTracks(prisma, spotify, data);
+      linker.searchedSpotifyTracks(spotify, data);
       return data;
     }),
   findUniqueTrack: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       if (!input) return null;
       const spotify = await authorized(session),
         data = await spotify.getTrack(input).then(({ body }) => body);
-      linker.findedUniqueSpotifyTrack(prisma, data);
+      linker.findedUniqueSpotifyTrack(data);
       return data;
     }),
   searchArtists: publicProcedure
@@ -65,23 +65,23 @@ export const spotifyRouter = router({
     }),
   searchAlbums: publicProcedure
     .input(z.string())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         ids = await spotify
           .searchAlbums(input, { limit: 12, offset: 0 })
           .then(({ body }) => body.albums?.items.map(({ id }) => id));
       if (!ids) return null;
       const data = await spotify.getAlbums(ids).then(({ body }) => body.albums);
-      linker.searchedSpotifyAlbums(prisma, spotify, data);
+      linker.searchedSpotifyAlbums(spotify, data);
       return data;
     }),
   findUniqueAlbum: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       if (!input) return null;
       const spotify = await authorized(session),
         data = await spotify.getAlbum(input).then(({ body }) => body);
-      linker.findedUniqueSpotifyAlbum(prisma, spotify, data);
+      linker.findedUniqueSpotifyAlbum(spotify, data);
       return data;
     }),
 });

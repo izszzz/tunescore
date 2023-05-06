@@ -7,7 +7,6 @@ import { useRecoilState } from "recoil";
 
 import { perPageState } from "../../../atoms/perPage";
 import UserListItem from "../../../components/elements/list/item/user";
-import UserLists from "../../../components/elements/list/user";
 import IndexLayout from "../../../components/layouts/index";
 import ListsLayout from "../../../components/layouts/lists";
 import UserLayout from "../../../components/layouts/show/user";

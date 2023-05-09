@@ -9,9 +9,11 @@ import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import type { Prisma } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
 import { match } from "ts-pattern";
 
@@ -23,6 +25,7 @@ import { trpc } from "../utils/trpc";
 
 const New: NextPage = () => {
   const router = useRouter(),
+    { t } = useTranslation(),
     { enqueueSnackbar } = useSnackbar(),
     { status } = useSession(),
     { show } = useModal("auth-dialog"),
@@ -84,7 +87,7 @@ const New: NextPage = () => {
               type="submit"
               variant="contained"
             >
-              submit
+              {t("submit")}
             </LoadingButton>
           </Box>
         </FormContainer>
@@ -92,5 +95,9 @@ const New: NextPage = () => {
     </DefaultSingleColumnLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => ({
+  props: await serverSideTranslations(ctx.locale ?? "", ["common"]),
+});
 
 export default New;

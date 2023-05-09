@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => ({
     "src/components/card/banner/discord",
     "src/components/card/banner/patreon",
     "src/components/card/banner/document",
+    "src/components/alert/beta",
   ]),
 });
 

@@ -1,6 +1,6 @@
 import type { NextRouter } from "next/router";
 
-import { take } from "../consts/prisma.js";
+import { take } from "../consts/prisma";
 
 export const selectBandMutate = (id: string | undefined) => ({
     data: { band: { connect: { id } } },

@@ -9,12 +9,14 @@ import {
 import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import type { Issue } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSnackbar } from "notistack";
 
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
@@ -25,6 +27,7 @@ import { trpc } from "../../../../utils/trpc";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Issues: NextPage = () => {
   const formContext = useForm<Issue>(),
+    { t } = useTranslation(),
     { enqueueSnackbar } = useSnackbar(),
     router = useRouter<"/musics/[id]">(),
     { data: session, status } = useSession(),
@@ -64,12 +67,16 @@ const Issues: NextPage = () => {
             type="submit"
             variant="contained"
           >
-            Submit
+            {t("submit")}
           </LoadingButton>
         </FormContainer>
       )}
     </ResourceShowLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => ({
+  props: await serverSideTranslations(ctx.locale ?? "", ["common"]),
+});
 
 export default Issues;

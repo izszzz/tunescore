@@ -6,7 +6,7 @@ import { userArgs, getCurrentUserId } from "../../helpers/user";
 import type { WithPerPage } from "../../types";
 
 export type NotificationArgsType = typeof notificationArgs;
-export const notificationArgs = {
+const notificationArgs = {
   include: {
     bookmarked: { include: { resource: { include: { name: true } } } },
     user: userArgs,

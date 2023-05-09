@@ -8,5 +8,6 @@
   "loading": "loading",
   "add": "add",
   "submit": "submit",
-  "order": "order"
+  "order": "order",
+  "delete": "delete"
 }

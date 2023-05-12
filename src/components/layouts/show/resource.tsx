@@ -2,9 +2,9 @@ import React from "react";
 
 import { useModal } from "@ebay/nice-modal-react";
 import LocalOffer from "@mui/icons-material/LocalOffer";
-import { IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { Prisma, ResourceUnionType } from "@prisma/client";
@@ -55,7 +55,7 @@ export interface ResourceShowLayoutProps
     | ReturnType<typeof resourceAlbumShowQuery>
     | ReturnType<typeof resourceArtistShowQuery>
     | ReturnType<typeof resourceBandShowQuery>;
-  children: (data: ResourceData) => React.ReactNode;
+  children: (data: ResourceData | undefined) => React.ReactNode;
 }
 
 const ResourceShowLayout = ({
@@ -64,14 +64,44 @@ const ResourceShowLayout = ({
   ...props
 }: ResourceShowLayoutProps) => {
   const router = useRouter<ResourceShowQueryParameter["router"]["pathname"]>(),
-    { show } = useModal("report-dialog"),
+    { data: session } = useSession(),
+    query = getQuery({ router, session }),
+    { data, isLoading } = trpc.resource.findUniqueResource.useQuery(query),
+    resourceData = data as ResourceData | undefined;
+
+  return (
+    <ShowLayout
+      {...props}
+      footer={<Footer />}
+      header={<DefaultHeader />}
+      loading={isLoading}
+      tabs={resourceData?.unionType ? getTabs(resourceData.unionType) : []}
+      title={
+        resourceData ? (
+          <ResourceTitle data={resourceData} query={query} />
+        ) : null
+      }
+    >
+      {resourceData?.name?.[router.locale] === null && <LocaleAlert />}
+      {children(resourceData)}
+    </ShowLayout>
+  );
+};
+
+export default ResourceShowLayout;
+
+const ResourceTitle = ({
+  data,
+  query,
+}: {
+  data: ResourceData;
+  query: ReturnType<ResourceShowLayoutProps["getQuery"]>;
+}) => {
+  const router = useRouter<ResourceShowQueryParameter["router"]["pathname"]>(),
     { data: session, status } = useSession(),
+    { show } = useModal("report-dialog"),
     queryClient = useQueryClient(),
     { enqueueSnackbar } = useSnackbar(),
-    query = getQuery({ router, session }),
-    {
-      query: { id },
-    } = router,
     update = trpc.resource.updateOneResource.useMutation({
       onSuccess: (data) => {
         queryClient.setQueryData(
@@ -82,98 +112,72 @@ const ResourceShowLayout = ({
       },
       onError: () => enqueueSnackbar(`type.update error`),
     }),
-    { data } = trpc.resource.findUniqueResource.useQuery(query);
-  if (!data) return <></>;
-  const resourceData = data as ResourceData,
-    { unionType: type, bookmarks, name, links, genres } = resourceData,
-    locale = setLocale(name, router),
-    image = getImage(getMusicLinks(resourceData), 80, { channel: true });
-
+    {
+      query: { id },
+    } = router,
+    { unionType: type, bookmarks, name, links, genres } = data,
+    image = getImage(getMusicLinks(data), 80, { channel: true });
   return (
-    <ShowLayout
-      {...props}
-      footer={<Footer />}
-      header={<DefaultHeader />}
-      tabs={getTabs(type)}
-      title={
-        <Box mx={3}>
-          <Box
-            alignItems="center"
-            display="flex"
-            justifyContent="space-between"
+    <>
+      <Box alignItems="center" display="flex" justifyContent="space-between">
+        <Box alignItems="center" display="flex">
+          <IconButton
+            onClick={() =>
+              router.push({ pathname: "/search", query: { type } })
+            }
           >
-            <Box alignItems="center" display="flex">
-              <IconButton
-                onClick={() =>
-                  router.push({ pathname: "/search", query: { type } })
-                }
-              >
-                <ResourceIcon type={type} />
-              </IconButton>
-              <Typography variant="h5">
-                {match(type)
-                  .with("Music", () => (
-                    <>
-                      <Owner data={resourceData} />
-                    </>
-                  ))
-                  .with(P.union("Album", "Band", "Artist"), () => <></>)
-                  .exhaustive()}
-                {locale}
-              </Typography>
-              {image && (
-                <Box display="flex" justifyContent="center" pl={3}>
-                  <Image
-                    alt={locale}
-                    height="80"
-                    src={image}
-                    style={{ borderRadius: 5 }}
-                  />
-                </Box>
-              )}
-            </Box>
-            <Box>
-              <BookmarkToggleButton
-                onClick={() => {
-                  if (isAuth(status))
-                    update.mutate({
-                      ...query,
-                      ...bookmarkMutate({ bookmarks, session }),
-                    });
-                  else show();
-                }}
-                value={isNonEmpty(bookmarks)}
+            <ResourceIcon type={type} />
+          </IconButton>
+          <Typography variant="h5">
+            {match(type)
+              .with("Music", () => <Owner data={data} />)
+              .with(P.union("Album", "Band", "Artist"), () => <></>)
+              .exhaustive()}
+            {setLocale(name, router)}
+          </Typography>
+          {image && (
+            <Box display="flex" justifyContent="center" pl={3}>
+              <Image
+                alt="image"
+                height="80"
+                src={image}
+                style={{ borderRadius: 5 }}
               />
-              <FlagIconButton onClick={() => show({ unionType: type, id })} />
             </Box>
-          </Box>
-          <Stack direction="row" spacing={1}>
-            {genres.map((genre) => (
-              <Chip
-                icon={<LocalOffer />}
-                key={genre.id}
-                label={genre.name}
-                size="small"
-                variant="outlined"
-              />
-            ))}
-          </Stack>
-          <LinkButtons data={links} type={type} />
+          )}
         </Box>
-      }
-    >
-      {name?.[router.locale] === null && <LocaleAlert />}
-      {children(resourceData)}
-    </ShowLayout>
+        <Box>
+          <BookmarkToggleButton
+            onClick={() => {
+              if (isAuth(status))
+                update.mutate({
+                  ...query,
+                  ...bookmarkMutate({ bookmarks, session }),
+                });
+              else show();
+            }}
+            value={isNonEmpty(bookmarks)}
+          />
+          <FlagIconButton onClick={() => show({ unionType: type, id })} />
+        </Box>
+      </Box>
+      <Stack direction="row" spacing={1}>
+        {genres.map((genre) => (
+          <Chip
+            icon={<LocalOffer />}
+            key={genre.id}
+            label={genre.name}
+            size="small"
+            variant="outlined"
+          />
+        ))}
+      </Stack>
+      <LinkButtons data={links} type={type} />
+    </>
   );
 };
 
-interface OwnerProps {
-  data: ResourceData;
-}
-export default ResourceShowLayout;
-
-const Owner = ({ data }: OwnerProps) => {
+const Owner = ({ data }: { data: ResourceData }) => {
     const router = useRouter(),
       { type, owner } = getOwner(data, router);
     if (type === "NONE" || owner === null) return <></>;

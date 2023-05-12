@@ -36,7 +36,7 @@ const UserFollowers: NextPage = () => {
         searchAutocompleteProps={{
           options: search.data?.map((follow) => follow.following) || [],
           loading: search.isLoading,
-          getOptionLabel: (option) => option.name || "",
+          getOptionLabel: ({ name }) => name,
           textFieldProps: {
             onChange: ({ currentTarget: { value: v } }) =>
               search.mutate({

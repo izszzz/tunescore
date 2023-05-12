@@ -34,7 +34,7 @@ const Pulls: NextPage = () => {
     search = trpc.search.pull.useMutation({
       onError: () => enqueueSnackbar("music.search error"),
     });
-  if (!pullsData) return <></>;
+  if (!pullsData) return null;
   return (
     <ResourceShowLayout
       activeTab="pullrequests"

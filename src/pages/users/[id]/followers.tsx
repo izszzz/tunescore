@@ -27,7 +27,7 @@ const UserFollowers: NextPage = () => {
       followersQuery({ router, perPage })
     ),
     search = trpc.search.follow.useMutation();
-  if (!data || !followData) return <></>;
+  if (!data || !followData) return null;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
     <UserLayout activeTab="" data={userData} query={query}>

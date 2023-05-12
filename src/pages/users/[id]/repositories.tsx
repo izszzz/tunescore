@@ -25,7 +25,7 @@ const User: NextPage = () => {
     { data: musicData } = trpc.pagination.music.useQuery(
       userRepositoriesQuery({ router, session, perPage })
     );
-  if (!data || !musicData) return <></>;
+  if (!data || !musicData) return null;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
     <UserLayout activeTab="repositories" data={userData} query={query}>

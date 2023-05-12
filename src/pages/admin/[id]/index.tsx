@@ -24,7 +24,7 @@ const Model: NextPage = () => {
       skip: paginationModel.page,
     });
 
-  if (!data) return <></>;
+  if (!data) return null;
   const columns = R.pipe(
     data[0],
     R.keys,

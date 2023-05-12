@@ -81,9 +81,9 @@ const New: NextPage = () => {
             <Box>
               {match(unionType)
                 .with("Music", () => <MusicNewForm formContext={formContext} />)
-                .with("Artist", () => <></>)
-                .with("Album", () => <></>)
-                .with("Band", () => <></>)
+                .with("Artist", () => null)
+                .with("Album", () => null)
+                .with("Band", () => null)
                 .exhaustive()}
             </Box>
             <LoadingButton

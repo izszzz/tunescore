@@ -41,7 +41,7 @@ const PullButton = ({
   onBad,
 }: PullButtonProps) => {
   const { data: session } = useSession();
-  if (!isSelf(session, data)) return <></>;
+  if (!isSelf(session, data)) return null;
   return match(data)
     .with({ status: "DRAFT" }, () => (
       <PullOpenButton fullWidth loading={loading} onClick={onOpen} />

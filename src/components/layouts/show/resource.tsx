@@ -131,7 +131,7 @@ const ResourceTitle = ({
           <Typography variant="h5">
             {match(type)
               .with("Music", () => <Owner data={data} />)
-              .with(P.union("Album", "Band", "Artist"), () => <></>)
+              .with(P.union("Album", "Band", "Artist"), () => null)
               .exhaustive()}
             {setLocale(name, router)}
           </Typography>
@@ -180,8 +180,8 @@ const ResourceTitle = ({
 const Owner = ({ data }: { data: ResourceData }) => {
     const router = useRouter(),
       { type, owner } = getOwner(data, router);
-    if (type === "NONE" || owner === null) return <></>;
-    if (owner.name) return <></>;
+    if (type === "NONE" || owner === null) return null;
+    if (owner.name) return null;
     return (
       <Box
         component="a"

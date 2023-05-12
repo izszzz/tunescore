@@ -17,7 +17,7 @@ const Notification: NextPage = () => {
     { data } = trpc.pagination.notification.useQuery(
       notificationPaginationQuery({ router, session, perPage })
     );
-  if (!data) return <></>;
+  if (!data) return null;
   return (
     <DashboardLayout active="notifications">
       <IndexLayout meta={data.meta}>

@@ -31,7 +31,7 @@ const UserBookmarks: NextPage = () => {
       onError: () => enqueueSnackbar("bookmark.search error"),
     }),
     { locale } = router;
-  if (!data || !bookmarkData) return <></>;
+  if (!data || !bookmarkData) return null;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
     <UserLayout activeTab="bookmarks" data={userData} query={query}>

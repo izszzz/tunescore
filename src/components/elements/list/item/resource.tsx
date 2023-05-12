@@ -65,9 +65,7 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
                     label={setLocale(data.bands[0].resource.name, router)}
                     size="small"
                   />
-                ) : (
-                  <></>
-                )
+                ) : null
               )
               .with({ album: P.select(P.not(P.nullish)) }, (data) => (
                 <>
@@ -82,9 +80,7 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
                   <ArtistChip label={data._count.artists} size="small" />
                 </>
               ))
-              .otherwise(() => (
-                <></>
-              ))}
+              .otherwise(() => null)}
           </Stack>
         ),
       }}

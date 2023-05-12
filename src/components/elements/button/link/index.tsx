@@ -14,7 +14,7 @@ interface LinkButtonsProps {
   type: ResourceUnionType;
 }
 const LinkButtons = ({ data, type }: LinkButtonsProps) => {
-  if (!isNonEmpty(data)) return <></>;
+  if (!isNonEmpty(data)) return null;
   return (
     <>
       {data.map((link) =>
@@ -37,7 +37,7 @@ const LinkButtons = ({ data, type }: LinkButtonsProps) => {
               key={link.linkId}
             />
           ))
-          .with({ type: "Twitter" }, () => <></>)
+          .with({ type: "Twitter" }, () => null)
           .exhaustive()
       )}
     </>

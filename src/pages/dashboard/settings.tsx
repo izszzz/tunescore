@@ -15,7 +15,7 @@ const Dashboard: NextPage = () => {
       onSuccess: () => router.push("/"),
       onError: (error) => console.log(error),
     });
-  if (!data) return <></>;
+  if (!data) return null;
 
   return (
     <DashboardLayout active="settings">

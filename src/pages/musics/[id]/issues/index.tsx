@@ -32,7 +32,7 @@ const Issues: NextPage = () => {
     search = trpc.search.issue.useMutation({
       onError: () => enqueueSnackbar("music.search error"),
     });
-  if (!issueData) return <></>;
+  if (!issueData) return null;
   return (
     <ResourceShowLayout activeTab="issues" getQuery={resourceMusicShowQuery}>
       {() => (

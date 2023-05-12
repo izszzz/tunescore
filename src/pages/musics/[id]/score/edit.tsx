@@ -15,7 +15,7 @@ const ScoreEdit: NextPage = () => {
     { onError: () => enqueueSnackbar("music.show error") }
   );
   const update = trpc.music.updateOneMusic.useMutation();
-  if (!data) return <></>;
+  if (!data) return null;
   return (
     <ScoreEditor
       backRoute={{

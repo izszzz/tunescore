@@ -14,7 +14,7 @@ const Transaction: NextPage = () => {
     { data: stripeData } = trpc.stripe.paymentIntent.useQuery(
       data?.stripePaymentIntentId
     );
-  if (!data) return <></>;
+  if (!data) return null;
   return (
     <DashboardLayout active="transactions">
       <Typography variant="h3">{data.type}</Typography>

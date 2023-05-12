@@ -34,7 +34,7 @@ const UserFollowers: NextPage = () => {
       <IndexLayout
         meta={followData.meta}
         searchAutocompleteProps={{
-          options: search.data?.map((follow) => follow.following) || [],
+          options: search.data?.map((follow) => follow.following) ?? [],
           loading: search.isLoading,
           getOptionLabel: ({ name }) => name,
           textFieldProps: {

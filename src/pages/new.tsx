@@ -54,6 +54,12 @@ const New: NextPage = () => {
             <RadioButtonGroup
               label="type"
               name="unionType"
+              onChange={() => {
+                formContext.resetField("music");
+                formContext.resetField("album");
+                formContext.resetField("band");
+                formContext.resetField("artist");
+              }}
               options={[
                 { id: "Music", label: "Music" },
                 { id: "Artist", label: "Artist" },

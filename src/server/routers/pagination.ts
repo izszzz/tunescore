@@ -1,5 +1,4 @@
 import type { Prisma } from "@prisma/client";
-import type { PaginateOptions } from "prisma-pagination";
 import { createPaginator } from "prisma-pagination";
 
 import {
@@ -18,7 +17,6 @@ import {
 } from "../../../prisma/generated/schemas/findManyIssue.schema";
 import { MusicFindManySchema } from "../../../prisma/generated/schemas/findManyMusic.schema";
 import { UserFindManySchema } from "../../../prisma/generated/schemas/findManyUser.schema";
-import { env } from "../../env/server.mjs";
 import type { AlbumListArgsType } from "../../helpers/album";
 import type { ArtistListArgsType } from "../../helpers/artist";
 import type { BandListArgsType } from "../../helpers/band";
@@ -30,17 +28,12 @@ import type { NotificationArgsType } from "../../paths/dashboard/notifications";
 import { PaginateInputSchema } from "../../utils/zod";
 import { router, publicProcedure } from "../trpc";
 
-const paginator = ({
-  perPage = env.NEXT_PUBLIC_DEFAULT_PAGINATION_PER_PAGE,
-  ...options
-}: PaginateOptions) => createPaginator({ ...options, perPage });
-
 export const paginationRouter = router({
   resource: publicProcedure
     .input(PaginateInputSchema(ResourceFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.ResourceGetPayload<ResourceListArgsType>,
           Prisma.ResourceFindManyArgs
         >(ctx.prisma.resource, args)
@@ -48,7 +41,7 @@ export const paginationRouter = router({
   music: publicProcedure
     .input(PaginateInputSchema(MusicFindManySchema))
     .query(async ({ ctx, input: { args, options } }) => {
-      const data = await paginator(options)<
+      const data = await createPaginator(options)<
         Prisma.MusicGetPayload<MusicListArgsType>,
         Prisma.MusicFindManyArgs
       >(ctx.prisma.music, args);
@@ -57,7 +50,7 @@ export const paginationRouter = router({
   artist: publicProcedure
     .input(PaginateInputSchema(ArtistFindManySchema))
     .query(async ({ ctx, input: { args, options } }) => {
-      const data = await paginator(options)<
+      const data = await createPaginator(options)<
         Prisma.ArtistGetPayload<ArtistListArgsType>,
         Prisma.ArtistFindManyArgs
       >(ctx.prisma.artist, args);
@@ -66,7 +59,7 @@ export const paginationRouter = router({
   band: publicProcedure
     .input(PaginateInputSchema(BandFindManySchema))
     .query(async ({ ctx, input: { args, options } }) => {
-      const data = await paginator(options)<
+      const data = await createPaginator(options)<
         Prisma.BandGetPayload<BandListArgsType>,
         Prisma.BandFindManyArgs
       >(ctx.prisma.band, args);
@@ -75,7 +68,7 @@ export const paginationRouter = router({
   album: publicProcedure
     .input(PaginateInputSchema(AlbumFindManySchema))
     .query(async ({ ctx, input: { args, options } }) => {
-      const data = await paginator(options)<
+      const data = await createPaginator(options)<
         Prisma.AlbumGetPayload<AlbumListArgsType>,
         Prisma.AlbumFindManyArgs
       >(ctx.prisma.album, args);
@@ -85,7 +78,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(UserFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.UserGetPayload<typeof userArgs>,
           Prisma.UserFindManyArgs
         >(ctx.prisma.user, args)
@@ -94,7 +87,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(IssueFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.IssueGetPayload<{ include: { user: typeof userArgs } }>,
           Prisma.IssueFindManyArgs
         >(ctx.prisma.issue, args)
@@ -103,7 +96,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(PullFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.PullGetPayload<{ include: { user: typeof userArgs } }>,
           Prisma.PullFindManyArgs
         >(ctx.prisma.pull, args)
@@ -112,7 +105,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(FollowFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.FollowGetPayload<{
             include: {
               follower: {
@@ -134,7 +127,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(BookmarkFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.BookmarkGetPayload<{
             include: { resource: ResourceListArgsType };
           }>,
@@ -145,7 +138,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(TransactionFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.TransactionGetPayload<{ include: TransactionArgsType }>,
           Prisma.TransactionFindManyArgs
         >(ctx.prisma.transaction, args)
@@ -154,7 +147,7 @@ export const paginationRouter = router({
     .input(PaginateInputSchema(NotificationFindManySchema))
     .query(
       async ({ ctx, input: { args, options } }) =>
-        await paginator(options)<
+        await createPaginator(options)<
           Prisma.NotificationGetPayload<NotificationArgsType>,
           Prisma.NotificationFindManyArgs
         >(ctx.prisma.notification, args)

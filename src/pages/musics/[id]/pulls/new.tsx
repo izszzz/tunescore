@@ -9,13 +9,15 @@ import { useModal } from "@ebay/nice-modal-react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Stack from "@mui/material/Stack";
 import type { Pull } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-
 import ScoreDropzone from "../../../../components/elements/form/dropzone/score";
 import ResourceShowLayout from "../../../../components/layouts/show/resource";
 import { resourceMusicShowQuery } from "../../../../helpers/resource";
@@ -25,6 +27,7 @@ import { trpc } from "../../../../utils/trpc";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const NewPull: NextPage = () => {
   const router = useRouter<"/musics/[id]">(),
+    { t } = useTranslation(),
     formContext = useForm<Pull>(),
     { data: session, status } = useSession(),
     { show } = useModal("auth-dialog"),
@@ -87,7 +90,7 @@ const NewPull: NextPage = () => {
                 type="submit"
                 variant="contained"
               >
-                Submit
+                {t("submit")}
               </LoadingButton>
             </Stack>
           </FormContainer>
@@ -96,5 +99,9 @@ const NewPull: NextPage = () => {
     </ResourceShowLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => ({
+  props: await serverSideTranslations(ctx.locale ?? "", ["common"]),
+});
 
 export default NewPull;

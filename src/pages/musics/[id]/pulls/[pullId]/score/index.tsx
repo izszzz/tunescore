@@ -9,7 +9,7 @@ const Score: NextPage = () => {
     { data } = trpc.pull.findUniquePull.useQuery({
       where: { id: router.query.pullId },
     });
-  if (!data) return <></>;
+  if (!data) return null;
   return <ScoreLayout value={data.changed} />;
 };
 

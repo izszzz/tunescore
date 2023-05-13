@@ -12,7 +12,7 @@ const User: NextPage = () => {
     router = useRouter<"/users/[id]">(),
     query = userShowQuery({ router, session }),
     { data } = trpc.user.findUniqueUser.useQuery(query);
-  if (!data) return <></>;
+  if (!data) return null;
   const userData = data as unknown as UserLayoutProps["data"];
   return (
     <UserLayout activeTab="info" data={userData} query={query}>

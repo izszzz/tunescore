@@ -48,7 +48,7 @@ const SettingsShowLayout = ({
   return (
     <ResourceShowLayout activeTab="settings" getQuery={getQuery}>
       {(data) => {
-        const { genres } = data;
+        if (!data) return null;
         return (
           <>
             <Typography variant="h4">Info</Typography>
@@ -71,7 +71,7 @@ const SettingsShowLayout = ({
                 onRemove: (_e, _v, _r, d) =>
                   d && update.mutate({ ...query, ...removeTag(d.option.id) }),
               }}
-              value={genres}
+              value={data?.genres}
             />
 
             {children({ data, update, router, query })}

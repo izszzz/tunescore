@@ -8,17 +8,17 @@ import { resourceArtistShowQuery } from "../../../helpers/resource";
 
 const Artist: NextPage = () => (
   <ResourceShowLayout activeTab="info" getQuery={resourceArtistShowQuery}>
-    {({ artist }) => (
+    {(data) => (
       <>
         <ResourceLists
           data={
-            artist?.bands.map(({ resource, ...band }) => ({
+            data?.artist?.bands.map(({ resource, ...band }) => ({
               ...resource,
               band,
             })) ?? []
           }
         />
-        <ParticipationLists data={artist?.participations ?? []}>
+        <ParticipationLists data={data?.artist?.participations ?? []}>
           {(participation, data) => (
             <ResourceListItem
               data={{ ...data.music.resource, music: data.music }}

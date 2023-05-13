@@ -2,7 +2,9 @@ import React from "react";
 
 import type { ItunesArtist } from "@izszzz/itunes-search-api";
 import type { Link } from "@prisma/client";
+import { useRouter } from "next/router";
 
+import { convertLocaleToLang } from "../../../../../../../helpers/itunes";
 import { trpc } from "../../../../../../../utils/trpc";
 import ChannelItunesCard from "../../../../../card/itunes/channel";
 import ChannelItunesSquareCard from "../../../../../card/square/itunes/channel";
@@ -20,8 +22,12 @@ const ItunesArtistSelectForm = ({
   onSelect,
   onRemove,
 }: ItunesArtistSelectFormProps) => {
-  const { data } = trpc.itunes.findUniqueArtist.useQuery(link?.linkId),
-    { data: searchData } = trpc.itunes.searchArtists.useQuery(term);
+  const lang = convertLocaleToLang(useRouter().locale),
+    { data } = trpc.itunes.findUniqueArtist.useQuery({
+      id: link?.linkId,
+      lang,
+    }),
+    { data: searchData } = trpc.itunes.searchArtists.useQuery({ term, lang });
   return (
     <ItunesSelectForm<ItunesArtist>
       largeCard={(value) =>

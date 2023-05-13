@@ -13,7 +13,7 @@ const OrderForm = () => {
     createPaymentIntent = trpc.stripe.createPaymentIntent.useMutation({
       onSuccess: () => router.push("/thanks"),
     });
-  if (!data || !paymentMethods) return <></>;
+  if (!data || !paymentMethods) return null;
   return (
     <FormContainer onSuccess={({ id }) => createPaymentIntent.mutate(id)}>
       <RadioButtonGroup

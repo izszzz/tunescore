@@ -24,7 +24,7 @@ const ProviderButtons = ({ stackProps }: ProviderButtonsProps) => {
         return match(provider)
           .with({ id: "google" }, () => <GoogleButton {...props} />)
           .with({ id: "spotify" }, () => <SpotifyButton {...props} />)
-          .otherwise(() => <></>);
+          .otherwise(() => null);
       })}
     </Stack>
   );

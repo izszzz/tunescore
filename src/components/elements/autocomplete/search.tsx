@@ -6,6 +6,8 @@ import Autocomplete, {
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
 import { useDebouncedCallback } from "use-debounce";
 
+import { debounce } from "../../../consts";
+
 export type SearchAutocompleteProps<
   T,
   Multiple extends boolean | undefined,
@@ -28,13 +30,9 @@ function SearchAutocomplete<
   onInputChange,
   ...props
 }: SearchAutocompleteProps<T, Multiple, DisableClearable, FreeSolo>) {
-  type InputChangeParamters = Parameters<NonNullable<typeof onInputChange>>;
-  const handleInputChange = (
-      e: InputChangeParamters[0],
-      value: InputChangeParamters[1],
-      reason: InputChangeParamters[2]
-    ) => onInputChange?.(e, value, reason),
-    debounced = useDebouncedCallback(handleInputChange, 500);
+  const handleInputChange: typeof onInputChange = (e, value, reason) =>
+      onInputChange?.(e, value, reason),
+    debounced = useDebouncedCallback(handleInputChange, debounce);
   return (
     <Autocomplete
       {...props}

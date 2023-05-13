@@ -6,11 +6,11 @@ import { resourceBandShowQuery } from "../../../helpers/resource";
 
 const Band: NextPage = () => (
   <ResourceShowLayout activeTab="info" getQuery={resourceBandShowQuery}>
-    {({ band }) => (
+    {(data) => (
       <>
         <ResourceLists
           data={
-            band?.musics.map(({ resource, ...music }) => ({
+            data?.band?.musics.map(({ resource, ...music }) => ({
               ...resource,
               music,
             })) ?? []
@@ -18,7 +18,7 @@ const Band: NextPage = () => (
         />
         <ResourceLists
           data={
-            band?.artists.map(({ resource, ...artist }) => ({
+            data?.band?.artists.map(({ resource, ...artist }) => ({
               ...resource,
               artist,
             })) ?? []

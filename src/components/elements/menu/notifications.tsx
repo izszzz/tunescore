@@ -16,7 +16,7 @@ import MenuManager from ".";
 const NotificationsMenuManager = () => {
   const router = useRouter(),
     { data } = trpc.currentUser.findManyNotification.useQuery();
-  if (!data) return <></>;
+  if (!data) return null;
   return (
     <MenuManager
       button={(handleOpen) => <NotificationsIconButton onClick={handleOpen} />}

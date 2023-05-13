@@ -29,7 +29,7 @@ const Pull: NextPage = () => {
     pull = trpc.pull.findUniquePull.useQuery(pullQuery, {
       onError: () => enqueueSnackbar("pull.show error"),
     });
-  if (!pull.data) return <></>;
+  if (!pull.data) return null;
   const pullData = pull.data as PullLayoutProps["data"],
     { id, title, body, comments } = pullData;
   return (

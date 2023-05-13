@@ -9,7 +9,7 @@ import ItunesArtistSelectForm from "../../../components/elements/form/settings/s
 import SpotifyArtistSelectForm from "../../../components/elements/form/settings/select/card/channel/spotify";
 import ChannelYoutubeSelectForm from "../../../components/elements/form/settings/select/card/channel/youtube";
 import SettingsShowLayout from "../../../components/layouts/show/settings";
-import { convertAffiliateLink } from "../../../helpers/itunes";
+import { convertToAffiliateUrl } from "../../../helpers/itunes";
 import {
   findLinkItunes,
   findLinkSpotify,
@@ -91,7 +91,7 @@ const BandSettings: NextPage = () => {
                 update.mutate({
                   ...query,
                   ...selectItunesMutate({
-                    id: convertAffiliateLink(value.artistLinkUrl).toString(),
+                    id: convertToAffiliateUrl(value.artistLinkUrl).toString(),
                     images: [],
                   }),
                 })

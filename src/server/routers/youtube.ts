@@ -1,8 +1,10 @@
 import { z } from "zod";
 
+import { limit } from "../../consts/external";
 import { youtube } from "../common/youtube";
 import { publicProcedure, router } from "../trpc";
 
+const maxResults = limit / 2;
 export const youtubeRouter = router({
   search: publicProcedure
     .input(
@@ -17,7 +19,7 @@ export const youtubeRouter = router({
           q: term,
           type: [type],
           part: ["snippet"],
-          maxResults: 6,
+          maxResults,
           ...(type === "video" ? { videoCategoryId: "10" } : {}),
         })
         .then((data) => data.data)
@@ -31,7 +33,7 @@ export const youtubeRouter = router({
               id: [input],
               part: ["snippet"],
               videoCategoryId: "10",
-              maxResults: 6,
+              maxResults,
             })
             .then((data) => data.data)
         : null
@@ -44,7 +46,7 @@ export const youtubeRouter = router({
             .list({
               id: [input],
               part: ["snippet"],
-              maxResults: 6,
+              maxResults,
             })
             .then((data) => data.data)
         : null

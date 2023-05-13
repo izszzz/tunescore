@@ -7,9 +7,11 @@ import type { SessionArg } from "../helpers/user";
 export const resourcePaginationQuery = ({
   router,
   session,
+  perPage,
 }: {
   router: NextRouter;
   session: SessionArg;
+  perPage: number;
 }) => ({
   args: {
     ...resourceListArgs(session),
@@ -30,5 +32,5 @@ export const resourcePaginationQuery = ({
       }),
     },
   },
-  options: { page: router.query.page as string },
+  options: { page: router.query.page as string, perPage },
 });

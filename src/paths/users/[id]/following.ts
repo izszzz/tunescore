@@ -3,15 +3,15 @@ import type { NextRouter } from "next/router";
 import { followArgs } from "../../../helpers/follow";
 
 export const followingPath = ({
-  router: {
-    query: { id },
-  },
+  router,
+  perPage,
 }: {
   router: NextRouter<"/users/[id]">;
+  perPage: number;
 }) => ({
   args: {
-    where: { followingId: id },
+    where: { followingId: router.query.id },
     ...followArgs,
   },
-  options: { page: 0 },
+  options: { page: router.query.page as string, perPage },
 });

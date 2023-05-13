@@ -14,7 +14,7 @@ const Score: NextPage = () => {
     { where: { id } },
     { onError: () => enqueueSnackbar("music.show error") }
   );
-  if (!data) return <></>;
+  if (!data) return null;
   return <ScoreLayout value={data.score || ""} />;
 };
 

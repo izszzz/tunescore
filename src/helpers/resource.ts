@@ -19,7 +19,7 @@ import { musicArgs } from "./music";
 import type { SessionArg, userArgs } from "./user";
 
 export type ResourceListArgsType = ReturnType<typeof resourceListArgs>;
-export type ResourceShowQuery = ReturnType<typeof resourceShowQuery>;
+export type ResourceShowQueryType = ReturnType<typeof resourceShowQuery>;
 export type ResourceShowQueryParameter = Parameters<
   typeof resourceShowQuery
 >[0];

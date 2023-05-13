@@ -16,9 +16,7 @@ const CustomThemeProvider = ({ children }: PropsWithChildren) => {
   });
   return mounted ? (
     <ThemeProvider theme={theme}>{children}</ThemeProvider>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 export default CustomThemeProvider;

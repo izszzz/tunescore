@@ -45,23 +45,24 @@ const Music: NextPage = () => {
   return (
     <ResourceShowLayout activeTab="info" getQuery={resourceMusicShowQuery}>
       {(data) => {
-        const { music } = data,
-          youtube = findLinkYoutube(data.links);
+        const youtube = findLinkYoutube(data?.links ?? []);
         return (
           <>
             <Box mb={2}>
-              <ActionButton
-                data={data}
-                loading={create.isLoading}
-                onAddCart={() =>
-                  create.mutate({
-                    data: {
-                      user: { connect: { id: getCurrentUserId(session) } },
-                      music: { connect: { id: music?.id } },
-                    },
-                  })
-                }
-              />
+              {data && (
+                <ActionButton
+                  data={data}
+                  loading={create.isLoading}
+                  onAddCart={() =>
+                    create.mutate({
+                      data: {
+                        user: { connect: { id: getCurrentUserId(session) } },
+                        music: { connect: { id: data.music?.id } },
+                      },
+                    })
+                  }
+                />
+              )}
             </Box>
 
             {youtube && (
@@ -69,7 +70,7 @@ const Music: NextPage = () => {
                 <YoutubeAmbient videoId={youtube.linkId} />
               </Box>
             )}
-            {music?.pulls.map((pull) => (
+            {data?.music?.pulls.map((pull) => (
               <Box key={pull.id} mb={2}>
                 <VoteCard
                   badIconButtonProps={{ disabled: true }}
@@ -79,14 +80,14 @@ const Music: NextPage = () => {
               </Box>
             ))}
 
-            {music?.lyric && <Article text={music.lyric} />}
+            {data?.music?.lyric && <Article text={data.music.lyric} />}
 
-            {music?.band && (
+            {data?.music?.band && (
               <ResourceLists
-                data={[{ ...music.band.resource, band: music.band }]}
+                data={[{ ...data.music.band.resource, band: data.music.band }]}
               />
             )}
-            <ParticipationLists data={music?.participations ?? []}>
+            <ParticipationLists data={data?.music?.participations ?? []}>
               {(participation, data) => (
                 <ResourceListItem
                   data={{ ...data.artist.resource, artist: data.artist }}
@@ -97,7 +98,7 @@ const Music: NextPage = () => {
             </ParticipationLists>
             <ResourceLists
               data={
-                music?.albums.map(({ resource, ...album }) => ({
+                data?.music?.albums.map(({ resource, ...album }) => ({
                   ...resource,
                   album,
                 })) ?? []

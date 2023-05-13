@@ -6,6 +6,7 @@ import Split from "split.js";
 import { useDebouncedCallback } from "use-debounce";
 import { useDarkMode } from "usehooks-ts";
 
+import { debounce } from "../../../consts";
 import Score from "../../layouts/score";
 import type { EditorHeaderProps } from "../header/editor";
 import EditorHeader from "../header/editor";
@@ -27,7 +28,7 @@ const ScoreEditor = ({
     { isDarkMode } = useDarkMode(),
     handleResolve = () => onResolve && setValue(onResolve()),
     handleChange = (value: string | undefined) => value && setValue(value),
-    debounced = useDebouncedCallback(handleChange, 500);
+    debounced = useDebouncedCallback(handleChange, debounce);
   useEffect(() => {
     if (!split.current)
       split.current = Split(["#editor", "#score"], { sizes: [50, 50] });

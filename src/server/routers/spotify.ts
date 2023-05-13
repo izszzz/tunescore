@@ -1,10 +1,12 @@
 import { z } from "zod";
 
+import { limit } from "../../consts/external";
 import { authorized } from "../../helpers/spotify";
 import { Linker } from "../../utils/linker";
 import { publicProcedure, router } from "../trpc";
 
 const linker = new Linker();
+
 export const spotifyRouter = router({
   search: publicProcedure
     .input(
@@ -31,29 +33,31 @@ export const spotifyRouter = router({
     }),
   searchTracks: publicProcedure
     .input(z.string())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         data = await spotify
-          .searchTracks(input)
+          .searchTracks(input, { limit, offset: 0 })
           .then(({ body }) => body.tracks);
       if (!data) return null;
-      linker.searchedSpotifyTracks(prisma, spotify, data);
+      linker.searchedSpotifyTracks(spotify, data);
       return data;
     }),
   findUniqueTrack: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       if (!input) return null;
       const spotify = await authorized(session),
         data = await spotify.getTrack(input).then(({ body }) => body);
-      linker.findedUniqueSpotifyTrack(prisma, data);
+      linker.findedUniqueSpotifyTrack(data);
       return data;
     }),
   searchArtists: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const spotify = await authorized(ctx.session);
-      return spotify.searchArtists(input).then(({ body }) => body.artists);
+      return spotify
+        .searchArtists(input, { limit, offset: 0 })
+        .then(({ body }) => body.artists);
     }),
   findUniqueArtist: publicProcedure
     .input(z.string().nullish())
@@ -63,23 +67,23 @@ export const spotifyRouter = router({
     }),
   searchAlbums: publicProcedure
     .input(z.string())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       const spotify = await authorized(session),
         ids = await spotify
-          .searchAlbums(input)
+          .searchAlbums(input, { limit, offset: 0 })
           .then(({ body }) => body.albums?.items.map(({ id }) => id));
       if (!ids) return null;
       const data = await spotify.getAlbums(ids).then(({ body }) => body.albums);
-      linker.searchedSpotifyAlbums(prisma, spotify, data);
+      linker.searchedSpotifyAlbums(spotify, data);
       return data;
     }),
   findUniqueAlbum: publicProcedure
     .input(z.string().nullish())
-    .query(async ({ ctx: { session, prisma }, input }) => {
+    .query(async ({ ctx: { session }, input }) => {
       if (!input) return null;
       const spotify = await authorized(session),
         data = await spotify.getAlbum(input).then(({ body }) => body);
-      linker.findedUniqueSpotifyAlbum(prisma, spotify, data);
+      linker.findedUniqueSpotifyAlbum(spotify, data);
       return data;
     }),
 });

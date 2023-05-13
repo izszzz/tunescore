@@ -65,9 +65,5 @@ const createLink = (baseURL: string, path: string, id: string) =>
     },
   }),
   removeLinkMutate = (type: LinkType, resourceId: string) => ({
-    data: {
-      links: {
-        delete: { type_resourceId: { type, resourceId } },
-      },
-    },
+    data: { links: { delete: { type_resourceId: { type, resourceId } } } },
   });

@@ -48,7 +48,7 @@ const PullScoreEdit: NextPage = () => {
     );
     setConflict(merged.conflict);
   }, [data]);
-  if (!data) return <></>;
+  if (!data) return null;
   const pullData = data as Prisma.PullGetPayload<{ include: { music: true } }>;
   const handleResolve = () => {
       const merged = Diff3.mergeDiff3(

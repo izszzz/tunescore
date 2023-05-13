@@ -16,7 +16,6 @@ import MusicYoutubeSelectForm from "../../../components/elements/form/settings/s
 import SingleForm from "../../../components/elements/form/single";
 import SettingsShowLayout from "../../../components/layouts/show/settings";
 import { clearBandMutate, selectBandMutate } from "../../../helpers";
-import { convertAffiliateLink } from "../../../helpers/itunes";
 import {
   findLinkItunes,
   findLinkSpotify,
@@ -155,7 +154,7 @@ const SettingsMusic: NextPage = () => {
                 update.mutate({
                   ...query,
                   ...selectItunesMutate({
-                    id: convertAffiliateLink(value.trackViewUrl).toString(),
+                    id: value.trackViewUrl,
                     images: [
                       value.artworkUrl30,
                       value.artworkUrl60,

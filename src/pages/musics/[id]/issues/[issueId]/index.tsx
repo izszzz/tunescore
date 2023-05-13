@@ -31,7 +31,7 @@ const Issue: NextPage = () => {
       },
       { onError: () => enqueueSnackbar("music.show error") }
     );
-  if (!issue.data) return <></>;
+  if (!issue.data) return null;
   const issueData = issue.data as Prisma.IssueGetPayload<{
     include: { comments: { include: { user: typeof userArgs } } };
   }>;
@@ -56,9 +56,7 @@ const Issue: NextPage = () => {
                     notifications: {
                       create: {
                         unionType: "Comment",
-                        user: {
-                          connect: { id: userId },
-                        },
+                        user: { connect: { id: userId } },
                       },
                     },
                   },

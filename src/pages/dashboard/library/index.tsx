@@ -2,32 +2,35 @@ import type { Prisma } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useRecoilState } from "recoil";
 import * as R from "remeda";
 
+import { perPageState } from "../../../atoms/perPage";
 import ResourceListItem from "../../../components/elements/list/item/resource";
-import ResourceLists from "../../../components/elements/list/resource";
 import DashboardLayout from "../../../components/layouts/dashboard";
 import IndexLayout from "../../../components/layouts/index";
+import ListsLayout from "../../../components/layouts/lists";
+import { take } from "../../../consts/prisma";
 import setLocale from "../../../helpers/locale";
 import type { MusicListArgsType } from "../../../helpers/music";
 import { libraryPaginationQuery } from "../../../paths/dashboard/library";
 import { trpc } from "../../../utils/trpc";
 
 const Library: NextPage = () => {
-  const { data: session } = useSession(),
+  const [perPage] = useRecoilState(perPageState),
+    { data: session } = useSession(),
     router = useRouter(),
     { data } = trpc.pagination.transaction.useQuery(
-      libraryPaginationQuery({ session, router })
+      libraryPaginationQuery({ session, router, perPage })
     ),
-    search = trpc.search.transaction.useMutation();
-  if (!data) return <></>;
-  const transactionData = data as unknown as Prisma.TransactionGetPayload<{
-    include: { music: MusicListArgsType };
-  }>[];
+    search = trpc.search.transaction.useMutation(),
+    transactionData = data as unknown as Prisma.TransactionGetPayload<{
+      include: { music: MusicListArgsType };
+    }>[];
   return (
     <DashboardLayout active="library">
       <IndexLayout
-        meta={data.meta}
+        meta={data?.meta}
         searchAutocompleteProps={{
           options: search.data || [],
           loading: search.isLoading,
@@ -49,12 +52,12 @@ const Library: NextPage = () => {
                   },
                 },
               },
-              take: 10,
+              take,
             });
           },
         }}
       >
-        <ResourceLists
+        <ListsLayout
           data={R.pipe(
             transactionData,
             R.map(
@@ -63,6 +66,7 @@ const Library: NextPage = () => {
             ),
             R.compact
           )}
+          lists={{ listItem: (data) => <ResourceListItem data={data} /> }}
         />
       </IndexLayout>
     </DashboardLayout>

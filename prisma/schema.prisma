@@ -124,7 +124,7 @@ model Resource {
 model Locale {
   ja         String?
   en         String?
-  resource   Resource @relation(fields: [resourceId], references: [id])
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String   @unique
 }
 
@@ -136,7 +136,7 @@ model Link {
   medium String?
   large  String?
 
-  resource   Resource @relation(fields: [resourceId], references: [id])
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String
   @@unique([type, resourceId])
 }
@@ -150,7 +150,7 @@ model Music {
   lyric       String?
   price       Int?
 
-  resource   Resource @relation("MusicResource", fields: [resourceId], references: [id])
+  resource   Resource @relation("MusicResource", fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String   @unique
 
   user   User?   @relation(fields: [userId], references: [id])
@@ -173,7 +173,7 @@ model Album {
   id  String  @id @default(uuid())
   upc String?
 
-  resource   Resource @relation("AlbumResource", fields: [resourceId], references: [id])
+  resource   Resource @relation("AlbumResource", fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String   @unique
 
   band   Band?   @relation(fields: [bandId], references: [id])
@@ -187,7 +187,7 @@ model Album {
 model Artist {
   id String @id @default(uuid())
 
-  resource   Resource @relation("ArtistResource", fields: [resourceId], references: [id])
+  resource   Resource @relation("ArtistResource", fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String   @unique
   bands      Band[]
 
@@ -199,7 +199,7 @@ model Artist {
 model Band {
   id String @id @default(uuid())
 
-  resource   Resource @relation("BandResource", fields: [resourceId], references: [id])
+  resource   Resource @relation("BandResource", fields: [resourceId], references: [id], onDelete: Cascade)
   resourceId String   @unique
 
   artists Artist[]

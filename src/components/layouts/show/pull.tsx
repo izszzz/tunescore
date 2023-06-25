@@ -115,21 +115,24 @@ const PullLayout: React.FC<PullLayoutProps> = ({
       title={
         <>
           <Box alignItems="center" display="flex">
-            <Avatar src={data.user.image || ""} />
+            <Avatar src={data.user?.image ?? ""} />
             <Typography ml={3} variant="h4">
               {data.title}
             </Typography>
           </Box>
-          <Link
-            href={{
-              pathname: "/users/[id]",
-              query: { id: data.user.id },
-            }}
+          <Typography
+            color="text.secondary"
+            onClick={() =>
+              data.user &&
+              router.push({
+                pathname: "/users/[id]",
+                query: { id: data.user.id },
+              })
+            }
+            variant="subtitle2"
           >
-            <Typography color="text.secondary" variant="subtitle2">
-              {data.user.name}
-            </Typography>
-          </Link>
+            {data.user?.name}
+          </Typography>
           <Box my={3}>
             <PullButton
               conflict={conflict}

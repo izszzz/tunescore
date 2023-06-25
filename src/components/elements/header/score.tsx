@@ -1,7 +1,7 @@
 // references
 // https://mui.com/material-ui/react-drawer/#mini-variant-drawer
 import type { PropsWithChildren } from "react";
-import React, { useState } from "react";
+import React from "react";
 
 import type { AlphaTabApi } from "@coderline/alphatab";
 import { useRecoilState } from "recoil";

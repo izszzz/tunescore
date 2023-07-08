@@ -5,9 +5,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { NextLinkComposed } from "../elements/link";
 import ExpandListItem from "../elements/list/item/expand";
 
 import DefaultSingleColumnLayout from "./single_column/default";
@@ -34,7 +34,7 @@ const DocumentLayout = () => {
         >
           <Toolbar />
           <List>
-            <ListItemButton component={NextLinkComposed} to="/docs">
+            <ListItemButton component={Link} href="/docs">
               <ListItemText>Document</ListItemText>
             </ListItemButton>
             <ExpandListItem
@@ -43,25 +43,25 @@ const DocumentLayout = () => {
             >
               <List>
                 <ListItemButton
-                  component={NextLinkComposed}
+                  component={Link}
+                  href="/docs/getting-started/create-music"
                   sx={{ pl: 4 }}
-                  to="/docs/getting-started/create-music"
                 >
                   <ListItemText>Create Music</ListItemText>
                 </ListItemButton>
                 <ListItemButton
-                  component={NextLinkComposed}
+                  component={Link}
+                  href="/docs/getting-started/write-score"
                   sx={{ pl: 4 }}
-                  to="/docs/getting-started/write-score"
                 >
                   <ListItemText>Write Music</ListItemText>
                 </ListItemButton>
               </List>
             </ExpandListItem>
-            <ListItemButton component={NextLinkComposed} to="/docs/developer">
+            <ListItemButton component={Link} href="/docs/developer">
               <ListItemText>Developer</ListItemText>
             </ListItemButton>
-            <ListItemButton component={NextLinkComposed} to="/docs/hakei-prod">
+            <ListItemButton component={Link} href="/docs/hakei-prod">
               <ListItemText>Hakei Prod.</ListItemText>
             </ListItemButton>
           </List>

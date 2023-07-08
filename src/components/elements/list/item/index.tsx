@@ -5,14 +5,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import type { ListItemTextProps } from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 import type { Route } from "nextjs-routes";
-
-import { NextLinkComposed } from "../../link";
 
 interface ListItemProps extends MuiListItemProps {
   icon: React.ReactNode;
   listItemTextProps: ListItemTextProps;
-  to?: Route;
+  to: Route;
 }
 
 const ListItem = ({
@@ -23,7 +22,7 @@ const ListItem = ({
   ...props
 }: ListItemProps) => (
   <MuiListItem {...props} disablePadding divider>
-    <ListItemButton {...(to ? { to, component: NextLinkComposed } : {})}>
+    <ListItemButton component={Link} href={to}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText
         {...listItemTextProps}

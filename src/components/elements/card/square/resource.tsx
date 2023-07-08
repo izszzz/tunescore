@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { isNonEmpty } from "ts-array-length";
 
@@ -12,7 +13,6 @@ import {
 } from "../../../../helpers/resource";
 import BookmarkChip from "../../chip/bookmark";
 import ResourceIcon from "../../icon/resource";
-import { NextLinkComposed } from "../../link";
 import type { ResourceListItemProps } from "../../list/item/resource";
 import EllipsisTypography from "../../typography/ellipsis";
 
@@ -31,6 +31,10 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
     });
   return (
     <SquareCard
+      href={{
+        pathname: getResourceShowPathname(unionType),
+        query: { id },
+      }}
       icon={
         <ResourceIcon
           sx={{ fontSize: "60px", color: "grey" }}
@@ -57,22 +61,18 @@ const ResourceSquareCard = ({ data }: ResourceSquareCardProps) => {
           {owner && (
             <Chip
               clickable
-              component={NextLinkComposed}
-              icon={<ResourceIcon type={type} />}
-              label={owner.name}
-              size="small"
-              to={{
+              component={Link}
+              href={{
                 pathname: getResourceShowPathname(type),
                 query: { id: owner.id },
               }}
+              icon={<ResourceIcon type={type} />}
+              label={owner.name}
+              size="small"
             />
           )}
         </>
       }
-      to={{
-        pathname: getResourceShowPathname(unionType),
-        query: { id },
-      }}
     />
   );
 };

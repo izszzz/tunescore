@@ -3,6 +3,7 @@ import type { Prisma, LinkType } from "@prisma/client";
 import * as R from "remeda";
 import type SpotifyWebApi from "spotify-web-api-node";
 
+import { popularity } from "../consts/spotify";
 import { convertLangToLocale } from "../helpers/itunes";
 import { findLinkSpotify } from "../helpers/link";
 import { prisma } from "../server/db/client";
@@ -251,7 +252,7 @@ const getExistedResources = (
     ),
   createMusicsBySpotify = (tracks: SpotifyApi.TrackObjectFull[]) =>
     prisma.$transaction(
-      tracks.map((item) =>
+      tracks.filter(item=>item.popularity > popularity).map((item) =>
         prisma.resource.create({
           data: {
             name: { create: { ja: item.name, en: item.name } },
@@ -271,7 +272,7 @@ const getExistedResources = (
     ),
   createdAlbumsBySpotify = (albums: SpotifyApi.AlbumObjectFull[]) =>
     prisma.$transaction(
-      albums.map((album) =>
+      albums.filter(item=>item.popularity > popularity).map((album) =>
         prisma.resource.create({
           data: {
             name: { create: { ja: album.name, en: album.name } },

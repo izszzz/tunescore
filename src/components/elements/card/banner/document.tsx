@@ -5,9 +5,8 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
-
-import { NextLinkComposed } from "../../link";
 
 const DocumentBannerCard = () => {
   const { t } = useTranslation("src/components/card/banner/document");
@@ -22,10 +21,10 @@ const DocumentBannerCard = () => {
       <CardActions>
         <Button
           color="primary"
-          component={NextLinkComposed}
+          component={Link}
+          href="/docs"
           size="small"
           startIcon={<Article />}
-          to="/docs"
         >
           {t("button")}
         </Button>

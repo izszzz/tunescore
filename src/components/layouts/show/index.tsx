@@ -32,7 +32,7 @@ const ShowLayout = ({
     header={
       <>
         {header}
-        <Box mx={3} my={3}>
+        <Box my={3}>
           {loading ? (
             <Typography variant="h5">
               <Skeleton variant="text" />

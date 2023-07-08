@@ -5,15 +5,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDarkMode } from "usehooks-ts";
 
 const CustomThemeProvider = ({ children }: PropsWithChildren) => {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false),
+    { isDarkMode } = useDarkMode(),
+    theme = createTheme({
+      palette: { mode: isDarkMode ? "dark" : "light" },
+    });
 
   useEffect(() => {
     setMounted(true);
   }, []);
-  const { isDarkMode } = useDarkMode();
-  const theme = createTheme({
-    palette: { mode: isDarkMode ? "dark" : "light" },
-  });
+
   return mounted ? (
     <ThemeProvider theme={theme}>{children}</ThemeProvider>
   ) : null;

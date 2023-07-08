@@ -33,7 +33,7 @@ const Admin: NextPage = () => {
             icon={undefined}
             key={option}
             listItemTextProps={{ primary: option }}
-            to={{ pathname: "/admin/[id]", query: { id: option } }}
+            href={{ pathname: "/admin/[id]", query: { id: option } }}
           />
         ))}
       </List>

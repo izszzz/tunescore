@@ -22,6 +22,10 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
   const router = useRouter();
   return (
     <ListItem
+      href={{
+        pathname: "/dashboard/transactions/[id]",
+        query: { id: data.id },
+      }}
       icon={<AttachMoney />}
       listItemTextProps={{
         primary: `${data.type} ${
@@ -39,10 +43,6 @@ const TransactionListItem = ({ data }: TransactionListItemProps) => {
             />
           </Box>
         ),
-      }}
-      to={{
-        pathname: "/dashboard/transactions/[id]",
-        query: { id: data.id },
       }}
     />
   );

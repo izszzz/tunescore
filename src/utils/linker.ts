@@ -272,7 +272,7 @@ const getExistedResources = (
     ),
   createdAlbumsBySpotify = (albums: SpotifyApi.AlbumObjectFull[]) =>
     prisma.$transaction(
-      albums.filter(item=>item.popularity > popularity).map((album) =>
+      albums.map((album) =>
         prisma.resource.create({
           data: {
             name: { create: { ja: album.name, en: album.name } },

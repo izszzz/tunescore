@@ -28,7 +28,7 @@ const UserListItem = ({ data }: UserListItemProps) => (
         </Typography>
       ),
     }}
-    to={{
+    href={{
       pathname: "/users/[id]",
       query: { id: data.id },
     }}

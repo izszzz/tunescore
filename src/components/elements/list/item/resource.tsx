@@ -38,6 +38,10 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
     { type, owner } = getOwner(data, router);
   return (
     <ListItem
+      href={{
+        pathname: getResourceShowPathname(unionType),
+        query: { id },
+      }}
       icon={<ResourceIcon type={unionType} />}
       listItemTextProps={{
         primary: locale,
@@ -83,10 +87,6 @@ const ResourceListItem = ({ data, children }: ResourceListItemProps) => {
               .otherwise(() => null)}
           </Stack>
         ),
-      }}
-      to={{
-        pathname: getResourceShowPathname(unionType),
-        query: { id },
       }}
     >
       {image && (

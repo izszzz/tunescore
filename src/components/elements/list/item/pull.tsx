@@ -23,6 +23,10 @@ const PullListItem = ({ data }: PullListItemProps) => {
   } = useRouter<"/musics/[id]">();
   return (
     <ListItem
+      href={{
+        pathname: "/musics/[id]/pulls/[pullId]",
+        query: { id, pullId: data.id },
+      }}
       icon={<PullStatusIcon status={data.status} />}
       listItemTextProps={{
         primary: data.title,
@@ -37,10 +41,6 @@ const PullListItem = ({ data }: PullListItemProps) => {
             />
           </Box>
         ),
-      }}
-      to={{
-        pathname: "/musics/[id]/pulls/[pullId]",
-        query: { id, pullId: data.id },
       }}
     />
   );

@@ -24,6 +24,10 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
   } = useRouter<"/musics/[id]">();
   return (
     <ListItem
+      href={{
+        pathname: "/musics/[id]/issues/[issueId]",
+        query: { id, issueId: data.id },
+      }}
       icon={<StatusIcon resource={data.status} />}
       listItemTextProps={{
         primary: data.title,
@@ -38,10 +42,6 @@ const IssueListItem = ({ data }: IssueListItemProps) => {
             />
           </Box>
         ),
-      }}
-      to={{
-        pathname: "/musics/[id]/issues/[issueId]",
-        query: { id, issueId: data.id },
       }}
     />
   );

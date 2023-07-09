@@ -11,18 +11,18 @@ import type { Route } from "nextjs-routes";
 interface ListItemProps extends MuiListItemProps {
   icon: React.ReactNode;
   listItemTextProps: ListItemTextProps;
-  to: Route;
+  href?: Route;
 }
 
 const ListItem = ({
   icon,
-  to,
+  href: to,
   listItemTextProps,
   children,
   ...props
 }: ListItemProps) => (
   <MuiListItem {...props} disablePadding divider>
-    <ListItemButton component={Link} href={to}>
+    <ListItemButton {...(to ? ({component: Link, href: to}):({}))} >
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText
         {...listItemTextProps}
